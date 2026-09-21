@@ -8,7 +8,11 @@ import networkx as nx
 
 from nexus.engine.rules import apply_effect
 from nexus.generator.evidence import choose_discriminating_evidence, evidence_csv
-from nexus.generator.rules import enumerate_transformation_rules, transformation_rule
+from nexus.generator.rules import (
+    enumerate_transformation_rules,
+    rule_ast_metrics,
+    sample_transformation_rule,
+)
 from nexus.models.episode import PrivateEpisode, PublicEpisode
 from nexus.models.goals import GoalKind, GoalPredicate
 from nexus.models.world import (
@@ -85,35 +89,23 @@ def generate_episode(
         rooms, edges = _random_tree(rng, room_count)
         artifact_room, machine_room, nexus_room, distance_sum = _role_rooms(rooms, edges)
 
-        shape = rng.choice(tuple(Shape))
-        parity = rng.choice(("even", "odd"))
-        add_amount = rng.choice((1, 2, 3, 4))
-        then_rotation = rng.choice((1, 2, 3))
-        multiplier = rng.choice((2, 3, 4))
-        else_rotation = rng.choice((1, 2, 3))
-        rule = transformation_rule(
-            shape=shape,
-            parity=parity,
-            add_amount=add_amount,
-            then_rotation=then_rotation,
-            multiplier=multiplier,
-            else_rotation=else_rotation,
-        )
-
+        # Sample grammar components independently. The complete law is composed for
+        # this episode rather than selected from a hand-authored list of full rules.
+        rule = sample_transformation_rule(rng)
         experiments, remaining = choose_discriminating_evidence(rule, all_candidates)
-        if len(remaining) != 1:
+        if len(remaining) != 1 or remaining[0] != rule:
             continue
 
         initial_artifact = Artifact(
             id="A1",
             location=artifact_room,
-            shape=shape,
+            shape=rng.choice(tuple(Shape)),
             pattern=rng.choice(tuple(Pattern)),
             orientation=rng.choice(tuple(Orientation)),
             value=rng.randint(0, 10),
             polarity=rng.choice(tuple(Polarity)),
         )
-        target_phase = 0 if parity == "even" else 1
+        target_phase = rng.choice((0, 1))
         transformed = apply_effect(rule, initial_artifact, target_phase)
         if (
             transformed.value == initial_artifact.value
@@ -152,7 +144,7 @@ def generate_episode(
             ),
         )
 
-        estimated = distance_sum + 4 + (1 if target_phase else 0)
+        estimated = distance_sum + 4 + target_phase
         budget = max(estimated + 3, max_optimal_actions + 1)
         initial_state = WorldState(
             phase=0,
@@ -170,8 +162,8 @@ def generate_episode(
             f"and deliver A1 to {nexus_room}. The final artifact must have value {transformed.value}, "
             f"polarity {transformed.polarity.value}, orientation {transformed.orientation.value}, "
             f"while the facility phase is {target_phase}. The phase advances only when you wait. "
-            "The attached measurements.csv contains prior machine experiments. Finish explicitly "
-            "when all mission conditions are satisfied."
+            "The supplied measurements.csv contains prior experiments performed on M1. Infer enough "
+            "of the local machine law to complete the mission, then finish explicitly."
         )
         public = PublicEpisode(
             episode_id=episode_id,
@@ -183,6 +175,7 @@ def generate_episode(
             goal=goal,
             evidence_files={"measurements.csv": evidence},
         )
+        rule_nodes, rule_depth = rule_ast_metrics(rule)
         private = PrivateEpisode(
             public=public,
             rules={"machine-rule": rule},
@@ -195,6 +188,8 @@ def generate_episode(
                 "candidate_rules_after_evidence": len(remaining),
                 "evidence_rows": len(experiments),
                 "estimated_reference_actions": estimated,
+                "rule_ast_nodes": rule_nodes,
+                "rule_ast_depth": rule_depth,
             },
         )
         solved = solve(private)
