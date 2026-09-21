@@ -47,6 +47,10 @@ def qualify_episode(
 
     target_rule_id = episode.machine_rules.get("M1")
     target_rule = episode.rules.get(target_rule_id or "")
+    checks["causal_grammar_disclosed"] = bool(
+        episode.public.evidence_files.get("facility_manual.txt", "").strip()
+    )
+
     evidence = episode.public.evidence_files.get("measurements.csv", "")
     matching = candidates_matching_csv(evidence, enumerate_transformation_rules()) if evidence else []
     checks["evidence_unique"] = len(matching) == 1
