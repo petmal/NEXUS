@@ -21,16 +21,18 @@ def test_saved_episode_separates_player_and_runner_data(tmp_path):
 
     manifest_path = tmp_path / "manifest.json"
     private_path = tmp_path / "private.json"
+    manual_path = tmp_path / "attachments" / "facility_manual.txt"
     evidence_path = tmp_path / "attachments" / "measurements.csv"
 
     assert manifest_path.exists()
     assert private_path.exists()
+    assert manual_path.exists()
     assert evidence_path.exists()
     assert not (tmp_path / "public.json").exists()
 
     manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
     assert manifest["episode_id"] == episode.public.episode_id
-    assert manifest["evidence_files"] == ["measurements.csv"]
+    assert manifest["evidence_files"] == ["facility_manual.txt", "measurements.csv"]
     assert "initial_state" not in manifest
     assert "rooms" not in manifest
     assert "rules" not in manifest
@@ -49,10 +51,15 @@ def test_http_session_round_trip_and_public_evidence():
     manifest_payload = manifest.json()
     assert manifest_payload["episode_id"] == episode.public.episode_id
     assert manifest_payload["description"] == episode.public.description
-    assert manifest_payload["evidence_files"] == ["measurements.csv"]
+    assert manifest_payload["evidence_files"] == ["facility_manual.txt", "measurements.csv"]
     assert "initial_state" not in manifest_payload
     assert "rooms" not in manifest_payload
     assert episode.verifier_secret not in manifest.text
+
+    manual = client.get("/evidence/facility_manual.txt")
+    assert manual.status_code == 200
+    assert "finite grammar" in manual.text
+    assert episode.verifier_secret not in manual.text
 
     evidence = client.get("/evidence/measurements.csv")
     assert evidence.status_code == 200
