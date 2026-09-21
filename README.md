@@ -100,3 +100,116 @@ Conventional game engines are intentionally avoided. NEXUS is primarily a symbol
 See [AGENTS.md](AGENTS.md) for implementation constraints and staged development guidance.
 
 All prototype work should remain isolated from unrelated projects. MindTrial support should eventually be a thin adapter over the standalone NEXUS protocol.
+
+
+## Working prototype
+
+The feature branch currently implements the first end-to-end Transformation Facility prototype:
+
+- compositional latent rule grammar with 288 possible generated laws;
+- generated connected room topology, artifact state, machine law, target state, and evidence;
+- public `facility_manual.txt` describing the causal grammar;
+- generated `measurements.csv` that uniquely identifies the selected law within that grammar;
+- deterministic transition engine and canonical hashing;
+- append-only trace plus deterministic replay verification;
+- engine-defined goal predicates and HMAC-based victory receipts;
+- exhaustive BFS reference solver and episode qualification;
+- player-safe manifest/attachment packaging separated from runner-only private state;
+- JSONL stdin/stdout protocol;
+- persistent HTTP sessions with idempotent action stepping;
+- Rich human observer with facility topology and omniscient debug mode;
+- pytest/Hypothesis coverage and GitHub Actions smoke tests.
+
+### Install
+
+Using `uv`:
+
+```bash
+uv venv
+uv pip install -e ".[dev,server]"
+```
+
+A normal pip environment also works:
+
+```bash
+python -m pip install -e ".[dev,server]"
+```
+
+### Generate an episode
+
+```bash
+nexus generate ./episode --seed 17
+```
+
+The generated directory contains:
+
+```text
+episode/
+  manifest.json                 # safe to expose to the evaluated agent
+  attachments/
+    facility_manual.txt         # public causal grammar
+    measurements.csv            # generated experimental evidence
+  private.json                  # trusted runner only
+```
+
+Do not give `private.json` to the evaluated model. It contains the latent rule,
+construction metadata, reference solution, and victory secret.
+
+### Qualify and inspect
+
+```bash
+nexus qualify ./episode/private.json
+nexus solve ./episode/private.json --trace-out ./episode/run.jsonl
+nexus replay ./episode/private.json ./episode/run.jsonl --observer
+```
+
+### Human play
+
+```bash
+nexus play ./episode/private.json
+```
+
+The human CLI intentionally uses the trusted package because it combines the runner and
+observer in one process. Normal evaluated agents should interact through the machine protocol,
+not read the private file.
+
+### JSONL agent protocol
+
+```bash
+nexus stdio ./episode/private.json
+```
+
+The process emits the initial observation, then accepts requests such as:
+
+```json
+{"expected_turn": 0, "action": {"type": "move", "target": "R1"}}
+```
+
+### HTTP runner
+
+```bash
+nexus serve ./episode/private.json --host 127.0.0.1 --port 8000
+```
+
+Player-safe endpoints include:
+
+```text
+GET  /manifest
+GET  /evidence/{filename}
+POST /sessions
+GET  /sessions/{id}/observe
+POST /sessions/{id}/actions
+GET  /sessions/{id}/status
+GET  /sessions/{id}/events
+```
+
+Canonical state, latent rules, reference plans, and verifier secrets remain server-side.
+
+## Prototype limitations
+
+This is intentionally a narrow proof of concept rather than the final benchmark. The current
+episode family uses one artifact and one transformation machine; the finite causal grammar is
+public; runtime execution is deterministic; and observations are text/structured data only.
+Visual renderers, richer rule grammars, multiple interacting machines/artifacts, structural OOD
+splits, active information-gathering scenarios, and a MindTrial adapter are follow-up work after
+the core generator/solver/verifier loop is validated against real models.
