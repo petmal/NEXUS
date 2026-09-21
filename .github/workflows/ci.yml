@@ -1,0 +1,26 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -e ".[dev,server]"
+      - name: Test
+        run: pytest -q
+      - name: CLI smoke test
+        run: |
+          nexus generate /tmp/nexus-smoke --seed 17
+          nexus qualify /tmp/nexus-smoke/private.json
+          nexus solve /tmp/nexus-smoke/private.json --trace-out /tmp/nexus-smoke/run.jsonl
+          nexus replay /tmp/nexus-smoke/private.json /tmp/nexus-smoke/run.jsonl
