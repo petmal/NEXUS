@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from functools import lru_cache
 from itertools import product
 
 from nexus.models.rules import Condition, ConditionKind, Effect, EffectKind
@@ -58,8 +59,9 @@ def transformation_rule(
     )
 
 
-def enumerate_transformation_rules() -> list[Effect]:
-    return [
+@lru_cache(maxsize=1)
+def transformation_rule_catalog() -> tuple[Effect, ...]:
+    return tuple(
         transformation_rule(
             shape=shape,
             parity=parity,
@@ -76,4 +78,8 @@ def enumerate_transformation_rules() -> list[Effect]:
             MULTIPLIERS,
             ELSE_ROTATIONS,
         )
-    ]
+    )
+
+
+def enumerate_transformation_rules() -> list[Effect]:
+    return list(transformation_rule_catalog())
