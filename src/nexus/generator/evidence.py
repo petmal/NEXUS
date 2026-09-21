@@ -25,11 +25,12 @@ def _projection(artifact: Artifact) -> tuple[int, str, str]:
 @lru_cache(maxsize=1)
 def experiment_pool() -> tuple[Experiment, ...]:
     experiments: list[Experiment] = []
-    for shape, phase, value, orientation in product(
+    for shape, phase, value, orientation, polarity in product(
         tuple(Shape),
         (0, 1),
-        (1, 2, 4, 7),
+        (0, 1, 2, 4, 7),
         (Orientation.NORTH, Orientation.EAST),
+        tuple(Polarity),
     ):
         experiments.append(
             Experiment(
@@ -41,7 +42,7 @@ def experiment_pool() -> tuple[Experiment, ...]:
                     pattern=Pattern.PLAIN,
                     orientation=orientation,
                     value=value,
-                    polarity=Polarity.POSITIVE,
+                    polarity=polarity,
                 ),
             )
         )
@@ -50,7 +51,7 @@ def experiment_pool() -> tuple[Experiment, ...]:
 
 @lru_cache(maxsize=1)
 def _catalog_signature_matrix() -> tuple[tuple[tuple[int, str, str], ...], ...]:
-    """Return experiment-major signatures for the fixed prototype rule catalog."""
+    """Return experiment-major signatures for the finite prototype grammar."""
     catalog = transformation_rule_catalog()
     return tuple(
         tuple(_projection(apply_effect(rule, experiment.artifact, experiment.phase)) for rule in catalog)
@@ -72,11 +73,7 @@ def choose_discriminating_evidence(
     candidates: list[Effect],
     max_rows: int = 12,
 ) -> tuple[list[Experiment], list[Effect]]:
-    """Greedily choose experiments that maximally shrink the candidate rule set.
-
-    The prototype grammar is finite, so its complete experiment×rule signature matrix is cached
-    once. This makes repeated episode generation cheap while keeping the evidence check exact.
-    """
+    """Greedily choose experiments that uniquely discriminate the target law when possible."""
     candidate_indices = _catalog_indices(candidates)
     catalog = transformation_rule_catalog()
     target_json = target.model_dump_json()
@@ -97,7 +94,7 @@ def choose_discriminating_evidence(
     while len(remaining) > 1 and len(chosen_indices) < max_rows:
         best_experiment: int | None = None
         best_matches: list[int] | None = None
-        for experiment_index in unused:
+        for experiment_index in sorted(unused):
             expected = matrix[experiment_index][target_index]
             matches = [index for index in remaining if matrix[experiment_index][index] == expected]
             if not matches:
