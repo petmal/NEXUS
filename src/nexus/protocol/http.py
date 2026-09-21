@@ -8,7 +8,7 @@ from fastapi.responses import PlainTextResponse
 from pydantic import BaseModel, ConfigDict
 
 from nexus.models.actions import Action
-from nexus.models.episode import PrivateEpisode
+from nexus.models.episode import PlayerManifest, PrivateEpisode
 from nexus.protocol.session import Session
 
 
@@ -43,19 +43,12 @@ def create_app(episode: PrivateEpisode) -> FastAPI:
     app = FastAPI(title="NEXUS", version=episode.public.protocol_version)
     store = SessionStore(episode)
 
-    def player_manifest() -> dict:
-        public = store.episode.public
-        return {
-            "protocol_version": public.protocol_version,
-            "episode_id": public.episode_id,
-            "description": public.description,
-            "goal": public.goal.model_dump(mode="json"),
-            "evidence_files": sorted(public.evidence_files),
-        }
+    def player_manifest() -> PlayerManifest:
+        return PlayerManifest.from_episode(store.episode.public)
 
     @app.get("/manifest")
     def manifest():
-        return player_manifest()
+        return player_manifest().model_dump(mode="json")
 
     @app.get("/evidence/{filename}", response_class=PlainTextResponse)
     def evidence(filename: str):
@@ -69,7 +62,7 @@ def create_app(episode: PrivateEpisode) -> FastAPI:
         session_id, session = store.create()
         return {
             "session_id": session_id,
-            "manifest": player_manifest(),
+            "manifest": player_manifest().model_dump(mode="json"),
             "observation": session.observe().model_dump(mode="json"),
         }
 
