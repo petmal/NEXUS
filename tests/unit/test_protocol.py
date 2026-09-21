@@ -10,8 +10,24 @@ def test_session_retries_are_idempotent():
     response = session.act(0, first_action)
     assert response.ok
     assert session.state.turn == 1
+
     duplicate = session.act(0, first_action)
     assert duplicate.ok and duplicate.duplicate
+    assert session.state.turn == 1
+
+
+def test_stale_turn_with_different_action_is_rejected():
+    episode = generate_episode(44)
+    session = Session(episode)
+    first_action = ACTION_ADAPTER.validate_python(episode.reference_plan[0])
+    response = session.act(0, first_action)
+    assert response.ok
+
+    different = ACTION_ADAPTER.validate_python({"type": "wait"})
+    stale = session.act(0, different)
+    assert not stale.ok
+    assert not stale.duplicate
+    assert "different action" in stale.message
     assert session.state.turn == 1
 
 
