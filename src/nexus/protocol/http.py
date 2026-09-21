@@ -4,6 +4,7 @@ from threading import Lock
 from uuid import uuid4
 
 from fastapi import FastAPI, HTTPException
+from fastapi.responses import PlainTextResponse
 from pydantic import BaseModel, ConfigDict
 
 from nexus.models.actions import Action
@@ -42,10 +43,35 @@ def create_app(episode: PrivateEpisode) -> FastAPI:
     app = FastAPI(title="NEXUS", version=episode.public.protocol_version)
     store = SessionStore(episode)
 
+    def player_manifest() -> dict:
+        public = store.episode.public
+        return {
+            "protocol_version": public.protocol_version,
+            "episode_id": public.episode_id,
+            "description": public.description,
+            "goal": public.goal.model_dump(mode="json"),
+            "evidence_files": sorted(public.evidence_files),
+        }
+
+    @app.get("/manifest")
+    def manifest():
+        return player_manifest()
+
+    @app.get("/evidence/{filename}", response_class=PlainTextResponse)
+    def evidence(filename: str):
+        try:
+            return store.episode.public.evidence_files[filename]
+        except KeyError as exc:
+            raise HTTPException(status_code=404, detail="evidence file not found") from exc
+
     @app.post("/sessions")
     def create_session():
         session_id, session = store.create()
-        return {"session_id": session_id, "observation": session.observe().model_dump(mode="json")}
+        return {
+            "session_id": session_id,
+            "manifest": player_manifest(),
+            "observation": session.observe().model_dump(mode="json"),
+        }
 
     @app.get("/sessions/{session_id}/observe")
     def observe_session(session_id: str):
@@ -57,15 +83,15 @@ def create_app(episode: PrivateEpisode) -> FastAPI:
 
     @app.get("/sessions/{session_id}/status")
     def status(session_id: str):
-        session = store.get(session_id)
+        state = store.get(session_id).state_snapshot()
         return {
-            "turn": session.state.turn,
-            "status": session.state.terminal_status.value,
-            "actions_remaining": session.state.resources.actions_remaining,
+            "turn": state.turn,
+            "status": state.terminal_status.value,
+            "actions_remaining": state.resources.actions_remaining,
         }
 
     @app.get("/sessions/{session_id}/events")
     def events(session_id: str):
-        return [record.model_dump(mode="json") for record in store.get(session_id).trace]
+        return [record.model_dump(mode="json") for record in store.get(session_id).trace_snapshot()]
 
     return app
