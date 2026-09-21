@@ -8,6 +8,7 @@ import networkx as nx
 
 from nexus.engine.rules import apply_effect
 from nexus.generator.evidence import choose_discriminating_evidence, evidence_csv
+from nexus.generator.manual import FACILITY_MANUAL
 from nexus.generator.rules import (
     enumerate_transformation_rules,
     rule_ast_metrics,
@@ -162,8 +163,9 @@ def generate_episode(
             f"and deliver A1 to {nexus_room}. The final artifact must have value {transformed.value}, "
             f"polarity {transformed.polarity.value}, orientation {transformed.orientation.value}, "
             f"while the facility phase is {target_phase}. The phase advances only when you wait. "
-            "The supplied measurements.csv contains prior experiments performed on M1. Infer enough "
-            "of the local machine law to complete the mission, then finish explicitly."
+            "The supplied facility_manual.txt defines the possible machine-law grammar, while "
+            "measurements.csv contains prior experiments performed on M1. Infer the selected "
+            "law well enough to complete the mission, then finish explicitly."
         )
         public = PublicEpisode(
             episode_id=episode_id,
@@ -173,7 +175,10 @@ def generate_episode(
             phase_modulus=4,
             initial_state=initial_state,
             goal=goal,
-            evidence_files={"measurements.csv": evidence},
+            evidence_files={
+                "facility_manual.txt": FACILITY_MANUAL,
+                "measurements.csv": evidence,
+            },
         )
         rule_nodes, rule_depth = rule_ast_metrics(rule)
         private = PrivateEpisode(
