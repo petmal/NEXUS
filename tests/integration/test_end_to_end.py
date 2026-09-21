@@ -1,6 +1,8 @@
+import json
 from io import StringIO
 
 from nexus.generator import generate_episode, qualify_episode
+from nexus.io import save_episode
 from nexus.protocol.stdio import run_jsonl
 
 
@@ -11,6 +13,28 @@ def test_generate_qualify_and_stdio_bootstrap():
     run_jsonl(episode, StringIO(""), output)
     assert '"observation"' in output.getvalue()
     assert episode.verifier_secret not in output.getvalue()
+
+
+def test_saved_episode_separates_player_and_runner_data(tmp_path):
+    episode = generate_episode(2028)
+    save_episode(episode, tmp_path)
+
+    manifest_path = tmp_path / "manifest.json"
+    private_path = tmp_path / "private.json"
+    evidence_path = tmp_path / "attachments" / "measurements.csv"
+
+    assert manifest_path.exists()
+    assert private_path.exists()
+    assert evidence_path.exists()
+    assert not (tmp_path / "public.json").exists()
+
+    manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+    assert manifest["episode_id"] == episode.public.episode_id
+    assert manifest["evidence_files"] == ["measurements.csv"]
+    assert "initial_state" not in manifest
+    assert "rooms" not in manifest
+    assert "rules" not in manifest
+    assert episode.verifier_secret not in manifest_path.read_text(encoding="utf-8")
 
 
 def test_http_session_round_trip_and_public_evidence():
@@ -26,6 +50,8 @@ def test_http_session_round_trip_and_public_evidence():
     assert manifest_payload["episode_id"] == episode.public.episode_id
     assert manifest_payload["description"] == episode.public.description
     assert manifest_payload["evidence_files"] == ["measurements.csv"]
+    assert "initial_state" not in manifest_payload
+    assert "rooms" not in manifest_payload
     assert episode.verifier_secret not in manifest.text
 
     evidence = client.get("/evidence/measurements.csv")
