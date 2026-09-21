@@ -1,10 +1,23 @@
 from __future__ import annotations
 
+from collections import defaultdict
+
 from rich.console import Console
 from rich.table import Table
 
 from nexus.models.episode import PrivateEpisode
 from nexus.models.world import WorldState
+
+
+def _room_exits(episode: PrivateEpisode) -> dict[str, tuple[str, ...]]:
+    exits: dict[str, list[str]] = defaultdict(list)
+    for left, right in episode.public.edges:
+        exits[left].append(right)
+        exits[right].append(left)
+    return {
+        room_id: tuple(sorted(exits.get(room_id, [])))
+        for room_id in sorted(episode.public.rooms)
+    }
 
 
 def render_observer(
@@ -20,6 +33,21 @@ def render_observer(
         f"Agent: [bold]{state.agent_room}[/bold]  Phase: {state.phase}  "
         f"Actions: {state.resources.actions_remaining}  Status: {state.terminal_status.value}"
     )
+
+    map_table = Table(title="Facility map")
+    map_table.add_column("here")
+    map_table.add_column("room")
+    map_table.add_column("label")
+    map_table.add_column("exits")
+    for room_id, exits in _room_exits(episode).items():
+        room = episode.public.rooms[room_id]
+        map_table.add_row(
+            "●" if room_id == state.agent_room else "",
+            room_id,
+            room.label,
+            ", ".join(exits) or "—",
+        )
+    console.print(map_table)
 
     table = Table(title="Artifacts")
     for column in ("id", "location", "shape", "pattern", "orientation", "value", "polarity"):
