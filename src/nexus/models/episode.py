@@ -8,6 +8,13 @@ from nexus.models.world import Room, WorldState
 
 
 class PublicEpisode(BaseModel):
+    """Non-secret compiled episode data used by the trusted runner.
+
+    This model intentionally contains canonical initial state and is therefore
+    not the player-facing manifest. Use PlayerManifest for data safe to hand to
+    an evaluated agent.
+    """
+
     model_config = ConfigDict(extra="forbid")
 
     protocol_version: str = "nexus-0.1"
@@ -35,6 +42,28 @@ class PublicEpisode(BaseModel):
             if machine.room_id not in room_ids:
                 raise ValueError(f"machine {machine.id} has unknown room")
         return self
+
+
+class PlayerManifest(BaseModel):
+    """Player-safe episode metadata. Contains no canonical world state or latent rules."""
+
+    model_config = ConfigDict(extra="forbid", frozen=True)
+
+    protocol_version: str
+    episode_id: str
+    description: str
+    goal: GoalPredicate
+    evidence_files: tuple[str, ...] = ()
+
+    @classmethod
+    def from_episode(cls, episode: PublicEpisode) -> "PlayerManifest":
+        return cls(
+            protocol_version=episode.protocol_version,
+            episode_id=episode.episode_id,
+            description=episode.description,
+            goal=episode.goal,
+            evidence_files=tuple(sorted(episode.evidence_files)),
+        )
 
 
 class PrivateEpisode(BaseModel):
