@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from pydantic import BaseModel, ConfigDict, Field, model_validator
 
+from nexus.models.actions import action_contract
 from nexus.models.goals import GoalPredicate
 from nexus.models.rules import Effect
 from nexus.models.world import Room, WorldState
@@ -54,6 +55,7 @@ class PlayerManifest(BaseModel):
     description: str
     goal: GoalPredicate
     evidence_files: tuple[str, ...] = ()
+    action_contract: dict = Field(default_factory=dict)
 
     @classmethod
     def from_episode(cls, episode: PublicEpisode) -> "PlayerManifest":
@@ -63,6 +65,7 @@ class PlayerManifest(BaseModel):
             description=episode.description,
             goal=episode.goal,
             evidence_files=tuple(sorted(episode.evidence_files)),
+            action_contract=action_contract(),
         )
 
 
