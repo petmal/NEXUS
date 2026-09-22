@@ -33,6 +33,9 @@ def test_saved_episode_separates_player_and_runner_data(tmp_path):
     manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
     assert manifest["episode_id"] == episode.public.episode_id
     assert manifest["evidence_files"] == ["facility_manual.txt", "measurements.csv"]
+    action_types = {item["type"] for item in manifest["action_contract"]["reference"]}
+    assert {"move", "take", "operate", "probe", "finish"} <= action_types
+    assert "schema" in manifest["action_contract"]
     assert "initial_state" not in manifest
     assert "rooms" not in manifest
     assert "rules" not in manifest
@@ -52,6 +55,7 @@ def test_http_session_round_trip_and_public_evidence():
     assert manifest_payload["episode_id"] == episode.public.episode_id
     assert manifest_payload["description"] == episode.public.description
     assert manifest_payload["evidence_files"] == ["facility_manual.txt", "measurements.csv"]
+    assert manifest_payload["action_contract"]["reference"]
     assert "initial_state" not in manifest_payload
     assert "rooms" not in manifest_payload
     assert episode.verifier_secret not in manifest.text
