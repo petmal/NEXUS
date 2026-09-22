@@ -1,150 +1,275 @@
 # MindTrial integration design
 
-## Goal
+## Principle
 
-NEXUS should appear to an evaluated model as **one structured stateful tool** while remaining a
-standalone environment.
+NEXUS must remain independent of MindTrial.
 
-The model should be able to act in the world, but it must not control session creation,
-restarting, private state, or verification.
+MindTrial should not contain NEXUS-specific session logic, protocol handling, or game semantics.
+Instead, MindTrial can gain a generic capability that is useful for NEXUS and other stateful
+interactive tools:
 
-## Model-facing tool
+> Start one isolated service instance for each task execution attempt, keep it alive for the
+> duration of that attempt, and allow explicitly selected tools to communicate with it.
 
-Conceptually MindTrial exposes one tool:
+NEXUS is then simply one possible service.
 
-```text
-nexus_action(action)
-```
+The same NEXUS interfaces should also be usable directly through HTTP/JSONL, MCP, another agent
+loop, or a human client.
 
-where `action` follows NEXUS's public discriminated-union action schema.
+## Correct lifecycle scope
 
-Example:
+"One service per task" must mean one service per **task execution attempt**, not one service per
+logical task definition.
 
-```json
-{
-  "action": {
-    "type": "operate",
-    "machine": "M1",
-    "artifact": "A1"
-  }
-}
-```
-
-The tool result contains the public NEXUS action response and observation.
-
-The tool description should include the stable action semantics, or derive them directly from
-NEXUS's published action contract.
-
-## Session ownership
-
-**One MindTrial task execution equals one NEXUS session.**
-
-The harness, not the model, creates that session.
-
-The evaluated model must never receive or control:
-
-- `POST /sessions`;
-- a reset/restart command;
-- the NEXUS session identifier;
-- the private episode path;
-- the verifier secret.
-
-The adapter binds the MindTrial task/run to one NEXUS session internally.
+MindTrial evaluates the same task across multiple providers and run configurations. Those runs
+must never share mutable environment state.
 
 Conceptually:
 
 ```text
-MindTrial task starts
-        |
-        v
-adapter creates exactly one NEXUS session
-        |
-        v
-model calls nexus_action(action)
-        |
-        v
-adapter sends action to bound session
-        |
-        v
-NEXUS returns observation/result
+(provider A, run X, task T) -> service instance 1
+(provider B, run X, task T) -> service instance 2
+(provider A, run Y, task T) -> service instance 3
 ```
 
-When the NEXUS state becomes `won` or `failed`, that session remains terminal. Further action
-calls return the terminal state; they do not create a new session.
+Each evaluated model therefore receives an identical initial episode but an independent mutable
+world instance.
 
-## Why not keep session state in MindTrial /app/shared?
+## Retry scope
 
-The current MindTrial Docker-tool executor creates a fresh tool container for each invocation and
-mounts a persistent `/app/shared` directory across all local tools in the task.
+The service lifetime must wrap MindTrial's whole provider/task retry loop.
 
-That is useful for ordinary tools but is the wrong trust boundary for NEXUS:
+MindTrial's execution layer may retry an entire provider task attempt after a transient failure.
+If the service were created inside `Provider.Run`, each retry could silently reset the game.
 
-- the model's Python tool can also access `/app/shared`;
-- therefore private NEXUS state or a reusable secret session token stored there could be read or
-  modified by the evaluated model.
+The correct ordering is:
 
-NEXUS private state must instead remain in a trusted process/storage boundary inaccessible to
-the model's Python environment.
+```text
+create task services
+    |
+    +-- provider attempt
+    |      |
+    |      +-- API/tool turns
+    |
+    +-- transient retry of provider attempt
+    |      |
+    |      +-- same service instance and state
+    |
+destroy task services
+```
 
-## Preferred integration
+A service crash during an active attempt should normally make the task an infrastructure error.
+MindTrial should not automatically replace it with a fresh service, because doing so would reset
+state and could give the model another attempt.
 
-The cleanest implementation is a small MindTrial-side **stateful NEXUS adapter**:
+## Generic MindTrial service configuration
 
-1. at provider/task-run initialization, create a NEXUS session against a persistent NEXUS server;
-2. keep the opaque session ID in Go memory associated with that tool executor/run;
-3. expose only the NEXUS action schema to the model;
-4. on each tool call, forward the supplied action to the already-bound session;
-5. destroy/end the binding when the MindTrial task finishes.
+A possible configuration shape is:
 
-This is a small amount of MindTrial-specific code, but game semantics remain entirely inside
-NEXUS.
+```yaml
+services:
+  - name: nexus
+    image: ghcr.io/petmal/nexus:latest
+    command:
+      - nexus
+      - serve-session
+      - /app/episode/private.json
+      - --host
+      - 0.0.0.0
+      - --port
+      - "8080"
 
-An alternative is to add a generic stateful/remote-tool abstraction to MindTrial if another
-environment soon needs the same lifecycle. Do not add that abstraction solely speculatively.
+    health-check:
+      type: http
+      port: 8080
+      path: /health
 
-## Can the agent cheat by restarting a lost game?
+    parameter-files:
+      episode: /app/episode/private.json
+```
 
-Not with the intended adapter.
+A task binds the service and supplies private service-only inputs:
 
-Restart prevention should exist at several layers:
+```yaml
+service-selector:
+  services:
+    - name: nexus
+      files:
+        episode: ./episodes/example/private.json
+```
 
-1. **No reset action in the public NEXUS action schema.**
-2. **No model-facing session-creation endpoint.**
-3. **Session ID is harness-owned and invisible to the model.**
-4. **A terminal NEXUS session cannot transition back to active.**
-5. **NEXUS private/server state is outside the model's Python/container filesystem.**
-6. **MindTrial creates at most one bound NEXUS session per task attempt.**
+These service files are infrastructure inputs. They are **not** task attachments and are never
+exposed to the model or ordinary local tools.
 
-The model could ask to "restart" in natural language, call `observe`, or deliberately submit
-invalid actions, but none of those creates a new world.
+The exact YAML shape is only illustrative; the important distinction is between:
 
-If the entire MindTrial benchmark task is explicitly rerun by the human/operator, that is a new
-benchmark attempt and should be recorded as such rather than treated as an in-game restart.
+- model-visible task files;
+- tool-local task files;
+- private service-only files.
 
-## Episode files in MindTrial
+## Tool connectivity
 
-For a text-first episode, MindTrial can provide public evidence such as:
+MindTrial's current Docker tools run with `NetworkMode: none`, which is a good default and should
+remain unchanged.
+
+A tool may explicitly declare service dependencies:
+
+```yaml
+tools:
+  - name: nexus
+    image: ghcr.io/petmal/nexus:latest
+    command:
+      - nexus
+      - call
+      - --url
+      - http://nexus:8080/action
+    services:
+      - nexus
+    parameters:
+      type: object
+      properties:
+        action:
+          # NEXUS action schema
+```
+
+For each task attempt, MindTrial creates private Docker networking for the selected services.
+Only tools that explicitly list a service are attached to the relevant service network.
+
+Therefore:
+
+- the NEXUS tool can reach the NEXUS service;
+- the Python tool cannot reach NEXUS unless explicitly configured to do so;
+- external internet access remains disabled;
+- the model cannot access Docker or the service network directly.
+
+This keeps the trust boundary narrow without requiring MCP support in MindTrial.
+
+## Why a Docker client tool is acceptable
+
+The first version does not need a new generic HTTP-tool implementation in MindTrial.
+
+The existing Docker-tool mechanism can invoke a small client command from the NEXUS image:
+
+```text
+model function call
+      |
+      v
+short-lived NEXUS client tool container
+      |
+      | private Docker service network
+      v
+persistent NEXUS service container
+```
+
+The client container remains stateless. The service owns all mutable game state.
+
+A generic in-process HTTP tool executor could be added later if service-backed tools become
+common and container-per-call overhead matters.
+
+## NEXUS single-session service mode
+
+Because MindTrial already creates one service instance per task execution attempt, NEXUS does
+not need to expose model-visible session creation in this mode.
+
+NEXUS should provide a runner-friendly single-session service interface such as:
+
+```text
+GET  /health
+GET  /manifest
+GET  /evidence/{name}
+GET  /observe
+POST /action
+GET  /status
+GET  /events
+```
+
+There is:
+
+```text
+no POST /sessions
+no reset
+no restart
+no new_game
+```
+
+The service creates its one game session when the process starts.
+
+NEXUS may retain its existing multi-session HTTP API for other consumers. Single-session service
+mode is simply another transport/lifecycle option and is not MindTrial-specific.
+
+## Restart prevention
+
+With this architecture, the evaluated model cannot restart a failed game:
+
+1. the public NEXUS action schema contains no reset action;
+2. the per-attempt service exposes no session-creation/reset endpoint;
+3. the model does not control service/container lifecycle;
+4. the tool container does not receive the Docker socket;
+5. terminal NEXUS state is irreversible;
+6. provider/task retries reuse the same service;
+7. a crashed service is an infrastructure error, not an automatic fresh game.
+
+A human/operator explicitly rerunning the entire MindTrial task is a new benchmark attempt and
+should be recorded as such.
+
+## Public action contract
+
+The model should know the stable NEXUS control interface.
+
+The tool schema and description should expose ordinary semantics for:
+
+- observe;
+- move;
+- take;
+- drop;
+- operate;
+- probe;
+- wait;
+- finish.
+
+The challenge is discovering the episode's causal world and planning within it, not guessing an
+undocumented tool API.
+
+## Evidence and attachments
+
+Public NEXUS evidence can still use MindTrial's ordinary task-file mechanisms when desired:
 
 - `facility_manual.txt`;
-- `measurements.csv`.
+- `measurements.csv`;
+- future images or other public attachments.
 
-These may be exposed natively to models that support files and/or locally to Python according to
-the benchmark configuration.
+These can be exposed natively to the model, locally to Python, or both according to MindTrial's
+normal file-access configuration.
 
-The private NEXUS package must never be attached to the task.
-
-For a future paired-modality benchmark, the same adapter/session can be used while the task
-chooses which public renderers/attachments are exposed.
+The private compiled episode is different: it is a service-only input and must never enter
+MindTrial's model/task file set.
 
 ## Expected result
 
-The task prompt can instruct the model:
+A task prompt can remain simple:
 
 ```text
-Complete the NEXUS mission using the nexus_action tool.
+Complete the NEXUS mission using the nexus tool.
 When NEXUS reports victory, return the victory code exactly.
 ```
 
-MindTrial's normal exact-result validation can compare that code with the expected receipt.
+MindTrial compares that final code using ordinary exact-result validation.
 
-No LLM judge is required.
+No NEXUS-specific validation logic or LLM judge is required.
+
+## Why this abstraction is useful beyond NEXUS
+
+A generic per-task service facility could support other interactive or stateful evaluation
+environments:
+
+- game/simulation servers;
+- local web applications;
+- databases with task-specific state;
+- API emulators;
+- coding sandboxes with daemon state;
+- mock external systems;
+- browser targets;
+- robotics/simulation bridges.
+
+That makes the MindTrial change defensible as a general execution capability rather than a
+benchmark-specific integration.
