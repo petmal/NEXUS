@@ -95,6 +95,12 @@ The initial episode family is a synthetic **Transformation Facility**: manipulat
 
 Conventional game engines are intentionally avoided. NEXUS is primarily a symbolic world, generation, search, and verification problem.
 
+## Documentation
+
+- [Player tutorial](docs/tutorial.md) — action reference, CLI help, and a tiny solved mechanics example.
+- [MindTrial integration design](docs/mindtrial-integration.md) — single-session tool binding and restart prevention.
+- [AGENTS.md](AGENTS.md) — implementation constraints and staged development guidance.
+
 ## Development
 
 See [AGENTS.md](AGENTS.md) for implementation constraints and staged development guidance.
@@ -169,6 +175,15 @@ nexus replay ./episode/private.json ./episode/run.jsonl --observer
 nexus play ./episode/private.json
 ```
 
+Inside the game, type `help`, `actions`, or `?` for the complete action reference. You can also run:
+
+```bash
+nexus actions
+nexus help
+nexus --help
+nexus qualify --help
+```
+
 The human CLI intentionally uses the trusted package because it combines the runner and
 observer in one process. Normal evaluated agents should interact through the machine protocol,
 not read the private file.
@@ -203,7 +218,7 @@ GET  /sessions/{id}/status
 GET  /sessions/{id}/events
 ```
 
-Canonical state, latent rules, reference plans, and verifier secrets remain server-side.
+Canonical state, latent rules, reference plans, and verifier secrets remain server-side. The player-safe manifest also includes the machine-readable action schema and human-readable action reference.
 
 ## Prototype limitations
 
