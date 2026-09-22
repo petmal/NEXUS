@@ -48,7 +48,23 @@ same initial state + same action trace == same state trace and terminal result
 
 Avoid floating point mechanics in the prototype. Prefer bounded integers and enums.
 
-### 4. Canonical state is authoritative
+### 4. Controls are public; world mechanics may be hidden
+
+Do not make undocumented control syntax part of ordinary NEXUS difficulty.
+
+The evaluated player should receive the stable interaction contract:
+
+- available action types;
+- required fields / JSON schema;
+- ordinary action semantics such as take, move, operate, probe, wait, and finish.
+
+Episode-specific causal laws, hidden state, reference plans, and verifier data remain private.
+
+If a future benchmark deliberately studies instruction-following under incomplete controls, make
+that an explicit separately tagged evaluation mode rather than silently mixing it into the normal
+reasoning score.
+
+### 5. Canonical state is authoritative
 
 Never place game logic in prose, rendering, UI, or LLM prompts.
 
@@ -56,13 +72,13 @@ Maintain one canonical symbolic state. Text, files, images, and human-observer v
 
 Renderers must be side-effect free.
 
-### 5. Exact success
+### 6. Exact success
 
 Do not use an LLM judge to decide whether the player won.
 
 The engine evaluates declarative goal predicates. A victory receipt may be emitted after success for integration with external benchmark systems.
 
-### 6. Keep private state private
+### 7. Keep private state private
 
 Never expose:
 
@@ -76,7 +92,7 @@ Public and private episode data should be separable.
 
 Do not rely on obscurity. Assume the player can inspect every file/process explicitly made available to it.
 
-### 7. Standalone first
+### 8. Standalone first
 
 NEXUS must run independently of MindTrial or any model vendor.
 
@@ -84,7 +100,7 @@ Core code must not import OpenAI, Anthropic, Google, MindTrial, or another evalu
 
 External systems integrate through adapters over a neutral NEXUS protocol.
 
-### 8. Prefer small explicit code over speculative frameworks
+### 9. Prefer small explicit code over speculative frameworks
 
 This is a prototype.
 
