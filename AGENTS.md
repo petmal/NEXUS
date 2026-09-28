@@ -94,9 +94,9 @@ Do not rely on obscurity. Assume the player can inspect every file/process expli
 
 ### 8. Standalone first
 
-NEXUS must run independently of MindTrial or any model vendor.
+NEXUS must run independently of any evaluation harness or model vendor.
 
-Core code must not import OpenAI, Anthropic, Google, MindTrial, or another evaluation harness.
+Core code must not import OpenAI, Anthropic, Google, or another evaluation harness.
 
 External systems integrate through adapters over a neutral NEXUS protocol.
 
@@ -315,7 +315,7 @@ Implement in this order unless a concrete blocker requires otherwise:
 11. CLI / JSONL machine protocol;
 12. terminal observer;
 13. persistent HTTP session server;
-14. external adapters such as MindTrial;
+14. neutral service/client integration interfaces;
 15. optional visual renderers.
 
 Do not put visual support on the critical path of the first working engine.

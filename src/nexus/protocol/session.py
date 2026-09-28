@@ -10,7 +10,7 @@ from nexus.models.actions import Action
 from nexus.models.episode import PrivateEpisode
 from nexus.models.events import TraceRecord
 from nexus.models.observation import Observation
-from nexus.models.world import WorldState
+from nexus.models.world import TerminalStatus, WorldState
 from nexus.render.text import observation
 
 
@@ -25,6 +25,15 @@ class ActionResponse(BaseModel):
     message: str = ""
     victory_code: str | None = None
     duplicate: bool = False
+
+
+class SessionStatus(BaseModel):
+    model_config = ConfigDict(extra="forbid", frozen=True)
+
+    turn: int
+    status: TerminalStatus
+    actions_remaining: int
+    victory_code: str | None = None
 
 
 class Session:
@@ -46,6 +55,19 @@ class Session:
     def state_snapshot(self) -> WorldState:
         with self._lock:
             return self.state.model_copy(deep=True)
+
+    def status(self) -> SessionStatus:
+        with self._lock:
+            victory_code = next(
+                (record.victory_code for record in reversed(self.trace) if record.victory_code),
+                None,
+            )
+            return SessionStatus(
+                turn=self.state.turn,
+                status=self.state.terminal_status,
+                actions_remaining=self.state.resources.actions_remaining,
+                victory_code=victory_code,
+            )
 
     def act(self, expected_turn: int, action: Action) -> ActionResponse:
         with self._lock:

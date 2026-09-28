@@ -12,6 +12,10 @@ def test_help_alias_and_actions_command():
     assert "generate" in result.stdout
     assert "qualify" in result.stdout
     assert "actions" in result.stdout
+    assert "serve-session" in result.stdout
+    assert "request" in result.stdout
+    assert "health" in result.stdout
+    assert "validate" in result.stdout
 
     actions = runner.invoke(app, ["actions"])
     assert actions.exit_code == 0

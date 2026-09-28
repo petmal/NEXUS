@@ -24,3 +24,7 @@ jobs:
           nexus qualify /tmp/nexus-smoke/private.json
           nexus solve /tmp/nexus-smoke/private.json --trace-out /tmp/nexus-smoke/run.jsonl
           nexus replay /tmp/nexus-smoke/private.json /tmp/nexus-smoke/run.jsonl
+      - name: Container smoke test
+        run: |
+          docker build -t nexus-ci .
+          docker run --rm nexus-ci --help

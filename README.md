@@ -98,14 +98,14 @@ Conventional game engines are intentionally avoided. NEXUS is primarily a symbol
 ## Documentation
 
 - [Player tutorial](docs/tutorial.md) — action reference, CLI help, and a tiny solved mechanics example.
-- [MindTrial integration design](docs/mindtrial-integration.md) — single-session tool binding and restart prevention.
+- [Service integration](docs/service-integration.md) — single-session service, client, health, and validation interfaces.
 - [AGENTS.md](AGENTS.md) — implementation constraints and staged development guidance.
 
 ## Development
 
 See [AGENTS.md](AGENTS.md) for implementation constraints and staged development guidance.
 
-All prototype work should remain isolated from unrelated projects. MindTrial support should eventually be a thin adapter over the standalone NEXUS protocol.
+All prototype work should remain isolated from unrelated projects. External harnesses should integrate through the standalone NEXUS protocols and CLI.
 
 
 ## Working prototype
@@ -220,11 +220,112 @@ GET  /sessions/{id}/events
 
 Canonical state, latent rules, reference plans, and verifier secrets remain server-side. The player-safe manifest also includes the machine-readable action schema and human-readable action reference.
 
+
+### Single-session service and container integration
+
+For an external orchestrator that already scopes one service process to one evaluation attempt,
+NEXUS can own exactly one non-resettable session:
+
+```bash
+NEXUS_SEED=17 NEXUS_HOST=0.0.0.0 nexus serve-session
+```
+
+A fixed verifier secret is optional when reproducible victory codes are useful:
+
+```bash
+NEXUS_SEED=17 NEXUS_VERIFIER_SECRET=test-secret nexus serve-session
+```
+
+The same mode can serve an already compiled private episode:
+
+```bash
+nexus serve-session --private ./episode/private.json
+```
+
+The single-session API intentionally has no session-creation or reset endpoint:
+
+```text
+GET  /health
+GET  /manifest
+GET  /evidence/{filename}
+GET  /observe
+POST /action
+GET  /status
+GET  /events
+```
+
+A short-lived client process can talk to the service using `NEXUS_URL`:
+
+```json
+{"operation":"observe"}
+{"operation":"evidence","filename":"measurements.csv"}
+{"operation":"action","action":{"type":"move","target":"R1"}}
+{"operation":"status"}
+```
+
+Each `nexus request --request-file` file contains exactly one of the JSON request envelopes
+shown above. For example:
+
+```json
+{"operation":"action","action":{"type":"move","target":"R1"}}
+```
+
+Execute it with:
+
+```bash
+NEXUS_URL=http://nexus:8000 nexus request --request-file /input/request.json
+```
+
+The client resolves the current turn before posting an action, so callers do not need to manage
+the optimistic-concurrency turn field themselves.
+
+Health checks can use:
+
+```bash
+nexus health
+```
+
+After the world is won, a trusted process can validate a submitted victory code without reading
+the private episode. For a short code, pass it directly:
+
+```bash
+NEXUS_URL=http://nexus:8000 nexus validate --candidate NX-ABCD-EFGH-IJKL
+```
+
+For file-based transport:
+
+```bash
+NEXUS_URL=http://nexus:8000 nexus validate --candidate-file /input/candidate
+```
+
+Unlike `nexus request --request-file`, the validator file is **not JSON**. It contains only the
+submitted victory code as raw text, for example:
+
+```text
+NX-ABCD-EFGH-IJKL
+```
+
+A valid check prints one JSON object with `correct`, `title`, and `explanation`. An incorrect
+candidate is a normal `correct:false` result; transport/protocol failures exit non-zero.
+
+A container image can be built directly from the repository:
+
+```bash
+docker build -t nexus .
+docker run --rm -p 8000:8000 \
+  -e NEXUS_SEED=17 \
+  -e NEXUS_HOST=0.0.0.0 \
+  nexus serve-session
+```
+
+See [Service integration](docs/service-integration.md) for trust boundaries and configuration
+patterns.
+
 ## Prototype limitations
 
 This is intentionally a narrow proof of concept rather than the final benchmark. The current
 episode family uses one artifact and one transformation machine; the finite causal grammar is
 public; runtime execution is deterministic; and observations are text/structured data only.
 Visual renderers, richer rule grammars, multiple interacting machines/artifacts, structural OOD
-splits, active information-gathering scenarios, and a MindTrial adapter are follow-up work after
+splits, active information-gathering scenarios, and richer external integrations are follow-up work after
 the core generator/solver/verifier loop is validated against real models.

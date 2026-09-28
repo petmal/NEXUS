@@ -81,7 +81,11 @@ def generate_episode(
     min_optimal_actions: int = 8,
     max_optimal_actions: int = 15,
     max_attempts: int = 100,
+    verifier_secret: str | None = None,
 ) -> PrivateEpisode:
+    if verifier_secret == "":
+        raise ValueError("verifier_secret must not be empty")
+
     all_candidates = enumerate_transformation_rules()
 
     for attempt in range(max_attempts):
@@ -185,7 +189,9 @@ def generate_episode(
             public=public,
             rules={"machine-rule": rule},
             machine_rules={"M1": "machine-rule"},
-            verifier_secret=secrets.token_hex(32),
+            verifier_secret=(
+                verifier_secret if verifier_secret is not None else secrets.token_hex(32)
+            ),
             construction_seed=seed,
             generation_metadata={
                 "generation_attempt": attempt,

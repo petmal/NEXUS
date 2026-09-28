@@ -5,6 +5,7 @@ import sys
 from pathlib import Path
 
 import typer
+from pydantic import ValidationError
 from rich.console import Console
 from rich.table import Table
 
@@ -12,6 +13,13 @@ from nexus.engine.replay import execute_with_trace, replay
 from nexus.generator import generate_episode, qualify_episode
 from nexus.io import load_private, load_trace, save_episode, save_trace
 from nexus.models.actions import ACTION_ADAPTER, ACTION_REFERENCE
+from nexus.protocol.client import (
+    SERVICE_REQUEST_ADAPTER,
+    ClientError,
+    check_health,
+    request_service,
+    validate_candidate,
+)
 from nexus.protocol.session import Session
 from nexus.protocol.stdio import run_jsonl
 from nexus.render.observer import render_observer
@@ -19,6 +27,10 @@ from nexus.solver import solve
 
 app = typer.Typer(no_args_is_help=True, help="NEXUS procedural LLM reasoning environment")
 console = Console()
+
+
+def _write_json(value: object) -> None:
+    sys.stdout.write(json.dumps(value, separators=(",", ":")) + "\n")
 
 
 def _print_action_reference() -> None:
@@ -173,7 +185,7 @@ def serve(
     host: str = typer.Option("127.0.0.1"),
     port: int = typer.Option(8000),
 ) -> None:
-    """Run a persistent HTTP session server (requires the server extra)."""
+    """Run a persistent multi-session HTTP server (requires the server extra)."""
     try:
         import uvicorn
     except ImportError as exc:
@@ -181,6 +193,92 @@ def serve(
     from nexus.protocol.http import create_app
 
     uvicorn.run(create_app(load_private(private)), host=host, port=port)
+
+
+@app.command("serve-session")
+def serve_session(
+    private: Path | None = typer.Option(
+        None, exists=True, readable=True,
+        help="Optional compiled private episode. Mutually exclusive with --seed.",
+    ),
+    seed: int | None = typer.Option(
+        None, envvar="NEXUS_SEED", help="Generate a qualified episode from this seed.",
+    ),
+    verifier_secret: str | None = typer.Option(
+        None, envvar="NEXUS_VERIFIER_SECRET",
+        help="Optional fixed verifier secret when generating from --seed.",
+    ),
+    host: str = typer.Option("127.0.0.1", envvar="NEXUS_HOST"),
+    port: int = typer.Option(8000, envvar="NEXUS_PORT"),
+) -> None:
+    """Run one non-resettable HTTP session for an external orchestrator."""
+    if (private is None) == (seed is None):
+        raise typer.BadParameter("provide exactly one of --private or --seed")
+    if private is not None and verifier_secret is not None:
+        raise typer.BadParameter("--verifier-secret can only be used with --seed")
+
+    episode = (
+        load_private(private)
+        if private is not None
+        else generate_episode(seed, verifier_secret=verifier_secret)
+    )
+    try:
+        import uvicorn
+    except ImportError as exc:
+        raise typer.BadParameter("install nexus-benchmark[server]") from exc
+    from nexus.protocol.http import create_single_session_app
+
+    uvicorn.run(create_single_session_app(episode), host=host, port=port)
+
+
+@app.command("request")
+def request_command(
+    request_file: Path = typer.Option(..., exists=True, readable=True),
+    url: str | None = typer.Option(None, envvar="NEXUS_URL"),
+) -> None:
+    """Send one player-safe request to a single-session service."""
+    try:
+        request = SERVICE_REQUEST_ADAPTER.validate_json(request_file.read_text(encoding="utf-8"))
+        response = request_service(request, url=url)
+    except (ValidationError, ClientError, OSError) as exc:
+        typer.echo(f"request failed: {exc}", err=True)
+        raise typer.Exit(code=2) from exc
+    _write_json(response)
+
+
+@app.command("health")
+def health_command(
+    url: str | None = typer.Option(None, envvar="NEXUS_URL"),
+) -> None:
+    """Exit successfully when a NEXUS service is healthy."""
+    try:
+        check_health(url=url)
+    except ClientError as exc:
+        typer.echo(f"unhealthy: {exc}", err=True)
+        raise typer.Exit(code=2) from exc
+    sys.stdout.write("ok\n")
+
+
+@app.command("validate")
+def validate_command(
+    candidate: str | None = typer.Option(None, help="Submitted victory code."),
+    candidate_file: Path | None = typer.Option(
+        None, exists=True, readable=True,
+        help="Read the submitted victory code from a file.",
+    ),
+    url: str | None = typer.Option(None, envvar="NEXUS_URL"),
+) -> None:
+    """Validate a submitted victory code against a live single-session service."""
+    if (candidate is None) == (candidate_file is None):
+        raise typer.BadParameter("provide exactly one of --candidate or --candidate-file")
+
+    supplied = candidate if candidate is not None else candidate_file.read_text(encoding="utf-8")
+    try:
+        result = validate_candidate(supplied, url=url)
+    except ClientError as exc:
+        typer.echo(f"validation failed: {exc}", err=True)
+        raise typer.Exit(code=2) from exc
+    _write_json(result.model_dump(mode="json"))
 
 
 if __name__ == "__main__":
