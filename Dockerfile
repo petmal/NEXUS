@@ -8,7 +8,7 @@ ENV PATH="/app/.venv/bin:$PATH"
 COPY pyproject.toml uv.lock README.md ./
 COPY src ./src
 
-RUN python -m pip install --no-cache-dir --no-deps uv==0.12.19 \
+RUN python -m pip install --no-cache-dir --no-deps uv==0.12.21 \
     && uv sync --frozen --extra server --no-editable
 
 ENTRYPOINT ["nexus"]

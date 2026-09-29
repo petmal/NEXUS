@@ -132,7 +132,7 @@ NEXUS uses Python 3.14 and commits a `uv.lock` so development, CI, and container
 the same resolved dependency graph. Install the pinned `uv` release and sync from the lock:
 
 ```bash
-python -m pip install --no-deps uv==0.12.19
+python -m pip install --no-deps uv==0.12.21
 uv sync --frozen --all-extras
 ```
 
