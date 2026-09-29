@@ -143,9 +143,11 @@ uv run nexus --help
 uv run pytest -q
 ```
 
-Direct dependencies are pinned in `pyproject.toml`; `uv.lock` additionally pins the complete
-transitive graph and artifact hashes. Refresh either intentionally rather than allowing installs
-to resolve newer packages implicitly.
+Direct dependencies use bounded compatibility ranges in `pyproject.toml`: generation-sensitive
+and pre-1.0 runtime dependencies stay within their current minor series, while stable-major
+non-generation and dev/test dependencies may advance across minor releases. `uv.lock` pins the
+exact resolved graph and artifact hashes used by development, CI, and containers. Refresh the
+lock intentionally rather than allowing installs to resolve newer packages implicitly.
 
 ### Generate an episode
 

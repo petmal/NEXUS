@@ -280,9 +280,12 @@ Prefer maintained third-party libraries where they remove undifferentiated infra
 
 Keep the deterministic transition engine itself simple and locally understandable.
 
-Runtime and package versions are intentionally reproducible. Keep direct dependencies pinned in
-`pyproject.toml`, commit the resolved `uv.lock`, and use frozen lock installs in CI and
-containers. Dependency upgrades should update both files together and pass the full test suite.
+Runtime and package versions are intentionally reproducible. Keep direct dependencies bounded in
+`pyproject.toml`, commit the exact resolved `uv.lock`, and use frozen lock installs in CI and
+containers. Allow patch drift generally; minor drift is appropriate for stable-major dependencies
+that do not affect generated-world stability and for dev/test tooling. Keep generation-sensitive
+or pre-1.0 runtime dependencies within their current minor series. Dependency upgrades should
+update both files together and pass the full test suite.
 
 ## Test expectations
 
