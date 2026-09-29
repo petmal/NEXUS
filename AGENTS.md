@@ -128,7 +128,7 @@ tests/
   integration/
 ```
 
-Use Python 3.12+ and modern typing.
+Use Python 3.14 and modern typing.
 
 ### Models
 
@@ -279,6 +279,10 @@ Prefer maintained third-party libraries where they remove undifferentiated infra
 - FastAPI/Uvicorn: later HTTP session server
 
 Keep the deterministic transition engine itself simple and locally understandable.
+
+Runtime and package versions are intentionally reproducible. Keep direct dependencies pinned in
+`pyproject.toml`, commit the resolved `uv.lock`, and use frozen lock installs in CI and
+containers. Dependency upgrades should update both files together and pass the full test suite.
 
 ## Test expectations
 

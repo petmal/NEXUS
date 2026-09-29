@@ -11,20 +11,23 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
-          python-version: "3.12"
-      - name: Install
+          python-version: "3.14.7"
+      - name: Install uv
+        run: python -m pip install --no-deps uv==0.12.19
+      - name: Verify lock and install
         run: |
-          python -m pip install --upgrade pip
-          python -m pip install -e ".[dev,server]"
+          uv lock --check
+          uv sync --frozen --all-extras
       - name: Test
-        run: pytest -q
+        run: uv run pytest -q
       - name: CLI smoke test
         run: |
-          nexus generate /tmp/nexus-smoke --seed 17
-          nexus qualify /tmp/nexus-smoke/private.json
-          nexus solve /tmp/nexus-smoke/private.json --trace-out /tmp/nexus-smoke/run.jsonl
-          nexus replay /tmp/nexus-smoke/private.json /tmp/nexus-smoke/run.jsonl
+          uv run nexus generate /tmp/nexus-smoke --seed 17
+          uv run nexus qualify /tmp/nexus-smoke/private.json
+          uv run nexus solve /tmp/nexus-smoke/private.json --trace-out /tmp/nexus-smoke/run.jsonl
+          uv run nexus replay /tmp/nexus-smoke/private.json /tmp/nexus-smoke/run.jsonl
       - name: Container smoke test
         run: |
           docker build -t nexus-ci .
+          docker run --rm --entrypoint python nexus-ci --version
           docker run --rm nexus-ci --help

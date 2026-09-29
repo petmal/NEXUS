@@ -82,7 +82,7 @@ The initial episode family is a synthetic **Transformation Facility**: manipulat
 
 ## Planned stack
 
-- Python 3.12+
+- Python 3.14
 - uv
 - Pydantic v2
 - Typer
@@ -128,18 +128,24 @@ The feature branch currently implements the first end-to-end Transformation Faci
 
 ### Install
 
-Using `uv`:
+NEXUS uses Python 3.14 and commits a `uv.lock` so development, CI, and container builds use
+the same resolved dependency graph. Install the pinned `uv` release and sync from the lock:
 
 ```bash
-uv venv
-uv pip install -e ".[dev,server]"
+python -m pip install --no-deps uv==0.12.19
+uv sync --frozen --all-extras
 ```
 
-A normal pip environment also works:
+Run commands through the locked environment with `uv run`, for example:
 
 ```bash
-python -m pip install -e ".[dev,server]"
+uv run nexus --help
+uv run pytest -q
 ```
+
+Direct dependencies are pinned in `pyproject.toml`; `uv.lock` additionally pins the complete
+transitive graph and artifact hashes. Refresh either intentionally rather than allowing installs
+to resolve newer packages implicitly.
 
 ### Generate an episode
 
@@ -308,14 +314,15 @@ NX-ABCD-EFGH-IJKL
 A valid check prints one JSON object with `correct`, `title`, and `explanation`. An incorrect
 candidate is a normal `correct:false` result; transport/protocol failures exit non-zero.
 
-A container image can be built directly from the repository:
+A container image can be built directly from the repository. The Dockerfile pins both the
+Python/Debian base image digest and the locked Python dependency graph:
 
 ```bash
-docker build -t nexus .
+docker build -t nexus:0.1.0 .
 docker run --rm -p 8000:8000 \
   -e NEXUS_SEED=17 \
   -e NEXUS_HOST=0.0.0.0 \
-  nexus serve-session
+  nexus:0.1.0 serve-session
 ```
 
 See [Service integration](docs/service-integration.md) for trust boundaries and configuration
