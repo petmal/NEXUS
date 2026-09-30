@@ -10,7 +10,7 @@ from nexus.models.actions import (
     TakeAction,
     WaitAction,
 )
-from nexus.models.episode import PlayerManifest, PrivateEpisode, PublicEpisode
+from nexus.models.episode import GenerationMetadata, PlayerManifest, PrivateEpisode, PublicEpisode
 from nexus.models.events import EngineEvent, StepResult, TraceRecord
 from nexus.models.goals import GoalKind, GoalPredicate
 from nexus.models.observation import Observation
@@ -40,6 +40,7 @@ __all__ = [
     "ProbeAction",
     "WaitAction",
     "FinishAction",
+    "GenerationMetadata",
     "PlayerManifest",
     "PrivateEpisode",
     "PublicEpisode",

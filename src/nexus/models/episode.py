@@ -69,6 +69,47 @@ class PlayerManifest(BaseModel):
         )
 
 
+class GenerationMetadata(BaseModel):
+    """Trusted operator metadata produced and mechanically checked during generation."""
+
+    model_config = ConfigDict(extra="forbid")
+
+    generation_attempt: int = 0
+    discovery_level: int = 0
+    planning_level: int = 1
+    machine_count: int = 1
+    room_count: int = 0
+    graph_diameter: int = 0
+
+    candidate_rules_before_evidence: int = 0
+    candidate_rules_after_evidence: int = 0
+    evidence_candidate_counts: dict[str, int] = Field(default_factory=dict)
+    evidence_rows: int = 0
+    evidence_rows_by_machine: dict[str, int] = Field(default_factory=dict)
+    mission_relevant_prediction_counts: dict[str, int] = Field(default_factory=dict)
+    direct_target_example: bool = False
+    required_probe_count: int = 0
+    viable_causal_hypotheses: int = 0
+
+    transformation_phases: dict[str, int] = Field(default_factory=dict)
+    requires_both_machines: bool = False
+    reverse_order_reaches_goal: bool = False
+
+    estimated_reference_actions: int = 0
+    optimal_action_count: int = 0
+    action_budget: int = 0
+    exploration_allowance: int = 0
+    recommended_tool_call_limit: int = 0
+
+    rule_ast_nodes: int = 0
+    rule_ast_depth: int = 0
+    rule_ast_nodes_by_machine: dict[str, int] = Field(default_factory=dict)
+    rule_ast_depth_by_machine: dict[str, int] = Field(default_factory=dict)
+
+    solver_visited_states: int = 0
+    solver_max_frontier_size: int = 0
+
+
 class PrivateEpisode(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
@@ -78,7 +119,7 @@ class PrivateEpisode(BaseModel):
     verifier_secret: str
     construction_seed: int | None = None
     reference_plan: tuple[dict, ...] = ()
-    generation_metadata: dict[str, int | str | bool] = Field(default_factory=dict)
+    generation_metadata: GenerationMetadata = Field(default_factory=GenerationMetadata)
 
     @model_validator(mode="after")
     def validate_private_links(self) -> "PrivateEpisode":
