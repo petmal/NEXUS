@@ -3,8 +3,8 @@
 FACILITY_MANUAL = """NEXUS TRANSFORMATION FACILITY — MACHINE LAW REFERENCE
 
 Every transformation machine in this prototype obeys one deterministic conditional law.
-The law is assembled from the finite grammar below. The selected law is hidden, but this
-grammar is public.
+Each machine's law is assembled independently from the finite grammar below. The selected
+laws are hidden, but this grammar is public.
 
 CONDITION
 
@@ -41,8 +41,13 @@ Orientation cycles north -> east -> south -> west -> north.
 
 EVIDENCE
 
-measurements.csv contains prior experiments performed on the same machine law used in
-this episode. Each row gives the facility phase and an artifact's input/output state.
+Each measurements file contains prior experiments for one machine. measurements.csv refers
+to M1. If M2 exists, measurements_M2.csv refers to M2. Each row gives the facility phase
+and an artifact's input/output state.
 
-The law does not depend on artifact pattern, room, turn number, or experiment history.
+Evidence is guaranteed to be truthful but is not always sufficient to identify the complete
+hidden law. Some episodes deliberately leave mission-relevant uncertainty that can be resolved
+by probing the live machine.
+
+A machine law does not depend on artifact pattern, room, turn number, or experiment history.
 """
