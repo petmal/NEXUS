@@ -1,7 +1,7 @@
 from fastapi.testclient import TestClient
 
 from nexus.generator import generate_episode
-from nexus.protocol import client as service_client
+import nexus.protocol.transport as service_transport
 from nexus.protocol.client import (
     SERVICE_REQUEST_ADAPTER,
     ValidationResult,
@@ -63,7 +63,7 @@ def test_request_client_sets_current_turn_for_actions(monkeypatch):
         assert path == "/action"
         return {"ok": True}
 
-    monkeypatch.setattr(service_client, "_json_request", fake_json_request)
+    monkeypatch.setattr(service_transport, "_json_request", fake_json_request)
     request = SERVICE_REQUEST_ADAPTER.validate_python(
         {"operation": "action", "action": {"type": "wait"}}
     )
@@ -82,14 +82,14 @@ def test_validate_candidate_requires_won_session_and_matching_code(monkeypatch):
         }
 
     monkeypatch.setattr(
-        service_client,
+        service_transport,
         "_json_request",
         lambda *_args, **_kwargs: status("active", None),
     )
     assert not validate_candidate("NX-NOPE").correct
 
     monkeypatch.setattr(
-        service_client,
+        service_transport,
         "_json_request",
         lambda *_args, **_kwargs: status("won", "NX-ABCD-EFGH-IJKL"),
     )

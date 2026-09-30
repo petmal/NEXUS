@@ -5,25 +5,9 @@ import sys
 from pathlib import Path
 
 import typer
-from pydantic import ValidationError
 from rich.console import Console
 from rich.table import Table
 
-from nexus.engine.replay import execute_with_trace, replay
-from nexus.generator import generate_episode, qualify_episode
-from nexus.io import load_private, load_trace, save_episode, save_trace
-from nexus.models.actions import ACTION_ADAPTER, ACTION_REFERENCE
-from nexus.protocol.client import (
-    SERVICE_REQUEST_ADAPTER,
-    ClientError,
-    check_health,
-    request_service,
-    validate_candidate,
-)
-from nexus.protocol.session import Session
-from nexus.protocol.stdio import run_jsonl
-from nexus.render.observer import render_observer
-from nexus.solver import solve
 
 app = typer.Typer(no_args_is_help=True, help="NEXUS procedural LLM reasoning environment")
 console = Console()
@@ -34,6 +18,8 @@ def _write_json(value: object) -> None:
 
 
 def _print_action_reference() -> None:
+    from nexus.models.actions import ACTION_REFERENCE
+
     table = Table(title="NEXUS actions")
     table.add_column("action")
     table.add_column("meaning")
@@ -74,6 +60,9 @@ def generate(
 
     Writes a player-safe manifest and attachments plus a runner-only private.json.
     """
+    from nexus.generator import generate_episode, qualify_episode
+    from nexus.io import save_episode
+
     for offset in range(count):
         episode = generate_episode(seed + offset)
         target = output if count == 1 else output / f"episode-{offset + 1:03d}"
@@ -95,6 +84,9 @@ def qualify(private: Path = typer.Argument(..., exists=True, readable=True)) -> 
     optimal-plan bounds, exact replay, victory receipt generation, serialization,
     and public/private separation.
     """
+    from nexus.generator import qualify_episode
+    from nexus.io import load_private
+
     report = qualify_episode(load_private(private))
     console.print_json(data=report.model_dump(mode="json"))
     if not report.passed:
@@ -107,6 +99,10 @@ def solve_episode(
     trace_out: Path | None = typer.Option(None, help="Optional JSONL trace output"),
 ) -> None:
     """Find an optimal plan with exhaustive BFS and optionally write its replay trace."""
+    from nexus.engine.replay import execute_with_trace
+    from nexus.io import load_private, save_trace
+    from nexus.solver import solve
+
     episode = load_private(private)
     result = solve(episode)
     console.print_json(data=result.model_dump(mode="json"))
@@ -124,6 +120,11 @@ def play(
 
     Type help, actions, or ? inside the game for the action reference.
     """
+    from nexus.io import load_private
+    from nexus.models.actions import ACTION_ADAPTER
+    from nexus.protocol.session import Session
+    from nexus.render.observer import render_observer
+
     session = Session(load_private(private))
     render_observer(session.episode, session.state, debug_private=debug_private)
     console.print(session.episode.public.description)
@@ -166,6 +167,10 @@ def replay_trace(
     observer: bool = typer.Option(False, help="Render final observer state"),
 ) -> None:
     """Replay a recorded action trace and verify every canonical state hash."""
+    from nexus.engine.replay import replay
+    from nexus.io import load_private, load_trace
+    from nexus.render.observer import render_observer
+
     episode = load_private(private)
     final = replay(episode, load_trace(trace))
     console.print(f"replay verified: turn={final.turn} status={final.terminal_status.value}")
@@ -176,6 +181,9 @@ def replay_trace(
 @app.command()
 def stdio(private: Path = typer.Argument(..., exists=True, readable=True)) -> None:
     """Run the JSONL stdin/stdout machine protocol for an external agent harness."""
+    from nexus.io import load_private
+    from nexus.protocol.stdio import run_jsonl
+
     run_jsonl(load_private(private), sys.stdin, sys.stdout)
 
 
@@ -186,6 +194,8 @@ def serve(
     port: int = typer.Option(8000),
 ) -> None:
     """Run a persistent multi-session HTTP server (requires the server extra)."""
+    from nexus.io import load_private
+
     try:
         import uvicorn
     except ImportError as exc:
@@ -212,6 +222,9 @@ def serve_session(
     port: int = typer.Option(8000, envvar="NEXUS_PORT"),
 ) -> None:
     """Run one non-resettable HTTP session for an external orchestrator."""
+    from nexus.generator import generate_episode
+    from nexus.io import load_private
+
     if (private is None) == (seed is None):
         raise typer.BadParameter("provide exactly one of --private or --seed")
     if private is not None and verifier_secret is not None:
@@ -237,6 +250,14 @@ def request_command(
     url: str | None = typer.Option(None, envvar="NEXUS_URL"),
 ) -> None:
     """Send one player-safe request to a single-session service."""
+    from pydantic import ValidationError
+
+    from nexus.protocol.client import (
+        SERVICE_REQUEST_ADAPTER,
+        ClientError,
+        request_service,
+    )
+
     try:
         request = SERVICE_REQUEST_ADAPTER.validate_json(request_file.read_text(encoding="utf-8"))
         response = request_service(request, url=url)
@@ -251,6 +272,8 @@ def health_command(
     url: str | None = typer.Option(None, envvar="NEXUS_URL"),
 ) -> None:
     """Exit successfully when a NEXUS service is healthy."""
+    from nexus.protocol.client import ClientError, check_health
+
     try:
         check_health(url=url)
     except ClientError as exc:
@@ -269,6 +292,8 @@ def validate_command(
     url: str | None = typer.Option(None, envvar="NEXUS_URL"),
 ) -> None:
     """Validate a submitted victory code against a live single-session service."""
+    from nexus.protocol.client import ClientError, validate_candidate
+
     if (candidate is None) == (candidate_file is None):
         raise typer.BadParameter("provide exactly one of --candidate or --candidate-file")
 

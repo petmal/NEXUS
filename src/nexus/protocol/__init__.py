@@ -1,25 +1,31 @@
-from nexus.protocol.client import (
-    SERVICE_REQUEST_ADAPTER,
-    ClientError,
-    ServiceRequest,
-    ValidationResult,
-    check_health,
-    request_service,
-    validate_candidate,
-)
-from nexus.protocol.session import ActionResponse, Session, SessionStatus
-from nexus.protocol.stdio import run_jsonl
+from __future__ import annotations
 
-__all__ = [
-    "ActionResponse",
-    "ClientError",
-    "SERVICE_REQUEST_ADAPTER",
-    "ServiceRequest",
-    "Session",
-    "SessionStatus",
-    "ValidationResult",
-    "check_health",
-    "request_service",
-    "run_jsonl",
-    "validate_candidate",
-]
+from importlib import import_module
+
+
+_EXPORTS = {
+    "ActionResponse": ("nexus.protocol.session", "ActionResponse"),
+    "ClientError": ("nexus.protocol.client", "ClientError"),
+    "SERVICE_REQUEST_ADAPTER": ("nexus.protocol.client", "SERVICE_REQUEST_ADAPTER"),
+    "ServiceRequest": ("nexus.protocol.client", "ServiceRequest"),
+    "Session": ("nexus.protocol.session", "Session"),
+    "SessionStatus": ("nexus.protocol.session", "SessionStatus"),
+    "ValidationResult": ("nexus.protocol.client", "ValidationResult"),
+    "check_health": ("nexus.protocol.client", "check_health"),
+    "request_service": ("nexus.protocol.client", "request_service"),
+    "run_jsonl": ("nexus.protocol.stdio", "run_jsonl"),
+    "validate_candidate": ("nexus.protocol.client", "validate_candidate"),
+}
+
+__all__ = list(_EXPORTS)
+
+
+def __getattr__(name: str):
+    try:
+        module_name, attribute = _EXPORTS[name]
+    except KeyError as exc:
+        raise AttributeError(f"module {__name__!r} has no attribute {name!r}") from exc
+
+    value = getattr(import_module(module_name), attribute)
+    globals()[name] = value
+    return value
