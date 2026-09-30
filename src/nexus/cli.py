@@ -37,6 +37,14 @@ def _print_action_reference() -> None:
     )
 
 
+def _print_play_reference() -> None:
+    _print_action_reference()
+    console.print(
+        "Human-play meta-command: [bold]evidence <filename>[/bold] reads one of the "
+        "public evidence files listed for the episode without consuming an action."
+    )
+
+
 @app.command("help")
 def help_command(ctx: typer.Context) -> None:
     """Show top-level command help. Equivalent to nexus --help."""
@@ -55,6 +63,18 @@ def generate(
     output: Path = typer.Argument(..., help="Output directory"),
     seed: int = typer.Option(1, help="Private construction seed"),
     count: int = typer.Option(1, min=1, help="Number of episodes"),
+    discovery_level: int = typer.Option(
+        0,
+        min=0,
+        max=3,
+        help="Causal-discovery difficulty: 0=demonstrated, 1=inferred, 2=one probe, 3=two stages.",
+    ),
+    planning_level: int = typer.Option(
+        1,
+        min=0,
+        max=2,
+        help="Planning scale: 0=compact, 1=standard, 2=extended.",
+    ),
 ) -> None:
     """Generate one or more solver-qualified episodes.
 
@@ -64,25 +84,46 @@ def generate(
     from nexus.io import save_episode
 
     for offset in range(count):
-        episode = generate_episode(seed + offset)
+        episode = generate_episode(
+            seed + offset,
+            discovery_level=discovery_level,
+            planning_level=planning_level,
+        )
         target = output if count == 1 else output / f"episode-{offset + 1:03d}"
         save_episode(episode, target)
         report = qualify_episode(episode)
         if not report.passed:
             raise typer.Exit(code=2)
+        metadata = episode.generation_metadata
         console.print(
             f"[green]generated[/green] {episode.public.episode_id} -> {target} "
-            f"(optimal={report.metrics['optimal_action_count']})"
+            f"(discovery={metadata.discovery_level} planning={metadata.planning_level} "
+            f"optimal={metadata.optimal_action_count} probes={metadata.required_probe_count} "
+            f"budget={metadata.action_budget} "
+            f"recommended-tool-calls={metadata.recommended_tool_call_limit})"
         )
+
+
+@app.command()
+def inspect(private: Path = typer.Argument(..., exists=True, readable=True)) -> None:
+    """Show trusted generation/complexity metadata without dumping hidden rules or secrets."""
+    from nexus.io import load_private
+
+    episode = load_private(private)
+    console.print_json(
+        data={
+            "episode_id": episode.public.episode_id,
+            "generation_metadata": episode.generation_metadata.model_dump(mode="json"),
+        }
+    )
 
 
 @app.command()
 def qualify(private: Path = typer.Argument(..., exists=True, readable=True)) -> None:
     """Validate a compiled episode as benchmark-ready.
 
-    Checks evidence sufficiency, compositional-rule complexity, solver success,
-    optimal-plan bounds, exact replay, victory receipt generation, serialization,
-    and public/private separation.
+    Checks information-profile guarantees, solver success, replay, victory receipt generation,
+    serialization, metadata consistency, and public/private separation.
     """
     from nexus.generator import qualify_episode
     from nexus.io import load_private
@@ -98,7 +139,7 @@ def solve_episode(
     private: Path = typer.Argument(..., exists=True, readable=True),
     trace_out: Path | None = typer.Option(None, help="Optional JSONL trace output"),
 ) -> None:
-    """Find an optimal plan with exhaustive BFS and optionally write its replay trace."""
+    """Find an optimal physical plan with exhaustive BFS and optionally write its replay trace."""
     from nexus.engine.replay import execute_with_trace
     from nexus.io import load_private, save_trace
     from nexus.solver import solve
@@ -118,7 +159,8 @@ def play(
 ) -> None:
     """Play interactively by entering one JSON action per line.
 
-    Type help, actions, or ? inside the game for the action reference.
+    Type help, actions, or ? for the action reference. Use evidence <filename> to read a
+    public evidence file without consuming an environment action.
     """
     from nexus.io import load_private
     from nexus.models.actions import ACTION_ADAPTER
@@ -129,8 +171,13 @@ def play(
     render_observer(session.episode, session.state, debug_private=debug_private)
     console.print(session.episode.public.description)
     console.print(
+        "Evidence files: "
+        + ", ".join(sorted(session.episode.public.evidence_files))
+    )
+    console.print(
         'Enter JSON actions such as {"type":"move","target":"R1"}. '
-        "Type [bold]help[/bold] for all actions; Ctrl-D exits."
+        "Type [bold]help[/bold] for all actions; use [bold]evidence <filename>[/bold] "
+        "to read public evidence; Ctrl-D exits."
     )
     while session.state.terminal_status.value == "active":
         try:
@@ -138,12 +185,28 @@ def play(
         except EOFError:
             break
 
-        command = raw.strip().lower()
+        stripped = raw.strip()
+        parts = stripped.split(maxsplit=1)
+        command = parts[0].lower() if parts else ""
+
         if command in {"help", "actions", "?"}:
-            _print_action_reference()
+            _print_play_reference()
             continue
         if command in {"quit", "exit"}:
             break
+        if command == "evidence":
+            if len(parts) != 2 or not parts[1].strip():
+                console.print("[red]usage:[/red] evidence <filename>")
+                continue
+            filename = parts[1].strip()
+            content = session.episode.public.evidence_files.get(filename)
+            if content is None:
+                console.print(f"[red]evidence file not found:[/red] {filename}")
+                continue
+            console.print(content, markup=False, highlight=False, end="")
+            if not content.endswith("\n"):
+                console.print()
+            continue
 
         try:
             action = ACTION_ADAPTER.validate_python(json.loads(raw))
@@ -214,6 +277,20 @@ def serve_session(
     seed: int | None = typer.Option(
         None, envvar="NEXUS_SEED", help="Generate a qualified episode from this seed.",
     ),
+    discovery_level: int = typer.Option(
+        0,
+        min=0,
+        max=3,
+        envvar="NEXUS_DISCOVERY_LEVEL",
+        help="Generated-session causal-discovery difficulty (used with --seed).",
+    ),
+    planning_level: int = typer.Option(
+        1,
+        min=0,
+        max=2,
+        envvar="NEXUS_PLANNING_LEVEL",
+        help="Generated-session planning scale (used with --seed).",
+    ),
     verifier_secret: str | None = typer.Option(
         None, envvar="NEXUS_VERIFIER_SECRET",
         help="Optional fixed verifier secret when generating from --seed.",
@@ -233,7 +310,12 @@ def serve_session(
     episode = (
         load_private(private)
         if private is not None
-        else generate_episode(seed, verifier_secret=verifier_secret)
+        else generate_episode(
+            seed,
+            discovery_level=discovery_level,
+            planning_level=planning_level,
+            verifier_secret=verifier_secret,
+        )
     )
     try:
         import uvicorn

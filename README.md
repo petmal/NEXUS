@@ -67,14 +67,14 @@ Important invariants:
 
 Keep the first environment deliberately small:
 
-- 5–7 connected rooms;
-- 2 artifacts;
-- 1–2 transformation machines;
+- 4–9 connected rooms selected by the planning profile;
+- 1 artifact;
+- 1–2 transformation machines selected by the discovery profile;
 - optional gate/phase state;
 - small integer/enumerated object properties;
 - one or two generated rule ASTs;
-- 8–15 optimal environment actions;
-- one generated evidence file;
+- solver-measured physical horizon with a conservative safety cap;
+- generated evidence qualified against the requested discovery profile;
 - text observations;
 - exact victory verification.
 
@@ -97,8 +97,9 @@ Conventional game engines are intentionally avoided. NEXUS is primarily a symbol
 
 ## Documentation
 
-- [Player tutorial](docs/tutorial.md) — action reference, CLI help, and a tiny solved mechanics example.
-- [Service integration](docs/service-integration.md) — single-session service, client, health, and validation interfaces.
+- [Player tutorial](docs/tutorial.md) — action reference, CLI help, evidence access, and a tiny solved mechanics example.
+- [Difficulty profiles](docs/difficulty.md) — the two public generation knobs and their mechanical guarantees.
+- [Service integration](docs/service-integration.md) — single-session service, client, health, validation, and generated-session configuration.
 - [AGENTS.md](AGENTS.md) — implementation constraints and staged development guidance.
 
 ## Development
@@ -115,7 +116,8 @@ The feature branch currently implements the first end-to-end Transformation Faci
 - compositional latent rule grammar with 288 possible generated laws;
 - generated connected room topology, artifact state, machine law, target state, and evidence;
 - public `facility_manual.txt` describing the causal grammar;
-- generated `measurements.csv` that uniquely identifies the selected law within that grammar;
+- generated machine evidence whose mission-relevant ambiguity is qualified to the requested discovery level;
+- generic discovery/planning profiles, including a two-machine sequential-discovery level;
 - deterministic transition engine and canonical hashing;
 - append-only trace plus deterministic replay verification;
 - engine-defined goal predicates and HMAC-based victory receipts;
@@ -152,8 +154,17 @@ lock intentionally rather than allowing installs to resolve newer packages impli
 ### Generate an episode
 
 ```bash
-nexus generate ./episode --seed 17
+nexus generate ./episode --seed 17 --discovery-level 1 --planning-level 1
 ```
+
+The public difficulty surface is intentionally small:
+
+- `--discovery-level 0..3` controls how much mission-relevant causal information must be
+  actively discovered;
+- `--planning-level 0..2` controls topology/planning scale.
+
+NEXUS derives compatible low-level generation settings and rejects candidates until the selected
+profile's guarantees are mechanically satisfied. See [Difficulty profiles](docs/difficulty.md).
 
 The generated directory contains:
 
@@ -162,8 +173,9 @@ episode/
   manifest.json                 # safe to expose to the evaluated agent
   attachments/
     facility_manual.txt         # public causal grammar
-    measurements.csv            # generated experimental evidence
-  private.json                  # trusted runner only
+    measurements.csv            # M1 experimental evidence
+    measurements_M2.csv         # present when an M2 evidence file is needed
+  private.json                  # trusted runner only, including generation metadata
 ```
 
 Do not give `private.json` to the evaluated model. It contains the latent rule,
@@ -173,6 +185,7 @@ construction metadata, reference solution, and victory secret.
 
 ```bash
 nexus qualify ./episode/private.json
+nexus inspect ./episode/private.json
 nexus solve ./episode/private.json --trace-out ./episode/run.jsonl
 nexus replay ./episode/private.json ./episode/run.jsonl --observer
 ```
@@ -183,7 +196,7 @@ nexus replay ./episode/private.json ./episode/run.jsonl --observer
 nexus play ./episode/private.json
 ```
 
-Inside the game, type `help`, `actions`, or `?` for the complete action reference. You can also run:
+Inside the game, type `help`, `actions`, or `?` for the complete action reference. Read any public file listed by the episode with `evidence <filename>`, for example `evidence measurements.csv`; this does not consume an environment action. You can also run:
 
 ```bash
 nexus actions
@@ -235,7 +248,8 @@ For an external orchestrator that already scopes one service process to one eval
 NEXUS can own exactly one non-resettable session:
 
 ```bash
-NEXUS_SEED=17 NEXUS_HOST=0.0.0.0 nexus serve-session
+NEXUS_SEED=17 NEXUS_DISCOVERY_LEVEL=1 NEXUS_PLANNING_LEVEL=1 \
+NEXUS_HOST=0.0.0.0 nexus serve-session
 ```
 
 A fixed verifier secret is optional when reproducible victory codes are useful:
@@ -333,8 +347,8 @@ patterns.
 ## Prototype limitations
 
 This is intentionally a narrow proof of concept rather than the final benchmark. The current
-episode family uses one artifact and one transformation machine; the finite causal grammar is
-public; runtime execution is deterministic; and observations are text/structured data only.
-Visual renderers, richer rule grammars, multiple interacting machines/artifacts, structural OOD
-splits, active information-gathering scenarios, and richer external integrations are follow-up work after
-the core generator/solver/verifier loop is validated against real models.
+episode family uses one artifact and one or two transformation machines; the finite causal grammar
+is public; runtime execution is deterministic; and observations are text/structured data only.
+Discovery level 3 introduces a qualified two-stage transformation chain, but richer interacting
+artifacts, larger rule grammars, structural OOD splits, visual renderers, and broader world families
+remain follow-up work after calibration against real models.

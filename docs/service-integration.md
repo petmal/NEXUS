@@ -12,7 +12,8 @@ creating, resetting, or replacing it.
 A generated episode can be selected with a seed:
 
 ```bash
-NEXUS_SEED=17 NEXUS_HOST=0.0.0.0 nexus serve-session
+NEXUS_SEED=17 NEXUS_DISCOVERY_LEVEL=1 NEXUS_PLANNING_LEVEL=1 \
+NEXUS_HOST=0.0.0.0 nexus serve-session
 ```
 
 Or an existing compiled private episode can be mounted and loaded:
@@ -25,12 +26,14 @@ Supported startup environment variables are:
 
 ```text
 NEXUS_SEED               deterministic public episode generation seed
+NEXUS_DISCOVERY_LEVEL    causal-discovery profile, integer 0..3 (default 0)
+NEXUS_PLANNING_LEVEL     topology/planning profile, integer 0..2 (default 1)
 NEXUS_VERIFIER_SECRET    optional fixed private secret for reproducible victory codes
 NEXUS_HOST               server bind address
 NEXUS_PORT               server port
 ```
 
-When `NEXUS_VERIFIER_SECRET` is omitted, each generated service process gets a fresh private
+The difficulty variables apply only when the service generates from `NEXUS_SEED`; a mounted private episode already contains its compiled world and metadata. When `NEXUS_VERIFIER_SECRET` is omitted, each generated service process gets a fresh private
 secret and therefore a fresh victory code even when the public episode seed is the same.
 
 ## Player-safe single-session API

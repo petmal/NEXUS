@@ -256,7 +256,18 @@ The first prototype may generate a CSV of prior machine experiments.
 
 For a finite rule grammar, enumerate candidate rules and mechanically verify that evidence narrows the hypothesis space as intended.
 
-Start by requiring a unique rule after supplied evidence. Active information gathering can be added later.
+Evidence difficulty is qualified by mission-relevant predictive uncertainty, not row count alone.
+
+The public discovery levels are semantic guarantees:
+
+- level 0: relevant behavior is directly demonstrated and the selected rule is identified;
+- level 1: no direct-context example is supplied, but the mission outcome is inferable without a probe;
+- level 2: supplied evidence leaves multiple mission-relevant predictions and one relevant probe resolves the stage;
+- level 3: two independently ambiguous transformation stages require two informed probe results for a guaranteed strategy.
+
+Probes are never mechanically mandatory; an agent may guess. The qualifier proves information
+conditions separately from physical winnability. For multi-stage worlds, also prove that the target
+cannot be reached by omitting a required machine or reversing the intended transformation chain.
 
 ### Human observability
 

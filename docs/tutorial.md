@@ -39,6 +39,17 @@ nexus> help
 
 to see the action reference.
 
+During human play, public evidence is available through the same filename-oriented concept used
+by the machine API:
+
+```text
+nexus> evidence facility_manual.txt
+nexus> evidence measurements.csv
+```
+
+The filename must be one of those listed by the episode. Reading evidence is a CLI meta-command
+and does not consume an environment action.
+
 ## Actions
 
 ### Observe
@@ -177,6 +188,7 @@ Per-command help uses Typer's standard form:
 ```bash
 nexus generate --help
 nexus qualify --help
+nexus inspect --help
 nexus solve --help
 nexus play --help
 nexus serve --help
@@ -186,6 +198,7 @@ In broad terms:
 
 - `generate`: create solver-qualified episodes;
 - `qualify`: run benchmark-validity checks against a compiled private episode;
+- `inspect`: print trusted generation/complexity metadata without dumping hidden rules or secrets;
 - `solve`: run the reference BFS solver;
 - `play`: human interactive client;
 - `replay`: verify a recorded trace deterministically;
