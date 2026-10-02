@@ -20,7 +20,7 @@ from nexus.models.actions import (
 from nexus.models.episode import PrivateEpisode
 from nexus.models.rules import Effect
 from nexus.models.world import INVENTORY, TerminalStatus, WorldState
-from nexus.solver.search import goal_location_rooms, neighbors, search_state_key, solve
+from nexus.solver.search import goal_artifact_ids, goal_location_rooms, neighbors, search_state_key, solve
 
 
 class PolicyActionValue(BaseModel):
@@ -71,6 +71,7 @@ def _legal_actions(episode: PrivateEpisode, state: WorldState) -> tuple[Action, 
             actions.append(DropAction(artifact=artifact.id))
 
     carried = sorted(artifact.id for artifact in state.carried_artifacts())
+    goal_artifacts = goal_artifact_ids(episode.public.goal)
     for machine in sorted(state.machines.values(), key=lambda item: item.id):
         if machine.room_id != state.agent_room:
             continue
@@ -78,7 +79,9 @@ def _legal_actions(episode: PrivateEpisode, state: WorldState) -> tuple[Action, 
             # Probe semantics are intentionally stable across all discovery levels and do not
             # consume a machine use.
             actions.append(ProbeAction(machine=machine.id, artifact=artifact_id))
-            if machine.uses_remaining > 0:
+            if machine.uses_remaining > 0 and artifact_id in goal_artifacts:
+                # Operating a non-goal artifact is dominated by probing it: the observation and
+                # action cost are identical, while probe preserves both artifact and machine use.
                 actions.append(OperateAction(machine=machine.id, artifact=artifact_id))
 
     if episode.public.phase_modulus > 1:
