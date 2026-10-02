@@ -18,8 +18,10 @@ jobs:
         run: |
           uv lock --check
           uv sync --frozen --all-extras
-      - name: Test
-        run: uv run pytest -q
+      - name: Fast tests
+        run: uv run pytest -q tests/unit tests/integration
+      - name: Property stress
+        run: uv run pytest -q tests/property
       - name: CLI smoke test
         run: |
           uv run nexus generate /tmp/nexus-smoke --seed 17
