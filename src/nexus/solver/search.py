@@ -51,6 +51,24 @@ def neighbors(episode: PrivateEpisode, room_id: str) -> list[str]:
     return sorted(result)
 
 
+def goal_artifact_ids(goal: GoalPredicate) -> set[str]:
+    """Collect artifacts that can affect the declarative goal.
+
+    Artifact-local transitions cannot make progress through an artifact that the goal never
+    references. The traversal is conservative across composite/negated predicates.
+    """
+    result: set[str] = set()
+
+    def visit(predicate: GoalPredicate) -> None:
+        if predicate.artifact_id is not None:
+            result.add(predicate.artifact_id)
+        for child in predicate.children:
+            visit(child)
+
+    visit(goal)
+    return result
+
+
 def goal_location_rooms(goal: GoalPredicate) -> dict[str, set[str]]:
     """Collect rooms that can satisfy an explicit artifact-location goal.
 
@@ -93,10 +111,12 @@ def legal_solver_actions(episode: PrivateEpisode, state: WorldState) -> list[Act
             actions.append(DropAction(artifact=artifact.id))
 
     carried = sorted((a.id for a in state.carried_artifacts()))
+    goal_artifacts = goal_artifact_ids(episode.public.goal)
     for machine in sorted(state.machines.values(), key=lambda m: m.id):
         if machine.room_id == state.agent_room and machine.uses_remaining > 0:
             for artifact_id in carried:
-                actions.append(OperateAction(machine=machine.id, artifact=artifact_id))
+                if artifact_id in goal_artifacts:
+                    actions.append(OperateAction(machine=machine.id, artifact=artifact_id))
 
     if episode.public.phase_modulus > 1:
         actions.append(WaitAction())
