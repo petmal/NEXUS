@@ -118,3 +118,115 @@ def test_operator_metadata_is_not_player_visible():
     assert "generation_metadata" not in manifest
     assert "optimal_action_count" not in str(manifest)
     assert "required_probe_count" not in str(manifest)
+
+
+
+def _artifact_intrinsic_state(artifact):
+    return (
+        artifact.shape,
+        artifact.pattern,
+        artifact.orientation,
+        artifact.value,
+        artifact.polarity,
+    )
+
+
+def test_d0_d1_d2_share_one_machine_scenario_family_at_fixed_planning_level():
+    episodes = [
+        generate_episode(
+            17,
+            discovery_level=discovery_level,
+            planning_level=1,
+            verifier_secret="paired-secret",
+        )
+        for discovery_level in (0, 1, 2)
+    ]
+
+    family_ids = {episode.generation_metadata.scenario_family_id for episode in episodes}
+    family_attempts = {
+        episode.generation_metadata.scenario_family_attempt for episode in episodes
+    }
+    assert len(family_ids) == 1
+    assert len(family_attempts) == 1
+
+    first = episodes[0]
+    for episode in episodes[1:]:
+        assert episode.rules == first.rules
+        assert episode.machine_rules == first.machine_rules
+        assert (
+            episode.generation_metadata.transformation_phases
+            == first.generation_metadata.transformation_phases
+        )
+        assert episode.public.rooms == first.public.rooms
+        assert episode.public.edges == first.public.edges
+        assert episode.public.initial_state.artifacts["A1"] == first.public.initial_state.artifacts["A1"]
+        assert episode.public.initial_state.machines == first.public.initial_state.machines
+        assert episode.public.goal == first.public.goal
+
+    evidence = [episode.public.evidence_files["measurements.csv"] for episode in episodes]
+    assert len(set(evidence)) == 3
+
+
+def test_planning_profiles_share_mechanics_and_evidence_but_not_role_placement_contract():
+    episodes = [
+        generate_episode(
+            73,
+            discovery_level=1,
+            planning_level=planning_level,
+            verifier_secret="paired-secret",
+        )
+        for planning_level in (0, 1, 2)
+    ]
+
+    assert len({episode.generation_metadata.scenario_family_id for episode in episodes}) == 1
+    assert len(
+        {episode.generation_metadata.scenario_family_attempt for episode in episodes}
+    ) == 1
+
+    first = episodes[0]
+    first_artifact = first.public.initial_state.artifacts["A1"]
+    for episode in episodes[1:]:
+        artifact = episode.public.initial_state.artifacts["A1"]
+        assert episode.rules == first.rules
+        assert episode.machine_rules == first.machine_rules
+        assert (
+            episode.generation_metadata.transformation_phases
+            == first.generation_metadata.transformation_phases
+        )
+        assert _artifact_intrinsic_state(artifact) == _artifact_intrinsic_state(first_artifact)
+        assert episode.public.evidence_files == first.public.evidence_files
+
+    assert all(
+        episode.generation_metadata.topology_attempt >= 0
+        for episode in episodes
+    )
+
+
+def test_d3_planning_profiles_share_two_machine_scenario_family():
+    episodes = [
+        generate_episode(
+            211,
+            discovery_level=3,
+            planning_level=planning_level,
+            verifier_secret="paired-secret",
+        )
+        for planning_level in (0, 1, 2)
+    ]
+
+    assert len({episode.generation_metadata.scenario_family_id for episode in episodes}) == 1
+    assert len(
+        {episode.generation_metadata.scenario_family_attempt for episode in episodes}
+    ) == 1
+
+    first = episodes[0]
+    first_artifact = first.public.initial_state.artifacts["A1"]
+    for episode in episodes[1:]:
+        assert episode.rules == first.rules
+        assert (
+            episode.generation_metadata.transformation_phases
+            == first.generation_metadata.transformation_phases
+        )
+        assert _artifact_intrinsic_state(
+            episode.public.initial_state.artifacts["A1"]
+        ) == _artifact_intrinsic_state(first_artifact)
+        assert episode.public.evidence_files == first.public.evidence_files
