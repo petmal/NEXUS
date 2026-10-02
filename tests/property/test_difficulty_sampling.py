@@ -6,6 +6,7 @@ from statistics import median
 
 from nexus.generator import GenerationError, generate_episode
 from nexus.generator.difficulty import MAX_PHYSICAL_OPTIMAL_ACTIONS
+from nexus.models.world import Shape
 
 
 SEEDS = (1, 17, 73, 211, 509, 1009, 4099, 16381, 65537, 104729)
@@ -68,7 +69,7 @@ def test_difficulty_profiles_are_stable_across_seed_sample(capsys):
                     assert {
                         artifact.shape
                         for artifact in episode.public.initial_state.artifacts.values()
-                    } == set(__import__("nexus.models.world", fromlist=["Shape"]).Shape)
+                    } == set(Shape)
 
     lines = [
         "difficulty seed stress: "
