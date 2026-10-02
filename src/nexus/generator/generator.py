@@ -22,12 +22,13 @@ from nexus.generator.difficulty import (
     room_bounds,
     validate_difficulty_levels,
 )
-from nexus.generator.discovery import DiscoveryAnalysis, analyze_discovery
+from nexus.generator.discovery import DiscoveryAnalysis, DiscoveryBelief, analyze_discovery
 from nexus.generator.evidence import (
     EvidencePlanningError,
     candidates_matching_csv,
     choose_mission_evidence,
     evidence_csv,
+    experiment_pool,
     measurement_filename,
 )
 from nexus.generator.manual import FACILITY_MANUAL
@@ -37,6 +38,7 @@ from nexus.generator.rules import (
     rule_ast_metrics,
     sample_transformation_rule,
 )
+from nexus.models.actions import ProbeAction
 from nexus.models.episode import GenerationMetadata, PrivateEpisode, PublicEpisode
 from nexus.models.goals import GoalKind, GoalPredicate
 from nexus.models.rules import Effect
@@ -51,6 +53,7 @@ from nexus.models.world import (
     Shape,
     WorldState,
 )
+from nexus.solver.belief import solve_guaranteed_policy
 from nexus.solver.search import solve
 
 
@@ -66,6 +69,19 @@ class _EvidenceProfile:
     prediction_counts: dict[str, int]
     direct_examples: dict[str, bool]
     analysis: DiscoveryAnalysis
+
+
+@dataclass(frozen=True)
+class _SelectiveMechanicsFamily:
+    attempt: int
+    family_id: str
+    selected_rule: Effect
+    initial_artifact: Artifact
+    target_artifact: Artifact
+    target_phase: int
+    epistemic_artifact: Artifact
+    distractor_artifact: Artifact
+    evidence_profile: _EvidenceProfile
 
 
 @dataclass(frozen=True)
@@ -130,6 +146,21 @@ def _role_rooms(
         assignment[-1],
         distance_sum,
     )
+
+
+def _farthest_room(
+    rooms: dict[str, Room],
+    edges: tuple[tuple[str, str], ...],
+    *,
+    start: str = "R0",
+) -> tuple[str, int]:
+    graph = nx.Graph()
+    graph.add_nodes_from(rooms)
+    graph.add_edges_from(edges)
+    distances = nx.single_source_shortest_path_length(graph, start)
+    distance = max(distances.values())
+    room_id = max(room for room, value in distances.items() if value == distance)
+    return room_id, distance
 
 
 def _graph_diameter(rooms: dict[str, Room], edges: tuple[tuple[str, str], ...]) -> int:
