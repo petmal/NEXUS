@@ -100,8 +100,16 @@ class GenerationMetadata(BaseModel):
     requires_both_machines: bool = False
     reverse_order_reaches_goal: bool = False
 
+    epistemic_artifact_id: str | None = None
+    distractor_artifact_id: str | None = None
+    epistemic_probe_outcomes: int = 0
+    distractor_probe_outcomes: int = 0
+    epistemic_probe_action_cost: int = 0
+    distractor_probe_action_cost: int = 0
+
     estimated_reference_actions: int = 0
     optimal_action_count: int = 0
+    guaranteed_policy_action_count: int = 0
     action_budget: int = 0
     exploration_allowance: int = 0
     recommended_tool_call_limit: int = 0
