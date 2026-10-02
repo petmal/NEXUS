@@ -72,6 +72,7 @@ def _legal_actions(episode: PrivateEpisode, state: WorldState) -> tuple[Action, 
 
     carried = sorted(artifact.id for artifact in state.carried_artifacts())
     goal_artifacts = goal_artifact_ids(episode.public.goal)
+    total_machine_uses = sum(machine.uses_remaining for machine in state.machines.values())
     for machine in sorted(state.machines.values(), key=lambda item: item.id):
         if machine.room_id != state.agent_room:
             continue
@@ -79,9 +80,14 @@ def _legal_actions(episode: PrivateEpisode, state: WorldState) -> tuple[Action, 
             # Probe semantics are intentionally stable across all discovery levels and do not
             # consume a machine use.
             actions.append(ProbeAction(machine=machine.id, artifact=artifact_id))
-            if machine.uses_remaining > 0 and artifact_id in goal_artifacts:
-                # Operating a non-goal artifact is dominated by probing it: the observation and
-                # action cost are identical, while probe preserves both artifact and machine use.
+            if machine.uses_remaining <= 0:
+                continue
+
+            # A non-goal operation is dominated by probe only when this would consume the final
+            # remaining machine use. If another use remains anywhere, mutating an auxiliary
+            # artifact can construct a new context for a later experiment and must stay legal in
+            # the exact belief-policy search.
+            if artifact_id in goal_artifacts or total_machine_uses > 1:
                 actions.append(OperateAction(machine=machine.id, artifact=artifact_id))
 
     if episode.public.phase_modulus > 1:
