@@ -33,9 +33,7 @@ def test_d4_selects_informative_auxiliary_context_over_predictable_distractor():
 
     artifacts = episode.public.initial_state.artifacts
     assert set(artifacts) == {"A1", "A2", "A3"}
-    assert artifacts["A1"].shape == Shape.SQUARE
-    assert artifacts["A2"].shape == Shape.CIRCLE
-    assert artifacts["A3"].shape == Shape.TRIANGLE
+    assert {artifact.shape for artifact in artifacts.values()} == set(Shape)
     assert all(artifact.location == "@inventory" for artifact in artifacts.values())
     assert episode.public.initial_state.machines["M1"].room_id == "R0"
 
@@ -99,3 +97,32 @@ def test_d4_generation_is_stable_across_seed_sample():
         report = qualify_episode(episode)
         assert report.passed, (seed, report.model_dump())
         assert episode.generation_metadata.guaranteed_policy_action_count > 0
+
+
+
+def test_d4_shape_roles_are_not_hardcoded_and_family_search_stays_bounded():
+    episodes = [
+        generate_episode(
+            seed,
+            discovery_level=4,
+            planning_level=1,
+            verifier_secret="d4-role-search-secret",
+        )
+        for seed in (1, 17, 73, 211, 509)
+    ]
+
+    assert all(
+        {artifact.shape for artifact in episode.public.initial_state.artifacts.values()}
+        == set(Shape)
+        for episode in episodes
+    )
+    assert max(
+        episode.generation_metadata.scenario_family_attempt + 1
+        for episode in episodes
+    ) <= 150
+    assert len(
+        {
+            episode.public.initial_state.artifacts["A1"].shape
+            for episode in episodes
+        }
+    ) >= 2
