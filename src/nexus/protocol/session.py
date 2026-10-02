@@ -99,7 +99,11 @@ class Session:
 
         metadata = self.episode.generation_metadata
         probes_used = sum(isinstance(record.action, ProbeAction) for record in self.trace)
-        guaranteed_baseline = metadata.optimal_action_count + metadata.required_probe_count
+        guaranteed_baseline = (
+            metadata.guaranteed_policy_action_count
+            if metadata.guaranteed_policy_action_count > 0
+            else metadata.optimal_action_count + metadata.required_probe_count
+        )
         return PerformanceSummary(
             actions_used=self.state.turn,
             optimal_physical_actions=metadata.optimal_action_count,
