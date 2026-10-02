@@ -102,10 +102,16 @@ class GenerationMetadata(BaseModel):
 
     epistemic_artifact_id: str | None = None
     distractor_artifact_id: str | None = None
+    epistemic_machine_id: str | None = None
+    distractor_machine_id: str | None = None
     epistemic_probe_outcomes: int = 0
     distractor_probe_outcomes: int = 0
     epistemic_probe_action_cost: int = 0
     distractor_probe_action_cost: int = 0
+    constructed_probe_outcomes: int = 0
+    direct_probe_action_cost: int = 0
+    constructor_action_cost: int = 0
+    distractor_action_cost: int = 0
 
     estimated_reference_actions: int = 0
     optimal_action_count: int = 0
