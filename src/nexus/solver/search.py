@@ -16,6 +16,7 @@ from nexus.models.actions import (
     WaitAction,
 )
 from nexus.models.episode import PrivateEpisode
+from nexus.models.goals import GoalKind, GoalPredicate
 from nexus.models.world import INVENTORY, TerminalStatus, WorldState
 
 
@@ -50,6 +51,30 @@ def neighbors(episode: PrivateEpisode, room_id: str) -> list[str]:
     return sorted(result)
 
 
+def goal_location_rooms(goal: GoalPredicate) -> dict[str, set[str]]:
+    """Collect rooms that can satisfy an explicit artifact-location goal.
+
+    With unlimited inventory and the current mechanics, dropping an artifact anywhere else is
+    dominated: movement has no carrying cost and probe/operate both require the artifact to be
+    carried. Collecting locations even underneath OR/NOT is deliberately conservative; it may
+    retain extra legal drops but never removes one referenced by the goal.
+    """
+    result: dict[str, set[str]] = {}
+
+    def visit(predicate: GoalPredicate) -> None:
+        if (
+            predicate.kind == GoalKind.ARTIFACT_LOCATION
+            and predicate.artifact_id is not None
+            and isinstance(predicate.value, str)
+        ):
+            result.setdefault(predicate.artifact_id, set()).add(predicate.value)
+        for child in predicate.children:
+            visit(child)
+
+    visit(goal)
+    return result
+
+
 def legal_solver_actions(episode: PrivateEpisode, state: WorldState) -> list[Action]:
     if state.terminal_status != TerminalStatus.ACTIVE or state.resources.actions_remaining <= 0:
         return []
@@ -57,10 +82,14 @@ def legal_solver_actions(episode: PrivateEpisode, state: WorldState) -> list[Act
     actions: list[Action] = [FinishAction()]
     actions.extend(MoveAction(target=room) for room in neighbors(episode, state.agent_room))
 
+    goal_rooms = goal_location_rooms(episode.public.goal)
     for artifact in sorted(state.artifacts.values(), key=lambda a: a.id):
         if artifact.location == state.agent_room:
             actions.append(TakeAction(artifact=artifact.id))
-        elif artifact.location == INVENTORY:
+        elif (
+            artifact.location == INVENTORY
+            and state.agent_room in goal_rooms.get(artifact.id, set())
+        ):
             actions.append(DropAction(artifact=artifact.id))
 
     carried = sorted((a.id for a in state.carried_artifacts()))
