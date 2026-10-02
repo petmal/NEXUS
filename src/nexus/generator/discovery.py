@@ -4,8 +4,15 @@ from dataclasses import dataclass
 from functools import lru_cache
 from itertools import product
 
+from nexus.engine.engine import step
 from nexus.engine.rules import apply_effect
 from nexus.generator.difficulty import artifact_projection
+from nexus.generator.evidence import candidates_matching_csv, measurement_filename
+from nexus.generator.rules import enumerate_transformation_rules
+from nexus.models.actions import OperateAction, ProbeAction
+from nexus.models.episode import PrivateEpisode
+from nexus.models.events import TraceRecord
+from nexus.models.goals import GoalKind, GoalPredicate
 from nexus.models.rules import Effect
 from nexus.models.world import Artifact, Orientation, Pattern, Polarity, Shape
 
@@ -364,3 +371,158 @@ def analyze_discovery(
         target_artifact=target_artifact,
         phase_modulus=phase_modulus,
     ).analysis()
+
+
+
+@dataclass(frozen=True)
+class CausalDecisionTrace:
+    """Epistemic classification of a probe/operate at the moment the agent took it."""
+
+    turn_before: int
+    action_type: str
+    machine_id: str
+    artifact_id: str
+    phase: int
+    viable_hypotheses_before: int
+    minimum_guaranteed_probes_before: int | None
+    discriminative: bool | None = None
+    mission_relevant: bool | None = None
+    guaranteed_safe: bool | None = None
+    risky: bool | None = None
+
+
+def _target_artifact_from_public_goal(episode: PrivateEpisode, artifact_id: str) -> Artifact:
+    """Recover the public target projection without consulting latent rules or reference plans."""
+    source = episode.public.initial_state.artifacts[artifact_id].model_copy(
+        update={"location": "@inventory"}
+    )
+    updates: dict[str, object] = {}
+
+    def visit(predicate: GoalPredicate) -> None:
+        if (
+            predicate.kind == GoalKind.ARTIFACT_FIELD
+            and predicate.artifact_id == artifact_id
+            and predicate.field is not None
+        ):
+            updates[predicate.field] = predicate.value
+        for child in predicate.children:
+            visit(child)
+
+    visit(episode.public.goal)
+    return Artifact.model_validate(source.model_copy(update=updates).model_dump())
+
+
+def analyze_causal_trace(
+    episode: PrivateEpisode,
+    trace: tuple[TraceRecord, ...] | list[TraceRecord],
+    *,
+    artifact_id: str = "A1",
+) -> tuple[CausalDecisionTrace, ...]:
+    """Label causal decisions using only information available before each decision.
+
+    The trusted private episode is used to replay accepted state transitions because compact trace
+    records store hashes/events rather than complete state snapshots. Causal classification never
+    consults the selected hidden rule directly: its hypothesis set comes from public evidence and
+    its target comes from the public goal. Each observed probe/operate result then narrows that
+    hypothesis set exactly as it would for the player.
+    """
+    catalog = enumerate_transformation_rules()
+    candidate_rules_by_machine: dict[str, list[Effect]] = {}
+    for machine_id in sorted(episode.public.initial_state.machines):
+        filename = measurement_filename(machine_id)
+        evidence = episode.public.evidence_files.get(filename)
+        if evidence is None:
+            raise ValueError(f"missing public evidence for machine {machine_id}")
+        candidate_rules_by_machine[machine_id] = candidates_matching_csv(evidence, catalog)
+
+    belief = DiscoveryBelief(
+        candidate_rules_by_machine=candidate_rules_by_machine,
+        initial_artifact=episode.public.initial_state.artifacts[artifact_id],
+        target_artifact=_target_artifact_from_public_goal(episode, artifact_id),
+        phase_modulus=episode.public.phase_modulus,
+    )
+    state = episode.public.initial_state.model_copy(deep=True)
+    decisions: list[CausalDecisionTrace] = []
+
+    for record in trace:
+        action = record.action
+        before_phase = state.phase
+        before_turn = state.turn
+
+        if isinstance(action, ProbeAction):
+            analysis = belief.analysis()
+            experiment = next(
+                (
+                    item
+                    for item in analysis.experiments
+                    if item.machine_id == action.machine and item.phase == before_phase
+                ),
+                None,
+            )
+            if experiment is None:
+                raise ValueError("trace probe is unavailable in the causal belief state")
+            decisions.append(
+                CausalDecisionTrace(
+                    turn_before=before_turn,
+                    action_type="probe",
+                    machine_id=action.machine,
+                    artifact_id=action.artifact,
+                    phase=before_phase,
+                    viable_hypotheses_before=analysis.viable_hypothesis_count,
+                    minimum_guaranteed_probes_before=analysis.minimum_guaranteed_probes,
+                    discriminative=experiment.discriminative,
+                    mission_relevant=experiment.mission_relevant,
+                )
+            )
+
+        elif isinstance(action, OperateAction):
+            analysis = belief.analysis()
+            commitment = next(
+                (
+                    item
+                    for item in analysis.commitments
+                    if item.machine_id == action.machine and item.phase == before_phase
+                ),
+                None,
+            )
+            if commitment is None:
+                raise ValueError("trace operation is unavailable in the causal belief state")
+            decisions.append(
+                CausalDecisionTrace(
+                    turn_before=before_turn,
+                    action_type="operate",
+                    machine_id=action.machine,
+                    artifact_id=action.artifact,
+                    phase=before_phase,
+                    viable_hypotheses_before=analysis.viable_hypothesis_count,
+                    minimum_guaranteed_probes_before=analysis.minimum_guaranteed_probes,
+                    guaranteed_safe=commitment.guaranteed_safe,
+                    risky=commitment.risky,
+                )
+            )
+
+        result = step(state, action, episode)
+        if not result.ok:
+            raise ValueError(f"trace contains invalid accepted action at turn {record.turn}")
+
+        if isinstance(action, ProbeAction):
+            probe_event = next((event for event in result.events if event.type == "probe"), None)
+            if probe_event is None:
+                raise ValueError("probe trace step did not emit a probe result")
+            observed = Artifact.model_validate(probe_event.details["result"])
+            belief.observe_probe(
+                machine_id=action.machine,
+                phase=before_phase,
+                observed_artifact=observed,
+            )
+        elif isinstance(action, OperateAction):
+            observed = result.state.artifacts[action.artifact]
+            belief.observe_operate(
+                machine_id=action.machine,
+                phase=before_phase,
+                observed_artifact=observed,
+            )
+
+        state = result.state
+
+    return tuple(decisions)
