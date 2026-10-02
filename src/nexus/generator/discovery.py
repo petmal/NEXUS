@@ -447,9 +447,7 @@ class CausalDecisionTrace:
 
 def _target_artifact_from_public_goal(episode: PrivateEpisode, artifact_id: str) -> Artifact:
     """Recover the public target projection without consulting latent rules or reference plans."""
-    source = episode.public.initial_state.artifacts[artifact_id].model_copy(
-        update={"location": "@inventory"}
-    )
+    source = episode.public.initial_state.artifacts[artifact_id]
     updates: dict[str, object] = {}
 
     def visit(predicate: GoalPredicate) -> None:
@@ -463,7 +461,10 @@ def _target_artifact_from_public_goal(episode: PrivateEpisode, artifact_id: str)
             visit(child)
 
     visit(episode.public.goal)
-    return Artifact.model_validate(source.model_copy(update=updates).model_dump())
+    payload = source.model_dump(mode="python")
+    payload["location"] = "@inventory"
+    payload.update(updates)
+    return Artifact.model_validate(payload)
 
 
 def analyze_causal_trace(
