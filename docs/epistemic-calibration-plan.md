@@ -109,6 +109,18 @@ Acceptance:
 
 ## Milestone 5 — D4 selective experimentation
 
+Implementation note after Milestone 4: non-destructive `probe` semantics remain identical at all
+difficulty levels. D4 is therefore a **cost-optimal experiment-selection** profile, not a profile
+where a special artifact is mechanically required to make an observation. Brute-force probing is
+legal. Qualification must prove that selecting a more informative context yields a lower
+worst-case total environment-action cost than indiscriminate probing.
+
+The exact minimum guaranteed total-action policy solver originally scoped for Milestone 7 is a
+prerequisite for this guarantee and is implemented at the start of Milestone 5. Milestone 7 then
+focuses on exposing exact regret/trace metrics and validating the generalized solver across all
+profiles rather than introducing the solver for the first time.
+
+
 Semantic guarantee:
 
 > Multiple plausible legal experiment contexts exist. At least one is predictably useless or
@@ -119,11 +131,11 @@ Semantic guarantee:
 Requirements:
 
 - support auxiliary artifacts that are not required by the final goal;
-- generate at least one epistemic resource and at least one epistemic distractor;
+- generate at least one lower-cost epistemic resource/context and at least one epistemic distractor;
 - distractor uselessness is proved from the full evidence-consistent hypothesis set, not from the
   selected hidden rule;
-- the world remains winnable even if the agent guesses, but the guarantee requires informative
-  experimentation;
+- the world remains winnable if the agent guesses or brute-force probes; the semantic guarantee
+  is that an informative experiment strictly improves minimum guaranteed total action cost;
 - qualifier proves the D4 semantic profile before return.
 
 Acceptance:
@@ -164,8 +176,9 @@ Acceptance:
 
 ## Milestone 7 — integrated belief-policy cost and epistemic regret
 
-Goal: replace the D0-D3 approximation "physical optimum + probe count" with an exact minimum
-worst-case action cost for information-aware policies.
+Goal: generalize the exact minimum worst-case action-cost solver introduced for D4/D5, expose
+regret/trace metrics from it, and validate it across all discovery profiles. This replaces the
+D0-D3 approximation "physical optimum + probe count" wherever an exact policy cost is available.
 
 State conceptually includes:
 
