@@ -1,4 +1,5 @@
 from nexus.engine.engine import step
+from nexus.engine.rules import apply_effect
 from nexus.engine.replay import execute_with_trace
 from nexus.generator import generate_episode, qualify_episode
 from nexus.generator.constructed import (
@@ -116,19 +117,20 @@ def test_d5_constructed_context_discriminates_all_winning_phases():
     # M2 itself is deterministic; it constructs one public test context.
     assert constructed_results == {CONSTRUCTOR_VALUE}
 
-    diagnostic_artifact = next(iter(constructed_results))
-    assert diagnostic_artifact == CONSTRUCTOR_VALUE
+    diagnostic_value = next(iter(constructed_results))
+    assert diagnostic_value == CONSTRUCTOR_VALUE
 
+    constructed = episode.public.initial_state.artifacts["A2"].model_copy(
+        update={"value": CONSTRUCTOR_VALUE}
+    )
     outputs = {
-        mission_rule.model_dump_json(): (
-            mission_rule,
-        )
+        apply_effect(mission_rule, constructed, 0).value
         for mission_rule in candidates["M1"]
     }
-    assert len(outputs) == 4
+    assert outputs == {0, 1, 2, 3}
 
-    # Qualification independently checks that probing M1 on the constructed A2 state yields four
-    # distinct observations; the metadata exposes only the count, never the hidden winning phase.
+    # Qualification independently recomputes the same partition; metadata exposes only the count,
+    # never the selected hidden winning phase.
     assert episode.generation_metadata.constructed_probe_outcomes == 4
 
 
