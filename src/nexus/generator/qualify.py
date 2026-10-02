@@ -303,6 +303,48 @@ def qualify_episode(
             )
             d4_mission_probe = _policy_probe_value(d4_policy, "A1")
 
+    d5_policy = None
+    d5_constructor = None
+    d5_direct_probe = None
+    d5_distractor = None
+    d5_constructed_outcomes = 0
+    if (
+        metadata.discovery_level == 5
+        and profile_inputs_valid
+        and initial_artifact is not None
+        and machine_ids == ("M1", "M2", "M3")
+    ):
+        epistemic_artifact = episode.public.initial_state.artifacts.get("A2")
+        distractor_artifact = episode.public.initial_state.artifacts.get("A3")
+        if epistemic_artifact is not None and distractor_artifact is not None:
+            proof_bound = min(
+                96,
+                max(
+                    10,
+                    (metadata.guaranteed_policy_action_count or metadata.action_budget or 48) + 2,
+                ),
+            )
+            d5_policy = solve_guaranteed_policy(
+                episode,
+                candidate_rules_by_machine=candidate_rules_by_machine,
+                max_actions=proof_bound,
+            )
+            d5_constructor = _policy_operate_value(d5_policy, "M2", "A2")
+            d5_direct_probe = _policy_probe_value(d5_policy, "A1")
+            d5_distractor = _policy_operate_value(d5_policy, "M3", "A3")
+
+            constructed_artifact = apply_effect(
+                constant_value_rule(CONSTRUCTOR_VALUE),
+                epistemic_artifact,
+                0,
+            )
+            d5_constructed_outcomes = len(
+                {
+                    artifact_projection(apply_effect(rule, constructed_artifact, 0))
+                    for rule in candidate_rules_by_machine["M1"]
+                }
+            )
+
     discovery_profile = (
         profile_inputs_valid
         and len(machine_ids) == expected_machine_count
@@ -394,21 +436,89 @@ def qualify_episode(
                 and distractor_probe.worst_case_total_actions
                 == d4_policy.optimal_worst_case_actions + 1
             )
+        elif metadata.discovery_level == 5:
+            epistemic_artifact = episode.public.initial_state.artifacts.get("A2")
+            distractor_artifact = episode.public.initial_state.artifacts.get("A3")
+            discovery_profile = (
+                machine_ids == ("M1", "M2", "M3")
+                and set(episode.public.initial_state.artifacts) == {"A1", "A2", "A3"}
+                and epistemic_artifact is not None
+                and distractor_artifact is not None
+                and {
+                    initial_artifact.shape,
+                    epistemic_artifact.shape,
+                    distractor_artifact.shape,
+                }
+                == set(Shape)
+                and all(
+                    artifact.location == "@inventory"
+                    for artifact in episode.public.initial_state.artifacts.values()
+                )
+                and all(
+                    machine.room_id == "R0"
+                    for machine in episode.public.initial_state.machines.values()
+                )
+                and not _goal_contains_kind(episode.public.goal, GoalKind.PHASE_EQUALS)
+                and _goal_field_value(episode.public.goal, "A1", "value")
+                == MISSION_TARGET_VALUE
+                and d5_policy is not None
+                and d5_policy.solvable
+                and d5_policy.viable_hypothesis_count == 4
+                and d5_policy.optimal_worst_case_actions is not None
+                and d5_constructor is not None
+                and d5_constructor.worst_case_total_actions
+                == d5_policy.optimal_worst_case_actions
+                and d5_direct_probe is not None
+                and d5_direct_probe.worst_case_total_actions is not None
+                and d5_direct_probe.worst_case_total_actions
+                > d5_policy.optimal_worst_case_actions
+                and d5_distractor is not None
+                and d5_distractor.worst_case_total_actions is not None
+                and d5_distractor.worst_case_total_actions
+                > d5_policy.optimal_worst_case_actions
+                and d5_constructed_outcomes == 4
+            )
 
     checks["discovery_profile"] = discovery_profile
     checks["guaranteed_policy"] = (
-        metadata.discovery_level != 4
-        or (
-            d4_policy is not None
+        (
+            metadata.discovery_level == 4
+            and d4_policy is not None
             and d4_policy.solvable
             and d4_policy.optimal_worst_case_actions
             == metadata.guaranteed_policy_action_count
+        )
+        or (
+            metadata.discovery_level == 5
+            and d5_policy is not None
+            and d5_policy.solvable
+            and d5_policy.optimal_worst_case_actions
+            == metadata.guaranteed_policy_action_count
+        )
+        or metadata.discovery_level not in {4, 5}
+    )
+    checks["constructed_experiment"] = (
+        metadata.discovery_level != 5
+        or (
+            d5_policy is not None
+            and d5_constructor is not None
+            and d5_constructor.worst_case_total_actions
+            == d5_policy.optimal_worst_case_actions
+            and d5_direct_probe is not None
+            and d5_direct_probe.worst_case_total_actions is not None
+            and d5_direct_probe.worst_case_total_actions
+            > d5_policy.optimal_worst_case_actions
+            and d5_distractor is not None
+            and d5_distractor.worst_case_total_actions is not None
+            and d5_distractor.worst_case_total_actions
+            > d5_policy.optimal_worst_case_actions
+            and d5_constructed_outcomes == 4
         )
     )
 
     expected_probes = (
         required_probe_count(metadata.discovery_level)
-        if 0 <= metadata.discovery_level <= 4
+        if 0 <= metadata.discovery_level <= 5
         else -1
     )
     expected_allowance = exploration_allowance(len(episode.public.rooms))
@@ -417,6 +527,8 @@ def qualify_episode(
         if metadata.discovery_level == 3
         else "selective-one-machine"
         if metadata.discovery_level == 4
+        else "constructed-three-machine"
+        if metadata.discovery_level == 5
         else "one-machine"
     )
     expected_family_id = (
