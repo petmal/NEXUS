@@ -63,6 +63,12 @@ def test_difficulty_profiles_are_stable_across_seed_sample(capsys):
                     or metadata.optimal_action_count + metadata.required_probe_count
                 )
                 assert metadata.recommended_tool_call_limit > metadata.action_budget
+                if discovery_level == 4:
+                    assert metadata.scenario_family_attempt + 1 <= 150
+                    assert {
+                        artifact.shape
+                        for artifact in episode.public.initial_state.artifacts.values()
+                    } == set(__import__("nexus.models.world", fromlist=["Shape"]).Shape)
 
     lines = [
         "difficulty seed stress: "
