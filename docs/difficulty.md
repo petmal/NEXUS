@@ -17,6 +17,7 @@ evidence rows.
 | 2 | Evidence plus the public goal require exactly one probe in the minimum guaranteed causal policy. |
 | 3 | The world contains two required transformation stages and the minimum guaranteed causal policy requires exactly two probes. The second stage operates on the artifact produced by the first. |
 | 4 | Probe mechanics are unchanged, but the world exposes multiple legal experimental contexts. At least one auxiliary context is discriminative and lies on a minimum-cost guaranteed policy, while a distractor context is predictably non-discriminative and costs an extra action. |
+| 5 | The agent must construct a lower-cost diagnostic context by operating an auxiliary machine on an auxiliary artifact, then probe the mission machine. Direct mission-artifact probing and a functional distractor-machine path remain legal but are mechanically proved to have higher worst-case total action cost. |
 
 A probe is an information action, not a gate. NEXUS never refuses an `operate` merely because the
 agent has not probed. An agent can therefore guess and get lucky. The qualifier instead enumerates
@@ -40,6 +41,23 @@ legal; the guarantee is about total action cost:
   action without improving the guaranteed policy.
 
 This lets NEXUS measure experiment-selection efficiency without changing the player mechanics.
+
+Level 5 extends the same idea to **experiment construction** without adding any new action
+semantics. The generated public grammar discloses two calibration-machine laws and a four-member
+mission-machine hypothesis family. The hidden parameter is the mission machine's winning phase.
+One calibration machine transforms an auxiliary sample into a diagnostic input that makes a
+single subsequent M1 probe distinguish all four hypotheses. A second calibration machine is fully
+functional but produces a non-diagnostic state. Qualification proves with the exact belief-policy
+solver that:
+
+- `operate M2(A2)` can start a minimum-cost guaranteed policy;
+- directly probing the mission artifact has strictly greater worst-case total action cost;
+- the `M3/A3` distractor path is also strictly more expensive;
+- the constructed M1 probe has four distinct outcomes, one for every viable hidden phase; and
+- the selected hidden world remains independently winnable by the ordinary physical solver.
+
+Brute-force probing remains legal. D5 therefore tests whether the agent can spend actions to
+*create* a useful experiment rather than merely choose among already informative probes.
 
 ## Planning level
 
@@ -70,6 +88,7 @@ For a fixed seed:
   locations; only the evidence/discovery profile changes.
 - D3 uses its own qualified two-machine causal family.
 - D4 uses a separate selective-experiment family with one mission artifact plus qualified auxiliary and distractor samples.
+- D5 uses a separate constructed-experiment family. For a fixed seed, all planning variants share the same hidden winning phase, artifact roles, and three machine laws; only the delivery topology changes.
 - Changing P0/P1/P2 does not reroll mechanics or evidence. Topology has an independent named RNG
   stream, so planning variants share the causal problem while changing the room graph and role
   placement.
@@ -94,7 +113,7 @@ physical optimal actions
 + execution slack
 ```
 
-For D4 the qualifier has an exact minimum worst-case **total action** policy, so the budget uses:
+For D4 and D5 the qualifier has an exact minimum worst-case **total action** policy, so the budget uses:
 
 ```text
 minimum guaranteed policy actions
@@ -117,7 +136,7 @@ evidence-consistent worlds.
 - physical optimal action count;
 - required informed-probe count;
 - exact guaranteed-policy action count where available;
-- selective-experiment proof metadata for D4;
+- selective-experiment proof metadata for D4 and constructed-experiment proof metadata for D5;
 - action budget;
 - recommended tool-call ceiling;
 - room count and graph diameter;
