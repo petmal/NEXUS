@@ -216,6 +216,15 @@ def solve_guaranteed_policy(
             branches = branches_for(state, belief, action)
             if not branches:
                 continue
+            if (
+                isinstance(action, ProbeAction)
+                and len(branches) == 1
+                and branches[0][1] == belief
+                and search_state_key(branches[0][0]) == search_state_key(state)
+            ):
+                # The probe revealed nothing and changed no physical state. Repeating it can only
+                # spend budget, so it cannot belong to a minimum guaranteed winning policy.
+                continue
             if all(can_win(next_state, members, budget - 1) for next_state, members in branches):
                 memo[key] = True
                 return True
