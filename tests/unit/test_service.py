@@ -100,3 +100,40 @@ def test_validate_candidate_requires_won_session_and_matching_code(monkeypatch):
         title="Valid victory code",
         explanation="The session is won and the submitted victory code matches it.",
     )
+
+
+
+def test_protocol_v02_keeps_static_context_in_manifest_not_state_responses():
+    episode = generate_episode(3031, verifier_secret="fixed-secret")
+    assert episode.public.protocol_version == "nexus-0.2"
+
+    client = TestClient(create_single_session_app(episode))
+
+    manifest = client.get("/manifest").json()
+    assert "goal" in manifest
+    assert manifest["evidence_files"]
+
+    observed = client.get("/observe").json()
+    assert "goal" not in observed
+    assert "evidence_files" not in observed
+
+    status = client.get("/status").json()
+    first_action = episode.reference_plan[0]
+    acted = client.post(
+        "/action",
+        json={"expected_turn": status["turn"], "action": first_action},
+    ).json()
+    assert acted["ok"] is True
+    assert "goal" not in acted["observation"]
+    assert "evidence_files" not in acted["observation"]
+
+
+def test_protocol_v01_loaded_episode_retains_legacy_static_observation_context():
+    episode = generate_episode(3032, verifier_secret="fixed-secret")
+    episode.public.protocol_version = "nexus-0.1"
+
+    client = TestClient(create_single_session_app(episode))
+    observed = client.get("/observe").json()
+
+    assert observed["goal"] == episode.public.goal.model_dump(mode="json")
+    assert observed["evidence_files"] == sorted(episode.public.evidence_files)
