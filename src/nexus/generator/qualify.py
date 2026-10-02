@@ -326,11 +326,17 @@ def qualify_episode(
 
     expected_probes = (
         required_probe_count(metadata.discovery_level)
-        if 0 <= metadata.discovery_level <= 3
+        if 0 <= metadata.discovery_level <= 4
         else -1
     )
     expected_allowance = exploration_allowance(len(episode.public.rooms))
-    family_kind = "two-machine" if metadata.discovery_level == 3 else "one-machine"
+    family_kind = (
+        "two-machine"
+        if metadata.discovery_level == 3
+        else "selective-one-machine"
+        if metadata.discovery_level == 4
+        else "one-machine"
+    )
     expected_family_id = (
         scenario_family_id(
             episode.construction_seed,
