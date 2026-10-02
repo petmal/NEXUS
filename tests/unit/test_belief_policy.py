@@ -100,11 +100,15 @@ def _episode(*, artifacts: dict[str, Artifact], phase_modulus: int) -> PrivateEp
     )
 
 
-def _probe_cost(result, artifact_id: str) -> int | None:
+def _probe_value(result, artifact_id: str):
     for value in result.initial_action_values:
         if isinstance(value.action, ProbeAction) and value.action.artifact == artifact_id:
-            return value.worst_case_total_actions
+            return value
     raise AssertionError(f"missing probe action for {artifact_id}")
+
+
+def _probe_cost(result, artifact_id: str) -> int | None:
+    return _probe_value(result, artifact_id).worst_case_total_actions
 
 
 def test_guaranteed_policy_solver_counts_total_action_cost_exactly():
@@ -159,5 +163,9 @@ def test_auxiliary_circle_probe_is_cheaper_than_square_bruteforce_and_triangle_i
 
     assert circle_cost == 5
     assert square_cost == 6
-    assert triangle_cost is None
+    assert triangle_cost == 6
     assert circle_cost < square_cost
+    assert _probe_value(result, "A2").outcome_count == 3
+    assert _probe_value(result, "A2").discriminative is True
+    assert _probe_value(result, "A3").outcome_count == 1
+    assert _probe_value(result, "A3").discriminative is False
