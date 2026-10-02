@@ -809,6 +809,14 @@ def generate_episode(
     if max_attempts < 1:
         raise ValueError("max_attempts must be at least 1")
 
+    if discovery_level == 4:
+        return _generate_selective_episode(
+            seed,
+            planning_level=planning_level,
+            max_attempts=max_attempts,
+            verifier_secret=verifier_secret,
+        )
+
     all_candidates = enumerate_transformation_rules()
     family_kind = "two-machine" if discovery_level == 3 else "one-machine"
     family = _find_mechanics_family(seed, family_kind, max_attempts)
