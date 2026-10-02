@@ -10,6 +10,13 @@ from pydantic import BaseModel, ConfigDict, Field
 from nexus.engine.canonical import canonical_hash
 from nexus.engine.replay import execute_with_trace, replay
 from nexus.engine.rules import apply_effect
+from nexus.generator.constructed import (
+    CONSTRUCTOR_VALUE,
+    DISTRACTOR_VALUE,
+    MISSION_TARGET_VALUE,
+    constant_value_rule,
+    constructed_mission_rules,
+)
 from nexus.generator.difficulty import (
     EXECUTION_SLACK,
     MAX_PHYSICAL_OPTIMAL_ACTIONS,
@@ -31,8 +38,9 @@ from nexus.generator.evidence import (
 )
 from nexus.generator.randomness import scenario_family_id
 from nexus.generator.rules import enumerate_transformation_rules, rule_ast_metrics
-from nexus.models.actions import ACTION_ADAPTER, ProbeAction
+from nexus.models.actions import ACTION_ADAPTER, OperateAction, ProbeAction
 from nexus.models.episode import PrivateEpisode
+from nexus.models.goals import GoalKind
 from nexus.models.world import Shape, TerminalStatus
 from nexus.solver.belief import solve_guaranteed_policy
 from nexus.solver.search import solve
@@ -56,6 +64,39 @@ def _graph_diameter(episode: PrivateEpisode) -> int:
 
 def _csv_row_count(csv_text: str) -> int:
     return len(list(csv.DictReader(io.StringIO(csv_text))))
+
+
+def _policy_operate_value(policy, machine_id: str, artifact_id: str):
+    return next(
+        (
+            value
+            for value in policy.initial_action_values
+            if isinstance(value.action, OperateAction)
+            and value.action.machine == machine_id
+            and value.action.artifact == artifact_id
+        ),
+        None,
+    )
+
+
+def _goal_contains_kind(goal, kind: GoalKind) -> bool:
+    if goal.kind == kind:
+        return True
+    return any(_goal_contains_kind(child, kind) for child in goal.children)
+
+
+def _goal_field_value(goal, artifact_id: str, field: str):
+    if (
+        goal.kind == GoalKind.ARTIFACT_FIELD
+        and goal.artifact_id == artifact_id
+        and goal.field == field
+    ):
+        return goal.value
+    for child in goal.children:
+        value = _goal_field_value(child, artifact_id, field)
+        if value is not None:
+            return value
+    return None
 
 
 def _policy_probe_value(policy, artifact_id: str):
