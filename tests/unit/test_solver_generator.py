@@ -98,6 +98,7 @@ def test_solver_prunes_operations_on_artifacts_absent_from_goal():
     machine = next(iter(episode.public.initial_state.machines.values()))
     state = episode.public.initial_state.model_copy(deep=True)
     state.agent_room = machine.room_id
+    state.artifacts["A1"].location = "@inventory"
 
     operations = [
         action.artifact
