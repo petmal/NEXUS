@@ -78,9 +78,27 @@ def test_play_evidence_meta_command_matches_player_evidence_access(tmp_path):
     assert "invalid action JSON" not in result.stdout
 
 
+def test_generate_supports_selective_discovery_level_four(tmp_path):
+    result = runner.invoke(
+        app,
+        [
+            "generate",
+            str(tmp_path / "episode-d4"),
+            "--seed",
+            "17",
+            "--discovery-level",
+            "4",
+            "--planning-level",
+            "0",
+        ],
+    )
+    assert result.exit_code == 0, result.stdout
+    assert "discovery=4" in result.stdout
+
+
 def test_generate_rejects_out_of_range_difficulty_levels(tmp_path):
     result = runner.invoke(
         app,
-        ["generate", str(tmp_path / "episode"), "--discovery-level", "4"],
+        ["generate", str(tmp_path / "episode"), "--discovery-level", "5"],
     )
     assert result.exit_code != 0
