@@ -8,7 +8,7 @@ from nexus.models.world import Artifact
 
 
 MIN_DISCOVERY_LEVEL = 0
-MAX_DISCOVERY_LEVEL = 3
+MAX_DISCOVERY_LEVEL = 4
 MIN_PLANNING_LEVEL = 0
 MAX_PLANNING_LEVEL = 2
 
@@ -48,7 +48,13 @@ def machine_count_for_discovery(discovery_level: int) -> int:
 def required_probe_count(discovery_level: int) -> int:
     if discovery_level <= 1:
         return 0
-    return discovery_level - 1
+    if discovery_level == 2:
+        return 1
+    if discovery_level == 3:
+        return 2
+    if discovery_level == 4:
+        return 1
+    raise ValueError(f"unsupported discovery level: {discovery_level}")
 
 
 def room_bounds(planning_level: int, machine_count: int) -> tuple[int, int]:
