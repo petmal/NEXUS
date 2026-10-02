@@ -122,7 +122,7 @@ def create_single_session_app(episode: PrivateEpisode) -> FastAPI:
 
     @app.get("/observe")
     def observe():
-        return session.observe().model_dump(mode="json")
+        return session.observe().model_dump(mode="json", exclude_none=True)
 
     @app.post("/action")
     def act(request: ActionRequest):
