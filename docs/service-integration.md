@@ -26,7 +26,7 @@ Supported startup environment variables are:
 
 ```text
 NEXUS_SEED               deterministic public episode generation seed
-NEXUS_DISCOVERY_LEVEL    causal-discovery profile, integer 0..3 (default 0)
+NEXUS_DISCOVERY_LEVEL    causal-discovery profile, integer 0..4 (default 0)
 NEXUS_PLANNING_LEVEL     topology/planning profile, integer 0..2 (default 1)
 NEXUS_VERIFIER_SECRET    optional fixed private secret for reproducible victory codes
 NEXUS_HOST               server bind address
@@ -62,7 +62,9 @@ The action response that first reaches `won` or `failed` also includes a termina
 `performance` object. It is absent as meaningful data while the episode is active, so private
 solver information cannot influence play.
 
-For the current D0-D3 profiles the summary includes:
+For D0-D3 the summary uses the physical optimum plus guaranteed probe count as its baseline. D4
+instead uses the exact minimum worst-case total-action policy proved during qualification. The
+summary includes:
 
 - accepted environment actions used;
 - private physical optimum;
