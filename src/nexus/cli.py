@@ -66,10 +66,10 @@ def generate(
     discovery_level: int = typer.Option(
         0,
         min=0,
-        max=4,
+        max=5,
         help=(
             "Causal-discovery difficulty: 0=demonstrated, 1=inferred, 2=one probe, "
-            "3=two stages, 4=cost-selective experiments."
+            "3=two stages, 4=cost-selective experiments, 5=constructed experiments."
         ),
     ),
     planning_level: int = typer.Option(
@@ -283,7 +283,7 @@ def serve_session(
     discovery_level: int = typer.Option(
         0,
         min=0,
-        max=4,
+        max=5,
         envvar="NEXUS_DISCOVERY_LEVEL",
         help="Generated-session causal-discovery difficulty (used with --seed).",
     ),
