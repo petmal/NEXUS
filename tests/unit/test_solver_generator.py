@@ -52,3 +52,29 @@ def test_reference_plan_is_structured_actions():
     episode = generate_episode(99)
     actions = [ACTION_ADAPTER.validate_python(item) for item in episode.reference_plan]
     assert actions
+
+
+def test_solver_prunes_drops_that_cannot_satisfy_any_location_goal():
+    from nexus.models.actions import DropAction
+    from nexus.models.world import Artifact, Orientation, Pattern, Polarity, Shape
+    from nexus.solver.search import legal_solver_actions
+
+    episode = generate_episode(6060, discovery_level=0, planning_level=1)
+    episode.public.initial_state.artifacts["A2"] = Artifact(
+        id="A2",
+        location="@inventory",
+        shape=Shape.CIRCLE,
+        pattern=Pattern.PLAIN,
+        orientation=Orientation.NORTH,
+        value=0,
+        polarity=Polarity.POSITIVE,
+    )
+    state = episode.public.initial_state.model_copy(deep=True)
+
+    drops = [
+        action.artifact
+        for action in legal_solver_actions(episode, state)
+        if isinstance(action, DropAction)
+    ]
+
+    assert "A2" not in drops
