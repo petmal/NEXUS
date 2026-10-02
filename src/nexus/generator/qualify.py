@@ -412,11 +412,48 @@ def qualify_episode(
     else:
         metadata_consistent = metadata_consistent and not metadata.requires_both_machines
 
+    if metadata.discovery_level == 4:
+        epistemic_probe = (
+            _policy_probe_value(d4_policy, "A2") if d4_policy is not None else None
+        )
+        distractor_probe = (
+            _policy_probe_value(d4_policy, "A3") if d4_policy is not None else None
+        )
+        metadata_consistent = metadata_consistent and (
+            metadata.epistemic_artifact_id == "A2"
+            and metadata.distractor_artifact_id == "A3"
+            and d4_policy is not None
+            and d4_policy.optimal_worst_case_actions
+            == metadata.guaranteed_policy_action_count
+            and epistemic_probe is not None
+            and epistemic_probe.outcome_count == metadata.epistemic_probe_outcomes
+            and epistemic_probe.worst_case_total_actions
+            == metadata.epistemic_probe_action_cost
+            and distractor_probe is not None
+            and distractor_probe.outcome_count == metadata.distractor_probe_outcomes
+            and distractor_probe.worst_case_total_actions
+            == metadata.distractor_probe_action_cost
+        )
+    else:
+        metadata_consistent = metadata_consistent and (
+            metadata.guaranteed_policy_action_count == 0
+            and metadata.epistemic_artifact_id is None
+            and metadata.distractor_artifact_id is None
+            and metadata.epistemic_probe_outcomes == 0
+            and metadata.distractor_probe_outcomes == 0
+            and metadata.epistemic_probe_action_cost == 0
+            and metadata.distractor_probe_action_cost == 0
+        )
+
     checks["generation_metadata_consistent"] = metadata_consistent
 
     metrics["evidence_candidate_count"] = evidence_candidate_counts.get("M1", 0)
     metrics["mission_relevant_prediction_count"] = prediction_counts.get("M1", 0)
     metrics["required_probe_count"] = metadata.required_probe_count
+    if metadata.discovery_level == 4:
+        metrics["guaranteed_policy_action_count"] = metadata.guaranteed_policy_action_count
+        metrics["epistemic_probe_action_cost"] = metadata.epistemic_probe_action_cost
+        metrics["distractor_probe_action_cost"] = metadata.distractor_probe_action_cost
     metrics["viable_causal_hypotheses"] = (
         discovery_analysis.viable_hypothesis_count if discovery_analysis is not None else 0
     )
@@ -432,12 +469,19 @@ def qualify_episode(
         checks["difficulty_bounds"] = (
             0 < solved.optimal_action_count <= MAX_PHYSICAL_OPTIMAL_ACTIONS
         )
-        checks["action_budget_sufficient"] = (
-            episode.public.initial_state.resources.actions_remaining
-            == solved.optimal_action_count
+        expected_action_budget = (
+            metadata.guaranteed_policy_action_count
+            + expected_allowance
+            + EXECUTION_SLACK
+            if metadata.discovery_level == 4
+            else solved.optimal_action_count
             + metadata.required_probe_count
             + expected_allowance
             + EXECUTION_SLACK
+        )
+        checks["action_budget_sufficient"] = (
+            episode.public.initial_state.resources.actions_remaining
+            == expected_action_budget
         )
         metadata_consistent = metadata_consistent and (
             metadata.optimal_action_count == solved.optimal_action_count
