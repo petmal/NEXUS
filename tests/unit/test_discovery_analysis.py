@@ -193,3 +193,28 @@ def test_stateful_belief_preserves_cross_machine_hypothesis_correlations():
     after = belief.analysis()
     assert after.viable_hypothesis_count == 1
     assert after.minimum_guaranteed_probes == 0
+
+
+def test_generated_d2_reference_trace_is_identified_as_risky_zero_probe_commitment():
+    from nexus.engine.replay import execute_with_trace
+    from nexus.generator import generate_episode
+    from nexus.generator.discovery import analyze_causal_trace
+    from nexus.models import ACTION_ADAPTER
+
+    episode = generate_episode(
+        1702,
+        discovery_level=2,
+        planning_level=1,
+        verifier_secret="trace-analysis-secret",
+    )
+    actions = [ACTION_ADAPTER.validate_python(item) for item in episode.reference_plan]
+    final, trace = execute_with_trace(episode, actions)
+    assert final.terminal_status.value == "won"
+
+    decisions = analyze_causal_trace(episode, trace)
+    operates = [item for item in decisions if item.action_type == "operate"]
+
+    assert operates
+    assert all(item.minimum_guaranteed_probes_before >= 1 for item in operates)
+    assert any(item.risky is True for item in operates)
+    assert all(item.mission_relevant is None for item in operates)
