@@ -22,7 +22,7 @@ def test_difficulty_profiles_are_stable_across_seed_sample(capsys):
     records: dict[tuple[int, int], list[dict[str, int]]] = defaultdict(list)
     failures: list[str] = []
 
-    for discovery_level in range(4):
+    for discovery_level in range(5):
         for planning_level in range(3):
             for seed in SEEDS:
                 try:
@@ -48,12 +48,20 @@ def test_difficulty_profiles_are_stable_across_seed_sample(capsys):
                         "solver_frontier": metadata.solver_max_frontier_size,
                         "optimal_actions": metadata.optimal_action_count,
                         "action_budget": metadata.action_budget,
+                        "guaranteed_actions": (
+                            metadata.guaranteed_policy_action_count
+                            or metadata.optimal_action_count + metadata.required_probe_count
+                        ),
                         "tool_calls": metadata.recommended_tool_call_limit,
                     }
                 )
 
                 assert 0 < metadata.optimal_action_count <= MAX_PHYSICAL_OPTIMAL_ACTIONS
                 assert metadata.action_budget >= metadata.optimal_action_count
+                assert metadata.action_budget >= (
+                    metadata.guaranteed_policy_action_count
+                    or metadata.optimal_action_count + metadata.required_probe_count
+                )
                 assert metadata.recommended_tool_call_limit > metadata.action_budget
 
     lines = [
@@ -61,18 +69,19 @@ def test_difficulty_profiles_are_stable_across_seed_sample(capsys):
         f"{len(SEEDS)} seeds x 12 profiles = {len(SEEDS) * 12} generated worlds",
         (
             "profile  success  attempts med/p95/max  solver-states med/p95/max  "
-            "horizon med/p95/max  budget med/p95/max"
+            "horizon med/p95/max  guaranteed med/p95/max  budget med/p95/max"
         ),
     ]
     all_records: list[dict[str, int]] = []
 
-    for discovery_level in range(4):
+    for discovery_level in range(5):
         for planning_level in range(3):
             profile_records = records[(discovery_level, planning_level)]
             all_records.extend(profile_records)
             attempts = [record["attempts"] for record in profile_records]
             states = [record["solver_states"] for record in profile_records]
             horizons = [record["optimal_actions"] for record in profile_records]
+            guaranteed = [record["guaranteed_actions"] for record in profile_records]
             budgets = [record["action_budget"] for record in profile_records]
             success = f"{len(profile_records)}/{len(SEEDS)}"
 
@@ -82,6 +91,7 @@ def test_difficulty_profiles_are_stable_across_seed_sample(capsys):
                     f"{median(attempts):>4g}/{_p95(attempts):>3}/{max(attempts):>3}          "
                     f"{median(states):>7g}/{_p95(states):>6}/{max(states):>6}             "
                     f"{median(horizons):>4g}/{_p95(horizons):>3}/{max(horizons):>3}          "
+                    f"{median(guaranteed):>4g}/{_p95(guaranteed):>3}/{max(guaranteed):>3}          "
                     f"{median(budgets):>4g}/{_p95(budgets):>3}/{max(budgets):>3}"
                 )
             else:
@@ -115,4 +125,4 @@ def test_difficulty_profiles_are_stable_across_seed_sample(capsys):
         print("\n".join(lines))
 
     assert not failures, "\n".join(failures)
-    assert len(all_records) == len(SEEDS) * 12
+    assert len(all_records) == len(SEEDS) * 15
