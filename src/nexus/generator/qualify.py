@@ -172,54 +172,91 @@ def qualify_episode(
     hidden_rules_match = True
     stage_inputs = {}
 
-    current = initial_artifact
-    profile_inputs_valid = current is not None
-    for machine_id in machine_ids:
-        if current is None:
-            profile_inputs_valid = False
-            break
-        phase = metadata.transformation_phases.get(machine_id)
-        rule_id = episode.machine_rules.get(machine_id)
-        rule = episode.rules.get(rule_id or "")
-        evidence_text = episode.public.evidence_files.get(measurement_filename(machine_id))
-        if phase is None or rule is None or evidence_text is None:
-            profile_inputs_valid = False
+    if metadata.discovery_level == 5:
+        epistemic_artifact = episode.public.initial_state.artifacts.get("A2")
+        distractor_artifact = episode.public.initial_state.artifacts.get("A3")
+        profile_inputs_valid = (
+            initial_artifact is not None
+            and epistemic_artifact is not None
+            and distractor_artifact is not None
+            and machine_ids == ("M1", "M2", "M3")
+            and episode.public.phase_modulus == 4
+        )
+        if profile_inputs_valid:
+            assert epistemic_artifact is not None
+            candidate_rules_by_machine = {
+                "M1": list(constructed_mission_rules(epistemic_artifact.shape)),
+                "M2": [constant_value_rule(CONSTRUCTOR_VALUE)],
+                "M3": [constant_value_rule(DISTRACTOR_VALUE)],
+            }
+            evidence_candidate_counts = {"M1": 4, "M2": 1, "M3": 1}
+            prediction_counts = {"M1": 2, "M2": 1, "M3": 1}
+            direct_examples = {"M1": False, "M2": False, "M3": False}
+            evidence_rows_by_machine = {"M1": 0, "M2": 0, "M3": 0}
+            hidden_rules_match = all(
+                episode.rules.get(episode.machine_rules.get(machine_id, ""))
+                in candidate_rules_by_machine[machine_id]
+                for machine_id in machine_ids
+            )
+        else:
             hidden_rules_match = False
-            continue
-        if not 0 <= phase < episode.public.phase_modulus:
-            profile_inputs_valid = False
-            continue
 
-        stage_inputs[machine_id] = current
-        matching = candidates_matching_csv(evidence_text, all_candidates)
-        candidate_rules_by_machine[machine_id] = matching
-        evidence_candidate_counts[machine_id] = len(matching)
-        prediction_counts[machine_id] = mission_prediction_count(matching, current, phase)
-        direct_examples[machine_id] = has_direct_context_csv(evidence_text, current, phase)
-        evidence_rows_by_machine[machine_id] = _csv_row_count(evidence_text)
-        hidden_rules_match = hidden_rules_match and rule in matching
-        current = apply_effect(rule, current, phase)
+        current = (
+            initial_artifact.model_copy(update={"value": MISSION_TARGET_VALUE})
+            if initial_artifact is not None
+            else None
+        )
+        discovery_analysis = None
+        exact_probe_count = 1 if profile_inputs_valid else None
+    else:
+        current = initial_artifact
+        profile_inputs_valid = current is not None
+        for machine_id in machine_ids:
+            if current is None:
+                profile_inputs_valid = False
+                break
+            phase = metadata.transformation_phases.get(machine_id)
+            rule_id = episode.machine_rules.get(machine_id)
+            rule = episode.rules.get(rule_id or "")
+            evidence_text = episode.public.evidence_files.get(measurement_filename(machine_id))
+            if phase is None or rule is None or evidence_text is None:
+                profile_inputs_valid = False
+                hidden_rules_match = False
+                continue
+            if not 0 <= phase < episode.public.phase_modulus:
+                profile_inputs_valid = False
+                continue
+
+            stage_inputs[machine_id] = current
+            matching = candidates_matching_csv(evidence_text, all_candidates)
+            candidate_rules_by_machine[machine_id] = matching
+            evidence_candidate_counts[machine_id] = len(matching)
+            prediction_counts[machine_id] = mission_prediction_count(matching, current, phase)
+            direct_examples[machine_id] = has_direct_context_csv(evidence_text, current, phase)
+            evidence_rows_by_machine[machine_id] = _csv_row_count(evidence_text)
+            hidden_rules_match = hidden_rules_match and rule in matching
+            current = apply_effect(rule, current, phase)
+
+        discovery_analysis = (
+            analyze_discovery(
+                candidate_rules_by_machine=candidate_rules_by_machine,
+                initial_artifact=initial_artifact,
+                target_artifact=current,
+                phase_modulus=episode.public.phase_modulus,
+            )
+            if profile_inputs_valid
+            and initial_artifact is not None
+            and current is not None
+            and len(candidate_rules_by_machine) == len(machine_ids)
+            else None
+        )
+        exact_probe_count = (
+            discovery_analysis.minimum_guaranteed_probes
+            if discovery_analysis is not None
+            else None
+        )
 
     checks["evidence_matches_hidden_rule"] = hidden_rules_match and profile_inputs_valid
-
-    discovery_analysis = (
-        analyze_discovery(
-            candidate_rules_by_machine=candidate_rules_by_machine,
-            initial_artifact=initial_artifact,
-            target_artifact=current,
-            phase_modulus=episode.public.phase_modulus,
-        )
-        if profile_inputs_valid
-        and initial_artifact is not None
-        and current is not None
-        and len(candidate_rules_by_machine) == len(machine_ids)
-        else None
-    )
-    exact_probe_count = (
-        discovery_analysis.minimum_guaranteed_probes
-        if discovery_analysis is not None
-        else None
-    )
 
     d4_policy = None
     d4_epistemic = None
