@@ -299,12 +299,64 @@ class DiscoveryBelief:
             commitments=tuple(commitments),
         )
 
+    def analyze_probe_context(
+        self,
+        *,
+        artifact: Artifact,
+        machine_id: str,
+        phase: int,
+    ) -> ExperimentAnalysis:
+        """Classify an arbitrary carried-artifact probe against the current mission belief."""
+        if machine_id not in self.remaining:
+            raise ValueError(f"machine {machine_id!r} is not available in the causal belief state")
+        if not 0 <= phase < self.phase_modulus:
+            raise ValueError(f"phase {phase} is outside the configured phase cycle")
+        if not self.belief:
+            return ExperimentAnalysis(
+                machine_id=machine_id,
+                phase=phase,
+                outcome_count=0,
+                discriminative=False,
+                mission_relevant=False,
+                worst_case_remaining_probes=None,
+            )
+
+        groups = self._outcome_groups(
+            self.belief,
+            _artifact_key(artifact),
+            machine_id,
+            phase,
+        )
+        minimum = self._search(self.belief, self.artifact_key, self.remaining)
+        minimum_probes = None if minimum >= self.infinity else minimum
+        costs = [
+            self._search(members, self.artifact_key, self.remaining)
+            for members in groups.values()
+        ]
+        feasible = all(cost < self.infinity for cost in costs)
+        worst = max(costs, default=0) if feasible else None
+        discriminative = len(groups) > 1
+        return ExperimentAnalysis(
+            machine_id=machine_id,
+            phase=phase,
+            outcome_count=len(groups),
+            discriminative=discriminative,
+            mission_relevant=(
+                discriminative
+                and minimum_probes is not None
+                and worst is not None
+                and worst < minimum_probes
+            ),
+            worst_case_remaining_probes=worst,
+        )
+
     def _members_for_observation(
         self,
         *,
         machine_id: str,
         phase: int,
         observed_artifact: Artifact,
+        input_artifact: Artifact | None = None,
     ) -> frozenset[int]:
         if machine_id not in self.remaining:
             raise ValueError(f"machine {machine_id!r} is not available in the causal belief state")
@@ -314,7 +366,7 @@ class DiscoveryBelief:
         observed_key = _artifact_key(observed_artifact)
         groups = self._outcome_groups(
             self.belief,
-            self.artifact_key,
+            _artifact_key(input_artifact) if input_artifact is not None else self.artifact_key,
             machine_id,
             phase,
         )
@@ -329,11 +381,13 @@ class DiscoveryBelief:
         machine_id: str,
         phase: int,
         observed_artifact: Artifact,
+        input_artifact: Artifact | None = None,
     ) -> None:
         self.belief = self._members_for_observation(
             machine_id=machine_id,
             phase=phase,
             observed_artifact=observed_artifact,
+            input_artifact=input_artifact,
         )
 
     def observe_operate(
@@ -451,16 +505,12 @@ def analyze_causal_trace(
 
         if isinstance(action, ProbeAction):
             analysis = belief.analysis()
-            experiment = next(
-                (
-                    item
-                    for item in analysis.experiments
-                    if item.machine_id == action.machine and item.phase == before_phase
-                ),
-                None,
+            input_artifact = state.artifacts[action.artifact]
+            experiment = belief.analyze_probe_context(
+                artifact=input_artifact,
+                machine_id=action.machine,
+                phase=before_phase,
             )
-            if experiment is None:
-                raise ValueError("trace probe is unavailable in the causal belief state")
             decisions.append(
                 CausalDecisionTrace(
                     turn_before=before_turn,
@@ -514,6 +564,7 @@ def analyze_causal_trace(
                 machine_id=action.machine,
                 phase=before_phase,
                 observed_artifact=observed,
+                input_artifact=state.artifacts[action.artifact],
             )
         elif isinstance(action, OperateAction):
             observed = result.state.artifacts[action.artifact]
