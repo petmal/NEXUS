@@ -540,6 +540,13 @@ def qualify_episode(
         if episode.construction_seed is not None
         else ""
     )
+    expected_viable_hypotheses = (
+        4
+        if metadata.discovery_level == 5
+        else (discovery_analysis.viable_hypothesis_count if discovery_analysis is not None else 0)
+    )
+    expected_catalog_count = 4 if metadata.discovery_level == 5 else len(all_candidates)
+
     metadata_consistent = (
         metadata.generation_attempt == metadata.scenario_family_attempt
         and metadata.scenario_family_attempt >= 0
@@ -550,13 +557,12 @@ def qualify_episode(
         and metadata.graph_diameter == _graph_diameter(episode)
         and metadata.required_probe_count == expected_probes
         and exact_probe_count == expected_probes
-        and metadata.viable_causal_hypotheses
-        == (discovery_analysis.viable_hypothesis_count if discovery_analysis is not None else 0)
+        and metadata.viable_causal_hypotheses == expected_viable_hypotheses
         and metadata.evidence_candidate_counts == evidence_candidate_counts
         and metadata.evidence_rows_by_machine == evidence_rows_by_machine
         and metadata.mission_relevant_prediction_counts == prediction_counts
         and metadata.direct_target_example == any(direct_examples.values())
-        and metadata.candidate_rules_before_evidence == len(all_candidates)
+        and metadata.candidate_rules_before_evidence == expected_catalog_count
         and metadata.candidate_rules_after_evidence == evidence_candidate_counts.get("M1", 0)
         and metadata.evidence_rows == evidence_rows_by_machine.get("M1", 0)
         and metadata.action_budget == episode.public.initial_state.resources.actions_remaining
@@ -581,8 +587,20 @@ def qualify_episode(
 
     checks["compositional_rule"] = (
         len(node_counts) == len(machine_ids)
-        and all(nodes >= 8 for nodes in node_counts.values())
-        and all(depth >= 3 for depth in depths.values())
+        and (
+            (
+                metadata.discovery_level == 5
+                and node_counts.get("M1", 0) >= 8
+                and depths.get("M1", 0) >= 3
+                and node_counts.get("M2", 0) >= 1
+                and node_counts.get("M3", 0) >= 1
+            )
+            or (
+                metadata.discovery_level != 5
+                and all(nodes >= 8 for nodes in node_counts.values())
+                and all(depth >= 3 for depth in depths.values())
+            )
+        )
     )
     metadata_consistent = metadata_consistent and (
         metadata.rule_ast_nodes_by_machine == node_counts
@@ -616,6 +634,8 @@ def qualify_episode(
         metadata_consistent = metadata_consistent and (
             metadata.epistemic_artifact_id == "A2"
             and metadata.distractor_artifact_id == "A3"
+            and metadata.epistemic_machine_id is None
+            and metadata.distractor_machine_id is None
             and d4_policy is not None
             and d4_policy.optimal_worst_case_actions
             == metadata.guaranteed_policy_action_count
@@ -627,16 +647,62 @@ def qualify_episode(
             and distractor_probe.outcome_count == metadata.distractor_probe_outcomes
             and distractor_probe.worst_case_total_actions
             == metadata.distractor_probe_action_cost
+            and metadata.constructed_probe_outcomes == 0
+            and metadata.direct_probe_action_cost == 0
+            and metadata.constructor_action_cost == 0
+            and metadata.distractor_action_cost == 0
+        )
+    elif metadata.discovery_level == 5:
+        selected_m1 = episode.rules.get(episode.machine_rules.get("M1", ""))
+        winning_phase = next(
+            (
+                index
+                for index, rule in enumerate(candidate_rules_by_machine.get("M1", []))
+                if rule == selected_m1
+            ),
+            None,
+        )
+        metadata_consistent = metadata_consistent and (
+            metadata.epistemic_artifact_id == "A2"
+            and metadata.distractor_artifact_id == "A3"
+            and metadata.epistemic_machine_id == "M2"
+            and metadata.distractor_machine_id == "M3"
+            and metadata.epistemic_probe_outcomes == 0
+            and metadata.distractor_probe_outcomes == 0
+            and metadata.epistemic_probe_action_cost == 0
+            and metadata.distractor_probe_action_cost == 0
+            and d5_policy is not None
+            and d5_policy.optimal_worst_case_actions
+            == metadata.guaranteed_policy_action_count
+            and d5_constructed_outcomes == metadata.constructed_probe_outcomes
+            and d5_direct_probe is not None
+            and d5_direct_probe.worst_case_total_actions
+            == metadata.direct_probe_action_cost
+            and d5_constructor is not None
+            and d5_constructor.worst_case_total_actions
+            == metadata.constructor_action_cost
+            and d5_distractor is not None
+            and d5_distractor.worst_case_total_actions
+            == metadata.distractor_action_cost
+            and winning_phase is not None
+            and metadata.transformation_phases
+            == {"M1": winning_phase, "M2": 0, "M3": 0}
         )
     else:
         metadata_consistent = metadata_consistent and (
             metadata.guaranteed_policy_action_count == 0
             and metadata.epistemic_artifact_id is None
             and metadata.distractor_artifact_id is None
+            and metadata.epistemic_machine_id is None
+            and metadata.distractor_machine_id is None
             and metadata.epistemic_probe_outcomes == 0
             and metadata.distractor_probe_outcomes == 0
             and metadata.epistemic_probe_action_cost == 0
             and metadata.distractor_probe_action_cost == 0
+            and metadata.constructed_probe_outcomes == 0
+            and metadata.direct_probe_action_cost == 0
+            and metadata.constructor_action_cost == 0
+            and metadata.distractor_action_cost == 0
         )
 
     checks["generation_metadata_consistent"] = metadata_consistent
@@ -648,9 +714,13 @@ def qualify_episode(
         metrics["guaranteed_policy_action_count"] = metadata.guaranteed_policy_action_count
         metrics["epistemic_probe_action_cost"] = metadata.epistemic_probe_action_cost
         metrics["distractor_probe_action_cost"] = metadata.distractor_probe_action_cost
-    metrics["viable_causal_hypotheses"] = (
-        discovery_analysis.viable_hypothesis_count if discovery_analysis is not None else 0
-    )
+    elif metadata.discovery_level == 5:
+        metrics["guaranteed_policy_action_count"] = metadata.guaranteed_policy_action_count
+        metrics["constructed_probe_outcomes"] = metadata.constructed_probe_outcomes
+        metrics["direct_probe_action_cost"] = metadata.direct_probe_action_cost
+        metrics["constructor_action_cost"] = metadata.constructor_action_cost
+        metrics["distractor_action_cost"] = metadata.distractor_action_cost
+    metrics["viable_causal_hypotheses"] = expected_viable_hypotheses
     metrics["rule_ast_nodes"] = max(node_counts.values(), default=0)
     metrics["rule_ast_depth"] = max(depths.values(), default=0)
 
@@ -667,7 +737,7 @@ def qualify_episode(
             metadata.guaranteed_policy_action_count
             + expected_allowance
             + EXECUTION_SLACK
-            if metadata.discovery_level == 4
+            if metadata.discovery_level in {4, 5}
             else solved.optimal_action_count
             + metadata.required_probe_count
             + expected_allowance
