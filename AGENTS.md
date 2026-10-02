@@ -263,11 +263,15 @@ The public discovery levels are semantic guarantees:
 - level 0: relevant behavior is directly demonstrated and the selected rule is identified;
 - level 1: no direct-context example is supplied, but the mission outcome is inferable without a probe;
 - level 2: supplied evidence leaves multiple mission-relevant predictions and one relevant probe resolves the stage;
-- level 3: two independently ambiguous transformation stages require two informed probe results for a guaranteed strategy.
+- level 3: two independently ambiguous transformation stages require two informed probe results for a guaranteed strategy;
+- level 4: probe semantics stay unchanged, but multiple legal experimental contexts have different mission value. Qualification proves an auxiliary context lies on a minimum-cost guaranteed total-action policy while a distractor context is predictably non-discriminative.
 
 Probes are never mechanically mandatory; an agent may guess. The qualifier proves information
-conditions separately from physical winnability. For multi-stage worlds, also prove that the target
-cannot be reached by omitting a required machine or reversing the intended transformation chain.
+conditions separately from physical winnability. Higher discovery levels must not silently change
+the stable probe/action semantics merely to force experimentation. Prefer exact policy-cost
+qualification: inefficient brute-force probing may remain legal while better experiment selection
+uses fewer actions. For multi-stage worlds, also prove that the target cannot be reached by
+omitting a required machine or reversing the intended transformation chain.
 
 ### Human observability
 
