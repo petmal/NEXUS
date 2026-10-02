@@ -77,19 +77,19 @@ def create_app(episode: PrivateEpisode) -> FastAPI:
         return {
             "session_id": session_id,
             "manifest": _player_manifest(store.episode),
-            "observation": session.observe().model_dump(mode="json"),
+            "observation": session.observe().model_dump(mode="json", exclude_none=True),
         }
 
     @app.get("/sessions/{session_id}/observe")
     def observe_session(session_id: str):
-        return store.get(session_id).observe().model_dump(mode="json")
+        return store.get(session_id).observe().model_dump(mode="json", exclude_none=True)
 
     @app.post("/sessions/{session_id}/actions")
     def act(session_id: str, request: ActionRequest):
         return (
             store.get(session_id)
             .act(request.expected_turn, request.action)
-            .model_dump(mode="json")
+            .model_dump(mode="json", exclude_none=True)
         )
 
     @app.get("/sessions/{session_id}/status")
@@ -126,7 +126,7 @@ def create_single_session_app(episode: PrivateEpisode) -> FastAPI:
 
     @app.post("/action")
     def act(request: ActionRequest):
-        return session.act(request.expected_turn, request.action).model_dump(mode="json")
+        return session.act(request.expected_turn, request.action).model_dump(mode="json", exclude_none=True)
 
     @app.get("/status")
     def status():
