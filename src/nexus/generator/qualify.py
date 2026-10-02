@@ -33,7 +33,7 @@ from nexus.generator.randomness import scenario_family_id
 from nexus.generator.rules import enumerate_transformation_rules, rule_ast_metrics
 from nexus.models.actions import ACTION_ADAPTER, ProbeAction
 from nexus.models.episode import PrivateEpisode
-from nexus.models.world import TerminalStatus
+from nexus.models.world import Shape, TerminalStatus
 from nexus.solver.belief import solve_guaranteed_policy
 from nexus.solver.search import solve
 
