@@ -66,7 +66,7 @@ def test_difficulty_profiles_are_stable_across_seed_sample(capsys):
 
     lines = [
         "difficulty seed stress: "
-        f"{len(SEEDS)} seeds x 12 profiles = {len(SEEDS) * 12} generated worlds",
+        f"{len(SEEDS)} seeds x 15 profiles = {len(SEEDS) * 15} generated worlds",
         (
             "profile  success  attempts med/p95/max  solver-states med/p95/max  "
             "horizon med/p95/max  guaranteed med/p95/max  budget med/p95/max"
