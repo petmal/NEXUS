@@ -18,7 +18,7 @@ class PublicEpisode(BaseModel):
 
     model_config = ConfigDict(extra="forbid")
 
-    protocol_version: str = "nexus-0.1"
+    protocol_version: str = "nexus-0.2"
     episode_id: str
     description: str
     rooms: dict[str, Room]

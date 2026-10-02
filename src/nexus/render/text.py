@@ -35,6 +35,7 @@ def observation(episode: PublicEpisode, state: WorldState) -> Observation:
             key=lambda m: m.id,
         )
     )
+    include_static_context = episode.protocol_version == "nexus-0.1"
     return Observation(
         episode_id=episode.episode_id,
         turn=state.turn,
@@ -47,6 +48,8 @@ def observation(episode: PublicEpisode, state: WorldState) -> Observation:
         carried_artifacts=carried,
         visible_machines=machines,
         terminal_status=state.terminal_status,
-        goal=episode.goal.model_dump(mode="json"),
-        evidence_files=tuple(sorted(episode.evidence_files)),
+        goal=episode.goal.model_dump(mode="json") if include_static_context else None,
+        evidence_files=(
+            tuple(sorted(episode.evidence_files)) if include_static_context else None
+        ),
     )

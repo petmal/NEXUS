@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict
 
 from nexus.models.world import Artifact, Machine, TerminalStatus
 
@@ -19,5 +19,7 @@ class Observation(BaseModel):
     carried_artifacts: tuple[Artifact, ...] = ()
     visible_machines: tuple[Machine, ...] = ()
     terminal_status: TerminalStatus
-    goal: dict = Field(default_factory=dict)
-    evidence_files: tuple[str, ...] = ()
+
+    # v0.1 compatibility only. v0.2 keeps immutable goal/evidence context in the manifest.
+    goal: dict | None = None
+    evidence_files: tuple[str, ...] | None = None
