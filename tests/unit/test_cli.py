@@ -96,9 +96,27 @@ def test_generate_supports_selective_discovery_level_four(tmp_path):
     assert "discovery=4" in result.stdout
 
 
+def test_generate_supports_constructed_discovery_level_five(tmp_path):
+    result = runner.invoke(
+        app,
+        [
+            "generate",
+            str(tmp_path / "episode-d5"),
+            "--seed",
+            "17",
+            "--discovery-level",
+            "5",
+            "--planning-level",
+            "0",
+        ],
+    )
+    assert result.exit_code == 0, result.stdout
+    assert "discovery=5" in result.stdout
+
+
 def test_generate_rejects_out_of_range_difficulty_levels(tmp_path):
     result = runner.invoke(
         app,
-        ["generate", str(tmp_path / "episode"), "--discovery-level", "5"],
+        ["generate", str(tmp_path / "episode"), "--discovery-level", "6"],
     )
     assert result.exit_code != 0
