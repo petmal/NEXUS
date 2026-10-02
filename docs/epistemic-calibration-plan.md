@@ -232,3 +232,20 @@ Each milestone uses a focused group of commits:
 
 No milestone proceeds while the previous milestone has failing tests, failed qualification,
 unexplained generation rejection, or unresolved ambiguity.
+
+
+## Post-milestone interoperability polish
+
+After the functional milestones are complete and stable, make terminal performance telemetry
+machine-interpretable for downstream evaluators and LLM analysis:
+
+- add a top-level `$schema` field to the terminal performance object;
+- publish a versioned JSON Schema in the NEXUS repository;
+- use stable, descriptive property names and schema descriptions that explain semantics,
+  units, signed-delta interpretation, guaranteed-vs-actual distinctions, and nullable fields;
+- keep schema evolution versioned so historical benchmark outputs remain interpretable;
+- prefer a stable raw GitHub/release URL rather than an unversioned branch URL;
+- add contract tests that emitted terminal telemetry validates against the published schema.
+
+This is intentionally deferred until the telemetry shape from the later policy/regret milestones is
+final, to avoid publishing a schema that immediately churns.
