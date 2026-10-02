@@ -195,7 +195,7 @@ def test_stateful_belief_preserves_cross_machine_hypothesis_correlations():
     assert after.minimum_guaranteed_probes == 0
 
 
-def test_generated_d2_reference_trace_is_identified_as_risky_zero_probe_commitment():
+def test_generated_d2_reference_trace_is_identified_as_risky_zero_probe_commitment(recwarn):
     from nexus.engine.replay import execute_with_trace
     from nexus.generator import generate_episode
     from nexus.generator.discovery import analyze_causal_trace
@@ -218,3 +218,4 @@ def test_generated_d2_reference_trace_is_identified_as_risky_zero_probe_commitme
     assert all(item.minimum_guaranteed_probes_before >= 1 for item in operates)
     assert any(item.risky is True for item in operates)
     assert all(item.mission_relevant is None for item in operates)
+    assert not recwarn.list
