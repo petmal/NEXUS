@@ -279,11 +279,14 @@ def qualify_episode(
                 and direct_examples.get("M1") is False
                 and prediction_counts.get("M1", 0) > 1
                 and set(episode.public.initial_state.artifacts) == {"A1", "A2", "A3"}
-                and initial_artifact.shape == Shape.SQUARE
                 and epistemic_artifact is not None
-                and epistemic_artifact.shape == Shape.CIRCLE
                 and distractor_artifact is not None
-                and distractor_artifact.shape == Shape.TRIANGLE
+                and {
+                    initial_artifact.shape,
+                    epistemic_artifact.shape,
+                    distractor_artifact.shape,
+                }
+                == set(Shape)
                 and all(
                     artifact.location == "@inventory"
                     for artifact in episode.public.initial_state.artifacts.values()
