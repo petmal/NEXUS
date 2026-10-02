@@ -9,6 +9,15 @@ from itertools import permutations
 import networkx as nx
 
 from nexus.engine.rules import apply_effect
+from nexus.generator.constructed import (
+    CONSTRUCTOR_VALUE,
+    DISTRACTOR_VALUE,
+    MISSION_TARGET_VALUE,
+    constant_value_rule,
+    constructed_manual,
+    constructed_mission_rule,
+    constructed_mission_rules,
+)
 from nexus.generator.difficulty import (
     EXECUTION_SLACK,
     GENERATION_SOLVER_BUDGET,
@@ -38,7 +47,7 @@ from nexus.generator.rules import (
     rule_ast_metrics,
     sample_transformation_rule,
 )
-from nexus.models.actions import ProbeAction
+from nexus.models.actions import OperateAction, ProbeAction
 from nexus.models.episode import GenerationMetadata, PrivateEpisode, PublicEpisode
 from nexus.models.goals import GoalKind, GoalPredicate
 from nexus.models.rules import Effect
@@ -590,6 +599,19 @@ def _find_selective_family(seed: int, max_attempts: int) -> _SelectiveMechanicsF
         f"for seed {seed}"
     )
 
+def _initial_operate_value(policy, machine_id: str, artifact_id: str):
+    return next(
+        (
+            value
+            for value in policy.initial_action_values
+            if isinstance(value.action, OperateAction)
+            and value.action.machine == machine_id
+            and value.action.artifact == artifact_id
+        ),
+        None,
+    )
+
+
 def _initial_probe_value(policy, artifact_id: str):
     return next(
         (
@@ -805,6 +827,277 @@ def _generate_selective_episode(
     )
 
 
+
+
+def _constructed_goal(destination: str) -> GoalPredicate:
+    return GoalPredicate(
+        kind=GoalKind.AND,
+        children=(
+            GoalPredicate(
+                kind=GoalKind.ARTIFACT_LOCATION,
+                artifact_id="A1",
+                value=destination,
+            ),
+            GoalPredicate(
+                kind=GoalKind.ARTIFACT_FIELD,
+                artifact_id="A1",
+                field="value",
+                value=MISSION_TARGET_VALUE,
+            ),
+        ),
+    )
+
+
+def _constructed_description(*, destination: str) -> str:
+    return (
+        "Transformation Facility. A1 is the mission payload; A2 and A3 are ordinary auxiliary "
+        "samples. M1 is the mission machine and M2/M3 are calibration machines. Deliver A1 to "
+        f"{destination} with value {MISSION_TARGET_VALUE}. The final facility phase is unrestricted. "
+        "The supplied facility_manual.txt defines the complete generated law family. Probe and "
+        "operate retain their ordinary NEXUS semantics. Infer an efficient information-acquisition "
+        "policy, execute the mission transformation, and finish explicitly."
+    )
+
+
+def _generate_constructed_episode(
+    seed: int,
+    *,
+    planning_level: int,
+    max_attempts: int,
+    verifier_secret: str | None,
+) -> PrivateEpisode:
+    # D5 is constructive rather than rejection-sampled at the causal layer. The same named RNG
+    # stream defines mechanics for every planning variant; only topology uses planning_level.
+    mechanics_rng = rng_for(seed, "mechanics", "constructed-three-machine", 0)
+    shapes = list(Shape)
+    mechanics_rng.shuffle(shapes)
+    mission_shape, diagnostic_shape, distractor_shape = shapes
+    winning_phase = mechanics_rng.randrange(4)
+
+    def artifact(artifact_id: str, shape: Shape) -> Artifact:
+        return Artifact(
+            id=artifact_id,
+            location="@inventory",
+            shape=shape,
+            pattern=mechanics_rng.choice(tuple(Pattern)),
+            orientation=mechanics_rng.choice(tuple(Orientation)),
+            value=mechanics_rng.choice((0, 1, 2, 3, 4, 5, 6)),
+            polarity=mechanics_rng.choice(tuple(Polarity)),
+        )
+
+    artifacts_template = {
+        "A1": artifact("A1", mission_shape),
+        "A2": artifact("A2", diagnostic_shape),
+        "A3": artifact("A3", distractor_shape),
+    }
+    mission_rule = constructed_mission_rule(winning_phase, diagnostic_shape)
+    constructor_rule = constant_value_rule(CONSTRUCTOR_VALUE)
+    distractor_rule = constant_value_rule(DISTRACTOR_VALUE)
+    candidate_rules_by_machine = {
+        "M1": list(constructed_mission_rules(diagnostic_shape)),
+        "M2": [constructor_rule],
+        "M3": [distractor_rule],
+    }
+    family_id = scenario_family_id(seed, "constructed-three-machine", 0)
+
+    # D5 co-locates its experiment-construction apparatus in R0. Planning difficulty continues to
+    # vary the delivery topology independently instead of inventing discovery differences.
+    min_rooms, max_rooms = room_bounds(planning_level, 1)
+    for topology_attempt in range(max_attempts):
+        topology_rng = rng_for(
+            seed,
+            "topology",
+            "constructed-three-machine",
+            0,
+            planning_level,
+            topology_attempt,
+        )
+        room_count = topology_rng.randint(min_rooms, max_rooms)
+        rooms, edges = _random_tree(topology_rng, room_count)
+        nexus_room, delivery_distance = _farthest_room(rooms, edges)
+
+        initial_state = WorldState(
+            phase=0,
+            agent_room="R0",
+            artifacts={
+                artifact_id: item.model_copy(deep=True)
+                for artifact_id, item in artifacts_template.items()
+            },
+            machines={
+                "M1": Machine(id="M1", room_id="R0", uses_remaining=1),
+                "M2": Machine(id="M2", room_id="R0", uses_remaining=1),
+                "M3": Machine(id="M3", room_id="R0", uses_remaining=1),
+            },
+            resources=Resources(actions_remaining=GENERATION_SOLVER_BUDGET),
+        )
+        public = PublicEpisode(
+            episode_id=hashlib.sha256(
+                (
+                    f"nexus-episode|{family_id}|d5|p{planning_level}|"
+                    f"t{topology_attempt}"
+                ).encode("utf-8")
+            ).hexdigest()[:16],
+            description=_constructed_description(destination=nexus_room),
+            rooms=rooms,
+            edges=edges,
+            phase_modulus=4,
+            initial_state=initial_state,
+            goal=_constructed_goal(nexus_room),
+            evidence_files={
+                "facility_manual.txt": constructed_manual(diagnostic_shape),
+            },
+        )
+        rules = {
+            "mission-rule": mission_rule,
+            "constructor-rule": constructor_rule,
+            "distractor-rule": distractor_rule,
+        }
+        node_metrics = {
+            "M1": rule_ast_metrics(mission_rule),
+            "M2": rule_ast_metrics(constructor_rule),
+            "M3": rule_ast_metrics(distractor_rule),
+        }
+        metadata = GenerationMetadata(
+            generation_attempt=0,
+            scenario_family_id=family_id,
+            scenario_family_attempt=0,
+            topology_attempt=topology_attempt,
+            discovery_level=5,
+            planning_level=planning_level,
+            machine_count=3,
+            room_count=room_count,
+            graph_diameter=_graph_diameter(rooms, edges),
+            candidate_rules_before_evidence=4,
+            candidate_rules_after_evidence=4,
+            evidence_candidate_counts={"M1": 4, "M2": 1, "M3": 1},
+            evidence_rows=0,
+            evidence_rows_by_machine={"M1": 0, "M2": 0, "M3": 0},
+            mission_relevant_prediction_counts={"M1": 2, "M2": 1, "M3": 1},
+            direct_target_example=False,
+            required_probe_count=1,
+            viable_causal_hypotheses=4,
+            transformation_phases={"M1": winning_phase, "M2": 0, "M3": 0},
+            epistemic_artifact_id="A2",
+            distractor_artifact_id="A3",
+            epistemic_machine_id="M2",
+            distractor_machine_id="M3",
+            estimated_reference_actions=delivery_distance + winning_phase + 3,
+            rule_ast_nodes=max(nodes for nodes, _ in node_metrics.values()),
+            rule_ast_depth=max(depth for _, depth in node_metrics.values()),
+            rule_ast_nodes_by_machine={
+                machine_id: metrics[0] for machine_id, metrics in node_metrics.items()
+            },
+            rule_ast_depth_by_machine={
+                machine_id: metrics[1] for machine_id, metrics in node_metrics.items()
+            },
+        )
+        private = PrivateEpisode(
+            public=public,
+            rules=rules,
+            machine_rules={
+                "M1": "mission-rule",
+                "M2": "constructor-rule",
+                "M3": "distractor-rule",
+            },
+            verifier_secret=(
+                verifier_secret if verifier_secret is not None else secrets.token_hex(32)
+            ),
+            construction_seed=seed,
+            generation_metadata=metadata,
+        )
+
+        physical = solve(private)
+        if (
+            not physical.solvable
+            or physical.optimal_action_count is None
+            or physical.optimal_action_count > MAX_PHYSICAL_OPTIMAL_ACTIONS
+        ):
+            continue
+
+        policy_bound = min(
+            GENERATION_SOLVER_BUDGET,
+            physical.optimal_action_count + 16,
+        )
+        policy = solve_guaranteed_policy(
+            private,
+            candidate_rules_by_machine=candidate_rules_by_machine,
+            max_actions=policy_bound,
+        )
+        if (
+            not policy.solvable
+            or policy.viable_hypothesis_count != 4
+            or policy.optimal_worst_case_actions is None
+        ):
+            continue
+
+        constructor = _initial_operate_value(policy, "M2", "A2")
+        direct_probe = _initial_probe_value(policy, "A1")
+        distractor = _initial_operate_value(policy, "M3", "A3")
+        if (
+            constructor is None
+            or constructor.worst_case_total_actions
+            != policy.optimal_worst_case_actions
+            or direct_probe is None
+            or direct_probe.worst_case_total_actions is None
+            or direct_probe.worst_case_total_actions
+            <= policy.optimal_worst_case_actions
+            or distractor is None
+            or distractor.worst_case_total_actions is None
+            or distractor.worst_case_total_actions
+            <= policy.optimal_worst_case_actions
+        ):
+            continue
+
+        constructed_artifact = apply_effect(constructor_rule, artifacts_template["A2"], 0)
+        constructed_outputs = {
+            artifact_projection(apply_effect(rule, constructed_artifact, 0))
+            for rule in candidate_rules_by_machine["M1"]
+        }
+        if len(constructed_outputs) != 4:
+            continue
+
+        allowance = exploration_allowance(room_count)
+        action_budget = policy.optimal_worst_case_actions + allowance + EXECUTION_SLACK
+        private.public.initial_state.resources.actions_remaining = action_budget
+
+        final_solve = solve(private)
+        if (
+            not final_solve.solvable
+            or final_solve.optimal_action_count != physical.optimal_action_count
+        ):
+            continue
+
+        private.reference_plan = tuple(
+            action.model_dump(mode="json") for action in final_solve.plan
+        )
+        metadata = private.generation_metadata
+        metadata.estimated_reference_actions = final_solve.optimal_action_count
+        metadata.optimal_action_count = final_solve.optimal_action_count
+        metadata.guaranteed_policy_action_count = policy.optimal_worst_case_actions
+        metadata.constructed_probe_outcomes = len(constructed_outputs)
+        metadata.direct_probe_action_cost = direct_probe.worst_case_total_actions
+        metadata.constructor_action_cost = constructor.worst_case_total_actions or 0
+        metadata.distractor_action_cost = distractor.worst_case_total_actions or 0
+        metadata.action_budget = action_budget
+        metadata.exploration_allowance = allowance
+        metadata.recommended_tool_call_limit = recommended_tool_call_limit(
+            action_budget,
+            len(public.evidence_files),
+        )
+        metadata.solver_visited_states = final_solve.visited_states
+        metadata.solver_max_frontier_size = final_solve.max_frontier_size
+
+        from nexus.generator.qualify import qualify_episode
+
+        if qualify_episode(private).passed:
+            return private
+
+    raise GenerationError(
+        f"constructed D5 scenario family {family_id} failed qualification in {max_attempts} "
+        f"topology attempts for seed {seed} (planning_level={planning_level})"
+    )
+
+
 def generate_episode(
     seed: int,
     *,
@@ -824,6 +1117,14 @@ def generate_episode(
         raise ValueError("verifier_secret must not be empty")
     if max_attempts < 1:
         raise ValueError("max_attempts must be at least 1")
+
+    if discovery_level == 5:
+        return _generate_constructed_episode(
+            seed,
+            planning_level=planning_level,
+            max_attempts=max_attempts,
+            verifier_secret=verifier_secret,
+        )
 
     if discovery_level == 4:
         return _generate_selective_episode(
