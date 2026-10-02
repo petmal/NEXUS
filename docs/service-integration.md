@@ -33,8 +33,10 @@ NEXUS_HOST               server bind address
 NEXUS_PORT               server port
 ```
 
-The difficulty variables apply only when the service generates from `NEXUS_SEED`; a mounted private episode already contains its compiled world and metadata. When `NEXUS_VERIFIER_SECRET` is omitted, each generated service process gets a fresh private
-secret and therefore a fresh victory code even when the public episode seed is the same.
+The difficulty variables apply only when the service generates from `NEXUS_SEED`; a mounted
+private episode already contains its compiled world and metadata. When `NEXUS_VERIFIER_SECRET`
+is omitted, each generated service process gets a fresh private secret and therefore a fresh
+victory code even when the public episode seed is the same.
 
 ## Player-safe single-session API
 
@@ -53,6 +55,33 @@ The API deliberately has no reset, restart, or create-session operation.
 The status response exposes the victory code only after the session has reached `won`. This is
 equivalent to the code returned by the successful `finish` action and lets a trusted validator
 verify the final submitted value without access to the private episode.
+
+## Terminal performance telemetry
+
+The action response that first reaches `won` or `failed` also includes a terminal-only
+`performance` object. It is absent as meaningful data while the episode is active, so private
+solver information cannot influence play.
+
+For the current D0-D3 profiles the summary includes:
+
+- accepted environment actions used;
+- private physical optimum;
+- minimum probes required by the guaranteed causal policy;
+- their sum as the guaranteed baseline;
+- signed action/probe deltas from that guaranteed baseline;
+- remaining action budget;
+- invalid game actions;
+- rejected `finish` attempts;
+- duplicate transport retries; and
+- turn/protocol conflicts.
+
+The deltas are intentionally signed. A negative delta does not automatically mean better
+reasoning: an agent can beat the guaranteed baseline by guessing the actual hidden world rather
+than resolving uncertainty. Later epistemic analysis can distinguish justified commitment from
+that kind of risk-taking.
+
+Duplicate idempotent retries never consume an environment action and are reported separately, so
+transport behavior does not distort game-path efficiency.
 
 ## Stateless client command
 

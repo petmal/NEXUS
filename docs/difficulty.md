@@ -45,6 +45,29 @@ The generator does not ask the user to choose an optimal-action range. It genera
 semantic world, solves it exactly, rejects pathological horizons, and records the resulting
 physical optimum.
 
+## Paired scenario families
+
+Difficulty comparisons are deliberately paired rather than relying on one shared sequential RNG.
+
+For a fixed seed:
+
+- D0, D1, and D2 use the same qualified one-machine causal family. At a fixed planning level they
+  share the hidden law, intrinsic artifact state, target transformation, phase, topology, and role
+  locations; only the evidence/discovery profile changes.
+- D3 uses its own qualified two-machine causal family.
+- Changing P0/P1/P2 does not reroll mechanics or evidence. Topology has an independent named RNG
+  stream, so planning variants share the causal problem while changing the room graph and role
+  placement.
+
+The generator first finds a causal family that satisfies every discovery profile in that family.
+Once selected, topology rejection may retry only the topology stream; it is never allowed to
+silently reroll the hidden law. Stable SHA-256-derived seeds are used for named streams rather than
+Python's process-dependent `hash()`.
+
+Private generation metadata records a `scenario_family_id`, `scenario_family_attempt`, and
+`topology_attempt` so benchmark analysis can verify that compared episodes were genuinely
+paired.
+
 ## Resource budget
 
 Resource pressure is currently derived rather than publicly configurable. The action budget is:
@@ -59,11 +82,15 @@ physical optimal actions
 This avoids penalizing an agent merely because the private reference solver already knows hidden
 entity locations. Resource pressure can become a public axis later after calibration data exists.
 
+The qualified probe allowance is a guarantee-level quantity. A model may guess the true hidden
+world and win with fewer probes than the minimum needed by a policy that succeeds across all
+evidence-consistent worlds.
+
 ## Operator metadata
 
 `private.json` contains typed `generation_metadata`, including:
 
-- selected discovery/planning levels;
+- selected discovery/planning levels and scenario-family identity;
 - physical optimal action count;
 - required informed-probe count;
 - action budget;
