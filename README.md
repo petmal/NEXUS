@@ -69,7 +69,7 @@ Keep the first environment deliberately small:
 
 - 4–9 connected rooms selected by the planning profile;
 - 1 mission artifact, with auxiliary experimental artifacts on higher discovery profiles;
-- 1–2 transformation machines selected by the discovery profile;
+- 1–3 transformation machines selected by the discovery profile;
 - optional gate/phase state;
 - small integer/enumerated object properties;
 - one or two generated rule ASTs;
@@ -117,7 +117,7 @@ The feature branch currently implements the first end-to-end Transformation Faci
 - generated connected room topology, artifact state, machine law, target state, and evidence;
 - public `facility_manual.txt` describing the causal grammar;
 - generated machine evidence whose mission-relevant ambiguity is qualified to the requested discovery level;
-- generic discovery/planning profiles, including two-machine sequential discovery and cost-selective experimentation;
+- generic discovery/planning profiles, including two-machine sequential discovery, cost-selective experimentation, and constructed diagnostic experiments;
 - deterministic transition engine and canonical hashing;
 - append-only trace plus deterministic replay verification;
 - engine-defined goal predicates and HMAC-based victory receipts;
@@ -159,7 +159,7 @@ nexus generate ./episode --seed 17 --discovery-level 1 --planning-level 1
 
 The public difficulty surface is intentionally small:
 
-- `--discovery-level 0..4` controls how much mission-relevant causal information must be
+- `--discovery-level 0..5` controls how much mission-relevant causal information must be
   actively discovered;
 - `--planning-level 0..2` controls topology/planning scale.
 
@@ -351,6 +351,9 @@ episode family uses a small number of artifacts and one or two transformation ma
 causal grammar is public; runtime execution is deterministic; and observations are text/structured
 data only. Discovery level 3 introduces a qualified two-stage transformation chain. Discovery level
 4 keeps the same probe mechanics but adds auxiliary and distractor experimental contexts whose
-relative value is proved by an exact minimum worst-case action-policy solver. Richer interacting
-artifacts, larger rule grammars, structural OOD splits, visual renderers, and broader world families
-remain follow-up work after calibration against real models.
+relative value is proved by an exact minimum worst-case action-policy solver. Discovery level 5
+keeps those same actions again, but requires constructing a diagnostic context by operating an
+auxiliary machine before probing the mission machine; a functional distractor machine remains a
+strictly higher-cost alternative. Richer interacting artifacts, larger rule grammars, structural
+OOD splits, visual renderers, and broader world families remain follow-up work after calibration
+against real models.
