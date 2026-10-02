@@ -20,7 +20,7 @@ from nexus.models.actions import (
 from nexus.models.episode import PrivateEpisode
 from nexus.models.rules import Effect
 from nexus.models.world import INVENTORY, TerminalStatus, WorldState
-from nexus.solver.search import neighbors, search_state_key, solve
+from nexus.solver.search import goal_location_rooms, neighbors, search_state_key, solve
 
 
 class PolicyActionValue(BaseModel):
@@ -60,10 +60,14 @@ def _legal_actions(episode: PrivateEpisode, state: WorldState) -> tuple[Action, 
 
     actions.extend(MoveAction(target=room) for room in neighbors(episode, state.agent_room))
 
+    goal_rooms = goal_location_rooms(episode.public.goal)
     for artifact in sorted(state.artifacts.values(), key=lambda item: item.id):
         if artifact.location == state.agent_room:
             actions.append(TakeAction(artifact=artifact.id))
-        elif artifact.location == INVENTORY:
+        elif (
+            artifact.location == INVENTORY
+            and state.agent_room in goal_rooms.get(artifact.id, set())
+        ):
             actions.append(DropAction(artifact=artifact.id))
 
     carried = sorted(artifact.id for artifact in state.carried_artifacts())
