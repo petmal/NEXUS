@@ -450,7 +450,6 @@ def _shape_probe_samples(shape: Shape) -> list[Artifact]:
 @lru_cache(maxsize=256)
 def _find_selective_family(seed: int, max_attempts: int) -> _SelectiveMechanicsFamily:
     all_candidates = enumerate_transformation_rules()
-    shape_roles = list(permutations(tuple(Shape), 3))
 
     for family_attempt in range(max_attempts):
         rng = rng_for(seed, "mechanics", "selective-one-machine", family_attempt)
@@ -460,12 +459,12 @@ def _find_selective_family(seed: int, max_attempts: int) -> _SelectiveMechanicsF
         value = rng.choice((0, 1, 2, 4, 7))
         polarity = rng.choice(tuple(Polarity))
 
-        # Shape names are presentation-level roles, not semantics. Search every permutation so a
-        # valid D4 family is not rejected merely because "square/circle/triangle" happened to be
-        # assigned to the wrong mission/epistemic/distractor roles for this hidden law.
-        role_order = list(shape_roles)
-        rng.shuffle(role_order)
-        for mission_shape, epistemic_shape, distractor_shape in role_order:
+        # Evidence depends on the mission shape but not on which of the other two shapes is later
+        # assigned to the epistemic or distractor sample. Analyze each mission shape once, then
+        # try both remaining role assignments against that shared exact belief state.
+        mission_shapes = list(Shape)
+        rng.shuffle(mission_shapes)
+        for mission_shape in mission_shapes:
             initial_artifact = Artifact(
                 id="A1",
                 location="@inventory",
@@ -511,73 +510,80 @@ def _find_selective_family(seed: int, max_attempts: int) -> _SelectiveMechanicsF
                 phase_modulus=4,
             )
 
-            epistemic_samples = _shape_probe_samples(epistemic_shape)
-            distractor_samples = _shape_probe_samples(distractor_shape)
-            rng.shuffle(epistemic_samples)
-            rng.shuffle(distractor_samples)
+            remaining_shapes = [shape for shape in Shape if shape != mission_shape]
+            role_pairs = [
+                (remaining_shapes[0], remaining_shapes[1]),
+                (remaining_shapes[1], remaining_shapes[0]),
+            ]
+            rng.shuffle(role_pairs)
+            for epistemic_shape, distractor_shape in role_pairs:
+                epistemic_samples = _shape_probe_samples(epistemic_shape)
+                distractor_samples = _shape_probe_samples(distractor_shape)
+                rng.shuffle(epistemic_samples)
+                rng.shuffle(distractor_samples)
 
-            epistemic: Artifact | None = None
-            epistemic_analysis = None
-            for sample in epistemic_samples:
-                candidate = sample.model_copy(update={"id": "A2", "location": "@inventory"})
-                experiment = belief.analyze_probe_context(
-                    artifact=candidate,
-                    machine_id="M1",
-                    phase=0,
+                epistemic: Artifact | None = None
+                epistemic_analysis = None
+                for sample in epistemic_samples:
+                    candidate = sample.model_copy(update={"id": "A2", "location": "@inventory"})
+                    experiment = belief.analyze_probe_context(
+                        artifact=candidate,
+                        machine_id="M1",
+                        phase=0,
+                    )
+                    if (
+                        experiment.discriminative
+                        and experiment.mission_relevant
+                        and experiment.worst_case_remaining_probes == 0
+                    ):
+                        epistemic = candidate
+                        epistemic_analysis = experiment
+                        break
+                if epistemic is None or epistemic_analysis is None:
+                    continue
+
+                distractor: Artifact | None = None
+                distractor_analysis = None
+                for sample in distractor_samples:
+                    candidate = sample.model_copy(update={"id": "A3", "location": "@inventory"})
+                    experiment = belief.analyze_probe_context(
+                        artifact=candidate,
+                        machine_id="M1",
+                        phase=0,
+                    )
+                    if not experiment.discriminative and experiment.outcome_count == 1:
+                        distractor = candidate
+                        distractor_analysis = experiment
+                        break
+                if distractor is None or distractor_analysis is None:
+                    continue
+
+                profile = _EvidenceProfile(
+                    files={
+                        "facility_manual.txt": FACILITY_MANUAL,
+                        "measurements.csv": evidence_text,
+                    },
+                    candidate_counts={"M1": plan.candidate_count},
+                    rows_by_machine={"M1": len(plan.experiments)},
+                    prediction_counts={"M1": plan.prediction_count},
+                    direct_examples={"M1": plan.direct_target_example},
+                    analysis=analysis,
                 )
-                if (
-                    experiment.discriminative
-                    and experiment.mission_relevant
-                    and experiment.worst_case_remaining_probes == 0
-                ):
-                    epistemic = candidate
-                    epistemic_analysis = experiment
-                    break
-            if epistemic is None or epistemic_analysis is None:
-                continue
-
-            distractor: Artifact | None = None
-            distractor_analysis = None
-            for sample in distractor_samples:
-                candidate = sample.model_copy(update={"id": "A3", "location": "@inventory"})
-                experiment = belief.analyze_probe_context(
-                    artifact=candidate,
-                    machine_id="M1",
-                    phase=0,
+                return _SelectiveMechanicsFamily(
+                    attempt=family_attempt,
+                    family_id=scenario_family_id(
+                        seed,
+                        "selective-one-machine",
+                        family_attempt,
+                    ),
+                    selected_rule=selected_rule,
+                    initial_artifact=initial_artifact,
+                    target_artifact=target_artifact,
+                    target_phase=target_phase,
+                    epistemic_artifact=epistemic,
+                    distractor_artifact=distractor,
+                    evidence_profile=profile,
                 )
-                if not experiment.discriminative and experiment.outcome_count == 1:
-                    distractor = candidate
-                    distractor_analysis = experiment
-                    break
-            if distractor is None or distractor_analysis is None:
-                continue
-
-            profile = _EvidenceProfile(
-                files={
-                    "facility_manual.txt": FACILITY_MANUAL,
-                    "measurements.csv": evidence_text,
-                },
-                candidate_counts={"M1": plan.candidate_count},
-                rows_by_machine={"M1": len(plan.experiments)},
-                prediction_counts={"M1": plan.prediction_count},
-                direct_examples={"M1": plan.direct_target_example},
-                analysis=analysis,
-            )
-            return _SelectiveMechanicsFamily(
-                attempt=family_attempt,
-                family_id=scenario_family_id(
-                    seed,
-                    "selective-one-machine",
-                    family_attempt,
-                ),
-                selected_rule=selected_rule,
-                initial_artifact=initial_artifact,
-                target_artifact=target_artifact,
-                target_phase=target_phase,
-                epistemic_artifact=epistemic,
-                distractor_artifact=distractor,
-                evidence_profile=profile,
-            )
 
     raise GenerationError(
         f"failed to generate a D4 selective-discovery causal world in {max_attempts} attempts "
