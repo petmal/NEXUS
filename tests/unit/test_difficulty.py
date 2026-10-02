@@ -102,7 +102,7 @@ def test_generation_is_deterministic_for_seed_and_difficulty_profile():
 
 @pytest.mark.parametrize(
     ("keyword", "value"),
-    [("discovery_level", -1), ("discovery_level", 4), ("planning_level", -1), ("planning_level", 3)],
+    [("discovery_level", -1), ("discovery_level", 5), ("planning_level", -1), ("planning_level", 3)],
 )
 def test_invalid_public_difficulty_levels_fail_fast(keyword, value):
     kwargs = {"discovery_level": 0, "planning_level": 1}
