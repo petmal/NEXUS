@@ -78,3 +78,32 @@ def test_solver_prunes_drops_that_cannot_satisfy_any_location_goal():
     ]
 
     assert "A2" not in drops
+
+
+def test_solver_prunes_operations_on_artifacts_absent_from_goal():
+    from nexus.models.actions import OperateAction
+    from nexus.models.world import Artifact, Orientation, Pattern, Polarity, Shape
+    from nexus.solver.search import legal_solver_actions
+
+    episode = generate_episode(6061, discovery_level=0, planning_level=1)
+    episode.public.initial_state.artifacts["A2"] = Artifact(
+        id="A2",
+        location="@inventory",
+        shape=Shape.CIRCLE,
+        pattern=Pattern.PLAIN,
+        orientation=Orientation.NORTH,
+        value=0,
+        polarity=Polarity.POSITIVE,
+    )
+    machine = next(iter(episode.public.initial_state.machines.values()))
+    state = episode.public.initial_state.model_copy(deep=True)
+    state.agent_room = machine.room_id
+
+    operations = [
+        action.artifact
+        for action in legal_solver_actions(episode, state)
+        if isinstance(action, OperateAction)
+    ]
+
+    assert "A1" in operations
+    assert "A2" not in operations
