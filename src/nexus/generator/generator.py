@@ -417,6 +417,378 @@ def _find_mechanics_family(
     )
 
 
+
+def _selective_description(*, destination: str, target: Artifact, target_phase: int) -> str:
+    return (
+        "Transformation Facility. Artifact A1 is the mission payload; A2 and A3 are ordinary "
+        "carried samples that may be used for experiments but are not part of the success "
+        f"predicate. Use the unknown machine M1 and deliver A1 to {destination}. The final A1 "
+        f"must have value {target.value}, polarity {target.polarity.value}, "
+        f"orientation {target.orientation.value}, while the facility phase is {target_phase}. "
+        "The phase advances only when you wait. The supplied facility_manual.txt defines the "
+        "possible machine-law grammar and measurements.csv contains prior M1 experiments. "
+        "Infer or experimentally discover the behavior needed to complete the mission, then "
+        "finish explicitly."
+    )
+
+
+def _shape_probe_samples(shape: Shape) -> list[Artifact]:
+    samples: list[Artifact] = []
+    seen: set[tuple[int, str, str]] = set()
+    for experiment in experiment_pool():
+        artifact = experiment.artifact
+        if experiment.phase != 0 or artifact.shape != shape:
+            continue
+        key = (artifact.value, artifact.polarity.value, artifact.orientation.value)
+        if key in seen:
+            continue
+        seen.add(key)
+        samples.append(artifact)
+    return samples
+
+
+@lru_cache(maxsize=256)
+def _find_selective_family(seed: int, max_attempts: int) -> _SelectiveMechanicsFamily:
+    all_candidates = enumerate_transformation_rules()
+
+    for family_attempt in range(max_attempts):
+        rng = rng_for(seed, "mechanics", "selective-one-machine", family_attempt)
+        selected_rule = sample_transformation_rule(rng)
+        initial_artifact = Artifact(
+            id="A1",
+            location="@inventory",
+            shape=Shape.SQUARE,
+            pattern=Pattern.PLAIN,
+            orientation=rng.choice((Orientation.NORTH, Orientation.EAST)),
+            value=rng.choice((0, 1, 2, 4, 7)),
+            polarity=rng.choice(tuple(Polarity)),
+        )
+        target_phase = rng.choice((0, 1))
+        target_artifact = apply_effect(selected_rule, initial_artifact, target_phase)
+        if artifact_projection(target_artifact) == artifact_projection(initial_artifact):
+            continue
+
+        try:
+            plan = choose_mission_evidence(
+                selected_rule,
+                all_candidates,
+                initial_artifact,
+                target_phase,
+                discovery_level=2,
+            )
+        except EvidencePlanningError:
+            continue
+
+        evidence_text = evidence_csv(selected_rule, plan.experiments)
+        candidate_rules = candidates_matching_csv(evidence_text, all_candidates)
+        analysis = analyze_discovery(
+            candidate_rules_by_machine={"M1": candidate_rules},
+            initial_artifact=initial_artifact,
+            target_artifact=target_artifact,
+            phase_modulus=4,
+        )
+        if (
+            analysis.minimum_guaranteed_probes != 1
+            or analysis.viable_hypothesis_count < 2
+        ):
+            continue
+
+        belief = DiscoveryBelief(
+            candidate_rules_by_machine={"M1": candidate_rules},
+            initial_artifact=initial_artifact,
+            target_artifact=target_artifact,
+            phase_modulus=4,
+        )
+
+        epistemic_samples = _shape_probe_samples(Shape.CIRCLE)
+        distractor_samples = _shape_probe_samples(Shape.TRIANGLE)
+        rng.shuffle(epistemic_samples)
+        rng.shuffle(distractor_samples)
+
+        epistemic: Artifact | None = None
+        epistemic_analysis = None
+        for sample in epistemic_samples:
+            candidate = sample.model_copy(update={"id": "A2", "location": "@inventory"})
+            experiment = belief.analyze_probe_context(
+                artifact=candidate,
+                machine_id="M1",
+                phase=0,
+            )
+            if (
+                experiment.discriminative
+                and experiment.mission_relevant
+                and experiment.worst_case_remaining_probes == 0
+            ):
+                epistemic = candidate
+                epistemic_analysis = experiment
+                break
+        if epistemic is None or epistemic_analysis is None:
+            continue
+
+        distractor: Artifact | None = None
+        distractor_analysis = None
+        for sample in distractor_samples:
+            candidate = sample.model_copy(update={"id": "A3", "location": "@inventory"})
+            experiment = belief.analyze_probe_context(
+                artifact=candidate,
+                machine_id="M1",
+                phase=0,
+            )
+            if not experiment.discriminative and experiment.outcome_count == 1:
+                distractor = candidate
+                distractor_analysis = experiment
+                break
+        if distractor is None or distractor_analysis is None:
+            continue
+
+        profile = _EvidenceProfile(
+            files={
+                "facility_manual.txt": FACILITY_MANUAL,
+                "measurements.csv": evidence_text,
+            },
+            candidate_counts={"M1": plan.candidate_count},
+            rows_by_machine={"M1": len(plan.experiments)},
+            prediction_counts={"M1": plan.prediction_count},
+            direct_examples={"M1": plan.direct_target_example},
+            analysis=analysis,
+        )
+        return _SelectiveMechanicsFamily(
+            attempt=family_attempt,
+            family_id=scenario_family_id(
+                seed,
+                "selective-one-machine",
+                family_attempt,
+            ),
+            selected_rule=selected_rule,
+            initial_artifact=initial_artifact,
+            target_artifact=target_artifact,
+            target_phase=target_phase,
+            epistemic_artifact=epistemic,
+            distractor_artifact=distractor,
+            evidence_profile=profile,
+        )
+
+    raise GenerationError(
+        f"failed to generate a D4 selective-discovery causal world in {max_attempts} attempts "
+        f"for seed {seed}"
+    )
+
+
+def _initial_probe_value(policy, artifact_id: str):
+    return next(
+        (
+            value
+            for value in policy.initial_action_values
+            if isinstance(value.action, ProbeAction)
+            and value.action.machine == "M1"
+            and value.action.artifact == artifact_id
+        ),
+        None,
+    )
+
+
+def _generate_selective_episode(
+    seed: int,
+    *,
+    planning_level: int,
+    max_attempts: int,
+    verifier_secret: str | None,
+) -> PrivateEpisode:
+    family = _find_selective_family(seed, max_attempts)
+    profile = family.evidence_profile
+    min_rooms, max_rooms = room_bounds(planning_level, 1)
+
+    for topology_attempt in range(max_attempts):
+        topology_rng = rng_for(
+            seed,
+            "topology",
+            "selective-one-machine",
+            family.attempt,
+            planning_level,
+            topology_attempt,
+        )
+        room_count = topology_rng.randint(min_rooms, max_rooms)
+        rooms, edges = _random_tree(topology_rng, room_count)
+        nexus_room, delivery_distance = _farthest_room(rooms, edges)
+
+        artifacts = {
+            "A1": family.initial_artifact.model_copy(
+                update={"id": "A1", "location": "@inventory"}
+            ),
+            "A2": family.epistemic_artifact.model_copy(deep=True),
+            "A3": family.distractor_artifact.model_copy(deep=True),
+        }
+        initial_state = WorldState(
+            phase=0,
+            agent_room="R0",
+            artifacts=artifacts,
+            machines={"M1": Machine(id="M1", room_id="R0", uses_remaining=1)},
+            resources=Resources(actions_remaining=GENERATION_SOLVER_BUDGET),
+        )
+        goal = _goal_for(
+            family.target_artifact,
+            nexus_room,
+            family.target_phase,
+        )
+        episode_id = hashlib.sha256(
+            (
+                f"nexus-episode|{family.family_id}|d4|p{planning_level}|"
+                f"t{topology_attempt}"
+            ).encode("utf-8")
+        ).hexdigest()[:16]
+        public = PublicEpisode(
+            episode_id=episode_id,
+            description=_selective_description(
+                destination=nexus_room,
+                target=family.target_artifact,
+                target_phase=family.target_phase,
+            ),
+            rooms=rooms,
+            edges=edges,
+            phase_modulus=4,
+            initial_state=initial_state,
+            goal=goal,
+            evidence_files=dict(profile.files),
+        )
+        nodes, depth = rule_ast_metrics(family.selected_rule)
+        metadata = GenerationMetadata(
+            generation_attempt=family.attempt,
+            scenario_family_id=family.family_id,
+            scenario_family_attempt=family.attempt,
+            topology_attempt=topology_attempt,
+            discovery_level=4,
+            planning_level=planning_level,
+            machine_count=1,
+            room_count=room_count,
+            graph_diameter=_graph_diameter(rooms, edges),
+            candidate_rules_before_evidence=len(enumerate_transformation_rules()),
+            candidate_rules_after_evidence=profile.candidate_counts["M1"],
+            evidence_candidate_counts=dict(profile.candidate_counts),
+            evidence_rows=profile.rows_by_machine["M1"],
+            evidence_rows_by_machine=dict(profile.rows_by_machine),
+            mission_relevant_prediction_counts=dict(profile.prediction_counts),
+            direct_target_example=any(profile.direct_examples.values()),
+            required_probe_count=1,
+            viable_causal_hypotheses=profile.analysis.viable_hypothesis_count,
+            transformation_phases={"M1": family.target_phase},
+            epistemic_artifact_id="A2",
+            distractor_artifact_id="A3",
+            estimated_reference_actions=delivery_distance + 3,
+            rule_ast_nodes=nodes,
+            rule_ast_depth=depth,
+            rule_ast_nodes_by_machine={"M1": nodes},
+            rule_ast_depth_by_machine={"M1": depth},
+        )
+        private = PrivateEpisode(
+            public=public,
+            rules={"machine-rule": family.selected_rule},
+            machine_rules={"M1": "machine-rule"},
+            verifier_secret=(
+                verifier_secret if verifier_secret is not None else secrets.token_hex(32)
+            ),
+            construction_seed=seed,
+            generation_metadata=metadata,
+        )
+
+        physical = solve(private)
+        if (
+            not physical.solvable
+            or physical.optimal_action_count is None
+            or physical.optimal_action_count > MAX_PHYSICAL_OPTIMAL_ACTIONS
+        ):
+            continue
+        operation_count = sum(
+            getattr(action, "type", None) == "operate" for action in physical.plan
+        )
+        if operation_count != 1:
+            continue
+
+        candidates = candidates_matching_csv(
+            profile.files["measurements.csv"],
+            enumerate_transformation_rules(),
+        )
+        policy_bound = min(
+            GENERATION_SOLVER_BUDGET,
+            physical.optimal_action_count + 16,
+        )
+        policy = solve_guaranteed_policy(
+            private,
+            candidate_rules_by_machine={"M1": candidates},
+            max_actions=policy_bound,
+        )
+        if (
+            not policy.solvable
+            or policy.optimal_worst_case_actions is None
+            or policy.viable_hypothesis_count < 2
+        ):
+            continue
+
+        mission_probe = _initial_probe_value(policy, "A1")
+        epistemic_probe = _initial_probe_value(policy, "A2")
+        distractor_probe = _initial_probe_value(policy, "A3")
+        if (
+            mission_probe is None
+            or epistemic_probe is None
+            or distractor_probe is None
+            or mission_probe.worst_case_total_actions
+            != policy.optimal_worst_case_actions
+            or not epistemic_probe.discriminative
+            or epistemic_probe.worst_case_total_actions
+            != policy.optimal_worst_case_actions
+            or distractor_probe.discriminative
+            or distractor_probe.outcome_count != 1
+            or distractor_probe.worst_case_total_actions
+            != policy.optimal_worst_case_actions + 1
+        ):
+            continue
+
+        allowance = exploration_allowance(room_count)
+        action_budget = policy.optimal_worst_case_actions + allowance + EXECUTION_SLACK
+        private.public.initial_state.resources.actions_remaining = action_budget
+
+        final_solve = solve(private)
+        if (
+            not final_solve.solvable
+            or final_solve.optimal_action_count != physical.optimal_action_count
+        ):
+            continue
+
+        private.reference_plan = tuple(
+            action.model_dump(mode="json") for action in final_solve.plan
+        )
+        metadata = private.generation_metadata
+        metadata.estimated_reference_actions = final_solve.optimal_action_count
+        metadata.optimal_action_count = final_solve.optimal_action_count
+        metadata.guaranteed_policy_action_count = policy.optimal_worst_case_actions
+        metadata.epistemic_probe_outcomes = epistemic_probe.outcome_count
+        metadata.distractor_probe_outcomes = distractor_probe.outcome_count
+        metadata.epistemic_probe_action_cost = (
+            epistemic_probe.worst_case_total_actions or 0
+        )
+        metadata.distractor_probe_action_cost = (
+            distractor_probe.worst_case_total_actions or 0
+        )
+        metadata.action_budget = action_budget
+        metadata.exploration_allowance = allowance
+        metadata.recommended_tool_call_limit = recommended_tool_call_limit(
+            action_budget,
+            len(profile.files),
+        )
+        metadata.solver_visited_states = final_solve.visited_states
+        metadata.solver_max_frontier_size = final_solve.max_frontier_size
+
+        from nexus.generator.qualify import qualify_episode
+
+        if qualify_episode(private).passed:
+            return private
+
+    raise GenerationError(
+        f"selective scenario family {family.family_id} was valid but no topology qualified in "
+        f"{max_attempts} attempts for seed {seed} (discovery_level=4, "
+        f"planning_level={planning_level})"
+    )
+
+
 def generate_episode(
     seed: int,
     *,
