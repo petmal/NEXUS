@@ -3,6 +3,7 @@ from __future__ import annotations
 import hashlib
 import secrets
 from dataclasses import dataclass
+from functools import lru_cache
 from itertools import permutations
 
 import networkx as nx
@@ -294,17 +295,18 @@ def _compile_evidence_profile(
     )
 
 
+@lru_cache(maxsize=256)
 def _find_mechanics_family(
     seed: int,
-    *,
-    discovery_level: int,
+    family_kind: str,
     max_attempts: int,
-    all_candidates: list[Effect],
 ) -> _MechanicsFamily:
-    family_kind = "two-machine" if discovery_level == 3 else "one-machine"
-    machine_count = machine_count_for_discovery(discovery_level)
+    if family_kind not in {"one-machine", "two-machine"}:
+        raise ValueError(f"unknown scenario family kind: {family_kind}")
+    machine_count = 2 if family_kind == "two-machine" else 1
     machine_ids = tuple(f"M{index + 1}" for index in range(machine_count))
-    required_profiles = (3,) if discovery_level == 3 else (0, 1, 2)
+    required_profiles = (3,) if family_kind == "two-machine" else (0, 1, 2)
+    all_candidates = enumerate_transformation_rules()
 
     for family_attempt in range(max_attempts):
         rng = rng_for(seed, "mechanics", family_kind, family_attempt)
@@ -405,12 +407,8 @@ def generate_episode(
         raise ValueError("max_attempts must be at least 1")
 
     all_candidates = enumerate_transformation_rules()
-    family = _find_mechanics_family(
-        seed,
-        discovery_level=discovery_level,
-        max_attempts=max_attempts,
-        all_candidates=all_candidates,
-    )
+    family_kind = "two-machine" if discovery_level == 3 else "one-machine"
+    family = _find_mechanics_family(seed, family_kind, max_attempts)
     profile = family.evidence_profiles[discovery_level]
     machine_ids = family.machine_ids
     machine_count = len(machine_ids)
