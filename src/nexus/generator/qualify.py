@@ -58,6 +58,19 @@ def _csv_row_count(csv_text: str) -> int:
     return len(list(csv.DictReader(io.StringIO(csv_text))))
 
 
+def _policy_probe_value(policy, artifact_id: str):
+    return next(
+        (
+            value
+            for value in policy.initial_action_values
+            if isinstance(value.action, ProbeAction)
+            and value.action.machine == "M1"
+            and value.action.artifact == artifact_id
+        ),
+        None,
+    )
+
+
 def qualify_episode(
     episode: PrivateEpisode,
     *,
@@ -166,6 +179,51 @@ def qualify_episode(
         else None
     )
 
+    d4_policy = None
+    d4_epistemic = None
+    d4_distractor = None
+    d4_mission_probe = None
+    if (
+        metadata.discovery_level == 4
+        and profile_inputs_valid
+        and initial_artifact is not None
+        and current is not None
+        and machine_ids == ("M1",)
+        and "M1" in candidate_rules_by_machine
+    ):
+        epistemic_artifact = episode.public.initial_state.artifacts.get("A2")
+        distractor_artifact = episode.public.initial_state.artifacts.get("A3")
+        if epistemic_artifact is not None and distractor_artifact is not None:
+            belief = DiscoveryBelief(
+                candidate_rules_by_machine=candidate_rules_by_machine,
+                initial_artifact=initial_artifact,
+                target_artifact=current,
+                phase_modulus=episode.public.phase_modulus,
+            )
+            d4_epistemic = belief.analyze_probe_context(
+                artifact=epistemic_artifact,
+                machine_id="M1",
+                phase=0,
+            )
+            d4_distractor = belief.analyze_probe_context(
+                artifact=distractor_artifact,
+                machine_id="M1",
+                phase=0,
+            )
+            proof_bound = min(
+                96,
+                max(
+                    8,
+                    (metadata.guaranteed_policy_action_count or metadata.action_budget or 48) + 2,
+                ),
+            )
+            d4_policy = solve_guaranteed_policy(
+                episode,
+                candidate_rules_by_machine=candidate_rules_by_machine,
+                max_actions=proof_bound,
+            )
+            d4_mission_probe = _policy_probe_value(d4_policy, "A1")
+
     discovery_profile = (
         profile_inputs_valid
         and len(machine_ids) == expected_machine_count
@@ -207,8 +265,64 @@ def qualify_episode(
                     current,
                     phase_modulus=episode.public.phase_modulus,
                 )
+        elif metadata.discovery_level == 4:
+            epistemic_artifact = episode.public.initial_state.artifacts.get("A2")
+            distractor_artifact = episode.public.initial_state.artifacts.get("A3")
+            epistemic_probe = (
+                _policy_probe_value(d4_policy, "A2") if d4_policy is not None else None
+            )
+            distractor_probe = (
+                _policy_probe_value(d4_policy, "A3") if d4_policy is not None else None
+            )
+            discovery_profile = (
+                machine_ids == ("M1",)
+                and direct_examples.get("M1") is False
+                and prediction_counts.get("M1", 0) > 1
+                and set(episode.public.initial_state.artifacts) == {"A1", "A2", "A3"}
+                and initial_artifact.shape == Shape.SQUARE
+                and epistemic_artifact is not None
+                and epistemic_artifact.shape == Shape.CIRCLE
+                and distractor_artifact is not None
+                and distractor_artifact.shape == Shape.TRIANGLE
+                and all(
+                    artifact.location == "@inventory"
+                    for artifact in episode.public.initial_state.artifacts.values()
+                )
+                and episode.public.initial_state.machines["M1"].room_id == "R0"
+                and d4_epistemic is not None
+                and d4_epistemic.discriminative
+                and d4_epistemic.mission_relevant
+                and d4_epistemic.worst_case_remaining_probes == 0
+                and d4_distractor is not None
+                and not d4_distractor.discriminative
+                and d4_distractor.outcome_count == 1
+                and d4_policy is not None
+                and d4_policy.solvable
+                and d4_policy.optimal_worst_case_actions is not None
+                and d4_mission_probe is not None
+                and d4_mission_probe.worst_case_total_actions
+                == d4_policy.optimal_worst_case_actions
+                and epistemic_probe is not None
+                and epistemic_probe.discriminative
+                and epistemic_probe.worst_case_total_actions
+                == d4_policy.optimal_worst_case_actions
+                and distractor_probe is not None
+                and not distractor_probe.discriminative
+                and distractor_probe.outcome_count == 1
+                and distractor_probe.worst_case_total_actions
+                == d4_policy.optimal_worst_case_actions + 1
+            )
 
     checks["discovery_profile"] = discovery_profile
+    checks["guaranteed_policy"] = (
+        metadata.discovery_level != 4
+        or (
+            d4_policy is not None
+            and d4_policy.solvable
+            and d4_policy.optimal_worst_case_actions
+            == metadata.guaranteed_policy_action_count
+        )
+    )
 
     expected_probes = (
         required_probe_count(metadata.discovery_level)
