@@ -1,8 +1,8 @@
 from __future__ import annotations
 
 import hashlib
-import random
 import secrets
+from dataclasses import dataclass
 from itertools import permutations
 
 import networkx as nx
@@ -21,7 +21,7 @@ from nexus.generator.difficulty import (
     room_bounds,
     validate_difficulty_levels,
 )
-from nexus.generator.discovery import analyze_discovery
+from nexus.generator.discovery import DiscoveryAnalysis, analyze_discovery
 from nexus.generator.evidence import (
     EvidencePlanningError,
     candidates_matching_csv,
@@ -30,6 +30,7 @@ from nexus.generator.evidence import (
     measurement_filename,
 )
 from nexus.generator.manual import FACILITY_MANUAL
+from nexus.generator.randomness import rng_for, scenario_family_id
 from nexus.generator.rules import (
     enumerate_transformation_rules,
     rule_ast_metrics,
@@ -37,6 +38,7 @@ from nexus.generator.rules import (
 )
 from nexus.models.episode import GenerationMetadata, PrivateEpisode, PublicEpisode
 from nexus.models.goals import GoalKind, GoalPredicate
+from nexus.models.rules import Effect
 from nexus.models.world import (
     Artifact,
     Machine,
@@ -55,7 +57,31 @@ class GenerationError(RuntimeError):
     pass
 
 
-def _random_tree(rng: random.Random, count: int) -> tuple[dict[str, Room], tuple[tuple[str, str], ...]]:
+@dataclass(frozen=True)
+class _EvidenceProfile:
+    files: dict[str, str]
+    candidate_counts: dict[str, int]
+    rows_by_machine: dict[str, int]
+    prediction_counts: dict[str, int]
+    direct_examples: dict[str, bool]
+    analysis: DiscoveryAnalysis
+
+
+@dataclass(frozen=True)
+class _MechanicsFamily:
+    kind: str
+    attempt: int
+    family_id: str
+    machine_ids: tuple[str, ...]
+    selected_rules: dict[str, Effect]
+    initial_artifact: Artifact
+    phases: dict[str, int]
+    target_artifact: Artifact
+    evidence_profiles: dict[int, _EvidenceProfile]
+    requires_both: bool
+
+
+def _random_tree(rng, count: int) -> tuple[dict[str, Room], tuple[tuple[str, str], ...]]:
     ids = [f"R{i}" for i in range(count)]
     edges: list[tuple[str, str]] = []
     for index in range(1, count):
@@ -70,18 +96,14 @@ def _role_rooms(
     *,
     machine_count: int,
 ) -> tuple[str, tuple[str, ...], str, int]:
-    """Choose distinct role rooms that maximize the intended route length.
-
-    The intended route is start -> artifact -> M1 -> [M2] -> destination. This does not
-    constrain the player; the reference solver still searches the real transition graph.
-    """
+    """Choose distinct role rooms that maximize the intended route length."""
     graph = nx.Graph()
     graph.add_nodes_from(rooms)
     graph.add_edges_from(edges)
     start = "R0"
     distances = dict(nx.all_pairs_shortest_path_length(graph))
 
-    role_count = machine_count + 2  # artifact + machines + destination
+    role_count = machine_count + 2
     candidates = [room_id for room_id in rooms if room_id != start]
     if len(candidates) < role_count:
         raise GenerationError("not enough rooms for distinct episode roles")
@@ -182,6 +204,186 @@ def _rule_ids(machine_ids: tuple[str, ...]) -> tuple[dict[str, str], dict[str, s
     return rules_by_machine, machine_rules
 
 
+def _compile_evidence_profile(
+    *,
+    discovery_level: int,
+    machine_ids: tuple[str, ...],
+    selected_rules: dict[str, Effect],
+    all_candidates: list[Effect],
+    stage_inputs: dict[str, Artifact],
+    initial_artifact: Artifact,
+    target_artifact: Artifact,
+    phases: dict[str, int],
+) -> _EvidenceProfile:
+    files = {"facility_manual.txt": FACILITY_MANUAL}
+    candidate_counts: dict[str, int] = {}
+    rows_by_machine: dict[str, int] = {}
+    prediction_counts: dict[str, int] = {}
+    direct_examples: dict[str, bool] = {}
+
+    evidence_level = 2 if discovery_level == 3 else discovery_level
+    for machine_id in machine_ids:
+        plan = choose_mission_evidence(
+            selected_rules[machine_id],
+            all_candidates,
+            stage_inputs[machine_id],
+            phases[machine_id],
+            discovery_level=evidence_level,
+        )
+        files[measurement_filename(machine_id)] = evidence_csv(
+            selected_rules[machine_id],
+            plan.experiments,
+        )
+        candidate_counts[machine_id] = plan.candidate_count
+        rows_by_machine[machine_id] = len(plan.experiments)
+        prediction_counts[machine_id] = plan.prediction_count
+        direct_examples[machine_id] = plan.direct_target_example
+
+    candidate_rules_by_machine = {
+        machine_id: candidates_matching_csv(
+            files[measurement_filename(machine_id)],
+            all_candidates,
+        )
+        for machine_id in machine_ids
+    }
+    analysis = analyze_discovery(
+        candidate_rules_by_machine=candidate_rules_by_machine,
+        initial_artifact=initial_artifact,
+        target_artifact=target_artifact,
+        phase_modulus=4,
+    )
+    if analysis.minimum_guaranteed_probes != required_probe_count(discovery_level):
+        raise EvidencePlanningError("evidence does not satisfy the requested guaranteed probe count")
+
+    if discovery_level == 0:
+        valid = (
+            machine_ids == ("M1",)
+            and direct_examples["M1"]
+            and candidate_counts["M1"] == 1
+            and prediction_counts["M1"] == 1
+        )
+    elif discovery_level == 1:
+        valid = (
+            machine_ids == ("M1",)
+            and not direct_examples["M1"]
+            and prediction_counts["M1"] == 1
+        )
+    elif discovery_level == 2:
+        valid = (
+            machine_ids == ("M1",)
+            and not direct_examples["M1"]
+            and prediction_counts["M1"] > 1
+        )
+    else:
+        valid = (
+            machine_ids == ("M1", "M2")
+            and all(not direct_examples[machine_id] for machine_id in machine_ids)
+            and all(prediction_counts[machine_id] > 1 for machine_id in machine_ids)
+        )
+
+    if not valid:
+        raise EvidencePlanningError("evidence does not satisfy the discovery profile semantics")
+
+    return _EvidenceProfile(
+        files=files,
+        candidate_counts=candidate_counts,
+        rows_by_machine=rows_by_machine,
+        prediction_counts=prediction_counts,
+        direct_examples=direct_examples,
+        analysis=analysis,
+    )
+
+
+def _find_mechanics_family(
+    seed: int,
+    *,
+    discovery_level: int,
+    max_attempts: int,
+    all_candidates: list[Effect],
+) -> _MechanicsFamily:
+    family_kind = "two-machine" if discovery_level == 3 else "one-machine"
+    machine_count = machine_count_for_discovery(discovery_level)
+    machine_ids = tuple(f"M{index + 1}" for index in range(machine_count))
+    required_profiles = (3,) if discovery_level == 3 else (0, 1, 2)
+
+    for family_attempt in range(max_attempts):
+        rng = rng_for(seed, "mechanics", family_kind, family_attempt)
+        selected_rules = {
+            machine_id: sample_transformation_rule(rng) for machine_id in machine_ids
+        }
+        initial_artifact = Artifact(
+            id="A1",
+            location="@inventory",
+            shape=rng.choice(tuple(Shape)),
+            pattern=rng.choice(tuple(Pattern)),
+            orientation=rng.choice(tuple(Orientation)),
+            value=rng.randint(0, 10),
+            polarity=rng.choice(tuple(Polarity)),
+        )
+        phases = {machine_id: rng.choice((0, 1)) for machine_id in machine_ids}
+
+        stage_inputs: dict[str, Artifact] = {}
+        current = initial_artifact
+        chain_changed = True
+        for machine_id in machine_ids:
+            stage_inputs[machine_id] = current
+            transformed = apply_effect(selected_rules[machine_id], current, phases[machine_id])
+            if artifact_projection(transformed) == artifact_projection(current):
+                chain_changed = False
+                break
+            current = transformed
+        if not chain_changed:
+            continue
+
+        target_artifact = current
+        requires_both = False
+        if machine_count == 2:
+            requires_both = chain_requires_both_in_order(
+                initial_artifact,
+                selected_rules["M1"],
+                selected_rules["M2"],
+                target_artifact,
+                phase_modulus=4,
+            )
+            if not requires_both:
+                continue
+
+        try:
+            profiles = {
+                profile_level: _compile_evidence_profile(
+                    discovery_level=profile_level,
+                    machine_ids=machine_ids,
+                    selected_rules=selected_rules,
+                    all_candidates=all_candidates,
+                    stage_inputs=stage_inputs,
+                    initial_artifact=initial_artifact,
+                    target_artifact=target_artifact,
+                    phases=phases,
+                )
+                for profile_level in required_profiles
+            }
+        except EvidencePlanningError:
+            continue
+
+        return _MechanicsFamily(
+            kind=family_kind,
+            attempt=family_attempt,
+            family_id=scenario_family_id(seed, family_kind, family_attempt),
+            machine_ids=machine_ids,
+            selected_rules=selected_rules,
+            initial_artifact=initial_artifact,
+            phases=phases,
+            target_artifact=target_artifact,
+            evidence_profiles=profiles,
+            requires_both=requires_both,
+        )
+
+    raise GenerationError(
+        f"failed to generate a scenario-family-compatible causal world in {max_attempts} "
+        f"attempts for seed {seed} (discovery family={family_kind})"
+    )
+
+
 def generate_episode(
     seed: int,
     *,
@@ -192,9 +394,9 @@ def generate_episode(
 ) -> PrivateEpisode:
     """Generate a deterministic, solver-qualified Transformation Facility episode.
 
-    discovery_level controls how much mission-relevant causal information must be actively
-    acquired. planning_level controls the compactness of the topology while leaving the exact
-    optimal horizon as a measured property rather than a requested target.
+    D0-D2 are compiled from one shared one-machine scenario family for a given seed. D3 uses a
+    separate two-machine family. Topology has its own deterministic stream so changing planning
+    level cannot reroll causal mechanics or evidence.
     """
     validate_difficulty_levels(discovery_level, planning_level)
     if verifier_secret == "":
@@ -203,126 +405,46 @@ def generate_episode(
         raise ValueError("max_attempts must be at least 1")
 
     all_candidates = enumerate_transformation_rules()
-    machine_count = machine_count_for_discovery(discovery_level)
-    machine_ids = tuple(f"M{index + 1}" for index in range(machine_count))
+    family = _find_mechanics_family(
+        seed,
+        discovery_level=discovery_level,
+        max_attempts=max_attempts,
+        all_candidates=all_candidates,
+    )
+    profile = family.evidence_profiles[discovery_level]
+    machine_ids = family.machine_ids
+    machine_count = len(machine_ids)
     min_rooms, max_rooms = room_bounds(planning_level, machine_count)
     probe_count = required_probe_count(discovery_level)
 
-    for attempt in range(max_attempts):
-        rng = random.Random((seed << 16) ^ attempt)
-        room_count = rng.randint(min_rooms, max_rooms)
-        rooms, edges = _random_tree(rng, room_count)
+    # Once mechanics are selected they are never rerolled because of topology. This is the
+    # scenario-pairing guarantee: topology retries stay entirely inside their named RNG stream.
+    for topology_attempt in range(max_attempts):
+        topology_rng = rng_for(
+            seed,
+            "topology",
+            family.kind,
+            family.attempt,
+            planning_level,
+            topology_attempt,
+        )
+        room_count = topology_rng.randint(min_rooms, max_rooms)
+        rooms, edges = _random_tree(topology_rng, room_count)
         artifact_room, machine_rooms, nexus_room, distance_sum = _role_rooms(
             rooms,
             edges,
             machine_count=machine_count,
         )
 
-        selected_rules = {
-            machine_id: sample_transformation_rule(rng) for machine_id in machine_ids
-        }
-        initial_artifact = Artifact(
-            id="A1",
-            location=artifact_room,
-            shape=rng.choice(tuple(Shape)),
-            pattern=rng.choice(tuple(Pattern)),
-            orientation=rng.choice(tuple(Orientation)),
-            value=rng.randint(0, 10),
-            polarity=rng.choice(tuple(Polarity)),
+        initial_artifact = family.initial_artifact.model_copy(
+            update={"location": artifact_room}
         )
-        phases = {machine_id: rng.choice((0, 1)) for machine_id in machine_ids}
-
-        stage_inputs: dict[str, Artifact] = {}
-        stage_outputs: dict[str, Artifact] = {}
-        current = initial_artifact
-        chain_changed = True
-        for machine_id in machine_ids:
-            stage_inputs[machine_id] = current
-            transformed = apply_effect(selected_rules[machine_id], current, phases[machine_id])
-            if artifact_projection(transformed) == artifact_projection(current):
-                chain_changed = False
-                break
-            stage_outputs[machine_id] = transformed
-            current = transformed
-        if not chain_changed:
-            continue
-
-        target_artifact = current
-        requires_both = False
-        reverse_reaches_goal = False
-        if machine_count == 2:
-            first_rule = selected_rules["M1"]
-            second_rule = selected_rules["M2"]
-            requires_both = chain_requires_both_in_order(
-                initial_artifact,
-                first_rule,
-                second_rule,
-                target_artifact,
-                phase_modulus=4,
-            )
-            if not requires_both:
-                continue
-            reverse_reaches_goal = False
-
-        evidence_files = {"facility_manual.txt": FACILITY_MANUAL}
-        evidence_candidate_counts: dict[str, int] = {}
-        evidence_rows_by_machine: dict[str, int] = {}
-        prediction_counts: dict[str, int] = {}
-        direct_examples: dict[str, bool] = {}
-
-        evidence_level = 2 if discovery_level == 3 else discovery_level
-        try:
-            for machine_id in machine_ids:
-                plan = choose_mission_evidence(
-                    selected_rules[machine_id],
-                    all_candidates,
-                    stage_inputs[machine_id],
-                    phases[machine_id],
-                    discovery_level=evidence_level,
-                )
-                evidence_files[measurement_filename(machine_id)] = evidence_csv(
-                    selected_rules[machine_id],
-                    plan.experiments,
-                )
-                evidence_candidate_counts[machine_id] = plan.candidate_count
-                evidence_rows_by_machine[machine_id] = len(plan.experiments)
-                prediction_counts[machine_id] = plan.prediction_count
-                direct_examples[machine_id] = plan.direct_target_example
-        except EvidencePlanningError:
-            continue
-
-        if discovery_level == 0:
-            if not direct_examples["M1"] or prediction_counts["M1"] != 1:
-                continue
-        elif discovery_level == 1:
-            if direct_examples["M1"] or prediction_counts["M1"] != 1:
-                continue
-        elif discovery_level == 2:
-            if direct_examples["M1"] or prediction_counts["M1"] <= 1:
-                continue
-        else:
-            if any(direct_examples.values()) or any(
-                prediction_count <= 1 for prediction_count in prediction_counts.values()
-            ):
-                continue
-
-        candidate_rules_by_machine = {
-            machine_id: candidates_matching_csv(
-                evidence_files[measurement_filename(machine_id)],
-                all_candidates,
-            )
-            for machine_id in machine_ids
-        }
-        discovery_analysis = analyze_discovery(
-            candidate_rules_by_machine=candidate_rules_by_machine,
-            initial_artifact=initial_artifact,
-            target_artifact=target_artifact,
-            phase_modulus=4,
+        target_artifact = family.target_artifact
+        goal = _goal_for(
+            target_artifact,
+            nexus_room,
+            family.phases[machine_ids[-1]],
         )
-        if discovery_analysis.minimum_guaranteed_probes != probe_count:
-            continue
-
-        goal = _goal_for(target_artifact, nexus_room, phases[machine_ids[-1]])
         machines = {
             machine_id: Machine(id=machine_id, room_id=room_id, uses_remaining=1)
             for machine_id, room_id in zip(machine_ids, machine_rooms)
@@ -336,8 +458,10 @@ def generate_episode(
         )
 
         episode_id = hashlib.sha256(
-            f"nexus|{seed}|{discovery_level}|{planning_level}|{attempt}|"
-            f"{rng.getrandbits(128)}".encode()
+            (
+                f"nexus-episode|{family.family_id}|d{discovery_level}|p{planning_level}|"
+                f"t{topology_attempt}"
+            ).encode("utf-8")
         ).hexdigest()[:16]
 
         public = PublicEpisode(
@@ -346,44 +470,48 @@ def generate_episode(
                 machine_ids=machine_ids,
                 destination=nexus_room,
                 target=target_artifact,
-                target_phase=phases[machine_ids[-1]],
+                target_phase=family.phases[machine_ids[-1]],
             ),
             rooms=rooms,
             edges=edges,
             phase_modulus=4,
             initial_state=initial_state,
             goal=goal,
-            evidence_files=evidence_files,
+            evidence_files=dict(profile.files),
         )
 
         rule_ids, machine_rules = _rule_ids(machine_ids)
         rules = {
-            rule_ids[machine_id]: selected_rules[machine_id] for machine_id in machine_ids
+            rule_ids[machine_id]: family.selected_rules[machine_id]
+            for machine_id in machine_ids
         }
         node_metrics = {
-            machine_id: rule_ast_metrics(selected_rules[machine_id])
+            machine_id: rule_ast_metrics(family.selected_rules[machine_id])
             for machine_id in machine_ids
         }
 
         metadata = GenerationMetadata(
-            generation_attempt=attempt,
+            generation_attempt=family.attempt,
+            scenario_family_id=family.family_id,
+            scenario_family_attempt=family.attempt,
+            topology_attempt=topology_attempt,
             discovery_level=discovery_level,
             planning_level=planning_level,
             machine_count=machine_count,
             room_count=room_count,
             graph_diameter=_graph_diameter(rooms, edges),
             candidate_rules_before_evidence=len(all_candidates),
-            candidate_rules_after_evidence=evidence_candidate_counts["M1"],
-            evidence_candidate_counts=evidence_candidate_counts,
-            evidence_rows=evidence_rows_by_machine["M1"],
-            evidence_rows_by_machine=evidence_rows_by_machine,
-            mission_relevant_prediction_counts=prediction_counts,
-            direct_target_example=any(direct_examples.values()),
+            candidate_rules_after_evidence=profile.candidate_counts["M1"],
+            evidence_candidate_counts=dict(profile.candidate_counts),
+            evidence_rows=profile.rows_by_machine["M1"],
+            evidence_rows_by_machine=dict(profile.rows_by_machine),
+            mission_relevant_prediction_counts=dict(profile.prediction_counts),
+            direct_target_example=any(profile.direct_examples.values()),
             required_probe_count=probe_count,
-            viable_causal_hypotheses=discovery_analysis.viable_hypothesis_count,
-            transformation_phases=phases,
-            requires_both_machines=requires_both,
-            reverse_order_reaches_goal=reverse_reaches_goal,
+            viable_causal_hypotheses=profile.analysis.viable_hypothesis_count,
+            transformation_phases=dict(family.phases),
+            requires_both_machines=family.requires_both,
+            reverse_order_reaches_goal=False,
             estimated_reference_actions=distance_sum + machine_count + 3,
             rule_ast_nodes=max(nodes for nodes, _ in node_metrics.values()),
             rule_ast_depth=max(depth for _, depth in node_metrics.values()),
@@ -443,13 +571,11 @@ def generate_episode(
         private.generation_metadata.exploration_allowance = allowance
         private.generation_metadata.recommended_tool_call_limit = recommended_tool_call_limit(
             action_budget,
-            len(evidence_files),
+            len(profile.files),
         )
         private.generation_metadata.solver_visited_states = final_solve.visited_states
         private.generation_metadata.solver_max_frontier_size = final_solve.max_frontier_size
 
-        # Service-mode generation does not have a separate caller-side qualification step.
-        # Require the exact same invariant suite before any generated episode can escape.
         from nexus.generator.qualify import qualify_episode
 
         if not qualify_episode(private).passed:
@@ -457,6 +583,8 @@ def generate_episode(
         return private
 
     raise GenerationError(
-        f"failed to generate a qualified episode in {max_attempts} attempts for seed {seed} "
-        f"(discovery_level={discovery_level}, planning_level={planning_level})"
+        f"scenario family {family.family_id} was valid but no topology qualified in "
+        f"{max_attempts} attempts for seed {seed} "
+        f"(discovery_level={discovery_level}, planning_level={planning_level}); "
+        "mechanics were intentionally not rerolled"
     )

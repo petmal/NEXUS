@@ -74,7 +74,12 @@ class GenerationMetadata(BaseModel):
 
     model_config = ConfigDict(extra="forbid")
 
+    # generation_attempt is retained for compatibility and mirrors scenario_family_attempt.
     generation_attempt: int = 0
+    scenario_family_id: str = ""
+    scenario_family_attempt: int = 0
+    topology_attempt: int = 0
+
     discovery_level: int = 0
     planning_level: int = 1
     machine_count: int = 1

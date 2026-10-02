@@ -29,6 +29,7 @@ from nexus.generator.evidence import (
     measurement_filename,
     mission_prediction_count,
 )
+from nexus.generator.randomness import scenario_family_id
 from nexus.generator.rules import enumerate_transformation_rules, rule_ast_metrics
 from nexus.models.actions import ACTION_ADAPTER
 from nexus.models.episode import PrivateEpisode
@@ -214,8 +215,22 @@ def qualify_episode(
         else -1
     )
     expected_allowance = exploration_allowance(len(episode.public.rooms))
+    family_kind = "two-machine" if metadata.discovery_level == 3 else "one-machine"
+    expected_family_id = (
+        scenario_family_id(
+            episode.construction_seed,
+            family_kind,
+            metadata.scenario_family_attempt,
+        )
+        if episode.construction_seed is not None
+        else ""
+    )
     metadata_consistent = (
-        metadata.machine_count == len(machine_ids)
+        metadata.generation_attempt == metadata.scenario_family_attempt
+        and metadata.scenario_family_attempt >= 0
+        and metadata.topology_attempt >= 0
+        and metadata.scenario_family_id == expected_family_id
+        and metadata.machine_count == len(machine_ids)
         and metadata.room_count == len(episode.public.rooms)
         and metadata.graph_diameter == _graph_diameter(episode)
         and metadata.required_probe_count == expected_probes
