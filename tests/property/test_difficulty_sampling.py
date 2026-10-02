@@ -22,7 +22,7 @@ def test_difficulty_profiles_are_stable_across_seed_sample(capsys):
     records: dict[tuple[int, int], list[dict[str, int]]] = defaultdict(list)
     failures: list[str] = []
 
-    for discovery_level in range(5):
+    for discovery_level in range(6):
         for planning_level in range(3):
             for seed in SEEDS:
                 try:
@@ -66,7 +66,7 @@ def test_difficulty_profiles_are_stable_across_seed_sample(capsys):
 
     lines = [
         "difficulty seed stress: "
-        f"{len(SEEDS)} seeds x 15 profiles = {len(SEEDS) * 15} generated worlds",
+        f"{len(SEEDS)} seeds x 18 profiles = {len(SEEDS) * 18} generated worlds",
         (
             "profile  success  attempts med/p95/max  solver-states med/p95/max  "
             "horizon med/p95/max  guaranteed med/p95/max  budget med/p95/max"
@@ -74,7 +74,7 @@ def test_difficulty_profiles_are_stable_across_seed_sample(capsys):
     ]
     all_records: list[dict[str, int]] = []
 
-    for discovery_level in range(5):
+    for discovery_level in range(6):
         for planning_level in range(3):
             profile_records = records[(discovery_level, planning_level)]
             all_records.extend(profile_records)
@@ -125,4 +125,4 @@ def test_difficulty_profiles_are_stable_across_seed_sample(capsys):
         print("\n".join(lines))
 
     assert not failures, "\n".join(failures)
-    assert len(all_records) == len(SEEDS) * 15
+    assert len(all_records) == len(SEEDS) * 18
