@@ -148,7 +148,8 @@ def qualify_episode(
     try:
         validate_difficulty_levels(metadata.discovery_level, metadata.planning_level)
         expected_machine_count = machine_count_for_discovery(metadata.discovery_level)
-        min_rooms, max_rooms = room_bounds(metadata.planning_level, expected_machine_count)
+        room_role_count = 1 if metadata.discovery_level == 5 else expected_machine_count
+        min_rooms, max_rooms = room_bounds(metadata.planning_level, room_role_count)
         checks["planning_profile"] = (
             metadata.machine_count == expected_machine_count
             and len(episode.public.initial_state.machines) == expected_machine_count
