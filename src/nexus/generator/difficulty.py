@@ -8,7 +8,7 @@ from nexus.models.world import Artifact
 
 
 MIN_DISCOVERY_LEVEL = 0
-MAX_DISCOVERY_LEVEL = 4
+MAX_DISCOVERY_LEVEL = 5
 MIN_PLANNING_LEVEL = 0
 MAX_PLANNING_LEVEL = 2
 
@@ -42,6 +42,8 @@ def validate_difficulty_levels(discovery_level: int, planning_level: int) -> Non
 
 
 def machine_count_for_discovery(discovery_level: int) -> int:
+    if discovery_level == 5:
+        return 3
     return 2 if discovery_level == 3 else 1
 
 
@@ -52,7 +54,7 @@ def required_probe_count(discovery_level: int) -> int:
         return 1
     if discovery_level == 3:
         return 2
-    if discovery_level == 4:
+    if discovery_level in {4, 5}:
         return 1
     raise ValueError(f"unsupported discovery level: {discovery_level}")
 
