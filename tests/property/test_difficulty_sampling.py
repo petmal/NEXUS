@@ -24,7 +24,7 @@ def test_difficulty_profiles_are_stable_across_seed_sample(capsys):
     failures: list[str] = []
 
     for discovery_level in range(6):
-        for planning_level in range(3):
+        for planning_level in range(4):
             for seed in SEEDS:
                 try:
                     episode = generate_episode(
@@ -67,13 +67,21 @@ def test_difficulty_profiles_are_stable_across_seed_sample(capsys):
                 if discovery_level == 4:
                     assert metadata.scenario_family_attempt + 1 <= 150
                     assert {
-                        artifact.shape
-                        for artifact in episode.public.initial_state.artifacts.values()
+                        episode.public.initial_state.artifacts[artifact_id].shape
+                        for artifact_id in ("A1", "A2", "A3")
                     } == set(Shape)
+                if planning_level == 3:
+                    assert metadata.planning_dependency_artifact_id is not None
+                    assert metadata.planning_dependency_action_cost >= 2
+                assert metadata.resource_pressure == 0
+                assert metadata.action_budget == (
+                    metadata.guaranteed_policy_action_count
+                    + metadata.resource_allowance
+                )
 
     lines = [
         "difficulty seed stress: "
-        f"{len(SEEDS)} seeds x 18 profiles = {len(SEEDS) * 18} generated worlds",
+        f"{len(SEEDS)} seeds x 24 profiles = {len(SEEDS) * 24} generated worlds",
         (
             "profile  success  attempts med/p95/max  solver-states med/p95/max  "
             "horizon med/p95/max  guaranteed med/p95/max  budget med/p95/max"
@@ -82,7 +90,7 @@ def test_difficulty_profiles_are_stable_across_seed_sample(capsys):
     all_records: list[dict[str, int]] = []
 
     for discovery_level in range(6):
-        for planning_level in range(3):
+        for planning_level in range(4):
             profile_records = records[(discovery_level, planning_level)]
             all_records.extend(profile_records)
             attempts = [record["attempts"] for record in profile_records]
@@ -132,4 +140,36 @@ def test_difficulty_profiles_are_stable_across_seed_sample(capsys):
         print("\n".join(lines))
 
     assert not failures, "\n".join(failures)
-    assert len(all_records) == len(SEEDS) * 18
+    assert len(all_records) == len(SEEDS) * 24
+
+
+
+def test_resource_pressure_profiles_preserve_exact_world_across_seed_sample():
+    for seed in (1, 17, 211):
+        episodes = [
+            generate_episode(
+                seed,
+                discovery_level=2,
+                planning_level=1,
+                resource_pressure=pressure,
+                verifier_secret="pressure-stress-secret",
+            )
+            for pressure in (0, 1, 2)
+        ]
+
+        first = episodes[0]
+        for episode in episodes[1:]:
+            assert episode.rules == first.rules
+            assert episode.machine_rules == first.machine_rules
+            assert episode.public.rooms == first.public.rooms
+            assert episode.public.edges == first.public.edges
+            assert episode.public.goal == first.public.goal
+            assert episode.public.evidence_files == first.public.evidence_files
+            assert (
+                episode.generation_metadata.guaranteed_policy_action_count
+                == first.generation_metadata.guaranteed_policy_action_count
+            )
+
+        budgets = [episode.generation_metadata.action_budget for episode in episodes]
+        assert budgets[0] > budgets[1] > budgets[2]
+        assert budgets[2] == episodes[2].generation_metadata.guaranteed_policy_action_count
