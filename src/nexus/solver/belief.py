@@ -20,7 +20,7 @@ from nexus.models.actions import (
 from nexus.models.episode import PrivateEpisode
 from nexus.models.rules import Effect
 from nexus.models.world import INVENTORY, TerminalStatus, WorldState
-from nexus.solver.search import goal_artifact_ids, goal_location_rooms, neighbors, search_state_key, solve
+from nexus.solver.search import goal_field_artifact_ids, goal_location_rooms, neighbors, search_state_key, solve
 
 
 class PolicyWitnessNode(BaseModel):
@@ -139,7 +139,7 @@ def _legal_actions(episode: PrivateEpisode, state: WorldState) -> tuple[Action, 
             actions.append(DropAction(artifact=artifact.id))
 
     carried = sorted(artifact.id for artifact in state.carried_artifacts())
-    goal_artifacts = goal_artifact_ids(episode.public.goal)
+    goal_artifacts = goal_field_artifact_ids(episode.public.goal)
     total_machine_uses = sum(machine.uses_remaining for machine in state.machines.values())
     for machine in sorted(state.machines.values(), key=lambda item: item.id):
         if machine.room_id != state.agent_room:
