@@ -369,3 +369,30 @@ def test_fixed_cost_certificate_rejects_nonminimal_claim():
     assert not too_low.solvable
     assert too_high.optimal_worst_case_actions is None
     assert too_low.optimal_worst_case_actions is None
+
+
+
+def test_structural_lower_bound_certificate_matches_generic_optimizer():
+    episode = _episode(
+        artifacts={"A1": _artifact("A1", Shape.SQUARE)},
+        phase_modulus=2,
+    )
+    candidates = {"M1": [_phase_rule(0), _phase_rule(1)]}
+
+    optimized = solve_guaranteed_policy(
+        episode,
+        candidate_rules_by_machine=candidates,
+        max_actions=8,
+    )
+    certified = prove_guaranteed_policy_cost(
+        episode,
+        candidate_rules_by_machine=candidates,
+        expected_actions=4,
+        minimum_guaranteed_probes=1,
+    )
+
+    assert optimized.optimal_worst_case_actions == 4
+    assert certified.solvable
+    assert certified.optimal_worst_case_actions == 4
+    assert certified.witness is not None
+    assert certified.initial_action_values == ()
