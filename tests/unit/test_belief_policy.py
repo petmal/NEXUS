@@ -288,3 +288,33 @@ def test_non_goal_operation_can_construct_the_unique_lower_cost_experiment():
     assert direct_probe.worst_case_total_actions == 8
     assert distractor.worst_case_total_actions is not None
     assert distractor.worst_case_total_actions > 7
+
+
+
+def _witness_depth(node) -> int:
+    if node is None:
+        return 0
+    if not node.branches:
+        return 1
+    return 1 + max(_witness_depth(branch.next) for branch in node.branches)
+
+
+def test_guaranteed_policy_returns_optimal_branching_witness():
+    episode = _episode(
+        artifacts={"A1": _artifact("A1", Shape.SQUARE)},
+        phase_modulus=2,
+    )
+    result = solve_guaranteed_policy(
+        episode,
+        candidate_rules_by_machine={"M1": [_phase_rule(0), _phase_rule(1)]},
+        max_actions=8,
+    )
+
+    assert result.solvable
+    assert result.optimal_worst_case_actions == 4
+    assert result.witness is not None
+    assert _witness_depth(result.witness) == result.optimal_worst_case_actions
+    assert result.witness.remaining_budget == result.optimal_worst_case_actions
+    assert result.witness.action["type"] in {"probe", "operate", "wait"}
+    assert result.witness.branches
+    assert all(branch.viable_hypotheses >= 1 for branch in result.witness.branches)
