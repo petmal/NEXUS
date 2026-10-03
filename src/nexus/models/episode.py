@@ -116,6 +116,7 @@ class GenerationMetadata(BaseModel):
     estimated_reference_actions: int = 0
     optimal_action_count: int = 0
     guaranteed_policy_action_count: int = 0
+    guaranteed_policy_witness: dict[str, object] = Field(default_factory=dict)
     action_budget: int = 0
     exploration_allowance: int = 0
     recommended_tool_call_limit: int = 0
