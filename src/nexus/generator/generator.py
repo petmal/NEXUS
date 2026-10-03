@@ -1290,6 +1290,7 @@ def generate_episode(
             private,
             candidate_rules_by_machine=candidate_rules_by_machine,
             expected_actions=expected_guaranteed_actions,
+            minimum_guaranteed_probes=probe_count,
         )
         if (
             not policy.solvable
