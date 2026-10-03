@@ -73,6 +73,18 @@ def test_terminal_performance_uses_signed_guaranteed_policy_deltas():
     assert performance.failed_finishes == 0
     assert performance.duplicate_requests == 0
     assert performance.protocol_conflicts == 0
+    payload = performance.model_dump(mode="json", by_alias=True)
+    assert payload["$schema"].startswith(
+        "https://raw.githubusercontent.com/petmal/NEXUS/"
+    )
+    assert payload["$schema"].endswith("/schemas/performance-v1.schema.json")
+    assert performance.discovery_level == 2
+    assert performance.planning_level == 1
+    assert performance.resource_pressure == 0
+    assert performance.terminal_status == "won"
+    assert performance.initial_action_budget == (
+        performance.actions_used + performance.budget_remaining
+    )
 
 
 def test_terminal_performance_counts_runtime_inefficiencies_without_changing_state():
