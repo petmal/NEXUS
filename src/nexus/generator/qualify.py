@@ -345,6 +345,26 @@ def qualify_episode(
                 }
             )
 
+    legacy_policy = None
+    if (
+        metadata.discovery_level in {0, 1, 2, 3}
+        and profile_inputs_valid
+        and len(candidate_rules_by_machine) == len(machine_ids)
+    ):
+        legacy_policy = solve_guaranteed_policy(
+            episode,
+            candidate_rules_by_machine=candidate_rules_by_machine,
+            max_actions=min(
+                96,
+                max(
+                    4,
+                    metadata.optimal_action_count
+                    + metadata.required_probe_count
+                    + 4,
+                ),
+            ),
+        )
+
     discovery_profile = (
         profile_inputs_valid
         and len(machine_ids) == expected_machine_count
@@ -480,22 +500,21 @@ def qualify_episode(
             )
 
     checks["discovery_profile"] = discovery_profile
+    exact_policy = (
+        d4_policy
+        if metadata.discovery_level == 4
+        else d5_policy
+        if metadata.discovery_level == 5
+        else legacy_policy
+    )
     checks["guaranteed_policy"] = (
-        (
-            metadata.discovery_level == 4
-            and d4_policy is not None
-            and d4_policy.solvable
-            and d4_policy.optimal_worst_case_actions
-            == metadata.guaranteed_policy_action_count
-        )
-        or (
-            metadata.discovery_level == 5
-            and d5_policy is not None
-            and d5_policy.solvable
-            and d5_policy.optimal_worst_case_actions
-            == metadata.guaranteed_policy_action_count
-        )
-        or metadata.discovery_level not in {4, 5}
+        exact_policy is not None
+        and exact_policy.solvable
+        and exact_policy.optimal_worst_case_actions
+        == metadata.guaranteed_policy_action_count
+        and exact_policy.witness is not None
+        and exact_policy.witness.model_dump(mode="json")
+        == metadata.guaranteed_policy_witness
     )
     checks["constructed_experiment"] = (
         metadata.discovery_level != 5
@@ -639,6 +658,9 @@ def qualify_episode(
             and d4_policy is not None
             and d4_policy.optimal_worst_case_actions
             == metadata.guaranteed_policy_action_count
+            and d4_policy.witness is not None
+            and d4_policy.witness.model_dump(mode="json")
+            == metadata.guaranteed_policy_witness
             and epistemic_probe is not None
             and epistemic_probe.outcome_count == metadata.epistemic_probe_outcomes
             and epistemic_probe.worst_case_total_actions
@@ -674,6 +696,9 @@ def qualify_episode(
             and d5_policy is not None
             and d5_policy.optimal_worst_case_actions
             == metadata.guaranteed_policy_action_count
+            and d5_policy.witness is not None
+            and d5_policy.witness.model_dump(mode="json")
+            == metadata.guaranteed_policy_witness
             and d5_constructed_outcomes == metadata.constructed_probe_outcomes
             and d5_direct_probe is not None
             and d5_direct_probe.worst_case_total_actions
@@ -690,7 +715,13 @@ def qualify_episode(
         )
     else:
         metadata_consistent = metadata_consistent and (
-            metadata.guaranteed_policy_action_count == 0
+            legacy_policy is not None
+            and legacy_policy.solvable
+            and legacy_policy.optimal_worst_case_actions
+            == metadata.guaranteed_policy_action_count
+            and legacy_policy.witness is not None
+            and legacy_policy.witness.model_dump(mode="json")
+            == metadata.guaranteed_policy_witness
             and metadata.epistemic_artifact_id is None
             and metadata.distractor_artifact_id is None
             and metadata.epistemic_machine_id is None
@@ -710,12 +741,11 @@ def qualify_episode(
     metrics["evidence_candidate_count"] = evidence_candidate_counts.get("M1", 0)
     metrics["mission_relevant_prediction_count"] = prediction_counts.get("M1", 0)
     metrics["required_probe_count"] = metadata.required_probe_count
+    metrics["guaranteed_policy_action_count"] = metadata.guaranteed_policy_action_count
     if metadata.discovery_level == 4:
-        metrics["guaranteed_policy_action_count"] = metadata.guaranteed_policy_action_count
         metrics["epistemic_probe_action_cost"] = metadata.epistemic_probe_action_cost
         metrics["distractor_probe_action_cost"] = metadata.distractor_probe_action_cost
     elif metadata.discovery_level == 5:
-        metrics["guaranteed_policy_action_count"] = metadata.guaranteed_policy_action_count
         metrics["constructed_probe_outcomes"] = metadata.constructed_probe_outcomes
         metrics["direct_probe_action_cost"] = metadata.direct_probe_action_cost
         metrics["constructor_action_cost"] = metadata.constructor_action_cost
@@ -735,11 +765,6 @@ def qualify_episode(
         )
         expected_action_budget = (
             metadata.guaranteed_policy_action_count
-            + expected_allowance
-            + EXECUTION_SLACK
-            if metadata.discovery_level in {4, 5}
-            else solved.optimal_action_count
-            + metadata.required_probe_count
             + expected_allowance
             + EXECUTION_SLACK
         )
