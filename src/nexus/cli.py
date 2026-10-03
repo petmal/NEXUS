@@ -75,8 +75,14 @@ def generate(
     planning_level: int = typer.Option(
         1,
         min=0,
+        max=3,
+        help="Planning scale: 0=compact, 1=standard, 2=extended, 3=delivery dependency.",
+    ),
+    resource_pressure: int = typer.Option(
+        0,
+        min=0,
         max=2,
-        help="Planning scale: 0=compact, 1=standard, 2=extended.",
+        help="Action-budget pressure: 0=forgiving, 1=constrained, 2=exact guaranteed budget.",
     ),
 ) -> None:
     """Generate one or more solver-qualified episodes.
@@ -91,6 +97,7 @@ def generate(
             seed + offset,
             discovery_level=discovery_level,
             planning_level=planning_level,
+            resource_pressure=resource_pressure,
         )
         target = output if count == 1 else output / f"episode-{offset + 1:03d}"
         save_episode(episode, target)
@@ -101,6 +108,7 @@ def generate(
         console.print(
             f"[green]generated[/green] {episode.public.episode_id} -> {target} "
             f"(discovery={metadata.discovery_level} planning={metadata.planning_level} "
+            f"resource-pressure={metadata.resource_pressure} "
             f"optimal={metadata.optimal_action_count} probes={metadata.required_probe_count} "
             f"budget={metadata.action_budget} "
             f"recommended-tool-calls={metadata.recommended_tool_call_limit})"
@@ -290,9 +298,16 @@ def serve_session(
     planning_level: int = typer.Option(
         1,
         min=0,
-        max=2,
+        max=3,
         envvar="NEXUS_PLANNING_LEVEL",
         help="Generated-session planning scale (used with --seed).",
+    ),
+    resource_pressure: int = typer.Option(
+        0,
+        min=0,
+        max=2,
+        envvar="NEXUS_RESOURCE_PRESSURE",
+        help="Generated-session action-budget pressure (used with --seed).",
     ),
     verifier_secret: str | None = typer.Option(
         None, envvar="NEXUS_VERIFIER_SECRET",
@@ -317,6 +332,7 @@ def serve_session(
             seed,
             discovery_level=discovery_level,
             planning_level=planning_level,
+            resource_pressure=resource_pressure,
             verifier_secret=verifier_secret,
         )
     )
