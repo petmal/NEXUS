@@ -13,7 +13,7 @@ A generated episode can be selected with a seed:
 
 ```bash
 NEXUS_SEED=17 NEXUS_DISCOVERY_LEVEL=1 NEXUS_PLANNING_LEVEL=1 \
-NEXUS_HOST=0.0.0.0 nexus serve-session
+NEXUS_RESOURCE_PRESSURE=0 NEXUS_HOST=0.0.0.0 nexus serve-session
 ```
 
 Or an existing compiled private episode can be mounted and loaded:
@@ -27,7 +27,8 @@ Supported startup environment variables are:
 ```text
 NEXUS_SEED               deterministic public episode generation seed
 NEXUS_DISCOVERY_LEVEL    causal-discovery profile, integer 0..5 (default 0)
-NEXUS_PLANNING_LEVEL     topology/planning profile, integer 0..2 (default 1)
+NEXUS_PLANNING_LEVEL     topology/planning profile, integer 0..3 (default 1)
+NEXUS_RESOURCE_PRESSURE  action-budget pressure, integer 0..2 (default 0)
 NEXUS_VERIFIER_SECRET    optional fixed private secret for reproducible victory codes
 NEXUS_HOST               server bind address
 NEXUS_PORT               server port
@@ -58,32 +59,32 @@ verify the final submitted value without access to the private episode.
 
 ## Terminal performance telemetry
 
-The action response that first reaches `won` or `failed` also includes a terminal-only
-`performance` object. It is absent as meaningful data while the episode is active, so private
-solver information cannot influence play.
+The action response that first reaches `won` or `failed` includes a terminal-only `performance`
+object. It is absent while the episode is active, so trusted solver information cannot influence
+play.
 
-For D0-D3 the summary uses the physical optimum plus guaranteed probe count as its baseline. D4
-and D5 instead use the exact minimum worst-case total-action policy proved during qualification. The
-summary includes:
+Every profile D0-D5 now has an exact minimum worst-case total-action policy cost. The terminal
+object is self-describing and includes an immutable `$schema` URL pointing to the versioned
+`schemas/performance-v1.schema.json` contract stored in this repository. In addition to the run
+counters it records the discovery/planning/resource-pressure profile, terminal status, initial
+budget, resource allowance, and P3 dependency cost.
 
-- accepted environment actions used;
-- private physical optimum;
-- minimum probes required by the guaranteed causal policy;
-- their sum as the guaranteed baseline;
-- signed action/probe deltas from that guaranteed baseline;
-- remaining action budget;
-- invalid game actions;
-- rejected `finish` attempts;
-- duplicate transport retries; and
-- turn/protocol conflicts.
+Important baseline fields are:
 
-The deltas are intentionally signed. A negative delta does not automatically mean better
-reasoning: an agent can beat the guaranteed baseline by guessing the actual hidden world rather
-than resolving uncertainty. Later epistemic analysis can distinguish justified commitment from
-that kind of risk-taking.
+- `optimal_physical_actions`: omniscient selected-world BFS optimum;
+- `minimum_guaranteed_probes`: minimum worst-case causal probe count;
+- `guaranteed_policy_actions`: exact minimum worst-case total action cost across all viable
+  public-evidence-consistent hidden worlds;
+- `action_delta_from_guaranteed_policy`: signed realized actions minus that minimax baseline; and
+- `probe_delta_from_guaranteed_minimum`: signed realized probes minus the guaranteed probe count.
 
-Duplicate idempotent retries never consume an environment action and are reported separately, so
-transport behavior does not distort game-path efficiency.
+The deltas are intentionally signed. A negative value does not automatically mean better
+reasoning: an agent may beat a worst-case guarantee because the selected hidden world was
+favorable or because it took epistemic risk and guessed correctly.
+
+`invalid_actions`, `duplicate_requests`, and `protocol_conflicts` do not consume environment
+actions. Rejected `finish` attempts do consume an action and are counted separately as
+`failed_finishes`.
 
 ## Stateless client command
 
