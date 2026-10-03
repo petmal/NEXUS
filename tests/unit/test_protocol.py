@@ -1,3 +1,5 @@
+import pytest
+
 from nexus.generator import generate_episode
 from nexus.models import ACTION_ADAPTER
 from nexus.protocol.session import Session
@@ -64,9 +66,13 @@ def test_terminal_performance_uses_signed_guaranteed_policy_deltas():
     assert performance.minimum_guaranteed_probes == 1
     assert (
         performance.guaranteed_policy_actions
-        == episode.generation_metadata.optimal_action_count + 1
+        == episode.generation_metadata.guaranteed_policy_action_count
     )
-    assert performance.action_delta_from_guaranteed_policy == -1
+    assert performance.guaranteed_policy_actions > performance.optimal_physical_actions
+    assert performance.action_delta_from_guaranteed_policy == (
+        performance.actions_used - performance.guaranteed_policy_actions
+    )
+    assert performance.action_delta_from_guaranteed_policy < 0
     assert performance.probes_used == 0
     assert performance.probe_delta_from_guaranteed_minimum == -1
     assert performance.invalid_actions == 0
@@ -163,6 +169,7 @@ def test_terminal_performance_counts_rejected_finish_and_reports_failed_episode(
 
 
 
+@pytest.mark.slow
 def test_terminal_performance_uses_exact_policy_cost_for_higher_discovery():
     episode = generate_episode(
         17,

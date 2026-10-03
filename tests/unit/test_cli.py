@@ -1,3 +1,5 @@
+import pytest
+
 from typer.testing import CliRunner
 
 from nexus.cli import app
@@ -78,6 +80,7 @@ def test_play_evidence_meta_command_matches_player_evidence_access(tmp_path):
     assert "invalid action JSON" not in result.stdout
 
 
+@pytest.mark.slow
 def test_generate_supports_selective_discovery_level_four(tmp_path):
     result = runner.invoke(
         app,
@@ -96,6 +99,7 @@ def test_generate_supports_selective_discovery_level_four(tmp_path):
     assert "discovery=4" in result.stdout
 
 
+@pytest.mark.slow
 def test_generate_supports_constructed_discovery_level_five(tmp_path):
     result = runner.invoke(
         app,
@@ -123,6 +127,7 @@ def test_generate_rejects_out_of_range_difficulty_levels(tmp_path):
 
 
 
+@pytest.mark.slow
 def test_generate_supports_dependency_planning_and_resource_pressure(tmp_path):
     result = runner.invoke(
         app,

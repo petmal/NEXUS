@@ -39,14 +39,16 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 240
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
 
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-python@v7
         with:
           python-version: "3.14.7"
 
       - name: Cache uv downloads
-        uses: actions/cache@v4
+        uses: actions/cache@v6
         with:
           path: ~/.cache/uv
           key: uv-${{ runner.os }}-py314-${{ hashFiles('uv.lock') }}
@@ -61,23 +63,28 @@ jobs:
           uv lock --check
           uv sync --frozen --all-extras
 
+      - name: Solver proof tests
+        run: |
+          uv run pytest -q tests/unit/test_belief_policy.py --maxfail=1 --durations=10
+
       - name: Fast tests
         run: |
           uv run pytest -q -m "not slow and not stress" tests/unit tests/integration \
-            --durations=15
+            --ignore=tests/unit/test_belief_policy.py --maxfail=1 --durations=15
 
       - name: Extended unit and integration tests
         if: ${{ github.event_name == 'workflow_dispatch' && inputs.full }}
         run: |
           uv run pytest -q -m slow tests/unit tests/integration \
-            --durations=20
+            --maxfail=1 --durations=20
 
       - name: Cross-seed property stress
         if: ${{ github.event_name == 'workflow_dispatch' && inputs.full }}
         env:
           NEXUS_STRESS_SEED_COUNT: ${{ inputs.stress_seed_count }}
+          NEXUS_STRESS_FAIL_FAST: "1"
         run: |
-          uv run pytest -q -m stress tests/property --durations=20
+          uv run pytest -q -m stress tests/property --maxfail=1 --durations=20
 
       - name: CLI smoke test
         if: ${{ github.event_name == 'workflow_dispatch' && inputs.full }}

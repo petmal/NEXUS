@@ -9,7 +9,12 @@ from nexus.solver import solve
 
 @pytest.mark.parametrize(
     ("discovery_level", "expected_probes", "machine_count"),
-    [(0, 0, 1), (1, 0, 1), (2, 1, 1), (3, 2, 2)],
+    [
+        (0, 0, 1),
+        (1, 0, 1),
+        (2, 1, 1),
+        pytest.param(3, 2, 2, marks=pytest.mark.slow),
+    ],
 )
 def test_discovery_profiles_are_mechanical_guarantees(
     discovery_level, expected_probes, machine_count
@@ -74,6 +79,7 @@ def test_every_profile_combination_generates_a_winnable_world(
     assert qualify_episode(episode).passed
 
 
+@pytest.mark.slow
 def test_level_three_reference_plan_uses_both_machines_in_order():
     episode = generate_episode(
         9303,
@@ -89,6 +95,7 @@ def test_level_three_reference_plan_uses_both_machines_in_order():
     assert operations == ["M1", "M2"]
 
 
+@pytest.mark.slow
 def test_generation_is_deterministic_for_seed_and_difficulty_profile():
     kwargs = {
         "discovery_level": 3,
@@ -243,7 +250,10 @@ def test_d3_planning_profiles_share_two_machine_scenario_family():
 
 
 
-@pytest.mark.parametrize("discovery_level", [0, 1, 2, 3])
+@pytest.mark.parametrize(
+    "discovery_level",
+    [0, 1, 2, pytest.param(3, marks=pytest.mark.slow)],
+)
 def test_legacy_discovery_profiles_record_exact_guaranteed_policy_cost(discovery_level):
     episode = generate_episode(
         12000 + discovery_level,
@@ -267,6 +277,7 @@ def _goal_mentions_artifact(goal, artifact_id: str) -> bool:
     return any(_goal_mentions_artifact(child, artifact_id) for child in goal.children)
 
 
+@pytest.mark.slow
 def test_p3_adds_dependency_without_changing_topology_or_causal_world():
     kwargs = {
         "discovery_level": 2,
@@ -322,6 +333,7 @@ def test_resource_pressure_preserves_world_and_exact_policy(resource_pressure):
     assert qualify_episode(episode).passed
 
 
+@pytest.mark.slow
 def test_resource_pressure_only_changes_budget_allowance():
     episodes = [
         generate_episode(

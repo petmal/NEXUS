@@ -10,6 +10,7 @@ import pytest
 from nexus.generator import GenerationError, generate_episode
 from nexus.generator.difficulty import MAX_PHYSICAL_OPTIMAL_ACTIONS
 from nexus.models.world import Shape
+from nexus.solver.belief import solve_compressed_physical
 
 
 ALL_SEEDS = (1, 17, 73, 211, 509, 1009, 4099, 16381, 65537, 104729)
@@ -58,9 +59,10 @@ def test_difficulty_profiles_are_stable_across_seed_sample(capsys):
                         verifier_secret="sampling-secret",
                     )
                 except GenerationError as exc:
-                    failures.append(
-                        f"d={discovery_level} p={planning_level} seed={seed}: {exc}"
-                    )
+                    failure = f"d={discovery_level} p={planning_level} seed={seed}: {exc}"
+                    if os.environ.get("NEXUS_STRESS_FAIL_FAST") == "1":
+                        raise AssertionError(failure) from exc
+                    failures.append(failure)
                     continue
 
                 metadata = episode.generation_metadata
@@ -101,6 +103,9 @@ def test_difficulty_profiles_are_stable_across_seed_sample(capsys):
                     metadata.guaranteed_policy_action_count
                     + metadata.resource_allowance
                 )
+                compressed = solve_compressed_physical(episode)
+                assert compressed.solvable
+                assert compressed.optimal_action_count == metadata.optimal_action_count
 
     lines = [
         "difficulty seed stress: "

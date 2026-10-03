@@ -1,3 +1,5 @@
+import pytest
+
 from nexus.engine.engine import step
 from nexus.engine.rules import apply_effect
 from nexus.engine.replay import execute_with_trace
@@ -12,6 +14,9 @@ from nexus.models import ACTION_ADAPTER, TerminalStatus
 from nexus.models.actions import OperateAction, ProbeAction
 from nexus.solver import solve
 from nexus.solver.belief import solve_guaranteed_policy
+
+
+pytestmark = pytest.mark.slow
 
 
 def _initial_action_value(result, action_type, machine_id: str, artifact_id: str):

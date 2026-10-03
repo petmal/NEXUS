@@ -1,3 +1,5 @@
+import pytest
+
 from nexus.generator import generate_episode, qualify_episode
 from nexus.generator.evidence import candidates_matching_csv
 from nexus.generator.rules import enumerate_transformation_rules
@@ -6,6 +8,9 @@ from nexus.models.world import Shape, TerminalStatus
 from nexus.solver import solve
 from nexus.solver.belief import solve_guaranteed_policy
 from nexus.engine.replay import execute_with_trace
+
+
+pytestmark = pytest.mark.slow
 
 
 def _probe_value(result, artifact_id: str):
