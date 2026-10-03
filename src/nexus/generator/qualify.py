@@ -755,9 +755,35 @@ def qualify_episode(
     if metadata.planning_level == 3:
         dependency_id = metadata.planning_dependency_artifact_id
         goal = episode.public.goal
+        source_id = "A3" if metadata.discovery_level >= 4 else "A1"
+        dependency = (
+            episode.public.initial_state.artifacts.get(dependency_id)
+            if dependency_id is not None
+            else None
+        )
+        source = episode.public.initial_state.artifacts.get(source_id)
+        duplicate_context = (
+            dependency is not None
+            and source is not None
+            and (
+                dependency.shape,
+                dependency.pattern,
+                dependency.orientation,
+                dependency.value,
+                dependency.polarity,
+            )
+            == (
+                source.shape,
+                source.pattern,
+                source.orientation,
+                source.value,
+                source.polarity,
+            )
+        )
         if (
             dependency_id is not None
             and dependency_id in episode.public.initial_state.artifacts
+            and duplicate_context
             and goal.kind == GoalKind.AND
             and len(goal.children) == 2
             and goal.children[1].kind == GoalKind.ARTIFACT_LOCATION
