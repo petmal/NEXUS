@@ -62,7 +62,7 @@ from nexus.models.world import (
     Shape,
     WorldState,
 )
-from nexus.solver.belief import solve_guaranteed_policy
+from nexus.solver.belief import prove_guaranteed_policy_cost, solve_guaranteed_policy
 from nexus.solver.search import solve
 
 
@@ -1286,10 +1286,10 @@ def generate_episode(
             for machine_id in machine_ids
         }
         expected_guaranteed_actions = solved.optimal_action_count + probe_count
-        policy = solve_guaranteed_policy(
+        policy = prove_guaranteed_policy_cost(
             private,
             candidate_rules_by_machine=candidate_rules_by_machine,
-            max_actions=min(GENERATION_SOLVER_BUDGET, expected_guaranteed_actions + 4),
+            expected_actions=expected_guaranteed_actions,
         )
         if (
             not policy.solvable
