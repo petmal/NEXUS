@@ -351,18 +351,10 @@ def qualify_episode(
         and profile_inputs_valid
         and len(candidate_rules_by_machine) == len(machine_ids)
     ):
-        legacy_policy = solve_guaranteed_policy(
+        legacy_policy = prove_guaranteed_policy_cost(
             episode,
             candidate_rules_by_machine=candidate_rules_by_machine,
-            max_actions=min(
-                96,
-                max(
-                    4,
-                    metadata.optimal_action_count
-                    + metadata.required_probe_count
-                    + 4,
-                ),
-            ),
+            expected_actions=metadata.guaranteed_policy_action_count,
         )
 
     discovery_profile = (
