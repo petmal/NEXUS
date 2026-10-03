@@ -1219,6 +1219,7 @@ def _add_planning_dependency(episode: PrivateEpisode) -> PrivateEpisode:
         if overhead < 2:
             continue
 
+        needs_decision_values = metadata.discovery_level >= 4
         policy = solve_guaranteed_policy(
             trial,
             candidate_rules_by_machine=candidate_rules,
@@ -1226,7 +1227,7 @@ def _add_planning_dependency(episode: PrivateEpisode) -> PrivateEpisode:
                 GENERATION_SOLVER_BUDGET,
                 base_guaranteed + overhead + 8,
             ),
-            include_action_values=False,
+            include_action_values=needs_decision_values,
         )
 
         if (
@@ -1236,6 +1237,47 @@ def _add_planning_dependency(episode: PrivateEpisode) -> PrivateEpisode:
             or policy.optimal_worst_case_actions != base_guaranteed + overhead
         ):
             continue
+
+        if metadata.discovery_level == 4:
+            epistemic_probe = _initial_probe_value(policy, "A2")
+            distractor_probe = _initial_probe_value(policy, "A3")
+            if (
+                epistemic_probe is None
+                or epistemic_probe.worst_case_total_actions is None
+                or distractor_probe is None
+                or distractor_probe.worst_case_total_actions is None
+            ):
+                continue
+            trial.generation_metadata.epistemic_probe_outcomes = epistemic_probe.outcome_count
+            trial.generation_metadata.distractor_probe_outcomes = distractor_probe.outcome_count
+            trial.generation_metadata.epistemic_probe_action_cost = (
+                epistemic_probe.worst_case_total_actions
+            )
+            trial.generation_metadata.distractor_probe_action_cost = (
+                distractor_probe.worst_case_total_actions
+            )
+        elif metadata.discovery_level == 5:
+            constructor = _initial_operate_value(policy, "M2", "A2")
+            direct_probe = _initial_probe_value(policy, "A1")
+            distractor = _initial_operate_value(policy, "M3", "A3")
+            if (
+                constructor is None
+                or constructor.worst_case_total_actions is None
+                or direct_probe is None
+                or direct_probe.worst_case_total_actions is None
+                or distractor is None
+                or distractor.worst_case_total_actions is None
+            ):
+                continue
+            trial.generation_metadata.constructor_action_cost = (
+                constructor.worst_case_total_actions
+            )
+            trial.generation_metadata.direct_probe_action_cost = (
+                direct_probe.worst_case_total_actions
+            )
+            trial.generation_metadata.distractor_action_cost = (
+                distractor.worst_case_total_actions
+            )
 
         trial.generation_metadata.planning_level = 3
         trial.generation_metadata.planning_dependency_artifact_id = dependency_id

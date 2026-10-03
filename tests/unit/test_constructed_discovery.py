@@ -19,6 +19,16 @@ from nexus.solver.belief import solve_guaranteed_policy
 pytestmark = pytest.mark.slow
 
 
+@pytest.fixture(scope="module")
+def d5_episode():
+    return generate_episode(
+        17,
+        discovery_level=5,
+        planning_level=1,
+        verifier_secret="d5-proof-secret",
+    )
+
+
 def _initial_action_value(result, action_type, machine_id: str, artifact_id: str):
     for value in result.initial_action_values:
         action = value.action
@@ -42,13 +52,8 @@ def _candidate_rules(episode):
     }
 
 
-def test_d5_constructs_a_strictly_lower_cost_diagnostic_experiment():
-    episode = generate_episode(
-        17,
-        discovery_level=5,
-        planning_level=1,
-        verifier_secret="d5-proof-secret",
-    )
+def test_d5_constructs_a_strictly_lower_cost_diagnostic_experiment(d5_episode):
+    episode = d5_episode
     metadata = episode.generation_metadata
 
     assert metadata.discovery_level == 5
@@ -98,13 +103,8 @@ def test_d5_constructs_a_strictly_lower_cost_diagnostic_experiment():
     assert report.checks["constructed_experiment"]
 
 
-def test_d5_constructed_context_discriminates_all_winning_phases():
-    episode = generate_episode(
-        73,
-        discovery_level=5,
-        planning_level=1,
-        verifier_secret="d5-proof-secret",
-    )
+def test_d5_constructed_context_discriminates_all_winning_phases(d5_episode):
+    episode = d5_episode
     candidates = _candidate_rules(episode)
 
     constructor = ACTION_ADAPTER.validate_python(
@@ -139,13 +139,8 @@ def test_d5_constructed_context_discriminates_all_winning_phases():
     assert episode.generation_metadata.constructed_probe_outcomes == 4
 
 
-def test_d5_hidden_world_is_independently_solver_winnable_and_replayable():
-    episode = generate_episode(
-        211,
-        discovery_level=5,
-        planning_level=2,
-        verifier_secret="d5-proof-secret",
-    )
+def test_d5_hidden_world_is_independently_solver_winnable_and_replayable(d5_episode):
+    episode = d5_episode
 
     solved = solve(episode)
     assert solved.solvable

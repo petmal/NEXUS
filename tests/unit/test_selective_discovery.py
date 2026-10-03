@@ -13,6 +13,16 @@ from nexus.engine.replay import execute_with_trace
 pytestmark = pytest.mark.slow
 
 
+@pytest.fixture(scope="module")
+def d4_episode():
+    return generate_episode(
+        17,
+        discovery_level=4,
+        planning_level=1,
+        verifier_secret="d4-proof-secret",
+    )
+
+
 def _probe_value(result, artifact_id: str):
     for value in result.initial_action_values:
         if isinstance(value.action, ProbeAction) and value.action.artifact == artifact_id:
@@ -20,13 +30,8 @@ def _probe_value(result, artifact_id: str):
     raise AssertionError(f"missing initial probe for {artifact_id}")
 
 
-def test_d4_selects_informative_auxiliary_context_over_predictable_distractor():
-    episode = generate_episode(
-        17,
-        discovery_level=4,
-        planning_level=1,
-        verifier_secret="d4-proof-secret",
-    )
+def test_d4_selects_informative_auxiliary_context_over_predictable_distractor(d4_episode):
+    episode = d4_episode
     metadata = episode.generation_metadata
 
     assert metadata.discovery_level == 4
@@ -73,13 +78,8 @@ def test_d4_selects_informative_auxiliary_context_over_predictable_distractor():
     assert report.checks["guaranteed_policy"]
 
 
-def test_d4_hidden_world_remains_independently_solver_winnable_and_replayable():
-    episode = generate_episode(
-        73,
-        discovery_level=4,
-        planning_level=2,
-        verifier_secret="d4-proof-secret",
-    )
+def test_d4_hidden_world_remains_independently_solver_winnable_and_replayable(d4_episode):
+    episode = d4_episode
 
     solved = solve(episode)
     assert solved.solvable
@@ -92,13 +92,8 @@ def test_d4_hidden_world_remains_independently_solver_winnable_and_replayable():
 
 
 
-def test_d4_shape_roles_are_semantic_not_hardcoded():
-    episode = generate_episode(
-        17,
-        discovery_level=4,
-        planning_level=1,
-        verifier_secret="d4-role-proof-secret",
-    )
+def test_d4_shape_roles_are_semantic_not_hardcoded(d4_episode):
+    episode = d4_episode
 
     assert {
         artifact.shape
