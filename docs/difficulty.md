@@ -1,8 +1,8 @@
 # Difficulty profiles
 
-NEXUS intentionally exposes only two public generation knobs. Low-level topology, evidence,
-resource, and qualification settings remain internal so callers do not need to reason about
-incompatible parameter combinations. Discovery guarantees are evaluated after conditioning on
+NEXUS exposes three orthogonal public generation knobs: causal discovery, planning, and resource
+pressure. Low-level topology, evidence construction, and qualification settings remain internal so
+callers do not need to reason about incompatible parameter combinations. Discovery guarantees are evaluated after conditioning on
 both the public evidence and the public goal.
 
 ## Discovery level
@@ -69,6 +69,15 @@ measured property:
 | 0 | 4–5 rooms |
 | 1 | 5–7 rooms |
 | 2 | 7–9 rooms |
+| 3 | 7–9 rooms + delivery dependency |
+
+P3 deliberately does **not** increase the P2 room-count range. It is compiled from the paired P2
+world with identical rooms, edges, hidden laws, evidence, and core entities. NEXUS adds one cargo
+artifact whose intrinsic state duplicates an already available experimental context, places it in
+the existing topology, and adds a delivery-location goal for that cargo. Qualification then removes
+only that cargo/goal to reconstruct the P2 counterfactual and proves that both the physical optimal
+action count and exact guaranteed-policy action count decrease by exactly the recorded
+`planning_dependency_action_cost` (at least two actions).
 
 When a discovery profile requires more distinct roles, NEXUS automatically raises the minimum
 room count needed to keep start, artifact, machines, and destination distinct.
@@ -90,8 +99,10 @@ For a fixed seed:
 - D4 uses a separate selective-experiment family with one mission artifact plus qualified auxiliary and distractor samples.
 - D5 uses a separate constructed-experiment family. For a fixed seed, all planning variants share the same hidden winning phase, artifact roles, and three machine laws; only the delivery topology changes.
 - Changing P0/P1/P2 does not reroll mechanics or evidence. Topology has an independent named RNG
-  stream, so planning variants share the causal problem while changing the room graph and role
-  placement.
+  stream, so those planning variants share the causal problem while changing the room graph and
+  role placement.
+- P3 reuses the exact paired P2 topology and causal world, then adds only the mechanically isolated
+  delivery dependency described above.
 
 The generator first finds a causal family that satisfies every discovery profile in that family.
 Once selected, topology rejection may retry only the topology stream; it is never allowed to
@@ -102,42 +113,45 @@ Private generation metadata records a `scenario_family_id`, `scenario_family_att
 `topology_attempt` so benchmark analysis can verify that compared episodes were genuinely
 paired.
 
-## Resource budget
+## Resource pressure
 
-Resource pressure is currently derived rather than publicly configurable. For D0-D3 the action budget is:
+`--resource-pressure` is an independent action-budget axis. Every profile first computes the exact
+minimum worst-case **total environment-action** cost of a guaranteed winning policy. Resource
+pressure changes only the explicit allowance above that baseline:
+
+| Level | Meaning | Action allowance above exact guaranteed policy |
+| --- | --- | ---: |
+| 0 | forgiving | `2 * (room_count - 1) + 2` |
+| 1 | constrained | `room_count - 1` |
+| 2 | tight | `0` |
+
+Thus R2 remains mechanically guaranteed winnable: it gives exactly
+`guaranteed_policy_actions`, but no action is available for avoidable exploration or redundant
+experiments. R0 preserves the historical exploration + execution cushion.
+
+Resource pressure never rerolls topology, mechanics, evidence, goals, physical optimum, or the
+exact guaranteed-policy optimum. The qualifier recomputes the selected allowance and rejects an
+episode whose budget does not equal:
 
 ```text
-physical optimal actions
-+ qualified probe allowance
-+ conservative local-exploration allowance
-+ execution slack
+exact guaranteed-policy actions + resource allowance
 ```
 
-For D4 and D5 the qualifier has an exact minimum worst-case **total action** policy, so the budget uses:
-
-```text
-minimum guaranteed policy actions
-+ conservative local-exploration allowance
-+ execution slack
-```
-
-This avoids penalizing an agent merely because the private reference solver already knows hidden
-entity locations. Resource pressure can become a public axis later after calibration data exists.
-
-The qualified probe allowance is a guarantee-level quantity. A model may guess the true hidden
-world and win with fewer probes than the minimum needed by a policy that succeeds across all
-evidence-consistent worlds.
+The minimum guaranteed probe count remains a separate causal statistic. An agent can guess the
+selected hidden world and win with fewer probes than the minimum required by a policy that succeeds
+across all evidence-consistent worlds; terminal telemetry therefore reports signed action and probe
+deltas rather than labeling every negative delta as better reasoning.
 
 ## Operator metadata
 
 `private.json` contains typed `generation_metadata`, including:
 
-- selected discovery/planning levels and scenario-family identity;
+- selected discovery/planning/resource-pressure levels and scenario-family identity;
 - physical optimal action count;
 - required informed-probe count;
-- exact guaranteed-policy action count where available;
+- exact guaranteed-policy action count and a private branching witness for every profile;
 - selective-experiment proof metadata for D4 and constructed-experiment proof metadata for D5;
-- action budget;
+- P3 dependency cost where applicable, resource allowance, and action budget;
 - recommended tool-call ceiling;
 - room count and graph diameter;
 - evidence candidate/prediction counts and goal-compatible causal-hypothesis count;
