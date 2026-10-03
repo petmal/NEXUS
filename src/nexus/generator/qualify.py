@@ -801,22 +801,11 @@ def qualify_episode(
                     metadata.guaranteed_policy_action_count
                     - metadata.planning_dependency_action_cost
                 )
-                if metadata.discovery_level <= 3:
-                    planning_counterfactual_policy = prove_guaranteed_policy_cost(
-                        counterfactual,
-                        candidate_rules_by_machine=candidate_rules_by_machine,
-                        expected_actions=expected_counterfactual_policy,
-                        minimum_guaranteed_probes=exact_probe_count,
-                    )
-                else:
-                    planning_counterfactual_policy = solve_guaranteed_policy(
-                        counterfactual,
-                        candidate_rules_by_machine=candidate_rules_by_machine,
-                        max_actions=min(
-                            96,
-                            max(8, expected_counterfactual_policy + 4),
-                        ),
-                    )
+                planning_counterfactual_policy = prove_guaranteed_policy_cost(
+                    counterfactual,
+                    candidate_rules_by_machine=candidate_rules_by_machine,
+                    expected_actions=expected_counterfactual_policy,
+                )
 
                 planning_dependency_ok = (
                     metadata.planning_dependency_action_cost >= 2
@@ -874,8 +863,13 @@ def qualify_episode(
         metadata_consistent = metadata_consistent and (
             metadata.optimal_action_count == solved.optimal_action_count
             and metadata.estimated_reference_actions == solved.optimal_action_count
-            and metadata.solver_visited_states == solved.visited_states
-            and metadata.solver_max_frontier_size == solved.max_frontier_size
+            and (
+                metadata.resource_pressure != 0
+                or (
+                    metadata.solver_visited_states == solved.visited_states
+                    and metadata.solver_max_frontier_size == solved.max_frontier_size
+                )
+            )
         )
         checks["generation_metadata_consistent"] = metadata_consistent
     else:

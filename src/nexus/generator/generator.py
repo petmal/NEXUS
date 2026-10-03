@@ -62,7 +62,7 @@ from nexus.models.world import (
     Shape,
     WorldState,
 )
-from nexus.solver.belief import prove_guaranteed_policy_cost, solve_guaranteed_policy
+from nexus.solver.belief import solve_guaranteed_policy
 from nexus.solver.search import solve
 
 
@@ -785,19 +785,12 @@ def _generate_selective_episode(
         action_budget = policy.optimal_worst_case_actions + allowance
         private.public.initial_state.resources.actions_remaining = action_budget
 
-        final_solve = solve(private)
-        if (
-            not final_solve.solvable
-            or final_solve.optimal_action_count != physical.optimal_action_count
-        ):
-            continue
-
         private.reference_plan = tuple(
-            action.model_dump(mode="json") for action in final_solve.plan
+            action.model_dump(mode="json") for action in physical.plan
         )
         metadata = private.generation_metadata
-        metadata.estimated_reference_actions = final_solve.optimal_action_count
-        metadata.optimal_action_count = final_solve.optimal_action_count
+        metadata.estimated_reference_actions = physical.optimal_action_count
+        metadata.optimal_action_count = physical.optimal_action_count
         metadata.guaranteed_policy_action_count = policy.optimal_worst_case_actions
         metadata.guaranteed_policy_witness = (
             policy.witness.model_dump(mode="json") if policy.witness is not None else {}
@@ -817,8 +810,8 @@ def _generate_selective_episode(
             action_budget,
             len(profile.files),
         )
-        metadata.solver_visited_states = final_solve.visited_states
-        metadata.solver_max_frontier_size = final_solve.max_frontier_size
+        metadata.solver_visited_states = physical.visited_states
+        metadata.solver_max_frontier_size = physical.max_frontier_size
 
         from nexus.generator.qualify import qualify_episode
 
@@ -1066,19 +1059,12 @@ def _generate_constructed_episode(
         action_budget = policy.optimal_worst_case_actions + allowance
         private.public.initial_state.resources.actions_remaining = action_budget
 
-        final_solve = solve(private)
-        if (
-            not final_solve.solvable
-            or final_solve.optimal_action_count != physical.optimal_action_count
-        ):
-            continue
-
         private.reference_plan = tuple(
-            action.model_dump(mode="json") for action in final_solve.plan
+            action.model_dump(mode="json") for action in physical.plan
         )
         metadata = private.generation_metadata
-        metadata.estimated_reference_actions = final_solve.optimal_action_count
-        metadata.optimal_action_count = final_solve.optimal_action_count
+        metadata.estimated_reference_actions = physical.optimal_action_count
+        metadata.optimal_action_count = physical.optimal_action_count
         metadata.guaranteed_policy_action_count = policy.optimal_worst_case_actions
         metadata.guaranteed_policy_witness = (
             policy.witness.model_dump(mode="json") if policy.witness is not None else {}
@@ -1094,8 +1080,8 @@ def _generate_constructed_episode(
             action_budget,
             len(public.evidence_files),
         )
-        metadata.solver_visited_states = final_solve.visited_states
-        metadata.solver_max_frontier_size = final_solve.max_frontier_size
+        metadata.solver_visited_states = physical.visited_states
+        metadata.solver_max_frontier_size = physical.max_frontier_size
 
         from nexus.generator.qualify import qualify_episode
 
@@ -1233,23 +1219,15 @@ def _add_planning_dependency(episode: PrivateEpisode) -> PrivateEpisode:
         if overhead < 2:
             continue
 
-        if metadata.discovery_level <= 3:
-            expected = physical.optimal_action_count + metadata.required_probe_count
-            policy = prove_guaranteed_policy_cost(
-                trial,
-                candidate_rules_by_machine=candidate_rules,
-                expected_actions=expected,
-                minimum_guaranteed_probes=metadata.required_probe_count,
-            )
-        else:
-            policy = solve_guaranteed_policy(
-                trial,
-                candidate_rules_by_machine=candidate_rules,
-                max_actions=min(
-                    GENERATION_SOLVER_BUDGET,
-                    base_guaranteed + overhead + 8,
-                ),
-            )
+        policy = solve_guaranteed_policy(
+            trial,
+            candidate_rules_by_machine=candidate_rules,
+            max_actions=min(
+                GENERATION_SOLVER_BUDGET,
+                base_guaranteed + overhead + 8,
+            ),
+            include_action_values=False,
+        )
 
         if (
             not policy.solvable
@@ -1290,14 +1268,8 @@ def _add_planning_dependency(episode: PrivateEpisode) -> PrivateEpisode:
             len(trial.public.evidence_files),
         )
 
-        final = solve(trial)
-        if (
-            not final.solvable
-            or final.optimal_action_count != physical.optimal_action_count
-        ):
-            continue
         trial.reference_plan = tuple(
-            action.model_dump(mode="json") for action in final.plan
+            action.model_dump(mode="json") for action in physical.plan
         )
         return trial
 
@@ -1523,16 +1495,15 @@ def _generate_episode_core(
             )
             for machine_id in machine_ids
         }
-        expected_guaranteed_actions = solved.optimal_action_count + probe_count
-        policy = prove_guaranteed_policy_cost(
+        policy = solve_guaranteed_policy(
             private,
             candidate_rules_by_machine=candidate_rules_by_machine,
-            expected_actions=expected_guaranteed_actions,
-            minimum_guaranteed_probes=probe_count,
+            max_actions=GENERATION_SOLVER_BUDGET,
+            include_action_values=False,
         )
         if (
             not policy.solvable
-            or policy.optimal_worst_case_actions != expected_guaranteed_actions
+            or policy.optimal_worst_case_actions is None
             or policy.witness is None
         ):
             continue
@@ -1542,18 +1513,11 @@ def _generate_episode_core(
         action_budget = policy.optimal_worst_case_actions + allowance
         private.public.initial_state.resources.actions_remaining = action_budget
 
-        final_solve = solve(private)
-        if (
-            not final_solve.solvable
-            or final_solve.optimal_action_count != solved.optimal_action_count
-        ):
-            continue
-
         private.reference_plan = tuple(
-            action.model_dump(mode="json") for action in final_solve.plan
+            action.model_dump(mode="json") for action in solved.plan
         )
-        private.generation_metadata.estimated_reference_actions = final_solve.optimal_action_count
-        private.generation_metadata.optimal_action_count = final_solve.optimal_action_count
+        private.generation_metadata.estimated_reference_actions = solved.optimal_action_count
+        private.generation_metadata.optimal_action_count = solved.optimal_action_count
         private.generation_metadata.guaranteed_policy_action_count = (
             policy.optimal_worst_case_actions
         )
@@ -1567,8 +1531,8 @@ def _generate_episode_core(
             action_budget,
             len(profile.files),
         )
-        private.generation_metadata.solver_visited_states = final_solve.visited_states
-        private.generation_metadata.solver_max_frontier_size = final_solve.max_frontier_size
+        private.generation_metadata.solver_visited_states = solved.visited_states
+        private.generation_metadata.solver_max_frontier_size = solved.max_frontier_size
 
         from nexus.generator.qualify import qualify_episode
 

@@ -1,4 +1,5 @@
 from nexus.models.actions import OperateAction, ProbeAction
+from nexus.solver import solve
 from nexus.models.episode import PrivateEpisode, PublicEpisode
 from nexus.models.goals import GoalKind, GoalPredicate
 from nexus.models.rules import Condition, ConditionKind, Effect, EffectKind
@@ -13,7 +14,11 @@ from nexus.models.world import (
     Shape,
     WorldState,
 )
-from nexus.solver.belief import prove_guaranteed_policy_cost, solve_guaranteed_policy
+from nexus.solver.belief import (
+    prove_guaranteed_policy_cost,
+    solve_compressed_physical,
+    solve_guaranteed_policy,
+)
 
 
 def _artifact(artifact_id: str, shape: Shape) -> Artifact:
@@ -372,27 +377,73 @@ def test_fixed_cost_certificate_rejects_nonminimal_claim():
 
 
 
-def test_structural_lower_bound_certificate_matches_generic_optimizer():
+def test_compressed_physical_solver_matches_ordinary_bfs_with_travel_and_waits():
     episode = _episode(
         artifacts={"A1": _artifact("A1", Shape.SQUARE)},
-        phase_modulus=2,
+        phase_modulus=3,
     )
-    candidates = {"M1": [_phase_rule(0), _phase_rule(1)]}
+    episode.public.rooms["R1"] = Room(id="R1", label="Machine room")
+    episode.public.edges = (("R0", "R1"),)
+    episode.public.initial_state.machines["M1"].room_id = "R1"
+    episode.rules["machine-rule"] = _phase_rule(2)
 
-    optimized = solve_guaranteed_policy(
+    ordinary = solve(episode)
+    compressed = solve_compressed_physical(episode)
+
+    assert ordinary.solvable and compressed.solvable
+    assert compressed.optimal_action_count == ordinary.optimal_action_count
+    assert len(compressed.plan) == compressed.optimal_action_count
+
+
+def test_guaranteed_cost_can_strictly_exceed_physical_optimum_plus_one_probe():
+    episode = _episode(
+        artifacts={"A1": _artifact("A1", Shape.SQUARE)},
+        phase_modulus=3,
+    )
+    candidates = {"M1": [_phase_rule(0), _phase_rule(2)]}
+
+    result = solve_guaranteed_policy(
         episode,
         candidate_rules_by_machine=candidates,
         max_actions=8,
     )
-    certified = prove_guaranteed_policy_cost(
+
+    world_zero = episode.model_copy(deep=True)
+    world_zero.rules["machine-rule"] = _phase_rule(0)
+    world_two = episode.model_copy(deep=True)
+    world_two.rules["machine-rule"] = _phase_rule(2)
+    physical_zero = solve_compressed_physical(world_zero)
+    physical_two = solve_compressed_physical(world_two)
+
+    assert physical_zero.optimal_action_count == 2
+    assert physical_two.optimal_action_count == 4
+    assert result.optimal_worst_case_actions == 5
+    assert result.optimal_worst_case_actions > max(
+        physical_zero.optimal_action_count,
+        physical_two.optimal_action_count,
+    )
+
+
+def test_probe_count_argument_does_not_replace_exact_total_cost_proof():
+    episode = _episode(
+        artifacts={"A1": _artifact("A1", Shape.SQUARE)},
+        phase_modulus=3,
+    )
+    candidates = {"M1": [_phase_rule(0), _phase_rule(2)]}
+
+    wrong = prove_guaranteed_policy_cost(
         episode,
         candidate_rules_by_machine=candidates,
         expected_actions=4,
         minimum_guaranteed_probes=1,
     )
+    exact = prove_guaranteed_policy_cost(
+        episode,
+        candidate_rules_by_machine=candidates,
+        expected_actions=5,
+        minimum_guaranteed_probes=1,
+    )
 
-    assert optimized.optimal_worst_case_actions == 4
-    assert certified.solvable
-    assert certified.optimal_worst_case_actions == 4
-    assert certified.witness is not None
-    assert certified.initial_action_values == ()
+    assert not wrong.solvable
+    assert exact.solvable
+    assert exact.optimal_worst_case_actions == 5
