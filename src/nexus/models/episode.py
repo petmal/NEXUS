@@ -82,6 +82,9 @@ class GenerationMetadata(BaseModel):
 
     discovery_level: int = 0
     planning_level: int = 1
+    resource_pressure: int = 0
+    planning_dependency_artifact_id: str | None = None
+    planning_dependency_action_cost: int = 0
     machine_count: int = 1
     room_count: int = 0
     graph_diameter: int = 0
@@ -119,6 +122,7 @@ class GenerationMetadata(BaseModel):
     guaranteed_policy_witness: dict[str, object] = Field(default_factory=dict)
     action_budget: int = 0
     exploration_allowance: int = 0
+    resource_allowance: int = 0
     recommended_tool_call_limit: int = 0
 
     rule_ast_nodes: int = 0
