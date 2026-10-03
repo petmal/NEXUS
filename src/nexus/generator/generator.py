@@ -798,6 +798,9 @@ def _generate_selective_episode(
         metadata.estimated_reference_actions = final_solve.optimal_action_count
         metadata.optimal_action_count = final_solve.optimal_action_count
         metadata.guaranteed_policy_action_count = policy.optimal_worst_case_actions
+        metadata.guaranteed_policy_witness = (
+            policy.witness.model_dump(mode="json") if policy.witness is not None else {}
+        )
         metadata.epistemic_probe_outcomes = epistemic_probe.outcome_count
         metadata.distractor_probe_outcomes = distractor_probe.outcome_count
         metadata.epistemic_probe_action_cost = (
@@ -1074,6 +1077,9 @@ def _generate_constructed_episode(
         metadata.estimated_reference_actions = final_solve.optimal_action_count
         metadata.optimal_action_count = final_solve.optimal_action_count
         metadata.guaranteed_policy_action_count = policy.optimal_worst_case_actions
+        metadata.guaranteed_policy_witness = (
+            policy.witness.model_dump(mode="json") if policy.witness is not None else {}
+        )
         metadata.constructed_probe_outcomes = len(constructed_outputs)
         metadata.direct_probe_action_cost = direct_probe.worst_case_total_actions
         metadata.constructor_action_cost = constructor.worst_case_total_actions or 0
@@ -1272,13 +1278,28 @@ def generate_episode(
         if machine_count == 2 and operations != ["M1", "M2"]:
             continue
 
-        allowance = exploration_allowance(room_count)
-        action_budget = (
-            solved.optimal_action_count
-            + probe_count
-            + allowance
-            + EXECUTION_SLACK
+        candidate_rules_by_machine = {
+            machine_id: candidates_matching_csv(
+                profile.files[measurement_filename(machine_id)],
+                all_candidates,
+            )
+            for machine_id in machine_ids
+        }
+        expected_guaranteed_actions = solved.optimal_action_count + probe_count
+        policy = solve_guaranteed_policy(
+            private,
+            candidate_rules_by_machine=candidate_rules_by_machine,
+            max_actions=min(GENERATION_SOLVER_BUDGET, expected_guaranteed_actions + 4),
         )
+        if (
+            not policy.solvable
+            or policy.optimal_worst_case_actions != expected_guaranteed_actions
+            or policy.witness is None
+        ):
+            continue
+
+        allowance = exploration_allowance(room_count)
+        action_budget = policy.optimal_worst_case_actions + allowance + EXECUTION_SLACK
         private.public.initial_state.resources.actions_remaining = action_budget
 
         final_solve = solve(private)
@@ -1293,6 +1314,12 @@ def generate_episode(
         )
         private.generation_metadata.estimated_reference_actions = final_solve.optimal_action_count
         private.generation_metadata.optimal_action_count = final_solve.optimal_action_count
+        private.generation_metadata.guaranteed_policy_action_count = (
+            policy.optimal_worst_case_actions
+        )
+        private.generation_metadata.guaranteed_policy_witness = (
+            policy.witness.model_dump(mode="json") if policy.witness is not None else {}
+        )
         private.generation_metadata.action_budget = action_budget
         private.generation_metadata.exploration_allowance = allowance
         private.generation_metadata.recommended_tool_call_limit = recommended_tool_call_limit(
