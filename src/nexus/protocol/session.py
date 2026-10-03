@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from threading import RLock
 
-from pydantic import BaseModel, ConfigDict
+from pydantic import BaseModel, ConfigDict, Field
 
 from nexus.engine.canonical import canonical_hash
 from nexus.engine.engine import step
@@ -14,11 +14,25 @@ from nexus.models.world import TerminalStatus, WorldState
 from nexus.render.text import observation
 
 
+PERFORMANCE_SCHEMA_URL = (
+    "https://raw.githubusercontent.com/petmal/NEXUS/"
+    "6421ea6b00f8f4a682d7678d7a73e69493a34f0a/schemas/performance-v1.schema.json"
+)
+
+
 class PerformanceSummary(BaseModel):
     """Terminal-only evaluation telemetry derived from trusted episode data and the live trace."""
 
-    model_config = ConfigDict(extra="forbid", frozen=True)
+    model_config = ConfigDict(extra="forbid", frozen=True, populate_by_name=True)
 
+    schema_url: str = Field(default=PERFORMANCE_SCHEMA_URL, alias="$schema")
+    discovery_level: int
+    planning_level: int
+    resource_pressure: int
+    terminal_status: TerminalStatus
+    initial_action_budget: int
+    resource_allowance: int
+    planning_dependency_action_cost: int
     actions_used: int
     optimal_physical_actions: int
     minimum_guaranteed_probes: int
@@ -103,6 +117,13 @@ class Session:
         if guaranteed_policy_actions <= 0:
             raise RuntimeError("terminal performance requires exact guaranteed-policy metadata")
         return PerformanceSummary(
+            discovery_level=metadata.discovery_level,
+            planning_level=metadata.planning_level,
+            resource_pressure=metadata.resource_pressure,
+            terminal_status=self.state.terminal_status,
+            initial_action_budget=metadata.action_budget,
+            resource_allowance=metadata.resource_allowance,
+            planning_dependency_action_cost=metadata.planning_dependency_action_cost,
             actions_used=self.state.turn,
             optimal_physical_actions=metadata.optimal_action_count,
             minimum_guaranteed_probes=metadata.required_probe_count,
