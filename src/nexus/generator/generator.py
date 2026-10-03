@@ -28,6 +28,7 @@ from nexus.generator.difficulty import (
     machine_count_for_discovery,
     recommended_tool_call_limit,
     required_probe_count,
+    resource_allowance,
     room_bounds,
     validate_difficulty_levels,
 )
@@ -780,8 +781,9 @@ def _generate_selective_episode(
         ):
             continue
 
-        allowance = exploration_allowance(room_count)
-        action_budget = policy.optimal_worst_case_actions + allowance + EXECUTION_SLACK
+        exploration = exploration_allowance(room_count)
+        allowance = resource_allowance(room_count, 0)
+        action_budget = policy.optimal_worst_case_actions + allowance
         private.public.initial_state.resources.actions_remaining = action_budget
 
         final_solve = solve(private)
@@ -810,7 +812,8 @@ def _generate_selective_episode(
             distractor_probe.worst_case_total_actions or 0
         )
         metadata.action_budget = action_budget
-        metadata.exploration_allowance = allowance
+        metadata.exploration_allowance = exploration
+        metadata.resource_allowance = allowance
         metadata.recommended_tool_call_limit = recommended_tool_call_limit(
             action_budget,
             len(profile.files),
@@ -1059,8 +1062,9 @@ def _generate_constructed_episode(
         if len(constructed_outputs) != 4:
             continue
 
-        allowance = exploration_allowance(room_count)
-        action_budget = policy.optimal_worst_case_actions + allowance + EXECUTION_SLACK
+        exploration = exploration_allowance(room_count)
+        allowance = resource_allowance(room_count, 0)
+        action_budget = policy.optimal_worst_case_actions + allowance
         private.public.initial_state.resources.actions_remaining = action_budget
 
         final_solve = solve(private)
@@ -1085,7 +1089,8 @@ def _generate_constructed_episode(
         metadata.constructor_action_cost = constructor.worst_case_total_actions or 0
         metadata.distractor_action_cost = distractor.worst_case_total_actions or 0
         metadata.action_budget = action_budget
-        metadata.exploration_allowance = allowance
+        metadata.exploration_allowance = exploration
+        metadata.resource_allowance = allowance
         metadata.recommended_tool_call_limit = recommended_tool_call_limit(
             action_budget,
             len(public.evidence_files),
@@ -1299,8 +1304,9 @@ def generate_episode(
         ):
             continue
 
-        allowance = exploration_allowance(room_count)
-        action_budget = policy.optimal_worst_case_actions + allowance + EXECUTION_SLACK
+        exploration = exploration_allowance(room_count)
+        allowance = resource_allowance(room_count, 0)
+        action_budget = policy.optimal_worst_case_actions + allowance
         private.public.initial_state.resources.actions_remaining = action_budget
 
         final_solve = solve(private)
