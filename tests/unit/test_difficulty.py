@@ -230,3 +230,20 @@ def test_d3_planning_profiles_share_two_machine_scenario_family():
             episode.public.initial_state.artifacts["A1"]
         ) == _artifact_intrinsic_state(first_artifact)
         assert episode.public.evidence_files == first.public.evidence_files
+
+
+
+@pytest.mark.parametrize("discovery_level", [0, 1, 2, 3])
+def test_legacy_discovery_profiles_record_exact_guaranteed_policy_cost(discovery_level):
+    episode = generate_episode(
+        12000 + discovery_level,
+        discovery_level=discovery_level,
+        planning_level=1,
+        verifier_secret="exact-policy-secret",
+    )
+    metadata = episode.generation_metadata
+
+    assert metadata.guaranteed_policy_action_count == (
+        metadata.optimal_action_count + metadata.required_probe_count
+    )
+    assert metadata.guaranteed_policy_witness
