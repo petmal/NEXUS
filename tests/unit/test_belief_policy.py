@@ -13,7 +13,7 @@ from nexus.models.world import (
     Shape,
     WorldState,
 )
-from nexus.solver.belief import solve_guaranteed_policy
+from nexus.solver.belief import prove_guaranteed_policy_cost, solve_guaranteed_policy
 
 
 def _artifact(artifact_id: str, shape: Shape) -> Artifact:
@@ -318,3 +318,54 @@ def test_guaranteed_policy_returns_optimal_branching_witness():
     assert result.witness.action["type"] in {"probe", "operate", "wait"}
     assert result.witness.branches
     assert all(branch.viable_hypotheses >= 1 for branch in result.witness.branches)
+
+
+
+def test_fixed_cost_certificate_matches_generic_optimizer():
+    episode = _episode(
+        artifacts={"A1": _artifact("A1", Shape.SQUARE)},
+        phase_modulus=2,
+    )
+    candidates = {"M1": [_phase_rule(0), _phase_rule(1)]}
+
+    optimized = solve_guaranteed_policy(
+        episode,
+        candidate_rules_by_machine=candidates,
+        max_actions=8,
+    )
+    certified = prove_guaranteed_policy_cost(
+        episode,
+        candidate_rules_by_machine=candidates,
+        expected_actions=4,
+    )
+
+    assert optimized.optimal_worst_case_actions == 4
+    assert certified.solvable
+    assert certified.optimal_worst_case_actions == 4
+    assert certified.witness is not None
+    assert _witness_depth(certified.witness) == 4
+    assert certified.initial_action_values == ()
+
+
+def test_fixed_cost_certificate_rejects_nonminimal_claim():
+    episode = _episode(
+        artifacts={"A1": _artifact("A1", Shape.SQUARE)},
+        phase_modulus=2,
+    )
+    candidates = {"M1": [_phase_rule(0), _phase_rule(1)]}
+
+    too_high = prove_guaranteed_policy_cost(
+        episode,
+        candidate_rules_by_machine=candidates,
+        expected_actions=5,
+    )
+    too_low = prove_guaranteed_policy_cost(
+        episode,
+        candidate_rules_by_machine=candidates,
+        expected_actions=3,
+    )
+
+    assert not too_high.solvable
+    assert not too_low.solvable
+    assert too_high.optimal_worst_case_actions is None
+    assert too_low.optimal_worst_case_actions is None
