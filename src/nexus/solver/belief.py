@@ -23,6 +23,30 @@ from nexus.models.world import INVENTORY, TerminalStatus, WorldState
 from nexus.solver.search import goal_artifact_ids, goal_location_rooms, neighbors, search_state_key, solve
 
 
+class PolicyWitnessNode(BaseModel):
+    """One action in a private minimax policy witness."""
+
+    model_config = ConfigDict(extra="forbid")
+
+    action: dict[str, object]
+    remaining_budget: int
+    branches: tuple["PolicyWitnessBranch", ...] = ()
+
+
+class PolicyWitnessBranch(BaseModel):
+    """One observable outcome branch from a policy-witness action."""
+
+    model_config = ConfigDict(extra="forbid")
+
+    outcome: str
+    viable_hypotheses: int
+    next: PolicyWitnessNode | None = None
+
+
+PolicyWitnessNode.model_rebuild()
+PolicyWitnessBranch.model_rebuild()
+
+
 class PolicyActionValue(BaseModel):
     model_config = ConfigDict(extra="forbid", arbitrary_types_allowed=True)
 
@@ -39,6 +63,7 @@ class BeliefPolicyResult(BaseModel):
     viable_hypothesis_count: int
     optimal_worst_case_actions: int | None = None
     initial_action_values: tuple[PolicyActionValue, ...] = ()
+    witness: PolicyWitnessNode | None = None
     visited_belief_nodes: int = 0
     exhausted_action_limit: bool = False
 
@@ -134,6 +159,10 @@ def solve_guaranteed_policy(
     Candidate worlds that are physically impossible despite NEXUS's public winnability guarantee
     are removed before policy search, matching the existing causal-discovery semantics.
 
+    The returned private witness is one optimal branching policy. Its branch labels encode only
+    observations available after the corresponding action; it is never included in player-facing
+    episode data.
+
     This solver deliberately ignores the episode's current action budget while proving policy
     cost. The caller chooses max_actions as a proof bound and may derive a runtime budget from
     the resulting optimum afterwards.
@@ -172,6 +201,8 @@ def solve_guaranteed_policy(
     initial_belief = frozenset(range(len(hypothesis_episodes)))
     initial_state = _normalize_state(episode.public.initial_state, engine_budget)
 
+    # Branch tuple: observable signature, representative physical state, surviving hypotheses.
+    Branch = tuple[str, WorldState, frozenset[int]]
     memo: dict[tuple[str, frozenset[int], int], bool] = {}
     visited_nodes: set[tuple[str, frozenset[int], int]] = set()
 
@@ -179,7 +210,7 @@ def solve_guaranteed_policy(
         state: WorldState,
         belief: frozenset[int],
         action: Action,
-    ) -> tuple[tuple[WorldState, frozenset[int]], ...] | None:
+    ) -> tuple[Branch, ...] | None:
         grouped: dict[str, tuple[WorldState, set[int]]] = {}
 
         for hypothesis_index in belief:
@@ -202,8 +233,21 @@ def solve_guaranteed_policy(
                 grouped[signature] = (representative, members)
 
         return tuple(
-            (state_value, frozenset(members))
-            for state_value, members in grouped.values()
+            (signature, state_value, frozenset(members))
+            for signature, (state_value, members) in sorted(grouped.items())
+        )
+
+    def useless_probe(
+        state: WorldState,
+        belief: frozenset[int],
+        action: Action,
+        branches: tuple[Branch, ...],
+    ) -> bool:
+        return (
+            isinstance(action, ProbeAction)
+            and len(branches) == 1
+            and branches[0][2] == belief
+            and search_state_key(branches[0][1]) == search_state_key(state)
         )
 
     def can_win(state: WorldState, belief: frozenset[int], budget: int) -> bool:
@@ -222,16 +266,12 @@ def solve_guaranteed_policy(
             branches = branches_for(state, belief, action)
             if not branches:
                 continue
-            if (
-                isinstance(action, ProbeAction)
-                and len(branches) == 1
-                and branches[0][1] == belief
-                and search_state_key(branches[0][0]) == search_state_key(state)
-            ):
-                # The probe revealed nothing and changed no physical state. Repeating it can only
-                # spend budget, so it cannot belong to a minimum guaranteed winning policy.
+            if useless_probe(state, belief, action, branches):
                 continue
-            if all(can_win(next_state, members, budget - 1) for next_state, members in branches):
+            if all(
+                can_win(next_state, members, budget - 1)
+                for _, next_state, members in branches
+            ):
                 memo[key] = True
                 return True
 
@@ -244,6 +284,48 @@ def solve_guaranteed_policy(
             optimal = action_budget
             break
 
+    def build_witness(
+        state: WorldState,
+        belief: frozenset[int],
+        budget: int,
+    ) -> PolicyWitnessNode | None:
+        if state.terminal_status == TerminalStatus.WON:
+            return None
+        if budget <= 0:
+            raise RuntimeError("cannot build policy witness beyond proved action budget")
+
+        for action in _legal_actions(episode, state):
+            branches = branches_for(state, belief, action)
+            if not branches or useless_probe(state, belief, action, branches):
+                continue
+            if not all(
+                can_win(next_state, members, budget - 1)
+                for _, next_state, members in branches
+            ):
+                continue
+
+            witness_branches = tuple(
+                PolicyWitnessBranch(
+                    outcome=signature,
+                    viable_hypotheses=len(members),
+                    next=build_witness(next_state, members, budget - 1),
+                )
+                for signature, next_state, members in branches
+            )
+            return PolicyWitnessNode(
+                action=action.model_dump(mode="json"),
+                remaining_budget=budget,
+                branches=witness_branches,
+            )
+
+        raise RuntimeError("proved policy state has no witness action")
+
+    witness = (
+        build_witness(initial_state, initial_belief, optimal)
+        if optimal is not None
+        else None
+    )
+
     def action_value(action: Action) -> PolicyActionValue:
         branches = branches_for(initial_state, initial_belief, action)
         if not branches:
@@ -253,7 +335,7 @@ def solve_guaranteed_policy(
         for candidate_total in range(1, max_actions + 1):
             if all(
                 can_win(next_state, members, candidate_total - 1)
-                for next_state, members in branches
+                for _, next_state, members in branches
             ):
                 total_cost = candidate_total
                 break
@@ -273,6 +355,7 @@ def solve_guaranteed_policy(
         viable_hypothesis_count=len(hypothesis_episodes),
         optimal_worst_case_actions=optimal,
         initial_action_values=initial_values,
+        witness=witness,
         visited_belief_nodes=len(visited_nodes),
         exhausted_action_limit=optimal is None,
     )
