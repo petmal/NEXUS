@@ -98,7 +98,7 @@ Conventional game engines are intentionally avoided. NEXUS is primarily a symbol
 ## Documentation
 
 - [Player tutorial](docs/tutorial.md) — action reference, CLI help, evidence access, and a tiny solved mechanics example.
-- [Difficulty profiles](docs/difficulty.md) — the two public generation knobs and their mechanical guarantees.
+- [Difficulty profiles](docs/difficulty.md) — discovery, planning, and resource-pressure knobs and their mechanical guarantees.
 - [Service integration](docs/service-integration.md) — single-session service, client, health, validation, and generated-session configuration.
 - [AGENTS.md](AGENTS.md) — implementation constraints and staged development guidance.
 
@@ -117,7 +117,7 @@ The feature branch currently implements the first end-to-end Transformation Faci
 - generated connected room topology, artifact state, machine law, target state, and evidence;
 - public `facility_manual.txt` describing the causal grammar;
 - generated machine evidence whose mission-relevant ambiguity is qualified to the requested discovery level;
-- generic discovery/planning profiles, including two-machine sequential discovery, cost-selective experimentation, and constructed diagnostic experiments;
+- generic discovery/planning/resource profiles, including P3 delivery dependencies, two-machine sequential discovery, cost-selective experimentation, and constructed diagnostic experiments;
 - deterministic transition engine and canonical hashing;
 - append-only trace plus deterministic replay verification;
 - engine-defined goal predicates and HMAC-based victory receipts;
@@ -161,7 +161,8 @@ The public difficulty surface is intentionally small:
 
 - `--discovery-level 0..5` controls how much mission-relevant causal information must be
   actively discovered;
-- `--planning-level 0..2` controls topology/planning scale.
+- `--planning-level 0..3` controls topology/planning complexity; P3 adds a paired delivery dependency without increasing the P2 room-count range;
+- `--resource-pressure 0..2` controls only the action allowance above the exact guaranteed-policy cost.
 
 NEXUS derives compatible low-level generation settings and rejects candidates until the selected
 profile's guarantees are mechanically satisfied. See [Difficulty profiles](docs/difficulty.md).
@@ -242,6 +243,15 @@ GET  /sessions/{id}/events
 Canonical state, latent rules, reference plans, and verifier secrets remain server-side. The player-safe manifest also includes the machine-readable action schema and human-readable action reference.
 
 
+
+### Terminal performance telemetry
+
+Terminal `won`/`failed` action responses include a `performance` object with exact physical and
+guaranteed-policy baselines, signed action/probe deltas, profile identifiers, and runtime error/
+retry counters. The object includes an immutable `$schema` URL. The published schema is
+[schemas/performance-v1.schema.json](schemas/performance-v1.schema.json), whose field descriptions
+are intended to make benchmark logs directly interpretable by downstream tools and LLMs.
+
 ### Single-session service and container integration
 
 For an external orchestrator that already scopes one service process to one evaluation attempt,
@@ -249,7 +259,7 @@ NEXUS can own exactly one non-resettable session:
 
 ```bash
 NEXUS_SEED=17 NEXUS_DISCOVERY_LEVEL=1 NEXUS_PLANNING_LEVEL=1 \
-NEXUS_HOST=0.0.0.0 nexus serve-session
+NEXUS_RESOURCE_PRESSURE=0 NEXUS_HOST=0.0.0.0 nexus serve-session
 ```
 
 A fixed verifier secret is optional when reproducible victory codes are useful:
@@ -347,7 +357,7 @@ patterns.
 ## Prototype limitations
 
 This is intentionally a narrow proof of concept rather than the final benchmark. The current
-episode family uses a small number of artifacts and one or two transformation machines; the finite
+episode family uses a small number of artifacts and up to three transformation machines; the finite
 causal grammar is public; runtime execution is deterministic; and observations are text/structured
 data only. Discovery level 3 introduces a qualified two-stage transformation chain. Discovery level
 4 keeps the same probe mechanics but adds auxiliary and distractor experimental contexts whose
