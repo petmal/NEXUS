@@ -355,6 +355,7 @@ def qualify_episode(
             episode,
             candidate_rules_by_machine=candidate_rules_by_machine,
             expected_actions=metadata.guaranteed_policy_action_count,
+            minimum_guaranteed_probes=exact_probe_count,
         )
 
     discovery_profile = (
