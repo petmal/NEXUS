@@ -19,7 +19,6 @@ from nexus.generator.constructed import (
     constructed_mission_rules,
 )
 from nexus.generator.difficulty import (
-    EXECUTION_SLACK,
     GENERATION_SOLVER_BUDGET,
     MAX_PHYSICAL_OPTIMAL_ACTIONS,
     artifact_projection,
@@ -1566,7 +1565,8 @@ def _generate_episode_core(
             policy.witness.model_dump(mode="json") if policy.witness is not None else {}
         )
         private.generation_metadata.action_budget = action_budget
-        private.generation_metadata.exploration_allowance = allowance
+        private.generation_metadata.exploration_allowance = exploration
+        private.generation_metadata.resource_allowance = allowance
         private.generation_metadata.recommended_tool_call_limit = recommended_tool_call_limit(
             action_budget,
             len(profile.files),
