@@ -102,10 +102,17 @@ def test_generation_is_deterministic_for_seed_and_difficulty_profile():
 
 @pytest.mark.parametrize(
     ("keyword", "value"),
-    [("discovery_level", -1), ("discovery_level", 6), ("planning_level", -1), ("planning_level", 3)],
+    [
+        ("discovery_level", -1),
+        ("discovery_level", 6),
+        ("planning_level", -1),
+        ("planning_level", 4),
+        ("resource_pressure", -1),
+        ("resource_pressure", 3),
+    ],
 )
 def test_invalid_public_difficulty_levels_fail_fast(keyword, value):
-    kwargs = {"discovery_level": 0, "planning_level": 1}
+    kwargs = {"discovery_level": 0, "planning_level": 1, "resource_pressure": 0}
     kwargs[keyword] = value
     with pytest.raises(ValueError):
         generate_episode(1, **kwargs)
@@ -247,3 +254,101 @@ def test_legacy_discovery_profiles_record_exact_guaranteed_policy_cost(discovery
         metadata.optimal_action_count + metadata.required_probe_count
     )
     assert metadata.guaranteed_policy_witness
+
+
+
+def _goal_mentions_artifact(goal, artifact_id: str) -> bool:
+    if goal.artifact_id == artifact_id:
+        return True
+    return any(_goal_mentions_artifact(child, artifact_id) for child in goal.children)
+
+
+def test_p3_adds_dependency_without_changing_topology_or_causal_world():
+    kwargs = {
+        "discovery_level": 2,
+        "verifier_secret": "planning-dependency-secret",
+    }
+    base = generate_episode(17017, planning_level=2, **kwargs)
+    dependent = generate_episode(17017, planning_level=3, **kwargs)
+
+    base_meta = base.generation_metadata
+    metadata = dependent.generation_metadata
+
+    assert dependent.public.rooms == base.public.rooms
+    assert dependent.public.edges == base.public.edges
+    assert dependent.rules == base.rules
+    assert dependent.machine_rules == base.machine_rules
+    assert dependent.public.evidence_files == base.public.evidence_files
+    assert metadata.room_count == base_meta.room_count
+    assert metadata.planning_level == 3
+    assert metadata.planning_dependency_artifact_id
+    assert metadata.planning_dependency_action_cost >= 2
+    assert _goal_mentions_artifact(
+        dependent.public.goal,
+        metadata.planning_dependency_artifact_id,
+    )
+    assert (
+        metadata.optimal_action_count
+        == base_meta.optimal_action_count + metadata.planning_dependency_action_cost
+    )
+    assert (
+        metadata.guaranteed_policy_action_count
+        == base_meta.guaranteed_policy_action_count
+        + metadata.planning_dependency_action_cost
+    )
+    assert qualify_episode(dependent).passed
+
+
+@pytest.mark.parametrize("resource_pressure", [0, 1, 2])
+def test_resource_pressure_preserves_world_and_exact_policy(resource_pressure):
+    episode = generate_episode(
+        18181,
+        discovery_level=1,
+        planning_level=1,
+        resource_pressure=resource_pressure,
+        verifier_secret="resource-pressure-secret",
+    )
+    metadata = episode.generation_metadata
+
+    assert metadata.resource_pressure == resource_pressure
+    assert metadata.action_budget == (
+        metadata.guaranteed_policy_action_count + metadata.resource_allowance
+    )
+    assert metadata.action_budget >= metadata.guaranteed_policy_action_count
+    assert qualify_episode(episode).passed
+
+
+def test_resource_pressure_only_changes_budget_allowance():
+    episodes = [
+        generate_episode(
+            19191,
+            discovery_level=1,
+            planning_level=1,
+            resource_pressure=pressure,
+            verifier_secret="resource-pressure-secret",
+        )
+        for pressure in (0, 1, 2)
+    ]
+
+    first = episodes[0]
+    for episode in episodes[1:]:
+        assert episode.rules == first.rules
+        assert episode.machine_rules == first.machine_rules
+        assert episode.public.rooms == first.public.rooms
+        assert episode.public.edges == first.public.edges
+        assert episode.public.goal == first.public.goal
+        assert episode.public.evidence_files == first.public.evidence_files
+        assert (
+            episode.generation_metadata.guaranteed_policy_action_count
+            == first.generation_metadata.guaranteed_policy_action_count
+        )
+        assert (
+            episode.generation_metadata.optimal_action_count
+            == first.generation_metadata.optimal_action_count
+        )
+
+    budgets = [episode.generation_metadata.action_budget for episode in episodes]
+    allowances = [episode.generation_metadata.resource_allowance for episode in episodes]
+    assert budgets[0] > budgets[1] > budgets[2]
+    assert allowances[0] > allowances[1] > allowances[2] == 0
+    assert budgets[2] == episodes[2].generation_metadata.guaranteed_policy_action_count
