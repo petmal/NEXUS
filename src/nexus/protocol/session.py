@@ -22,8 +22,8 @@ class PerformanceSummary(BaseModel):
     actions_used: int
     optimal_physical_actions: int
     minimum_guaranteed_probes: int
-    guaranteed_baseline_actions: int
-    action_delta_from_guaranteed_baseline: int
+    guaranteed_policy_actions: int
+    action_delta_from_guaranteed_policy: int
     probes_used: int
     probe_delta_from_guaranteed_minimum: int
     budget_remaining: int
@@ -99,17 +99,15 @@ class Session:
 
         metadata = self.episode.generation_metadata
         probes_used = sum(isinstance(record.action, ProbeAction) for record in self.trace)
-        guaranteed_baseline = (
-            metadata.guaranteed_policy_action_count
-            if metadata.guaranteed_policy_action_count > 0
-            else metadata.optimal_action_count + metadata.required_probe_count
-        )
+        guaranteed_policy_actions = metadata.guaranteed_policy_action_count
+        if guaranteed_policy_actions <= 0:
+            raise RuntimeError("terminal performance requires exact guaranteed-policy metadata")
         return PerformanceSummary(
             actions_used=self.state.turn,
             optimal_physical_actions=metadata.optimal_action_count,
             minimum_guaranteed_probes=metadata.required_probe_count,
-            guaranteed_baseline_actions=guaranteed_baseline,
-            action_delta_from_guaranteed_baseline=self.state.turn - guaranteed_baseline,
+            guaranteed_policy_actions=guaranteed_policy_actions,
+            action_delta_from_guaranteed_policy=self.state.turn - guaranteed_policy_actions,
             probes_used=probes_used,
             probe_delta_from_guaranteed_minimum=probes_used - metadata.required_probe_count,
             budget_remaining=self.state.resources.actions_remaining,
