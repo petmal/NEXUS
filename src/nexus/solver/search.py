@@ -69,6 +69,29 @@ def goal_artifact_ids(goal: GoalPredicate) -> set[str]:
     return result
 
 
+
+def goal_field_artifact_ids(goal: GoalPredicate) -> set[str]:
+    """Collect artifacts whose intrinsic fields can affect the declarative goal.
+
+    Machine operations only change intrinsic artifact fields, never artifact location. Therefore
+    operating an artifact referenced solely by location predicates is dominated and can be
+    excluded from physical-policy search without changing solvability or optimal cost.
+    """
+    result: set[str] = set()
+
+    def visit(predicate: GoalPredicate) -> None:
+        if (
+            predicate.kind == GoalKind.ARTIFACT_FIELD
+            and predicate.artifact_id is not None
+        ):
+            result.add(predicate.artifact_id)
+        for child in predicate.children:
+            visit(child)
+
+    visit(goal)
+    return result
+
+
 def goal_location_rooms(goal: GoalPredicate) -> dict[str, set[str]]:
     """Collect rooms that can satisfy an explicit artifact-location goal.
 
@@ -111,7 +134,7 @@ def legal_solver_actions(episode: PrivateEpisode, state: WorldState) -> list[Act
             actions.append(DropAction(artifact=artifact.id))
 
     carried = sorted((a.id for a in state.carried_artifacts()))
-    goal_artifacts = goal_artifact_ids(episode.public.goal)
+    goal_artifacts = goal_field_artifact_ids(episode.public.goal)
     for machine in sorted(state.machines.values(), key=lambda m: m.id):
         if machine.room_id == state.agent_room and machine.uses_remaining > 0:
             for artifact_id in carried:
