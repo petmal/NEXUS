@@ -68,6 +68,49 @@ class BeliefPolicyResult(BaseModel):
     exhausted_action_limit: bool = False
 
 
+
+
+_POLICY_RESULT_CACHE: dict[tuple[str, int, int, int], BeliefPolicyResult] = {}
+_POLICY_RESULT_CACHE_LIMIT = 256
+
+
+def _policy_semantic_key(
+    episode: PrivateEpisode,
+    candidate_rules_by_machine: dict[str, list[Effect]],
+) -> str:
+    state = episode.public.initial_state.model_dump(mode="json")
+    state["turn"] = 0
+    state["resources"]["actions_remaining"] = 0
+    payload = {
+        "rooms": {
+            room_id: room.model_dump(mode="json")
+            for room_id, room in sorted(episode.public.rooms.items())
+        },
+        "edges": sorted(tuple(edge) for edge in episode.public.edges),
+        "phase_modulus": episode.public.phase_modulus,
+        "initial_state": state,
+        "goal": episode.public.goal.model_dump(mode="json"),
+        "candidate_rules_by_machine": {
+            machine_id: [
+                rule.model_dump(mode="json")
+                for rule in candidate_rules_by_machine[machine_id]
+            ]
+            for machine_id in sorted(candidate_rules_by_machine)
+        },
+    }
+    return json.dumps(payload, sort_keys=True, separators=(",", ":"))
+
+
+def _cache_result(
+    key: tuple[str, int, int, int],
+    result: BeliefPolicyResult,
+) -> BeliefPolicyResult:
+    if len(_POLICY_RESULT_CACHE) >= _POLICY_RESULT_CACHE_LIMIT:
+        _POLICY_RESULT_CACHE.clear()
+    _POLICY_RESULT_CACHE[key] = result.model_copy(deep=True)
+    return result
+
+
 def _normalize_state(state: WorldState, search_budget: int) -> WorldState:
     normalized = state.model_copy(deep=True)
     normalized.turn = 0
@@ -170,9 +213,22 @@ def solve_guaranteed_policy(
     if max_actions < 1:
         raise ValueError("max_actions must be at least 1")
 
+    cache_key = (
+        _policy_semantic_key(episode, candidate_rules_by_machine),
+        max_actions,
+        max_physical_states,
+        max_hypotheses,
+    )
+    cached = _POLICY_RESULT_CACHE.get(cache_key)
+    if cached is not None:
+        return cached.model_copy(deep=True)
+
     machine_ids = tuple(sorted(candidate_rules_by_machine))
     if not machine_ids or any(not candidate_rules_by_machine[item] for item in machine_ids):
-        return BeliefPolicyResult(solvable=False, viable_hypothesis_count=0)
+        return _cache_result(
+            cache_key,
+            BeliefPolicyResult(solvable=False, viable_hypothesis_count=0),
+        )
 
     combinations = tuple(
         dict(zip(machine_ids, rules))
@@ -196,7 +252,10 @@ def solve_guaranteed_policy(
             hypothesis_episodes.append(candidate)
 
     if not hypothesis_episodes:
-        return BeliefPolicyResult(solvable=False, viable_hypothesis_count=0)
+        return _cache_result(
+            cache_key,
+            BeliefPolicyResult(solvable=False, viable_hypothesis_count=0),
+        )
 
     initial_belief = frozenset(range(len(hypothesis_episodes)))
     initial_state = _normalize_state(episode.public.initial_state, engine_budget)
@@ -350,12 +409,15 @@ def solve_guaranteed_policy(
 
     initial_values = tuple(action_value(action) for action in _legal_actions(episode, initial_state))
 
-    return BeliefPolicyResult(
-        solvable=optimal is not None,
-        viable_hypothesis_count=len(hypothesis_episodes),
-        optimal_worst_case_actions=optimal,
-        initial_action_values=initial_values,
-        witness=witness,
-        visited_belief_nodes=len(visited_nodes),
-        exhausted_action_limit=optimal is None,
+    return _cache_result(
+        cache_key,
+        BeliefPolicyResult(
+            solvable=optimal is not None,
+            viable_hypothesis_count=len(hypothesis_episodes),
+            optimal_worst_case_actions=optimal,
+            initial_action_values=initial_values,
+            witness=witness,
+            visited_belief_nodes=len(visited_nodes),
+            exhausted_action_limit=optimal is None,
+        ),
     )
