@@ -1109,7 +1109,245 @@ def _generate_constructed_episode(
     )
 
 
-def generate_episode(
+
+def _goal_location(goal: GoalPredicate, artifact_id: str) -> str | None:
+    if (
+        goal.kind == GoalKind.ARTIFACT_LOCATION
+        and goal.artifact_id == artifact_id
+        and isinstance(goal.value, str)
+    ):
+        return goal.value
+    for child in goal.children:
+        found = _goal_location(child, artifact_id)
+        if found is not None:
+            return found
+    return None
+
+
+def _candidate_rules_for_episode(episode: PrivateEpisode) -> dict[str, list[Effect]]:
+    """Reconstruct the public causal hypothesis set for exact-policy qualification."""
+    if episode.generation_metadata.discovery_level == 5:
+        diagnostic_shape = episode.public.initial_state.artifacts["A2"].shape
+        return {
+            "M1": list(constructed_mission_rules(diagnostic_shape)),
+            "M2": [constant_value_rule(CONSTRUCTOR_VALUE)],
+            "M3": [constant_value_rule(DISTRACTOR_VALUE)],
+        }
+
+    catalog = enumerate_transformation_rules()
+    result: dict[str, list[Effect]] = {}
+    for machine_id in sorted(episode.machine_rules):
+        evidence = episode.public.evidence_files.get(measurement_filename(machine_id))
+        if evidence is None:
+            raise GenerationError(f"missing public evidence for machine {machine_id}")
+        result[machine_id] = candidates_matching_csv(evidence, catalog)
+    return result
+
+
+def _with_delivery_dependency(
+    goal: GoalPredicate,
+    artifact_id: str,
+    destination: str,
+) -> GoalPredicate:
+    return GoalPredicate(
+        kind=GoalKind.AND,
+        children=(
+            goal,
+            GoalPredicate(
+                kind=GoalKind.ARTIFACT_LOCATION,
+                artifact_id=artifact_id,
+                value=destination,
+            ),
+        ),
+    )
+
+
+def _add_planning_dependency(episode: PrivateEpisode) -> PrivateEpisode:
+    """Compile P3 from the paired P2 world without changing mechanics or topology.
+
+    The extra cargo duplicates an already available artifact context, so it cannot introduce a
+    new causal experiment. Qualification still recomputes the exact guaranteed policy and accepts
+    the P3 world only when its entire cost increase is attributable to the delivery dependency.
+    """
+    base = episode
+    metadata = base.generation_metadata
+    if metadata.planning_level != 2:
+        raise GenerationError("P3 dependency compilation requires a P2 base episode")
+
+    destination = _goal_location(base.public.goal, "A1")
+    if destination is None:
+        raise GenerationError("P3 requires an A1 delivery-location goal")
+
+    artifacts = base.public.initial_state.artifacts
+    if "A3" in artifacts:
+        source = artifacts["A3"]
+        dependency_id = "A4"
+    else:
+        source = artifacts["A1"]
+        dependency_id = "A2"
+
+    graph = nx.Graph()
+    graph.add_nodes_from(base.public.rooms)
+    graph.add_edges_from(base.public.edges)
+    direct_distance = nx.shortest_path_length(graph, "R0", destination)
+    candidate_rooms = [
+        room_id for room_id in base.public.rooms if room_id != destination
+    ]
+    candidate_rooms.sort(
+        key=lambda room_id: (
+            nx.shortest_path_length(graph, "R0", room_id)
+            + nx.shortest_path_length(graph, room_id, destination)
+            - direct_distance,
+            room_id,
+        ),
+        reverse=True,
+    )
+
+    base_physical = metadata.optimal_action_count
+    base_guaranteed = metadata.guaranteed_policy_action_count
+    candidate_rules = _candidate_rules_for_episode(base)
+
+    for cargo_room in candidate_rooms:
+        trial = base.model_copy(deep=True)
+        cargo = source.model_copy(
+            deep=True,
+            update={"id": dependency_id, "location": cargo_room},
+        )
+        trial.public.initial_state.artifacts[dependency_id] = cargo
+        trial.public.goal = _with_delivery_dependency(
+            trial.public.goal,
+            dependency_id,
+            destination,
+        )
+        trial.public.description += (
+            f" Planning dependency: also recover {dependency_id} and deliver it to "
+            f"{destination} before finishing."
+        )
+        trial.public.episode_id = hashlib.sha256(
+            f"{base.public.episode_id}|planning-p3|{cargo_room}".encode("utf-8")
+        ).hexdigest()[:16]
+
+        physical = solve(trial)
+        if not physical.solvable or physical.optimal_action_count is None:
+            continue
+        overhead = physical.optimal_action_count - base_physical
+        if overhead < 2:
+            continue
+
+        if metadata.discovery_level <= 3:
+            expected = physical.optimal_action_count + metadata.required_probe_count
+            policy = prove_guaranteed_policy_cost(
+                trial,
+                candidate_rules_by_machine=candidate_rules,
+                expected_actions=expected,
+                minimum_guaranteed_probes=metadata.required_probe_count,
+            )
+        else:
+            policy = solve_guaranteed_policy(
+                trial,
+                candidate_rules_by_machine=candidate_rules,
+                max_actions=min(
+                    GENERATION_SOLVER_BUDGET,
+                    base_guaranteed + overhead + 8,
+                ),
+            )
+
+        if (
+            not policy.solvable
+            or policy.optimal_worst_case_actions is None
+            or policy.witness is None
+            or policy.optimal_worst_case_actions != base_guaranteed + overhead
+        ):
+            continue
+
+        trial.generation_metadata.planning_level = 3
+        trial.generation_metadata.planning_dependency_artifact_id = dependency_id
+        trial.generation_metadata.planning_dependency_action_cost = overhead
+        trial.generation_metadata.optimal_action_count = physical.optimal_action_count
+        trial.generation_metadata.estimated_reference_actions = physical.optimal_action_count
+        trial.generation_metadata.guaranteed_policy_action_count = (
+            policy.optimal_worst_case_actions
+        )
+        trial.generation_metadata.guaranteed_policy_witness = policy.witness.model_dump(
+            mode="json"
+        )
+        trial.generation_metadata.solver_visited_states = physical.visited_states
+        trial.generation_metadata.solver_max_frontier_size = physical.max_frontier_size
+
+        allowance = resource_allowance(metadata.room_count, 0)
+        trial.generation_metadata.resource_pressure = 0
+        trial.generation_metadata.resource_allowance = allowance
+        trial.generation_metadata.exploration_allowance = exploration_allowance(
+            metadata.room_count
+        )
+        trial.generation_metadata.action_budget = (
+            policy.optimal_worst_case_actions + allowance
+        )
+        trial.public.initial_state.resources.actions_remaining = (
+            trial.generation_metadata.action_budget
+        )
+        trial.generation_metadata.recommended_tool_call_limit = recommended_tool_call_limit(
+            trial.generation_metadata.action_budget,
+            len(trial.public.evidence_files),
+        )
+
+        final = solve(trial)
+        if (
+            not final.solvable
+            or final.optimal_action_count != physical.optimal_action_count
+        ):
+            continue
+        trial.reference_plan = tuple(
+            action.model_dump(mode="json") for action in final.plan
+        )
+        return trial
+
+    raise GenerationError(
+        f"unable to compile a mechanically isolated P3 dependency for "
+        f"{base.public.episode_id}"
+    )
+
+
+def _apply_resource_pressure(
+    episode: PrivateEpisode,
+    resource_pressure: int,
+) -> PrivateEpisode:
+    trial = episode.model_copy(deep=True)
+    metadata = trial.generation_metadata
+    allowance = resource_allowance(metadata.room_count, resource_pressure)
+    budget = metadata.guaranteed_policy_action_count + allowance
+    if budget < metadata.optimal_action_count:
+        raise GenerationError("resource-pressure budget falls below physical optimum")
+
+    metadata.resource_pressure = resource_pressure
+    metadata.resource_allowance = allowance
+    metadata.action_budget = budget
+    trial.public.initial_state.resources.actions_remaining = budget
+    metadata.recommended_tool_call_limit = recommended_tool_call_limit(
+        budget,
+        len(trial.public.evidence_files),
+    )
+
+    if resource_pressure != 0:
+        trial.public.episode_id = hashlib.sha256(
+            f"{trial.public.episode_id}|resource-r{resource_pressure}".encode("utf-8")
+        ).hexdigest()[:16]
+
+    solved = solve(trial)
+    if (
+        not solved.solvable
+        or solved.optimal_action_count != metadata.optimal_action_count
+    ):
+        raise GenerationError("resource-pressure profile changed physical solvability")
+    trial.reference_plan = tuple(
+        action.model_dump(mode="json") for action in solved.plan
+    )
+    metadata.solver_visited_states = solved.visited_states
+    metadata.solver_max_frontier_size = solved.max_frontier_size
+    return trial
+
+
+def _generate_episode_core(
     seed: int,
     *,
     discovery_level: int = 0,
@@ -1348,3 +1586,43 @@ def generate_episode(
         f"(discovery_level={discovery_level}, planning_level={planning_level}); "
         "mechanics were intentionally not rerolled"
     )
+
+
+
+def generate_episode(
+    seed: int,
+    *,
+    discovery_level: int = 0,
+    planning_level: int = 1,
+    resource_pressure: int = 0,
+    max_attempts: int = 250,
+    verifier_secret: str | None = None,
+) -> PrivateEpisode:
+    """Generate a deterministic, solver-qualified NEXUS episode.
+
+    P3 is compiled from the paired P2 topology by adding a mechanically isolated delivery
+    dependency. Resource pressure changes only the action allowance above the exact guaranteed
+    policy cost.
+    """
+    validate_difficulty_levels(discovery_level, planning_level, resource_pressure)
+    core_planning = 2 if planning_level == 3 else planning_level
+    episode = _generate_episode_core(
+        seed,
+        discovery_level=discovery_level,
+        planning_level=core_planning,
+        max_attempts=max_attempts,
+        verifier_secret=verifier_secret,
+    )
+    if planning_level == 3:
+        episode = _add_planning_dependency(episode)
+    episode = _apply_resource_pressure(episode, resource_pressure)
+
+    from nexus.generator.qualify import qualify_episode
+
+    report = qualify_episode(episode)
+    if not report.passed:
+        raise GenerationError(
+            "generated episode failed final profile qualification: "
+            + ", ".join(name for name, passed in report.checks.items() if not passed)
+        )
+    return episode
