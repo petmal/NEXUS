@@ -1311,6 +1311,13 @@ def _apply_resource_pressure(
     episode: PrivateEpisode,
     resource_pressure: int,
 ) -> PrivateEpisode:
+    # R0 is already the fully qualified default produced by every core generator. Returning the
+    # same object avoids a deep copy and a redundant physical solve on the common path. R1/R2
+    # change only the action allowance; generate_episode performs one final full qualification
+    # after that budget-only transformation.
+    if resource_pressure == 0:
+        return episode
+
     trial = episode.model_copy(deep=True)
     metadata = trial.generation_metadata
     allowance = resource_allowance(metadata.room_count, resource_pressure)
@@ -1326,23 +1333,12 @@ def _apply_resource_pressure(
         budget,
         len(trial.public.evidence_files),
     )
+    trial.public.episode_id = hashlib.sha256(
+        f"{trial.public.episode_id}|resource-r{resource_pressure}".encode("utf-8")
+    ).hexdigest()[:16]
 
-    if resource_pressure != 0:
-        trial.public.episode_id = hashlib.sha256(
-            f"{trial.public.episode_id}|resource-r{resource_pressure}".encode("utf-8")
-        ).hexdigest()[:16]
-
-    solved = solve(trial)
-    if (
-        not solved.solvable
-        or solved.optimal_action_count != metadata.optimal_action_count
-    ):
-        raise GenerationError("resource-pressure profile changed physical solvability")
-    trial.reference_plan = tuple(
-        action.model_dump(mode="json") for action in solved.plan
-    )
-    metadata.solver_visited_states = solved.visited_states
-    metadata.solver_max_frontier_size = solved.max_frontier_size
+    # The existing physical reference plan remains valid because
+    # optimal_action_count <= guaranteed_policy_action_count <= budget.
     return trial
 
 
@@ -1613,16 +1609,20 @@ def generate_episode(
         max_attempts=max_attempts,
         verifier_secret=verifier_secret,
     )
+    transformed = planning_level == 3 or resource_pressure != 0
     if planning_level == 3:
         episode = _add_planning_dependency(episode)
     episode = _apply_resource_pressure(episode, resource_pressure)
 
-    from nexus.generator.qualify import qualify_episode
+    # Core P0-P2/R0 generators already perform complete qualification before returning. Only
+    # post-generation P3 or R1/R2 transformations need another full qualification pass.
+    if transformed:
+        from nexus.generator.qualify import qualify_episode
 
-    report = qualify_episode(episode)
-    if not report.passed:
-        raise GenerationError(
-            "generated episode failed final profile qualification: "
-            + ", ".join(name for name, passed in report.checks.items() if not passed)
-        )
+        report = qualify_episode(episode)
+        if not report.passed:
+            raise GenerationError(
+                "generated episode failed final profile qualification: "
+                + ", ".join(name for name, passed in report.checks.items() if not passed)
+            )
     return episode

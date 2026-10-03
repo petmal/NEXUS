@@ -1,16 +1,39 @@
 from __future__ import annotations
 
 import math
+import os
 from collections import defaultdict
 from statistics import median
+
+import pytest
 
 from nexus.generator import GenerationError, generate_episode
 from nexus.generator.difficulty import MAX_PHYSICAL_OPTIMAL_ACTIONS
 from nexus.models.world import Shape
 
 
-SEEDS = (1, 17, 73, 211, 509, 1009, 4099, 16381, 65537, 104729)
+ALL_SEEDS = (1, 17, 73, 211, 509, 1009, 4099, 16381, 65537, 104729)
 MAX_ATTEMPTS = 250
+
+pytestmark = pytest.mark.stress
+
+
+def _stress_seeds() -> tuple[int, ...]:
+    raw = os.environ.get("NEXUS_STRESS_SEED_COUNT")
+    if raw is None:
+        return ALL_SEEDS
+    try:
+        count = int(raw)
+    except ValueError as exc:
+        raise ValueError("NEXUS_STRESS_SEED_COUNT must be an integer") from exc
+    if not 1 <= count <= len(ALL_SEEDS):
+        raise ValueError(
+            f"NEXUS_STRESS_SEED_COUNT must be between 1 and {len(ALL_SEEDS)}"
+        )
+    return ALL_SEEDS[:count]
+
+
+SEEDS = _stress_seeds()
 
 
 def _p95(values: list[int]) -> int:

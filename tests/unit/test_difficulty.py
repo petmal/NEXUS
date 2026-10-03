@@ -51,6 +51,7 @@ def test_discovery_profiles_are_mechanical_guarantees(
     assert report.checks["reference_plan_wins"]
 
 
+@pytest.mark.slow
 @pytest.mark.parametrize("discovery_level", [0, 1, 2, 3])
 @pytest.mark.parametrize("planning_level", [0, 1, 2])
 def test_every_profile_combination_generates_a_winnable_world(
@@ -174,6 +175,7 @@ def test_d0_d1_d2_share_one_machine_scenario_family_at_fixed_planning_level():
     assert len(set(evidence)) == 3
 
 
+@pytest.mark.slow
 def test_planning_profiles_share_mechanics_and_evidence_but_not_role_placement_contract():
     episodes = [
         generate_episode(
@@ -209,6 +211,7 @@ def test_planning_profiles_share_mechanics_and_evidence_but_not_role_placement_c
     )
 
 
+@pytest.mark.slow
 def test_d3_planning_profiles_share_two_machine_scenario_family():
     episodes = [
         generate_episode(

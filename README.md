@@ -145,6 +145,27 @@ uv run nexus --help
 uv run pytest -q
 ```
 
+Tests are tiered so routine development does not repeatedly pay for the cross-seed generator
+matrix:
+
+```bash
+# Fast correctness gate used by ordinary PR/main CI.
+uv run pytest -q -m "not slow and not stress" tests/unit tests/integration
+
+# Broader multi-profile unit/integration checks.
+uv run pytest -q -m slow tests/unit tests/integration
+
+# Full 10-seed D/P stress matrix (default when run locally).
+uv run pytest -q -m stress tests/property
+
+# Smaller paid-CI sample when desired.
+NEXUS_STRESS_SEED_COUNT=5 uv run pytest -q -m stress tests/property
+```
+
+GitHub Actions runs only the fast gate automatically on pull requests and `main`. The expensive
+extended/stress/CLI/container suite is an explicit `workflow_dispatch` full run, so feature-branch
+commits do not consume Actions budget accidentally.
+
 Direct dependencies use bounded compatibility ranges in `pyproject.toml`: generation-sensitive
 and pre-1.0 runtime dependencies stay within their current minor series, while stable-major
 non-generation and dev/test dependencies may advance across minor releases. `uv.lock` pins the

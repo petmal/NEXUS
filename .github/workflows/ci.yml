@@ -2,7 +2,33 @@ name: CI
 
 on:
   push:
+    branches: [main]
+    paths-ignore:
+      - "docs/**"
+      - "README.md"
   pull_request:
+    paths-ignore:
+      - "docs/**"
+      - "README.md"
+  workflow_dispatch:
+    inputs:
+      full:
+        description: "Run extended tests, cross-seed stress, CLI smoke, and container smoke"
+        required: true
+        type: boolean
+        default: false
+      stress_seed_count:
+        description: "Cross-seed sample size for a full run"
+        required: true
+        type: choice
+        options:
+          - "3"
+          - "5"
+          - "10"
+        default: "5"
+
+permissions:
+  contents: read
 
 concurrency:
   group: ci-${{ github.workflow }}-${{ github.ref }}
@@ -11,29 +37,64 @@ concurrency:
 jobs:
   test:
     runs-on: ubuntu-latest
+    timeout-minutes: 240
     steps:
       - uses: actions/checkout@v4
+
       - uses: actions/setup-python@v5
         with:
           python-version: "3.14.7"
+
+      - name: Cache uv downloads
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/uv
+          key: uv-${{ runner.os }}-py314-${{ hashFiles('uv.lock') }}
+          restore-keys: |
+            uv-${{ runner.os }}-py314-
+
       - name: Install uv
         run: python -m pip install --no-deps uv==0.12.21
+
       - name: Verify lock and install
         run: |
           uv lock --check
           uv sync --frozen --all-extras
+
       - name: Fast tests
-        run: uv run pytest -q tests/unit tests/integration
-      - name: Property stress
-        run: uv run pytest -q tests/property
-      - name: CLI smoke test
         run: |
-          uv run nexus generate /tmp/nexus-smoke --seed 17
+          uv run pytest -q -m "not slow and not stress" tests/unit tests/integration \
+            --durations=15
+
+      - name: Extended unit and integration tests
+        if: ${{ github.event_name == 'workflow_dispatch' && inputs.full }}
+        run: |
+          uv run pytest -q -m slow tests/unit tests/integration \
+            --durations=20
+
+      - name: Cross-seed property stress
+        if: ${{ github.event_name == 'workflow_dispatch' && inputs.full }}
+        env:
+          NEXUS_STRESS_SEED_COUNT: ${{ inputs.stress_seed_count }}
+        run: |
+          uv run pytest -q -m stress tests/property --durations=20
+
+      - name: CLI smoke test
+        if: ${{ github.event_name == 'workflow_dispatch' && inputs.full }}
+        run: |
+          uv run nexus generate /tmp/nexus-smoke --seed 17 --discovery-level 2 \
+            --planning-level 3 --resource-pressure 2
           uv run nexus qualify /tmp/nexus-smoke/private.json
           uv run nexus solve /tmp/nexus-smoke/private.json --trace-out /tmp/nexus-smoke/run.jsonl
           uv run nexus replay /tmp/nexus-smoke/private.json /tmp/nexus-smoke/run.jsonl
+
       - name: Container smoke test
+        if: ${{ github.event_name == 'workflow_dispatch' && inputs.full }}
         run: |
           docker build -t nexus-ci .
           docker run --rm --entrypoint python nexus-ci --version
           docker run --rm nexus-ci --help
+
+      - name: Minimize saved uv cache
+        if: ${{ always() }}
+        run: uv cache prune --ci || true
