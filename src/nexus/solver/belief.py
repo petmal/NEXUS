@@ -70,7 +70,7 @@ class BeliefPolicyResult(BaseModel):
 
 
 
-_POLICY_RESULT_CACHE: dict[tuple[str, int, int, int, int, bool], BeliefPolicyResult] = {}
+_POLICY_RESULT_CACHE: dict[tuple[str, int, int, int, int, bool, int], BeliefPolicyResult] = {}
 _POLICY_RESULT_CACHE_LIMIT = 256
 
 
@@ -102,7 +102,7 @@ def _policy_semantic_key(
 
 
 def _cache_result(
-    key: tuple[str, int, int, int, int, bool],
+    key: tuple[str, int, int, int, int, bool, int],
     result: BeliefPolicyResult,
 ) -> BeliefPolicyResult:
     if len(_POLICY_RESULT_CACHE) >= _POLICY_RESULT_CACHE_LIMIT:
@@ -194,6 +194,7 @@ def solve_guaranteed_policy(
     max_hypotheses: int = 256,
     expected_actions: int | None = None,
     include_action_values: bool = True,
+    minimum_guaranteed_probes: int | None = None,
 ) -> BeliefPolicyResult:
     """Solve the minimum worst-case total-action policy over evidence-consistent worlds.
 
@@ -227,6 +228,7 @@ def solve_guaranteed_policy(
         max_hypotheses,
         expected_actions if expected_actions is not None else -1,
         include_action_values,
+        minimum_guaranteed_probes if minimum_guaranteed_probes is not None else -1,
     )
     cached = _POLICY_RESULT_CACHE.get(cache_key)
     if cached is not None:
@@ -250,6 +252,7 @@ def solve_guaranteed_policy(
 
     engine_budget = max(512, max_actions + 8)
     hypothesis_episodes: list[PrivateEpisode] = []
+    hypothesis_physical_optima: list[int] = []
     for rules_by_machine in combinations:
         candidate = _episode_for_hypothesis(
             episode,
@@ -257,8 +260,9 @@ def solve_guaranteed_policy(
             search_budget=engine_budget,
         )
         physical = solve(candidate, max_states=max_physical_states)
-        if physical.solvable:
+        if physical.solvable and physical.optimal_action_count is not None:
             hypothesis_episodes.append(candidate)
+            hypothesis_physical_optima.append(physical.optimal_action_count)
 
     if not hypothesis_episodes:
         return _cache_result(
@@ -355,14 +359,29 @@ def solve_guaranteed_policy(
                 break
         exhausted_action_limit = optimal is None
     else:
-        # Fixed-cost certificate: prove both sufficiency at N and minimality by failure at N-1.
         sufficient = can_win(initial_state, initial_belief, expected_actions)
+        lower_bound_proved = False
+        if minimum_guaranteed_probes is not None:
+            if minimum_guaranteed_probes < 0:
+                raise ValueError("minimum_guaranteed_probes cannot be negative")
+            physical_costs = set(hypothesis_physical_optima)
+            lower_bound_proved = (
+                len(physical_costs) == 1
+                and expected_actions
+                == next(iter(physical_costs)) + minimum_guaranteed_probes
+            )
+
+        # Without a structural lower-bound certificate, prove minimality by disproving N-1.
         lower_sufficient = (
-            can_win(initial_state, initial_belief, expected_actions - 1)
-            if expected_actions > 1
-            else False
+            False
+            if lower_bound_proved
+            else (
+                can_win(initial_state, initial_belief, expected_actions - 1)
+                if expected_actions > 1
+                else False
+            )
         )
-        if sufficient and not lower_sufficient:
+        if sufficient and (lower_bound_proved or not lower_sufficient):
             optimal = expected_actions
         exhausted_action_limit = not sufficient
 
@@ -458,6 +477,7 @@ def prove_guaranteed_policy_cost(
     expected_actions: int,
     max_physical_states: int = 100_000,
     max_hypotheses: int = 256,
+    minimum_guaranteed_probes: int | None = None,
 ) -> BeliefPolicyResult:
     """Certify that expected_actions is the exact minimax policy cost.
 
@@ -473,4 +493,5 @@ def prove_guaranteed_policy_cost(
         max_hypotheses=max_hypotheses,
         expected_actions=expected_actions,
         include_action_values=False,
+        minimum_guaranteed_probes=minimum_guaranteed_probes,
     )
