@@ -70,7 +70,7 @@ class BeliefPolicyResult(BaseModel):
 
 
 
-_POLICY_RESULT_CACHE: dict[tuple[str, int, int, int], BeliefPolicyResult] = {}
+_POLICY_RESULT_CACHE: dict[tuple[str, int, int, int, int, bool], BeliefPolicyResult] = {}
 _POLICY_RESULT_CACHE_LIMIT = 256
 
 
@@ -102,7 +102,7 @@ def _policy_semantic_key(
 
 
 def _cache_result(
-    key: tuple[str, int, int, int],
+    key: tuple[str, int, int, int, int, bool],
     result: BeliefPolicyResult,
 ) -> BeliefPolicyResult:
     if len(_POLICY_RESULT_CACHE) >= _POLICY_RESULT_CACHE_LIMIT:
@@ -192,6 +192,8 @@ def solve_guaranteed_policy(
     max_actions: int,
     max_physical_states: int = 100_000,
     max_hypotheses: int = 256,
+    expected_actions: int | None = None,
+    include_action_values: bool = True,
 ) -> BeliefPolicyResult:
     """Solve the minimum worst-case total-action policy over evidence-consistent worlds.
 
@@ -212,12 +214,19 @@ def solve_guaranteed_policy(
     """
     if max_actions < 1:
         raise ValueError("max_actions must be at least 1")
+    if expected_actions is not None:
+        if expected_actions < 1:
+            raise ValueError("expected_actions must be at least 1")
+        if expected_actions > max_actions:
+            raise ValueError("expected_actions cannot exceed max_actions")
 
     cache_key = (
         _policy_semantic_key(episode, candidate_rules_by_machine),
         max_actions,
         max_physical_states,
         max_hypotheses,
+        expected_actions if expected_actions is not None else -1,
+        include_action_values,
     )
     cached = _POLICY_RESULT_CACHE.get(cache_key)
     if cached is not None:
@@ -338,10 +347,24 @@ def solve_guaranteed_policy(
         return False
 
     optimal: int | None = None
-    for action_budget in range(1, max_actions + 1):
-        if can_win(initial_state, initial_belief, action_budget):
-            optimal = action_budget
-            break
+    exhausted_action_limit = False
+    if expected_actions is None:
+        for action_budget in range(1, max_actions + 1):
+            if can_win(initial_state, initial_belief, action_budget):
+                optimal = action_budget
+                break
+        exhausted_action_limit = optimal is None
+    else:
+        # Fixed-cost certificate: prove both sufficiency at N and minimality by failure at N-1.
+        sufficient = can_win(initial_state, initial_belief, expected_actions)
+        lower_sufficient = (
+            can_win(initial_state, initial_belief, expected_actions - 1)
+            if expected_actions > 1
+            else False
+        )
+        if sufficient and not lower_sufficient:
+            optimal = expected_actions
+        exhausted_action_limit = not sufficient
 
     def build_witness(
         state: WorldState,
@@ -407,7 +430,11 @@ def solve_guaranteed_policy(
             discriminative=isinstance(action, (ProbeAction, OperateAction)) and outcome_count > 1,
         )
 
-    initial_values = tuple(action_value(action) for action in _legal_actions(episode, initial_state))
+    initial_values = (
+        tuple(action_value(action) for action in _legal_actions(episode, initial_state))
+        if include_action_values
+        else ()
+    )
 
     return _cache_result(
         cache_key,
@@ -418,6 +445,32 @@ def solve_guaranteed_policy(
             initial_action_values=initial_values,
             witness=witness,
             visited_belief_nodes=len(visited_nodes),
-            exhausted_action_limit=optimal is None,
+            exhausted_action_limit=exhausted_action_limit,
         ),
+    )
+
+
+
+def prove_guaranteed_policy_cost(
+    episode: PrivateEpisode,
+    *,
+    candidate_rules_by_machine: dict[str, list[Effect]],
+    expected_actions: int,
+    max_physical_states: int = 100_000,
+    max_hypotheses: int = 256,
+) -> BeliefPolicyResult:
+    """Certify that expected_actions is the exact minimax policy cost.
+
+    This uses the same physical+belief search as solve_guaranteed_policy, but it avoids iterative
+    optimization and initial-action cost analysis. It proves sufficiency at N and minimality by
+    disproving N-1, then returns one optimal private branching witness.
+    """
+    return solve_guaranteed_policy(
+        episode,
+        candidate_rules_by_machine=candidate_rules_by_machine,
+        max_actions=expected_actions,
+        max_physical_states=max_physical_states,
+        max_hypotheses=max_hypotheses,
+        expected_actions=expected_actions,
+        include_action_values=False,
     )
