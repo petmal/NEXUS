@@ -108,3 +108,47 @@ def test_solver_prunes_operations_on_artifacts_absent_from_goal():
 
     assert "A1" in operations
     assert "A2" not in operations
+
+
+
+def test_solver_prunes_operations_on_location_only_goal_artifacts():
+    from nexus.models.actions import OperateAction
+    from nexus.models.goals import GoalKind, GoalPredicate
+    from nexus.models.world import Artifact, Orientation, Pattern, Polarity, Shape
+    from nexus.solver.search import legal_solver_actions
+
+    episode = generate_episode(6062, discovery_level=0, planning_level=1)
+    episode.public.initial_state.artifacts["A2"] = Artifact(
+        id="A2",
+        location="@inventory",
+        shape=Shape.CIRCLE,
+        pattern=Pattern.PLAIN,
+        orientation=Orientation.NORTH,
+        value=0,
+        polarity=Polarity.POSITIVE,
+    )
+    episode.public.goal = GoalPredicate(
+        kind=GoalKind.AND,
+        children=(
+            episode.public.goal,
+            GoalPredicate(
+                kind=GoalKind.ARTIFACT_LOCATION,
+                artifact_id="A2",
+                value=episode.public.initial_state.agent_room,
+            ),
+        ),
+    )
+
+    machine = next(iter(episode.public.initial_state.machines.values()))
+    state = episode.public.initial_state.model_copy(deep=True)
+    state.agent_room = machine.room_id
+    state.artifacts["A1"].location = "@inventory"
+
+    operations = [
+        action.artifact
+        for action in legal_solver_actions(episode, state)
+        if isinstance(action, OperateAction)
+    ]
+
+    assert "A1" in operations
+    assert "A2" not in operations
