@@ -120,3 +120,38 @@ def test_generate_rejects_out_of_range_difficulty_levels(tmp_path):
         ["generate", str(tmp_path / "episode"), "--discovery-level", "6"],
     )
     assert result.exit_code != 0
+
+
+
+def test_generate_supports_dependency_planning_and_resource_pressure(tmp_path):
+    result = runner.invoke(
+        app,
+        [
+            "generate",
+            str(tmp_path / "episode-p3-r2"),
+            "--seed",
+            "17",
+            "--discovery-level",
+            "2",
+            "--planning-level",
+            "3",
+            "--resource-pressure",
+            "2",
+        ],
+    )
+    assert result.exit_code == 0, result.stdout
+    assert "planning=3" in result.stdout
+    assert "resource-pressure=2" in result.stdout
+
+
+def test_generate_rejects_out_of_range_planning_and_resource_pressure(tmp_path):
+    planning = runner.invoke(
+        app,
+        ["generate", str(tmp_path / "bad-p"), "--planning-level", "4"],
+    )
+    pressure = runner.invoke(
+        app,
+        ["generate", str(tmp_path / "bad-r"), "--resource-pressure", "3"],
+    )
+    assert planning.exit_code != 0
+    assert pressure.exit_code != 0
