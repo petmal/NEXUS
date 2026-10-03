@@ -26,6 +26,7 @@ from nexus.generator.difficulty import (
     machine_count_for_discovery,
     recommended_tool_call_limit,
     required_probe_count,
+    resource_allowance,
     room_bounds,
     validate_difficulty_levels,
 )
@@ -146,7 +147,11 @@ def qualify_episode(
     )
 
     try:
-        validate_difficulty_levels(metadata.discovery_level, metadata.planning_level)
+        validate_difficulty_levels(
+        metadata.discovery_level,
+        metadata.planning_level,
+        metadata.resource_pressure,
+    )
         expected_machine_count = machine_count_for_discovery(metadata.discovery_level)
         room_role_count = 1 if metadata.discovery_level == 5 else expected_machine_count
         min_rooms, max_rooms = room_bounds(metadata.planning_level, room_role_count)
@@ -412,7 +417,12 @@ def qualify_episode(
                 machine_ids == ("M1",)
                 and direct_examples.get("M1") is False
                 and prediction_counts.get("M1", 0) > 1
-                and set(episode.public.initial_state.artifacts) == {"A1", "A2", "A3"}
+                and (
+                    set(episode.public.initial_state.artifacts) == {"A1", "A2", "A3"}
+                    if metadata.planning_level != 3
+                    else set(episode.public.initial_state.artifacts)
+                    == {"A1", "A2", "A3", "A4"}
+                )
                 and epistemic_artifact is not None
                 and distractor_artifact is not None
                 and {
@@ -422,8 +432,8 @@ def qualify_episode(
                 }
                 == set(Shape)
                 and all(
-                    artifact.location == "@inventory"
-                    for artifact in episode.public.initial_state.artifacts.values()
+                    episode.public.initial_state.artifacts[artifact_id].location == "@inventory"
+                    for artifact_id in ("A1", "A2", "A3")
                 )
                 and episode.public.initial_state.machines["M1"].room_id == "R0"
                 and d4_epistemic is not None
@@ -454,7 +464,12 @@ def qualify_episode(
             distractor_artifact = episode.public.initial_state.artifacts.get("A3")
             discovery_profile = (
                 machine_ids == ("M1", "M2", "M3")
-                and set(episode.public.initial_state.artifacts) == {"A1", "A2", "A3"}
+                and (
+                    set(episode.public.initial_state.artifacts) == {"A1", "A2", "A3"}
+                    if metadata.planning_level != 3
+                    else set(episode.public.initial_state.artifacts)
+                    == {"A1", "A2", "A3", "A4"}
+                )
                 and epistemic_artifact is not None
                 and distractor_artifact is not None
                 and {
@@ -464,8 +479,8 @@ def qualify_episode(
                 }
                 == set(Shape)
                 and all(
-                    artifact.location == "@inventory"
-                    for artifact in episode.public.initial_state.artifacts.values()
+                    episode.public.initial_state.artifacts[artifact_id].location == "@inventory"
+                    for artifact_id in ("A1", "A2", "A3")
                 )
                 and all(
                     machine.room_id == "R0"
@@ -534,6 +549,10 @@ def qualify_episode(
         else -1
     )
     expected_allowance = exploration_allowance(len(episode.public.rooms))
+    expected_resource_allowance = resource_allowance(
+        len(episode.public.rooms),
+        metadata.resource_pressure,
+    )
     family_kind = (
         "two-machine"
         if metadata.discovery_level == 3
@@ -579,6 +598,7 @@ def qualify_episode(
         and metadata.evidence_rows == evidence_rows_by_machine.get("M1", 0)
         and metadata.action_budget == episode.public.initial_state.resources.actions_remaining
         and metadata.exploration_allowance == expected_allowance
+        and metadata.resource_allowance == expected_resource_allowance
         and metadata.recommended_tool_call_limit
         == recommended_tool_call_limit(
             metadata.action_budget,
@@ -729,6 +749,67 @@ def qualify_episode(
             and metadata.distractor_action_cost == 0
         )
 
+    planning_dependency_ok = metadata.planning_level != 3
+    planning_counterfactual_policy = None
+    planning_counterfactual_physical = None
+    if metadata.planning_level == 3:
+        dependency_id = metadata.planning_dependency_artifact_id
+        goal = episode.public.goal
+        if (
+            dependency_id is not None
+            and dependency_id in episode.public.initial_state.artifacts
+            and goal.kind == GoalKind.AND
+            and len(goal.children) == 2
+            and goal.children[1].kind == GoalKind.ARTIFACT_LOCATION
+            and goal.children[1].artifact_id == dependency_id
+        ):
+            counterfactual = episode.model_copy(deep=True)
+            counterfactual.public.goal = goal.children[0]
+            counterfactual.public.initial_state.artifacts.pop(dependency_id, None)
+            planning_counterfactual_physical = solve(counterfactual, max_states=max_states)
+            if (
+                planning_counterfactual_physical.solvable
+                and planning_counterfactual_physical.optimal_action_count is not None
+            ):
+                expected_counterfactual_policy = (
+                    metadata.guaranteed_policy_action_count
+                    - metadata.planning_dependency_action_cost
+                )
+                if metadata.discovery_level <= 3:
+                    planning_counterfactual_policy = prove_guaranteed_policy_cost(
+                        counterfactual,
+                        candidate_rules_by_machine=candidate_rules_by_machine,
+                        expected_actions=expected_counterfactual_policy,
+                        minimum_guaranteed_probes=exact_probe_count,
+                    )
+                else:
+                    planning_counterfactual_policy = solve_guaranteed_policy(
+                        counterfactual,
+                        candidate_rules_by_machine=candidate_rules_by_machine,
+                        max_actions=min(
+                            96,
+                            max(8, expected_counterfactual_policy + 4),
+                        ),
+                    )
+
+                planning_dependency_ok = (
+                    metadata.planning_dependency_action_cost >= 2
+                    and metadata.optimal_action_count
+                    - planning_counterfactual_physical.optimal_action_count
+                    == metadata.planning_dependency_action_cost
+                    and planning_counterfactual_policy is not None
+                    and planning_counterfactual_policy.solvable
+                    and planning_counterfactual_policy.optimal_worst_case_actions
+                    == expected_counterfactual_policy
+                )
+    else:
+        planning_dependency_ok = (
+            metadata.planning_dependency_artifact_id is None
+            and metadata.planning_dependency_action_cost == 0
+        )
+
+    checks["planning_dependency"] = planning_dependency_ok
+    metadata_consistent = metadata_consistent and planning_dependency_ok
     checks["generation_metadata_consistent"] = metadata_consistent
 
     metrics["evidence_candidate_count"] = evidence_candidate_counts.get("M1", 0)
@@ -758,8 +839,7 @@ def qualify_episode(
         )
         expected_action_budget = (
             metadata.guaranteed_policy_action_count
-            + expected_allowance
-            + EXECUTION_SLACK
+            + expected_resource_allowance
         )
         checks["action_budget_sufficient"] = (
             episode.public.initial_state.resources.actions_remaining
