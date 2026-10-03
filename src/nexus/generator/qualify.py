@@ -42,7 +42,7 @@ from nexus.models.actions import ACTION_ADAPTER, OperateAction, ProbeAction
 from nexus.models.episode import PrivateEpisode
 from nexus.models.goals import GoalKind
 from nexus.models.world import Shape, TerminalStatus
-from nexus.solver.belief import solve_guaranteed_policy
+from nexus.solver.belief import prove_guaranteed_policy_cost, solve_guaranteed_policy
 from nexus.solver.search import solve
 
 
