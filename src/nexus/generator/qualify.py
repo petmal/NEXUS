@@ -865,6 +865,7 @@ def qualify_episode(
             and metadata.estimated_reference_actions == solved.optimal_action_count
             and (
                 metadata.resource_pressure != 0
+                or metadata.planning_level == 3
                 or (
                     metadata.solver_visited_states == solved.visited_states
                     and metadata.solver_max_frontier_size == solved.max_frontier_size

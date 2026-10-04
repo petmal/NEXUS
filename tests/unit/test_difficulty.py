@@ -313,6 +313,13 @@ def test_p3_adds_dependency_without_changing_topology_or_causal_world():
     )
     assert qualify_episode(dependent).passed
 
+    # Solver exploration counters are diagnostics, not semantic invariants. P3 is solved once
+    # before its final action budget is installed, while qualification re-solves the final
+    # episode. The optimum must match, but visited/frontier counts may legitimately differ.
+    dependent.generation_metadata.solver_visited_states += 1
+    dependent.generation_metadata.solver_max_frontier_size += 1
+    assert qualify_episode(dependent).passed
+
 
 @pytest.mark.parametrize("resource_pressure", [0, 1, 2])
 def test_resource_pressure_preserves_world_and_exact_policy(resource_pressure):
