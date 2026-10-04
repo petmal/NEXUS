@@ -101,7 +101,3 @@ jobs:
           docker build -t nexus-ci .
           docker run --rm --entrypoint python nexus-ci --version
           docker run --rm nexus-ci --help
-
-      - name: Minimize saved uv cache
-        if: ${{ always() }}
-        run: uv cache prune --ci || true
