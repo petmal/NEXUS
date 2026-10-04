@@ -133,7 +133,13 @@ class _MovementOracle:
         return self._paths.get((source, target))
 
 
-_POLICY_RESULT_CACHE: dict[tuple[str, int, int, int, bool], BeliefPolicyResult] = {}
+@dataclass(frozen=True)
+class _CachedPolicyResult:
+    max_actions: int
+    result: BeliefPolicyResult
+
+
+_POLICY_RESULT_CACHE: dict[tuple[str, int, int, bool], _CachedPolicyResult] = {}
 _POLICY_RESULT_CACHE_LIMIT = 256
 
 
@@ -166,12 +172,77 @@ def _policy_semantic_key(
 
 
 def _cache_result(
-    key: tuple[str, int, int, int, bool],
+    key: tuple[str, int, int, bool],
+    max_actions: int,
     result: BeliefPolicyResult,
 ) -> BeliefPolicyResult:
     if len(_POLICY_RESULT_CACHE) >= _POLICY_RESULT_CACHE_LIMIT:
         _POLICY_RESULT_CACHE.clear()
-    _POLICY_RESULT_CACHE[key] = result.model_copy(deep=True)
+    existing = _POLICY_RESULT_CACHE.get(key)
+    if existing is None or max_actions >= existing.max_actions:
+        _POLICY_RESULT_CACHE[key] = _CachedPolicyResult(
+            max_actions=max_actions,
+            result=result.model_copy(deep=True),
+        )
+    return result
+
+
+def _adapt_cached_result(
+    cached: _CachedPolicyResult,
+    *,
+    max_actions: int,
+    expected_actions: int | None,
+    include_action_values: bool,
+) -> BeliefPolicyResult | None:
+    """Reuse an exact pure policy result without overstating a cached proof bound."""
+    result = cached.result.model_copy(deep=True)
+    optimum = result.optimal_worst_case_actions
+
+    if optimum is None:
+        # An exhausted search proves only that no policy exists through its searched bound.
+        if max_actions > cached.max_actions:
+            return None
+        result.initial_action_values = ()
+        return result
+
+    if expected_actions is not None:
+        if expected_actions != optimum or expected_actions > max_actions:
+            return BeliefPolicyResult(
+                solvable=False,
+                viable_hypothesis_count=result.viable_hypothesis_count,
+                visited_belief_nodes=result.visited_belief_nodes,
+                exhausted_action_limit=expected_actions < optimum,
+            )
+    elif optimum > max_actions:
+        return BeliefPolicyResult(
+            solvable=False,
+            viable_hypothesis_count=result.viable_hypothesis_count,
+            visited_belief_nodes=result.visited_belief_nodes,
+            exhausted_action_limit=True,
+        )
+
+    if not include_action_values:
+        result.initial_action_values = ()
+        return result
+
+    # Action values are bounded analyses. A larger requested bound may resolve an action that was
+    # None in the cached result, so only reuse rich values when the cached search covered at least
+    # the requested range.
+    if max_actions > cached.max_actions:
+        return None
+    result.initial_action_values = tuple(
+        value.model_copy(
+            update={
+                "worst_case_total_actions": (
+                    value.worst_case_total_actions
+                    if value.worst_case_total_actions is None
+                    or value.worst_case_total_actions <= max_actions
+                    else None
+                )
+            }
+        )
+        for value in result.initial_action_values
+    )
     return result
 
 
@@ -407,16 +478,28 @@ def solve_guaranteed_policy(
     if minimum_guaranteed_probes is not None and minimum_guaranteed_probes < 0:
         raise ValueError("minimum_guaranteed_probes cannot be negative")
 
+    semantic_key = _policy_semantic_key(episode, candidate_rules_by_machine)
     cache_key = (
-        _policy_semantic_key(episode, candidate_rules_by_machine),
-        max_actions,
+        semantic_key,
         max_physical_states,
         max_hypotheses,
         include_action_values,
     )
     cached = _POLICY_RESULT_CACHE.get(cache_key)
-    if cached is not None and expected_actions is None:
-        return cached.model_copy(deep=True)
+    if cached is None and not include_action_values:
+        # A richer action-value solve contains the same exact optimum and witness.
+        cached = _POLICY_RESULT_CACHE.get(
+            (semantic_key, max_physical_states, max_hypotheses, True)
+        )
+    if cached is not None:
+        adapted = _adapt_cached_result(
+            cached,
+            max_actions=max_actions,
+            expected_actions=expected_actions,
+            include_action_values=include_action_values,
+        )
+        if adapted is not None:
+            return adapted
 
     machine_ids = tuple(sorted(candidate_rules_by_machine))
     if not machine_ids or any(not candidate_rules_by_machine[item] for item in machine_ids):
@@ -694,9 +777,10 @@ def solve_guaranteed_policy(
         visited_belief_nodes=len(visited_nodes),
         exhausted_action_limit=optimal is None,
     )
-    if expected_actions is None:
-        return _cache_result(cache_key, result)
-    return result
+    # Cache pure exact results for both optimizer and fixed-cost certificate calls. A successful
+    # certificate proves the same exact optimum; an exhausted result is reusable only through its
+    # stored bound (enforced by _adapt_cached_result).
+    return _cache_result(cache_key, max_actions, result)
 
 
 def prove_guaranteed_policy_cost(
