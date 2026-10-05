@@ -1,0 +1,197 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/petmal/NEXUS/main/schemas/performance-v2.schema.json",
+  "title": "NEXUS terminal performance v2",
+  "description": "Terminal-only NEXUS evaluation statistics. These fields describe the realized run relative to mechanically qualified physical and guaranteed-policy baselines. Diagnostic fields are emitted only after the session reaches won or failed and are never exposed while play is active. Signed deltas may be negative; a negative value means the realized hidden-world run used fewer actions than the comparison baseline and must not be interpreted by itself as superior reasoning.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "$schema",
+    "discovery_level",
+    "planning_level",
+    "resource_pressure",
+    "terminal_status",
+    "initial_action_budget",
+    "resource_allowance",
+    "planning_dependency_action_cost",
+    "actions_used",
+    "optimal_physical_actions",
+    "minimum_guaranteed_probes",
+    "guaranteed_policy_actions",
+    "action_delta_from_guaranteed_policy",
+    "action_delta_from_physical_optimum",
+    "probes_used",
+    "probe_delta_from_guaranteed_minimum",
+    "movement_actions",
+    "wait_actions",
+    "operate_actions",
+    "take_actions",
+    "drop_actions",
+    "finish_actions",
+    "unique_rooms_visited",
+    "room_revisits",
+    "goal_satisfied_at_terminal",
+    "unsatisfied_goal_conditions",
+    "budget_remaining",
+    "invalid_actions",
+    "failed_finishes",
+    "duplicate_requests",
+    "protocol_conflicts"
+  ],
+  "properties": {
+    "$schema": {
+      "type": "string",
+      "format": "uri",
+      "description": "Immutable raw GitHub URL of the JSON Schema version used to interpret this performance object."
+    },
+    "discovery_level": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 5,
+      "description": "Generated causal-discovery profile D0-D5."
+    },
+    "planning_level": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 3,
+      "description": "Generated planning profile P0-P3. P3 adds a mechanically qualified delivery dependency without increasing the P2 room-count range."
+    },
+    "resource_pressure": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 2,
+      "description": "Action-budget pressure R0-R2. R0 is forgiving, R1 constrained, and R2 gives exactly the guaranteed-policy action budget."
+    },
+    "terminal_status": {
+      "type": "string",
+      "enum": ["won", "failed"],
+      "description": "Terminal outcome when these statistics were emitted."
+    },
+    "initial_action_budget": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Environment actions available at episode start. Accepted consuming actions decrement this budget; invalid requests and non-consuming observe operations do not."
+    },
+    "resource_allowance": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Actions added above guaranteed_policy_actions by the selected resource-pressure profile. At R2 this is zero."
+    },
+    "planning_dependency_action_cost": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Mechanically recomputed physical and guaranteed-policy overhead caused by the P3 delivery dependency. Zero for P0-P2."
+    },
+    "actions_used": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Accepted consuming environment actions executed by the session. Invalid actions, duplicate transport retries, protocol conflicts, and non-consuming observe calls are excluded."
+    },
+    "optimal_physical_actions": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "Shortest action count for an omniscient agent in the selected hidden world, proved independently by concrete-state BFS. Probe actions are unnecessary for this omniscient baseline."
+    },
+    "minimum_guaranteed_probes": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Minimum worst-case number of probe actions required by the causal-discovery guarantee for the profile."
+    },
+    "guaranteed_policy_actions": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "Exact minimum worst-case total environment-action cost of a policy guaranteed to win across all public-evidence-consistent viable hidden worlds."
+    },
+    "action_delta_from_guaranteed_policy": {
+      "type": "integer",
+      "description": "actions_used minus guaranteed_policy_actions. Positive means extra realized actions; zero matches the minimax guarantee; negative can result from a favorable realized hidden world or epistemic risk."
+    },
+    "action_delta_from_physical_optimum": {
+      "type": "integer",
+      "description": "actions_used minus the omniscient selected-world physical optimum. On failed episodes this may be negative because the run terminated before completing the mission."
+    },
+    "probes_used": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Probe actions actually executed in this run."
+    },
+    "probe_delta_from_guaranteed_minimum": {
+      "type": "integer",
+      "description": "probes_used minus minimum_guaranteed_probes. Negative values are possible when the agent commits without all information needed for a guaranteed policy."
+    },
+    "movement_actions": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Accepted move actions executed in the run."
+    },
+    "wait_actions": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Accepted wait actions executed in the run."
+    },
+    "operate_actions": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Accepted destructive machine operate actions executed in the run."
+    },
+    "take_actions": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Accepted take actions executed in the run."
+    },
+    "drop_actions": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Accepted drop actions executed in the run."
+    },
+    "finish_actions": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Accepted finish actions executed in the run, including rejected finishes that consumed an action."
+    },
+    "unique_rooms_visited": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "Number of distinct rooms occupied by the agent during the run, including the starting room."
+    },
+    "room_revisits": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Move actions whose destination had already been visited earlier in the run. This is descriptive navigation telemetry, not by itself proof of waste."
+    },
+    "goal_satisfied_at_terminal": {
+      "type": "boolean",
+      "description": "Whether the declarative goal predicate is true in the terminal world state. A failed finish or budget exhaustion can leave this false."
+    },
+    "unsatisfied_goal_conditions": {
+      "type": "array",
+      "items": {"type": "string"},
+      "description": "Terminal-only concise descriptions of unsatisfied conjunctive goal conditions. Complex non-conjunctive failures are represented as a compact predicate description. Empty when the goal is satisfied."
+    },
+    "budget_remaining": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Unused environment actions at terminal state."
+    },
+    "invalid_actions": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Rejected game actions that did not consume an environment action or mutate state."
+    },
+    "failed_finishes": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Accepted finish actions that consumed an environment action while the victory predicate was false."
+    },
+    "duplicate_requests": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Idempotent retries of an already committed turn with the same action. These do not count toward actions_used."
+    },
+    "protocol_conflicts": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Rejected stale/mismatched turn requests or retries that supplied a different action for an already committed turn. These do not count toward actions_used."
+    }
+  }
+}
