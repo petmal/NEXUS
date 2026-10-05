@@ -32,13 +32,38 @@ class SolveResult(BaseModel):
     exhausted_state_limit: bool = False
 
 
-def search_state_key(state: WorldState) -> str:
-    """Hash semantic state while dropping path-cost fields dominated by BFS depth."""
-    payload = state.model_dump(mode="json")
-    payload.pop("turn", None)
-    resources = payload.get("resources", {})
-    resources.pop("actions_remaining", None)
-    return canonical_hash(payload)
+SearchStateKey = tuple[object, ...]
+
+
+def search_state_key(state: WorldState) -> SearchStateKey:
+    """Return the immutable semantic search state, excluding path-cost-only fields.
+
+    `turn` and `actions_remaining` are deliberately omitted because BFS/minimax depth already
+    dominates them. Replay integrity continues to use canonical SHA-256 hashes separately.
+    """
+    artifacts = tuple(
+        (
+            artifact_id,
+            artifact.location,
+            artifact.shape.value,
+            artifact.pattern.value,
+            artifact.orientation.value,
+            artifact.value,
+            artifact.polarity.value,
+        )
+        for artifact_id, artifact in sorted(state.artifacts.items())
+    )
+    machines = tuple(
+        (machine_id, machine.room_id, machine.uses_remaining)
+        for machine_id, machine in sorted(state.machines.items())
+    )
+    return (
+        state.phase,
+        state.agent_room,
+        artifacts,
+        machines,
+        state.terminal_status.value,
+    )
 
 
 def neighbors(episode: PrivateEpisode, room_id: str) -> list[str]:

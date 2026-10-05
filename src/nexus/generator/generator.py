@@ -62,8 +62,7 @@ from nexus.models.world import (
     Shape,
     WorldState,
 )
-from nexus.solver.belief import solve_guaranteed_policy
-from nexus.solver.search import solve
+from nexus.solver.belief import solve_compressed_physical, solve_guaranteed_policy
 
 
 class GenerationError(RuntimeError):
@@ -631,6 +630,7 @@ def _generate_selective_episode(
     planning_level: int,
     max_attempts: int,
     verifier_secret: str | None,
+    qualify_result: bool = True,
 ) -> PrivateEpisode:
     family = _find_selective_family(seed, max_attempts)
     profile = family.evidence_profile
@@ -728,7 +728,7 @@ def _generate_selective_episode(
             generation_metadata=metadata,
         )
 
-        physical = solve(private)
+        physical = solve_compressed_physical(private)
         if (
             not physical.solvable
             or physical.optimal_action_count is None
@@ -753,6 +753,11 @@ def _generate_selective_episode(
             private,
             candidate_rules_by_machine={"M1": candidates},
             max_actions=policy_bound,
+            requested_action_values=(
+                ProbeAction(machine="M1", artifact="A1"),
+                ProbeAction(machine="M1", artifact="A2"),
+                ProbeAction(machine="M1", artifact="A3"),
+            ),
         )
         if (
             not policy.solvable
@@ -813,6 +818,8 @@ def _generate_selective_episode(
         metadata.solver_visited_states = physical.visited_states
         metadata.solver_max_frontier_size = physical.max_frontier_size
 
+        if not qualify_result:
+            return private
         from nexus.generator.qualify import qualify_episode
 
         if qualify_episode(private).passed:
@@ -863,6 +870,7 @@ def _generate_constructed_episode(
     planning_level: int,
     max_attempts: int,
     verifier_secret: str | None,
+    qualify_result: bool = True,
 ) -> PrivateEpisode:
     # D5 is constructive rather than rejection-sampled at the causal layer. The same named RNG
     # stream defines mechanics for every planning variant; only topology uses planning_level.
@@ -1004,7 +1012,7 @@ def _generate_constructed_episode(
             generation_metadata=metadata,
         )
 
-        physical = solve(private)
+        physical = solve_compressed_physical(private)
         if (
             not physical.solvable
             or physical.optimal_action_count is None
@@ -1020,6 +1028,11 @@ def _generate_constructed_episode(
             private,
             candidate_rules_by_machine=candidate_rules_by_machine,
             max_actions=policy_bound,
+            requested_action_values=(
+                OperateAction(machine="M2", artifact="A2"),
+                ProbeAction(machine="M1", artifact="A1"),
+                OperateAction(machine="M3", artifact="A3"),
+            ),
         )
         if (
             not policy.solvable
@@ -1083,6 +1096,8 @@ def _generate_constructed_episode(
         metadata.solver_visited_states = physical.visited_states
         metadata.solver_max_frontier_size = physical.max_frontier_size
 
+        if not qualify_result:
+            return private
         from nexus.generator.qualify import qualify_episode
 
         if qualify_episode(private).passed:
@@ -1212,7 +1227,7 @@ def _add_planning_dependency(episode: PrivateEpisode) -> PrivateEpisode:
             f"{base.public.episode_id}|planning-p3|{cargo_room}".encode("utf-8")
         ).hexdigest()[:16]
 
-        physical = solve(trial)
+        physical = solve_compressed_physical(trial)
         if not physical.solvable or physical.optimal_action_count is None:
             continue
         overhead = physical.optimal_action_count - base_physical
@@ -1220,6 +1235,19 @@ def _add_planning_dependency(episode: PrivateEpisode) -> PrivateEpisode:
             continue
 
         needs_decision_values = metadata.discovery_level >= 4
+        requested_action_values = None
+        if metadata.discovery_level == 4:
+            requested_action_values = (
+                ProbeAction(machine="M1", artifact="A1"),
+                ProbeAction(machine="M1", artifact="A2"),
+                ProbeAction(machine="M1", artifact="A3"),
+            )
+        elif metadata.discovery_level == 5:
+            requested_action_values = (
+                OperateAction(machine="M2", artifact="A2"),
+                ProbeAction(machine="M1", artifact="A1"),
+                OperateAction(machine="M3", artifact="A3"),
+            )
         policy = solve_guaranteed_policy(
             trial,
             candidate_rules_by_machine=candidate_rules,
@@ -1228,6 +1256,7 @@ def _add_planning_dependency(episode: PrivateEpisode) -> PrivateEpisode:
                 base_guaranteed + overhead + 8,
             ),
             include_action_values=needs_decision_values,
+            requested_action_values=requested_action_values,
         )
 
         if (
@@ -1363,6 +1392,7 @@ def _generate_episode_core(
     planning_level: int = 1,
     max_attempts: int = 250,
     verifier_secret: str | None = None,
+    qualify_result: bool = True,
 ) -> PrivateEpisode:
     """Generate a deterministic, solver-qualified Transformation Facility episode.
 
@@ -1382,6 +1412,7 @@ def _generate_episode_core(
             planning_level=planning_level,
             max_attempts=max_attempts,
             verifier_secret=verifier_secret,
+            qualify_result=qualify_result,
         )
 
     if discovery_level == 4:
@@ -1390,6 +1421,7 @@ def _generate_episode_core(
             planning_level=planning_level,
             max_attempts=max_attempts,
             verifier_secret=verifier_secret,
+            qualify_result=qualify_result,
         )
 
     all_candidates = enumerate_transformation_rules()
@@ -1518,7 +1550,7 @@ def _generate_episode_core(
             generation_metadata=metadata,
         )
 
-        solved = solve(private)
+        solved = solve_compressed_physical(private)
         if not solved.solvable or solved.optimal_action_count is None:
             continue
         if solved.optimal_action_count > MAX_PHYSICAL_OPTIMAL_ACTIONS:
@@ -1576,10 +1608,11 @@ def _generate_episode_core(
         private.generation_metadata.solver_visited_states = solved.visited_states
         private.generation_metadata.solver_max_frontier_size = solved.max_frontier_size
 
-        from nexus.generator.qualify import qualify_episode
+        if qualify_result:
+            from nexus.generator.qualify import qualify_episode
 
-        if not qualify_episode(private).passed:
-            continue
+            if not qualify_episode(private).passed:
+                continue
         return private
 
     raise GenerationError(
@@ -1614,6 +1647,7 @@ def generate_episode(
         planning_level=core_planning,
         max_attempts=max_attempts,
         verifier_secret=verifier_secret,
+        qualify_result=planning_level != 3,
     )
     transformed = planning_level == 3 or resource_pressure != 0
     if planning_level == 3:

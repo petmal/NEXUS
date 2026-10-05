@@ -305,6 +305,11 @@ def qualify_episode(
                 episode,
                 candidate_rules_by_machine=candidate_rules_by_machine,
                 max_actions=proof_bound,
+                requested_action_values=(
+                    ProbeAction(machine="M1", artifact="A1"),
+                    ProbeAction(machine="M1", artifact="A2"),
+                    ProbeAction(machine="M1", artifact="A3"),
+                ),
             )
             d4_mission_probe = _policy_probe_value(d4_policy, "A1")
 
@@ -333,6 +338,11 @@ def qualify_episode(
                 episode,
                 candidate_rules_by_machine=candidate_rules_by_machine,
                 max_actions=proof_bound,
+                requested_action_values=(
+                    OperateAction(machine="M2", artifact="A2"),
+                    ProbeAction(machine="M1", artifact="A1"),
+                    OperateAction(machine="M3", artifact="A3"),
+                ),
             )
             d5_constructor = _policy_operate_value(d5_policy, "M2", "A2")
             d5_direct_probe = _policy_probe_value(d5_policy, "A1")
@@ -863,14 +873,6 @@ def qualify_episode(
         metadata_consistent = metadata_consistent and (
             metadata.optimal_action_count == solved.optimal_action_count
             and metadata.estimated_reference_actions == solved.optimal_action_count
-            and (
-                metadata.resource_pressure != 0
-                or metadata.planning_level == 3
-                or (
-                    metadata.solver_visited_states == solved.visited_states
-                    and metadata.solver_max_frontier_size == solved.max_frontier_size
-                )
-            )
         )
         checks["generation_metadata_consistent"] = metadata_consistent
     else:

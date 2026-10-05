@@ -3,12 +3,13 @@ from __future__ import annotations
 import hashlib
 import heapq
 import json
-from collections import deque
+from collections import OrderedDict, deque
 from dataclasses import dataclass
 from itertools import count, product
 
 from pydantic import BaseModel, ConfigDict
 
+from nexus.engine.canonical import canonical_hash
 from nexus.engine.engine import step
 from nexus.engine.goals import evaluate_goal
 from nexus.models.actions import (
@@ -25,6 +26,7 @@ from nexus.models.episode import PrivateEpisode
 from nexus.models.rules import Effect
 from nexus.models.world import INVENTORY, TerminalStatus, WorldState
 from nexus.solver.search import (
+    SearchStateKey,
     goal_field_artifact_ids,
     goal_location_rooms,
     neighbors,
@@ -86,6 +88,7 @@ class CompressedPhysicalResult(BaseModel):
     optimal_action_count: int | None = None
     plan: tuple[Action, ...] = ()
     visited_states: int = 0
+    max_frontier_size: int = 0
     exhausted_state_limit: bool = False
 
 
@@ -139,8 +142,32 @@ class _CachedPolicyResult:
     result: BeliefPolicyResult
 
 
-_POLICY_RESULT_CACHE: dict[tuple[str, int, int, bool], _CachedPolicyResult] = {}
-_POLICY_RESULT_CACHE_LIMIT = 256
+_POLICY_RESULT_CACHE: OrderedDict[
+    tuple[str, int, int, tuple[str, ...]], _CachedPolicyResult
+] = OrderedDict()
+_POLICY_RESULT_CACHE_LIMIT = 16
+
+
+def _action_identity(action: Action) -> str:
+    return json.dumps(
+        action.model_dump(mode="json"),
+        sort_keys=True,
+        separators=(",", ":"),
+    )
+
+
+def _action_value_selection_key(
+    include_action_values: bool,
+    requested_action_values: tuple[Action, ...] | None,
+) -> tuple[str, ...]:
+    if not include_action_values:
+        return ("none",)
+    if requested_action_values is None:
+        return ("all",)
+    return (
+        "requested",
+        *tuple(sorted({_action_identity(action) for action in requested_action_values})),
+    )
 
 
 def _policy_semantic_key(
@@ -172,18 +199,19 @@ def _policy_semantic_key(
 
 
 def _cache_result(
-    key: tuple[str, int, int, bool],
+    key: tuple[str, int, int, tuple[str, ...]],
     max_actions: int,
     result: BeliefPolicyResult,
 ) -> BeliefPolicyResult:
-    if len(_POLICY_RESULT_CACHE) >= _POLICY_RESULT_CACHE_LIMIT:
-        _POLICY_RESULT_CACHE.clear()
     existing = _POLICY_RESULT_CACHE.get(key)
     if existing is None or max_actions >= existing.max_actions:
         _POLICY_RESULT_CACHE[key] = _CachedPolicyResult(
             max_actions=max_actions,
             result=result.model_copy(deep=True),
         )
+    _POLICY_RESULT_CACHE.move_to_end(key)
+    while len(_POLICY_RESULT_CACHE) > _POLICY_RESULT_CACHE_LIMIT:
+        _POLICY_RESULT_CACHE.popitem(last=False)
     return result
 
 
@@ -382,6 +410,7 @@ def solve_compressed_physical(
         (0, next(serial), initial, ())
     ]
     best_cost = {search_state_key(initial): 0}
+    max_frontier = 1
 
     while frontier:
         cost, _, state, plan = heapq.heappop(frontier)
@@ -392,6 +421,7 @@ def solve_compressed_physical(
             return CompressedPhysicalResult(
                 solvable=False,
                 visited_states=len(best_cost),
+                max_frontier_size=max_frontier,
                 exhausted_state_limit=True,
             )
 
@@ -407,6 +437,7 @@ def solve_compressed_physical(
                     optimal_action_count=next_cost,
                     plan=next_plan,
                     visited_states=len(best_cost),
+                    max_frontier_size=max_frontier,
                 )
             if result.state.terminal_status != TerminalStatus.ACTIVE:
                 continue
@@ -420,10 +451,12 @@ def solve_compressed_physical(
                 frontier,
                 (next_cost, next(serial), result.state, next_plan),
             )
+            max_frontier = max(max_frontier, len(frontier))
 
     return CompressedPhysicalResult(
         solvable=False,
         visited_states=len(best_cost),
+        max_frontier_size=max_frontier,
     )
 
 
@@ -457,6 +490,7 @@ def solve_guaranteed_policy(
     max_hypotheses: int = 256,
     expected_actions: int | None = None,
     include_action_values: bool = True,
+    requested_action_values: tuple[Action, ...] | None = None,
     minimum_guaranteed_probes: int | None = None,
 ) -> BeliefPolicyResult:
     """Solve the exact minimum worst-case total-action policy.
@@ -477,21 +511,22 @@ def solve_guaranteed_policy(
             raise ValueError("expected_actions cannot exceed max_actions")
     if minimum_guaranteed_probes is not None and minimum_guaranteed_probes < 0:
         raise ValueError("minimum_guaranteed_probes cannot be negative")
+    if requested_action_values is not None and not include_action_values:
+        raise ValueError("requested_action_values requires include_action_values=True")
 
     semantic_key = _policy_semantic_key(episode, candidate_rules_by_machine)
+    selection_key = _action_value_selection_key(
+        include_action_values, requested_action_values
+    )
     cache_key = (
         semantic_key,
         max_physical_states,
         max_hypotheses,
-        include_action_values,
+        selection_key,
     )
     cached = _POLICY_RESULT_CACHE.get(cache_key)
-    if cached is None and not include_action_values:
-        # A richer action-value solve contains the same exact optimum and witness.
-        cached = _POLICY_RESULT_CACHE.get(
-            (semantic_key, max_physical_states, max_hypotheses, True)
-        )
     if cached is not None:
+        _POLICY_RESULT_CACHE.move_to_end(cache_key)
         adapted = _adapt_cached_result(
             cached,
             max_actions=max_actions,
@@ -535,18 +570,19 @@ def solve_guaranteed_policy(
     initial_state = _normalize_state(episode.public.initial_state, search_budget)
     movement = _MovementOracle(episode)
 
-    Branch = tuple[str, WorldState, frozenset[int]]
+    BranchSignature = str | SearchStateKey
+    Branch = tuple[BranchSignature, WorldState, frozenset[int]]
     branch_cache: dict[
-        tuple[str, frozenset[int], tuple[str, ...], str],
+        tuple[SearchStateKey, frozenset[int], tuple[str, ...], str],
         tuple[Branch, ...] | None,
     ] = {}
-    memo: dict[tuple[str, frozenset[int], int], bool] = {}
-    visited_nodes: set[tuple[str, frozenset[int], int]] = set()
+    memo: dict[tuple[SearchStateKey, frozenset[int], int], bool] = {}
+    visited_nodes: set[tuple[SearchStateKey, frozenset[int], int]] = set()
 
     def choice_key(choice: _MacroChoice) -> tuple[tuple[str, ...], str]:
         return (
             tuple(move.target for move in choice.route),
-            json.dumps(choice.action.model_dump(mode="json"), sort_keys=True),
+            _action_identity(choice.action),
         )
 
     def branches_for(
@@ -571,13 +607,11 @@ def solve_guaranteed_policy(
                 branch_cache[key] = None
                 return None
             next_state = _normalize_state(result.state, search_budget)
-            branches = (
-                ("state|" + search_state_key(next_state), next_state, belief),
-            )
+            branches = ((search_state_key(next_state), next_state, belief),)
             branch_cache[key] = branches
             return branches
 
-        grouped: dict[str, tuple[WorldState, set[int]]] = {}
+        grouped: dict[BranchSignature, tuple[WorldState, set[int]]] = {}
         for hypothesis_index in belief:
             result = step(moved, choice.action, hypothesis_episodes[hypothesis_index])
             if not result.ok:
@@ -586,9 +620,9 @@ def solve_guaranteed_policy(
 
             next_state = _normalize_state(result.state, search_budget)
             if isinstance(choice.action, ProbeAction):
-                signature = "probe|" + _probe_observation_key(result)
+                signature: BranchSignature = "probe|" + _probe_observation_key(result)
             else:
-                signature = "state|" + search_state_key(next_state)
+                signature = search_state_key(next_state)
 
             existing = grouped.get(signature)
             if existing is None:
@@ -600,7 +634,9 @@ def solve_guaranteed_policy(
 
         branches = tuple(
             (signature, state_value, frozenset(members))
-            for signature, (state_value, members) in sorted(grouped.items())
+            for signature, (state_value, members) in sorted(
+                grouped.items(), key=lambda item: repr(item[0])
+            )
         )
         branch_cache[key] = branches
         return branches
@@ -667,6 +703,17 @@ def solve_guaranteed_policy(
         if sufficient and minimal:
             optimal = expected_actions
 
+    def witness_outcome(signature: BranchSignature, state: WorldState) -> str:
+        if isinstance(signature, str):
+            return signature
+        # Preserve the existing private witness representation while keeping SHA-256 out of
+        # hot search-key paths. Witness construction touches only the selected optimal policy.
+        payload = state.model_dump(mode="json")
+        payload.pop("turn", None)
+        resources = payload.get("resources", {})
+        resources.pop("actions_remaining", None)
+        return "state|" + canonical_hash(payload)
+
     def build_witness(
         state: WorldState,
         belief: frozenset[int],
@@ -696,7 +743,7 @@ def solve_guaranteed_policy(
                 remaining_budget=interaction_budget,
                 branches=tuple(
                     PolicyWitnessBranch(
-                        outcome=signature,
+                        outcome=witness_outcome(signature, next_state),
                         viable_hypotheses=len(members),
                         next=build_witness(next_state, members, remaining),
                     )
@@ -762,8 +809,18 @@ def solve_guaranteed_policy(
         for choice in _macro_choices(episode, initial_state, movement, belief_mode=True)
         if not choice.route
     )
+    requested_identities = (
+        None
+        if requested_action_values is None
+        else frozenset(_action_identity(action) for action in requested_action_values)
+    )
     initial_values = (
-        tuple(action_value(choice) for choice in immediate_choices)
+        tuple(
+            action_value(choice)
+            for choice in immediate_choices
+            if requested_identities is None
+            or _action_identity(choice.action) in requested_identities
+        )
         if include_action_values
         else ()
     )
