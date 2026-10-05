@@ -275,10 +275,18 @@ def _adapt_cached_result(
 
 
 def _normalize_state(state: WorldState, search_budget: int) -> WorldState:
+    """Normalize a caller-owned state by copying it first."""
     normalized = state.model_copy(deep=True)
     normalized.turn = 0
     normalized.resources.actions_remaining = search_budget
     return normalized
+
+
+def _normalize_fresh_state(state: WorldState, search_budget: int) -> WorldState:
+    """Normalize a fresh solver-owned transition state in place."""
+    state.turn = 0
+    state.resources.actions_remaining = search_budget
+    return state
 
 
 def _macro_sort_key(choice: _MacroChoice) -> tuple[int, int, str]:
@@ -373,7 +381,9 @@ def _apply_route(
         if not result.ok:
             return None
         current = result.state
-    return _normalize_state(current, search_budget)
+    if not route:
+        return _normalize_state(state, search_budget)
+    return _normalize_fresh_state(current, search_budget)
 
 
 def _execute_macro(
@@ -388,7 +398,7 @@ def _execute_macro(
     result = step(moved, choice.action, episode)
     if not result.ok:
         return None
-    result.state = _normalize_state(result.state, search_budget)
+    result.state = _normalize_fresh_state(result.state, search_budget)
     return result
 
 
@@ -466,8 +476,14 @@ def _episode_for_hypothesis(
     *,
     search_budget: int,
 ) -> PrivateEpisode:
-    candidate = episode.model_copy(deep=True)
+    # Hypotheses change only rules and the solver-local initial budget. Keep large immutable
+    # episode payloads (evidence, metadata, witness, topology) shared while isolating every object
+    # that this helper mutates.
+    candidate = episode.model_copy(deep=False)
+    candidate.public = episode.public.model_copy(deep=False)
+    candidate.public.initial_state = episode.public.initial_state.model_copy(deep=True)
     candidate.public.initial_state.resources.actions_remaining = search_budget
+    candidate.rules = dict(episode.rules)
     for machine_id, effect in rules_by_machine.items():
         rule_id = candidate.machine_rules[machine_id]
         candidate.rules[rule_id] = effect
@@ -524,9 +540,20 @@ def solve_guaranteed_policy(
         max_hypotheses,
         selection_key,
     )
-    cached = _POLICY_RESULT_CACHE.get(cache_key)
-    if cached is not None:
-        _POLICY_RESULT_CACHE.move_to_end(cache_key)
+    cache_candidates = [cache_key]
+    if not include_action_values:
+        # A richer exact result contains the same minimax proof plus action-value analysis. A
+        # no-action-value query may therefore reuse it, subject to the existing proof-bound
+        # checks in _adapt_cached_result. Never reuse a weaker entry for a richer query.
+        cache_candidates.extend(
+            key
+            for key in reversed(tuple(_POLICY_RESULT_CACHE.keys()))
+            if key[:3] == cache_key[:3] and key != cache_key
+        )
+    for candidate_key in cache_candidates:
+        cached = _POLICY_RESULT_CACHE.get(candidate_key)
+        if cached is None:
+            continue
         adapted = _adapt_cached_result(
             cached,
             max_actions=max_actions,
@@ -534,6 +561,7 @@ def solve_guaranteed_policy(
             include_action_values=include_action_values,
         )
         if adapted is not None:
+            _POLICY_RESULT_CACHE.move_to_end(candidate_key)
             return adapted
 
     machine_ids = tuple(sorted(candidate_rules_by_machine))
@@ -577,7 +605,6 @@ def solve_guaranteed_policy(
         tuple[Branch, ...] | None,
     ] = {}
     memo: dict[tuple[SearchStateKey, frozenset[int], int], bool] = {}
-    visited_nodes: set[tuple[SearchStateKey, frozenset[int], int]] = set()
 
     def choice_key(choice: _MacroChoice) -> tuple[tuple[str, ...], str]:
         return (
@@ -606,7 +633,7 @@ def solve_guaranteed_policy(
             if not result.ok:
                 branch_cache[key] = None
                 return None
-            next_state = _normalize_state(result.state, search_budget)
+            next_state = _normalize_fresh_state(result.state, search_budget)
             branches = ((search_state_key(next_state), next_state, belief),)
             branch_cache[key] = branches
             return branches
@@ -618,7 +645,7 @@ def solve_guaranteed_policy(
                 branch_cache[key] = None
                 return None
 
-            next_state = _normalize_state(result.state, search_budget)
+            next_state = _normalize_fresh_state(result.state, search_budget)
             if isinstance(choice.action, ProbeAction):
                 signature: BranchSignature = "probe|" + _probe_observation_key(result)
             else:
@@ -662,7 +689,6 @@ def solve_guaranteed_policy(
         cached_value = memo.get(key)
         if cached_value is not None:
             return cached_value
-        visited_nodes.add(key)
 
         for choice in _macro_choices(episode, state, movement, belief_mode=True):
             if choice.cost > budget:
@@ -831,7 +857,9 @@ def solve_guaranteed_policy(
         optimal_worst_case_actions=optimal,
         initial_action_values=initial_values,
         witness=witness,
-        visited_belief_nodes=len(visited_nodes),
+        # Every non-terminal can_win body stores one True/False entry before returning, so
+        # memo keys are exactly the previously duplicated visited-node set.
+        visited_belief_nodes=len(memo),
         exhausted_action_limit=optimal is None,
     )
     # Cache pure exact results for both optimizer and fixed-cost certificate calls. A successful

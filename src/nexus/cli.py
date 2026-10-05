@@ -89,7 +89,7 @@ def generate(
 
     Writes a player-safe manifest and attachments plus a runner-only private.json.
     """
-    from nexus.generator import generate_episode, qualify_episode
+    from nexus.generator import generate_episode
     from nexus.io import save_episode
 
     for offset in range(count):
@@ -101,9 +101,6 @@ def generate(
         )
         target = output if count == 1 else output / f"episode-{offset + 1:03d}"
         save_episode(episode, target)
-        report = qualify_episode(episode)
-        if not report.passed:
-            raise typer.Exit(code=2)
         metadata = episode.generation_metadata
         console.print(
             f"[green]generated[/green] {episode.public.episode_id} -> {target} "

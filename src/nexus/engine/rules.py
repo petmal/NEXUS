@@ -35,8 +35,8 @@ def evaluate_condition(condition: Condition, artifact: Artifact, phase: int) -> 
     raise ValueError(f"unsupported condition kind {kind}")
 
 
-def apply_effect(effect: Effect, artifact: Artifact, phase: int) -> Artifact:
-    result = artifact.model_copy(deep=True)
+def _apply_effect_to_working(effect: Effect, result: Artifact, phase: int) -> Artifact:
+    """Apply one validated effect tree to a solver/engine-owned working artifact."""
     kind = effect.kind
     if kind == EffectKind.ADD_MOD:
         assert effect.amount is not None and effect.modulus is not None
@@ -59,16 +59,27 @@ def apply_effect(effect: Effect, artifact: Artifact, phase: int) -> Artifact:
     if kind == EffectKind.SET:
         if effect.field not in ARTIFACT_FIELDS:
             raise ValueError(f"unsupported set field {effect.field!r}")
-        setattr(result, effect.field, effect.value)
-        return Artifact.model_validate(result.model_dump())
+        payload = result.model_dump(mode="python")
+        payload[effect.field] = effect.value
+        return Artifact.model_validate(payload)
     if kind == EffectKind.SEQUENCE:
         for child in effect.effects:
-            result = apply_effect(child, result, phase)
+            result = _apply_effect_to_working(child, result, phase)
         return result
     if kind == EffectKind.CONDITIONAL:
         assert effect.condition is not None
         branch = effect.effects if evaluate_condition(effect.condition, result, phase) else effect.else_effects
         for child in branch:
-            result = apply_effect(child, result, phase)
+            result = _apply_effect_to_working(child, result, phase)
         return result
     raise ValueError(f"unsupported effect kind {kind}")
+
+
+def apply_effect(effect: Effect, artifact: Artifact, phase: int) -> Artifact:
+    """Apply an effect without mutating the caller-owned artifact.
+
+    The previous recursive implementation deep-copied the Artifact at every AST node. The effect
+    language is sequential, so one private working copy is sufficient; SET still revalidates the
+    complete Artifact to preserve enum/type normalization semantics.
+    """
+    return _apply_effect_to_working(effect, artifact.model_copy(deep=True), phase)
