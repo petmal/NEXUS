@@ -75,6 +75,27 @@ def test_terminal_performance_uses_signed_guaranteed_policy_deltas():
     assert performance.action_delta_from_guaranteed_policy < 0
     assert performance.probes_used == 0
     assert performance.probe_delta_from_guaranteed_minimum == -1
+    assert (
+        performance.move_actions
+        + performance.wait_actions
+        + performance.take_actions
+        + performance.drop_actions
+        + performance.operate_actions
+        + performance.probes_used
+        + performance.finish_actions
+        == performance.actions_used
+    )
+    reference_moves = sum(item.get("type") == "move" for item in episode.reference_plan)
+    assert performance.reference_plan_move_actions == reference_moves
+    assert performance.move_delta_from_reference_plan == (
+        performance.move_actions - reference_moves
+    )
+    assert performance.rooms_visited >= 1
+    assert performance.room_revisits >= 0
+    assert performance.goal_satisfied
+    assert performance.goal_leaf_count >= 1
+    assert performance.satisfied_goal_leaf_count == performance.goal_leaf_count
+    assert performance.unsatisfied_goal_leaves == ()
     assert performance.invalid_actions == 0
     assert performance.failed_finishes == 0
     assert performance.duplicate_requests == 0
@@ -83,7 +104,7 @@ def test_terminal_performance_uses_signed_guaranteed_policy_deltas():
     assert payload["$schema"].startswith(
         "https://raw.githubusercontent.com/petmal/NEXUS/"
     )
-    assert payload["$schema"].endswith("/schemas/performance-v1.schema.json")
+    assert payload["$schema"].endswith("/schemas/performance-v2.schema.json")
     assert performance.discovery_level == 2
     assert performance.planning_level == 1
     assert performance.resource_pressure == 0
@@ -127,6 +148,7 @@ def test_terminal_performance_counts_runtime_inefficiencies_without_changing_sta
     assert performance.duplicate_requests == 1
     assert performance.protocol_conflicts == 1
     assert performance.failed_finishes == 0
+    assert performance.goal_satisfied
 
 
 def test_terminal_performance_counts_rejected_finish_and_reports_failed_episode():
@@ -151,7 +173,9 @@ def test_terminal_performance_counts_rejected_finish_and_reports_failed_episode(
     assert terminal is not None and terminal.performance is not None
     assert terminal.observation.terminal_status.value == "won"
     assert terminal.performance.failed_finishes == 1
+    assert terminal.performance.finish_actions >= 2
     assert terminal.performance.action_delta_from_guaranteed_policy == 1
+    assert terminal.performance.goal_satisfied
 
     failing_episode = generate_episode(1723, discovery_level=0, planning_level=0)
     failing_episode.public.initial_state.resources.actions_remaining = 1
@@ -165,8 +189,14 @@ def test_terminal_performance_counts_rejected_finish_and_reports_failed_episode(
     assert failed.observation.terminal_status.value == "failed"
     assert failed.performance is not None
     assert failed.performance.actions_used == 1
+    assert failed.performance.wait_actions == 1
+    assert failed.performance.move_actions == 0
+    assert failed.performance.rooms_visited == 1
+    assert failed.performance.room_revisits == 0
     assert failed.performance.budget_remaining == 0
-
+    assert not failed.performance.goal_satisfied
+    assert failed.performance.satisfied_goal_leaf_count < failed.performance.goal_leaf_count
+    assert failed.performance.unsatisfied_goal_leaves
 
 
 @pytest.mark.slow

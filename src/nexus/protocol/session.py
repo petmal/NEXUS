@@ -1,14 +1,17 @@
 from __future__ import annotations
 
+from collections import Counter
 from threading import RLock
 
 from pydantic import BaseModel, ConfigDict, Field
 
 from nexus.engine.canonical import canonical_hash
 from nexus.engine.engine import step
-from nexus.models.actions import Action, FinishAction, ProbeAction
+from nexus.engine.goals import evaluate_goal
+from nexus.models.actions import Action, FinishAction, MoveAction, ProbeAction
 from nexus.models.episode import PrivateEpisode
 from nexus.models.events import TraceRecord
+from nexus.models.goals import GoalKind, GoalPredicate
 from nexus.models.observation import Observation
 from nexus.models.world import TerminalStatus, WorldState
 from nexus.render.text import observation
@@ -16,7 +19,7 @@ from nexus.render.text import observation
 
 PERFORMANCE_SCHEMA_URL = (
     "https://raw.githubusercontent.com/petmal/NEXUS/"
-    "6421ea6b00f8f4a682d7678d7a73e69493a34f0a/schemas/performance-v1.schema.json"
+    "49603fa023a9d38bd85c08b112c8f2f4ce1e051c/schemas/performance-v2.schema.json"
 )
 
 
@@ -40,6 +43,20 @@ class PerformanceSummary(BaseModel):
     action_delta_from_guaranteed_policy: int
     probes_used: int
     probe_delta_from_guaranteed_minimum: int
+    move_actions: int
+    wait_actions: int
+    take_actions: int
+    drop_actions: int
+    operate_actions: int
+    finish_actions: int
+    rooms_visited: int
+    room_revisits: int
+    reference_plan_move_actions: int
+    move_delta_from_reference_plan: int
+    goal_satisfied: bool
+    goal_leaf_count: int
+    satisfied_goal_leaf_count: int
+    unsatisfied_goal_leaves: tuple[str, ...]
     budget_remaining: int
     invalid_actions: int
     failed_finishes: int
@@ -68,6 +85,23 @@ class SessionStatus(BaseModel):
     status: TerminalStatus
     actions_remaining: int
     victory_code: str | None = None
+
+
+def _goal_leaves(goal: GoalPredicate) -> tuple[GoalPredicate, ...]:
+    if goal.kind in {GoalKind.AND, GoalKind.OR, GoalKind.NOT}:
+        return tuple(leaf for child in goal.children for leaf in _goal_leaves(child))
+    return (goal,)
+
+
+def _goal_leaf_label(goal: GoalPredicate) -> str:
+    value = goal.value.value if hasattr(goal.value, "value") else goal.value
+    if goal.kind == GoalKind.ARTIFACT_FIELD:
+        return f"artifact_field:{goal.artifact_id}.{goal.field}={value}"
+    if goal.kind == GoalKind.ARTIFACT_LOCATION:
+        return f"artifact_location:{goal.artifact_id}={value}"
+    if goal.kind == GoalKind.PHASE_EQUALS:
+        return f"phase_equals:{value}"
+    raise ValueError(f"unsupported atomic goal kind {goal.kind}")
 
 
 class Session:
@@ -112,10 +146,31 @@ class Session:
             return None
 
         metadata = self.episode.generation_metadata
-        probes_used = sum(isinstance(record.action, ProbeAction) for record in self.trace)
+        action_counts = Counter(record.action.type for record in self.trace)
+        probes_used = action_counts["probe"]
         guaranteed_policy_actions = metadata.guaranteed_policy_action_count
         if guaranteed_policy_actions <= 0:
             raise RuntimeError("terminal performance requires exact guaranteed-policy metadata")
+
+        visited_rooms = {self.episode.public.initial_state.agent_room}
+        room_revisits = 0
+        for record in self.trace:
+            if not isinstance(record.action, MoveAction):
+                continue
+            if record.action.target in visited_rooms:
+                room_revisits += 1
+            visited_rooms.add(record.action.target)
+
+        reference_plan_move_actions = sum(
+            item.get("type") == "move" for item in self.episode.reference_plan
+        )
+        goal_leaves = _goal_leaves(self.episode.public.goal)
+        unsatisfied_goal_leaves = tuple(
+            _goal_leaf_label(leaf)
+            for leaf in goal_leaves
+            if not evaluate_goal(leaf, self.state)
+        )
+
         return PerformanceSummary(
             discovery_level=metadata.discovery_level,
             planning_level=metadata.planning_level,
@@ -131,6 +186,24 @@ class Session:
             action_delta_from_guaranteed_policy=self.state.turn - guaranteed_policy_actions,
             probes_used=probes_used,
             probe_delta_from_guaranteed_minimum=probes_used - metadata.required_probe_count,
+            move_actions=action_counts["move"],
+            wait_actions=action_counts["wait"],
+            take_actions=action_counts["take"],
+            drop_actions=action_counts["drop"],
+            operate_actions=action_counts["operate"],
+            finish_actions=action_counts["finish"],
+            rooms_visited=len(visited_rooms),
+            room_revisits=room_revisits,
+            reference_plan_move_actions=reference_plan_move_actions,
+            move_delta_from_reference_plan=(
+                action_counts["move"] - reference_plan_move_actions
+            ),
+            goal_satisfied=evaluate_goal(self.episode.public.goal, self.state),
+            goal_leaf_count=len(goal_leaves),
+            satisfied_goal_leaf_count=(
+                len(goal_leaves) - len(unsatisfied_goal_leaves)
+            ),
+            unsatisfied_goal_leaves=unsatisfied_goal_leaves,
             budget_remaining=self.state.resources.actions_remaining,
             invalid_actions=self._invalid_actions,
             failed_finishes=self._failed_finishes,
