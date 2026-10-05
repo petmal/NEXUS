@@ -83,7 +83,7 @@ def test_terminal_performance_uses_signed_guaranteed_policy_deltas():
     assert payload["$schema"].startswith(
         "https://raw.githubusercontent.com/petmal/NEXUS/"
     )
-    assert payload["$schema"].endswith("/schemas/performance-v1.schema.json")
+    assert payload["$schema"].endswith("/schemas/performance-v2.schema.json")
     assert performance.discovery_level == 2
     assert performance.planning_level == 1
     assert performance.resource_pressure == 0
@@ -166,7 +166,6 @@ def test_terminal_performance_counts_rejected_finish_and_reports_failed_episode(
     assert failed.performance is not None
     assert failed.performance.actions_used == 1
     assert failed.performance.budget_remaining == 0
-
 
 
 @pytest.mark.slow
