@@ -141,6 +141,21 @@ class Session:
                 victory_code=victory_code,
             )
 
+    def finalize_attempt(self) -> tuple[SessionStatus, PerformanceSummary]:
+        """Irreversibly end an evaluator attempt and expose terminal-only diagnostics.
+
+        This is deliberately not part of the player request contract. If called while the world is
+        still active, the attempt becomes failed without consuming an environment action. That
+        makes premature access fail closed rather than providing a usable mid-game hint channel.
+        """
+        with self._lock:
+            if self.state.terminal_status == TerminalStatus.ACTIVE:
+                self.state.terminal_status = TerminalStatus.FAILED
+            performance = self._performance_summary()
+            if performance is None:
+                raise RuntimeError("finalized attempt did not produce terminal performance")
+            return self.status(), performance
+
     def _performance_summary(self) -> PerformanceSummary | None:
         if self.state.terminal_status == TerminalStatus.ACTIVE:
             return None

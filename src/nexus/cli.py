@@ -389,18 +389,23 @@ def validate_command(
     ),
     url: str | None = typer.Option(None, envvar="NEXUS_URL"),
 ) -> None:
-    """Validate a submitted victory code against a live single-session service."""
-    from nexus.protocol.client import ClientError, validate_candidate
+    """Finalize the attempt, validate its victory code, and log terminal diagnostics."""
+    from nexus.protocol.client import ClientError, validate_candidate_with_performance
 
     if (candidate is None) == (candidate_file is None):
         raise typer.BadParameter("provide exactly one of --candidate or --candidate-file")
 
     supplied = candidate if candidate is not None else candidate_file.read_text(encoding="utf-8")
     try:
-        result = validate_candidate(supplied, url=url)
+        result, performance = validate_candidate_with_performance(supplied, url=url)
     except ClientError as exc:
         typer.echo(f"validation failed: {exc}", err=True)
         raise typer.Exit(code=2) from exc
+    typer.echo(
+        "NEXUS terminal performance: "
+        + json.dumps(performance, sort_keys=True, separators=(",", ":")),
+        err=True,
+    )
     _write_json(result.model_dump(mode="json"))
 
 

@@ -11,6 +11,7 @@ from nexus.protocol.transport import (
     request_service_payload,
     service_url,
     validate_candidate_payload,
+    validate_candidate_payload_with_performance,
 )
 
 
@@ -66,3 +67,12 @@ def request_service(request: ServiceRequest, *, url: str | None = None) -> objec
 
 def validate_candidate(candidate: str, *, url: str | None = None) -> ValidationResult:
     return ValidationResult.model_validate(validate_candidate_payload(candidate, url=url))
+
+
+def validate_candidate_with_performance(
+    candidate: str,
+    *,
+    url: str | None = None,
+) -> tuple[ValidationResult, dict[str, object]]:
+    result, performance = validate_candidate_payload_with_performance(candidate, url=url)
+    return ValidationResult.model_validate(result), performance
