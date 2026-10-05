@@ -1,14 +1,17 @@
 from __future__ import annotations
 
+from collections import Counter
 from threading import RLock
 
 from pydantic import BaseModel, ConfigDict, Field
 
 from nexus.engine.canonical import canonical_hash
 from nexus.engine.engine import step
+from nexus.engine.goals import evaluate_goal
 from nexus.models.actions import Action, FinishAction, ProbeAction
 from nexus.models.episode import PrivateEpisode
 from nexus.models.events import TraceRecord
+from nexus.models.goals import GoalKind, GoalPredicate
 from nexus.models.observation import Observation
 from nexus.models.world import TerminalStatus, WorldState
 from nexus.render.text import observation
@@ -16,8 +19,39 @@ from nexus.render.text import observation
 
 PERFORMANCE_SCHEMA_URL = (
     "https://raw.githubusercontent.com/petmal/NEXUS/"
-    "6421ea6b00f8f4a682d7678d7a73e69493a34f0a/schemas/performance-v1.schema.json"
+    "c97df680fd9e08979eb25cce32b117db323bb600/schemas/performance-v2.schema.json"
 )
+
+
+def _normalized(value):
+    return value.value if hasattr(value, "value") else value
+
+
+def _goal_condition_label(goal: GoalPredicate) -> str:
+    if goal.kind == GoalKind.ARTIFACT_FIELD:
+        return f"{goal.artifact_id}.{goal.field}={_normalized(goal.value)}"
+    if goal.kind == GoalKind.ARTIFACT_LOCATION:
+        return f"{goal.artifact_id}.location={_normalized(goal.value)}"
+    if goal.kind == GoalKind.PHASE_EQUALS:
+        return f"phase={_normalized(goal.value)}"
+    return goal.model_dump_json(exclude_none=True)
+
+
+def _unsatisfied_goal_conditions(
+    goal: GoalPredicate,
+    state: WorldState,
+) -> tuple[str, ...]:
+    """Describe only terminal goal deficits; never used by player-facing observations."""
+    if evaluate_goal(goal, state):
+        return ()
+    if goal.kind == GoalKind.AND:
+        failures: list[str] = []
+        for child in goal.children:
+            failures.extend(_unsatisfied_goal_conditions(child, state))
+        return tuple(failures)
+    # OR/NOT are kept intact because flattening them into leaf failures could falsely imply that
+    # every child is independently required. Current generated goals are primarily conjunctions.
+    return (_goal_condition_label(goal),)
 
 
 class PerformanceSummary(BaseModel):
@@ -38,8 +72,19 @@ class PerformanceSummary(BaseModel):
     minimum_guaranteed_probes: int
     guaranteed_policy_actions: int
     action_delta_from_guaranteed_policy: int
+    action_delta_from_physical_optimum: int
     probes_used: int
     probe_delta_from_guaranteed_minimum: int
+    movement_actions: int
+    wait_actions: int
+    operate_actions: int
+    take_actions: int
+    drop_actions: int
+    finish_actions: int
+    unique_rooms_visited: int
+    room_revisits: int
+    goal_satisfied_at_terminal: bool
+    unsatisfied_goal_conditions: tuple[str, ...]
     budget_remaining: int
     invalid_actions: int
     failed_finishes: int
@@ -112,10 +157,24 @@ class Session:
             return None
 
         metadata = self.episode.generation_metadata
-        probes_used = sum(isinstance(record.action, ProbeAction) for record in self.trace)
+        action_counts = Counter(record.action.type for record in self.trace)
+        probes_used = action_counts["probe"]
         guaranteed_policy_actions = metadata.guaranteed_policy_action_count
         if guaranteed_policy_actions <= 0:
             raise RuntimeError("terminal performance requires exact guaranteed-policy metadata")
+
+        visited_rooms = {self.episode.public.initial_state.agent_room}
+        room_revisits = 0
+        for record in self.trace:
+            if record.action.type != "move":
+                continue
+            target = record.action.target
+            if target in visited_rooms:
+                room_revisits += 1
+            visited_rooms.add(target)
+
+        goal_satisfied = evaluate_goal(self.episode.public.goal, self.state)
+        unsatisfied = _unsatisfied_goal_conditions(self.episode.public.goal, self.state)
         return PerformanceSummary(
             discovery_level=metadata.discovery_level,
             planning_level=metadata.planning_level,
@@ -129,8 +188,19 @@ class Session:
             minimum_guaranteed_probes=metadata.required_probe_count,
             guaranteed_policy_actions=guaranteed_policy_actions,
             action_delta_from_guaranteed_policy=self.state.turn - guaranteed_policy_actions,
+            action_delta_from_physical_optimum=self.state.turn - metadata.optimal_action_count,
             probes_used=probes_used,
             probe_delta_from_guaranteed_minimum=probes_used - metadata.required_probe_count,
+            movement_actions=action_counts["move"],
+            wait_actions=action_counts["wait"],
+            operate_actions=action_counts["operate"],
+            take_actions=action_counts["take"],
+            drop_actions=action_counts["drop"],
+            finish_actions=action_counts["finish"],
+            unique_rooms_visited=len(visited_rooms),
+            room_revisits=room_revisits,
+            goal_satisfied_at_terminal=goal_satisfied,
+            unsatisfied_goal_conditions=unsatisfied,
             budget_remaining=self.state.resources.actions_remaining,
             invalid_actions=self._invalid_actions,
             failed_finishes=self._failed_finishes,
