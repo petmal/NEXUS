@@ -1,0 +1,105 @@
+{
+  "case": {
+    "d": 5,
+    "mode": "combined",
+    "p": 3,
+    "seed": 18
+  },
+  "code": "ae21d76e3c115e6f27960a5b966a684f229e27ce0b671c90b043041749d7336b",
+  "episode_hash": "dccd8aaf23dd98b58c2e21b2799944efe0b03e876d9034d1268113564c2f586d",
+  "guaranteed_optimum": 19,
+  "peak_rss_mib": 566.125,
+  "physical_optimum": 16,
+  "platform": "Linux-6.18.44-x86_64-with-glibc2.39",
+  "policy_hashes": [
+    "7a11d0dcb7763887aa5f11d74ef328638f63b32467644d4bd4d86ca0d5d025d2",
+    "5bb55243db9a2ba816a247e4c09c0599bae185a9fad41789b60319a97df2c7da",
+    "5bb55243db9a2ba816a247e4c09c0599bae185a9fad41789b60319a97df2c7da"
+  ],
+  "python": "3.14.7",
+  "seconds": 110.3219585349998,
+  "solver_stages": [
+    {
+      "event": "complete",
+      "hypotheses": 4,
+      "seconds": 0.09741815300003509,
+      "stage": "policy.hypothesis_physical"
+    },
+    {
+      "branch_entries": 52575,
+      "event": "complete",
+      "interned_states": 1204,
+      "memo_entries": 5940,
+      "memo_hits": 23351,
+      "seconds": 9.052514147999773,
+      "stage": "policy.minimax"
+    },
+    {
+      "event": "complete",
+      "seconds": 0.014386940999884246,
+      "stage": "policy.witness"
+    },
+    {
+      "branch_entries": 56578,
+      "event": "complete",
+      "interned_states": 1232,
+      "memo_entries": 6603,
+      "memo_hits": 28011,
+      "requested_values": 3,
+      "seconds": 0.8649937549998867,
+      "stage": "policy.action_values"
+    },
+    {
+      "event": "complete",
+      "seconds": 10.064101307999863,
+      "stage": "generation.core"
+    },
+    {
+      "event": "complete",
+      "hypotheses": 4,
+      "seconds": 1.4172552740001265,
+      "stage": "policy.hypothesis_physical"
+    },
+    {
+      "branch_entries": 413980,
+      "event": "complete",
+      "interned_states": 6384,
+      "memo_entries": 40467,
+      "memo_hits": 291006,
+      "seconds": 91.44491660099993,
+      "stage": "policy.minimax"
+    },
+    {
+      "event": "complete",
+      "seconds": 0.04789995500004807,
+      "stage": "policy.witness"
+    },
+    {
+      "branch_entries": 438387,
+      "event": "complete",
+      "interned_states": 6582,
+      "memo_entries": 43326,
+      "memo_hits": 335350,
+      "requested_values": 3,
+      "seconds": 6.514991352999914,
+      "stage": "policy.action_values"
+    },
+    {
+      "event": "complete",
+      "seconds": 99.73642166899981,
+      "stage": "generation.planning_dependency"
+    },
+    {
+      "event": "complete",
+      "seconds": 1.5519999578827992e-06,
+      "stage": "generation.resource_pressure"
+    },
+    {
+      "event": "complete",
+      "seconds": 0.5210744860000887,
+      "stage": "generation.qualification"
+    }
+  ],
+  "status": "ok",
+  "workers": 1
+}

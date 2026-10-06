@@ -6,10 +6,10 @@
     "exact": true,
     "seed": 19
   },
-  "code": "e403f647a894cc8ac18c99d2c7f5d3d7ca33faf58a321e407150d3b1ea343fc8",
-  "evidence_seconds": 0.9076569799999561,
+  "code": "a50d04442b461a44da8ff5b398cc8f766d54230fcd54fde518212b20f4cce975",
+  "evidence_seconds": 0.9840235179999581,
   "predictions": 2,
   "rows": 3,
-  "seconds": 0.9076587220000647,
+  "seconds": 0.9840255109997997,
   "status": "rejected_evidence"
 }

@@ -6,12 +6,12 @@
     "exact": true,
     "seed": 1
   },
-  "code": "e403f647a894cc8ac18c99d2c7f5d3d7ca33faf58a321e407150d3b1ea343fc8",
-  "evidence_seconds": 2.2779097159999537,
+  "code": "a50d04442b461a44da8ff5b398cc8f766d54230fcd54fde518212b20f4cce975",
+  "evidence_seconds": 2.1356816380002783,
   "minimum_guaranteed_probes": 0,
   "predictions": 2,
   "rows": 2,
-  "seconds": 2.279109747000007,
+  "seconds": 2.1369321260003744,
   "status": "rejected_discovery",
   "viable_hypotheses": 4
 }

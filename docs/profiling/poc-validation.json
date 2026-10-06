@@ -1,0 +1,24 @@
+{
+  "solver_cases": 20,
+  "semantic_groups_verified": 6,
+  "solver_code": "ae21d76e3c115e6f27960a5b966a684f229e27ce0b671c90b043041749d7336b",
+  "theory_cases": 60,
+  "theory_accepted": 49,
+  "theory_replayed_hypotheses": 89,
+  "theory_code": "a50d04442b461a44da8ff5b398cc8f766d54230fcd54fde518212b20f4cce975",
+  "theory_status_counts": {
+    "ok": 49,
+    "rejected_discovery": 9,
+    "rejected_evidence": 2
+  },
+  "cpu_batch_serial_seconds": 215.54198471600012,
+  "cpu_batch_parallel_seconds": 125.41723068600004,
+  "cpu_batch_throughput_factor": 1.7185994582804995,
+  "pytest_passed": 102,
+  "pytest_deselected": 32,
+  "pytest_warnings": 2,
+  "pytest_seconds": 50.28,
+  "cpu_semantic_equality": true,
+  "resume_timeout_retry_skip_verified": true,
+  "theory_paired_action_costs_equal": true
+}

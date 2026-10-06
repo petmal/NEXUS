@@ -1,6 +1,6 @@
 # Solver and T1 performance PoCs
 
-Status: measurements in progress; see performance-poc-progress.md for the resumable checklist.
+Status: bounded PoCs and measurements complete; see performance-poc-progress.md for commands.
 Base: diagnostics PR #2, `75d5bda`. Experimental code is opt-in; production CLI/service behavior
 and supported difficulty profiles are unchanged. Do not merge as a production T-axis release.
 
@@ -75,11 +75,24 @@ production change after review. The PoC keeps both opt-in. Neither depends on re
 
 ## T1/P2 feasibility
 
-The initial 20-seed sweep (0–19) accepted 20/20 D0, 18/20 D1 and 11/20 D2 cases. Every accepted
+The final 20-seed sweep (0–19) accepted 20/20 D0, 18/20 D1 and 11/20 D2 cases. Every accepted
 policy replayed against all viable hypotheses at its exact proved action budget. D0 retained one
 behavior using four evidence rows; accepted D1 retained two with one mission prediction using
 three rows; accepted D2 retained four evidence-consistent laws, of which three were physically
 viable, using two rows. Rejected cases are retained rather than silently rerolled.
+
+| T1/P2 profile | Accepted / attempted | Median accepted case seconds | Median exact policy seconds |
+| --- | ---: | ---: | ---: |
+| D0 | 20 / 20 | 0.746 | 0.0134 |
+| D1 | 18 / 20 | 0.766 | 0.0174 |
+| D2 | 11 / 20 | 0.777 | 0.0417 |
+
+Case time includes universe/evidence construction, T0 paired-world generation, T1 solve and
+replay, but excludes interpreter startup. Peak RSS was about 60–61 MiB. All 49 accepted T1
+cases had the same exact guaranteed action cost as their paired T0 case. Thus this sample
+supports changing the supplied theory without adding physical action cost; it does not show
+whether models find the T1 version harder. Across these cases, 89 viable-hypothesis paths
+replayed successfully. State-limit exhaustion is an error, never a proof of physical impossibility.
 
 The important failure mode is semantic: a candidate set can have multiple mission predictions
 yet admit a probe-free strategy after using the public goal and physical-solvability promise.
@@ -104,13 +117,61 @@ The shared recursive minimax is not cheaply parallelized by wrapping its branche
 The pinned Pydantic core rejects subinterpreter imports. GPU execution would require a different
 numeric search representation and exactness proofs; no GPU speedup is claimed.
 
+| Same two cold D5/P3 episodes, combined mode | One worker | Two workers |
+| --- | ---: | ---: |
+| End-to-end batch seconds | 215.54 | 125.42 |
+| Seed 17 generation seconds | 99.87 | 110.70 |
+| Seed 18 generation seconds | 110.32 | 122.58 |
+| Seed 17 child peak MiB | 544.16 | 544.21 |
+| Seed 18 child peak MiB | 566.12 | 565.79 |
+
+The two-worker batch has 1.72x throughput (41.8% less elapsed batch time), with identical
+episode/policy hashes across worker counts. Individual episodes were about 11% slower under
+concurrency. Use this for preparation throughput, not as a single-search latency optimization.
+Per-child memory stayed stable; aggregate peak memory was not measured. No new dependency
+was needed. The serial repetition also reproduced the earlier combined timings closely.
+
+## Recommended next decisions
+
+1. Promote the combined solver optimization through normal production review and broader
+   stress coverage. It preserves exact semantics in the measured cases and removes most of
+   the per-episode memory cost. Keep a baseline path for future differential tests.
+2. For fresh-seed preparation batches, start with two process workers and an explicit memory
+   budget. Sample seeds at run preparation time, compile once per task, then share the same
+   compiled task across models. Different R seeds remain supported; cross-world cache hits
+   are not assumed by these optimizations.
+3. Continue T1 at P2 as a bounded integration project. Improve/review evidence selection and
+   law-sampling bias before treating D1/D2 rejection rates as production-ready. Recompute
+   budgets from T1 policies; do not serve the research copy with stale T0 metadata/qualification.
+4. Run paired model evaluations only after that integration. Generator feasibility does not
+   prove better discrimination between models. Retain a small P3 stress track for dependency
+   coordination, which T1 tests do not replace.
+5. Defer a GPU backend and fine-grained recursive parallelism. They require substantial
+   representation/search work, whereas the measured compact-state and batch changes already
+   provide useful gains without changing the engine or adding a distributed framework.
+
 ## Resuming
 
 Use performance-poc-progress.md. Completed case files are skipped only when their input and
 code fingerprint match. Keep output directories distinct when comparing worker counts. Do not
 edit measured code while a benchmark is running. A timeout/error is retained and retried on
 the next invocation; incomplete temporary files are never treated as completed measurements.
+`batch.json` describes the latest invocation; a resume with skipped cases is not a fresh full
+batch throughput measurement. Use a new output directory for timing repetitions and preserve
+the original batch report. Per-case completed results remain intact when skipped.
 
 The assistant cannot read credit balances or the allowance reset timer. These checkpoints let
 work resume after a reset without repeating completed matching cases; they do not schedule or
 control billing. No model API evaluations or repeated paid CI stress runs were launched.
+
+## Verification
+
+- 102 fast unit/integration tests passed in 50.28 seconds; 32 slow/stress tests deselected.
+  The two Pydantic enum-serialization fixture warnings already existed on the diagnostic base.
+- 20 solver ablation cases, six semantic comparison groups, all exact outputs matched.
+- Two serial and two parallel cold cases, with cross-worker episode/policy equality verified.
+- T1 compositional exhaustive branch/condition checks across the full domain, all 288 T0
+  members, an independent ordinary-action minimax fixture, and 60 generation/evidence cases.
+- Timeout/retry/resume smoke: timed-out case reran successfully, then matching success was
+  skipped with zero new generation work. No changes to runtime code during final measurements.
+- Full release stress and LLM capability evaluation are follow-on work, not claimed here.
