@@ -21,7 +21,8 @@ T axis yet. A single seed schedule is a smoke/calibration pass, not a leaderboar
 The P3 prediction overlaps P2 because the added dependency can be easy for a model with good
 state tracking. R2 is especially severe: the solver baseline knows topology, while a player may
 spend actions discovering it. Failure here is not sufficient evidence of poor causal inference.
-Prior observed D5/P3/R1–R2 failures motivate those cells; they do not establish a universal ranking.
+Four clean prior 8/10 model runs failed D5/P3/R1–R2; those observations motivate the last cells
+but do not establish a universal ranking. See the [run investigation](terminal-diagnostics-generation-findings.md).
 
 ## Seed and harness setup
 

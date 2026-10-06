@@ -1,6 +1,8 @@
 # Terminal diagnostics and D5/P3 generation investigation
 
-Continuation of `feat/terminal-diagnostics-generation-profile`, based on `124be3d` (PR #2).
+Historical investigation from PR #2, based on `124be3d`. The integrated production
+contract is now v3; see [integration evidence](solver-optimization-evidence.md).
+The paragraph below describes the branch state at the time of that investigation.
 The parallel PR #3 has a different v2 schema; do not combine those schemas or cherry-pick its
 schema URL into this branch. This continuation uses PR #2's published v2 contract and evaluator
 finalization. It fixes two integration gaps: the fast `nexus validate` entrypoint now prints the

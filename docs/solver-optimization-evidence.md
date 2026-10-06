@@ -42,7 +42,7 @@ Check out archive commit `49965c2128e187bae5be87224c7d02a5fed16b97` separately, 
 
 ```sh
 uv run python scripts/verify_solver_integration.py --reference ../nexus-reference \
-  --output docs/profiling/integration
+  --output docs/profiling/integration-final
 ```
 
 The runner checks complete episode hashes and successful exact policy hashes (excluding only
@@ -54,3 +54,6 @@ as the oracle; its equivalence to the former baseline is established in the earl
 The official operator profiler remains `scripts/profile_generation.py`. Run it in a fresh process
 with `--json-out`, optionally `--cprofile`, for a deployment host. Nested stage timings must not be
 summed. Never expose profiler output/private episode artifacts to a playing model.
+
+Use `--jobs 2` for bounded independent correctness cases. Such concurrent timings are not isolated
+latency comparisons. The runner refuses acceptance if source fingerprints change during the run.
