@@ -2,8 +2,34 @@
 
 from contextlib import contextmanager
 from contextvars import ContextVar
+from dataclasses import dataclass
 
 SEARCH_MODE = ContextVar("nexus_solver_experiment", default="baseline")
+PLANNING_SEARCH = ContextVar("nexus_planning_search", default="ordinary")
+PLANNING_MODES = ("ordinary", "certificate", "parallel-certificate")
+
+
+@contextmanager
+def planning_experiment(mode: str):
+    if mode not in PLANNING_MODES:
+        raise ValueError(f"unknown planning experiment: {mode}")
+    token = PLANNING_SEARCH.set(mode)
+    try:
+        yield
+    finally:
+        PLANNING_SEARCH.reset(token)
+
+
+@dataclass(frozen=True)
+class BudgetDecision:
+    can_win: bool
+    viable_hypotheses: int
+    memo_entries: int = 0
+    branch_entries: int = 0
+    memo_hits: int = 0
+    seconds: float = 0
+
+
 MODES = ("baseline", "intern", "bounds", "combined")
 
 

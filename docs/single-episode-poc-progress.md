@@ -47,3 +47,24 @@ existing research branch, never main or the public MindTrial repository.
 
 No balance/reset-time access exists; checkpoints make manual resumption independent
 of allowance boundaries.
+
+## Implementation checkpoint
+
+Implemented ordinary / sequential certificate / parallel certificate variants. The
+parallel variant runs the K-1 decision in one spawned worker while the parent computes
+K and retains its memo for the witness and action values. Failed certificates are no
+longer cached as exhausted optimization searches; generation falls back to ordinary
+optimization on certificate failure.
+
+Focused validation: 23 existing solver tests + 11 new decision/certificate/spawn tests
+passed. Environment restored with `uv sync --frozen --all-extras` (Python 3.14.7).
+Pilot command (currently running; no performance conclusions yet):
+
+```sh
+uv run python scripts/benchmark_single_episode.py --seeds 17 --timeout 300 \
+  --out docs/profiling/poc-single-episode-pilot
+```
+
+The benchmark uses explicit process groups and kills the whole child group on timeout.
+Measurements include worker shutdown. The result fingerprint covers source, runner,
+shared runner helpers, and lockfile. Do not edit measured files during a running batch.

@@ -6,6 +6,7 @@ import json
 from collections import OrderedDict, deque
 from dataclasses import dataclass
 from itertools import count, product
+from time import perf_counter
 
 from pydantic import BaseModel, ConfigDict
 
@@ -26,7 +27,7 @@ from nexus.models.actions import (
 from nexus.models.episode import PrivateEpisode
 from nexus.models.rules import Effect
 from nexus.models.world import INVENTORY, TerminalStatus, WorldState
-from nexus.solver.experiments import BudgetMemo, SEARCH_MODE
+from nexus.solver.experiments import BudgetDecision, BudgetMemo, PLANNING_SEARCH, SEARCH_MODE
 from nexus.solver.search import (
     SearchStateKey,
     goal_field_artifact_ids,
@@ -511,6 +512,31 @@ def solve_guaranteed_policy(
     requested_action_values: tuple[Action, ...] | None = None,
     minimum_guaranteed_probes: int | None = None,
 ) -> BeliefPolicyResult:
+    result = _solve_policy(
+        episode, candidate_rules_by_machine=candidate_rules_by_machine,
+        max_actions=max_actions, max_physical_states=max_physical_states,
+        max_hypotheses=max_hypotheses, expected_actions=expected_actions,
+        include_action_values=include_action_values,
+        requested_action_values=requested_action_values,
+        minimum_guaranteed_probes=minimum_guaranteed_probes,
+    )
+    assert isinstance(result, BeliefPolicyResult)
+    return result
+
+
+def _solve_policy(
+    episode: PrivateEpisode,
+    *,
+    candidate_rules_by_machine: dict[str, list[Effect]],
+    max_actions: int,
+    max_physical_states: int = 100_000,
+    max_hypotheses: int = 256,
+    expected_actions: int | None = None,
+    include_action_values: bool = True,
+    requested_action_values: tuple[Action, ...] | None = None,
+    minimum_guaranteed_probes: int | None = None,
+    decision_budget: int | None = None,
+) -> BeliefPolicyResult | BudgetDecision:
     """Solve the exact minimum worst-case total-action policy.
 
     Movement is compressed into deterministic shortest-path macro costs. The proof that this
@@ -555,7 +581,7 @@ def solve_guaranteed_policy(
             for key in reversed(tuple(_POLICY_RESULT_CACHE.keys()))
             if key[:3] == cache_key[:3] and key != cache_key
         )
-    for candidate_key in cache_candidates:
+    for candidate_key in (() if decision_budget is not None else cache_candidates):
         cached = _POLICY_RESULT_CACHE.get(candidate_key)
         if cached is None:
             continue
@@ -571,7 +597,8 @@ def solve_guaranteed_policy(
 
     machine_ids = tuple(sorted(candidate_rules_by_machine))
     if not machine_ids or any(not candidate_rules_by_machine[item] for item in machine_ids):
-        return BeliefPolicyResult(solvable=False, viable_hypothesis_count=0)
+        return (BudgetDecision(False, 0) if decision_budget is not None
+                else BeliefPolicyResult(solvable=False, viable_hypothesis_count=0))
 
     combinations = tuple(
         dict(zip(machine_ids, rules))
@@ -599,7 +626,8 @@ def solve_guaranteed_policy(
         timing["hypotheses"] = len(hypothesis_episodes)
 
     if not hypothesis_episodes:
-        return BeliefPolicyResult(solvable=False, viable_hypothesis_count=0)
+        return (BudgetDecision(False, 0) if decision_budget is not None
+                else BeliefPolicyResult(solvable=False, viable_hypothesis_count=0))
 
     initial_belief = frozenset(range(len(hypothesis_episodes)))
     initial_state = _normalize_state(episode.public.initial_state, search_budget)
@@ -736,6 +764,12 @@ def solve_guaranteed_policy(
         memo[key] = False
         return False
 
+    if decision_budget is not None:
+        started = perf_counter()
+        answer = can_win(initial_state, initial_belief, decision_budget)
+        return BudgetDecision(answer, len(hypothesis_episodes), len(memo),
+                              len(branch_cache), memo.hits, perf_counter() - started)
+
     lower_bound = max(hypothesis_physical_optima)
     optimal: int | None = None
     with timed_stage("policy.minimax") as timing:
@@ -745,19 +779,48 @@ def solve_guaranteed_policy(
                     optimal = action_budget
                     break
         else:
-            sufficient = (
-                expected_actions >= lower_bound
-                and can_win(initial_state, initial_belief, expected_actions)
-            )
-            minimal = (
-                expected_actions == lower_bound
-                or (
-                    expected_actions > lower_bound
-                    and not can_win(initial_state, initial_belief, expected_actions - 1)
+            # A spawned worker proves minimality while the parent retains the winning
+            # search table for deterministic witness and action-value construction.
+            executor = None
+            future = None
+            if PLANNING_SEARCH.get() == "parallel-certificate" and expected_actions > lower_bound:
+                from concurrent.futures import ProcessPoolExecutor
+                import multiprocessing
+                from nexus.solver.single_episode import budget_decision_worker
+
+                executor = ProcessPoolExecutor(
+                    max_workers=1, mp_context=multiprocessing.get_context("spawn")
                 )
-            )
-            if sufficient and minimal:
-                optimal = expected_actions
+                future = executor.submit(
+                    budget_decision_worker, episode, candidate_rules_by_machine,
+                    max_actions, expected_actions - 1, max_physical_states,
+                    max_hypotheses, mode,
+                )
+            try:
+                with timed_stage("policy.certificate_sufficient"):
+                    sufficient = (expected_actions >= lower_bound and
+                                  can_win(initial_state, initial_belief, expected_actions))
+                with timed_stage("policy.certificate_minimal") as proof_timing:
+                    if future is not None:
+                        decision = future.result()
+                        if decision.viable_hypotheses != len(hypothesis_episodes):
+                            raise RuntimeError("parallel proof disagrees on viable hypotheses")
+                        minimal = not decision.can_win
+                        proof_timing.update({
+                            "worker_search_seconds": decision.seconds,
+                            "worker_memo_entries": decision.memo_entries,
+                            "worker_branch_entries": decision.branch_entries,
+                            "worker_memo_hits": decision.memo_hits,
+                        })
+                    else:
+                        minimal = (expected_actions == lower_bound or
+                                   (expected_actions > lower_bound and not can_win(
+                                       initial_state, initial_belief, expected_actions - 1)))
+                if sufficient and minimal:
+                    optimal = expected_actions
+            finally:
+                if executor is not None:
+                    executor.shutdown(wait=True, cancel_futures=True)
         timing["memo_entries"] = len(memo)
         timing["branch_entries"] = len(branch_cache)
         timing["interned_states"] = len(states)
@@ -905,6 +968,10 @@ def solve_guaranteed_policy(
     # Cache pure exact results for both optimizer and fixed-cost certificate calls. A successful
     # certificate proves the same exact optimum; an exhausted result is reusable only through its
     # stored bound (enforced by _adapt_cached_result).
+    # A failed certificate can mean K is too high OR too low. Neither proves
+    # exhaustion through max_actions; do not let it poison a later optimizer query.
+    if expected_actions is not None and optimal is None:
+        return result
     return _cache_result(cache_key, max_actions, result)
 
 

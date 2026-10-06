@@ -64,6 +64,7 @@ from nexus.models.world import (
     WorldState,
 )
 from nexus.solver.belief import solve_compressed_physical, solve_guaranteed_policy
+from nexus.solver.experiments import PLANNING_SEARCH
 
 
 class GenerationError(RuntimeError):
@@ -1249,8 +1250,7 @@ def _add_planning_dependency(episode: PrivateEpisode) -> PrivateEpisode:
                 ProbeAction(machine="M1", artifact="A1"),
                 OperateAction(machine="M3", artifact="A3"),
             )
-        policy = solve_guaranteed_policy(
-            trial,
+        policy_options = dict(
             candidate_rules_by_machine=candidate_rules,
             max_actions=min(
                 GENERATION_SOLVER_BUDGET,
@@ -1259,6 +1259,16 @@ def _add_planning_dependency(episode: PrivateEpisode) -> PrivateEpisode:
             include_action_values=needs_decision_values,
             requested_action_values=requested_action_values,
         )
+        if PLANNING_SEARCH.get() == "ordinary":
+            policy = solve_guaranteed_policy(trial, **policy_options)
+        else:
+            policy = solve_guaranteed_policy(
+                trial, expected_actions=base_guaranteed + overhead, **policy_options
+            )
+            if not policy.solvable:
+                # Preserve ordinary candidate rejection and exact diagnostic semantics.
+                policy = solve_guaranteed_policy(trial, **policy_options)
+
 
         if (
             not policy.solvable
