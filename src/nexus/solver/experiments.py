@@ -6,7 +6,7 @@ from dataclasses import dataclass
 
 SEARCH_MODE = ContextVar("nexus_solver_experiment", default="baseline")
 PLANNING_SEARCH = ContextVar("nexus_planning_search", default="ordinary")
-PLANNING_MODES = ("ordinary", "certificate", "parallel-certificate")
+PLANNING_MODES = ("ordinary", "certificate", "parallel-certificate", "parallel-root", "reuse", "reuse-certificate", "reuse-parallel")
 
 
 @contextmanager

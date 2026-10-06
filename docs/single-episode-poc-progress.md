@@ -68,3 +68,54 @@ uv run python scripts/benchmark_single_episode.py --seeds 17 --timeout 300 \
 The benchmark uses explicit process groups and kills the whole child group on timeout.
 Measurements include worker shutdown. The result fingerprint covers source, runner,
 shared runner helpers, and lockfile. Do not edit measured files during a running batch.
+
+## Expanded implementation checkpoint
+
+Pilots (seed 17; exploratory timings, not final matched-source comparisons):
+
+- Ordinary combined: 108.26 s end to end.
+- Sequential certificate: 105.23 s.
+- Parallel certificate: 119.55 s; lost memo reuse increases CPU and follow-up work.
+- Two root shards plus parent: 122.18 s; sampled aggregate RSS 1152 MiB.
+- Transition/route/choice reuse: 29.35 s.
+- Reuse + sequential certificate: 26.55 s.
+- Reuse + parallel certificate: 32.56 s.
+
+Episode and policy hashes match. The first three pilot RSS readings are INVALID (zero):
+namespace PIDs differed from /proc PIDs. The sampler now resolves NSpid plus namespace
+identity before measuring process groups. The later pilots have valid sampled memory;
+pilot CPU counters are taken before interpreter shutdown. Final supervisor CPU counters
+include completed child/descendant usage through shutdown. Timeout CPU is null because
+killed grandchildren may not be accounted to their parent.
+
+A cProfile D5/P2 run found deep copying at ~60% of cumulative runtime. A bounded cache
+now reuses macro choices by normalized state, routes by state/route, and transitions
+by state/route/action/hypothesis (law-independent actions share one result). Caches last
+only for one solver call; belief-group assembly remains exact and separate. No-op routes
+reuse the existing solver-owned state; engine.step continues copying before mutation.
+No cached mutable state is mutated by this optimization.
+
+Validation before final timings: 136 fast tests passed, 32 deselected, two existing
+Pydantic fixture warnings. After import/style cleanup, all 34 new tests passed again.
+Ruff checks pass for the solver, diagnostics, runner and new tests. The generator has
+pre-existing lint findings (unused import, pairwise, unnecessary encoding arguments);
+no unrelated cleanup/toolchain migration is included. No ty/basedpyright gate exists.
+
+Final command (run cases serially; allow each case to use its own bounded processes):
+
+```sh
+uv run python scripts/benchmark_single_episode.py --seeds 17 18 19 \
+  --variants ordinary reuse reuse-certificate reuse-parallel \
+  --out docs/profiling/poc-single-episode
+```
+
+Then repeat the control and best serial variant in reversed order for seed 17:
+
+```sh
+uv run python scripts/benchmark_single_episode.py --seeds 17 \
+  --variants ordinary reuse-certificate --repeat 2 \
+  --out docs/profiling/poc-single-episode
+```
+
+The first repeat's existing cases should be skipped. Final findings and validation
+record remain pending. Source and runner must remain frozen while these runs execute.
