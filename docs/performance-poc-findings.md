@@ -53,7 +53,25 @@ P3 interning retains 6,525 distinct semantic states despite 417,472 branch-cache
 Bounds reduce memo records from 180,409 exact-budget entries to about 41,794 intervals but
 leave most transition work intact. This explains why interning drives memory savings while
 budget bounds alone have modest benefit. Combined P3 is 1.58x as fast and uses 86.6% less
-peak memory in this seed. More-seed and worker-count measurements follow below when complete.
+peak memory in this seed.
+
+### Additional seeds, measured without other benchmark work
+
+| Seed | Profile | Baseline seconds / MiB | Intern seconds / MiB | Combined seconds / MiB |
+| --- | --- | ---: | ---: | ---: |
+| 18 | D5/P2 | 14.75 / 528 | 10.28 / 116 | 9.94 / 115 |
+| 19 | D5/P2 | 13.99 / 536 | 10.62 / 117 | 9.55 / 117 |
+| 18 | D5/P3 | 178.96 / 4278 | 122.56 / 591 | 110.55 / 566 |
+| 19 | D5/P3 | 170.60 / 4521 | 113.87 / 617 | 106.86 / 595 |
+
+All 20 ablation cases completed; all six seed/profile groups had identical compiled episodes
+and policy outputs across modes. Combined P3 generation is 37–38% faster with 86.6–86.8%
+less peak memory across these three seeds. This is a meaningful improvement for fresh worlds,
+especially where simultaneous 4-GiB services caused memory pressure; actual MindTrial startup
+under contention has not been measured here. Generation still takes about 99–111 seconds.
+
+Recommendation: promote state interning and monotone bounds together through a focused
+production change after review. The PoC keeps both opt-in. Neither depends on reusing seeds.
 
 ## T1/P2 feasibility
 

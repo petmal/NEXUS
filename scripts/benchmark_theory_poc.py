@@ -24,7 +24,10 @@ def replay_policy(episode, candidates, witness):
     replayed = 0
     for rule in candidates:
         world = _episode_for_hypothesis(episode, {"M1": rule}, search_budget=witness.remaining_budget)
-        if not solve_compressed_physical(world).solvable:
+        physical = solve_compressed_physical(world)
+        if physical.exhausted_state_limit:
+            raise RuntimeError("cannot certify hypothesis viability after physical state exhaustion")
+        if not physical.solvable:
             continue
         state, node = world.public.initial_state, witness
         while node:
@@ -94,9 +97,11 @@ def run_case(case):
             report["policy_seconds"] = time.perf_counter() - solve_started
             report["solvable"] = policy.solvable
             report["guaranteed_actions"] = policy.optimal_worst_case_actions
+            report["t0_guaranteed_actions"] = episode.generation_metadata.guaranteed_policy_action_count
             report["paired_world_hash"] = paired
             assert policy.solvable and policy.witness
             report["replayed_hypotheses"] = replay_policy(episode, candidates, policy.witness)
+            assert report["replayed_hypotheses"] == policy.viable_hypothesis_count
     report.update(status="ok", seconds=time.perf_counter() - started, peak_rss_mib=_peak_rss_mb())
     return report
 

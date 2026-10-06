@@ -1,6 +1,7 @@
 # Resume record
 
-Status: solver and T1 PoCs implemented; final solver measurements running.
+Status: solver and T1 PoCs implemented; three-seed solver measurements complete;
+CPU batch comparison and final regression running.
 
 Read AGENTS.md and docs/performance-poc-plan.md. Base is diagnostic PR #2 at 75d5bda.
 Use poc/solver-theory-performance, never main. No changes to public MindTrial.
@@ -41,6 +42,8 @@ uv run python scripts/benchmark_theory_poc.py --seeds 0 1 2 3 4 5 6 7 8 9 10 11 
 uv run pytest -q -m 'not slow and not stress' tests/unit tests/integration --maxfail=1
 ```
 
-Seed 18 solver comparisons have also completed; seed 19 and the CPU throughput comparison
-are in progress. No source edits during final measurements. Extra certificate regression cases
-were added to the test suite (tests are outside the measured runtime fingerprint).
+All 20 solver ablation cases completed, with semantic identity in all six seed/profile groups.
+Combined D5/P3 is 37–38% faster and uses 86.6–86.8% less peak memory over seeds 17–19.
+The CPU throughput comparison is in progress. Extra certificate regression cases were added
+to the test suite. The T1 replay guard now fails on exhausted viability searches, and the final
+T1 refresh records paired T0 policy cost as well. These changes do not affect solver timing.
