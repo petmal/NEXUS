@@ -4,9 +4,10 @@
 from __future__ import annotations
 
 import argparse
-from concurrent.futures import ProcessPoolExecutor
+from concurrent.futures import ProcessPoolExecutor, as_completed
 import hashlib
 import json
+import logging
 import multiprocessing
 import os
 from pathlib import Path
@@ -39,6 +40,17 @@ def run_case(case):
     import nexus.generator.qualify as qualifier
     from nexus.solver.experiments import solver_experiment
     import profile_generation as profile
+    from nexus.diagnostics import logger
+
+    stages = []
+    class CaptureStages(logging.Handler):
+        def emit(self, record):
+            value = getattr(record, "generation_timing", None)
+            if value is not None:
+                stages.append(value)
+    logger.addHandler(CaptureStages())
+    logger.setLevel(logging.INFO)
+    logger.propagate = False
 
     policies = []
     original = generator.solve_guaranteed_policy
@@ -66,6 +78,7 @@ def run_case(case):
         "physical_optimum": metadata.optimal_action_count,
         "guaranteed_optimum": metadata.guaranteed_policy_action_count,
         "python": platform.python_version(), "platform": platform.platform(),
+        "solver_stages": stages,
     }
 
 
@@ -121,7 +134,8 @@ def main():
     else:
         executor = ProcessPoolExecutor(max_workers=args.workers,
                                        mp_context=multiprocessing.get_context("spawn"))
-        results = executor.map(dispatch, pending)
+        futures = [executor.submit(dispatch, job) for job in pending]
+        results = (future.result() for future in as_completed(futures))
     try:
         for result in results:
             result["code"] = code

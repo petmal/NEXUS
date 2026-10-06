@@ -538,7 +538,7 @@ def solve_guaranteed_policy(
     )
     mode = SEARCH_MODE.get()
     if mode != "baseline":
-        selection_key = (mode, *selection_key)
+        semantic_key = f"{semantic_key}|experiment={mode}"
     cache_key = (
         semantic_key,
         max_physical_states,
@@ -546,7 +546,7 @@ def solve_guaranteed_policy(
         selection_key,
     )
     cache_candidates = [cache_key]
-    if not include_action_values and mode == "baseline":
+    if not include_action_values:
         # A richer exact result contains the same minimax proof plus action-value analysis. A
         # no-action-value query may therefore reuse it, subject to the existing proof-bound
         # checks in _adapt_cached_result. Never reuse a weaker entry for a richer query.

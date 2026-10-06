@@ -34,3 +34,19 @@ def test_context_restores_after_failure():
     with pytest.raises(RuntimeError), solver_experiment("combined"):
         raise RuntimeError("interrupted")
     assert SEARCH_MODE.get() == "baseline"
+
+
+@pytest.mark.parametrize("mode", MODES)
+def test_each_mode_reuses_richer_proof_without_resolving(monkeypatch, mode):
+    import nexus.solver.belief as solver
+    _POLICY_RESULT_CACHE.clear()
+    episode = _episode()
+    candidates = {"M1": [_rule(0, 4), _rule(1, 5), _rule(2, 6)]}
+    with solver_experiment(mode):
+        rich = solve_guaranteed_policy(episode, candidate_rules_by_machine=candidates, max_actions=8)
+        def unexpected(*args, **kwargs):
+            raise AssertionError("qualification recomputed an existing richer proof")
+        monkeypatch.setattr(solver, "solve_compressed_physical", unexpected)
+        proof = solve_guaranteed_policy(episode, candidate_rules_by_machine=candidates,
+                                       max_actions=8, include_action_values=False)
+    assert proof.witness == rich.witness

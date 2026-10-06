@@ -1,15 +1,36 @@
 # Resume record
 
-Status: plan committed; implementation next.
+Status: solver and T1 PoCs implemented; final solver measurements running.
 
 Read AGENTS.md and docs/performance-poc-plan.md. Base is diagnostic PR #2 at 75d5bda.
 Use poc/solver-theory-performance, never main. No changes to public MindTrial.
 
 Completed: remote base verified byte-for-byte; Python 3.14.7 frozen dependencies installed.
-Next: implement opt-in state interning and budget bounds, fresh-process differential benchmark.
+Solver modes baseline/intern/bounds/combined implemented; 10 differential/cache tests pass.
+T1 compact grammar has 41,472 syntax forms / 27,120 behaviors. Four proof tests pass,
+including all T0 membership, full-domain branch/condition equivalence, and a tiny independent
+ordinary-action minimax comparison. First 20-seed exact T1/P2 sweep: D0 20/20 accepted,
+D1 18/20, D2 11/20. All accepted policies replayed over every viable hypothesis at their
+proved action budget. Rejections retained; this is conditional on current T0-selected families.
+
+Next: finish solver seed-17 ablations, extend baseline/intern/combined to seeds 18/19, compare
+one/two process workers, rerun T1 reports on the final code fingerprint, run fast regression.
+
+Important: docs/profiling/poc-solver-pilot is a superseded timing pilot. Experimental modes
+initially missed richer cached proof reuse during qualification; corrected by separating cache
+semantic keys per mode and retaining normal richer-proof lookup. Do not report pilot speedups.
+Pinned pydantic_core fails loading in Python 3.14 subinterpreters; use process workers.
 
 Setup: `uv sync --frozen --all-extras`.
 Existing proof gate: `uv run pytest -q tests/unit/test_belief_policy.py tests/unit/test_solver_performance_invariants.py`.
 
 Results and commands will be appended at each phase boundary. Do not infer that a launched
 benchmark completed; inspect its atomic JSON result and code fingerprint.
+
+Resume commands (fresh processes and atomic files; matching completed cases are skipped):
+
+```bash
+uv run python scripts/benchmark_solver_poc.py --seeds 17 --planning 2 3 --out docs/profiling/poc-solver
+uv run python scripts/benchmark_solver_poc.py --seeds 18 19 --planning 2 3 --modes baseline intern combined --out docs/profiling/poc-solver
+uv run python scripts/benchmark_theory_poc.py --seeds 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 --exact
+```
