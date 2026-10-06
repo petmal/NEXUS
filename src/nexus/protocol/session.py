@@ -26,7 +26,9 @@ PERFORMANCE_SCHEMA_URL = (
 class PerformanceSummary(BaseModel):
     """Terminal-only evaluation telemetry derived from trusted episode data and the live trace."""
 
-    model_config = ConfigDict(extra="forbid", frozen=True, populate_by_name=True)
+    model_config = ConfigDict(
+        extra="forbid", frozen=True, populate_by_name=True, serialize_by_alias=True,
+    )
 
     schema_url: str = Field(default=PERFORMANCE_SCHEMA_URL, alias="$schema")
     discovery_level: int

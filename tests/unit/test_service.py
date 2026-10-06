@@ -10,6 +10,7 @@ from nexus.protocol.client import (
     validate_candidate_with_performance,
 )
 from nexus.protocol.http import create_single_session_app
+from nexus.protocol.session import PERFORMANCE_SCHEMA_URL
 from nexus.verification.receipt import victory_receipt
 
 
@@ -44,6 +45,8 @@ def test_single_session_http_app_has_no_session_creation_and_can_win():
         assert response.status_code == 200
         assert response.json()["ok"] is True
 
+    assert response.json()["performance"]["$schema"] == PERFORMANCE_SCHEMA_URL
+    assert "schema_url" not in response.json()["performance"]
     final_status = client.get("/status").json()
     assert final_status["status"] == "won"
     assert final_status["victory_code"] == victory_receipt(episode)
@@ -167,3 +170,48 @@ def test_protocol_v01_loaded_episode_retains_legacy_static_observation_context()
 
     assert observed["goal"] == episode.public.goal.model_dump(mode="json")
     assert observed["evidence_files"] == sorted(episode.public.evidence_files)
+
+
+
+def test_active_routes_never_expose_terminal_diagnostics_and_finalization_is_idempotent():
+    episode = generate_episode(2031, verifier_secret="fixed-secret")
+    client = TestClient(create_single_session_app(episode))
+    for path in ("/status", "/observe", "/manifest"):
+        payload = client.get(path).json()
+        assert "performance" not in payload
+        assert "unsatisfied_goal_leaves" not in payload
+        assert "guaranteed_policy_actions" not in payload
+    invalid = client.post("/action", json={
+        "expected_turn": 0, "action": {"type": "move", "target": "missing"},
+    }).json()
+    assert not invalid["ok"]
+    assert not invalid.get("performance")
+    first = client.post("/finalize").json()
+    second = client.post("/finalize").json()
+    assert first == second
+    assert first["performance"]["invalid_actions"] == 1
+
+
+def test_terminal_diagnostics_distinguish_missing_delivery_from_missing_finish():
+    episode = generate_episode(2032, verifier_secret="fixed-secret")
+    client = TestClient(create_single_session_app(episode))
+    for action in episode.reference_plan[:-1]:
+        turn = client.get("/status").json()["turn"]
+        response = client.post("/action", json={"expected_turn": turn, "action": action})
+        assert response.json()["ok"]
+        assert not response.json().get("performance")
+    payload = client.post("/finalize").json()
+    assert payload["status"] == "failed"
+    assert payload["victory_code"] is None
+    assert payload["performance"]["goal_satisfied"]
+    assert payload["performance"]["unsatisfied_goal_leaves"] == []
+    assert payload["performance"]["finish_actions"] == 0
+
+    client = TestClient(create_single_session_app(episode))
+    for action in episode.reference_plan:
+        turn = client.get("/status").json()["turn"]
+        assert client.post("/action", json={"expected_turn": turn, "action": action}).json()["ok"]
+    payload = client.post("/finalize").json()
+    assert payload["status"] == "won"
+    assert payload["victory_code"] == victory_receipt(episode)
+    assert payload == client.post("/finalize").json()

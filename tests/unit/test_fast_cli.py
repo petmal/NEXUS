@@ -35,9 +35,12 @@ def test_fast_validate_command_accepts_candidate_file(tmp_path, monkeypatch, cap
     def fake_validate(candidate, *, url=None):
         seen["candidate"] = candidate
         seen["url"] = url
-        return {"correct": True, "title": "ok", "explanation": "ok"}
+        return (
+            {"correct": True, "title": "ok", "explanation": "ok"},
+            {"terminal_status": "won", "goal_satisfied": True},
+        )
 
-    monkeypatch.setattr(fast_cli, "validate_candidate_payload", fake_validate)
+    monkeypatch.setattr(fast_cli, "validate_candidate_payload_with_performance", fake_validate)
 
     assert fast_cli.main(
         ["validate", "--candidate-file", str(candidate_file), "--url", "http://service:8000"]
@@ -46,7 +49,13 @@ def test_fast_validate_command_accepts_candidate_file(tmp_path, monkeypatch, cap
         "candidate": " NX-ABCD \n",
         "url": "http://service:8000",
     }
-    assert json.loads(capsys.readouterr().out)["correct"] is True
+    captured = capsys.readouterr()
+    assert json.loads(captured.out) == {"correct": True, "title": "ok", "explanation": "ok"}
+    prefix = "NEXUS terminal performance: "
+    assert captured.err.startswith(prefix)
+    assert json.loads(captured.err[len(prefix):]) == {
+        "terminal_status": "won", "goal_satisfied": True,
+    }
 
 
 def test_fast_entrypoint_does_not_import_heavy_dependencies():

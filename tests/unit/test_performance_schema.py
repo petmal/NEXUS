@@ -58,7 +58,7 @@ def test_terminal_performance_matches_published_v2_schema_contract():
         assert terminal.ok
 
     assert terminal is not None and terminal.performance is not None
-    payload = terminal.performance.model_dump(mode="json", by_alias=True)
+    payload = terminal.model_dump(mode="json")["performance"]
 
     assert set(payload) == set(schema["required"])
     assert payload["$schema"] == PERFORMANCE_SCHEMA_URL
