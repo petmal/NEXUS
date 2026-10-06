@@ -50,3 +50,19 @@ def test_each_mode_reuses_richer_proof_without_resolving(monkeypatch, mode):
         proof = solve_guaranteed_policy(episode, candidate_rules_by_machine=candidates,
                                        max_actions=8, include_action_values=False)
     assert proof.witness == rich.witness
+
+
+@pytest.mark.parametrize("expected", [3, 4, 5, 6])
+def test_fixed_cost_certificates_match_in_every_mode(expected):
+    episode = _episode()
+    candidates = {"M1": [_rule(0, 4), _rule(1, 5), _rule(2, 6)]}
+    results = []
+    for mode in MODES:
+        _POLICY_RESULT_CACHE.clear()
+        with solver_experiment(mode):
+            result = solve_guaranteed_policy(
+                episode, candidate_rules_by_machine=candidates, max_actions=8,
+                expected_actions=expected, include_action_values=False,
+            )
+        results.append(result.model_dump(exclude={"visited_belief_nodes"}))
+    assert all(result == results[0] for result in results)

@@ -62,3 +62,11 @@ performance result is claimed. GPU implementation is not recommended for the nex
   https://numba.readthedocs.io/en/stable/cuda/index.html
 
 Measured batch results and final recommendation are in performance-poc-findings.md.
+
+Subinterpreter compatibility can be reproduced without running generation:
+
+```python
+from concurrent.futures import InterpreterPoolExecutor
+with InterpreterPoolExecutor(max_workers=1) as pool:
+    pool.submit(eval, "__import__('nexus.models.episode', fromlist=['PrivateEpisode']).PrivateEpisode.__name__").result()
+```

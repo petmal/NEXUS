@@ -35,5 +35,12 @@ Resume commands (fresh processes and atomic files; matching completed cases are 
 ```bash
 uv run python scripts/benchmark_solver_poc.py --seeds 17 --planning 2 3 --out docs/profiling/poc-solver
 uv run python scripts/benchmark_solver_poc.py --seeds 18 19 --planning 2 3 --modes baseline intern combined --out docs/profiling/poc-solver
+uv run python scripts/benchmark_solver_poc.py --seeds 17 18 --planning 3 --modes combined --workers 1 --timeout 300 --out docs/profiling/poc-cpu-serial
+uv run python scripts/benchmark_solver_poc.py --seeds 17 18 --planning 3 --modes combined --workers 2 --timeout 300 --out docs/profiling/poc-cpu-parallel
 uv run python scripts/benchmark_theory_poc.py --seeds 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 --exact
+uv run pytest -q -m 'not slow and not stress' tests/unit tests/integration --maxfail=1
 ```
+
+Seed 18 solver comparisons have also completed; seed 19 and the CPU throughput comparison
+are in progress. No source edits during final measurements. Extra certificate regression cases
+were added to the test suite (tests are outside the measured runtime fingerprint).
