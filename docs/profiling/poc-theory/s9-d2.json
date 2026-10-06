@@ -1,0 +1,17 @@
+{
+  "accepted": true,
+  "candidate_count": 6,
+  "case": {
+    "d": 2,
+    "exact": true,
+    "seed": 9
+  },
+  "code": "e403f647a894cc8ac18c99d2c7f5d3d7ca33faf58a321e407150d3b1ea343fc8",
+  "evidence_seconds": 0.5642547930000319,
+  "minimum_guaranteed_probes": 0,
+  "predictions": 2,
+  "rows": 2,
+  "seconds": 0.5654185700000198,
+  "status": "rejected_discovery",
+  "viable_hypotheses": 4
+}

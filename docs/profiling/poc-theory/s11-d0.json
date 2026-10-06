@@ -1,0 +1,23 @@
+{
+  "accepted": true,
+  "candidate_count": 1,
+  "case": {
+    "d": 0,
+    "exact": true,
+    "seed": 11
+  },
+  "code": "e403f647a894cc8ac18c99d2c7f5d3d7ca33faf58a321e407150d3b1ea343fc8",
+  "evidence_seconds": 1.1773193189999347,
+  "guaranteed_actions": 15,
+  "minimum_guaranteed_probes": 0,
+  "paired_world_hash": "f0096fd239dc557bd80aec2b98ad9b1163a159775eda4b852717f2898df5d004",
+  "peak_rss_mib": 61.05078125,
+  "policy_seconds": 0.013319107000029362,
+  "predictions": 1,
+  "replayed_hypotheses": 1,
+  "rows": 4,
+  "seconds": 1.2355392389999906,
+  "solvable": true,
+  "status": "ok",
+  "viable_hypotheses": 1
+}
