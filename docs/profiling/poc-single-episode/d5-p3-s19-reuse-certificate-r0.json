@@ -1,0 +1,147 @@
+{
+  "case": {
+    "d": 5,
+    "p": 3,
+    "repeat": 0,
+    "seed": 19,
+    "variant": "reuse-certificate"
+  },
+  "code": "2b918cc6a9da64e4a110f144322c6441c57b8a9a3d14adbef686ea626f4c58b7",
+  "cpu_seconds": 31.237512999999943,
+  "episode_hash": "d7582269e378d34bf40934532f05f20a292f825119dc507df7b6103013afa5c6",
+  "failed_policy_queries": 0,
+  "generation_cpu_seconds": 28.972841000000003,
+  "generation_seconds": 28.76288341899999,
+  "guaranteed_optimum": 16,
+  "parent_peak_rss_mib": 544.546875,
+  "peak_process_count": 1,
+  "physical_optimum": 14,
+  "platform": "Linux-6.18.44-x86_64-with-glibc2.39",
+  "policy_hashes": [
+    "a249512959fbc20265b99224f6160003076dccddec5c44c2b2790f83b4d3e828",
+    "fd5865d17493a13ccd054147328883b983c9e0b4f5f6b032e83808c2e17fb1c9",
+    "fd5865d17493a13ccd054147328883b983c9e0b4f5f6b032e83808c2e17fb1c9"
+  ],
+  "process_group_cleaned": true,
+  "python": "3.14.7",
+  "rss_sampling_seconds": 0.05,
+  "sampled_tree_peak_rss_mib": 544.546875,
+  "solver_stages": [
+    {
+      "event": "complete",
+      "hypotheses": 4,
+      "seconds": 0.08087266999973508,
+      "stage": "policy.hypothesis_physical"
+    },
+    {
+      "branch_entries": 51481,
+      "choice_cache_entries": 1024,
+      "choices_reuse_hits": 10543,
+      "event": "complete",
+      "interned_states": 1316,
+      "memo_entries": 5643,
+      "memo_hits": 18547,
+      "route_cache_entries": 1653,
+      "routes_reuse_hits": 49828,
+      "seconds": 2.35738205799953,
+      "stage": "policy.minimax",
+      "transition_cache_entries": 25752,
+      "transitions_reuse_hits": 76460
+    },
+    {
+      "event": "complete",
+      "seconds": 0.146979055999509,
+      "stage": "policy.witness"
+    },
+    {
+      "branch_entries": 57458,
+      "choice_cache_entries": 1070,
+      "choices_reuse_hits": 13199,
+      "event": "complete",
+      "interned_states": 1352,
+      "memo_entries": 6427,
+      "memo_hits": 22871,
+      "requested_values": 3,
+      "route_cache_entries": 1735,
+      "routes_reuse_hits": 55723,
+      "seconds": 0.2621936850000566,
+      "stage": "policy.action_values",
+      "transition_cache_entries": 27156,
+      "transitions_reuse_hits": 84296
+    },
+    {
+      "event": "complete",
+      "seconds": 2.8816931789997398,
+      "stage": "generation.core"
+    },
+    {
+      "event": "complete",
+      "hypotheses": 4,
+      "seconds": 0.9395779850001418,
+      "stage": "policy.hypothesis_physical"
+    },
+    {
+      "event": "complete",
+      "seconds": 12.512106075999327,
+      "stage": "policy.certificate_sufficient"
+    },
+    {
+      "event": "complete",
+      "seconds": 9.82617891100017,
+      "stage": "policy.certificate_minimal"
+    },
+    {
+      "branch_entries": 430013,
+      "choice_cache_entries": 5714,
+      "choices_reuse_hits": 71871,
+      "event": "complete",
+      "interned_states": 7504,
+      "memo_entries": 40447,
+      "memo_hits": 164669,
+      "route_cache_entries": 11694,
+      "routes_reuse_hits": 418319,
+      "seconds": 22.33846351400007,
+      "stage": "policy.minimax",
+      "transition_cache_entries": 190441,
+      "transitions_reuse_hits": 615424
+    },
+    {
+      "event": "complete",
+      "seconds": 0.008228556000176468,
+      "stage": "policy.witness"
+    },
+    {
+      "branch_entries": 466855,
+      "choice_cache_entries": 5886,
+      "choices_reuse_hits": 89738,
+      "event": "complete",
+      "interned_states": 7755,
+      "memo_entries": 43864,
+      "memo_hits": 209005,
+      "requested_values": 3,
+      "route_cache_entries": 12183,
+      "routes_reuse_hits": 454672,
+      "seconds": 1.7603295760000037,
+      "stage": "policy.action_values",
+      "transition_cache_entries": 197955,
+      "transitions_reuse_hits": 664330
+    },
+    {
+      "event": "complete",
+      "seconds": 25.316750214999956,
+      "stage": "generation.planning_dependency"
+    },
+    {
+      "event": "complete",
+      "seconds": 1.7120000848080963e-06,
+      "stage": "generation.resource_pressure"
+    },
+    {
+      "event": "complete",
+      "seconds": 0.5640736260002086,
+      "stage": "generation.qualification"
+    }
+  ],
+  "status": "ok",
+  "wall_seconds": 31.28073300199958
+}

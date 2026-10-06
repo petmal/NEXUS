@@ -1,0 +1,113 @@
+{
+  "case": {
+    "d": 5,
+    "p": 3,
+    "repeat": 0,
+    "seed": 19,
+    "variant": "ordinary"
+  },
+  "code": "2b918cc6a9da64e4a110f144322c6441c57b8a9a3d14adbef686ea626f4c58b7",
+  "cpu_seconds": 114.52594300000003,
+  "episode_hash": "d7582269e378d34bf40934532f05f20a292f825119dc507df7b6103013afa5c6",
+  "failed_policy_queries": 0,
+  "generation_cpu_seconds": 111.81577499999999,
+  "generation_seconds": 111.61544483699981,
+  "guaranteed_optimum": 16,
+  "parent_peak_rss_mib": 595.13671875,
+  "peak_process_count": 1,
+  "physical_optimum": 14,
+  "platform": "Linux-6.18.44-x86_64-with-glibc2.39",
+  "policy_hashes": [
+    "a249512959fbc20265b99224f6160003076dccddec5c44c2b2790f83b4d3e828",
+    "fd5865d17493a13ccd054147328883b983c9e0b4f5f6b032e83808c2e17fb1c9",
+    "fd5865d17493a13ccd054147328883b983c9e0b4f5f6b032e83808c2e17fb1c9"
+  ],
+  "process_group_cleaned": true,
+  "python": "3.14.7",
+  "rss_sampling_seconds": 0.05,
+  "sampled_tree_peak_rss_mib": 595.13671875,
+  "solver_stages": [
+    {
+      "event": "complete",
+      "hypotheses": 4,
+      "seconds": 0.08497122399967338,
+      "stage": "policy.hypothesis_physical"
+    },
+    {
+      "branch_entries": 51481,
+      "event": "complete",
+      "interned_states": 1292,
+      "memo_entries": 5643,
+      "memo_hits": 18547,
+      "seconds": 9.245174969999425,
+      "stage": "policy.minimax"
+    },
+    {
+      "event": "complete",
+      "seconds": 0.018958816999656847,
+      "stage": "policy.witness"
+    },
+    {
+      "branch_entries": 57458,
+      "event": "complete",
+      "interned_states": 1320,
+      "memo_entries": 6427,
+      "memo_hits": 22871,
+      "requested_values": 3,
+      "seconds": 1.2906348720007372,
+      "stage": "policy.action_values"
+    },
+    {
+      "event": "complete",
+      "seconds": 10.672695976999421,
+      "stage": "generation.core"
+    },
+    {
+      "event": "complete",
+      "hypotheses": 4,
+      "seconds": 1.3759336880002593,
+      "stage": "policy.hypothesis_physical"
+    },
+    {
+      "branch_entries": 430386,
+      "event": "complete",
+      "interned_states": 6742,
+      "memo_entries": 40458,
+      "memo_hits": 246339,
+      "seconds": 90.79107923999982,
+      "stage": "policy.minimax"
+    },
+    {
+      "event": "complete",
+      "seconds": 0.05608993799978634,
+      "stage": "policy.witness"
+    },
+    {
+      "branch_entries": 467297,
+      "event": "complete",
+      "interned_states": 6938,
+      "memo_entries": 43886,
+      "memo_hits": 290695,
+      "requested_values": 3,
+      "seconds": 7.772187993000443,
+      "stage": "policy.action_values"
+    },
+    {
+      "event": "complete",
+      "seconds": 100.34404204200018,
+      "stage": "generation.planning_dependency"
+    },
+    {
+      "event": "complete",
+      "seconds": 1.3919998309575021e-06,
+      "stage": "generation.resource_pressure"
+    },
+    {
+      "event": "complete",
+      "seconds": 0.598146657000143,
+      "stage": "generation.qualification"
+    }
+  ],
+  "status": "ok",
+  "wall_seconds": 114.5805086750006
+}

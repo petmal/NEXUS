@@ -1,7 +1,7 @@
 # Single-episode generation PoC
 
 Base: PR #4 head `28255ce5dd3a11131b590cf77bc3291771e8a935`.
-Status: design checkpoint; implementation pending.
+Status: complete. The checkpoints below are a chronological record.
 
 ## Objective
 
@@ -128,3 +128,22 @@ CI run 229 passed for that checkpoint. Seed 17 has completed all four final vari
 seed 18 is in progress. Persisted results are individually complete and resumable.
 A forced parallel-root timeout observed four processes and confirmed complete cleanup.
 The timeout evidence is in `profiling/poc-single-timeout-validation.json`.
+
+
+## Completion
+
+All 12 primary cases and two reversed-order repeat cases completed, with exact episode
+and policy equality across variants and against the earlier combined-mode results.
+No experiments remain running. Final D5/P3/R0 generation: 28.70–31.28 s for reuse plus
+sequential certification versus 110.79–119.59 s control (3.66–3.87x faster). Reuse plus
+parallel certification takes 38.29–40.10 s. Seed-17 repeat: 28.76 s optimized, 109.32 s
+control. See `single-episode-poc-findings.md` for the complete interpretation and limits.
+
+The current runner's timeout/retry/skip smoke also passed on D0/P0: timeout at 0.001 s,
+successful retry at a 30 s limit (0.764 s wall), then skipped on the next invocation.
+`profiling/poc-single-validation.json` records validation and the implementation CI run.
+
+Next work, if requested: broader seed/profile differential validation, then promotion
+of transition reuse with the previous combined solver optimization. Keep single-episode
+parallelism experimental. No main merge, production default change, T1 rollout, or
+MindTrial/model evaluation was performed by this follow-up.

@@ -7,6 +7,7 @@
     "variant": "parallel-root"
   },
   "code": "be38334fee301c78b9a8b8b6d91231b0dfc2f30c04e464dad395baf7057274c3",
+  "cpu_measurement_note": "Pilot CPU sampled before interpreter shutdown; use final runs for full CPU accounting.",
   "cpu_seconds": 232.633945,
   "episode_hash": "c1541fdf1cdef0e6ff57978e303a3a72ab3539db7c6f9b239460084231a11481",
   "failed_policy_queries": 0,

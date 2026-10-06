@@ -52,3 +52,10 @@ T1 exact action costs matched their paired T0 cost. No model capability measurem
 Timeout/retry/resume behavior was exercised successfully. The batch summary records only the
 latest invocation: use a fresh directory for a full throughput repetition, rather than a resume
 with skipped cases. Per-case fingerprints preserve completed work.
+
+
+## Completed single-episode follow-up
+
+See [single-episode progress](single-episode-poc-progress.md) and
+[findings](single-episode-poc-findings.md) for additional implemented PoCs, measurements,
+validation, and resume commands. All follow-up experiments are complete and checkpointed.

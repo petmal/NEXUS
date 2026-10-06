@@ -70,3 +70,10 @@ from concurrent.futures import InterpreterPoolExecutor
 with InterpreterPoolExecutor(max_workers=1) as pool:
     pool.submit(eval, "__import__('nexus.models.episode', fromlist=['PrivateEpisode']).PrivateEpisode.__name__").result()
 ```
+
+## Single-episode follow-up
+
+A follow-up implements and measures parallel exact-cost checks and a bounded root split.
+See `single-episode-poc-findings.md` for matched-source timings, process-tree memory,
+negative parallel results, and the more effective within-solve transition reuse.
+The earlier batch-throughput result remains separate from single-episode latency.

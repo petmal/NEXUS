@@ -1,0 +1,151 @@
+{
+  "case": {
+    "d": 5,
+    "p": 3,
+    "repeat": 0,
+    "seed": 19,
+    "variant": "reuse-parallel"
+  },
+  "code": "2b918cc6a9da64e4a110f144322c6441c57b8a9a3d14adbef686ea626f4c58b7",
+  "cpu_seconds": 53.47358300000003,
+  "episode_hash": "d7582269e378d34bf40934532f05f20a292f825119dc507df7b6103013afa5c6",
+  "failed_policy_queries": 0,
+  "generation_cpu_seconds": 53.394836,
+  "generation_seconds": 39.805547668000145,
+  "guaranteed_optimum": 16,
+  "parent_peak_rss_mib": 485.9375,
+  "peak_process_count": 3,
+  "physical_optimum": 14,
+  "platform": "Linux-6.18.44-x86_64-with-glibc2.39",
+  "policy_hashes": [
+    "a249512959fbc20265b99224f6160003076dccddec5c44c2b2790f83b4d3e828",
+    "fd5865d17493a13ccd054147328883b983c9e0b4f5f6b032e83808c2e17fb1c9",
+    "fd5865d17493a13ccd054147328883b983c9e0b4f5f6b032e83808c2e17fb1c9"
+  ],
+  "process_group_cleaned": true,
+  "python": "3.14.7",
+  "rss_sampling_seconds": 0.05,
+  "sampled_tree_peak_rss_mib": 781.390625,
+  "solver_stages": [
+    {
+      "event": "complete",
+      "hypotheses": 4,
+      "seconds": 0.08549471999958769,
+      "stage": "policy.hypothesis_physical"
+    },
+    {
+      "branch_entries": 51481,
+      "choice_cache_entries": 1024,
+      "choices_reuse_hits": 10543,
+      "event": "complete",
+      "interned_states": 1316,
+      "memo_entries": 5643,
+      "memo_hits": 18547,
+      "route_cache_entries": 1653,
+      "routes_reuse_hits": 49828,
+      "seconds": 2.5805821840003773,
+      "stage": "policy.minimax",
+      "transition_cache_entries": 25752,
+      "transitions_reuse_hits": 76460
+    },
+    {
+      "event": "complete",
+      "seconds": 0.11855568300052255,
+      "stage": "policy.witness"
+    },
+    {
+      "branch_entries": 57458,
+      "choice_cache_entries": 1070,
+      "choices_reuse_hits": 13199,
+      "event": "complete",
+      "interned_states": 1352,
+      "memo_entries": 6427,
+      "memo_hits": 22871,
+      "requested_values": 3,
+      "route_cache_entries": 1735,
+      "routes_reuse_hits": 55723,
+      "seconds": 0.24056323900003918,
+      "stage": "policy.action_values",
+      "transition_cache_entries": 27156,
+      "transitions_reuse_hits": 84296
+    },
+    {
+      "event": "complete",
+      "seconds": 3.0595905179998226,
+      "stage": "generation.core"
+    },
+    {
+      "event": "complete",
+      "hypotheses": 4,
+      "seconds": 0.9180051489993275,
+      "stage": "policy.hypothesis_physical"
+    },
+    {
+      "event": "complete",
+      "seconds": 13.39038036599959,
+      "stage": "policy.certificate_sufficient"
+    },
+    {
+      "event": "complete",
+      "seconds": 9.071753297999749,
+      "stage": "policy.certificate_minimal",
+      "worker_0_branch_entries": 388470,
+      "worker_0_memo_entries": 36742,
+      "worker_0_memo_hits": 141105,
+      "worker_0_search_seconds": 21.426717418999942
+    },
+    {
+      "branch_entries": 239164,
+      "choice_cache_entries": 3837,
+      "choices_reuse_hits": 42377,
+      "event": "complete",
+      "interned_states": 4986,
+      "memo_entries": 23092,
+      "memo_hits": 86742,
+      "route_cache_entries": 8156,
+      "routes_reuse_hits": 231008,
+      "seconds": 24.470984562000012,
+      "stage": "policy.minimax",
+      "transition_cache_entries": 115266,
+      "transitions_reuse_hits": 308437
+    },
+    {
+      "event": "complete",
+      "seconds": 0.010973670999192109,
+      "stage": "policy.witness"
+    },
+    {
+      "branch_entries": 376702,
+      "choice_cache_entries": 5887,
+      "choices_reuse_hits": 80598,
+      "event": "complete",
+      "interned_states": 7734,
+      "memo_entries": 35727,
+      "memo_hits": 185029,
+      "requested_values": 3,
+      "route_cache_entries": 12188,
+      "routes_reuse_hits": 364514,
+      "seconds": 8.545801514000232,
+      "stage": "policy.action_values",
+      "transition_cache_entries": 181094,
+      "transitions_reuse_hits": 483564
+    },
+    {
+      "event": "complete",
+      "seconds": 34.21081672699984,
+      "stage": "generation.planning_dependency"
+    },
+    {
+      "event": "complete",
+      "seconds": 1.050999344442971e-06,
+      "stage": "generation.resource_pressure"
+    },
+    {
+      "event": "complete",
+      "seconds": 2.5347817649999342,
+      "stage": "generation.qualification"
+    }
+  ],
+  "status": "ok",
+  "wall_seconds": 40.10363393300031
+}

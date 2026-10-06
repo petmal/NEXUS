@@ -175,3 +175,12 @@ control billing. No model API evaluations or repeated paid CI stress runs were l
 - Timeout/retry/resume smoke: timed-out case reran successfully, then matching success was
   skipped with zero new generation work. No changes to runtime code during final measurements.
 - Full release stress and LLM capability evaluation are follow-on work, not claimed here.
+
+
+## Single-episode follow-up
+
+The additional [single-episode PoC](single-episode-poc-findings.md) finds a further
+3.66–3.87x cold-generation speedup over the combined solver by reusing transitions,
+routes, and choices, with direct expected-cost certification. Tested intra-episode
+process splits were slower than the best sequential approach. This extends the original
+results above; it does not change production defaults.

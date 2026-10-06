@@ -1,0 +1,40 @@
+{
+  "local_fast_tests": {
+    "command": "uv run pytest -q -m 'not slow and not stress' tests/unit tests/integration --maxfail=1",
+    "passed": 136,
+    "deselected": 32,
+    "seconds": 59.67,
+    "warnings": "two existing Pydantic enum fixture warnings"
+  },
+  "post_style_focused_tests": {
+    "passed": 34,
+    "seconds": 10.28
+  },
+  "ci": {
+    "commit": "c8ad4c73920dbd142e5ca645aab46ab336c03671",
+    "run_id": 37499811504,
+    "run_number": 229,
+    "conclusion": "success",
+    "note": "No implementation or benchmark source changes after this checkpoint."
+  },
+  "final_cold_cases": 14,
+  "matched_source_fingerprint": "2b918cc6a9da64e4a110f144322c6441c57b8a9a3d14adbef686ea626f4c58b7",
+  "semantic_equality": "all final episode/policy hashes match within seeds and earlier combined-mode reference outputs",
+  "parallel_timeout": {
+    "timeout_seconds": 16,
+    "peak_processes": 4,
+    "group_cleaned": true
+  },
+  "retry_resume": {
+    "first": "timeout at 0.001 s",
+    "second": "ok at 30 s limit; 0.764 s wall",
+    "third": "skipped matching successful case"
+  },
+  "lint": {
+    "ruff_version": "0.16.10",
+    "changed_solver_diagnostics_and_new_files": "passed",
+    "generator": "pre-existing findings only",
+    "diff_check": "passed"
+  },
+  "full_stress_or_model_eval": false
+}
