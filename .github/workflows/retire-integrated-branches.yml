@@ -1,0 +1,82 @@
+name: Retire preserved integration branches
+
+on:
+  pull_request:
+    types: [closed]
+    branches: [feat/epistemic-calibration]
+
+permissions:
+  contents: write
+
+jobs:
+  retire:
+    if: >-
+      github.repository == 'petmal/NEXUS' &&
+      github.event.pull_request.number == 5 &&
+      github.event.pull_request.merged == true &&
+      github.event.pull_request.head.repo.full_name == 'petmal/NEXUS' &&
+      github.event.pull_request.head.ref == 'feat/solver-diagnostics-integration'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: ${{ github.event.pull_request.merge_commit_sha }}
+          fetch-depth: 0
+      - name: Archive original histories and delete only expected heads, atomically
+        env:
+          INTEGRATION_HEAD: ${{ github.event.pull_request.head.sha }}
+          INTEGRATION_MERGE: ${{ github.event.pull_request.merge_commit_sha }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          archive_head=a5280d42bcf88920b6c83105f8ed580e5ef0b970
+          archive_ref=refs/tags/archive/solver-diagnostics-2026-10-06
+          # Rebase changes commit IDs. Require the merged tree to equal the tested PR tree.
+          git diff --exit-code "$INTEGRATION_HEAD" "$INTEGRATION_MERGE" --
+          archived=$(git ls-remote origin "$archive_ref" | cut -f1)
+          if [[ -n "$archived" && "$archived" != "$archive_head" ]]; then
+            echo "Archive tag already points elsewhere; refusing cleanup" >&2
+            exit 1
+          fi
+          if [[ -z "$archived" ]]; then
+            git push origin "$archive_head:$archive_ref"
+          fi
+          test "$(git ls-remote origin "$archive_ref" | cut -f1)" = "$archive_head"
+          branches=(
+            feat/terminal-diagnostics-generation-profile
+            feat/terminal-telemetry-generation-profiling
+            poc/solver-theory-performance
+            feat/solver-diagnostics-integration
+            archive/solver-diagnostics-integration
+          )
+          heads=(
+            75d5bdacdd66aadb48609696592e0e37c5f3b390
+            2095a947b5eac34fef69418cf771006475e4b300
+            49965c2128e187bae5be87224c7d02a5fed16b97
+            "$INTEGRATION_HEAD"
+            "$archive_head"
+          )
+          leases=()
+          deletions=()
+          for i in "${!branches[@]}"; do
+            ref="refs/heads/${branches[$i]}"
+            expected="${heads[$i]}"
+            if [[ "${branches[$i]}" != feat/solver-diagnostics-integration ]]; then
+              git merge-base --is-ancestor "$expected" "$archive_head"
+            fi
+            actual=$(git ls-remote --heads origin "$ref" | cut -f1)
+            if [[ -z "$actual" ]]; then
+              echo "Already absent: $ref"
+              continue
+            fi
+            if [[ "$actual" != "$expected" ]]; then
+              echo "Ref moved; refusing all cleanup: $ref" >&2
+              exit 1
+            fi
+            leases+=("--force-with-lease=$ref:$expected")
+            deletions+=(":$ref")
+          done
+          if (( ${#deletions[@]} )); then
+            git push --atomic "${leases[@]}" origin "${deletions[@]}"
+          fi

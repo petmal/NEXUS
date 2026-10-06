@@ -310,6 +310,10 @@ def serve_session(
         None, envvar="NEXUS_VERIFIER_SECRET",
         help="Optional fixed verifier secret when generating from --seed.",
     ),
+    generation_timing: bool = typer.Option(
+        False, envvar="NEXUS_GENERATION_TIMING",
+        help="Log generation stage timings to operator stderr; keep service logs private.",
+    ),
     host: str = typer.Option("127.0.0.1", envvar="NEXUS_HOST"),
     port: int = typer.Option(8000, envvar="NEXUS_PORT"),
 ) -> None:
@@ -321,6 +325,12 @@ def serve_session(
         raise typer.BadParameter("provide exactly one of --private or --seed")
     if private is not None and verifier_secret is not None:
         raise typer.BadParameter("--verifier-secret can only be used with --seed")
+
+    if generation_timing:
+        import logging
+
+        logging.basicConfig(level=logging.INFO, format="%(asctime)s %(name)s %(message)s")
+        logging.getLogger("nexus.generation").setLevel(logging.INFO)
 
     episode = (
         load_private(private)
@@ -389,18 +399,23 @@ def validate_command(
     ),
     url: str | None = typer.Option(None, envvar="NEXUS_URL"),
 ) -> None:
-    """Validate a submitted victory code against a live single-session service."""
-    from nexus.protocol.client import ClientError, validate_candidate
+    """Finalize the attempt, validate its victory code, and log terminal diagnostics."""
+    from nexus.protocol.client import ClientError, validate_candidate_with_performance
 
     if (candidate is None) == (candidate_file is None):
         raise typer.BadParameter("provide exactly one of --candidate or --candidate-file")
 
     supplied = candidate if candidate is not None else candidate_file.read_text(encoding="utf-8")
     try:
-        result = validate_candidate(supplied, url=url)
+        result, performance = validate_candidate_with_performance(supplied, url=url)
     except ClientError as exc:
         typer.echo(f"validation failed: {exc}", err=True)
         raise typer.Exit(code=2) from exc
+    typer.echo(
+        "NEXUS terminal performance: "
+        + json.dumps(performance, sort_keys=True, separators=(",", ":")),
+        err=True,
+    )
     _write_json(result.model_dump(mode="json"))
 
 
