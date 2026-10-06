@@ -73,21 +73,21 @@ jobs:
             --ignore=tests/unit/test_belief_policy.py --maxfail=1 --durations=15
 
       - name: Extended unit and integration tests
-        if: ${{ github.event_name == 'workflow_dispatch' && inputs.full }}
+        if: ${{ (github.event_name == 'workflow_dispatch' && inputs.full) || (github.event_name == 'pull_request' && github.base_ref == 'feat/epistemic-calibration') }}
         run: |
           uv run pytest -q -m slow tests/unit tests/integration \
             --maxfail=1 --durations=20
 
       - name: Cross-seed property stress
-        if: ${{ github.event_name == 'workflow_dispatch' && inputs.full }}
+        if: ${{ (github.event_name == 'workflow_dispatch' && inputs.full) || (github.event_name == 'pull_request' && github.base_ref == 'feat/epistemic-calibration') }}
         env:
-          NEXUS_STRESS_SEED_COUNT: ${{ inputs.stress_seed_count }}
+          NEXUS_STRESS_SEED_COUNT: ${{ inputs.stress_seed_count || '3' }}
           NEXUS_STRESS_FAIL_FAST: "1"
         run: |
           uv run pytest -q -m stress tests/property --maxfail=1 --durations=20
 
       - name: CLI smoke test
-        if: ${{ github.event_name == 'workflow_dispatch' && inputs.full }}
+        if: ${{ (github.event_name == 'workflow_dispatch' && inputs.full) || (github.event_name == 'pull_request' && github.base_ref == 'feat/epistemic-calibration') }}
         run: |
           uv run nexus generate /tmp/nexus-smoke --seed 17 --discovery-level 2 \
             --planning-level 3 --resource-pressure 2
@@ -96,7 +96,7 @@ jobs:
           uv run nexus replay /tmp/nexus-smoke/private.json /tmp/nexus-smoke/run.jsonl
 
       - name: Container smoke test
-        if: ${{ github.event_name == 'workflow_dispatch' && inputs.full }}
+        if: ${{ (github.event_name == 'workflow_dispatch' && inputs.full) || (github.event_name == 'pull_request' && github.base_ref == 'feat/epistemic-calibration') }}
         run: |
           docker build -t nexus-ci .
           docker run --rm --entrypoint python nexus-ci --version

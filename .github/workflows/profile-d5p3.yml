@@ -1,11 +1,7 @@
 name: D5 P3 generation profile
 
 on:
-  push:
-    branches: ["feat/terminal-diagnostics-generation-profile"]
-    paths:
-      - "scripts/profile_generation.py"
-      - ".github/workflows/profile-d5p3.yml"
+  workflow_dispatch:
 
 permissions:
   contents: read

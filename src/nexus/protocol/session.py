@@ -8,7 +8,7 @@ from pydantic import BaseModel, ConfigDict, Field
 from nexus.engine.canonical import canonical_hash
 from nexus.engine.engine import step
 from nexus.engine.goals import evaluate_goal
-from nexus.models.actions import Action, FinishAction, MoveAction, ProbeAction
+from nexus.models.actions import Action, FinishAction, MoveAction
 from nexus.models.episode import PrivateEpisode
 from nexus.models.events import TraceRecord
 from nexus.models.goals import GoalKind, GoalPredicate
@@ -16,10 +16,9 @@ from nexus.models.observation import Observation
 from nexus.models.world import TerminalStatus, WorldState
 from nexus.render.text import observation
 
-
 PERFORMANCE_SCHEMA_URL = (
     "https://raw.githubusercontent.com/petmal/NEXUS/"
-    "49603fa023a9d38bd85c08b112c8f2f4ce1e051c/schemas/performance-v2.schema.json"
+    "15a252279da3da870fab354d92cb3e92726445d2/schemas/performance-v3.schema.json"
 )
 
 
@@ -40,6 +39,7 @@ class PerformanceSummary(BaseModel):
     planning_dependency_action_cost: int
     actions_used: int
     optimal_physical_actions: int
+    action_delta_from_physical_optimum: int
     minimum_guaranteed_probes: int
     guaranteed_policy_actions: int
     action_delta_from_guaranteed_policy: int
@@ -59,6 +59,7 @@ class PerformanceSummary(BaseModel):
     goal_leaf_count: int
     satisfied_goal_leaf_count: int
     unsatisfied_goal_leaves: tuple[str, ...]
+    unsatisfied_goal_conditions: tuple[str, ...]
     budget_remaining: int
     invalid_actions: int
     failed_finishes: int
@@ -103,7 +104,18 @@ def _goal_leaf_label(goal: GoalPredicate) -> str:
         return f"artifact_location:{goal.artifact_id}={value}"
     if goal.kind == GoalKind.PHASE_EQUALS:
         return f"phase_equals:{value}"
-    raise ValueError(f"unsupported atomic goal kind {goal.kind}")
+    if goal.kind in {GoalKind.AND, GoalKind.OR, GoalKind.NOT}:
+        return f"{goal.kind.value}(" + ",".join(_goal_leaf_label(c) for c in goal.children) + ")"
+    raise ValueError(f"unsupported goal kind {goal.kind}")
+
+
+def _goal_deficits(goal: GoalPredicate, state: WorldState) -> tuple[str, ...]:
+    """False required conditions; keep OR/NOT intact instead of inventing obligations."""
+    if evaluate_goal(goal, state):
+        return ()
+    if goal.kind == GoalKind.AND:
+        return tuple(label for child in goal.children for label in _goal_deficits(child, state))
+    return (_goal_leaf_label(goal),)
 
 
 class Session:
@@ -198,6 +210,7 @@ class Session:
             planning_dependency_action_cost=metadata.planning_dependency_action_cost,
             actions_used=self.state.turn,
             optimal_physical_actions=metadata.optimal_action_count,
+            action_delta_from_physical_optimum=self.state.turn - metadata.optimal_action_count,
             minimum_guaranteed_probes=metadata.required_probe_count,
             guaranteed_policy_actions=guaranteed_policy_actions,
             action_delta_from_guaranteed_policy=self.state.turn - guaranteed_policy_actions,
@@ -221,6 +234,7 @@ class Session:
                 len(goal_leaves) - len(unsatisfied_goal_leaves)
             ),
             unsatisfied_goal_leaves=unsatisfied_goal_leaves,
+            unsatisfied_goal_conditions=_goal_deficits(self.episode.public.goal, self.state),
             budget_remaining=self.state.resources.actions_remaining,
             invalid_actions=self._invalid_actions,
             failed_finishes=self._failed_finishes,

@@ -25,7 +25,7 @@ nexus serve-session --private /episode/private.json --host 0.0.0.0
 Supported startup environment variables are:
 
 ```text
-NEXUS_SEED               deterministic public episode generation seed
+NEXUS_SEED               private deterministic episode generation seed
 NEXUS_DISCOVERY_LEVEL    causal-discovery profile, integer 0..5 (default 0)
 NEXUS_PLANNING_LEVEL     topology/planning profile, integer 0..3 (default 1)
 NEXUS_RESOURCE_PRESSURE  action-budget pressure, integer 0..2 (default 0)
@@ -65,7 +65,7 @@ play.
 
 Every profile D0-D5 now has an exact minimum worst-case total-action policy cost. The terminal
 object is self-describing and includes an immutable `$schema` URL pointing to the versioned
-`schemas/performance-v1.schema.json` contract stored in this repository. In addition to the run
+`schemas/performance-v3.schema.json` contract stored in this repository. In addition to the run
 counters it records the discovery/planning/resource-pressure profile, terminal status, initial
 budget, resource allowance, and P3 dependency cost.
 
@@ -160,7 +160,7 @@ of the previous mutable world.
 
 ## Terminal diagnostics and operator timing
 
-Terminal action responses contain `performance` using the immutable performance-v2 schema
+Terminal action responses contain `performance` using the immutable performance-v3 schema
 referenced by `$schema`. This adds accepted action counts, room visits/revisits, a comparison to
 moves in the stored physical reference plan, and public-goal satisfaction diagnostics. A room
 revisit is not necessarily waste, and the stored plan's move count is not a standalone optimum
@@ -212,3 +212,8 @@ episode for reproducibility with the profiler's fixed verifier secret. Use `--cp
 `--profile-out /tmp/d5p3.prof` for function-level attribution; profiled wall times include cProfile
 overhead. Parent/child stage times are inclusive and must not be added together. Run each seed
 and profile in a fresh process when comparing cold service startup costs.
+
+The integrated v3 payload also includes `action_delta_from_physical_optimum` and
+`unsatisfied_goal_conditions`. The latter decomposes false conjunctions but preserves OR/NOT
+expressions, so a false atomic leaf is not misreported as an independently required condition.
+Historical v1/v2 schemas remain unchanged. See [model testing matrix](model-testing-matrix.md).

@@ -6,7 +6,6 @@ import json
 from collections import OrderedDict, deque
 from dataclasses import dataclass
 from itertools import count, product
-from time import perf_counter
 
 from pydantic import BaseModel, ConfigDict
 
@@ -27,7 +26,7 @@ from nexus.models.actions import (
 from nexus.models.episode import PrivateEpisode
 from nexus.models.rules import Effect
 from nexus.models.world import INVENTORY, TerminalStatus, WorldState
-from nexus.solver.experiments import PLANNING_SEARCH, SEARCH_MODE, BudgetDecision, BudgetMemo
+from nexus.solver.budget import BudgetMemo
 from nexus.solver.search import (
     SearchStateKey,
     goal_field_artifact_ids,
@@ -234,6 +233,8 @@ def _adapt_cached_result(
         if max_actions > cached.max_actions:
             return None
         result.initial_action_values = ()
+        if expected_actions is not None:
+            result.exhausted_action_limit = False
         return result
 
     if expected_actions is not None:
@@ -242,7 +243,7 @@ def _adapt_cached_result(
                 solvable=False,
                 viable_hypothesis_count=result.viable_hypothesis_count,
                 visited_belief_nodes=result.visited_belief_nodes,
-                exhausted_action_limit=expected_actions < optimum,
+                exhausted_action_limit=False,
             )
     elif optimum > max_actions:
         return BeliefPolicyResult(
@@ -512,33 +513,6 @@ def solve_guaranteed_policy(
     requested_action_values: tuple[Action, ...] | None = None,
     minimum_guaranteed_probes: int | None = None,
 ) -> BeliefPolicyResult:
-    """Return an exact minimax optimum, deterministic witness and optional action values."""
-    result = _solve_policy(
-        episode, candidate_rules_by_machine=candidate_rules_by_machine,
-        max_actions=max_actions, max_physical_states=max_physical_states,
-        max_hypotheses=max_hypotheses, expected_actions=expected_actions,
-        include_action_values=include_action_values,
-        requested_action_values=requested_action_values,
-        minimum_guaranteed_probes=minimum_guaranteed_probes,
-    )
-    assert isinstance(result, BeliefPolicyResult)
-    return result
-
-
-def _solve_policy(
-    episode: PrivateEpisode,
-    *,
-    candidate_rules_by_machine: dict[str, list[Effect]],
-    max_actions: int,
-    max_physical_states: int = 100_000,
-    max_hypotheses: int = 256,
-    expected_actions: int | None = None,
-    include_action_values: bool = True,
-    requested_action_values: tuple[Action, ...] | None = None,
-    minimum_guaranteed_probes: int | None = None,
-    decision_budget: int | None = None,
-    root_partition: tuple[int, int] | None = None,
-) -> BeliefPolicyResult | BudgetDecision:
     """Solve the exact minimum worst-case total-action policy.
 
     Movement is compressed into deterministic shortest-path macro costs. The proof that this
@@ -548,12 +522,6 @@ def _solve_policy(
     minimum_guaranteed_probes is accepted for API compatibility and validation only; probe count
     is not used as a total-action optimality certificate.
     """
-    if root_partition is not None:
-        index, count = root_partition
-        if decision_budget is None or count < 1 or not 0 <= index < count:
-            raise ValueError("invalid root decision partition")
-    if decision_budget is not None and not 0 <= decision_budget <= max_actions:
-        raise ValueError("decision budget must lie between zero and max_actions")
     if max_actions < 1:
         raise ValueError("max_actions must be at least 1")
     if expected_actions is not None:
@@ -570,12 +538,6 @@ def _solve_policy(
     selection_key = _action_value_selection_key(
         include_action_values, requested_action_values
     )
-    mode = SEARCH_MODE.get()
-    reuse_transitions = PLANNING_SEARCH.get().startswith("reuse")
-    if reuse_transitions:
-        semantic_key += "|transition-reuse"
-    if mode != "baseline":
-        semantic_key = f"{semantic_key}|experiment={mode}"
     cache_key = (
         semantic_key,
         max_physical_states,
@@ -592,7 +554,7 @@ def _solve_policy(
             for key in reversed(tuple(_POLICY_RESULT_CACHE.keys()))
             if key[:3] == cache_key[:3] and key != cache_key
         )
-    for candidate_key in (() if decision_budget is not None else cache_candidates):
+    for candidate_key in cache_candidates:
         cached = _POLICY_RESULT_CACHE.get(candidate_key)
         if cached is None:
             continue
@@ -608,8 +570,7 @@ def _solve_policy(
 
     machine_ids = tuple(sorted(candidate_rules_by_machine))
     if not machine_ids or any(not candidate_rules_by_machine[item] for item in machine_ids):
-        return (BudgetDecision(False, 0) if decision_budget is not None
-                else BeliefPolicyResult(solvable=False, viable_hypothesis_count=0))
+        return BeliefPolicyResult(solvable=False, viable_hypothesis_count=0)
 
     combinations = tuple(
         dict(zip(machine_ids, rules))
@@ -631,16 +592,15 @@ def _solve_policy(
                 search_budget=search_budget,
             )
             physical = solve_compressed_physical(candidate, max_states=max_physical_states)
-            if decision_budget is not None and physical.exhausted_state_limit:
-                raise RuntimeError("physical state limit exhausted during budget decision")
+            if physical.exhausted_state_limit:
+                raise RuntimeError("physical state limit exhausted during policy qualification")
             if physical.solvable and physical.optimal_action_count is not None:
                 hypothesis_episodes.append(candidate)
                 hypothesis_physical_optima.append(physical.optimal_action_count)
         timing["hypotheses"] = len(hypothesis_episodes)
 
     if not hypothesis_episodes:
-        return (BudgetDecision(False, 0) if decision_budget is not None
-                else BeliefPolicyResult(solvable=False, viable_hypothesis_count=0))
+        return BeliefPolicyResult(solvable=False, viable_hypothesis_count=0)
 
     initial_belief = frozenset(range(len(hypothesis_episodes)))
     initial_state = _normalize_state(episode.public.initial_state, search_budget)
@@ -649,18 +609,15 @@ def _solve_policy(
     BranchSignature = str | SearchStateKey
     Branch = tuple[BranchSignature, WorldState, frozenset[int]]
     branch_cache: dict[
-        tuple[SearchStateKey, frozenset[int], tuple[str, ...], str],
+        tuple[int, frozenset[int], tuple[str, ...], str],
         tuple[Branch, ...] | None,
     ] = {}
-    memo = BudgetMemo(monotone=mode in ("bounds", "combined"))
+    memo = BudgetMemo()
     state_ids: dict[SearchStateKey, int] = {}
     states: list[WorldState] = []
     object_ids: dict[int, int] = {}
-    intern_states = mode in ("intern", "combined")
 
     def intern(state: WorldState) -> WorldState:
-        if not intern_states:
-            return state
         key = search_state_key(state)
         index = state_ids.get(key)
         if index is None:
@@ -671,8 +628,8 @@ def _solve_policy(
         # Retained states are read-only: engine.step copies before mutation.
         return states[index]
 
-    def state_key(state: WorldState) -> int | SearchStateKey:
-        return object_ids[id(state)] if intern_states else search_state_key(state)
+    def state_key(state: WorldState) -> int:
+        return object_ids[id(state)]
 
     initial_state = intern(initial_state)
 
@@ -688,8 +645,6 @@ def _solve_policy(
     reuse_hits = {"choices": 0, "routes": 0, "transitions": 0}
 
     def choices_for(state: WorldState):
-        if not reuse_transitions:
-            return _macro_choices(episode, state, movement, belief_mode=True)
         key = state_key(state)
         if key not in choices_cache:
             choices_cache[key] = _macro_choices(episode, state, movement, belief_mode=True)
@@ -709,15 +664,14 @@ def _solve_policy(
 
         representative_episode = hypothesis_episodes[next(iter(belief))]
         route_identity = (state_key(state), route_key)
-        if reuse_transitions and route_identity in route_cache:
+        if route_identity in route_cache:
             moved = route_cache[route_identity]
             reuse_hits["routes"] += 1
         else:
-            moved = (state if reuse_transitions and not choice.route else
+            moved = (state if not choice.route else
                      _apply_route(state, choice.route, representative_episode, search_budget))
-            if reuse_transitions:
-                route_cache[route_identity] = intern(moved) if moved is not None else None
-                moved = route_cache[route_identity]
+            route_cache[route_identity] = intern(moved) if moved is not None else None
+            moved = route_cache[route_identity]
         if moved is None:
             branch_cache[key] = None
             return None
@@ -727,8 +681,8 @@ def _solve_policy(
             # movement, have identical semantics in every hypothesis of this solve.
             causal = isinstance(choice.action, (ProbeAction, OperateAction))
             transition_key = ((state_key(state), route_key, action_key,
-                               hypothesis_index if causal else -1) if reuse_transitions else None)
-            if reuse_transitions and transition_key in transition_cache:
+                               hypothesis_index if causal else -1))
+            if transition_key in transition_cache:
                 reuse_hits["transitions"] += 1
                 return transition_cache[transition_key]
             result = step(moved, choice.action, hypothesis_episodes[hypothesis_index])
@@ -739,8 +693,7 @@ def _solve_policy(
                              if isinstance(choice.action, ProbeAction)
                              else search_state_key(next_state))
                 value = (signature, next_state)
-            if reuse_transitions:
-                transition_cache[transition_key] = value
+            transition_cache[transition_key] = value
             return value
 
         if not isinstance(choice.action, (ProbeAction, OperateAction)):
@@ -789,7 +742,7 @@ def _solve_policy(
             and branches[0][2] == belief
         )
 
-    def can_win(state: WorldState, belief: frozenset[int], budget: int, *, root: bool = False) -> bool:
+    def can_win(state: WorldState, belief: frozenset[int], budget: int) -> bool:
         if state.terminal_status == TerminalStatus.WON:
             return True
         if state.terminal_status != TerminalStatus.ACTIVE or budget <= 0:
@@ -800,9 +753,7 @@ def _solve_policy(
         if cached_value is not None:
             return cached_value
 
-        for index, choice in enumerate(choices_for(state)):
-            if root and root_partition is not None and index % root_partition[1] != root_partition[0]:
-                continue
+        for choice in choices_for(state):
             if choice.cost > budget:
                 continue
             branches = branches_for(state, belief, choice)
@@ -819,12 +770,6 @@ def _solve_policy(
         memo[key] = False
         return False
 
-    if decision_budget is not None:
-        started = perf_counter()
-        answer = can_win(initial_state, initial_belief, decision_budget, root=True)
-        return BudgetDecision(answer, len(hypothesis_episodes), len(memo),
-                              len(branch_cache), memo.hits, perf_counter() - started)
-
     lower_bound = max(hypothesis_physical_optima)
     optimal: int | None = None
     with timed_stage("policy.minimax") as timing:
@@ -834,58 +779,21 @@ def _solve_policy(
                     optimal = action_budget
                     break
         else:
-            # A spawned worker proves minimality while the parent retains the winning
-            # search table for deterministic witness and action-value construction.
-            executor = None
-            futures = []
-            parallel_mode = PLANNING_SEARCH.get()
-            if parallel_mode in ("parallel-certificate", "parallel-root", "reuse-parallel") and expected_actions > lower_bound:
-                import multiprocessing
-                from concurrent.futures import ProcessPoolExecutor
-
-                from nexus.solver.single_episode import budget_decision_worker
-
-                workers = 2 if parallel_mode == "parallel-root" else 1
-                executor = ProcessPoolExecutor(
-                    max_workers=workers, mp_context=multiprocessing.get_context("spawn")
-                )
-                futures = [executor.submit(
-                    budget_decision_worker, episode, candidate_rules_by_machine,
-                    max_actions, expected_actions - 1, max_physical_states,
-                    max_hypotheses, mode, (index, workers) if workers > 1 else None, reuse_transitions,
-                ) for index in range(workers)]
-            try:
-                with timed_stage("policy.certificate_sufficient"):
-                    sufficient = (expected_actions >= lower_bound and
-                                  can_win(initial_state, initial_belief, expected_actions))
-                with timed_stage("policy.certificate_minimal") as proof_timing:
-                    if futures:
-                        decisions = [future.result() for future in futures]
-                        if any(d.viable_hypotheses != len(hypothesis_episodes) for d in decisions):
-                            raise RuntimeError("parallel proof disagrees on viable hypotheses")
-                        minimal = not any(d.can_win for d in decisions)
-                        for index, decision in enumerate(decisions):
-                            proof_timing.update({
-                                f"worker_{index}_search_seconds": decision.seconds,
-                                f"worker_{index}_memo_entries": decision.memo_entries,
-                                f"worker_{index}_branch_entries": decision.branch_entries,
-                                f"worker_{index}_memo_hits": decision.memo_hits,
-                            })
-                    else:
-                        minimal = (expected_actions == lower_bound or
-                                   (expected_actions > lower_bound and not can_win(
-                                       initial_state, initial_belief, expected_actions - 1)))
-                if sufficient and minimal:
-                    optimal = expected_actions
-            finally:
-                if executor is not None:
-                    executor.shutdown(wait=True, cancel_futures=True)
+            # Both sides of the exact-cost certificate share the same monotone memo.
+            with timed_stage("policy.certificate_sufficient"):
+                sufficient = (expected_actions >= lower_bound and
+                              can_win(initial_state, initial_belief, expected_actions))
+            with timed_stage("policy.certificate_minimal"):
+                minimal = (expected_actions == lower_bound or
+                           (expected_actions > lower_bound and not can_win(
+                               initial_state, initial_belief, expected_actions - 1)))
+            if sufficient and minimal:
+                optimal = expected_actions
         timing["memo_entries"] = len(memo)
         timing["branch_entries"] = len(branch_cache)
         timing["interned_states"] = len(states)
         timing["memo_hits"] = memo.hits
-        if reuse_transitions:
-            timing.update({"choice_cache_entries": len(choices_cache),
+        timing.update({"choice_cache_entries": len(choices_cache),
                            "route_cache_entries": len(route_cache),
                            "transition_cache_entries": len(transition_cache),
                            **{f"{name}_reuse_hits": hits for name, hits in reuse_hits.items()}})
@@ -1017,8 +925,7 @@ def _solve_policy(
         timing["branch_entries"] = len(branch_cache)
         timing["interned_states"] = len(states)
         timing["memo_hits"] = memo.hits
-        if reuse_transitions:
-            timing.update({"choice_cache_entries": len(choices_cache),
+        timing.update({"choice_cache_entries": len(choices_cache),
                            "route_cache_entries": len(route_cache),
                            "transition_cache_entries": len(transition_cache),
                            **{f"{name}_reuse_hits": hits for name, hits in reuse_hits.items()}})
@@ -1030,9 +937,9 @@ def _solve_policy(
         optimal_worst_case_actions=optimal,
         initial_action_values=initial_values,
         witness=witness,
-        # Experimental bounds mode counts state/belief intervals rather than exact budgets.
+        # Counts state/belief intervals, not individual budget queries.
         visited_belief_nodes=len(memo),
-        exhausted_action_limit=optimal is None,
+        exhausted_action_limit=optimal is None and expected_actions is None,
     )
     # Cache pure exact results for both optimizer and fixed-cost certificate calls. A successful
     # certificate proves the same exact optimum; an exhausted result is reusable only through its
