@@ -1,7 +1,7 @@
 # Solver and terminal-diagnostics integration results
 
-The validated high-value optimizations are now the default solver path on the integration PR
-into `feat/epistemic-calibration`. Fresh random seeds benefit from within-solve reuse. Exact world
+The validated high-value optimizations are now the default solver path on
+`feat/epistemic-calibration`, integrated through [PR #5](https://github.com/petmal/NEXUS/pull/5). Fresh random seeds benefit from within-solve reuse. Exact world
 acceptance, optimum costs, policy witnesses, action values, and player-visible mechanics remain
 unchanged in the differential sample. Terminal diagnostics use immutable performance-v3.
 
@@ -69,3 +69,12 @@ The separate `poc/theory-prior-axis` branch is intentionally retained for the ne
 
 CI tested code commit `46fd17091a411998758de54ff4f08bed515ca3f7`. Subsequent pre-merge
 changes publish documentation and evidence only; production source remains byte-identical.
+
+
+## Final repository state
+
+PR #5 rebased as `3226d97ea78915fec5d0d97513bff6c327fd1e8d`. PRs #2/#3/#4 closed as superseded.
+[Cleanup run 37539650026](https://github.com/petmal/NEXUS/actions/runs/37539650026) created and
+verified the archive tag, then deleted only the five leased superseded/temporary heads. The
+one-use workflow was removed afterward. Remaining branches: `main`, `feat/epistemic-calibration`,
+and the intentionally retained `poc/theory-prior-axis`. Main and theory branch heads are unchanged.

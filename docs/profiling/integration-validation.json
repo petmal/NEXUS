@@ -93,5 +93,32 @@
       "CLI generate/qualify/solve/replay",
       "container build/python/help"
     ]
+  },
+  "cleanup": {
+    "run_id": 37539650026,
+    "conclusion": "success",
+    "archive_tag": "archive/solver-diagnostics-2026-10-06",
+    "archive_head": "a5280d42bcf88920b6c83105f8ed580e5ef0b970",
+    "merge_commit": "3226d97ea78915fec5d0d97513bff6c327fd1e8d",
+    "local_safety_cases": [
+      {
+        "scenario": "preserved",
+        "exit": 0,
+        "remaining_branches": 3,
+        "passed": true
+      },
+      {
+        "scenario": "moved_head",
+        "exit": 1,
+        "remaining_branches": 8,
+        "passed": true
+      },
+      {
+        "scenario": "different_merged_tree",
+        "exit": 1,
+        "remaining_branches": 8,
+        "passed": true
+      }
+    ]
   }
 }
