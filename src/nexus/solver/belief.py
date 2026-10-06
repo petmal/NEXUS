@@ -26,6 +26,7 @@ from nexus.models.actions import (
 from nexus.models.episode import PrivateEpisode
 from nexus.models.rules import Effect
 from nexus.models.world import INVENTORY, TerminalStatus, WorldState
+from nexus.solver.experiments import BudgetMemo, SEARCH_MODE
 from nexus.solver.search import (
     SearchStateKey,
     goal_field_artifact_ids,
@@ -535,6 +536,9 @@ def solve_guaranteed_policy(
     selection_key = _action_value_selection_key(
         include_action_values, requested_action_values
     )
+    mode = SEARCH_MODE.get()
+    if mode != "baseline":
+        selection_key = (mode, *selection_key)
     cache_key = (
         semantic_key,
         max_physical_states,
@@ -542,7 +546,7 @@ def solve_guaranteed_policy(
         selection_key,
     )
     cache_candidates = [cache_key]
-    if not include_action_values:
+    if not include_action_values and mode == "baseline":
         # A richer exact result contains the same minimax proof plus action-value analysis. A
         # no-action-value query may therefore reuse it, subject to the existing proof-bound
         # checks in _adapt_cached_result. Never reuse a weaker entry for a richer query.
@@ -607,7 +611,29 @@ def solve_guaranteed_policy(
         tuple[SearchStateKey, frozenset[int], tuple[str, ...], str],
         tuple[Branch, ...] | None,
     ] = {}
-    memo: dict[tuple[SearchStateKey, frozenset[int], int], bool] = {}
+    memo = BudgetMemo(monotone=mode in ("bounds", "combined"))
+    state_ids: dict[SearchStateKey, int] = {}
+    states: list[WorldState] = []
+    object_ids: dict[int, int] = {}
+    intern_states = mode in ("intern", "combined")
+
+    def intern(state: WorldState) -> WorldState:
+        if not intern_states:
+            return state
+        key = search_state_key(state)
+        index = state_ids.get(key)
+        if index is None:
+            index = len(states)
+            state_ids[key] = index
+            states.append(state)
+            object_ids[id(state)] = index
+        # Retained states are read-only: engine.step copies before mutation.
+        return states[index]
+
+    def state_key(state: WorldState) -> int | SearchStateKey:
+        return object_ids[id(state)] if intern_states else search_state_key(state)
+
+    initial_state = intern(initial_state)
 
     def choice_key(choice: _MacroChoice) -> tuple[tuple[str, ...], str]:
         return (
@@ -621,7 +647,7 @@ def solve_guaranteed_policy(
         choice: _MacroChoice,
     ) -> tuple[Branch, ...] | None:
         route_key, action_key = choice_key(choice)
-        key = (search_state_key(state), belief, route_key, action_key)
+        key = (state_key(state), belief, route_key, action_key)
         if key in branch_cache:
             return branch_cache[key]
 
@@ -636,7 +662,7 @@ def solve_guaranteed_policy(
             if not result.ok:
                 branch_cache[key] = None
                 return None
-            next_state = _normalize_fresh_state(result.state, search_budget)
+            next_state = intern(_normalize_fresh_state(result.state, search_budget))
             branches = ((search_state_key(next_state), next_state, belief),)
             branch_cache[key] = branches
             return branches
@@ -648,7 +674,7 @@ def solve_guaranteed_policy(
                 branch_cache[key] = None
                 return None
 
-            next_state = _normalize_fresh_state(result.state, search_budget)
+            next_state = intern(_normalize_fresh_state(result.state, search_budget))
             if isinstance(choice.action, ProbeAction):
                 signature: BranchSignature = "probe|" + _probe_observation_key(result)
             else:
@@ -688,7 +714,7 @@ def solve_guaranteed_policy(
         if state.terminal_status != TerminalStatus.ACTIVE or budget <= 0:
             return False
 
-        key = (search_state_key(state), belief, budget)
+        key = (state_key(state), belief, budget)
         cached_value = memo.get(key)
         if cached_value is not None:
             return cached_value
@@ -734,6 +760,8 @@ def solve_guaranteed_policy(
                 optimal = expected_actions
         timing["memo_entries"] = len(memo)
         timing["branch_entries"] = len(branch_cache)
+        timing["interned_states"] = len(states)
+        timing["memo_hits"] = memo.hits
 
     def witness_outcome(signature: BranchSignature, state: WorldState) -> str:
         if isinstance(signature, str):
@@ -860,6 +888,8 @@ def solve_guaranteed_policy(
         )
         timing["memo_entries"] = len(memo)
         timing["branch_entries"] = len(branch_cache)
+        timing["interned_states"] = len(states)
+        timing["memo_hits"] = memo.hits
         timing["requested_values"] = len(initial_values)
 
     result = BeliefPolicyResult(
@@ -868,8 +898,7 @@ def solve_guaranteed_policy(
         optimal_worst_case_actions=optimal,
         initial_action_values=initial_values,
         witness=witness,
-        # Every non-terminal can_win body stores one True/False entry before returning, so
-        # memo keys are exactly the previously duplicated visited-node set.
+        # Experimental bounds mode counts state/belief intervals rather than exact budgets.
         visited_belief_nodes=len(memo),
         exhausted_action_limit=optimal is None,
     )
