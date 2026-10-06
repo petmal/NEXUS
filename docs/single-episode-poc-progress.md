@@ -119,3 +119,12 @@ uv run python scripts/benchmark_single_episode.py --seeds 17 \
 
 The first repeat's existing cases should be skipped. Final findings and validation
 record remain pending. Source and runner must remain frozen while these runs execute.
+
+## Final-run checkpoint (in progress)
+
+Final source fingerprint: `2b918cc6a9da64e4a110f144322c6441c57b8a9a3d14adbef686ea626f4c58b7`.
+GitHub implementation checkpoint: `c8ad4c73920dbd142e5ca645aab46ab336c03671`.
+CI run 229 passed for that checkpoint. Seed 17 has completed all four final variants;
+seed 18 is in progress. Persisted results are individually complete and resumable.
+A forced parallel-root timeout observed four processes and confirmed complete cleanup.
+The timeout evidence is in `profiling/poc-single-timeout-validation.json`.

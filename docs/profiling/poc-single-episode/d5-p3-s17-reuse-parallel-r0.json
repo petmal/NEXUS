@@ -1,0 +1,151 @@
+{
+  "case": {
+    "d": 5,
+    "p": 3,
+    "repeat": 0,
+    "seed": 17,
+    "variant": "reuse-parallel"
+  },
+  "code": "2b918cc6a9da64e4a110f144322c6441c57b8a9a3d14adbef686ea626f4c58b7",
+  "cpu_seconds": 55.48410599999999,
+  "episode_hash": "c1541fdf1cdef0e6ff57978e303a3a72ab3539db7c6f9b239460084231a11481",
+  "failed_policy_queries": 0,
+  "generation_cpu_seconds": 53.492386,
+  "generation_seconds": 37.81808249100004,
+  "guaranteed_optimum": 17,
+  "parent_peak_rss_mib": 424.53515625,
+  "peak_process_count": 3,
+  "physical_optimum": 14,
+  "platform": "Linux-6.18.44-x86_64-with-glibc2.39",
+  "policy_hashes": [
+    "4569657258ea8618f895d70a49886ebdfeb27865f6454d631954c2be1c08a7cd",
+    "e6e43f9c56e3153b86c11646f9e69f83f0aacd5ed24e8094d4e5c1567e420c57",
+    "e6e43f9c56e3153b86c11646f9e69f83f0aacd5ed24e8094d4e5c1567e420c57"
+  ],
+  "process_group_cleaned": true,
+  "python": "3.14.7",
+  "rss_sampling_seconds": 0.05,
+  "sampled_tree_peak_rss_mib": 720.6640625,
+  "solver_stages": [
+    {
+      "event": "complete",
+      "hypotheses": 4,
+      "seconds": 0.10586594699998386,
+      "stage": "policy.hypothesis_physical"
+    },
+    {
+      "branch_entries": 52575,
+      "choice_cache_entries": 993,
+      "choices_reuse_hits": 12138,
+      "event": "complete",
+      "interned_states": 1227,
+      "memo_entries": 5940,
+      "memo_hits": 23351,
+      "route_cache_entries": 1453,
+      "routes_reuse_hits": 51122,
+      "seconds": 2.373123802000009,
+      "stage": "policy.minimax",
+      "transition_cache_entries": 21069,
+      "transitions_reuse_hits": 77734
+    },
+    {
+      "event": "complete",
+      "seconds": 0.0031304529998124053,
+      "stage": "policy.witness"
+    },
+    {
+      "branch_entries": 56578,
+      "choice_cache_entries": 1036,
+      "choices_reuse_hits": 14880,
+      "event": "complete",
+      "interned_states": 1263,
+      "memo_entries": 6603,
+      "memo_hits": 28011,
+      "requested_values": 3,
+      "route_cache_entries": 1528,
+      "routes_reuse_hits": 55050,
+      "seconds": 0.40051517600022635,
+      "stage": "policy.action_values",
+      "transition_cache_entries": 22573,
+      "transitions_reuse_hits": 81876
+    },
+    {
+      "event": "complete",
+      "seconds": 2.91386555400004,
+      "stage": "generation.core"
+    },
+    {
+      "event": "complete",
+      "hypotheses": 4,
+      "seconds": 1.0804175429998395,
+      "stage": "policy.hypothesis_physical"
+    },
+    {
+      "event": "complete",
+      "seconds": 15.466040582000005,
+      "stage": "policy.certificate_sufficient"
+    },
+    {
+      "event": "complete",
+      "seconds": 7.448940152999967,
+      "stage": "policy.certificate_minimal",
+      "worker_0_branch_entries": 356813,
+      "worker_0_memo_entries": 35456,
+      "worker_0_memo_hits": 138205,
+      "worker_0_search_seconds": 21.505819041999985
+    },
+    {
+      "branch_entries": 213758,
+      "choice_cache_entries": 3606,
+      "choices_reuse_hits": 42098,
+      "event": "complete",
+      "interned_states": 4709,
+      "memo_entries": 21988,
+      "memo_hits": 82254,
+      "route_cache_entries": 7174,
+      "routes_reuse_hits": 206584,
+      "seconds": 24.86021696900025,
+      "stage": "policy.minimax",
+      "transition_cache_entries": 98857,
+      "transitions_reuse_hits": 271706
+    },
+    {
+      "event": "complete",
+      "seconds": 0.009913602999858995,
+      "stage": "policy.witness"
+    },
+    {
+      "branch_entries": 335235,
+      "choice_cache_entries": 5542,
+      "choices_reuse_hits": 79908,
+      "event": "complete",
+      "interned_states": 7280,
+      "memo_entries": 33995,
+      "memo_hits": 176543,
+      "requested_values": 3,
+      "route_cache_entries": 10710,
+      "routes_reuse_hits": 324525,
+      "seconds": 8.001812629000142,
+      "stage": "policy.action_values",
+      "transition_cache_entries": 155750,
+      "transitions_reuse_hits": 421518
+    },
+    {
+      "event": "complete",
+      "seconds": 34.26701158700007,
+      "stage": "generation.planning_dependency"
+    },
+    {
+      "event": "complete",
+      "seconds": 1.4419997569348197e-06,
+      "stage": "generation.resource_pressure"
+    },
+    {
+      "event": "complete",
+      "seconds": 0.6367223039997043,
+      "stage": "generation.qualification"
+    }
+  ],
+  "status": "ok",
+  "wall_seconds": 40.060252885999944
+}

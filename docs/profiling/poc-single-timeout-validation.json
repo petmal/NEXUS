@@ -1,0 +1,17 @@
+{
+  "case": {
+    "d": 5,
+    "p": 3,
+    "repeat": 0,
+    "seed": 17,
+    "variant": "parallel-root"
+  },
+  "code": "2b918cc6a9da64e4a110f144322c6441c57b8a9a3d14adbef686ea626f4c58b7",
+  "cpu_seconds": null,
+  "peak_process_count": 4,
+  "process_group_cleaned": true,
+  "rss_sampling_seconds": 0.05,
+  "sampled_tree_peak_rss_mib": 191.0078125,
+  "status": "timeout",
+  "wall_seconds": 16.019674886999837
+}

@@ -1,0 +1,113 @@
+{
+  "case": {
+    "d": 5,
+    "p": 3,
+    "repeat": 0,
+    "seed": 17,
+    "variant": "ordinary"
+  },
+  "code": "2b918cc6a9da64e4a110f144322c6441c57b8a9a3d14adbef686ea626f4c58b7",
+  "cpu_seconds": 110.752387,
+  "episode_hash": "c1541fdf1cdef0e6ff57978e303a3a72ab3539db7c6f9b239460084231a11481",
+  "failed_policy_queries": 0,
+  "generation_cpu_seconds": 108.063942,
+  "generation_seconds": 107.85058616099968,
+  "guaranteed_optimum": 17,
+  "parent_peak_rss_mib": 543.90625,
+  "peak_process_count": 1,
+  "physical_optimum": 14,
+  "platform": "Linux-6.18.44-x86_64-with-glibc2.39",
+  "policy_hashes": [
+    "4569657258ea8618f895d70a49886ebdfeb27865f6454d631954c2be1c08a7cd",
+    "e6e43f9c56e3153b86c11646f9e69f83f0aacd5ed24e8094d4e5c1567e420c57",
+    "e6e43f9c56e3153b86c11646f9e69f83f0aacd5ed24e8094d4e5c1567e420c57"
+  ],
+  "process_group_cleaned": true,
+  "python": "3.14.7",
+  "rss_sampling_seconds": 0.05,
+  "sampled_tree_peak_rss_mib": 543.90625,
+  "solver_stages": [
+    {
+      "event": "complete",
+      "hypotheses": 4,
+      "seconds": 0.10252082600027279,
+      "stage": "policy.hypothesis_physical"
+    },
+    {
+      "branch_entries": 52575,
+      "event": "complete",
+      "interned_states": 1204,
+      "memo_entries": 5940,
+      "memo_hits": 23351,
+      "seconds": 9.064960557000177,
+      "stage": "policy.minimax"
+    },
+    {
+      "event": "complete",
+      "seconds": 0.013366386000143393,
+      "stage": "policy.witness"
+    },
+    {
+      "branch_entries": 56578,
+      "event": "complete",
+      "interned_states": 1232,
+      "memo_entries": 6603,
+      "memo_hits": 28011,
+      "requested_values": 3,
+      "seconds": 0.8673823569997694,
+      "stage": "policy.action_values"
+    },
+    {
+      "event": "complete",
+      "seconds": 10.081517632000214,
+      "stage": "generation.core"
+    },
+    {
+      "event": "complete",
+      "hypotheses": 4,
+      "seconds": 1.3528926059998412,
+      "stage": "policy.hypothesis_physical"
+    },
+    {
+      "branch_entries": 388929,
+      "event": "complete",
+      "interned_states": 6331,
+      "memo_entries": 38735,
+      "memo_hits": 239574,
+      "seconds": 87.12836377700023,
+      "stage": "policy.minimax"
+    },
+    {
+      "event": "complete",
+      "seconds": 0.05462824500000352,
+      "stage": "policy.witness"
+    },
+    {
+      "branch_entries": 417173,
+      "event": "complete",
+      "interned_states": 6524,
+      "memo_entries": 41794,
+      "memo_hits": 280227,
+      "requested_values": 3,
+      "seconds": 8.382882108000103,
+      "stage": "policy.action_values"
+    },
+    {
+      "event": "complete",
+      "seconds": 97.19072144600023,
+      "stage": "generation.planning_dependency"
+    },
+    {
+      "event": "complete",
+      "seconds": 1.503000021330081e-06,
+      "stage": "generation.resource_pressure"
+    },
+    {
+      "event": "complete",
+      "seconds": 0.5775304379999397,
+      "stage": "generation.qualification"
+    }
+  ],
+  "status": "ok",
+  "wall_seconds": 110.79140644100016
+}
