@@ -1,0 +1,11 @@
+{
+  "python": "3.14.7",
+  "platform": "Linux-6.18.44-x86_64-with-glibc2.39",
+  "gil_enabled": true,
+  "logical_cpus": 9,
+  "available_cpus": 9,
+  "cpu_quota": "800000 100000",
+  "memory_limit_bytes": 8589934592,
+  "gpu_device_nodes": [],
+  "runtime_note": "Shared managed container, not dedicated benchmark hardware. Single measurements per mode/seed; speedups are indicative."
+}

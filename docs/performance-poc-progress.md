@@ -13,7 +13,10 @@ ordinary-action minimax comparison. First 20-seed exact T1/P2 sweep: D0 20/20 ac
 D1 18/20, D2 11/20. All accepted policies replayed over every viable hypothesis at their
 proved action budget. Rejections retained; this is conditional on current T0-selected families.
 
-Next: finish solver seed-17 ablations, extend baseline/intern/combined to seeds 18/19, compare
+Seed-17 corrected solver ablation completed: P3 baseline 157.04 s / 4056 MiB;
+combined 99.12 s / 544 MiB. P2 baseline 17.60 s / 528 MiB; combined 9.88 s / 115 MiB.
+All four modes have identical episode and policy hashes per profile.
+Next: extend baseline/intern/combined to seeds 18/19, compare
 one/two process workers, rerun T1 reports on the final code fingerprint, run fast regression.
 
 Important: docs/profiling/poc-solver-pilot is a superseded timing pilot. Experimental modes
