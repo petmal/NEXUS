@@ -10,7 +10,7 @@ from nexus.protocol.transport import (
     ClientError,
     check_health,
     request_service_payload,
-    validate_candidate_payload,
+    validate_candidate_payload_with_performance,
 )
 
 
@@ -59,7 +59,7 @@ def _request(argv: Sequence[str]) -> int:
 def _validate(argv: Sequence[str]) -> int:
     parser = argparse.ArgumentParser(
         prog="nexus validate",
-        description="Validate a submitted victory code against a live single-session service.",
+        description="Finalize the attempt and validate its submitted victory code.",
     )
     candidate = parser.add_mutually_exclusive_group(required=True)
     candidate.add_argument("--candidate")
@@ -73,11 +73,16 @@ def _validate(argv: Sequence[str]) -> int:
             if args.candidate is not None
             else Path(args.candidate_file).read_text(encoding="utf-8")
         )
-        result = validate_candidate_payload(supplied, url=args.url)
+        result, performance = validate_candidate_payload_with_performance(supplied, url=args.url)
     except (OSError, ClientError) as exc:
         print(f"validation failed: {exc}", file=sys.stderr)
         return 2
 
+    print(
+        "NEXUS terminal performance: "
+        + json.dumps(performance, sort_keys=True, separators=(",", ":")),
+        file=sys.stderr,
+    )
     _write_json(result)
     return 0
 

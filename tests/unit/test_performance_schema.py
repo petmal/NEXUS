@@ -7,7 +7,7 @@ from nexus.models import ACTION_ADAPTER
 from nexus.protocol.session import PERFORMANCE_SCHEMA_URL, Session
 
 
-SCHEMA_PATH = Path(__file__).resolve().parents[2] / "schemas" / "performance-v1.schema.json"
+SCHEMA_PATH = Path(__file__).resolve().parents[2] / "schemas" / "performance-v3.schema.json"
 
 
 def _assert_value_matches_schema(value, spec):
@@ -24,12 +24,19 @@ def _assert_value_matches_schema(value, spec):
             parsed = urlparse(value)
             assert parsed.scheme in {"http", "https"}
             assert parsed.netloc
+    elif expected_type == "boolean":
+        assert isinstance(value, bool)
+    elif expected_type == "array":
+        assert isinstance(value, list)
+        item_spec = spec.get("items", {})
+        for item in value:
+            _assert_value_matches_schema(item, item_spec)
 
     if "enum" in spec:
         assert value in spec["enum"]
 
 
-def test_terminal_performance_matches_published_v1_schema_contract():
+def test_terminal_performance_matches_published_v3_schema_contract():
     schema = json.loads(SCHEMA_PATH.read_text(encoding="utf-8"))
     assert schema["additionalProperties"] is False
     assert set(schema["required"]) == set(schema["properties"])
@@ -51,7 +58,7 @@ def test_terminal_performance_matches_published_v1_schema_contract():
         assert terminal.ok
 
     assert terminal is not None and terminal.performance is not None
-    payload = terminal.performance.model_dump(mode="json", by_alias=True)
+    payload = terminal.model_dump(mode="json")["performance"]
 
     assert set(payload) == set(schema["required"])
     assert payload["$schema"] == PERFORMANCE_SCHEMA_URL
@@ -60,5 +67,5 @@ def test_terminal_performance_matches_published_v1_schema_contract():
 
 
 def test_performance_schema_url_is_immutable_and_versioned():
-    assert "/6421ea6b00f8f4a682d7678d7a73e69493a34f0a/" in PERFORMANCE_SCHEMA_URL
-    assert PERFORMANCE_SCHEMA_URL.endswith("/schemas/performance-v1.schema.json")
+    assert "/15a252279da3da870fab354d92cb3e92726445d2/" in PERFORMANCE_SCHEMA_URL
+    assert PERFORMANCE_SCHEMA_URL.endswith("/schemas/performance-v3.schema.json")

@@ -84,6 +84,28 @@ def _exact_keys(value: dict[str, object], expected: set[str], description: str) 
         raise ClientError(f"{description} has unknown field(s): {', '.join(sorted(extra))}")
 
 
+def _parse_status(
+    payload: dict[str, object],
+    *,
+    description: str,
+) -> tuple[int, str, int, str | None]:
+    turn = payload["turn"]
+    status = payload["status"]
+    actions_remaining = payload["actions_remaining"]
+    victory_code = payload["victory_code"]
+
+    if isinstance(turn, bool) or not isinstance(turn, int):
+        raise ClientError(f"{description} field 'turn' must be an integer")
+    if not isinstance(status, str) or status not in {"active", "won", "failed"}:
+        raise ClientError(f"{description} field 'status' is invalid")
+    if isinstance(actions_remaining, bool) or not isinstance(actions_remaining, int):
+        raise ClientError(f"{description} field 'actions_remaining' must be an integer")
+    if victory_code is not None and not isinstance(victory_code, str):
+        raise ClientError(f"{description} field 'victory_code' must be a string or null")
+
+    return turn, status, actions_remaining, victory_code
+
+
 def _status(base_url: str) -> tuple[int, str, int, str | None]:
     payload = _object(_json_request(base_url, "GET", "/status"), "service status")
     _exact_keys(
@@ -91,22 +113,28 @@ def _status(base_url: str) -> tuple[int, str, int, str | None]:
         {"turn", "status", "actions_remaining", "victory_code"},
         "service status",
     )
+    return _parse_status(payload, description="service status")
 
-    turn = payload["turn"]
-    status = payload["status"]
-    actions_remaining = payload["actions_remaining"]
-    victory_code = payload["victory_code"]
 
-    if isinstance(turn, bool) or not isinstance(turn, int):
-        raise ClientError("service status field 'turn' must be an integer")
-    if not isinstance(status, str) or status not in {"active", "won", "failed"}:
-        raise ClientError("service status field 'status' is invalid")
-    if isinstance(actions_remaining, bool) or not isinstance(actions_remaining, int):
-        raise ClientError("service status field 'actions_remaining' must be an integer")
-    if victory_code is not None and not isinstance(victory_code, str):
-        raise ClientError("service status field 'victory_code' must be a string or null")
-
-    return turn, status, actions_remaining, victory_code
+def _finalize(base_url: str) -> tuple[int, str, int, str | None, dict[str, object]]:
+    payload = _object(
+        _json_request(base_url, "POST", "/finalize"),
+        "service finalization",
+    )
+    _exact_keys(
+        payload,
+        {"turn", "status", "actions_remaining", "victory_code", "performance"},
+        "service finalization",
+    )
+    performance = _object(payload["performance"], "service finalization performance")
+    status_payload = {key: payload[key] for key in ("turn", "status", "actions_remaining", "victory_code")}
+    turn, status, actions_remaining, victory_code = _parse_status(
+        status_payload,
+        description="service finalization",
+    )
+    if status == "active":
+        raise ClientError("service finalization left the session active")
+    return turn, status, actions_remaining, victory_code, performance
 
 
 def request_service_payload(request: object, *, url: str | None = None) -> object:
@@ -150,8 +178,7 @@ def check_health(*, url: str | None = None) -> None:
         raise ClientError("service health check did not report status=ok")
 
 
-def validate_candidate_payload(candidate: str, *, url: str | None = None) -> dict[str, object]:
-    _, status, _, victory_code = _status(service_url(url))
+def _validation_result(candidate: str, status: str, victory_code: str | None) -> dict[str, object]:
     if status != "won":
         return {
             "correct": False,
@@ -174,3 +201,17 @@ def validate_candidate_payload(candidate: str, *, url: str | None = None) -> dic
         "title": "Invalid victory code",
         "explanation": "The session is won, but the submitted victory code does not match it.",
     }
+
+
+def validate_candidate_payload_with_performance(
+    candidate: str,
+    *,
+    url: str | None = None,
+) -> tuple[dict[str, object], dict[str, object]]:
+    _, status, _, victory_code, performance = _finalize(service_url(url))
+    return _validation_result(candidate, status, victory_code), performance
+
+
+def validate_candidate_payload(candidate: str, *, url: str | None = None) -> dict[str, object]:
+    result, _ = validate_candidate_payload_with_performance(candidate, url=url)
+    return result

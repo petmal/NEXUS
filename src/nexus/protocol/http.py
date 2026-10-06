@@ -54,6 +54,14 @@ def _health(episode: PrivateEpisode) -> dict[str, str]:
     return {"status": "ok", "episode_id": episode.public.episode_id}
 
 
+def _finalize(session: Session) -> dict[str, object]:
+    status, performance = session.finalize_attempt()
+    return {
+        **status.model_dump(mode="json"),
+        "performance": performance.model_dump(mode="json", by_alias=True),
+    }
+
+
 def create_app(episode: PrivateEpisode) -> FastAPI:
     """Create the general multi-session HTTP application."""
     app = FastAPI(title="NEXUS", version=episode.public.protocol_version)
@@ -135,5 +143,11 @@ def create_single_session_app(episode: PrivateEpisode) -> FastAPI:
     @app.get("/events")
     def events():
         return [record.model_dump(mode="json") for record in session.trace_snapshot()]
+
+    @app.post("/finalize", include_in_schema=False)
+    def finalize():
+        # Evaluator-only lifecycle endpoint. It is intentionally absent from the player request
+        # contract/OpenAPI surface; premature direct use irreversibly fails an active attempt.
+        return _finalize(session)
 
     return app

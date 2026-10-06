@@ -1,0 +1,118 @@
+{
+  "version": 1,
+  "runs_per_model": 10,
+  "seed_policy": "one fresh private SUITE_SEED shared across all cells and models; refresh for each repeat",
+  "difficulty_scale": "ordinal prediction 1 (easiest) to 10 (hardest), not calibrated",
+  "runs": [
+    {
+      "id": "01-D0-P1-R0",
+      "expected_relative_difficulty": 1,
+      "environment": {
+        "NEXUS_SEED": "${SUITE_SEED}",
+        "NEXUS_DISCOVERY_LEVEL": "0",
+        "NEXUS_PLANNING_LEVEL": "1",
+        "NEXUS_RESOURCE_PRESSURE": "0",
+        "NEXUS_GENERATION_TIMING": "true"
+      }
+    },
+    {
+      "id": "02-D1-P1-R0",
+      "expected_relative_difficulty": 2,
+      "environment": {
+        "NEXUS_SEED": "${SUITE_SEED}",
+        "NEXUS_DISCOVERY_LEVEL": "1",
+        "NEXUS_PLANNING_LEVEL": "1",
+        "NEXUS_RESOURCE_PRESSURE": "0",
+        "NEXUS_GENERATION_TIMING": "true"
+      }
+    },
+    {
+      "id": "03-D2-P1-R0",
+      "expected_relative_difficulty": 3,
+      "environment": {
+        "NEXUS_SEED": "${SUITE_SEED}",
+        "NEXUS_DISCOVERY_LEVEL": "2",
+        "NEXUS_PLANNING_LEVEL": "1",
+        "NEXUS_RESOURCE_PRESSURE": "0",
+        "NEXUS_GENERATION_TIMING": "true"
+      }
+    },
+    {
+      "id": "04-D3-P1-R0",
+      "expected_relative_difficulty": 5,
+      "environment": {
+        "NEXUS_SEED": "${SUITE_SEED}",
+        "NEXUS_DISCOVERY_LEVEL": "3",
+        "NEXUS_PLANNING_LEVEL": "1",
+        "NEXUS_RESOURCE_PRESSURE": "0",
+        "NEXUS_GENERATION_TIMING": "true"
+      }
+    },
+    {
+      "id": "05-D4-P1-R0",
+      "expected_relative_difficulty": 6,
+      "environment": {
+        "NEXUS_SEED": "${SUITE_SEED}",
+        "NEXUS_DISCOVERY_LEVEL": "4",
+        "NEXUS_PLANNING_LEVEL": "1",
+        "NEXUS_RESOURCE_PRESSURE": "0",
+        "NEXUS_GENERATION_TIMING": "true"
+      }
+    },
+    {
+      "id": "06-D5-P1-R0",
+      "expected_relative_difficulty": 7,
+      "environment": {
+        "NEXUS_SEED": "${SUITE_SEED}",
+        "NEXUS_DISCOVERY_LEVEL": "5",
+        "NEXUS_PLANNING_LEVEL": "1",
+        "NEXUS_RESOURCE_PRESSURE": "0",
+        "NEXUS_GENERATION_TIMING": "true"
+      }
+    },
+    {
+      "id": "07-D5-P2-R0",
+      "expected_relative_difficulty": 8,
+      "environment": {
+        "NEXUS_SEED": "${SUITE_SEED}",
+        "NEXUS_DISCOVERY_LEVEL": "5",
+        "NEXUS_PLANNING_LEVEL": "2",
+        "NEXUS_RESOURCE_PRESSURE": "0",
+        "NEXUS_GENERATION_TIMING": "true"
+      }
+    },
+    {
+      "id": "08-D5-P3-R0",
+      "expected_relative_difficulty": 8,
+      "environment": {
+        "NEXUS_SEED": "${SUITE_SEED}",
+        "NEXUS_DISCOVERY_LEVEL": "5",
+        "NEXUS_PLANNING_LEVEL": "3",
+        "NEXUS_RESOURCE_PRESSURE": "0",
+        "NEXUS_GENERATION_TIMING": "true"
+      }
+    },
+    {
+      "id": "09-D5-P3-R1",
+      "expected_relative_difficulty": 9,
+      "environment": {
+        "NEXUS_SEED": "${SUITE_SEED}",
+        "NEXUS_DISCOVERY_LEVEL": "5",
+        "NEXUS_PLANNING_LEVEL": "3",
+        "NEXUS_RESOURCE_PRESSURE": "1",
+        "NEXUS_GENERATION_TIMING": "true"
+      }
+    },
+    {
+      "id": "10-D5-P3-R2",
+      "expected_relative_difficulty": 10,
+      "environment": {
+        "NEXUS_SEED": "${SUITE_SEED}",
+        "NEXUS_DISCOVERY_LEVEL": "5",
+        "NEXUS_PLANNING_LEVEL": "3",
+        "NEXUS_RESOURCE_PRESSURE": "2",
+        "NEXUS_GENERATION_TIMING": "true"
+      }
+    }
+  ]
+}

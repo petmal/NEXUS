@@ -1,0 +1,40 @@
+{
+  "case": {
+    "seed": 17,
+    "d": 2,
+    "p": 1,
+    "r": 0
+  },
+  "sources": {
+    "product": "05713564e548c7960d81e0ab8dc62e561b5f9fbeff519839a54afd07f0f4db5a",
+    "reference": "6748234c830b7cf15960db9aca171fe2a2ff9762afe23e2bade6d6371fd1774e",
+    "runner": "ec2880cde29b64388d8c84d832eb8bf314875e1e94a9ce339f2b68292b48098b"
+  },
+  "reference": {
+    "episode_hash": "62f9ce5fa6f89a883978d96c96f699c5c947138f01128c113fc060fd8575ec01",
+    "policy_hashes": [
+      "0d54e920dfabbdd2083d9137a83c9b2b8f03555f8868b857cf213e30306b2297"
+    ],
+    "seconds": 0.5033174529999087,
+    "peak_rss_mib": 51.8359375,
+    "episode_id": "e949af24e44dcb0f",
+    "physical": 13,
+    "guaranteed": 18,
+    "action_budget": 32,
+    "recommended_tool_calls": 39
+  },
+  "product": {
+    "episode_hash": "62f9ce5fa6f89a883978d96c96f699c5c947138f01128c113fc060fd8575ec01",
+    "policy_hashes": [
+      "0d54e920dfabbdd2083d9137a83c9b2b8f03555f8868b857cf213e30306b2297"
+    ],
+    "seconds": 0.4290896080001403,
+    "peak_rss_mib": 51.62109375,
+    "episode_id": "e949af24e44dcb0f",
+    "physical": 13,
+    "guaranteed": 18,
+    "action_budget": 32,
+    "recommended_tool_calls": 39
+  },
+  "match": true
+}

@@ -1,0 +1,69 @@
+Final unit and integration
+........................................................................ [ 56%]
+.......................................................                  [100%]
+=============================== warnings summary ===============================
+tests/unit/test_runtime_efficiency_pass_2.py::test_apply_effect_matches_reference_for_generic_nested_ast_and_set_normalization
+  /workspace/scratch/5185b9a844b2/nexus-integration/.venv/lib/python3.14/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+    PydanticSerializationUnexpectedValue(Expected `enum` - serialized value may not be as expected [field_name='shape', input_value='circle', input_type=str])
+    return self.__pydantic_serializer__.to_python(
+
+tests/unit/test_runtime_efficiency_pass_2.py::test_apply_effect_matches_reference_for_generic_nested_ast_and_set_normalization
+  /workspace/scratch/5185b9a844b2/nexus-integration/.venv/lib/python3.14/site-packages/pydantic/main.py:475: UserWarning: Pydantic serializer warnings:
+    PydanticSerializationUnexpectedValue(Expected `enum` - serialized value may not be as expected [field_name='pattern', input_value='plain', input_type=str])
+    return self.__pydantic_serializer__.to_python(
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+============================= slowest 5 durations ==============================
+26.16s call     tests/unit/test_generation_performance_invariants.py::test_d5_p3_r1_returns_a_fully_qualified_exact_world
+5.13s call     tests/unit/test_protocol.py::test_terminal_performance_uses_exact_policy_cost_for_higher_discovery
+4.88s call     tests/unit/test_runtime_efficiency_pass_2.py::test_apply_effect_matches_recursive_copy_reference_over_generated_domain
+4.05s call     tests/unit/test_constructed_discovery.py::test_d5_constructs_a_strictly_lower_cost_diagnostic_experiment
+2.92s call     tests/unit/test_cli.py::test_generate_supports_constructed_discovery_level_five
+127 passed, 2 warnings in 98.30s (0:01:38)
+
+
+Three-seed property suite
+.difficulty seed stress: 3 seeds x 24 profiles = 72 generated worlds
+profile  success  attempts med/p95/max  solver-states med/p95/max  horizon med/p95/max  guaranteed med/p95/max  budget med/p95/max
+d0/p0     3/3       5/ 16/ 16               23/    31/    31               10/ 10/ 10            10/ 10/ 10            18/ 19/ 19
+d0/p1     3/3       5/ 16/ 16               24/    33/    33               15/ 18/ 18            15/ 18/ 18            29/ 32/ 32
+d0/p2     3/3       5/ 16/ 16               24/    33/    33               16/ 17/ 17            16/ 17/ 17            31/ 32/ 32
+d0/p3     3/3       5/ 16/ 16               98/   140/   140               18/ 19/ 19            18/ 19/ 19            33/ 34/ 34
+d1/p0     3/3       5/ 16/ 16               23/    31/    31               10/ 10/ 10            10/ 10/ 10            18/ 19/ 19
+d1/p1     3/3       5/ 16/ 16               24/    33/    33               15/ 18/ 18            15/ 18/ 18            29/ 32/ 32
+d1/p2     3/3       5/ 16/ 16               24/    33/    33               16/ 17/ 17            16/ 17/ 17            31/ 32/ 32
+d1/p3     3/3       5/ 16/ 16               98/   140/   140               18/ 19/ 19            18/ 19/ 19            33/ 34/ 34
+d2/p0     3/3       5/ 16/ 16               23/    31/    31               10/ 10/ 10            14/ 15/ 15            23/ 24/ 24
+d2/p1     3/3       5/ 16/ 16               24/    33/    33               15/ 18/ 18            18/ 23/ 23            32/ 37/ 37
+d2/p2     3/3       5/ 16/ 16               24/    33/    33               16/ 17/ 17            19/ 22/ 22            33/ 36/ 36
+d2/p3     3/3       5/ 16/ 16               98/   140/   140               18/ 19/ 19            21/ 24/ 24            35/ 38/ 38
+d3/p0     3/3      26/ 47/ 47               83/   112/   112               14/ 14/ 14            20/ 22/ 22            30/ 32/ 32
+d3/p1     3/3      26/ 47/ 47               84/   106/   106               15/ 16/ 16            21/ 26/ 26            31/ 36/ 36
+d3/p2     3/3      26/ 47/ 47               93/   120/   120               20/ 22/ 22            26/ 28/ 28            42/ 44/ 44
+d3/p3     3/3      26/ 47/ 47              360/   470/   470               22/ 24/ 24            28/ 30/ 30            44/ 46/ 46
+d4/p0     3/3      10/ 61/ 61               16/    21/    21                5/  5/  5            10/ 10/ 10            18/ 20/ 20
+d4/p1     3/3      10/ 61/ 61               17/    24/    24                6/  6/  6            11/ 11/ 11            24/ 25/ 25
+d4/p2     3/3      10/ 61/ 61               17/    24/    24                6/  6/  6            11/ 11/ 11            25/ 26/ 26
+d4/p3     3/3      10/ 61/ 61               73/   107/   107               11/ 12/ 12            16/ 17/ 17            31/ 32/ 32
+d5/p0     3/3       1/  1/  1              158/   158/   158                8/  8/  8            11/ 11/ 11            20/ 21/ 21
+d5/p1     3/3       1/  1/  1              148/   158/   158                7/  8/  8            10/ 11/ 11            22/ 24/ 24
+d5/p2     3/3       1/  1/  1              158/   158/   158                8/  8/  8            11/ 11/ 11            25/ 29/ 29
+d5/p3     3/3       1/  1/  1              673/   673/   673               14/ 14/ 14            17/ 17/ 17            31/ 35/ 35
+top generation-attempt outliers: seed=73 attempts=61, seed=73 attempts=61, seed=73 attempts=61, seed=73 attempts=61, seed=17 attempts=47
+top solver-state outliers: seed=1 solver_states=673, seed=17 solver_states=673, seed=73 solver_states=673, seed=73 solver_states=470, seed=17 solver_states=360
+top horizon outliers: seed=17 optimal_actions=24, seed=17 optimal_actions=22, seed=73 optimal_actions=22, seed=73 optimal_actions=20, seed=1 optimal_actions=20
+..                                                                      [100%]
+============================= slowest 10 durations =============================
+142.28s call     tests/property/test_difficulty_sampling.py::test_difficulty_profiles_are_stable_across_seed_sample
+8.89s call     tests/property/test_determinism.py::test_same_state_and_action_are_deterministic
+0.60s call     tests/property/test_difficulty_sampling.py::test_resource_pressure_profiles_preserve_exact_world_across_seed_sample
+
+(6 durations < 0.005s hidden.  Use -vv to show these durations.)
+3 passed in 152.10s (0:02:32)
+
+
+Package build
+Building source distribution...
+Building wheel from source distribution...
+Successfully built dist/nexus_benchmark-0.1.0.tar.gz
+Successfully built dist/nexus_benchmark-0.1.0-py3-none-any.whl

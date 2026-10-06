@@ -8,6 +8,7 @@ from itertools import permutations
 
 import networkx as nx
 
+from nexus.diagnostics import timed_stage
 from nexus.engine.rules import apply_effect
 from nexus.generator.constructed import (
     CONSTRUCTOR_VALUE,
@@ -1248,16 +1249,21 @@ def _add_planning_dependency(episode: PrivateEpisode) -> PrivateEpisode:
                 ProbeAction(machine="M1", artifact="A1"),
                 OperateAction(machine="M3", artifact="A3"),
             )
-        policy = solve_guaranteed_policy(
-            trial,
-            candidate_rules_by_machine=candidate_rules,
-            max_actions=min(
-                GENERATION_SOLVER_BUDGET,
-                base_guaranteed + overhead + 8,
-            ),
-            include_action_values=needs_decision_values,
-            requested_action_values=requested_action_values,
-        )
+        policy_options = {
+            "candidate_rules_by_machine": candidate_rules,
+            "max_actions": min(GENERATION_SOLVER_BUDGET, base_guaranteed + overhead + 8),
+            "include_action_values": needs_decision_values,
+            "requested_action_values": requested_action_values,
+        }
+        if base_guaranteed + overhead > policy_options["max_actions"]:
+            policy = solve_guaranteed_policy(trial, **policy_options)
+        else:
+            policy = solve_guaranteed_policy(
+                trial, expected_actions=base_guaranteed + overhead, **policy_options
+            )
+            if not policy.solvable:
+                # Preserve ordinary candidate rejection and exact diagnostic semantics.
+                policy = solve_guaranteed_policy(trial, **policy_options)
 
         if (
             not policy.solvable
@@ -1641,25 +1647,29 @@ def generate_episode(
     """
     validate_difficulty_levels(discovery_level, planning_level, resource_pressure)
     core_planning = 2 if planning_level == 3 else planning_level
-    episode = _generate_episode_core(
-        seed,
-        discovery_level=discovery_level,
-        planning_level=core_planning,
-        max_attempts=max_attempts,
-        verifier_secret=verifier_secret,
-        qualify_result=planning_level != 3,
-    )
+    with timed_stage("generation.core"):
+        episode = _generate_episode_core(
+            seed,
+            discovery_level=discovery_level,
+            planning_level=core_planning,
+            max_attempts=max_attempts,
+            verifier_secret=verifier_secret,
+            qualify_result=planning_level != 3,
+        )
     transformed = planning_level == 3 or resource_pressure != 0
     if planning_level == 3:
-        episode = _add_planning_dependency(episode)
-    episode = _apply_resource_pressure(episode, resource_pressure)
+        with timed_stage("generation.planning_dependency"):
+            episode = _add_planning_dependency(episode)
+    with timed_stage("generation.resource_pressure"):
+        episode = _apply_resource_pressure(episode, resource_pressure)
 
     # Core P0-P2/R0 generators already perform complete qualification before returning. Only
     # post-generation P3 or R1/R2 transformations need another full qualification pass.
     if transformed:
         from nexus.generator.qualify import qualify_episode
 
-        report = qualify_episode(episode)
+        with timed_stage("generation.qualification"):
+            report = qualify_episode(episode)
         if not report.passed:
             raise GenerationError(
                 "generated episode failed final profile qualification: "

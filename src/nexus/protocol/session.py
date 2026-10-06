@@ -1,29 +1,33 @@
 from __future__ import annotations
 
+from collections import Counter
 from threading import RLock
 
 from pydantic import BaseModel, ConfigDict, Field
 
 from nexus.engine.canonical import canonical_hash
 from nexus.engine.engine import step
-from nexus.models.actions import Action, FinishAction, ProbeAction
+from nexus.engine.goals import evaluate_goal
+from nexus.models.actions import Action, FinishAction, MoveAction
 from nexus.models.episode import PrivateEpisode
 from nexus.models.events import TraceRecord
+from nexus.models.goals import GoalKind, GoalPredicate
 from nexus.models.observation import Observation
 from nexus.models.world import TerminalStatus, WorldState
 from nexus.render.text import observation
 
-
 PERFORMANCE_SCHEMA_URL = (
     "https://raw.githubusercontent.com/petmal/NEXUS/"
-    "6421ea6b00f8f4a682d7678d7a73e69493a34f0a/schemas/performance-v1.schema.json"
+    "15a252279da3da870fab354d92cb3e92726445d2/schemas/performance-v3.schema.json"
 )
 
 
 class PerformanceSummary(BaseModel):
     """Terminal-only evaluation telemetry derived from trusted episode data and the live trace."""
 
-    model_config = ConfigDict(extra="forbid", frozen=True, populate_by_name=True)
+    model_config = ConfigDict(
+        extra="forbid", frozen=True, populate_by_name=True, serialize_by_alias=True,
+    )
 
     schema_url: str = Field(default=PERFORMANCE_SCHEMA_URL, alias="$schema")
     discovery_level: int
@@ -35,11 +39,27 @@ class PerformanceSummary(BaseModel):
     planning_dependency_action_cost: int
     actions_used: int
     optimal_physical_actions: int
+    action_delta_from_physical_optimum: int
     minimum_guaranteed_probes: int
     guaranteed_policy_actions: int
     action_delta_from_guaranteed_policy: int
     probes_used: int
     probe_delta_from_guaranteed_minimum: int
+    move_actions: int
+    wait_actions: int
+    take_actions: int
+    drop_actions: int
+    operate_actions: int
+    finish_actions: int
+    rooms_visited: int
+    room_revisits: int
+    reference_plan_move_actions: int
+    move_delta_from_reference_plan: int
+    goal_satisfied: bool
+    goal_leaf_count: int
+    satisfied_goal_leaf_count: int
+    unsatisfied_goal_leaves: tuple[str, ...]
+    unsatisfied_goal_conditions: tuple[str, ...]
     budget_remaining: int
     invalid_actions: int
     failed_finishes: int
@@ -68,6 +88,34 @@ class SessionStatus(BaseModel):
     status: TerminalStatus
     actions_remaining: int
     victory_code: str | None = None
+
+
+def _goal_leaves(goal: GoalPredicate) -> tuple[GoalPredicate, ...]:
+    if goal.kind in {GoalKind.AND, GoalKind.OR, GoalKind.NOT}:
+        return tuple(leaf for child in goal.children for leaf in _goal_leaves(child))
+    return (goal,)
+
+
+def _goal_leaf_label(goal: GoalPredicate) -> str:
+    value = goal.value.value if hasattr(goal.value, "value") else goal.value
+    if goal.kind == GoalKind.ARTIFACT_FIELD:
+        return f"artifact_field:{goal.artifact_id}.{goal.field}={value}"
+    if goal.kind == GoalKind.ARTIFACT_LOCATION:
+        return f"artifact_location:{goal.artifact_id}={value}"
+    if goal.kind == GoalKind.PHASE_EQUALS:
+        return f"phase_equals:{value}"
+    if goal.kind in {GoalKind.AND, GoalKind.OR, GoalKind.NOT}:
+        return f"{goal.kind.value}(" + ",".join(_goal_leaf_label(c) for c in goal.children) + ")"
+    raise ValueError(f"unsupported goal kind {goal.kind}")
+
+
+def _goal_deficits(goal: GoalPredicate, state: WorldState) -> tuple[str, ...]:
+    """False required conditions; keep OR/NOT intact instead of inventing obligations."""
+    if evaluate_goal(goal, state):
+        return ()
+    if goal.kind == GoalKind.AND:
+        return tuple(label for child in goal.children for label in _goal_deficits(child, state))
+    return (_goal_leaf_label(goal),)
 
 
 class Session:
@@ -107,15 +155,51 @@ class Session:
                 victory_code=victory_code,
             )
 
+    def finalize_attempt(self) -> tuple[SessionStatus, PerformanceSummary]:
+        """Irreversibly end an evaluator attempt and expose terminal-only diagnostics.
+
+        This is deliberately not part of the player request contract. If called while the world is
+        still active, the attempt becomes failed without consuming an environment action. That
+        makes premature access fail closed rather than providing a usable mid-game hint channel.
+        """
+        with self._lock:
+            if self.state.terminal_status == TerminalStatus.ACTIVE:
+                self.state.terminal_status = TerminalStatus.FAILED
+            performance = self._performance_summary()
+            if performance is None:
+                raise RuntimeError("finalized attempt did not produce terminal performance")
+            return self.status(), performance
+
     def _performance_summary(self) -> PerformanceSummary | None:
         if self.state.terminal_status == TerminalStatus.ACTIVE:
             return None
 
         metadata = self.episode.generation_metadata
-        probes_used = sum(isinstance(record.action, ProbeAction) for record in self.trace)
+        action_counts = Counter(record.action.type for record in self.trace)
+        probes_used = action_counts["probe"]
         guaranteed_policy_actions = metadata.guaranteed_policy_action_count
         if guaranteed_policy_actions <= 0:
             raise RuntimeError("terminal performance requires exact guaranteed-policy metadata")
+
+        visited_rooms = {self.episode.public.initial_state.agent_room}
+        room_revisits = 0
+        for record in self.trace:
+            if not isinstance(record.action, MoveAction):
+                continue
+            if record.action.target in visited_rooms:
+                room_revisits += 1
+            visited_rooms.add(record.action.target)
+
+        reference_plan_move_actions = sum(
+            item.get("type") == "move" for item in self.episode.reference_plan
+        )
+        goal_leaves = _goal_leaves(self.episode.public.goal)
+        unsatisfied_goal_leaves = tuple(
+            _goal_leaf_label(leaf)
+            for leaf in goal_leaves
+            if not evaluate_goal(leaf, self.state)
+        )
+
         return PerformanceSummary(
             discovery_level=metadata.discovery_level,
             planning_level=metadata.planning_level,
@@ -126,11 +210,31 @@ class Session:
             planning_dependency_action_cost=metadata.planning_dependency_action_cost,
             actions_used=self.state.turn,
             optimal_physical_actions=metadata.optimal_action_count,
+            action_delta_from_physical_optimum=self.state.turn - metadata.optimal_action_count,
             minimum_guaranteed_probes=metadata.required_probe_count,
             guaranteed_policy_actions=guaranteed_policy_actions,
             action_delta_from_guaranteed_policy=self.state.turn - guaranteed_policy_actions,
             probes_used=probes_used,
             probe_delta_from_guaranteed_minimum=probes_used - metadata.required_probe_count,
+            move_actions=action_counts["move"],
+            wait_actions=action_counts["wait"],
+            take_actions=action_counts["take"],
+            drop_actions=action_counts["drop"],
+            operate_actions=action_counts["operate"],
+            finish_actions=action_counts["finish"],
+            rooms_visited=len(visited_rooms),
+            room_revisits=room_revisits,
+            reference_plan_move_actions=reference_plan_move_actions,
+            move_delta_from_reference_plan=(
+                action_counts["move"] - reference_plan_move_actions
+            ),
+            goal_satisfied=evaluate_goal(self.episode.public.goal, self.state),
+            goal_leaf_count=len(goal_leaves),
+            satisfied_goal_leaf_count=(
+                len(goal_leaves) - len(unsatisfied_goal_leaves)
+            ),
+            unsatisfied_goal_leaves=unsatisfied_goal_leaves,
+            unsatisfied_goal_conditions=_goal_deficits(self.episode.public.goal, self.state),
             budget_remaining=self.state.resources.actions_remaining,
             invalid_actions=self._invalid_actions,
             failed_finishes=self._failed_finishes,

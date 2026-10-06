@@ -1,0 +1,97 @@
+{
+  "date": "2026-10-06",
+  "python": "3.14.7",
+  "dependencies": "uv sync --frozen --all-extras",
+  "unit_integration": {
+    "passed": 127,
+    "warnings": 2,
+    "seconds": 98.3,
+    "warnings_note": "pre-existing Pydantic fixture enum serialization warnings"
+  },
+  "property": {
+    "passed": 3,
+    "seconds": 152.1,
+    "discovery_levels": 6,
+    "planning_levels": 4,
+    "seeds": [
+      1,
+      17,
+      73
+    ],
+    "generated_profile_cases": 72,
+    "paired_pressure_seeds": [
+      1,
+      17,
+      211
+    ]
+  },
+  "cli": {
+    "generate": "passed",
+    "qualify": "passed",
+    "solve": "passed",
+    "replay": "passed",
+    "profile": "D2/P3/R2 seed 17",
+    "replay_turn": 19
+  },
+  "live_service": [
+    {
+      "path": "win",
+      "validation_correct": true,
+      "terminal": "won",
+      "active_telemetry_absent": true,
+      "terminal_v3": true,
+      "post_finalize_action_rejected": true
+    },
+    {
+      "path": "abandonment",
+      "validation_correct": false,
+      "terminal": "failed",
+      "active_telemetry_absent": true,
+      "terminal_v3": true,
+      "post_finalize_action_rejected": true
+    }
+  ],
+  "build": [
+    "wheel",
+    "sdist"
+  ],
+  "lint": "Ruff changed solver/session/runner/tests; git diff --check",
+  "review": "bounded independent review; cache diagnostic finding fixed with regression",
+  "hardware": {
+    "cpu": "AMD EPYC 9V74",
+    "cpu_quota": 8,
+    "memory_gib": 8
+  },
+  "differential": {
+    "passed": 30,
+    "full_episode_hashes_match": true,
+    "policy_hashes_match": true,
+    "excluded_policy_fields": [
+      "visited_belief_nodes"
+    ],
+    "profile_cases": 24,
+    "d5_p3_r1_r2_seeds": [
+      17,
+      73,
+      211
+    ],
+    "source_fingerprints_verified": true,
+    "concurrency": 2,
+    "timings_are_not_isolated_latency_measurements": true
+  },
+  "ci": {
+    "run_id": 37538266610,
+    "url": "https://github.com/petmal/NEXUS/actions/runs/37538266610",
+    "code_commit": "46fd17091a411998758de54ff4f08bed515ca3f7",
+    "conclusion": "success",
+    "gates": [
+      "frozen lock install",
+      "solver tests",
+      "fast tests",
+      "extended tests",
+      "three-seed property stress",
+      "CLI generate/qualify/solve/replay",
+      "container build/python/help"
+    ]
+  }
+}

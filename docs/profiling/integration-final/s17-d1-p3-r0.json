@@ -1,0 +1,42 @@
+{
+  "case": {
+    "seed": 17,
+    "d": 1,
+    "p": 3,
+    "r": 0
+  },
+  "sources": {
+    "product": "05713564e548c7960d81e0ab8dc62e561b5f9fbeff519839a54afd07f0f4db5a",
+    "reference": "6748234c830b7cf15960db9aca171fe2a2ff9762afe23e2bade6d6371fd1774e",
+    "runner": "ec2880cde29b64388d8c84d832eb8bf314875e1e94a9ce339f2b68292b48098b"
+  },
+  "reference": {
+    "episode_hash": "9702a4d0f8475fb14abd2f0d2c229079c20782ab381a80e36779c91efcf6e7f8",
+    "policy_hashes": [
+      "1bcdea104e27223163adf6680d0d561e3e8bdd5ec433d5ca815b6b2167cb5187",
+      "f0ff24062fa4d400105bfc88b20fcb5fa4d619d165b3370a46b18c822e2e9428"
+    ],
+    "seconds": 0.6182819590003419,
+    "peak_rss_mib": 52.49609375,
+    "episode_id": "de454ee1bdc69e68",
+    "physical": 19,
+    "guaranteed": 19,
+    "action_budget": 33,
+    "recommended_tool_calls": 40
+  },
+  "product": {
+    "episode_hash": "9702a4d0f8475fb14abd2f0d2c229079c20782ab381a80e36779c91efcf6e7f8",
+    "policy_hashes": [
+      "1bcdea104e27223163adf6680d0d561e3e8bdd5ec433d5ca815b6b2167cb5187",
+      "f0ff24062fa4d400105bfc88b20fcb5fa4d619d165b3370a46b18c822e2e9428"
+    ],
+    "seconds": 0.552533960999881,
+    "peak_rss_mib": 53.01171875,
+    "episode_id": "de454ee1bdc69e68",
+    "physical": 19,
+    "guaranteed": 19,
+    "action_budget": 33,
+    "recommended_tool_calls": 40
+  },
+  "match": true
+}

@@ -1,0 +1,205 @@
+{
+  "cprofile_top_cumulative": null,
+  "events": [
+    {
+      "call": 1,
+      "exhausted_state_limit": false,
+      "max_frontier_size": 63,
+      "optimal_action_count": 8,
+      "seconds": 0.03269979499998499,
+      "solvable": true,
+      "stage": "generator._generate_constructed_episode->solve_compressed_physical",
+      "visited_states": 158
+    },
+    {
+      "call": 1,
+      "exhausted_action_limit": false,
+      "optimal_worst_case_actions": 11,
+      "seconds": 14.248944319999964,
+      "solvable": true,
+      "stage": "generator._generate_constructed_episode->solve_guaranteed_policy",
+      "visited_belief_nodes": 20306
+    },
+    {
+      "call": 1,
+      "seconds": 14.283350070999973,
+      "stage": "generator._generate_episode_core->_generate_constructed_episode"
+    },
+    {
+      "call": 1,
+      "seconds": 14.28337641099995,
+      "stage": "generator.generate_episode->_generate_episode_core"
+    },
+    {
+      "call": 1,
+      "exhausted_state_limit": false,
+      "max_frontier_size": 251,
+      "optimal_action_count": 14,
+      "seconds": 0.25972479699998985,
+      "solvable": true,
+      "stage": "generator._add_planning_dependency->solve_compressed_physical",
+      "visited_states": 673
+    },
+    {
+      "call": 1,
+      "exhausted_action_limit": false,
+      "optimal_worst_case_actions": 17,
+      "seconds": 137.562062976,
+      "solvable": true,
+      "stage": "generator._add_planning_dependency->solve_guaranteed_policy",
+      "visited_belief_nodes": 180409
+    },
+    {
+      "call": 1,
+      "seconds": 137.82306312800006,
+      "stage": "generator.generate_episode->_add_planning_dependency"
+    },
+    {
+      "call": 1,
+      "seconds": 9.010000212583691e-07,
+      "stage": "generator.generate_episode->_apply_resource_pressure"
+    },
+    {
+      "call": 1,
+      "exhausted_action_limit": false,
+      "optimal_worst_case_actions": 17,
+      "seconds": 0.0008536490001915809,
+      "solvable": true,
+      "stage": "qualify.qualify_episode->solve_guaranteed_policy",
+      "visited_belief_nodes": 180409
+    },
+    {
+      "call": 1,
+      "exhausted_state_limit": false,
+      "max_frontier_size": 138,
+      "optimal_action_count": 8,
+      "seconds": 0.09203990499986503,
+      "solvable": true,
+      "stage": "qualify.qualify_episode->solve",
+      "visited_states": 680
+    },
+    {
+      "call": 1,
+      "exhausted_action_limit": false,
+      "optimal_worst_case_actions": 11,
+      "seconds": 0.0005912629999329511,
+      "solvable": true,
+      "stage": "qualify.qualify_episode->prove_guaranteed_policy_cost",
+      "visited_belief_nodes": 20306
+    },
+    {
+      "call": 2,
+      "exhausted_state_limit": false,
+      "max_frontier_size": 319,
+      "optimal_action_count": 14,
+      "seconds": 0.3629312429998208,
+      "solvable": true,
+      "stage": "qualify.qualify_episode->solve",
+      "visited_states": 2279
+    },
+    {
+      "call": 1,
+      "seconds": 0.001280464000046777,
+      "stage": "qualify.qualify_episode->execute_with_trace"
+    },
+    {
+      "call": 1,
+      "seconds": 0.0012526310001703678,
+      "stage": "qualify.qualify_episode->replay"
+    },
+    {
+      "call": 1,
+      "passed": true,
+      "seconds": 0.46897784399993725,
+      "stage": "qualify.generate_episode->qualify_episode"
+    }
+  ],
+  "generation": {
+    "action_budget": 35,
+    "guaranteed_policy_actions": 17,
+    "optimal_physical_actions": 14,
+    "peak_rss_mb": 4059.5625,
+    "planning_dependency_action_cost": 6,
+    "seconds": 152.57555744499996,
+    "topology_attempt": 0
+  },
+  "profile": {
+    "discovery_level": 5,
+    "episode_id": "d43aa316d603ba0d",
+    "planning_level": 3,
+    "resource_pressure": 0,
+    "seed": 17
+  },
+  "stage_totals": [
+    {
+      "calls": 1,
+      "seconds": 137.82306312800006,
+      "stage": "generator.generate_episode->_add_planning_dependency"
+    },
+    {
+      "calls": 1,
+      "seconds": 137.562062976,
+      "stage": "generator._add_planning_dependency->solve_guaranteed_policy"
+    },
+    {
+      "calls": 1,
+      "seconds": 14.28337641099995,
+      "stage": "generator.generate_episode->_generate_episode_core"
+    },
+    {
+      "calls": 1,
+      "seconds": 14.283350070999973,
+      "stage": "generator._generate_episode_core->_generate_constructed_episode"
+    },
+    {
+      "calls": 1,
+      "seconds": 14.248944319999964,
+      "stage": "generator._generate_constructed_episode->solve_guaranteed_policy"
+    },
+    {
+      "calls": 1,
+      "seconds": 0.46897784399993725,
+      "stage": "qualify.generate_episode->qualify_episode"
+    },
+    {
+      "calls": 2,
+      "seconds": 0.45497114799968585,
+      "stage": "qualify.qualify_episode->solve"
+    },
+    {
+      "calls": 1,
+      "seconds": 0.25972479699998985,
+      "stage": "generator._add_planning_dependency->solve_compressed_physical"
+    },
+    {
+      "calls": 1,
+      "seconds": 0.03269979499998499,
+      "stage": "generator._generate_constructed_episode->solve_compressed_physical"
+    },
+    {
+      "calls": 1,
+      "seconds": 0.001280464000046777,
+      "stage": "qualify.qualify_episode->execute_with_trace"
+    },
+    {
+      "calls": 1,
+      "seconds": 0.0012526310001703678,
+      "stage": "qualify.qualify_episode->replay"
+    },
+    {
+      "calls": 1,
+      "seconds": 0.0008536490001915809,
+      "stage": "qualify.qualify_episode->solve_guaranteed_policy"
+    },
+    {
+      "calls": 1,
+      "seconds": 0.0005912629999329511,
+      "stage": "qualify.qualify_episode->prove_guaranteed_policy_cost"
+    },
+    {
+      "calls": 1,
+      "seconds": 9.010000212583691e-07,
+      "stage": "generator.generate_episode->_apply_resource_pressure"
+    }
+  ]
+}
