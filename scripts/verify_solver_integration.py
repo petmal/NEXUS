@@ -11,6 +11,7 @@ import os
 import subprocess
 import sys
 import time
+from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 
 
@@ -68,6 +69,8 @@ def main():
     parser.add_argument("--reference", type=Path, required=True)
     parser.add_argument("--output", type=Path, default=Path("integration-results"))
     parser.add_argument("--timeout", type=int, default=600)
+    parser.add_argument("--jobs", type=int, choices=(1, 2), default=1,
+                        help="Bounded independent case checks; use 1 for timing comparisons")
     parser.add_argument("--worker", choices=["reference", "product"])
     parser.add_argument("--case")
     args = parser.parse_args()
@@ -83,14 +86,14 @@ def main():
     cases = [{"seed": 17, "d": d, "p": p, "r": 0} for d in range(6) for p in range(4)]
     cases += [{"seed": s, "d": 5, "p": 3, "r": r}
               for s in (17, 73, 211) for r in (1, 2)]
-    for case in cases:
+    def check_case(case):
         label = "s{seed}-d{d}-p{p}-r{r}".format(**case)
         path = args.output / f"{label}.json"
         if path.exists():
             old = json.loads(path.read_text())
             if old.get("sources") == sources and old.get("match") is True:
                 print(f"{label}: verified checkpoint", flush=True)
-                continue
+                return
         record = {"case": case, "sources": sources}
         for variant in ("reference", "product"):
             result = subprocess.run(
@@ -108,6 +111,11 @@ def main():
         print(f"{label}: match={record['match']}", flush=True)
         if not record["match"]:
             raise SystemExit(f"differential mismatch: {path}")
+
+    with ThreadPoolExecutor(max_workers=args.jobs) as executor:
+        list(executor.map(check_case, cases))
+    if sources["product"] != fingerprint(product) or sources["reference"] != fingerprint(args.reference):
+        raise SystemExit("Sources changed during validation; rerun before accepting evidence")
 
 
 if __name__ == "__main__":
