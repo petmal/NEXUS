@@ -156,3 +156,59 @@ The private episode, latent rule AST, reference plan, and verifier secret remain
 service process. Player-facing clients need only the service URL. The surrounding orchestrator
 owns process/container lifetime; restarting a crashed service is a new attempt, not a continuation
 of the previous mutable world.
+
+
+## Terminal diagnostics and operator timing
+
+Terminal action responses contain `performance` using the immutable performance-v2 schema
+referenced by `$schema`. This adds accepted action counts, room visits/revisits, a comparison to
+moves in the stored physical reference plan, and public-goal satisfaction diagnostics. A room
+revisit is not necessarily waste, and the stored plan's move count is not a standalone optimum
+for navigation. Leaf counts describe atomic predicates, not a score for arbitrary OR/NOT goals.
+
+`nexus validate` finalizes the attempt before checking the submitted code. If the session is still
+active, finalization irreversibly marks it failed without consuming a game action. It returns
+terminal diagnostics even for an early model stop. A won session retains its receipt; repeated
+finalization is idempotent. The validator writes the usual `{correct,title,explanation}` JSON to
+stdout and a `NEXUS terminal performance: {...}` line to stderr, including through the fast CLI
+entrypoint. Capture stderr separately from the validator result.
+
+This distinguishes a satisfied goal with no successful `finish` from missing deliveries or
+incorrect transformations. It does not weaken the explicit-finish victory rule. `/finalize` is
+excluded from the player request envelope and OpenAPI description; direct premature calls end
+the attempt, so diagnostics cannot be used to continue playing. Ordinary active-session action,
+status, observation, and manifest responses contain no terminal diagnostics.
+
+If the orchestrator aborts on an API/parsing error before invoking its validator, it must still
+call the evaluator's finalization endpoint before destroying the service to collect this report.
+NEXUS cannot record the model provider's error category; retain that harness outcome alongside
+the NEXUS terminal outcome. Finalization is an evaluator lifecycle operation, not a replayed
+game action; an interrupted attempt's action trace ends at its last accepted environment action.
+
+For slow service generation, enable operator-side timing:
+
+```yaml
+NEXUS_GENERATION_TIMING: "true"
+```
+
+Or use `nexus serve-session --seed 17 --discovery-level 5 --planning-level 3
+--generation-timing`. Stage start/completion/error records go to server stderr. They cover core
+generation, P3 dependency compilation, resource pressure, final qualification, and cold policy
+solver phases. Timings never enter compiled episode data or player responses. Keep service logs
+outside the player's tools/files; they are operator diagnostics. No seeds, rules, witnesses,
+verifier secrets, or goal values are written by these timing records.
+
+For a cold troubleshooting run with a durable JSON report:
+
+```bash
+uv run python scripts/profile_generation.py \
+  --seed 17 --discovery-level 5 --planning-level 3 --resource-pressure 0 \
+  --json-out /tmp/d5p3.json
+```
+
+Progress is streamed to stderr while JSON is emitted to stdout and the requested file. The report
+includes runtime information, peak RSS (MiB), solver memo/branch counts, and a hash of the compiled
+episode for reproducibility with the profiler's fixed verifier secret. Use `--cprofile` and
+`--profile-out /tmp/d5p3.prof` for function-level attribution; profiled wall times include cProfile
+overhead. Parent/child stage times are inclusive and must not be added together. Run each seed
+and profile in a fresh process when comparing cold service startup costs.
