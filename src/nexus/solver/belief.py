@@ -9,6 +9,7 @@ from itertools import count, product
 
 from pydantic import BaseModel, ConfigDict
 
+from nexus.diagnostics import timed_stage
 from nexus.engine.canonical import canonical_hash
 from nexus.engine.engine import step
 from nexus.engine.goals import evaluate_goal
@@ -580,16 +581,18 @@ def solve_guaranteed_policy(
     search_budget = max(512, max_actions + 64)
     hypothesis_episodes: list[PrivateEpisode] = []
     hypothesis_physical_optima: list[int] = []
-    for rules_by_machine in combinations:
-        candidate = _episode_for_hypothesis(
-            episode,
-            rules_by_machine,
-            search_budget=search_budget,
-        )
-        physical = solve_compressed_physical(candidate, max_states=max_physical_states)
-        if physical.solvable and physical.optimal_action_count is not None:
-            hypothesis_episodes.append(candidate)
-            hypothesis_physical_optima.append(physical.optimal_action_count)
+    with timed_stage("policy.hypothesis_physical") as timing:
+        for rules_by_machine in combinations:
+            candidate = _episode_for_hypothesis(
+                episode,
+                rules_by_machine,
+                search_budget=search_budget,
+            )
+            physical = solve_compressed_physical(candidate, max_states=max_physical_states)
+            if physical.solvable and physical.optimal_action_count is not None:
+                hypothesis_episodes.append(candidate)
+                hypothesis_physical_optima.append(physical.optimal_action_count)
+        timing["hypotheses"] = len(hypothesis_episodes)
 
     if not hypothesis_episodes:
         return BeliefPolicyResult(solvable=False, viable_hypothesis_count=0)
@@ -709,25 +712,28 @@ def solve_guaranteed_policy(
 
     lower_bound = max(hypothesis_physical_optima)
     optimal: int | None = None
-    if expected_actions is None:
-        for action_budget in range(lower_bound, max_actions + 1):
-            if can_win(initial_state, initial_belief, action_budget):
-                optimal = action_budget
-                break
-    else:
-        sufficient = (
-            expected_actions >= lower_bound
-            and can_win(initial_state, initial_belief, expected_actions)
-        )
-        minimal = (
-            expected_actions == lower_bound
-            or (
-                expected_actions > lower_bound
-                and not can_win(initial_state, initial_belief, expected_actions - 1)
+    with timed_stage("policy.minimax") as timing:
+        if expected_actions is None:
+            for action_budget in range(lower_bound, max_actions + 1):
+                if can_win(initial_state, initial_belief, action_budget):
+                    optimal = action_budget
+                    break
+        else:
+            sufficient = (
+                expected_actions >= lower_bound
+                and can_win(initial_state, initial_belief, expected_actions)
             )
-        )
-        if sufficient and minimal:
-            optimal = expected_actions
+            minimal = (
+                expected_actions == lower_bound
+                or (
+                    expected_actions > lower_bound
+                    and not can_win(initial_state, initial_belief, expected_actions - 1)
+                )
+            )
+            if sufficient and minimal:
+                optimal = expected_actions
+        timing["memo_entries"] = len(memo)
+        timing["branch_entries"] = len(branch_cache)
 
     def witness_outcome(signature: BranchSignature, state: WorldState) -> str:
         if isinstance(signature, str):
@@ -795,11 +801,12 @@ def solve_guaranteed_policy(
 
         raise RuntimeError("proved policy state has no witness macro")
 
-    witness = (
-        build_witness(initial_state, initial_belief, optimal)
-        if optimal is not None
-        else None
-    )
+    with timed_stage("policy.witness"):
+        witness = (
+            build_witness(initial_state, initial_belief, optimal)
+            if optimal is not None
+            else None
+        )
 
     def action_value(choice: _MacroChoice) -> PolicyActionValue:
         branches = branches_for(initial_state, initial_belief, choice)
@@ -840,16 +847,20 @@ def solve_guaranteed_policy(
         if requested_action_values is None
         else frozenset(_action_identity(action) for action in requested_action_values)
     )
-    initial_values = (
-        tuple(
-            action_value(choice)
-            for choice in immediate_choices
-            if requested_identities is None
-            or _action_identity(choice.action) in requested_identities
+    with timed_stage("policy.action_values") as timing:
+        initial_values = (
+            tuple(
+                action_value(choice)
+                for choice in immediate_choices
+                if requested_identities is None
+                or _action_identity(choice.action) in requested_identities
+            )
+            if include_action_values
+            else ()
         )
-        if include_action_values
-        else ()
-    )
+        timing["memo_entries"] = len(memo)
+        timing["branch_entries"] = len(branch_cache)
+        timing["requested_values"] = len(initial_values)
 
     result = BeliefPolicyResult(
         solvable=optimal is not None,

@@ -18,6 +18,9 @@ import cProfile
 import inspect
 import io
 import json
+import logging
+import platform
+import sys
 import pstats
 import time
 from collections import Counter
@@ -31,6 +34,8 @@ try:
 except ImportError:  # pragma: no cover - resource is unavailable on Windows.
     resource = None  # type: ignore[assignment]
 
+from nexus.diagnostics import logger
+from nexus.engine.canonical import canonical_hash
 import nexus.generator.generator as generator_module
 import nexus.generator.qualify as qualify_module
 
@@ -45,6 +50,15 @@ class Event:
 
 EVENTS: list[Event] = []
 CALL_COUNTS: Counter[str] = Counter()
+SOLVER_STAGES: list[dict[str, object]] = []
+
+
+class TimingHandler(logging.StreamHandler):
+    def emit(self, record: logging.LogRecord) -> None:
+        timing = getattr(record, "generation_timing", None)
+        if timing is not None:
+            SOLVER_STAGES.append(timing)
+        super().emit(record)
 
 
 def _result_metrics(result: object) -> dict[str, object]:
@@ -80,6 +94,7 @@ def _timed(module_name: str, name: str, original: Callable[..., Any]) -> Callabl
         stage = f"{module_name}.{caller}->{name}"
         CALL_COUNTS[stage] += 1
         call = CALL_COUNTS[stage]
+        logger.info("stage=%s call=%d event=start", stage, call)
         started = time.perf_counter()
         try:
             result = original(*args, **kwargs)
@@ -96,6 +111,8 @@ def _timed(module_name: str, name: str, original: Callable[..., Any]) -> Callabl
                 result=_result_metrics(result),
             )
         )
+        logger.info("stage=%s call=%d event=complete seconds=%.6f",
+                    stage, call, EVENTS[-1].seconds)
         return result
 
     return wrapper
@@ -142,7 +159,7 @@ def _peak_rss_mb() -> float | None:
         return None
     value = resource.getrusage(resource.RUSAGE_SELF).ru_maxrss
     # Linux reports KiB; macOS reports bytes.
-    if value > 10_000_000:
+    if sys.platform == "darwin":
         return value / (1024 * 1024)
     return value / 1024
 
@@ -188,6 +205,11 @@ def main() -> None:
     args = parse_args()
     if args.profile_out is not None and not args.cprofile:
         raise SystemExit("--profile-out requires --cprofile")
+    handler = TimingHandler(sys.stderr)
+    handler.setFormatter(logging.Formatter("%(asctime)s %(message)s"))
+    logger.addHandler(handler)
+    logger.setLevel(logging.INFO)
+    logger.propagate = False
     install_timing_wrappers()
 
     profiler = cProfile.Profile()
@@ -212,6 +234,10 @@ def main() -> None:
 
     metadata = episode.generation_metadata
     report = {
+        "runtime": {"python": platform.python_version(), "platform": platform.platform()},
+        "episode_sha256": canonical_hash(episode),
+        "timing_note": "Stages are inclusive and nested; do not sum their durations.",
+        "solver_stages": SOLVER_STAGES,
         "profile": {
             "seed": args.seed,
             "discovery_level": args.discovery_level,

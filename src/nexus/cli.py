@@ -310,6 +310,10 @@ def serve_session(
         None, envvar="NEXUS_VERIFIER_SECRET",
         help="Optional fixed verifier secret when generating from --seed.",
     ),
+    generation_timing: bool = typer.Option(
+        False, envvar="NEXUS_GENERATION_TIMING",
+        help="Log generation stage timings to operator stderr; keep service logs private.",
+    ),
     host: str = typer.Option("127.0.0.1", envvar="NEXUS_HOST"),
     port: int = typer.Option(8000, envvar="NEXUS_PORT"),
 ) -> None:
@@ -321,6 +325,12 @@ def serve_session(
         raise typer.BadParameter("provide exactly one of --private or --seed")
     if private is not None and verifier_secret is not None:
         raise typer.BadParameter("--verifier-secret can only be used with --seed")
+
+    if generation_timing:
+        import logging
+
+        logging.basicConfig(level=logging.INFO, format="%(asctime)s %(name)s %(message)s")
+        logging.getLogger("nexus.generation").setLevel(logging.INFO)
 
     episode = (
         load_private(private)
