@@ -1,0 +1,31 @@
+{
+  "status": "ok",
+  "generation_seconds": 4.599874142999852,
+  "seconds": 5.547721617000207,
+  "peak_rss_mib": 72.296875,
+  "paired_world_hash": "ea7def02bb496ebe74d6013cc2a81b376ef2e22b8539c4efb5616015c193680b",
+  "scenario_family_id": "87e6c187961a4a52",
+  "candidates": {
+    "M1": 12,
+    "M2": 4
+  },
+  "evidence_rows": {
+    "M1": 2,
+    "M2": 2
+  },
+  "viable_causal_hypotheses": 27,
+  "replayed_physical_hypotheses": 27,
+  "minimum_probes": 2,
+  "physical_actions": 22,
+  "guaranteed_actions": 28,
+  "budget": 46,
+  "case": {
+    "seed": 10,
+    "discovery_level": 3,
+    "planning_level": 2,
+    "resource_pressure": 0,
+    "theory_level": 1
+  },
+  "code": "60f12c969e871cbe8cbd28a258cb536ba7dcbe8af5810353b5b8c088cc19b62a",
+  "python": "3.14.7"
+}

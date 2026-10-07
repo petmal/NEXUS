@@ -1,8 +1,9 @@
 # Theory-prior axis (T) — design and proof plan
 
-Status: design/PoC only. This branch is intentionally based on
-`5d95a584fdd0254b87d7f02a5a88034f3b9bfae7`, the validated calibration implementation.
-Do not merge this branch until the proof gates below have been satisfied.
+Status: T0/T1 implementation in progress on `feat/theory-prior-axis`, based on integration
+commit `cd69107f02af30c10464b85b47fa343a3f96aaef`. This document retains the broader
+research ladder; current runtime scope and measured gates are recorded in
+`theory-implementation-progress.md`. T2+ are not enabled.
 
 ## 1. Motivation
 
@@ -582,3 +583,4 @@ scientifically coherent, but efficient exact policy qualification needs a symbol
 that has not yet been proved.
 
 T5 hidden ontology remains future work.
+

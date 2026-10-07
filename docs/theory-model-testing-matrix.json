@@ -1,0 +1,128 @@
+{
+  "version": 1,
+  "runs_per_model": 10,
+  "seed_policy": "seed 17 shared across all paired cells and models for initial calibration; preflight replacement seeds under both theory levels",
+  "difficulty_scale": "ordinal prediction 1 (easiest) to 10 (hardest), not calibrated; T1 ordering is a hypothesis to test",
+  "runs": [
+    {
+      "id": "01-D0-P2-R0-T0",
+      "expected_relative_difficulty": 1,
+      "environment": {
+        "NEXUS_SEED": "17",
+        "NEXUS_DISCOVERY_LEVEL": "0",
+        "NEXUS_PLANNING_LEVEL": "2",
+        "NEXUS_RESOURCE_PRESSURE": "0",
+        "NEXUS_THEORY_LEVEL": "0",
+        "NEXUS_GENERATION_TIMING": "true"
+      }
+    },
+    {
+      "id": "02-D0-P2-R0-T1",
+      "expected_relative_difficulty": 2,
+      "environment": {
+        "NEXUS_SEED": "17",
+        "NEXUS_DISCOVERY_LEVEL": "0",
+        "NEXUS_PLANNING_LEVEL": "2",
+        "NEXUS_RESOURCE_PRESSURE": "0",
+        "NEXUS_THEORY_LEVEL": "1",
+        "NEXUS_GENERATION_TIMING": "true"
+      }
+    },
+    {
+      "id": "03-D1-P2-R0-T0",
+      "expected_relative_difficulty": 3,
+      "environment": {
+        "NEXUS_SEED": "17",
+        "NEXUS_DISCOVERY_LEVEL": "1",
+        "NEXUS_PLANNING_LEVEL": "2",
+        "NEXUS_RESOURCE_PRESSURE": "0",
+        "NEXUS_THEORY_LEVEL": "0",
+        "NEXUS_GENERATION_TIMING": "true"
+      }
+    },
+    {
+      "id": "04-D1-P2-R0-T1",
+      "expected_relative_difficulty": 4,
+      "environment": {
+        "NEXUS_SEED": "17",
+        "NEXUS_DISCOVERY_LEVEL": "1",
+        "NEXUS_PLANNING_LEVEL": "2",
+        "NEXUS_RESOURCE_PRESSURE": "0",
+        "NEXUS_THEORY_LEVEL": "1",
+        "NEXUS_GENERATION_TIMING": "true"
+      }
+    },
+    {
+      "id": "05-D2-P2-R0-T0",
+      "expected_relative_difficulty": 5,
+      "environment": {
+        "NEXUS_SEED": "17",
+        "NEXUS_DISCOVERY_LEVEL": "2",
+        "NEXUS_PLANNING_LEVEL": "2",
+        "NEXUS_RESOURCE_PRESSURE": "0",
+        "NEXUS_THEORY_LEVEL": "0",
+        "NEXUS_GENERATION_TIMING": "true"
+      }
+    },
+    {
+      "id": "06-D2-P2-R0-T1",
+      "expected_relative_difficulty": 6,
+      "environment": {
+        "NEXUS_SEED": "17",
+        "NEXUS_DISCOVERY_LEVEL": "2",
+        "NEXUS_PLANNING_LEVEL": "2",
+        "NEXUS_RESOURCE_PRESSURE": "0",
+        "NEXUS_THEORY_LEVEL": "1",
+        "NEXUS_GENERATION_TIMING": "true"
+      }
+    },
+    {
+      "id": "07-D3-P2-R0-T0",
+      "expected_relative_difficulty": 7,
+      "environment": {
+        "NEXUS_SEED": "17",
+        "NEXUS_DISCOVERY_LEVEL": "3",
+        "NEXUS_PLANNING_LEVEL": "2",
+        "NEXUS_RESOURCE_PRESSURE": "0",
+        "NEXUS_THEORY_LEVEL": "0",
+        "NEXUS_GENERATION_TIMING": "true"
+      }
+    },
+    {
+      "id": "08-D3-P2-R0-T1",
+      "expected_relative_difficulty": 8,
+      "environment": {
+        "NEXUS_SEED": "17",
+        "NEXUS_DISCOVERY_LEVEL": "3",
+        "NEXUS_PLANNING_LEVEL": "2",
+        "NEXUS_RESOURCE_PRESSURE": "0",
+        "NEXUS_THEORY_LEVEL": "1",
+        "NEXUS_GENERATION_TIMING": "true"
+      }
+    },
+    {
+      "id": "09-D3-P2-R1-T0",
+      "expected_relative_difficulty": 8,
+      "environment": {
+        "NEXUS_SEED": "17",
+        "NEXUS_DISCOVERY_LEVEL": "3",
+        "NEXUS_PLANNING_LEVEL": "2",
+        "NEXUS_RESOURCE_PRESSURE": "1",
+        "NEXUS_THEORY_LEVEL": "0",
+        "NEXUS_GENERATION_TIMING": "true"
+      }
+    },
+    {
+      "id": "10-D3-P2-R1-T1",
+      "expected_relative_difficulty": 9,
+      "environment": {
+        "NEXUS_SEED": "17",
+        "NEXUS_DISCOVERY_LEVEL": "3",
+        "NEXUS_PLANNING_LEVEL": "2",
+        "NEXUS_RESOURCE_PRESSURE": "1",
+        "NEXUS_THEORY_LEVEL": "1",
+        "NEXUS_GENERATION_TIMING": "true"
+      }
+    }
+  ]
+}

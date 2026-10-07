@@ -397,3 +397,27 @@ auxiliary machine before probing the mission machine; a functional distractor ma
 strictly higher-cost alternative. Richer interacting artifacts, larger rule grammars, structural
 OOD splits, visual renderers, and broader world families remain follow-up work after calibration
 against real models.
+
+
+## Theory prior (T)
+
+T0 is the existing explicit finite grammar. Opt-in T1 supplies independent value, polarity and
+rotation primitives with bounded shape/phase conditions. Its public `theory.json` and manual
+come from the evaluator's structured prior, covering 27,120 distinct behaviors. Only evidence
+survivors are materialized for exact policy solving; the belief is never silently truncated.
+
+```bash
+uv run nexus generate /tmp/nexus-t1 --seed 17 --discovery-level 2 \
+  --planning-level 2 --resource-pressure 0 --theory-level 1
+uv run nexus qualify /tmp/nexus-t1/private.json
+```
+
+For services set `NEXUS_THEORY_LEVEL=1`. T1 currently supports D0–D3; D4/D5 and T2+ remain
+unsupported. Seeded T0/T1 pairs preserve their physical world; T1 evidence and exact action
+budgets can differ. A seed is explicitly rejected when bounded evidence search cannot certify
+its D guarantee. This is an experimental calibration release, not a promise that every seed or
+higher T value is supported. True laws currently retain the paired T0 sampling distribution;
+T1 tests a broader disclosed prior, not full-universe true-law sampling.
+
+See [validation and model matrix](docs/theory-implementation-results.md) and the
+[resumable checkpoint](docs/theory-implementation-progress.md).

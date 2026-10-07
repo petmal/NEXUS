@@ -1,0 +1,75 @@
+{
+  "implementation_commit": "28d814cc86f8dd51f7ff02c07b5ab548124dc0b9",
+  "schema_commit": "5feedd9b21a7160d29a5cfa4d7b9908014edd14d",
+  "integration_base": "cd69107f02af30c10464b85b47fa343a3f96aaef",
+  "source_fingerprint": "60f12c969e871cbe8cbd28a258cb536ba7dcbe8af5810353b5b8c088cc19b62a",
+  "python": "3.14.7",
+  "fast_tests": {
+    "passed": 132,
+    "seconds": 84.33,
+    "existing_warnings": 2
+  },
+  "extended_stress_tests": {
+    "passed": 34,
+    "seconds": 216.75,
+    "seed_count": 3
+  },
+  "cold_cases": {
+    "total": 116,
+    "accepted": 113,
+    "rejected_evidence": 3,
+    "errors": 0,
+    "timeouts": 0,
+    "replayed_viable_paths": 865,
+    "matched_physical_pairs": 19
+  },
+  "t1_p2_sweep": {
+    "seeds": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      19,
+      73,
+      2525
+    ],
+    "accepted": 85,
+    "attempted": 88,
+    "replayed_viable_paths": 748,
+    "rejected": [
+      {
+        "seed": 8,
+        "d": 1
+      },
+      {
+        "seed": 19,
+        "d": 1
+      },
+      {
+        "seed": 73,
+        "d": 3
+      }
+    ]
+  },
+  "p3_r2_sweep": {
+    "accepted": 16,
+    "attempted": 16,
+    "replayed_viable_paths": 77
+  },
+  "container_validation": "Docker/Podman unavailable locally; OCI label build-and-inspect assertion in CI"
+}

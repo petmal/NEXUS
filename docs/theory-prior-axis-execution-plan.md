@@ -6,7 +6,7 @@ Production work is approved for shared theory-prior infrastructure, T0 backward 
 
 1. Branching
 
-Keep feat/epistemic-calibration untouched during current model testing. Continue design/feasibility work on poc/theory-prior-axis. When production work is approved, create feat/theory-prior-axis from the then-approved integration base rather than merging PoC history.
+Implementation authorized 2026-10-07. Work on feat/theory-prior-axis from integration commit cd69107f02af30c10464b85b47fa343a3f96aaef; preserve historical PoC design separately. OCI revision labeling is already on the integration branch.
 
 2. Commit 1 — T0 compatibility and minimal theory contract
 

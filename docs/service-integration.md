@@ -12,7 +12,8 @@ creating, resetting, or replacing it.
 A generated episode can be selected with a seed:
 
 ```bash
-NEXUS_SEED=17 NEXUS_DISCOVERY_LEVEL=1 NEXUS_PLANNING_LEVEL=1 \
+NEXUS_SEED=17 NEXUS_THEORY_LEVEL       0=catalogue (default), 1=structural prior (D0-D3 only)
+NEXUS_DISCOVERY_LEVEL=1 NEXUS_PLANNING_LEVEL=1 \
 NEXUS_RESOURCE_PRESSURE=0 NEXUS_HOST=0.0.0.0 nexus serve-session
 ```
 
@@ -217,3 +218,21 @@ The integrated v3 payload also includes `action_delta_from_physical_optimum` and
 `unsatisfied_goal_conditions`. The latter decomposes false conjunctions but preserves OR/NOT
 expressions, so a false atomic leaf is not misreported as an independently required condition.
 Historical v1/v2 schemas remain unchanged. See [model testing matrix](model-testing-matrix.md).
+
+
+## Theory-prior configuration
+
+Use `--theory-level 1` or `NEXUS_THEORY_LEVEL=1` when generating a session. The default T0
+preserves existing worlds. T1 supports D0–D3 and P0–P3/R0–R2, subject to paired-seed qualification;
+T1/D4–D5 and T2+ fail explicitly. Settings are generation inputs; loading `--private` uses the
+already compiled episode's metadata, as with D/P/R.
+
+T1's `theory.json` and manual describe the same complete structural prior used by the evaluator.
+Evidence is replanned against that prior; budgets are recomputed from its exact policy. Some
+seeds cannot be certified by the bounded evidence planner and fail before serving. Preflight a
+seed with `nexus generate` and `nexus qualify`; never silently retry another seed while labeling
+it as the original paired task. See [T-axis validation](theory-implementation-results.md).
+
+Terminal telemetry uses performance-v4, adding required integer `theory_level` (0 or 1).
+The previous v1/v2/v3 schemas remain available for historical artifacts. No active-session
+performance fields or evaluator-finalization behavior changed.
