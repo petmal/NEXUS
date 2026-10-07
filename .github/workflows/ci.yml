@@ -98,6 +98,7 @@ jobs:
       - name: Container smoke test
         if: ${{ (github.event_name == 'workflow_dispatch' && inputs.full) || (github.event_name == 'pull_request' && github.base_ref == 'feat/epistemic-calibration') }}
         run: |
-          docker build -t nexus-ci .
+          docker build --build-arg VCS_REF="$GITHUB_SHA" -t nexus-ci .
+          test "$(docker image inspect nexus-ci --format '{{ index .Config.Labels "org.opencontainers.image.revision" }}')" = "$GITHUB_SHA"
           docker run --rm --entrypoint python nexus-ci --version
           docker run --rm nexus-ci --help

@@ -365,11 +365,20 @@ A container image can be built directly from the repository. The Dockerfile pins
 Python/Debian base image digest and the locked Python dependency graph:
 
 ```bash
-docker build -t nexus:0.1.0 .
+docker build --build-arg VCS_REF="$(git rev-parse HEAD)" -t nexus:0.1.0 .
 docker run --rm -p 8000:8000 \
   -e NEXUS_SEED=17 \
   -e NEXUS_HOST=0.0.0.0 \
   nexus:0.1.0 serve-session
+```
+
+The image records `VCS_REF` in the standard `org.opencontainers.image.revision` OCI label.
+Use the same build argument with `podman build`. Builds without the argument report `unknown`;
+build from a clean checkout when using the commit SHA as provenance. Inspect it with:
+
+```bash
+docker image inspect nexus:0.1.0 \
+  --format '{{ index .Config.Labels "org.opencontainers.image.revision" }}'
 ```
 
 See [Service integration](docs/service-integration.md) for trust boundaries and configuration
