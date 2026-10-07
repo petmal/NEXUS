@@ -78,6 +78,10 @@ def generate(
         max=3,
         help="Planning scale: 0=compact, 1=standard, 2=extended, 3=delivery dependency.",
     ),
+    theory_level: int = typer.Option(
+        0, min=0, max=1, envvar="NEXUS_THEORY_LEVEL",
+        help="Theory prior: 0=catalogue, 1=structural primitives (D0-D3; paired seeds may reject).",
+    ),
     resource_pressure: int = typer.Option(
         0,
         min=0,
@@ -98,6 +102,7 @@ def generate(
             discovery_level=discovery_level,
             planning_level=planning_level,
             resource_pressure=resource_pressure,
+            theory_level=theory_level,
         )
         target = output if count == 1 else output / f"episode-{offset + 1:03d}"
         save_episode(episode, target)
@@ -105,7 +110,7 @@ def generate(
         console.print(
             f"[green]generated[/green] {episode.public.episode_id} -> {target} "
             f"(discovery={metadata.discovery_level} planning={metadata.planning_level} "
-            f"resource-pressure={metadata.resource_pressure} "
+            f"resource-pressure={metadata.resource_pressure} theory={metadata.theory_level} "
             f"optimal={metadata.optimal_action_count} probes={metadata.required_probe_count} "
             f"budget={metadata.action_budget} "
             f"recommended-tool-calls={metadata.recommended_tool_call_limit})"
@@ -299,6 +304,10 @@ def serve_session(
         envvar="NEXUS_PLANNING_LEVEL",
         help="Generated-session planning scale (used with --seed).",
     ),
+    theory_level: int = typer.Option(
+        0, min=0, max=1, envvar="NEXUS_THEORY_LEVEL",
+        help="Theory prior: 0=catalogue, 1=structural primitives (D0-D3; paired seeds may reject).",
+    ),
     resource_pressure: int = typer.Option(
         0,
         min=0,
@@ -340,6 +349,7 @@ def serve_session(
             discovery_level=discovery_level,
             planning_level=planning_level,
             resource_pressure=resource_pressure,
+            theory_level=theory_level,
             verifier_secret=verifier_secret,
         )
     )

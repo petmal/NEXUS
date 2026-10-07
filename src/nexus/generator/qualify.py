@@ -122,6 +122,17 @@ def qualify_episode(
     errors: list[str] = []
     metrics: dict[str, int | str | bool] = {}
     metadata = episode.generation_metadata
+    from nexus.generator.theory import (
+        theory_universe, validate_public_theory, validate_theory_profile,
+    )
+
+    try:
+        validate_theory_profile(metadata.theory_level, metadata.discovery_level)
+        if metadata.theory_level == 1:
+            validate_public_theory(episode.public.evidence_files)
+    except ValueError as exc:
+        return QualificationReport(passed=False, checks={"theory_prior": False}, errors=(str(exc),))
+    checks["theory_prior"] = True
 
     public_json = episode.public.model_dump_json()
     serialized_rules = [rule.model_dump_json() for rule in episode.rules.values()]
@@ -233,13 +244,27 @@ def qualify_episode(
                 continue
 
             stage_inputs[machine_id] = current
-            matching = candidates_matching_csv(evidence_text, all_candidates)
+            if metadata.theory_level == 1:
+                try:
+                    matching = theory_universe().candidates(
+                        evidence_text, ceiling=12 if len(machine_ids) == 2 else 32,
+                    )
+                except (ValueError, KeyError, RuntimeError) as exc:
+                    return QualificationReport(
+                        passed=False, checks={**checks, "theory_evidence": False},
+                        errors=(str(exc),),
+                    )
+            else:
+                matching = candidates_matching_csv(evidence_text, all_candidates)
             candidate_rules_by_machine[machine_id] = matching
             evidence_candidate_counts[machine_id] = len(matching)
             prediction_counts[machine_id] = mission_prediction_count(matching, current, phase)
             direct_examples[machine_id] = has_direct_context_csv(evidence_text, current, phase)
             evidence_rows_by_machine[machine_id] = _csv_row_count(evidence_text)
-            hidden_rules_match = hidden_rules_match and rule in matching
+            hidden_rules_match = hidden_rules_match and (
+                theory_universe().contains(rule, theory_universe().matching_indices(evidence_text))
+                if metadata.theory_level == 1 else rule in matching
+            )
             current = apply_effect(rule, current, phase)
 
         discovery_analysis = (
@@ -586,7 +611,10 @@ def qualify_episode(
         if metadata.discovery_level == 5
         else (discovery_analysis.viable_hypothesis_count if discovery_analysis is not None else 0)
     )
-    expected_catalog_count = 4 if metadata.discovery_level == 5 else len(all_candidates)
+    expected_catalog_count = (
+        len(theory_universe().behaviors) if metadata.theory_level == 1
+        else 4 if metadata.discovery_level == 5 else len(all_candidates)
+    )
 
     metadata_consistent = (
         metadata.generation_attempt == metadata.scenario_family_attempt

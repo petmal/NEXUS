@@ -1135,6 +1135,17 @@ def _candidate_rules_for_episode(episode: PrivateEpisode) -> dict[str, list[Effe
             "M3": [constant_value_rule(DISTRACTOR_VALUE)],
         }
 
+    if episode.generation_metadata.theory_level == 1:
+        from nexus.generator.theory import theory_universe, validate_public_theory
+
+        validate_public_theory(episode.public.evidence_files)
+        return {
+            machine: theory_universe().candidates(
+                episode.public.evidence_files[measurement_filename(machine)],
+                ceiling=12 if len(episode.machine_rules) == 2 else 32,
+            )
+            for machine in sorted(episode.machine_rules)
+        }
     catalog = enumerate_transformation_rules()
     result: dict[str, list[Effect]] = {}
     for machine_id in sorted(episode.machine_rules):
@@ -1636,6 +1647,7 @@ def generate_episode(
     discovery_level: int = 0,
     planning_level: int = 1,
     resource_pressure: int = 0,
+    theory_level: int = 0,
     max_attempts: int = 250,
     verifier_secret: str | None = None,
 ) -> PrivateEpisode:
@@ -1645,6 +1657,9 @@ def generate_episode(
     dependency. Resource pressure changes only the action allowance above the exact guaranteed
     policy cost.
     """
+    from nexus.generator.theory import validate_theory_profile
+
+    validate_theory_profile(theory_level, discovery_level)
     validate_difficulty_levels(discovery_level, planning_level, resource_pressure)
     core_planning = 2 if planning_level == 3 else planning_level
     with timed_stage("generation.core"):
@@ -1656,10 +1671,18 @@ def generate_episode(
             verifier_secret=verifier_secret,
             qualify_result=planning_level != 3,
         )
-    transformed = planning_level == 3 or resource_pressure != 0
+    transformed = planning_level == 3 or resource_pressure != 0 or theory_level != 0
     if planning_level == 3:
         with timed_stage("generation.planning_dependency"):
             episode = _add_planning_dependency(episode)
+    if theory_level == 1:
+        from nexus.generator.theory_generation import compile_theory
+
+        with timed_stage("generation.theory"):
+            try:
+                episode = compile_theory(episode)
+            except EvidencePlanningError as exc:
+                raise GenerationError(str(exc)) from exc
     with timed_stage("generation.resource_pressure"):
         episode = _apply_resource_pressure(episode, resource_pressure)
 

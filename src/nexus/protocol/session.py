@@ -18,7 +18,7 @@ from nexus.render.text import observation
 
 PERFORMANCE_SCHEMA_URL = (
     "https://raw.githubusercontent.com/petmal/NEXUS/"
-    "15a252279da3da870fab354d92cb3e92726445d2/schemas/performance-v3.schema.json"
+    "5feedd9b21a7160d29a5cfa4d7b9908014edd14d/schemas/performance-v4.schema.json"
 )
 
 
@@ -30,6 +30,7 @@ class PerformanceSummary(BaseModel):
     )
 
     schema_url: str = Field(default=PERFORMANCE_SCHEMA_URL, alias="$schema")
+    theory_level: int
     discovery_level: int
     planning_level: int
     resource_pressure: int
@@ -201,6 +202,7 @@ class Session:
         )
 
         return PerformanceSummary(
+            theory_level=metadata.theory_level,
             discovery_level=metadata.discovery_level,
             planning_level=metadata.planning_level,
             resource_pressure=metadata.resource_pressure,

@@ -481,14 +481,9 @@ def analyze_causal_trace(
     its target comes from the public goal. Each observed probe/operate result then narrows that
     hypothesis set exactly as it would for the player.
     """
-    catalog = enumerate_transformation_rules()
-    candidate_rules_by_machine: dict[str, list[Effect]] = {}
-    for machine_id in sorted(episode.public.initial_state.machines):
-        filename = measurement_filename(machine_id)
-        evidence = episode.public.evidence_files.get(filename)
-        if evidence is None:
-            raise ValueError(f"missing public evidence for machine {machine_id}")
-        candidate_rules_by_machine[machine_id] = candidates_matching_csv(evidence, catalog)
+    from nexus.generator.generator import _candidate_rules_for_episode
+
+    candidate_rules_by_machine = _candidate_rules_for_episode(episode)
 
     belief = DiscoveryBelief(
         candidate_rules_by_machine=candidate_rules_by_machine,
