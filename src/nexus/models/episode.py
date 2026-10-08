@@ -80,7 +80,7 @@ class GenerationMetadata(BaseModel):
     scenario_family_attempt: int = 0
     topology_attempt: int = 0
 
-    theory_level: int = Field(default=0, ge=0, le=2)
+    theory_level: int = Field(default=0, ge=0, le=3)
     discovery_level: int = 0
     planning_level: int = 1
     resource_pressure: int = 0

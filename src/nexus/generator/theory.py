@@ -287,10 +287,10 @@ def theory_universe() -> Universe:
 
 
 def validate_theory_profile(theory_level: int, discovery_level: int) -> None:
-    if theory_level not in (0, 1, 2):
-        raise ValueError("theory_level must be 0 (catalogue), 1 (structural theory), or 2 (bounded corrections)")
-    if theory_level == 2 and discovery_level != 2:
-        raise ValueError("T2 currently supports D2 only; other D profiles require separate proofs")
+    if theory_level not in (0, 1, 2, 3):
+        raise ValueError("theory_level must be 0 (catalogue), 1 (structural theory), 2 (bounded corrections), or 3 (missing relationships)")
+    if theory_level in (2, 3) and discovery_level != 2:
+        raise ValueError(f"T{theory_level} currently supports D2 only; other D profiles require separate proofs")
     if theory_level == 1 and discovery_level not in (0, 1, 2, 3, 4):
         raise ValueError("T1 currently supports D0-D4; D5 requires a separate theory proof")
 

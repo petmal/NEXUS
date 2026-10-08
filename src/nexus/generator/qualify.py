@@ -128,6 +128,8 @@ def qualify_episode(
     )
 
     correction_prior = None
+    structural_prior = None
+    structural_candidates = None
     try:
         validate_theory_profile(metadata.theory_level, metadata.discovery_level)
         if metadata.theory_level == 1:
@@ -135,6 +137,18 @@ def qualify_episode(
         elif metadata.theory_level == 2:
             from nexus.generator.correction import read_correction_prior
             correction_prior = read_correction_prior(episode.public.evidence_files)
+        elif metadata.theory_level == 3:
+            from nexus.generator.structural import StructuralPrior, structural_belief
+            structural_prior = structural_belief(episode)
+            rule = episode.rules.get(episode.machine_rules.get("M1", ""))
+            if rule is None or not structural_prior.contains(rule):
+                raise ValueError("T3 hidden law is outside the evidence-consistent full prior")
+            structural_candidates, multiplicity = structural_prior.project(episode)
+            metrics.update(structural_full_prior=StructuralPrior().cardinality,
+                           structural_after_evidence=structural_prior.cardinality,
+                           structural_reachable_classes=len(structural_candidates),
+                           structural_class_multiplicity=multiplicity)
+
     except ValueError as exc:
         return QualificationReport(passed=False, checks={"theory_prior": False}, errors=(str(exc),))
     checks["theory_prior"] = True
@@ -183,7 +197,8 @@ def qualify_episode(
 
     machine_ids = tuple(sorted(episode.public.initial_state.machines))
     initial_artifact = episode.public.initial_state.artifacts.get("A1")
-    all_candidates = (correction_prior.hypotheses() if correction_prior is not None
+    all_candidates = (structural_candidates if structural_candidates is not None
+                      else correction_prior.hypotheses() if correction_prior is not None
                       else enumerate_transformation_rules())
 
     evidence_candidate_counts: dict[str, int] = {}
@@ -269,7 +284,8 @@ def qualify_episode(
             evidence_rows_by_machine[machine_id] = _csv_row_count(evidence_text)
             hidden_rules_match = hidden_rules_match and (
                 theory_universe().contains(rule, theory_universe().matching_indices(evidence_text))
-                if metadata.theory_level == 1 else rule in matching
+                if metadata.theory_level == 1 else
+                structural_prior.contains(rule) if structural_prior is not None else rule in matching
             )
             current = apply_effect(rule, current, phase)
 
@@ -290,6 +306,20 @@ def qualify_episode(
             discovery_analysis.minimum_guaranteed_probes
             if discovery_analysis is not None
             else None
+        )
+
+    if structural_prior is not None:
+        checks["structural_projection"] = (
+            episode.public.phase_modulus == 4
+            and machine_ids == ("M1",)
+            and episode.public.initial_state.machines["M1"].uses_remaining == 1
+            and len(structural_candidates) == 9
+            and multiplicity == 27
+            and evidence_rows_by_machine == {"M1": 1}
+            and candidate_rules_by_machine.get("M1") == structural_candidates
+            and exact_probe_count == 1
+            and discovery_analysis is not None
+            and discovery_analysis.viable_hypothesis_count == 5
         )
 
     if correction_prior is not None:
@@ -626,6 +656,9 @@ def qualify_episode(
     )
     if correction_prior is not None:
         family_kind = correction_prior.family
+    if structural_prior is not None:
+        from nexus.generator.structural import FAMILY
+        family_kind = FAMILY
     expected_family_id = (
         scenario_family_id(
             episode.construction_seed,
@@ -641,6 +674,7 @@ def qualify_episode(
         else (discovery_analysis.viable_hypothesis_count if discovery_analysis is not None else 0)
     )
     expected_catalog_count = (
+        729 if structural_prior is not None else
         len(theory_universe().behaviors) if metadata.theory_level == 1
         else 4 if metadata.discovery_level == 5 else len(all_candidates)
     )

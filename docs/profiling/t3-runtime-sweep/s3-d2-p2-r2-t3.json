@@ -1,0 +1,120 @@
+{
+  "status": "ok",
+  "generation_seconds": 0.07991784700061544,
+  "generation_summary": {
+    "event": "complete",
+    "wall_seconds": 0.07983115699971677,
+    "cpu_seconds": 0.079746656,
+    "stages": {
+      "generation.core/structural.family": {
+        "count": 1,
+        "errors": 0,
+        "wall_seconds": 0.0006558780005434528,
+        "cpu_seconds": 0.0006564749999999897
+      },
+      "generation.core/structural.topology": {
+        "count": 1,
+        "errors": 0,
+        "wall_seconds": 0.0014940309993107803,
+        "cpu_seconds": 0.0014955030000000091
+      },
+      "generation.core/structural.projection/structural.evidence_projection": {
+        "count": 1,
+        "errors": 0,
+        "wall_seconds": 0.00021415300034277607,
+        "cpu_seconds": 0.0002151499999999973
+      },
+      "generation.core/structural.projection": {
+        "count": 1,
+        "errors": 0,
+        "wall_seconds": 0.004040757999973721,
+        "cpu_seconds": 0.004041435999999982
+      },
+      "generation.core/structural.physical": {
+        "count": 1,
+        "errors": 0,
+        "wall_seconds": 0.0031186179994620034,
+        "cpu_seconds": 0.003119636000000009
+      },
+      "generation.core/structural.policy/policy.hypothesis_physical": {
+        "count": 1,
+        "errors": 0,
+        "wall_seconds": 0.024902989999645797,
+        "cpu_seconds": 0.024905342999999996
+      },
+      "generation.core/structural.policy/policy.minimax": {
+        "count": 1,
+        "errors": 0,
+        "wall_seconds": 0.014194475999829592,
+        "cpu_seconds": 0.014197430000000011
+      },
+      "generation.core/structural.policy/policy.witness": {
+        "count": 1,
+        "errors": 0,
+        "wall_seconds": 0.0006110510003054515,
+        "cpu_seconds": 0.0006120189999999637
+      },
+      "generation.core/structural.policy/policy.action_values": {
+        "count": 1,
+        "errors": 0,
+        "wall_seconds": 6.179000592965167e-06,
+        "cpu_seconds": 6.159000000005577e-06
+      },
+      "generation.core/structural.policy": {
+        "count": 1,
+        "errors": 0,
+        "wall_seconds": 0.04130343999986508,
+        "cpu_seconds": 0.04130306300000003
+      },
+      "generation.core": {
+        "count": 1,
+        "errors": 0,
+        "wall_seconds": 0.051846514999851934,
+        "cpu_seconds": 0.051845731000000006
+      },
+      "generation.resource_pressure": {
+        "count": 1,
+        "errors": 0,
+        "wall_seconds": 0.00037948099998175167,
+        "cpu_seconds": 0.00038005499999999026
+      },
+      "generation.qualification/structural.evidence_projection": {
+        "count": 1,
+        "errors": 0,
+        "wall_seconds": 0.0001515079993623658,
+        "cpu_seconds": 0.00015182599999996604
+      },
+      "generation.qualification": {
+        "count": 1,
+        "errors": 0,
+        "wall_seconds": 0.026235577000079502,
+        "cpu_seconds": 0.026191795000000018
+      }
+    }
+  },
+  "seconds": 0.10899100000006001,
+  "peak_rss_mib": 47.33203125,
+  "paired_world_hash": "23967903383953120e1aa5f866adc180c19b891bbd1a89c304de623b8298c2dd",
+  "scenario_family_id": "f68b8c514706326b",
+  "candidates": {
+    "M1": 9
+  },
+  "evidence_rows": {
+    "M1": 1
+  },
+  "viable_causal_hypotheses": 5,
+  "replayed_physical_hypotheses": 5,
+  "minimum_probes": 1,
+  "physical_actions": 17,
+  "guaranteed_actions": 19,
+  "budget": 19,
+  "case": {
+    "seed": 3,
+    "discovery_level": 2,
+    "planning_level": 2,
+    "resource_pressure": 2,
+    "theory_level": 3
+  },
+  "code": "20dd8658c2f7a51c9cff091f388fa2d50f2bf669ff563e988320e87cb59668ea",
+  "python": "3.14.8"
+}

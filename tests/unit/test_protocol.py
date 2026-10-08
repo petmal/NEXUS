@@ -104,7 +104,7 @@ def test_terminal_performance_uses_signed_guaranteed_policy_deltas():
     assert payload["$schema"].startswith(
         "https://raw.githubusercontent.com/petmal/NEXUS/"
     )
-    assert payload["$schema"].endswith("/schemas/performance-v5.schema.json")
+    assert payload["$schema"].endswith("/schemas/performance-v6.schema.json")
     assert performance.discovery_level == 2
     assert performance.planning_level == 1
     assert performance.resource_pressure == 0

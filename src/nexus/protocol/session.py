@@ -18,7 +18,7 @@ from nexus.render.text import observation
 
 PERFORMANCE_SCHEMA_URL = (
     "https://raw.githubusercontent.com/petmal/NEXUS/"
-    "c24f44f510df32453c6e2860ef86640ab3ac6f8e/schemas/performance-v5.schema.json"
+    "50ea40636bf46313fe5eef46973527dec097d17a/schemas/performance-v6.schema.json"
 )
 
 

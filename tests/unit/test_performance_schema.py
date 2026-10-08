@@ -8,7 +8,7 @@ from nexus.models import ACTION_ADAPTER
 from nexus.protocol.session import PERFORMANCE_SCHEMA_URL, Session
 
 
-SCHEMA_PATH = Path(__file__).resolve().parents[2] / "schemas" / "performance-v5.schema.json"
+SCHEMA_PATH = Path(__file__).resolve().parents[2] / "schemas" / "performance-v6.schema.json"
 
 
 def _assert_value_matches_schema(value, spec):
@@ -37,8 +37,8 @@ def _assert_value_matches_schema(value, spec):
         assert value in spec["enum"]
 
 
-@pytest.mark.parametrize("theory", [0, 1, 2])
-def test_terminal_performance_matches_published_v5_schema_contract(theory):
+@pytest.mark.parametrize("theory", [0, 1, 2, 3])
+def test_terminal_performance_matches_published_v6_schema_contract(theory):
     schema = json.loads(SCHEMA_PATH.read_text(encoding="utf-8"))
     assert schema["additionalProperties"] is False
     assert set(schema["required"]) == set(schema["properties"])
@@ -70,5 +70,5 @@ def test_terminal_performance_matches_published_v5_schema_contract(theory):
 
 
 def test_performance_schema_url_is_immutable_and_versioned():
-    assert "/c24f44f510df32453c6e2860ef86640ab3ac6f8e/" in PERFORMANCE_SCHEMA_URL
-    assert PERFORMANCE_SCHEMA_URL.endswith("/schemas/performance-v5.schema.json")
+    assert "/50ea40636bf46313fe5eef46973527dec097d17a/" in PERFORMANCE_SCHEMA_URL
+    assert PERFORMANCE_SCHEMA_URL.endswith("/schemas/performance-v6.schema.json")

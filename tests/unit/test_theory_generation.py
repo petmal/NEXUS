@@ -61,9 +61,9 @@ def test_t1_planning_resource_profiles(p, r):
     assert episode.generation_metadata.resource_pressure == r
 
 
-@pytest.mark.parametrize("d,t", [(5, 1), (0, 2), (0, -1), (2, 3)])
+@pytest.mark.parametrize("d,t", [(5, 1), (0, 2), (0, -1), (1, 3), (2, 4)])
 def test_unsupported_theory_profiles_rejected(d, t):
-    with pytest.raises(ValueError, match="T[12] currently supports|theory_level must"):
+    with pytest.raises(ValueError, match="T[123] currently supports|theory_level must"):
         generate_episode(17, discovery_level=d, theory_level=t)
 
 
@@ -112,7 +112,7 @@ def test_t1_cli_and_service_keep_diagnostics_terminal_only(tmp_path):
         if response.json()["observation"]["terminal_status"] == "active":
             assert "performance" not in response.json()
     assert response.json()["performance"]["theory_level"] == 1
-    assert response.json()["performance"]["$schema"].endswith("performance-v5.schema.json")
+    assert response.json()["performance"]["$schema"].endswith("performance-v6.schema.json")
 
 
 def test_service_reads_theory_env(monkeypatch):

@@ -1148,6 +1148,9 @@ def _candidate_rules_for_episode(episode: PrivateEpisode) -> dict[str, list[Effe
             )
             for machine in sorted(episode.machine_rules)
         }
+    if episode.generation_metadata.theory_level == 3:
+        from nexus.generator.structural import structural_belief
+        return {"M1": structural_belief(episode).project(episode)[0]}
     if episode.generation_metadata.theory_level == 2:
         from nexus.generator.correction import read_correction_prior
         catalog = read_correction_prior(episode.public.evidence_files).hypotheses()
@@ -1670,7 +1673,13 @@ def generate_episode(
     validate_difficulty_levels(discovery_level, planning_level, resource_pressure)
     core_planning = 2 if planning_level == 3 else planning_level
     with timed_stage("generation.core"):
-        if theory_level == 2:
+        if theory_level == 3:
+            from nexus.generator.structural_generation import generate_structural_episode
+            episode = generate_structural_episode(
+                seed, planning_level=core_planning, max_attempts=max_attempts,
+                verifier_secret=verifier_secret,
+            )
+        elif theory_level == 2:
             from nexus.generator.correction_generation import generate_correction_episode
             episode = generate_correction_episode(
                 seed, planning_level=core_planning, max_attempts=max_attempts,

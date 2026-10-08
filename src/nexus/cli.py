@@ -79,8 +79,8 @@ def generate(
         help="Planning scale: 0=compact, 1=standard, 2=extended, 3=delivery dependency.",
     ),
     theory_level: int = typer.Option(
-        0, min=0, max=2, envvar="NEXUS_THEORY_LEVEL",
-        help="Theory prior: 0=catalogue, 1=structural primitives (D0-D4), 2=bounded corrections (D2 only).",
+        0, min=0, max=3, envvar="NEXUS_THEORY_LEVEL",
+        help="Theory prior: 0=catalogue, 1=structural primitives (D0-D4), 2=bounded corrections, 3=missing relationships (T2/T3: D2 only).",
     ),
     resource_pressure: int = typer.Option(
         0,
@@ -305,8 +305,8 @@ def serve_session(
         help="Generated-session planning scale (used with --seed).",
     ),
     theory_level: int = typer.Option(
-        0, min=0, max=2, envvar="NEXUS_THEORY_LEVEL",
-        help="Theory prior: 0=catalogue, 1=structural primitives (D0-D4), 2=bounded corrections (D2 only).",
+        0, min=0, max=3, envvar="NEXUS_THEORY_LEVEL",
+        help="Theory prior: 0=catalogue, 1=structural primitives (D0-D4), 2=bounded corrections, 3=missing relationships (T2/T3: D2 only).",
     ),
     resource_pressure: int = typer.Option(
         0,

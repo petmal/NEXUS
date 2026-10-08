@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Cold, resumable T0/T1/T2 qualification and ordinary-action policy replay sweep."""
+"""Cold, resumable T0/T1/T2/T3 qualification and ordinary-action policy replay sweep."""
 
 from __future__ import annotations
 
@@ -125,7 +125,7 @@ def main() -> int:
     parser.add_argument("--case", help=argparse.SUPPRESS)
     parser.add_argument("--seeds", type=int, nargs="+", default=[17, 73, 2525])
     parser.add_argument("--levels", type=int, choices=range(6), nargs="+", default=[0, 1, 2, 3])
-    parser.add_argument("--theory-levels", type=int, choices=[0, 1, 2], nargs="+", default=[0, 1])
+    parser.add_argument("--theory-levels", type=int, choices=[0, 1, 2, 3], nargs="+", default=[0, 1])
     parser.add_argument("--planning-level", type=int, choices=range(4), default=2)
     parser.add_argument("--resource-pressure", type=int, choices=range(3), default=0)
     parser.add_argument("--timeout", type=float, default=120)
