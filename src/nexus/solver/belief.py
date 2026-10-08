@@ -5,6 +5,7 @@ import heapq
 import json
 from collections import OrderedDict, deque
 from dataclasses import dataclass
+from functools import lru_cache
 from itertools import count, product
 
 from pydantic import BaseModel, ConfigDict
@@ -31,7 +32,6 @@ from nexus.solver.search import (
     SearchStateKey,
     goal_field_artifact_ids,
     goal_location_rooms,
-    neighbors,
     search_state_key,
 )
 
@@ -107,14 +107,18 @@ class _MacroChoice:
 class _MovementOracle:
     """Deterministic shortest room paths for one immutable episode topology."""
 
-    def __init__(self, episode: PrivateEpisode) -> None:
+    def __init__(self, rooms: tuple[str, ...], edges: tuple[tuple[str, str], ...]) -> None:
         self._paths: dict[tuple[str, str], tuple[MoveAction, ...]] = {}
-        for source in sorted(episode.public.rooms):
+        adjacent_rooms: dict[str, list[str]] = {room: [] for room in rooms}
+        for left, right in edges:
+            adjacent_rooms[left].append(right)
+            adjacent_rooms[right].append(left)
+        for source in rooms:
             parents: dict[str, str | None] = {source: None}
             frontier: deque[str] = deque([source])
             while frontier:
                 room = frontier.popleft()
-                for adjacent in neighbors(episode, room):
+                for adjacent in sorted(adjacent_rooms[room]):
                     if adjacent in parents:
                         continue
                     parents[adjacent] = room
@@ -136,6 +140,46 @@ class _MovementOracle:
 
     def route(self, source: str, target: str) -> tuple[MoveAction, ...] | None:
         return self._paths.get((source, target))
+
+
+@lru_cache(maxsize=32)
+def _movement_for_topology(rooms, edges) -> _MovementOracle:
+    return _MovementOracle(rooms, edges)
+
+
+def _movement_for(episode: PrivateEpisode) -> _MovementOracle:
+    return _movement_for_topology(
+        tuple(sorted(episode.public.rooms)), tuple(sorted(episode.public.edges)),
+    )
+
+
+# Only cost-only results are retained. Exact AST keys are conservative: equivalent
+# but differently serialized rules may miss the cache, never produce a false hit.
+_PHYSICAL_RESULT_CACHE: OrderedDict[tuple[str, int, int], CompressedPhysicalResult] = OrderedDict()
+_PHYSICAL_CACHE_LIMIT = 512
+_physical_cache_hits = 0
+
+
+def _solve_hypothesis_physical(episode: PrivateEpisode, *, max_states: int):
+    global _physical_cache_hits
+    rules = {machine: [episode.rules[rule]] for machine, rule in episode.machine_rules.items()}
+    budget = max(512, episode.public.initial_state.resources.actions_remaining + 64)
+    key = (_policy_semantic_key(episode, rules), max_states, budget)
+    cached = _PHYSICAL_RESULT_CACHE.get(key)
+    if cached is not None:
+        _physical_cache_hits += 1
+        _PHYSICAL_RESULT_CACHE.move_to_end(key)
+        return cached.model_copy(deep=True)
+    result = solve_compressed_physical(episode, max_states=max_states, include_plan=False)
+    _PHYSICAL_RESULT_CACHE[key] = result.model_copy(deep=True)
+    while len(_PHYSICAL_RESULT_CACHE) > _PHYSICAL_CACHE_LIMIT:
+        _PHYSICAL_RESULT_CACHE.popitem(last=False)
+    return result
+
+
+def _physical_results(episodes: list[PrivateEpisode], *, max_states: int):
+    """Ordered independent screens; the profiling PoC can replace this execution seam."""
+    return (_solve_hypothesis_physical(episode, max_states=max_states) for episode in episodes)
 
 
 @dataclass(frozen=True)
@@ -379,6 +423,19 @@ def _apply_route(
     episode: PrivateEpisode,
     search_budget: int,
 ) -> WorldState | None:
+    # Every caller supplies a shortest path from the immutable movement oracle.
+    # Movement changes only room, turn and budget; it never advances phase or
+    # changes an artifact. Normalize the path-cost fields once, without replaying
+    # and deep-copying each intermediate move. Shared artifacts/machines are
+    # read-only here; the subsequent engine interaction copies before mutation.
+    # Keep ordinary engine handling for terminal/budget boundary cases.
+    if (state.terminal_status == TerminalStatus.ACTIVE
+            and len(route) < state.resources.actions_remaining):
+        return state.model_copy(update={
+            "agent_room": route[-1].target if route else state.agent_room,
+            "turn": 0,
+            "resources": state.resources.model_copy(update={"actions_remaining": search_budget}),
+        })
     current = state
     for move in route:
         result = step(current, move, episode)
@@ -411,6 +468,7 @@ def solve_compressed_physical(
     *,
     initial_state: WorldState | None = None,
     max_states: int = 100_000,
+    include_plan: bool = True,
 ) -> CompressedPhysicalResult:
     """Exact Dijkstra solver after quotienting side-effect-free movement into shortest paths."""
     search_budget = max(512, episode.public.initial_state.resources.actions_remaining + 64)
@@ -418,7 +476,7 @@ def solve_compressed_physical(
         initial_state if initial_state is not None else episode.public.initial_state,
         search_budget,
     )
-    movement = _MovementOracle(episode)
+    movement = _movement_for(episode)
     serial = count()
     frontier: list[tuple[int, int, WorldState, tuple[Action, ...]]] = [
         (0, next(serial), initial, ())
@@ -444,7 +502,7 @@ def solve_compressed_physical(
             if result is None:
                 continue
             next_cost = cost + choice.cost
-            next_plan = plan + choice.route + (choice.action,)
+            next_plan = plan + choice.route + (choice.action,) if include_plan else ()
             if result.state.terminal_status == TerminalStatus.WON:
                 return CompressedPhysicalResult(
                     solvable=True,
@@ -585,26 +643,25 @@ def solve_guaranteed_policy(
     hypothesis_episodes: list[PrivateEpisode] = []
     hypothesis_physical_optima: list[int] = []
     with timed_stage("policy.hypothesis_physical") as timing:
-        for rules_by_machine in combinations:
-            candidate = _episode_for_hypothesis(
-                episode,
-                rules_by_machine,
-                search_budget=search_budget,
-            )
-            physical = solve_compressed_physical(candidate, max_states=max_physical_states)
+        hits_before = _physical_cache_hits
+        candidates = [_episode_for_hypothesis(episode, rules, search_budget=search_budget)
+                      for rules in combinations]
+        for candidate, physical in zip(candidates, _physical_results(candidates, max_states=max_physical_states), strict=True):
             if physical.exhausted_state_limit:
                 raise RuntimeError("physical state limit exhausted during policy qualification")
             if physical.solvable and physical.optimal_action_count is not None:
                 hypothesis_episodes.append(candidate)
                 hypothesis_physical_optima.append(physical.optimal_action_count)
         timing["hypotheses"] = len(hypothesis_episodes)
+        timing["physical_cache_hits"] = _physical_cache_hits - hits_before
+        timing["physical_searches"] = len(combinations) - timing["physical_cache_hits"]
 
     if not hypothesis_episodes:
         return BeliefPolicyResult(solvable=False, viable_hypothesis_count=0)
 
     initial_belief = frozenset(range(len(hypothesis_episodes)))
     initial_state = _normalize_state(episode.public.initial_state, search_budget)
-    movement = _MovementOracle(episode)
+    movement = _movement_for(episode)
 
     BranchSignature = str | SearchStateKey
     Branch = tuple[BranchSignature, WorldState, frozenset[int]]
