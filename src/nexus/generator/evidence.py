@@ -74,9 +74,14 @@ def _catalog_signature_matrix() -> tuple[tuple[tuple[int, str, str], ...], ...]:
     )
 
 
+@lru_cache(maxsize=1)
+def _catalog_index_by_json() -> dict[str, int]:
+    return {rule.model_dump_json(): index
+            for index, rule in enumerate(transformation_rule_catalog())}
+
+
 def _catalog_indices(candidates: list[Effect]) -> list[int] | None:
-    catalog = transformation_rule_catalog()
-    index_by_json = {rule.model_dump_json(): index for index, rule in enumerate(catalog)}
+    index_by_json = _catalog_index_by_json()
     try:
         return [index_by_json[candidate.model_dump_json()] for candidate in candidates]
     except KeyError:
@@ -84,11 +89,11 @@ def _catalog_indices(candidates: list[Effect]) -> list[int] | None:
 
 
 def _catalog_index(target: Effect) -> int:
-    target_json = target.model_dump_json()
-    for index, rule in enumerate(transformation_rule_catalog()):
-        if rule.model_dump_json() == target_json:
-            return index
-    raise EvidencePlanningError("target rule is outside the finite prototype grammar")
+    try:
+        return _catalog_index_by_json()[target.model_dump_json()]
+    except KeyError as exc:
+        raise EvidencePlanningError("target rule is outside the finite prototype grammar") from exc
+
 
 
 def _filter_indices(
@@ -101,14 +106,12 @@ def _filter_indices(
     return [index for index in remaining if matrix[experiment_index][index] == expected]
 
 
-def _prediction_count(indices: list[int], artifact: Artifact, phase: int) -> int:
-    catalog = transformation_rule_catalog()
-    return len(
-        {
-            _projection(apply_effect(catalog[index], artifact, phase))
-            for index in indices
-        }
-    )
+@timed_call("core.mission_prediction_signatures")
+def _catalog_predictions(artifact: Artifact, phase: int) -> tuple[tuple[int, str, str], ...]:
+    # One interpretation per rule/context, reused across every trial evidence subset.
+    # This is local to an evidence search: random episodes cannot grow a global cache.
+    return tuple(_projection(apply_effect(rule, artifact, phase))
+                 for rule in transformation_rule_catalog())
 
 
 def is_direct_context(experiment: Experiment, artifact: Artifact, phase: int) -> bool:
@@ -169,6 +172,11 @@ def choose_mission_evidence(
     if target_index not in candidate_indices:
         raise EvidencePlanningError("target rule is not in the candidate set")
 
+    predictions = _catalog_predictions(artifact, phase)
+
+    def prediction_count(indices: list[int]) -> int:
+        return len({predictions[index] for index in indices})
+
     remaining = list(candidate_indices)
     chosen: list[int] = []
     pool = experiment_pool()
@@ -216,7 +224,7 @@ def choose_mission_evidence(
         ]
 
         if discovery_level == 1:
-            while _prediction_count(remaining, artifact, phase) > 1 and len(chosen) < max_rows:
+            while prediction_count(remaining) > 1 and len(chosen) < max_rows:
                 best: tuple[tuple[int, int, int], int, list[int]] | None = None
                 for index in allowed:
                     if index in chosen:
@@ -225,7 +233,7 @@ def choose_mission_evidence(
                     if len(filtered) >= len(remaining):
                         continue
                     score = (
-                        _prediction_count(filtered, artifact, phase),
+                        prediction_count(filtered),
                         len(filtered),
                         index,
                     )
@@ -236,7 +244,7 @@ def choose_mission_evidence(
                 _, index, remaining = best
                 chosen.append(index)
 
-            if not chosen or _prediction_count(remaining, artifact, phase) != 1:
+            if not chosen or prediction_count(remaining) != 1:
                 raise EvidencePlanningError(
                     "unable to infer the mission outcome without direct-context evidence"
                 )
@@ -250,10 +258,10 @@ def choose_mission_evidence(
                     if index in chosen:
                         continue
                     filtered = _filter_indices(remaining, index, target_index)
-                    prediction_count = _prediction_count(filtered, artifact, phase)
-                    if prediction_count <= 1 or len(filtered) >= len(remaining):
+                    count = prediction_count(filtered)
+                    if count <= 1 or len(filtered) >= len(remaining):
                         continue
-                    score = (len(filtered), prediction_count, index)
+                    score = (len(filtered), count, index)
                     if best is None or score < best[0]:
                         best = (score, index, filtered)
                 if best is None:
@@ -263,7 +271,7 @@ def choose_mission_evidence(
                 if len(remaining) <= 8:
                     break
 
-            if not chosen or _prediction_count(remaining, artifact, phase) <= 1:
+            if not chosen or prediction_count(remaining) <= 1:
                 raise EvidencePlanningError(
                     "unable to preserve mission-relevant ambiguity with informative evidence"
                 )
@@ -272,7 +280,7 @@ def choose_mission_evidence(
     return MissionEvidencePlan(
         experiments=experiments,
         candidate_count=len(remaining),
-        prediction_count=_prediction_count(remaining, artifact, phase),
+        prediction_count=prediction_count(remaining),
         direct_target_example=any(
             is_direct_context(experiment, artifact, phase) for experiment in experiments
         ),

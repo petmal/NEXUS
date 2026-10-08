@@ -1,0 +1,140 @@
+{
+  "status": "ok",
+  "generation_seconds": 4.019898146000287,
+  "generation_summary": {
+    "event": "complete",
+    "wall_seconds": 4.01979211600019,
+    "cpu_seconds": 4.017767282,
+    "stages": {
+      "generation.core/core.catalogue_build": {
+        "count": 1,
+        "errors": 0,
+        "wall_seconds": 0.007983547000094404,
+        "cpu_seconds": 0.007986238000000007
+      },
+      "generation.core/core.mechanics_evidence/core.mission_prediction_signatures": {
+        "count": 16,
+        "errors": 0,
+        "wall_seconds": 0.042308150999360805,
+        "cpu_seconds": 0.04229746000000012
+      },
+      "generation.core/core.mechanics_evidence/core.catalogue_signature_matrix": {
+        "count": 1,
+        "errors": 0,
+        "wall_seconds": 0.27738731199997346,
+        "cpu_seconds": 0.277377155
+      },
+      "generation.core/core.mechanics_evidence": {
+        "count": 1,
+        "errors": 0,
+        "wall_seconds": 0.5913157640002282,
+        "cpu_seconds": 0.591290919
+      },
+      "generation.core/policy.hypothesis_physical": {
+        "count": 1,
+        "errors": 0,
+        "wall_seconds": 0.13088691600023594,
+        "cpu_seconds": 0.13086965299999997
+      },
+      "generation.core/policy.minimax": {
+        "count": 1,
+        "errors": 0,
+        "wall_seconds": 0.31194775699987076,
+        "cpu_seconds": 0.31101974099999996
+      },
+      "generation.core/policy.witness": {
+        "count": 1,
+        "errors": 0,
+        "wall_seconds": 0.0015176769998106465,
+        "cpu_seconds": 0.0015196079999999501
+      },
+      "generation.core/policy.action_values": {
+        "count": 1,
+        "errors": 0,
+        "wall_seconds": 7.80200025474187e-06,
+        "cpu_seconds": 7.71100000007685e-06
+      },
+      "generation.core": {
+        "count": 1,
+        "errors": 0,
+        "wall_seconds": 1.1526210960000753,
+        "cpu_seconds": 1.151641745
+      },
+      "generation.theory/theory.universe_build": {
+        "count": 1,
+        "errors": 0,
+        "wall_seconds": 0.03488936299982015,
+        "cpu_seconds": 0.03489199499999995
+      },
+      "generation.theory/policy.hypothesis_physical": {
+        "count": 1,
+        "errors": 0,
+        "wall_seconds": 1.3308368869998048,
+        "cpu_seconds": 1.330472652
+      },
+      "generation.theory/policy.minimax": {
+        "count": 1,
+        "errors": 0,
+        "wall_seconds": 0.8737879469999825,
+        "cpu_seconds": 0.8733940680000001
+      },
+      "generation.theory/policy.witness": {
+        "count": 1,
+        "errors": 0,
+        "wall_seconds": 0.014149556000120356,
+        "cpu_seconds": 0.014150839999999665
+      },
+      "generation.theory/policy.action_values": {
+        "count": 1,
+        "errors": 0,
+        "wall_seconds": 8.322000212501734e-06,
+        "cpu_seconds": 8.322000000227092e-06
+      },
+      "generation.theory": {
+        "count": 1,
+        "errors": 0,
+        "wall_seconds": 2.559994839999945,
+        "cpu_seconds": 2.5592252159999997
+      },
+      "generation.resource_pressure": {
+        "count": 1,
+        "errors": 0,
+        "wall_seconds": 2.243999915663153e-06,
+        "cpu_seconds": 2.2639999999185534e-06
+      },
+      "generation.qualification": {
+        "count": 1,
+        "errors": 0,
+        "wall_seconds": 0.3054519120000805,
+        "cpu_seconds": 0.305185061
+      }
+    }
+  },
+  "seconds": 5.395926083000177,
+  "peak_rss_mib": 79.1484375,
+  "paired_world_hash": "35e69fec96cc3fe635db019e7894234e1ed0cc67a0c57795c36f1e3da5aaec6f",
+  "scenario_family_id": "ed9823191f35e4bc",
+  "candidates": {
+    "M1": 12,
+    "M2": 12
+  },
+  "evidence_rows": {
+    "M1": 2,
+    "M2": 2
+  },
+  "viable_causal_hypotheses": 56,
+  "replayed_physical_hypotheses": 56,
+  "minimum_probes": 2,
+  "physical_actions": 18,
+  "guaranteed_actions": 26,
+  "budget": 40,
+  "case": {
+    "seed": 1,
+    "discovery_level": 3,
+    "planning_level": 2,
+    "resource_pressure": 0,
+    "theory_level": 1
+  },
+  "code": "3e2ca7c8e24589c8ad5e4ddb54cdbfe9d23fdc71c99f5f428c5123916cb0adb0",
+  "python": "3.14.8"
+}
