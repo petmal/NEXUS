@@ -1,0 +1,211 @@
+{
+  "status": "ok",
+  "seed": 2525,
+  "public_problem": {
+    "family": "cumulative-theory-poc-v1",
+    "modulus": 11,
+    "progression": {
+      "stages": [
+        {
+          "id": "derive",
+          "theory_level": 1,
+          "requires": [],
+          "description": "Compose the exact supplied laws to derive q(x)."
+        },
+        {
+          "id": "correct",
+          "theory_level": 2,
+          "requires": [
+            "derive"
+          ],
+          "description": "Infer c in u=q+c from calibration."
+        },
+        {
+          "id": "discover",
+          "theory_level": 3,
+          "requires": [
+            "correct"
+          ],
+          "description": "Infer the missing operator on corrected u."
+        }
+      ],
+      "prediction_stage": "discover"
+    },
+    "exact_laws": {
+      "a": "x+4",
+      "b": "2*a",
+      "q": "b-2*4"
+    },
+    "corrected_law": "u=q+c",
+    "correction_choices": [
+      1,
+      2
+    ],
+    "missing_relationship": {
+      "dependency": "u",
+      "choices": [
+        "u+0",
+        "-u"
+      ]
+    },
+    "available_experiments": {
+      "calibration": "measure u at x=0",
+      "relationship": "measure y at x=2"
+    },
+    "prediction": {
+      "quantity": "y",
+      "x": 1
+    },
+    "independent_control": {
+      "relationship_input_u": 1
+    },
+    "note": "All arithmetic is modulo 11. No experiment at the prediction context is available."
+  },
+  "judge_only": {
+    "problem": {
+      "hypotheses": [
+        "c=1;law=add",
+        "c=1;law=negate",
+        "c=2;law=add",
+        "c=2;law=negate"
+      ],
+      "experiments": [
+        [
+          "calibration",
+          [
+            1,
+            1,
+            2,
+            2
+          ]
+        ],
+        [
+          "relationship",
+          [
+            5,
+            6,
+            6,
+            5
+          ]
+        ]
+      ],
+      "predictions": [
+        3,
+        8,
+        4,
+        7
+      ]
+    },
+    "independent_control": {
+      "hypotheses": [
+        "c=1;law=add",
+        "c=1;law=negate",
+        "c=2;law=add",
+        "c=2;law=negate"
+      ],
+      "experiments": [
+        [
+          "calibration",
+          [
+            1,
+            1,
+            2,
+            2
+          ]
+        ],
+        [
+          "relationship",
+          [
+            1,
+            10,
+            1,
+            10
+          ]
+        ]
+      ],
+      "predictions": [
+        3,
+        8,
+        4,
+        7
+      ]
+    },
+    "proofs": [
+      {
+        "truth": 0,
+        "posterior": [
+          0
+        ],
+        "missing_c_predictions": [
+          3,
+          7
+        ],
+        "missing_relationship_predictions": [
+          3,
+          8
+        ],
+        "wrong_c_predictions": [
+          7
+        ]
+      },
+      {
+        "truth": 1,
+        "posterior": [
+          1
+        ],
+        "missing_c_predictions": [
+          4,
+          8
+        ],
+        "missing_relationship_predictions": [
+          3,
+          8
+        ],
+        "wrong_c_predictions": [
+          4
+        ]
+      },
+      {
+        "truth": 2,
+        "posterior": [
+          2
+        ],
+        "missing_c_predictions": [
+          4,
+          8
+        ],
+        "missing_relationship_predictions": [
+          4,
+          7
+        ],
+        "wrong_c_predictions": [
+          8
+        ]
+      },
+      {
+        "truth": 3,
+        "posterior": [
+          3
+        ],
+        "missing_c_predictions": [
+          3,
+          7
+        ],
+        "missing_relationship_predictions": [
+          4,
+          7
+        ],
+        "wrong_c_predictions": [
+          3
+        ]
+      }
+    ]
+  },
+  "minimum_measurements": 2,
+  "independent_minimum_measurements": 2,
+  "known_c_minimum_measurements": 1,
+  "direct_target_bypass_measurements": 1,
+  "limitation": "Static finite experiment PoC; no runtime mode, model scores, forced temporal order, or physical-world proof.",
+  "code": "bd0f9c205753217444020857c9721626b1c34c6eb9b7198b85428570a6871bd1",
+  "python": "3.14.8"
+}
