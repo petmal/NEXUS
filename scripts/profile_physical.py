@@ -144,6 +144,13 @@ def main():
                 os.killpg(process.pid, signal.SIGKILL)
                 process.communicate()
                 report = {"status": "timeout"}
+            except BaseException:
+                try:
+                    os.killpg(process.pid, signal.SIGKILL)
+                except ProcessLookupError:
+                    pass
+                process.communicate()
+                raise
         report.update(case=case, workers=args.workers, concurrent_episodes=args.concurrent_episodes,
                       repeat=repeat, code=fingerprint, python=platform.python_version(), host=host,
                       subprocess_seconds=time.perf_counter() - started)
@@ -151,9 +158,12 @@ def main():
         temp.write_text(json.dumps(report, indent=2) + "\n")
         temp.replace(path)
         return report
+    failed = False
     with ThreadPoolExecutor(max_workers=args.concurrent_episodes) as pool:
         for result in pool.map(execute, [(s, r) for r in range(args.repeats) for s in args.seeds]):
+            failed |= result["status"] != "ok"
             print(json.dumps({k: v for k, v in result.items() if k != "timings"}), flush=True)
+    return int(failed)
 
 
 if __name__ == "__main__":

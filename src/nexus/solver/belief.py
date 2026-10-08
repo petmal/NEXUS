@@ -153,33 +153,10 @@ def _movement_for(episode: PrivateEpisode) -> _MovementOracle:
     )
 
 
-# Only cost-only results are retained. Exact AST keys are conservative: equivalent
-# but differently serialized rules may miss the cache, never produce a false hit.
-_PHYSICAL_RESULT_CACHE: OrderedDict[tuple[str, int, int], CompressedPhysicalResult] = OrderedDict()
-_PHYSICAL_CACHE_LIMIT = 512
-_physical_cache_hits = 0
-
-
-def _solve_hypothesis_physical(episode: PrivateEpisode, *, max_states: int):
-    global _physical_cache_hits
-    rules = {machine: [episode.rules[rule]] for machine, rule in episode.machine_rules.items()}
-    budget = max(512, episode.public.initial_state.resources.actions_remaining + 64)
-    key = (_policy_semantic_key(episode, rules), max_states, budget)
-    cached = _PHYSICAL_RESULT_CACHE.get(key)
-    if cached is not None:
-        _physical_cache_hits += 1
-        _PHYSICAL_RESULT_CACHE.move_to_end(key)
-        return cached.model_copy(deep=True)
-    result = solve_compressed_physical(episode, max_states=max_states, include_plan=False)
-    _PHYSICAL_RESULT_CACHE[key] = result.model_copy(deep=True)
-    while len(_PHYSICAL_RESULT_CACHE) > _PHYSICAL_CACHE_LIMIT:
-        _PHYSICAL_RESULT_CACHE.popitem(last=False)
-    return result
-
-
 def _physical_results(episodes: list[PrivateEpisode], *, max_states: int):
     """Ordered independent screens; the profiling PoC can replace this execution seam."""
-    return (_solve_hypothesis_physical(episode, max_states=max_states) for episode in episodes)
+    return (solve_compressed_physical(episode, max_states=max_states, include_plan=False)
+            for episode in episodes)
 
 
 @dataclass(frozen=True)
@@ -643,7 +620,6 @@ def solve_guaranteed_policy(
     hypothesis_episodes: list[PrivateEpisode] = []
     hypothesis_physical_optima: list[int] = []
     with timed_stage("policy.hypothesis_physical") as timing:
-        hits_before = _physical_cache_hits
         candidates = [_episode_for_hypothesis(episode, rules, search_budget=search_budget)
                       for rules in combinations]
         for candidate, physical in zip(candidates, _physical_results(candidates, max_states=max_physical_states), strict=True):
@@ -653,8 +629,7 @@ def solve_guaranteed_policy(
                 hypothesis_episodes.append(candidate)
                 hypothesis_physical_optima.append(physical.optimal_action_count)
         timing["hypotheses"] = len(hypothesis_episodes)
-        timing["physical_cache_hits"] = _physical_cache_hits - hits_before
-        timing["physical_searches"] = len(combinations) - timing["physical_cache_hits"]
+        timing["physical_searches"] = len(combinations)
 
     if not hypothesis_episodes:
         return BeliefPolicyResult(solvable=False, viable_hypothesis_count=0)

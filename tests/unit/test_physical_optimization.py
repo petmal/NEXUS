@@ -4,7 +4,7 @@ from nexus.engine.engine import step
 from nexus.models.actions import MoveAction
 from nexus.models.world import Room, Shape, TerminalStatus
 from nexus.solver.belief import (
-    _apply_route, _normalize_state, _solve_hypothesis_physical,
+    _apply_route, _normalize_state,
     solve_compressed_physical,
 )
 from test_belief_policy import _artifact, _episode, _set_value
@@ -32,10 +32,10 @@ def test_compressed_routes_match_ordinary_engine_and_do_not_mutate_input():
         assert state.model_dump_json() == original
 
 
-def test_cost_only_matches_plan_search_and_cache_isolates_rules_goals_and_limits():
+def test_cost_only_matches_plan_search_with_different_rules_goals_and_limits():
     episode = _episode(artifacts={"A1": _artifact("A1", Shape.SQUARE)}, phase_modulus=2)
     full = solve_compressed_physical(episode)
-    cost = _solve_hypothesis_physical(episode, max_states=100_000)
+    cost = solve_compressed_physical(episode, include_plan=False, max_states=100_000)
     assert cost.model_dump(exclude={"plan"}) == full.model_dump(exclude={"plan"})
     assert cost.plan == ()
     state = episode.public.initial_state
@@ -43,13 +43,13 @@ def test_cost_only_matches_plan_search_and_cache_isolates_rules_goals_and_limits
         state = step(state, action, episode).state
     assert state.terminal_status == TerminalStatus.WON
     cost.solvable = False
-    assert _solve_hypothesis_physical(episode, max_states=100_000).solvable
-    assert _solve_hypothesis_physical(episode, max_states=0).exhausted_state_limit
-    assert _solve_hypothesis_physical(episode, max_states=100_000).solvable
+    assert solve_compressed_physical(episode, include_plan=False, max_states=100_000).solvable
+    assert solve_compressed_physical(episode, include_plan=False, max_states=0).exhausted_state_limit
+    assert solve_compressed_physical(episode, include_plan=False, max_states=100_000).solvable
     episode.rules["machine-rule"] = _set_value(3)
-    assert not _solve_hypothesis_physical(episode, max_states=100_000).solvable
+    assert not solve_compressed_physical(episode, include_plan=False, max_states=100_000).solvable
     episode.public.goal = episode.public.goal.model_copy(update={"value": 3})
-    assert _solve_hypothesis_physical(episode, max_states=100_000).solvable
+    assert solve_compressed_physical(episode, include_plan=False, max_states=100_000).solvable
 
 
 def test_explicit_initial_state_and_cost_only_keep_identical_search_bounds():

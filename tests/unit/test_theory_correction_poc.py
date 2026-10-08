@@ -1,6 +1,7 @@
 import importlib.util
 from pathlib import Path
 import sys
+import pytest
 
 SCRIPT = Path(__file__).resolve().parents[2] / "scripts/theory_correction_poc.py"
 spec = importlib.util.spec_from_file_location("theory_correction_poc", SCRIPT)
@@ -22,3 +23,22 @@ def test_calibration_does_not_hide_corrections_and_true_law_belongs_to_public_pr
     assert world.public.evidence_files["facility_manual.txt"] == spec.manual()
     spec2, world2, candidates2 = poc.build_case(17)
     assert (spec, world, candidates) == (spec2, world2, candidates2)
+
+
+def test_complete_correction_policy_replay_and_budget_mismatch_rejection(monkeypatch):
+    monkeypatch.syspath_prepend(str(SCRIPT.parent))
+    from profile_theory import replay_policy
+    from nexus.solver.belief import solve_guaranteed_policy
+    result = poc.run_case(17)
+    assert result["replayed"] == result["viable_candidates"] == 5
+    _, world, candidates = poc.build_case(17)
+    policy = solve_guaranteed_policy(world, candidate_rules_by_machine={"M1": candidates},
+                                    max_actions=96, include_action_values=False)
+    world.generation_metadata.guaranteed_policy_witness = policy.witness.model_dump(mode="json")
+    world.generation_metadata.guaranteed_policy_action_count = policy.optimal_worst_case_actions - 1
+    with pytest.raises(RuntimeError, match="root budget"):
+        replay_policy(world, {"M1": candidates})
+    world.generation_metadata.guaranteed_policy_action_count = policy.optimal_worst_case_actions
+    world.generation_metadata.viable_causal_hypotheses = 6
+    with pytest.raises(RuntimeError, match="every certified viable"):
+        replay_policy(world, {"M1": candidates})

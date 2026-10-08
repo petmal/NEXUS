@@ -1,0 +1,290 @@
+{
+  "code": "4058afa0d515d3d82638b991457dda8518146f861bdc5cec940f33f9e9f82630",
+  "python": "3.14.7",
+  "runs": [
+    {
+      "id": "01-s1-D3-P2-R1-T0",
+      "case": {
+        "seed": 1,
+        "discovery_level": 3,
+        "planning_level": 2,
+        "resource_pressure": 1,
+        "theory_level": 0
+      },
+      "status": "ok",
+      "generation_seconds": 1.844423287999689,
+      "seconds": 1.9782373949997236,
+      "peak_rss_mib": 56.98828125,
+      "paired_world_hash": "35e69fec96cc3fe635db019e7894234e1ed0cc67a0c57795c36f1e3da5aaec6f",
+      "scenario_family_id": "ed9823191f35e4bc",
+      "candidates": {
+        "M1": 5,
+        "M2": 3
+      },
+      "evidence_rows": {
+        "M1": 2,
+        "M2": 2
+      },
+      "viable_causal_hypotheses": 13,
+      "replayed_physical_hypotheses": 13,
+      "minimum_probes": 2,
+      "physical_actions": 18,
+      "guaranteed_actions": 26,
+      "budget": 32
+    },
+    {
+      "id": "02-s1-D3-P2-R1-T1",
+      "case": {
+        "seed": 1,
+        "discovery_level": 3,
+        "planning_level": 2,
+        "resource_pressure": 1,
+        "theory_level": 1
+      },
+      "status": "ok",
+      "generation_seconds": 2.5844184809998296,
+      "seconds": 3.799635343999853,
+      "peak_rss_mib": 77.84375,
+      "paired_world_hash": "35e69fec96cc3fe635db019e7894234e1ed0cc67a0c57795c36f1e3da5aaec6f",
+      "scenario_family_id": "ed9823191f35e4bc",
+      "candidates": {
+        "M1": 12,
+        "M2": 12
+      },
+      "evidence_rows": {
+        "M1": 2,
+        "M2": 2
+      },
+      "viable_causal_hypotheses": 56,
+      "replayed_physical_hypotheses": 56,
+      "minimum_probes": 2,
+      "physical_actions": 18,
+      "guaranteed_actions": 26,
+      "budget": 32
+    },
+    {
+      "id": "03-s1-D4-P2-R1-T0",
+      "case": {
+        "seed": 1,
+        "discovery_level": 4,
+        "planning_level": 2,
+        "resource_pressure": 1,
+        "theory_level": 0
+      },
+      "status": "ok",
+      "generation_seconds": 1.7291357290000633,
+      "seconds": 1.741318769999907,
+      "peak_rss_mib": 77.84375,
+      "paired_world_hash": "6a9c1fbcfe1d5fb8b7ef006d4686b2bd1f77099c3accf9897fa0af1a550b240b",
+      "scenario_family_id": "6dc9e72e68671264",
+      "candidates": {
+        "M1": 3
+      },
+      "evidence_rows": {
+        "M1": 2
+      },
+      "viable_causal_hypotheses": 3,
+      "replayed_physical_hypotheses": 3,
+      "minimum_probes": 1,
+      "physical_actions": 5,
+      "guaranteed_actions": 10,
+      "budget": 17
+    },
+    {
+      "id": "04-s1-D4-P2-R1-T1",
+      "case": {
+        "seed": 1,
+        "discovery_level": 4,
+        "planning_level": 2,
+        "resource_pressure": 1,
+        "theory_level": 1
+      },
+      "status": "ok",
+      "generation_seconds": 0.2404517569998461,
+      "seconds": 0.2587465339997834,
+      "peak_rss_mib": 77.84375,
+      "paired_world_hash": "6a9c1fbcfe1d5fb8b7ef006d4686b2bd1f77099c3accf9897fa0af1a550b240b",
+      "scenario_family_id": "6dc9e72e68671264",
+      "candidates": {
+        "M1": 6
+      },
+      "evidence_rows": {
+        "M1": 3
+      },
+      "viable_causal_hypotheses": 3,
+      "replayed_physical_hypotheses": 3,
+      "minimum_probes": 1,
+      "physical_actions": 5,
+      "guaranteed_actions": 10,
+      "budget": 17
+    },
+    {
+      "id": "05-s17-D4-P2-R1-T0",
+      "case": {
+        "seed": 17,
+        "discovery_level": 4,
+        "planning_level": 2,
+        "resource_pressure": 1,
+        "theory_level": 0
+      },
+      "status": "ok",
+      "generation_seconds": 1.613905842999884,
+      "seconds": 1.6241025709996393,
+      "peak_rss_mib": 77.84375,
+      "paired_world_hash": "87df005799607abc53658704e772cd2c7c6056b4dc9e23d4bc8b29add0b4b4c7",
+      "scenario_family_id": "3df224f33317a83d",
+      "candidates": {
+        "M1": 3
+      },
+      "evidence_rows": {
+        "M1": 2
+      },
+      "viable_causal_hypotheses": 3,
+      "replayed_physical_hypotheses": 3,
+      "minimum_probes": 1,
+      "physical_actions": 6,
+      "guaranteed_actions": 11,
+      "budget": 17
+    },
+    {
+      "id": "06-s17-D4-P2-R1-T1",
+      "case": {
+        "seed": 17,
+        "discovery_level": 4,
+        "planning_level": 2,
+        "resource_pressure": 1,
+        "theory_level": 1
+      },
+      "status": "ok",
+      "generation_seconds": 0.17258782199996858,
+      "seconds": 0.19015521399978752,
+      "peak_rss_mib": 77.84375,
+      "paired_world_hash": "87df005799607abc53658704e772cd2c7c6056b4dc9e23d4bc8b29add0b4b4c7",
+      "scenario_family_id": "3df224f33317a83d",
+      "candidates": {
+        "M1": 6
+      },
+      "evidence_rows": {
+        "M1": 3
+      },
+      "viable_causal_hypotheses": 4,
+      "replayed_physical_hypotheses": 4,
+      "minimum_probes": 1,
+      "physical_actions": 6,
+      "guaranteed_actions": 11,
+      "budget": 17
+    },
+    {
+      "id": "07-s17-D4-P2-R2-T0",
+      "case": {
+        "seed": 17,
+        "discovery_level": 4,
+        "planning_level": 2,
+        "resource_pressure": 2,
+        "theory_level": 0
+      },
+      "status": "ok",
+      "generation_seconds": 0.031855421000273054,
+      "seconds": 0.0428236980001202,
+      "peak_rss_mib": 77.84375,
+      "paired_world_hash": "87df005799607abc53658704e772cd2c7c6056b4dc9e23d4bc8b29add0b4b4c7",
+      "scenario_family_id": "3df224f33317a83d",
+      "candidates": {
+        "M1": 3
+      },
+      "evidence_rows": {
+        "M1": 2
+      },
+      "viable_causal_hypotheses": 3,
+      "replayed_physical_hypotheses": 3,
+      "minimum_probes": 1,
+      "physical_actions": 6,
+      "guaranteed_actions": 11,
+      "budget": 11
+    },
+    {
+      "id": "08-s17-D4-P2-R2-T1",
+      "case": {
+        "seed": 17,
+        "discovery_level": 4,
+        "planning_level": 2,
+        "resource_pressure": 2,
+        "theory_level": 1
+      },
+      "status": "ok",
+      "generation_seconds": 0.06843831299966041,
+      "seconds": 0.08703058899982352,
+      "peak_rss_mib": 77.84375,
+      "paired_world_hash": "87df005799607abc53658704e772cd2c7c6056b4dc9e23d4bc8b29add0b4b4c7",
+      "scenario_family_id": "3df224f33317a83d",
+      "candidates": {
+        "M1": 6
+      },
+      "evidence_rows": {
+        "M1": 3
+      },
+      "viable_causal_hypotheses": 4,
+      "replayed_physical_hypotheses": 4,
+      "minimum_probes": 1,
+      "physical_actions": 6,
+      "guaranteed_actions": 11,
+      "budget": 11
+    },
+    {
+      "id": "09-s17-D4-P3-R1-T0",
+      "case": {
+        "seed": 17,
+        "discovery_level": 4,
+        "planning_level": 3,
+        "resource_pressure": 1,
+        "theory_level": 0
+      },
+      "status": "ok",
+      "generation_seconds": 0.23158258600005865,
+      "seconds": 0.2797209719997227,
+      "peak_rss_mib": 77.84375,
+      "paired_world_hash": "ac76eb3405851cd7c72448910a1c6de5c915ea951ce30a96351c89cd6da76401",
+      "scenario_family_id": "3df224f33317a83d",
+      "candidates": {
+        "M1": 3
+      },
+      "evidence_rows": {
+        "M1": 2
+      },
+      "viable_causal_hypotheses": 3,
+      "replayed_physical_hypotheses": 3,
+      "minimum_probes": 1,
+      "physical_actions": 12,
+      "guaranteed_actions": 17,
+      "budget": 23
+    },
+    {
+      "id": "10-s17-D4-P3-R1-T1",
+      "case": {
+        "seed": 17,
+        "discovery_level": 4,
+        "planning_level": 3,
+        "resource_pressure": 1,
+        "theory_level": 1
+      },
+      "status": "ok",
+      "generation_seconds": 0.4664771549996658,
+      "seconds": 0.5651090409996868,
+      "peak_rss_mib": 77.84375,
+      "paired_world_hash": "ac76eb3405851cd7c72448910a1c6de5c915ea951ce30a96351c89cd6da76401",
+      "scenario_family_id": "3df224f33317a83d",
+      "candidates": {
+        "M1": 6
+      },
+      "evidence_rows": {
+        "M1": 3
+      },
+      "viable_causal_hypotheses": 4,
+      "replayed_physical_hypotheses": 4,
+      "minimum_probes": 1,
+      "physical_actions": 12,
+      "guaranteed_actions": 17,
+      "budget": 23
+    }
+  ]
+}

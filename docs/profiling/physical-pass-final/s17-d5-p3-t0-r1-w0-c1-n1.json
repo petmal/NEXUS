@@ -1,0 +1,155 @@
+{
+  "status": "ok",
+  "generation_seconds": 21.570324408000033,
+  "shutdown_inclusive_seconds": 21.570325440000033,
+  "timings": [
+    {
+      "stage": "policy.hypothesis_physical",
+      "event": "complete",
+      "seconds": 0.05817258400020364,
+      "hypotheses": 4,
+      "physical_cache_hits": 0,
+      "physical_searches": 4
+    },
+    {
+      "stage": "policy.minimax",
+      "event": "complete",
+      "seconds": 1.9765866190000452,
+      "memo_entries": 5940,
+      "branch_entries": 52575,
+      "interned_states": 1227,
+      "memo_hits": 23351,
+      "choice_cache_entries": 993,
+      "route_cache_entries": 1453,
+      "transition_cache_entries": 21069,
+      "choices_reuse_hits": 12138,
+      "routes_reuse_hits": 51122,
+      "transitions_reuse_hits": 77734
+    },
+    {
+      "stage": "policy.witness",
+      "event": "complete",
+      "seconds": 0.0030652460000055726
+    },
+    {
+      "stage": "policy.action_values",
+      "event": "complete",
+      "seconds": 0.21831469600010678,
+      "memo_entries": 6603,
+      "branch_entries": 56578,
+      "interned_states": 1263,
+      "memo_hits": 28011,
+      "choice_cache_entries": 1036,
+      "route_cache_entries": 1528,
+      "transition_cache_entries": 22573,
+      "choices_reuse_hits": 14880,
+      "routes_reuse_hits": 55050,
+      "transitions_reuse_hits": 81876,
+      "requested_values": 3
+    },
+    {
+      "stage": "generation.core",
+      "event": "complete",
+      "seconds": 2.2756759929998225
+    },
+    {
+      "stage": "policy.hypothesis_physical",
+      "event": "complete",
+      "seconds": 0.39554942199993093,
+      "hypotheses": 4,
+      "physical_cache_hits": 0,
+      "physical_searches": 4
+    },
+    {
+      "stage": "policy.certificate_sufficient",
+      "event": "complete",
+      "seconds": 9.802768484000353
+    },
+    {
+      "stage": "policy.certificate_minimal",
+      "event": "complete",
+      "seconds": 6.855647053000212
+    },
+    {
+      "stage": "policy.minimax",
+      "event": "complete",
+      "seconds": 16.658597325999835,
+      "memo_entries": 38730,
+      "branch_entries": 388553,
+      "interned_states": 7068,
+      "memo_hits": 158229,
+      "choice_cache_entries": 5399,
+      "route_cache_entries": 10309,
+      "transition_cache_entries": 161987,
+      "choices_reuse_hits": 71756,
+      "routes_reuse_hits": 378244,
+      "transitions_reuse_hits": 546011
+    },
+    {
+      "stage": "policy.witness",
+      "event": "complete",
+      "seconds": 0.007761921000110306
+    },
+    {
+      "stage": "policy.action_values",
+      "event": "complete",
+      "seconds": 1.4284170920000179,
+      "memo_entries": 41779,
+      "branch_entries": 416780,
+      "interned_states": 7299,
+      "memo_hits": 198861,
+      "choice_cache_entries": 5541,
+      "route_cache_entries": 10698,
+      "transition_cache_entries": 169648,
+      "choices_reuse_hits": 88911,
+      "routes_reuse_hits": 406082,
+      "transitions_reuse_hits": 580573,
+      "requested_values": 3
+    },
+    {
+      "stage": "generation.planning_dependency",
+      "event": "complete",
+      "seconds": 18.842610439000055
+    },
+    {
+      "stage": "generation.resource_pressure",
+      "event": "complete",
+      "seconds": 0.00036252499967304175
+    },
+    {
+      "stage": "generation.qualification",
+      "event": "complete",
+      "seconds": 0.4503732690000106
+    }
+  ],
+  "physical_hash": "c047fa261bdfdf9eb76c4a301c92cfe363334c25482b87e560d724c86ef2217d",
+  "physical_actions": 14,
+  "guaranteed_actions": 17,
+  "budget": 25,
+  "candidates": {
+    "M1": 4,
+    "M2": 1,
+    "M3": 1
+  },
+  "replayed": 4,
+  "parent_peak_rss_mib": 470.5625,
+  "max_child_rss_mib": 0.0,
+  "case": {
+    "seed": 17,
+    "discovery_level": 5,
+    "planning_level": 3,
+    "theory_level": 0,
+    "resource_pressure": 1
+  },
+  "workers": 0,
+  "concurrent_episodes": 1,
+  "repeat": 1,
+  "code": "6c4b350ab173ef090c2837f261eb582343e3e05e512a2897487a90936539ce59",
+  "python": "3.14.7",
+  "host": {
+    "cpu_count": 9,
+    "affinity": 9,
+    "cpu_max": "800000 100000"
+  },
+  "subprocess_seconds": 24.08699385
+}

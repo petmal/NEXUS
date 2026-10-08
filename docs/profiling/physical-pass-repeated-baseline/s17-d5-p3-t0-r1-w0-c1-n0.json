@@ -1,0 +1,151 @@
+{
+  "status": "ok",
+  "generation_seconds": 25.507631805000074,
+  "shutdown_inclusive_seconds": 25.507633077000264,
+  "timings": [
+    {
+      "stage": "policy.hypothesis_physical",
+      "event": "complete",
+      "seconds": 0.09682787300016571,
+      "hypotheses": 4
+    },
+    {
+      "stage": "policy.minimax",
+      "event": "complete",
+      "seconds": 2.121329026999774,
+      "memo_entries": 5940,
+      "branch_entries": 52575,
+      "interned_states": 1227,
+      "memo_hits": 23351,
+      "choice_cache_entries": 993,
+      "route_cache_entries": 1453,
+      "transition_cache_entries": 21069,
+      "choices_reuse_hits": 12138,
+      "routes_reuse_hits": 51122,
+      "transitions_reuse_hits": 77734
+    },
+    {
+      "stage": "policy.witness",
+      "event": "complete",
+      "seconds": 0.00301670400040166
+    },
+    {
+      "stage": "policy.action_values",
+      "event": "complete",
+      "seconds": 0.3368132529999457,
+      "memo_entries": 6603,
+      "branch_entries": 56578,
+      "interned_states": 1263,
+      "memo_hits": 28011,
+      "choice_cache_entries": 1036,
+      "route_cache_entries": 1528,
+      "transition_cache_entries": 22573,
+      "choices_reuse_hits": 14880,
+      "routes_reuse_hits": 55050,
+      "transitions_reuse_hits": 81876,
+      "requested_values": 3
+    },
+    {
+      "stage": "generation.core",
+      "event": "complete",
+      "seconds": 2.5878360720003
+    },
+    {
+      "stage": "policy.hypothesis_physical",
+      "event": "complete",
+      "seconds": 0.9197119270002077,
+      "hypotheses": 4
+    },
+    {
+      "stage": "policy.certificate_sufficient",
+      "event": "complete",
+      "seconds": 10.937639369999943
+    },
+    {
+      "stage": "policy.certificate_minimal",
+      "event": "complete",
+      "seconds": 6.979211325000051
+    },
+    {
+      "stage": "policy.minimax",
+      "event": "complete",
+      "seconds": 17.917013726000278,
+      "memo_entries": 38730,
+      "branch_entries": 388553,
+      "interned_states": 7068,
+      "memo_hits": 158229,
+      "choice_cache_entries": 5399,
+      "route_cache_entries": 10309,
+      "transition_cache_entries": 161987,
+      "choices_reuse_hits": 71756,
+      "routes_reuse_hits": 378244,
+      "transitions_reuse_hits": 546011
+    },
+    {
+      "stage": "policy.witness",
+      "event": "complete",
+      "seconds": 0.007827515999906609
+    },
+    {
+      "stage": "policy.action_values",
+      "event": "complete",
+      "seconds": 1.4852796000000126,
+      "memo_entries": 41779,
+      "branch_entries": 416780,
+      "interned_states": 7299,
+      "memo_hits": 198861,
+      "choice_cache_entries": 5541,
+      "route_cache_entries": 10698,
+      "transition_cache_entries": 169648,
+      "choices_reuse_hits": 88911,
+      "routes_reuse_hits": 406082,
+      "transitions_reuse_hits": 580573,
+      "requested_values": 3
+    },
+    {
+      "stage": "generation.planning_dependency",
+      "event": "complete",
+      "seconds": 20.5814696729999
+    },
+    {
+      "stage": "generation.resource_pressure",
+      "event": "complete",
+      "seconds": 0.0003739829999176436
+    },
+    {
+      "stage": "generation.qualification",
+      "event": "complete",
+      "seconds": 2.336649956000201
+    }
+  ],
+  "physical_hash": "c047fa261bdfdf9eb76c4a301c92cfe363334c25482b87e560d724c86ef2217d",
+  "physical_actions": 14,
+  "guaranteed_actions": 17,
+  "budget": 25,
+  "candidates": {
+    "M1": 4,
+    "M2": 1,
+    "M3": 1
+  },
+  "replayed": 4,
+  "parent_peak_rss_mib": 479.80078125,
+  "max_child_rss_mib": 0.0,
+  "case": {
+    "seed": 17,
+    "discovery_level": 5,
+    "planning_level": 3,
+    "theory_level": 0,
+    "resource_pressure": 1
+  },
+  "workers": 0,
+  "concurrent_episodes": 1,
+  "repeat": 0,
+  "code": "b8be85c1be47c8e5ea06939ed648a0e4ceb3b6da70eec39eaa25b4afa2dc21a9",
+  "python": "3.14.7",
+  "host": {
+    "cpu_count": 9,
+    "affinity": 9,
+    "cpu_max": "800000 100000"
+  },
+  "subprocess_seconds": 26.774578011999893
+}

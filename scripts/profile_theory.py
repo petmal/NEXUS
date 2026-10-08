@@ -27,6 +27,8 @@ def replay_policy(episode, candidates) -> int:
     )
 
     witness = PolicyWitnessNode.model_validate(episode.generation_metadata.guaranteed_policy_witness)
+    if witness.remaining_budget != episode.generation_metadata.guaranteed_policy_action_count:
+        raise RuntimeError("witness root budget differs from the certified exact policy cost")
     replayed = 0
     machines = sorted(candidates)
     for rules in product(*(candidates[machine] for machine in machines)):
@@ -59,6 +61,8 @@ def replay_policy(episode, candidates) -> int:
         if state.terminal_status != TerminalStatus.WON:
             raise RuntimeError("policy did not end in victory")
         replayed += 1
+    if replayed != episode.generation_metadata.viable_causal_hypotheses:
+        raise RuntimeError("replay did not cover every certified viable hypothesis")
     return replayed
 
 

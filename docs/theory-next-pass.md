@@ -61,3 +61,26 @@ observable here.
   correction discovery is mission-essential. Production T2 remains gated.
 - Focused tests: 38 passed. Repeated isolated performance/process-pool measurements
   running; final full suite and broader resource/planning preflight follow.
+
+- Repeated PoC: isolated D3 seed 1 median 5.329 -> 4.531 s; seed 17
+  4.371 -> 4.005 s. D5/P3 seed 17 25.668 -> 21.459 s. Four workers help
+  isolated seed 1 but seven concurrent episodes regress 16.9%; production stays
+  sequential. Exact physical-result cache had zero measured hits and was removed.
+  Final cache-free repetition/full tests running. See raw `physical-pass-final`
+  (candidate) vs `physical-pass-production` (shipping code).
+
+- Final cache-free medians: D3/T1 seed 1 4.237 s, seed 17 4.016 s;
+  D5/P3/T0 seed 17 21.750 s. Exact hashes/costs/replay counts match original.
+- Matrix preflight: all ten cases, five paired hashes, 96 policy paths passed.
+- Theory review found no production blocker. Shared replay now explicitly verifies
+  witness root budget equals certified optimum and replays every viable hypothesis;
+  negative tests and all five T2 reruns pass. Service docs updated, including a
+  malformed historical environment-variable example.
+
+- Final gates: 172-test full suite passed (257.54 s, three stress seeds); the newly
+  added replay-gate regression passed in a six-test rerun, covering all 173 current
+  tests. Two pre-existing SET-normalization serializer warnings only. Extra
+  D4/P0/R0, D4/P1/R1 and D5/P3/R2 current-harness cases passed (12 paths).
+- Code/results ready for final checkpoint publication. Keep production sequential,
+  D5/T1 rejected and T2 research-only. Next user action: build PR branch with OCI
+  revision and run `docs/theory-next-model-matrix.json` on selected real models.

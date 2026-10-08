@@ -1,0 +1,8 @@
+{
+  "status": "timeout",
+  "returncode": 1,
+  "workers_requested": 4,
+  "timeout_seconds": 3,
+  "cleanup": "entire process group receives SIGKILL; process communicate completes",
+  "descendant_observation": "not verified through /proc in this execution environment"
+}

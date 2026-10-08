@@ -32,8 +32,8 @@
   "exact_actions": 16,
   "replayed": 5,
   "effective_model_alone_solvable": false,
-  "seconds": 0.09078974800013384,
-  "code": "b7e0d9ad15ba28c56c6d69ce169652831c7504e0d143266f33beddd05ed748cc",
+  "seconds": 0.09745947700002944,
+  "code": "af544165bcc933001782ee2fec87fe6ad3e20435916b1b4fd4bb8c6c884b3dea",
   "python": "3.14.7",
   "exhaustive_domain_checks": 85536
 }

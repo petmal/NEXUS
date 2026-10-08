@@ -12,7 +12,7 @@ creating, resetting, or replacing it.
 A generated episode can be selected with a seed:
 
 ```bash
-NEXUS_SEED=17 NEXUS_THEORY_LEVEL       0=catalogue (default), 1=structural prior (D0-D3 only)
+NEXUS_SEED=17 NEXUS_THEORY_LEVEL=0 \
 NEXUS_DISCOVERY_LEVEL=1 NEXUS_PLANNING_LEVEL=1 \
 NEXUS_RESOURCE_PRESSURE=0 NEXUS_HOST=0.0.0.0 nexus serve-session
 ```
@@ -223,8 +223,8 @@ Historical v1/v2 schemas remain unchanged. See [model testing matrix](model-test
 ## Theory-prior configuration
 
 Use `--theory-level 1` or `NEXUS_THEORY_LEVEL=1` when generating a session. The default T0
-preserves existing worlds. T1 supports D0–D3 and P0–P3/R0–R2, subject to paired-seed qualification;
-T1/D4–D5 and T2+ fail explicitly. Settings are generation inputs; loading `--private` uses the
+preserves existing worlds. T1 supports D0–D4 and P0–P3/R0–R2, subject to paired-seed qualification;
+T1/D5 and T2+ fail explicitly. Settings are generation inputs; loading `--private` uses the
 already compiled episode's metadata, as with D/P/R.
 
 T1's `theory.json` and manual describe the same complete structural prior used by the evaluator.

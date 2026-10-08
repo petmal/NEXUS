@@ -1,0 +1,30 @@
+{
+  "source_sha256": "3e48ea46eb2c119f06428ade6833d11eebc64a1a97b4b85973340f4f9fbf1213",
+  "python": "3.14.7",
+  "full_suite": {
+    "passed": 172,
+    "seconds": 257.54,
+    "stress_seed_count": 3,
+    "warnings": 2
+  },
+  "subsequent_focused_tests": {
+    "passed": 6,
+    "seconds": 0.7,
+    "includes_one_new_test": true
+  },
+  "current_collected_tests": 173,
+  "matrix": {
+    "accepted": 10,
+    "paired_worlds": 5,
+    "policy_replays": 96
+  },
+  "t2": {
+    "cases": 5,
+    "policy_replays": 25,
+    "domain_checks": 85536
+  },
+  "dependency_lock": "passed",
+  "diff_check": "passed",
+  "container_build": "not run: Docker and Podman unavailable",
+  "paid_model_calls": 0
+}

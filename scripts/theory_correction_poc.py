@@ -153,8 +153,11 @@ def run_case(seed):
     assert policy.solvable and policy.witness is not None
     assert policy.viable_hypothesis_count == 5
     world.generation_metadata.guaranteed_policy_witness = policy.witness.model_dump(mode="json")
+    world.generation_metadata.guaranteed_policy_action_count = policy.optimal_worst_case_actions
+    world.generation_metadata.viable_causal_hypotheses = policy.viable_hypothesis_count
     world.public.initial_state.resources.actions_remaining = policy.optimal_worst_case_actions
     replayed = replay_policy(world, {"M1": candidates})
+    assert replayed == policy.viable_hypothesis_count == 5
     effective_world = _episode_for_hypothesis(world, {"M1": spec.effective()}, search_budget=96)
     ignored = solve_compressed_physical(effective_world, include_plan=False)
     assert not ignored.solvable and not ignored.exhausted_state_limit

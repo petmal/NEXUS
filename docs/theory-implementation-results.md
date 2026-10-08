@@ -1,5 +1,8 @@
 # T0/T1 implementation and calibration evidence
 
+Historical first-release evidence (D0–D3). For the current D4/T1 extension,
+physical-search measurements and T2 PoC, see [next-pass results](theory-next-pass-results.md).
+
 Implementation branch: `feat/theory-prior-axis`, based on integration commit
 `cd69107f02af30c10464b85b47fa343a3f96aaef`. No MindTrial changes and no merge into main.
 
