@@ -1,0 +1,19 @@
+{
+  "status": "ok",
+  "seed": 17,
+  "full_prior": 729,
+  "after_evidence": 243,
+  "reachable_classes": 9,
+  "multiplicity": 27,
+  "viable_full": 135,
+  "reduced_replays": 5,
+  "full_replays": 135,
+  "exact_actions": 14,
+  "minimum_guaranteed_probes": 1,
+  "reachable_domain_comparisons": 10692,
+  "reduced_seconds": 0.0719795290001457,
+  "oracle_seconds": 2.0767444920002163,
+  "limitation": "One shape-invariant artifact; no claim of greater model difficulty or a general symbolic solver.",
+  "code": "5e6abc331192fa7df1ccd4badd7321fc72bacc88261e1ee6b5f607f369d6063a",
+  "python": "3.14.8"
+}

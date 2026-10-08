@@ -66,7 +66,7 @@ play.
 
 Every profile D0-D5 now has an exact minimum worst-case total-action policy cost. The terminal
 object is self-describing and includes an immutable `$schema` URL pointing to the versioned
-`schemas/performance-v3.schema.json` contract stored in this repository. In addition to the run
+`schemas/performance-v5.schema.json` contract stored in this repository. In addition to the run
 counters it records the discovery/planning/resource-pressure profile, terminal status, initial
 budget, resource allowance, and P3 dependency cost.
 
@@ -161,7 +161,7 @@ of the previous mutable world.
 
 ## Terminal diagnostics and operator timing
 
-Terminal action responses contain `performance` using the immutable performance-v3 schema
+Terminal action responses contain `performance` using the immutable performance-v5 schema
 referenced by `$schema`. This adds accepted action counts, room visits/revisits, a comparison to
 moves in the stored physical reference plan, and public-goal satisfaction diagnostics. A room
 revisit is not necessarily waste, and the stored plan's move count is not a standalone optimum
@@ -214,17 +214,18 @@ episode for reproducibility with the profiler's fixed verifier secret. Use `--cp
 overhead. Parent/child stage times are inclusive and must not be added together. Run each seed
 and profile in a fresh process when comparing cold service startup costs.
 
-The integrated v3 payload also includes `action_delta_from_physical_optimum` and
+The current payload also includes `action_delta_from_physical_optimum` and
 `unsatisfied_goal_conditions`. The latter decomposes false conjunctions but preserves OR/NOT
 expressions, so a false atomic leaf is not misreported as an independently required condition.
-Historical v1/v2 schemas remain unchanged. See [model testing matrix](model-testing-matrix.md).
+Historical v1–v4 schemas remain unchanged. See [model testing matrix](model-testing-matrix.md).
 
 
 ## Theory-prior configuration
 
 Use `--theory-level 1` or `NEXUS_THEORY_LEVEL=1` when generating a session. The default T0
 preserves existing worlds. T1 supports D0–D4 and P0–P3/R0–R2, subject to paired-seed qualification;
-T1/D5 and T2+ fail explicitly. Settings are generation inputs; loading `--private` uses the
+T2 supports D2/P0–P3/R0–R2 using `NEXUS_THEORY_LEVEL=2`. T1/D5, T2 with any D other
+than D2, and T3+ fail explicitly. Settings are generation inputs; loading `--private` uses the
 already compiled episode's metadata, as with D/P/R.
 
 T1's `theory.json` and manual describe the same complete structural prior used by the evaluator.
@@ -233,6 +234,23 @@ seeds cannot be certified by the bounded evidence planner and fail before servin
 seed with `nexus generate` and `nexus qualify`; never silently retry another seed while labeling
 it as the original paired task. See [T-axis validation](theory-implementation-results.md).
 
-Terminal telemetry uses performance-v4, adding required integer `theory_level` (0 or 1).
-The previous v1/v2/v3 schemas remain available for historical artifacts. No active-session
+T2 is an effective model with independently bounded corrections at phases 1 and 3;
+its supplied calibration at phases 0 and 2 agrees exactly with the effective model.
+The complete disclosed prior contains nine laws, five of which satisfy the public physical
+solvability promise. Every accepted episode has an exact guaranteed policy. Its world family
+is separate from T0/T1; only T2's own P2/P3 and resource variants have the documented pairing.
+
+Terminal telemetry uses performance-v5, permitting required integer `theory_level` 0, 1 or 2.
+The immutable schema reference points to commit `c24f44f510df32453c6e2860ef86640ab3ac6f8e`.
+The previous v1–v4 schemas remain unchanged for historical artifacts. No active-session
 performance fields or evaluator-finalization behavior changed.
+
+Operator generation logging now ends with `event=generation_summary`: one JSON line with
+total wall/process-CPU seconds and stage paths, counts, errors and inclusive elapsed times.
+Thus a last-50-lines container capture retains the core timing even for P3/theory generation.
+Paths distinguish repeated solver work under core, theory, planning dependency and qualification.
+Do not sum nested stage durations; use the summary's total for whole-generation time. Process
+CPU time includes all threads in that process and is not host CPU utilization. Catalogue
+construction/signature-matrix and mechanics/evidence stages expose pre-solver cold-start work.
+Logging remains opt-in via the existing `NEXUS_GENERATION_TIMING=true` setting, on stderr only;
+operator logs must not be mounted or forwarded into the player's tool response.

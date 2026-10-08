@@ -4,8 +4,9 @@ Status: T0/T1 implemented on `feat/theory-prior-axis`, based on integration
 commit `cd69107f02af30c10464b85b47fa343a3f96aaef`. This document retains the broader
 research ladder; current runtime scope and measured gates are recorded in
 `theory-implementation-progress.md` and `theory-next-pass-results.md`. D4/T1 is
-now qualified experimentally; T2 has a bounded-correction PoC but T2+ runtime
-profiles are not enabled.
+now qualified experimentally; T2 is integrated for D2/P0–P3/R0–R2. T3 has a bounded
+factorized-prior PoC but remains unavailable at runtime. Current scope and gates are in
+`theory-t2-t3-plan.md` and `theory-t2-t3-results.md`.
 
 ## 1. Motivation
 

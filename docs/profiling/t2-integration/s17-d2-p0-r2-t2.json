@@ -1,0 +1,102 @@
+{
+  "status": "ok",
+  "generation_seconds": 0.12373434599976463,
+  "generation_summary": {
+    "event": "complete",
+    "wall_seconds": 0.1236346189998585,
+    "cpu_seconds": 0.12363352799999999,
+    "stages": {
+      "generation.core/correction.family": {
+        "count": 1,
+        "errors": 0,
+        "wall_seconds": 0.0031494380000367528,
+        "cpu_seconds": 0.0031500689999999776
+      },
+      "generation.core/correction.topology": {
+        "count": 1,
+        "errors": 0,
+        "wall_seconds": 0.0024972800001705764,
+        "cpu_seconds": 0.0024997289999999506
+      },
+      "generation.core/correction.physical": {
+        "count": 1,
+        "errors": 0,
+        "wall_seconds": 0.004762270000355784,
+        "cpu_seconds": 0.004763560999999972
+      },
+      "generation.core/correction.policy/policy.hypothesis_physical": {
+        "count": 1,
+        "errors": 0,
+        "wall_seconds": 0.046141751000050135,
+        "cpu_seconds": 0.04614377599999997
+      },
+      "generation.core/correction.policy/policy.minimax": {
+        "count": 1,
+        "errors": 0,
+        "wall_seconds": 0.03467506900005901,
+        "cpu_seconds": 0.03467632300000001
+      },
+      "generation.core/correction.policy/policy.witness": {
+        "count": 1,
+        "errors": 0,
+        "wall_seconds": 0.001015162999919994,
+        "cpu_seconds": 0.0010155720000000201
+      },
+      "generation.core/correction.policy/policy.action_values": {
+        "count": 1,
+        "errors": 0,
+        "wall_seconds": 9.150999630946899e-06,
+        "cpu_seconds": 9.073999999997806e-06
+      },
+      "generation.core/correction.policy": {
+        "count": 1,
+        "errors": 0,
+        "wall_seconds": 0.0850351200001569,
+        "cpu_seconds": 0.08503610700000003
+      },
+      "generation.core": {
+        "count": 1,
+        "errors": 0,
+        "wall_seconds": 0.09724642699984543,
+        "cpu_seconds": 0.09724614299999995
+      },
+      "generation.resource_pressure": {
+        "count": 1,
+        "errors": 0,
+        "wall_seconds": 0.0004692260004048876,
+        "cpu_seconds": 0.0004699649999999611
+      },
+      "generation.qualification": {
+        "count": 1,
+        "errors": 0,
+        "wall_seconds": 0.024373016000026837,
+        "cpu_seconds": 0.02437512399999997
+      }
+    }
+  },
+  "seconds": 0.17779280499962624,
+  "peak_rss_mib": 47.03125,
+  "paired_world_hash": "7f65e623343600aa6dba0b60b2c9975208bf19d3525dd594847bab68ade6e13b",
+  "scenario_family_id": "56d3391af100887e",
+  "candidates": {
+    "M1": 9
+  },
+  "evidence_rows": {
+    "M1": 2
+  },
+  "viable_causal_hypotheses": 5,
+  "replayed_physical_hypotheses": 5,
+  "minimum_probes": 1,
+  "physical_actions": 12,
+  "guaranteed_actions": 15,
+  "budget": 15,
+  "case": {
+    "seed": 17,
+    "discovery_level": 2,
+    "planning_level": 0,
+    "resource_pressure": 2,
+    "theory_level": 2
+  },
+  "code": "82259e5452ad3dd2c12e8a3f6151a4c7cbbe38801ac488b4da690218a8814d1f",
+  "python": "3.14.8"
+}

@@ -1,0 +1,145 @@
+{
+  "version": 1,
+  "runs_per_model": 10,
+  "difficulty_scale": "1 easiest to 10 hardest; qualitative uncalibrated predictions. T2 is not assumed harder than T1.",
+  "seed_policy": "Identical listed seed for each model. T2 is a separate world family; these T1 controls are not physically paired T2 comparisons.",
+  "scope": "Runtime T2 D2 only; T3 remains research-only.",
+  "operational_notes": [
+    "Build with VCS_REF and retain OCI revision.",
+    "Use explicit tested provider structured-output configuration; preserve stable Error scoring.",
+    "Keep generation_summary in the readiness container log capture; do not expose it to players.",
+    "Retain both official results and audited live terminal outcomes."
+  ],
+  "runs": [
+    {
+      "id": "01-s0-D2-P2-R1-T2",
+      "expected_relative_difficulty": 4,
+      "purpose": "Effective-model limits and one-probe correction discovery",
+      "environment": {
+        "NEXUS_SEED": "0",
+        "NEXUS_DISCOVERY_LEVEL": "2",
+        "NEXUS_PLANNING_LEVEL": "2",
+        "NEXUS_RESOURCE_PRESSURE": "1",
+        "NEXUS_THEORY_LEVEL": "2",
+        "NEXUS_GENERATION_TIMING": "true"
+      }
+    },
+    {
+      "id": "02-s1-D2-P2-R1-T2",
+      "expected_relative_difficulty": 4,
+      "purpose": "Effective-model limits and one-probe correction discovery",
+      "environment": {
+        "NEXUS_SEED": "1",
+        "NEXUS_DISCOVERY_LEVEL": "2",
+        "NEXUS_PLANNING_LEVEL": "2",
+        "NEXUS_RESOURCE_PRESSURE": "1",
+        "NEXUS_THEORY_LEVEL": "2",
+        "NEXUS_GENERATION_TIMING": "true"
+      }
+    },
+    {
+      "id": "03-s2-D2-P2-R1-T2",
+      "expected_relative_difficulty": 4,
+      "purpose": "Effective-model limits and one-probe correction discovery",
+      "environment": {
+        "NEXUS_SEED": "2",
+        "NEXUS_DISCOVERY_LEVEL": "2",
+        "NEXUS_PLANNING_LEVEL": "2",
+        "NEXUS_RESOURCE_PRESSURE": "1",
+        "NEXUS_THEORY_LEVEL": "2",
+        "NEXUS_GENERATION_TIMING": "true"
+      }
+    },
+    {
+      "id": "04-s17-D2-P2-R1-T2",
+      "expected_relative_difficulty": 4,
+      "purpose": "Effective-model limits and one-probe correction discovery",
+      "environment": {
+        "NEXUS_SEED": "17",
+        "NEXUS_DISCOVERY_LEVEL": "2",
+        "NEXUS_PLANNING_LEVEL": "2",
+        "NEXUS_RESOURCE_PRESSURE": "1",
+        "NEXUS_THEORY_LEVEL": "2",
+        "NEXUS_GENERATION_TIMING": "true"
+      }
+    },
+    {
+      "id": "05-s1-D2-P2-R2-T2",
+      "expected_relative_difficulty": 5,
+      "purpose": "Exact-budget correction discovery and execution",
+      "environment": {
+        "NEXUS_SEED": "1",
+        "NEXUS_DISCOVERY_LEVEL": "2",
+        "NEXUS_PLANNING_LEVEL": "2",
+        "NEXUS_RESOURCE_PRESSURE": "2",
+        "NEXUS_THEORY_LEVEL": "2",
+        "NEXUS_GENERATION_TIMING": "true"
+      }
+    },
+    {
+      "id": "06-s17-D2-P2-R2-T2",
+      "expected_relative_difficulty": 5,
+      "purpose": "Exact-budget correction discovery and execution",
+      "environment": {
+        "NEXUS_SEED": "17",
+        "NEXUS_DISCOVERY_LEVEL": "2",
+        "NEXUS_PLANNING_LEVEL": "2",
+        "NEXUS_RESOURCE_PRESSURE": "2",
+        "NEXUS_THEORY_LEVEL": "2",
+        "NEXUS_GENERATION_TIMING": "true"
+      }
+    },
+    {
+      "id": "07-s1-D2-P3-R1-T2",
+      "expected_relative_difficulty": 5,
+      "purpose": "Correction discovery plus delivery dependency",
+      "environment": {
+        "NEXUS_SEED": "1",
+        "NEXUS_DISCOVERY_LEVEL": "2",
+        "NEXUS_PLANNING_LEVEL": "3",
+        "NEXUS_RESOURCE_PRESSURE": "1",
+        "NEXUS_THEORY_LEVEL": "2",
+        "NEXUS_GENERATION_TIMING": "true"
+      }
+    },
+    {
+      "id": "08-s17-D2-P3-R1-T2",
+      "expected_relative_difficulty": 5,
+      "purpose": "Correction discovery plus delivery dependency",
+      "environment": {
+        "NEXUS_SEED": "17",
+        "NEXUS_DISCOVERY_LEVEL": "2",
+        "NEXUS_PLANNING_LEVEL": "3",
+        "NEXUS_RESOURCE_PRESSURE": "1",
+        "NEXUS_THEORY_LEVEL": "2",
+        "NEXUS_GENERATION_TIMING": "true"
+      }
+    },
+    {
+      "id": "09-s1-D3-P2-R1-T1",
+      "expected_relative_difficulty": 7,
+      "purpose": "Established two-stage T1 control; separate family from T2",
+      "environment": {
+        "NEXUS_SEED": "1",
+        "NEXUS_DISCOVERY_LEVEL": "3",
+        "NEXUS_PLANNING_LEVEL": "2",
+        "NEXUS_RESOURCE_PRESSURE": "1",
+        "NEXUS_THEORY_LEVEL": "1",
+        "NEXUS_GENERATION_TIMING": "true"
+      }
+    },
+    {
+      "id": "10-s17-D3-P2-R1-T1",
+      "expected_relative_difficulty": 7,
+      "purpose": "Established two-stage T1 control; separate family from T2",
+      "environment": {
+        "NEXUS_SEED": "17",
+        "NEXUS_DISCOVERY_LEVEL": "3",
+        "NEXUS_PLANNING_LEVEL": "2",
+        "NEXUS_RESOURCE_PRESSURE": "1",
+        "NEXUS_THEORY_LEVEL": "1",
+        "NEXUS_GENERATION_TIMING": "true"
+      }
+    }
+  ]
+}

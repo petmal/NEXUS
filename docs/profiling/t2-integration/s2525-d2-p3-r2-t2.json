@@ -1,0 +1,144 @@
+{
+  "status": "ok",
+  "generation_seconds": 0.8083075320000717,
+  "generation_summary": {
+    "event": "complete",
+    "wall_seconds": 0.808172956999897,
+    "cpu_seconds": 0.8056575989999999,
+    "stages": {
+      "generation.core/correction.family": {
+        "count": 1,
+        "errors": 0,
+        "wall_seconds": 0.003552349000074173,
+        "cpu_seconds": 0.003552980000000039
+      },
+      "generation.core/correction.topology": {
+        "count": 1,
+        "errors": 0,
+        "wall_seconds": 0.002083688999846345,
+        "cpu_seconds": 0.0020852849999999923
+      },
+      "generation.core/correction.physical": {
+        "count": 1,
+        "errors": 0,
+        "wall_seconds": 0.006229805000202759,
+        "cpu_seconds": 0.006231179000000031
+      },
+      "generation.core/correction.policy/policy.hypothesis_physical": {
+        "count": 1,
+        "errors": 0,
+        "wall_seconds": 0.046500817999913124,
+        "cpu_seconds": 0.04650319900000005
+      },
+      "generation.core/correction.policy/policy.minimax": {
+        "count": 1,
+        "errors": 0,
+        "wall_seconds": 0.020698256000287074,
+        "cpu_seconds": 0.020699785000000026
+      },
+      "generation.core/correction.policy/policy.witness": {
+        "count": 1,
+        "errors": 0,
+        "wall_seconds": 0.0013227730000835436,
+        "cpu_seconds": 0.001323521999999966
+      },
+      "generation.core/correction.policy/policy.action_values": {
+        "count": 1,
+        "errors": 0,
+        "wall_seconds": 8.956999863585224e-06,
+        "cpu_seconds": 8.90000000003388e-06
+      },
+      "generation.core/correction.policy": {
+        "count": 1,
+        "errors": 0,
+        "wall_seconds": 0.06999220099987724,
+        "cpu_seconds": 0.069992834
+      },
+      "generation.core": {
+        "count": 1,
+        "errors": 0,
+        "wall_seconds": 0.0839441269999952,
+        "cpu_seconds": 0.08394365999999998
+      },
+      "generation.planning_dependency/policy.hypothesis_physical": {
+        "count": 1,
+        "errors": 0,
+        "wall_seconds": 0.3416381330002878,
+        "cpu_seconds": 0.33912425799999996
+      },
+      "generation.planning_dependency/policy.minimax/policy.certificate_sufficient": {
+        "count": 1,
+        "errors": 0,
+        "wall_seconds": 0.15847030399982032,
+        "cpu_seconds": 0.15847464299999992
+      },
+      "generation.planning_dependency/policy.minimax/policy.certificate_minimal": {
+        "count": 1,
+        "errors": 0,
+        "wall_seconds": 0.0031821930001569854,
+        "cpu_seconds": 0.003183267000000045
+      },
+      "generation.planning_dependency/policy.minimax": {
+        "count": 1,
+        "errors": 0,
+        "wall_seconds": 0.1619320949998837,
+        "cpu_seconds": 0.16193317800000007
+      },
+      "generation.planning_dependency/policy.witness": {
+        "count": 1,
+        "errors": 0,
+        "wall_seconds": 0.001967688000149792,
+        "cpu_seconds": 0.0019697159999999547
+      },
+      "generation.planning_dependency/policy.action_values": {
+        "count": 1,
+        "errors": 0,
+        "wall_seconds": 1.0804000339703634e-05,
+        "cpu_seconds": 1.0613999999908863e-05
+      },
+      "generation.planning_dependency": {
+        "count": 1,
+        "errors": 0,
+        "wall_seconds": 0.5392253559998608,
+        "cpu_seconds": 0.536711099
+      },
+      "generation.resource_pressure": {
+        "count": 1,
+        "errors": 0,
+        "wall_seconds": 0.00035710299971469794,
+        "cpu_seconds": 0.00035722100000001866
+      },
+      "generation.qualification": {
+        "count": 1,
+        "errors": 0,
+        "wall_seconds": 0.18280043400000068,
+        "cpu_seconds": 0.18280441800000002
+      }
+    }
+  },
+  "seconds": 1.2114580229999774,
+  "peak_rss_mib": 49.65234375,
+  "paired_world_hash": "2df3708a2953f93a2f8c6dc50d1815dbca2fe8c50455687f854b9e363e2dcce0",
+  "scenario_family_id": "dd94d7365752ff87",
+  "candidates": {
+    "M1": 9
+  },
+  "evidence_rows": {
+    "M1": 2
+  },
+  "viable_causal_hypotheses": 5,
+  "replayed_physical_hypotheses": 5,
+  "minimum_probes": 1,
+  "physical_actions": 20,
+  "guaranteed_actions": 23,
+  "budget": 23,
+  "case": {
+    "seed": 2525,
+    "discovery_level": 2,
+    "planning_level": 3,
+    "resource_pressure": 2,
+    "theory_level": 2
+  },
+  "code": "82259e5452ad3dd2c12e8a3f6151a4c7cbbe38801ac488b4da690218a8814d1f",
+  "python": "3.14.8"
+}

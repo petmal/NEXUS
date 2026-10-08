@@ -1,3 +1,6 @@
+> Current follow-up: T2 integration and T3 research are tracked in
+> [the T2/T3 checkpoint](theory-t2-t3-plan.md). This document records the earlier T0/T1 phase.
+
 # T-axis implementation checkpoint
 
 2026-10-08 continuation: see [next-pass checkpoint](theory-next-pass.md) and

@@ -1,0 +1,49 @@
+{
+  "runtime_source_commit": "86e6bb6ee4bb7fdc8b9801ad704cc5340e5139b0",
+  "python": "3.12.14",
+  "full_suite": {
+    "passed": 206,
+    "warnings": 2,
+    "seconds": 445.05,
+    "stress_seed_count": 3
+  },
+  "post_collection_targeted_tests": {
+    "passed": 8,
+    "note": "Includes the new unsupported-runtime-T3 regression; 207 current tests covered in total."
+  },
+  "t2": {
+    "cases": 21,
+    "all_viable_replays": 105,
+    "fingerprints": [
+      "82259e5452ad3dd2c12e8a3f6151a4c7cbbe38801ac488b4da690218a8814d1f"
+    ]
+  },
+  "t3": {
+    "cases": 5,
+    "full_law_replays": 675,
+    "reachable_domain_comparisons": 53460,
+    "median_reduced_seconds": 0.08301644699986355,
+    "median_oracle_seconds": 1.9437576399996033,
+    "fingerprints": [
+      "5e6abc331192fa7df1ccd4badd7321fc72bacc88261e1ee6b5f607f369d6063a"
+    ]
+  },
+  "model_matrix": {
+    "cases": 10,
+    "replays": 123
+  },
+  "cli_smoke": "T2 D2/P3/R2 seed 17 generate, qualify, solve and replay: passed",
+  "other_checks": [
+    "immutable schema source fetched and checked",
+    "uv lock --check",
+    "compileall",
+    "git diff --check",
+    "independent read-only correctness/secrecy review: no blockers"
+  ],
+  "limits": [
+    "No real-model calls",
+    "No local Docker/Podman image build",
+    "Existing lint/type tooling gap not migrated",
+    "T3 research fixture only"
+  ]
+}

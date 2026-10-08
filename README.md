@@ -412,7 +412,7 @@ uv run nexus generate /tmp/nexus-t1 --seed 17 --discovery-level 2 \
 uv run nexus qualify /tmp/nexus-t1/private.json
 ```
 
-For services set `NEXUS_THEORY_LEVEL=1`. T1 currently supports D0–D4; D5 and T2+ remain
+For services set `NEXUS_THEORY_LEVEL=1`. T1 currently supports D0–D4; T1/D5 remains
 unsupported. Seeded T0/T1 pairs preserve their physical world; T1 evidence and exact action
 budgets can differ. A seed is explicitly rejected when bounded evidence search cannot certify
 its D guarantee. This is an experimental calibration release, not a promise that every seed or
@@ -424,8 +424,23 @@ while the distractor probe costs an extra action. The direct mission probe can a
 D4 is not guaranteed to be harder than the two-stage D3 tasks. D4 evidence search is bounded and
 may reject paired seeds (including seeds 0 and 2 in the initial P2 sample). See
 [the next-pass results](docs/theory-next-pass-results.md) for acceptance and model calibration.
-The bounded-correction T2 research script proves its public prior and policies independently;
-it does not enable `--theory-level 2` or export production-qualified episodes.
+T2 now supports **D2/P0–P3/R0–R2** through `--theory-level 2` or
+`NEXUS_THEORY_LEVEL=2`. It discloses an effective additive model, exact validity phases,
+and the complete nine-law correction family. Calibration leaves the correction unknown;
+one informed probe guarantees the mission under all five physically viable laws.
+This is a separate world family: equal seeds do **not** imply T0/T1/T2 physical pairing.
+Other T2 discovery levels reject explicitly. For example:
+
+```bash
+uv run nexus generate /tmp/nexus-t2 --seed 17 --discovery-level 2 \
+  --planning-level 2 --resource-pressure 1 --theory-level 2
+uv run nexus qualify /tmp/nexus-t2/private.json
+```
+
+T3 remains research-only. `uv run python scripts/theory_structure_poc.py` checks a
+factorized shape/parity prior against complete enumeration and ordinary-engine policy replay.
+It does not enable `--theory-level 3`. See [T2/T3 results](docs/theory-t2-t3-results.md)
+and the [resumable implementation checkpoint](docs/theory-t2-t3-plan.md).
 
 See [validation and model matrix](docs/theory-implementation-results.md) and the
 [resumable checkpoint](docs/theory-implementation-progress.md).
