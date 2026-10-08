@@ -29,7 +29,7 @@ def test_t0_retains_pre_theory_compiled_episode(d):
     assert PrivateEpisode.model_validate(payload) == episode
 
 
-@pytest.mark.parametrize("d", range(4))
+@pytest.mark.parametrize("d", range(5))
 def test_t1_pairing_discovery_and_exact_budget(d):
     t0 = generate_episode(17, discovery_level=d, planning_level=2, resource_pressure=2)
     t1 = generate_episode(17, discovery_level=d, planning_level=2, resource_pressure=2, theory_level=1)
@@ -43,7 +43,7 @@ def test_t1_pairing_discovery_and_exact_budget(d):
     assert t0.public.episode_id != t1.public.episode_id
     assert b.theory_level == 1
     assert b.candidate_rules_before_evidence == 27120
-    assert b.required_probe_count == (0, 0, 1, 2)[d]
+    assert b.required_probe_count == (0, 0, 1, 2, 1)[d]
     assert b.action_budget == b.guaranteed_policy_action_count
     assert b.resource_allowance == 0
     assert qualify_episode(t1).passed
@@ -61,7 +61,7 @@ def test_t1_planning_resource_profiles(p, r):
     assert episode.generation_metadata.resource_pressure == r
 
 
-@pytest.mark.parametrize("d,t", [(4, 1), (5, 1), (0, 2), (0, -1)])
+@pytest.mark.parametrize("d,t", [(5, 1), (0, 2), (0, -1)])
 def test_unsupported_theory_profiles_rejected(d, t):
     with pytest.raises(ValueError, match="T1 currently supports|theory_level must"):
         generate_episode(17, discovery_level=d, theory_level=t)
@@ -126,7 +126,7 @@ def test_service_reads_theory_env(monkeypatch):
     assert "theory.json" in client.get("/manifest").json()["evidence_files"]
 
 
-@pytest.mark.parametrize("d", range(4))
+@pytest.mark.parametrize("d", range(5))
 def test_t1_p3_pairing_uses_the_same_t0_delivery_dependency(d):
     t0 = generate_episode(17, discovery_level=d, planning_level=3, resource_pressure=2)
     t1 = generate_episode(17, discovery_level=d, planning_level=3, resource_pressure=2, theory_level=1)

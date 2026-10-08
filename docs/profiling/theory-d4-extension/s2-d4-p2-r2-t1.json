@@ -1,0 +1,14 @@
+{
+  "status": "rejected_evidence",
+  "error": "paired T1/D4 evidence search could not certify this seed; choose another seed (no hidden-law reroll or weaker D guarantee was applied)",
+  "seconds": 0.6661353050003527,
+  "case": {
+    "seed": 2,
+    "discovery_level": 4,
+    "planning_level": 2,
+    "resource_pressure": 2,
+    "theory_level": 1
+  },
+  "code": "7329f2355469f6db5d6e99a262c93146c0270192a38dfd95fb64bc178fba1c03",
+  "python": "3.14.7"
+}

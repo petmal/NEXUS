@@ -102,7 +102,7 @@ def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--case", help=argparse.SUPPRESS)
     parser.add_argument("--seeds", type=int, nargs="+", default=[17, 73, 2525])
-    parser.add_argument("--levels", type=int, choices=range(4), nargs="+", default=[0, 1, 2, 3])
+    parser.add_argument("--levels", type=int, choices=range(6), nargs="+", default=[0, 1, 2, 3])
     parser.add_argument("--theory-levels", type=int, choices=[0, 1], nargs="+", default=[0, 1])
     parser.add_argument("--planning-level", type=int, choices=range(4), default=2)
     parser.add_argument("--resource-pressure", type=int, choices=range(3), default=0)

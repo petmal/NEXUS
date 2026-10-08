@@ -52,3 +52,12 @@ observable here.
 - Planning complete; baseline running. Python 3.14.7 restored, frozen dependency
   environment used. Local snapshot ancestry differs from remote; publishing must
   use the remote base tree/parent and compare file blobs.
+- Physical implementation checkpoint published as remote `732f44dd7c738ce8654f3b609ee756b16cfc9115`.
+  Independent review found no production solver blocker. Harness timeout/hash
+  findings fixed before repeated measurements. Local corresponding commit: `c7020ac`.
+- D4/T1 P2/R2 sweep: 10/12 T1 accepted; seeds 0 and 2 explicitly rejected;
+  all 12 T0 controls passed, 83 viable policy replays, ten paired world hashes.
+- T2 PoC: five worlds passed, 25 policy replays, 85,536 finite-domain checks;
+  correction discovery is mission-essential. Production T2 remains gated.
+- Focused tests: 38 passed. Repeated isolated performance/process-pool measurements
+  running; final full suite and broader resource/planning preflight follow.

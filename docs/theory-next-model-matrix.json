@@ -1,0 +1,145 @@
+{
+  "version": 1,
+  "runs_per_model": 10,
+  "difficulty_scale": "1 easiest to 10 hardest; uncalibrated predictions, not guarantees. T1 may not increase observed difficulty. D4 is not necessarily harder than D3.",
+  "seed_policy": "Use identical listed seeds across T0/T1 and all models. Preflight both variants before replacing a seed.",
+  "scope": "Production T0/T1 only; T2 remains a research PoC and D5/T1 remains rejected.",
+  "operational_notes": [
+    "Build with VCS_REF=$(git rev-parse HEAD) and retain the OCI revision.",
+    "Keep readiness-time generation diagnostics and distinguish live terminal status from final-answer/parser errors.",
+    "Keep resource and output-token limits fixed across compared models.",
+    "Do not change validation-on-error or scoring behavior for this matrix."
+  ],
+  "runs": [
+    {
+      "id": "01-s1-D3-P2-R1-T0",
+      "expected_relative_difficulty": 6,
+      "purpose": "Repeat the previous slow-generation control",
+      "environment": {
+        "NEXUS_SEED": "1",
+        "NEXUS_DISCOVERY_LEVEL": "3",
+        "NEXUS_PLANNING_LEVEL": "2",
+        "NEXUS_RESOURCE_PRESSURE": "1",
+        "NEXUS_THEORY_LEVEL": "0",
+        "NEXUS_GENERATION_TIMING": "true"
+      }
+    },
+    {
+      "id": "02-s1-D3-P2-R1-T1",
+      "expected_relative_difficulty": 7,
+      "purpose": "Repeat the previous slow-generation control",
+      "environment": {
+        "NEXUS_SEED": "1",
+        "NEXUS_DISCOVERY_LEVEL": "3",
+        "NEXUS_PLANNING_LEVEL": "2",
+        "NEXUS_RESOURCE_PRESSURE": "1",
+        "NEXUS_THEORY_LEVEL": "1",
+        "NEXUS_GENERATION_TIMING": "true"
+      }
+    },
+    {
+      "id": "03-s1-D4-P2-R1-T0",
+      "expected_relative_difficulty": 3,
+      "purpose": "Selective experiment with action slack",
+      "environment": {
+        "NEXUS_SEED": "1",
+        "NEXUS_DISCOVERY_LEVEL": "4",
+        "NEXUS_PLANNING_LEVEL": "2",
+        "NEXUS_RESOURCE_PRESSURE": "1",
+        "NEXUS_THEORY_LEVEL": "0",
+        "NEXUS_GENERATION_TIMING": "true"
+      }
+    },
+    {
+      "id": "04-s1-D4-P2-R1-T1",
+      "expected_relative_difficulty": 4,
+      "purpose": "Selective experiment with action slack",
+      "environment": {
+        "NEXUS_SEED": "1",
+        "NEXUS_DISCOVERY_LEVEL": "4",
+        "NEXUS_PLANNING_LEVEL": "2",
+        "NEXUS_RESOURCE_PRESSURE": "1",
+        "NEXUS_THEORY_LEVEL": "1",
+        "NEXUS_GENERATION_TIMING": "true"
+      }
+    },
+    {
+      "id": "05-s17-D4-P2-R1-T0",
+      "expected_relative_difficulty": 3,
+      "purpose": "Second selective-experiment seed",
+      "environment": {
+        "NEXUS_SEED": "17",
+        "NEXUS_DISCOVERY_LEVEL": "4",
+        "NEXUS_PLANNING_LEVEL": "2",
+        "NEXUS_RESOURCE_PRESSURE": "1",
+        "NEXUS_THEORY_LEVEL": "0",
+        "NEXUS_GENERATION_TIMING": "true"
+      }
+    },
+    {
+      "id": "06-s17-D4-P2-R1-T1",
+      "expected_relative_difficulty": 4,
+      "purpose": "Second selective-experiment seed",
+      "environment": {
+        "NEXUS_SEED": "17",
+        "NEXUS_DISCOVERY_LEVEL": "4",
+        "NEXUS_PLANNING_LEVEL": "2",
+        "NEXUS_RESOURCE_PRESSURE": "1",
+        "NEXUS_THEORY_LEVEL": "1",
+        "NEXUS_GENERATION_TIMING": "true"
+      }
+    },
+    {
+      "id": "07-s17-D4-P2-R2-T0",
+      "expected_relative_difficulty": 6,
+      "purpose": "Exact budget; isolates efficient experiment/execution choice",
+      "environment": {
+        "NEXUS_SEED": "17",
+        "NEXUS_DISCOVERY_LEVEL": "4",
+        "NEXUS_PLANNING_LEVEL": "2",
+        "NEXUS_RESOURCE_PRESSURE": "2",
+        "NEXUS_THEORY_LEVEL": "0",
+        "NEXUS_GENERATION_TIMING": "true"
+      }
+    },
+    {
+      "id": "08-s17-D4-P2-R2-T1",
+      "expected_relative_difficulty": 7,
+      "purpose": "Exact budget; isolates efficient experiment/execution choice",
+      "environment": {
+        "NEXUS_SEED": "17",
+        "NEXUS_DISCOVERY_LEVEL": "4",
+        "NEXUS_PLANNING_LEVEL": "2",
+        "NEXUS_RESOURCE_PRESSURE": "2",
+        "NEXUS_THEORY_LEVEL": "1",
+        "NEXUS_GENERATION_TIMING": "true"
+      }
+    },
+    {
+      "id": "09-s17-D4-P3-R1-T0",
+      "expected_relative_difficulty": 5,
+      "purpose": "Delivery dependency plus selective experiment",
+      "environment": {
+        "NEXUS_SEED": "17",
+        "NEXUS_DISCOVERY_LEVEL": "4",
+        "NEXUS_PLANNING_LEVEL": "3",
+        "NEXUS_RESOURCE_PRESSURE": "1",
+        "NEXUS_THEORY_LEVEL": "0",
+        "NEXUS_GENERATION_TIMING": "true"
+      }
+    },
+    {
+      "id": "10-s17-D4-P3-R1-T1",
+      "expected_relative_difficulty": 6,
+      "purpose": "Delivery dependency plus selective experiment",
+      "environment": {
+        "NEXUS_SEED": "17",
+        "NEXUS_DISCOVERY_LEVEL": "4",
+        "NEXUS_PLANNING_LEVEL": "3",
+        "NEXUS_RESOURCE_PRESSURE": "1",
+        "NEXUS_THEORY_LEVEL": "1",
+        "NEXUS_GENERATION_TIMING": "true"
+      }
+    }
+  ]
+}

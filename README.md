@@ -412,12 +412,20 @@ uv run nexus generate /tmp/nexus-t1 --seed 17 --discovery-level 2 \
 uv run nexus qualify /tmp/nexus-t1/private.json
 ```
 
-For services set `NEXUS_THEORY_LEVEL=1`. T1 currently supports D0–D3; D4/D5 and T2+ remain
+For services set `NEXUS_THEORY_LEVEL=1`. T1 currently supports D0–D4; D5 and T2+ remain
 unsupported. Seeded T0/T1 pairs preserve their physical world; T1 evidence and exact action
 budgets can differ. A seed is explicitly rejected when bounded evidence search cannot certify
 its D guarantee. This is an experimental calibration release, not a promise that every seed or
 higher T value is supported. True laws currently retain the paired T0 sampling distribution;
 T1 tests a broader disclosed prior, not full-universe true-law sampling.
+
+D4/T1 retains the exact selective-experiment proof: an informative auxiliary probe is optimal,
+while the distractor probe costs an extra action. The direct mission probe can also be optimal;
+D4 is not guaranteed to be harder than the two-stage D3 tasks. D4 evidence search is bounded and
+may reject paired seeds (including seeds 0 and 2 in the initial P2 sample). See
+[the next-pass results](docs/theory-next-pass-results.md) for acceptance and model calibration.
+The bounded-correction T2 research script proves its public prior and policies independently;
+it does not enable `--theory-level 2` or export production-qualified episodes.
 
 See [validation and model matrix](docs/theory-implementation-results.md) and the
 [resumable checkpoint](docs/theory-implementation-progress.md).

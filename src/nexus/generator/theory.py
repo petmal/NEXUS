@@ -207,6 +207,7 @@ class Universe:
         self, rule: Effect, mission: Artifact, phase: int, level: int,
         *, ceiling: int = 32, max_rows: int = 8, beam_width: int = 24,
         preserve: tuple[Effect, ...] = (),
+        established: tuple[Experiment, ...] = (),
     ) -> Iterator[MissionEvidencePlan]:
         """Bounded deterministic beam search; failure does not prove evidence impossibility.
 
@@ -233,8 +234,17 @@ class Universe:
             row = self.predictions(experiment.artifact, experiment.phase)
             output = encode(expected)
             rows.setdefault((self.mask(row, output), direct), experiment)
-        beam = [(self.all, ())]
-        seen = {self.all}
+        initial = self.all
+        for experiment in established:
+            if level and is_direct_context(experiment, mission, phase):
+                raise EvidencePlanningError("established evidence must not reveal the mission context")
+            expected = apply_effect(rule, experiment.artifact, experiment.phase)
+            if any(apply_effect(candidate, experiment.artifact, experiment.phase) != expected
+                   for candidate in preserve):
+                raise EvidencePlanningError("established evidence removes a preserved hypothesis")
+            initial &= self.mask(self.predictions(experiment.artifact, experiment.phase), encode(expected))
+        beam = [(initial, established)]
+        seen = {initial}
         for _ in range(max_rows):
             next_states = {}
             for remaining, chosen in beam:
@@ -277,8 +287,8 @@ def theory_universe() -> Universe:
 def validate_theory_profile(theory_level: int, discovery_level: int) -> None:
     if theory_level not in (0, 1):
         raise ValueError("theory_level must be 0 (catalogue) or 1 (structural theory)")
-    if theory_level == 1 and discovery_level not in (0, 1, 2, 3):
-        raise ValueError("T1 currently supports D0-D3; D4/D5 require separate theory proofs")
+    if theory_level == 1 and discovery_level not in (0, 1, 2, 3, 4):
+        raise ValueError("T1 currently supports D0-D4; D5 requires a separate theory proof")
 
 
 def validate_public_theory(files: dict[str, str]) -> None:

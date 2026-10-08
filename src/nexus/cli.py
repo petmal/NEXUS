@@ -80,7 +80,7 @@ def generate(
     ),
     theory_level: int = typer.Option(
         0, min=0, max=1, envvar="NEXUS_THEORY_LEVEL",
-        help="Theory prior: 0=catalogue, 1=structural primitives (D0-D3; paired seeds may reject).",
+        help="Theory prior: 0=catalogue, 1=structural primitives (D0-D4; paired seeds may reject).",
     ),
     resource_pressure: int = typer.Option(
         0,
@@ -306,7 +306,7 @@ def serve_session(
     ),
     theory_level: int = typer.Option(
         0, min=0, max=1, envvar="NEXUS_THEORY_LEVEL",
-        help="Theory prior: 0=catalogue, 1=structural primitives (D0-D3; paired seeds may reject).",
+        help="Theory prior: 0=catalogue, 1=structural primitives (D0-D4; paired seeds may reject).",
     ),
     resource_pressure: int = typer.Option(
         0,

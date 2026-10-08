@@ -1,5 +1,10 @@
 # T-axis implementation checkpoint
 
+2026-10-08 continuation: see [next-pass checkpoint](theory-next-pass.md) and
+[results](theory-next-pass-results.md) for physical-search optimization, D4/T1
+extension and bounded-correction T2 PoC. The original measurements below remain
+historical evidence for the first D0–D3 implementation.
+
 Integration base: remote `feat/epistemic-calibration` at `cd69107f02af30c10464b85b47fa343a3f96aaef`
 (includes OCI revision label). Local worktree: `nexus-theory`, branch `feat/theory-prior-axis`.
 Local snapshot commit IDs differ from remote; all base file contents were compared by Git blob SHA.

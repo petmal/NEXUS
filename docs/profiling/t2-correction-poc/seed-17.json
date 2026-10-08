@@ -1,0 +1,39 @@
+{
+  "seed": 17,
+  "status": "ok",
+  "family": "t2-effective-phase-correction-poc-v1",
+  "public_prior": {
+    "family": "t2-effective-phase-correction-poc-v1",
+    "effective_add": 1,
+    "modulus": 11,
+    "validity_phases": [
+      0,
+      2
+    ],
+    "correction_phases": [
+      1,
+      3
+    ],
+    "correction_add_choices": [
+      0,
+      1,
+      2
+    ],
+    "invariant_fields": [
+      "shape",
+      "pattern",
+      "orientation",
+      "polarity"
+    ]
+  },
+  "full_candidates": 9,
+  "viable_candidates": 5,
+  "minimum_guaranteed_probes": 1,
+  "exact_actions": 19,
+  "replayed": 5,
+  "effective_model_alone_solvable": false,
+  "seconds": 0.09591115199964406,
+  "code": "b7e0d9ad15ba28c56c6d69ce169652831c7504e0d143266f33beddd05ed748cc",
+  "python": "3.14.7",
+  "exhaustive_domain_checks": 85536
+}

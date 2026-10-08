@@ -1,9 +1,11 @@
 # Theory-prior axis (T) — design and proof plan
 
-Status: T0/T1 implementation in progress on `feat/theory-prior-axis`, based on integration
+Status: T0/T1 implemented on `feat/theory-prior-axis`, based on integration
 commit `cd69107f02af30c10464b85b47fa343a3f96aaef`. This document retains the broader
 research ladder; current runtime scope and measured gates are recorded in
-`theory-implementation-progress.md`. T2+ are not enabled.
+`theory-implementation-progress.md` and `theory-next-pass-results.md`. D4/T1 is
+now qualified experimentally; T2 has a bounded-correction PoC but T2+ runtime
+profiles are not enabled.
 
 ## 1. Motivation
 
