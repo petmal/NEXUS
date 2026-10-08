@@ -1,0 +1,148 @@
+{
+  "version": 1,
+  "runs_per_model": 10,
+  "difficulty_scale": "1 easiest to 10 hardest; uncalibrated expectations, not ordinal by T. Bounded T3 need not be harder than broad T1.",
+  "seed_policy": "Same fixed seed per cell across models. T2/T3 are separate world families; cross-T equal seeds are not physically paired.",
+  "scope": "Supported live runtime T1/T2/T3. Cumulative progression is a separate information-only PoC, not enabled by these settings.",
+  "operational_notes": [
+    "Use current feat/theory-prior-axis image with OCI VCS_REF.",
+    "R0 supplies exploration allowance; P0 keeps navigation small. R2 is excluded from theory scoring.",
+    "Keep tool-call limits above each episode guidance; do not reuse MindTrial generic ten-call cap.",
+    "Keep final-answer provider configuration explicit and stable across this matrix.",
+    "Use identical action-contract clarification for every cell: carried location is inventory, drop into the destination and reserve a separate finish action.",
+    "Report official statuses, live wins, probe/operate phases, goal deficits, moves, failed finishes, output tokens and generation_summary separately.",
+    "No claim of open-ended law discovery: T3 has a complete bounded operator prior; direct mission probes remain legal."
+  ],
+  "runs": [
+    {
+      "id": "01-D2-P0-R0-T1-Seed7",
+      "expected_relative_difficulty": 4,
+      "purpose": "Exact structural-prior reasoning",
+      "environment": {
+        "NEXUS_SEED": "7",
+        "NEXUS_DISCOVERY_LEVEL": "2",
+        "NEXUS_PLANNING_LEVEL": "0",
+        "NEXUS_RESOURCE_PRESSURE": "0",
+        "NEXUS_THEORY_LEVEL": "1",
+        "NEXUS_GENERATION_TIMING": "true"
+      }
+    },
+    {
+      "id": "02-D2-P0-R0-T2-Seed7",
+      "expected_relative_difficulty": 3,
+      "purpose": "Infer a correction to a supplied effective law",
+      "environment": {
+        "NEXUS_SEED": "7",
+        "NEXUS_DISCOVERY_LEVEL": "2",
+        "NEXUS_PLANNING_LEVEL": "0",
+        "NEXUS_RESOURCE_PRESSURE": "0",
+        "NEXUS_THEORY_LEVEL": "2",
+        "NEXUS_GENERATION_TIMING": "true"
+      }
+    },
+    {
+      "id": "03-D2-P0-R0-T3-Seed7",
+      "expected_relative_difficulty": 3,
+      "purpose": "Infer a missing context-dependent operator",
+      "environment": {
+        "NEXUS_SEED": "7",
+        "NEXUS_DISCOVERY_LEVEL": "2",
+        "NEXUS_PLANNING_LEVEL": "0",
+        "NEXUS_RESOURCE_PRESSURE": "0",
+        "NEXUS_THEORY_LEVEL": "3",
+        "NEXUS_GENERATION_TIMING": "true"
+      }
+    },
+    {
+      "id": "04-D2-P0-R0-T1-Seed23",
+      "expected_relative_difficulty": 4,
+      "purpose": "Exact structural-prior reasoning",
+      "environment": {
+        "NEXUS_SEED": "23",
+        "NEXUS_DISCOVERY_LEVEL": "2",
+        "NEXUS_PLANNING_LEVEL": "0",
+        "NEXUS_RESOURCE_PRESSURE": "0",
+        "NEXUS_THEORY_LEVEL": "1",
+        "NEXUS_GENERATION_TIMING": "true"
+      }
+    },
+    {
+      "id": "05-D2-P0-R0-T2-Seed23",
+      "expected_relative_difficulty": 3,
+      "purpose": "Infer a correction to a supplied effective law",
+      "environment": {
+        "NEXUS_SEED": "23",
+        "NEXUS_DISCOVERY_LEVEL": "2",
+        "NEXUS_PLANNING_LEVEL": "0",
+        "NEXUS_RESOURCE_PRESSURE": "0",
+        "NEXUS_THEORY_LEVEL": "2",
+        "NEXUS_GENERATION_TIMING": "true"
+      }
+    },
+    {
+      "id": "06-D2-P0-R0-T3-Seed23",
+      "expected_relative_difficulty": 3,
+      "purpose": "Infer a missing context-dependent operator",
+      "environment": {
+        "NEXUS_SEED": "23",
+        "NEXUS_DISCOVERY_LEVEL": "2",
+        "NEXUS_PLANNING_LEVEL": "0",
+        "NEXUS_RESOURCE_PRESSURE": "0",
+        "NEXUS_THEORY_LEVEL": "3",
+        "NEXUS_GENERATION_TIMING": "true"
+      }
+    },
+    {
+      "id": "07-D2-P2-R0-T2-Seed7",
+      "expected_relative_difficulty": 4,
+      "purpose": "Navigation sensitivity control",
+      "environment": {
+        "NEXUS_SEED": "7",
+        "NEXUS_DISCOVERY_LEVEL": "2",
+        "NEXUS_PLANNING_LEVEL": "2",
+        "NEXUS_RESOURCE_PRESSURE": "0",
+        "NEXUS_THEORY_LEVEL": "2",
+        "NEXUS_GENERATION_TIMING": "true"
+      }
+    },
+    {
+      "id": "08-D2-P2-R0-T3-Seed7",
+      "expected_relative_difficulty": 4,
+      "purpose": "Navigation sensitivity control",
+      "environment": {
+        "NEXUS_SEED": "7",
+        "NEXUS_DISCOVERY_LEVEL": "2",
+        "NEXUS_PLANNING_LEVEL": "2",
+        "NEXUS_RESOURCE_PRESSURE": "0",
+        "NEXUS_THEORY_LEVEL": "3",
+        "NEXUS_GENERATION_TIMING": "true"
+      }
+    },
+    {
+      "id": "09-D3-P0-R0-T1-Seed7",
+      "expected_relative_difficulty": 6,
+      "purpose": "Two-stage composition control",
+      "environment": {
+        "NEXUS_SEED": "7",
+        "NEXUS_DISCOVERY_LEVEL": "3",
+        "NEXUS_PLANNING_LEVEL": "0",
+        "NEXUS_RESOURCE_PRESSURE": "0",
+        "NEXUS_THEORY_LEVEL": "1",
+        "NEXUS_GENERATION_TIMING": "true"
+      }
+    },
+    {
+      "id": "10-D3-P0-R0-T1-Seed23",
+      "expected_relative_difficulty": 6,
+      "purpose": "Two-stage composition control",
+      "environment": {
+        "NEXUS_SEED": "23",
+        "NEXUS_DISCOVERY_LEVEL": "3",
+        "NEXUS_PLANNING_LEVEL": "0",
+        "NEXUS_RESOURCE_PRESSURE": "0",
+        "NEXUS_THEORY_LEVEL": "1",
+        "NEXUS_GENERATION_TIMING": "true"
+      }
+    }
+  ]
+}

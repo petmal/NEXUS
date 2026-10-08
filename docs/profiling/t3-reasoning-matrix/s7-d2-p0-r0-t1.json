@@ -1,0 +1,138 @@
+{
+  "status": "ok",
+  "generation_seconds": 0.7718919359995198,
+  "generation_summary": {
+    "event": "complete",
+    "wall_seconds": 0.771767168000224,
+    "cpu_seconds": 0.771133261,
+    "stages": {
+      "generation.core/core.catalogue_build": {
+        "count": 1,
+        "errors": 0,
+        "wall_seconds": 0.009927208000590326,
+        "cpu_seconds": 0.009928776
+      },
+      "generation.core/core.mechanics_evidence/core.mission_prediction_signatures": {
+        "count": 21,
+        "errors": 0,
+        "wall_seconds": 0.05254298500040022,
+        "cpu_seconds": 0.052554337000000034
+      },
+      "generation.core/core.mechanics_evidence/core.catalogue_signature_matrix": {
+        "count": 1,
+        "errors": 0,
+        "wall_seconds": 0.2698518699999113,
+        "cpu_seconds": 0.26956743699999997
+      },
+      "generation.core/core.mechanics_evidence": {
+        "count": 1,
+        "errors": 0,
+        "wall_seconds": 0.5101362830000653,
+        "cpu_seconds": 0.509686396
+      },
+      "generation.core/policy.hypothesis_physical": {
+        "count": 1,
+        "errors": 0,
+        "wall_seconds": 0.008196890999897732,
+        "cpu_seconds": 0.008198403999999937
+      },
+      "generation.core/policy.minimax": {
+        "count": 1,
+        "errors": 0,
+        "wall_seconds": 0.010329605000151787,
+        "cpu_seconds": 0.010331244000000073
+      },
+      "generation.core/policy.witness": {
+        "count": 1,
+        "errors": 0,
+        "wall_seconds": 0.00036836500021308893,
+        "cpu_seconds": 0.0003684970000000787
+      },
+      "generation.core/policy.action_values": {
+        "count": 1,
+        "errors": 0,
+        "wall_seconds": 5.588000021816697e-06,
+        "cpu_seconds": 5.598999999967269e-06
+      },
+      "generation.core": {
+        "count": 1,
+        "errors": 0,
+        "wall_seconds": 0.5636656039996524,
+        "cpu_seconds": 0.5632146610000001
+      },
+      "generation.theory/theory.universe_build": {
+        "count": 1,
+        "errors": 0,
+        "wall_seconds": 0.029680482000003394,
+        "cpu_seconds": 0.029683785000000018
+      },
+      "generation.theory/policy.hypothesis_physical": {
+        "count": 1,
+        "errors": 0,
+        "wall_seconds": 0.02952412699960405,
+        "cpu_seconds": 0.029524288000000065
+      },
+      "generation.theory/policy.minimax": {
+        "count": 1,
+        "errors": 0,
+        "wall_seconds": 0.018134105000171985,
+        "cpu_seconds": 0.01813625299999999
+      },
+      "generation.theory/policy.witness": {
+        "count": 1,
+        "errors": 0,
+        "wall_seconds": 0.0006709109993607854,
+        "cpu_seconds": 0.0006721090000000318
+      },
+      "generation.theory/policy.action_values": {
+        "count": 1,
+        "errors": 0,
+        "wall_seconds": 6.751000000804197e-06,
+        "cpu_seconds": 6.640000000057711e-06
+      },
+      "generation.theory": {
+        "count": 1,
+        "errors": 0,
+        "wall_seconds": 0.14514709600007336,
+        "cpu_seconds": 0.14496944700000003
+      },
+      "generation.resource_pressure": {
+        "count": 1,
+        "errors": 0,
+        "wall_seconds": 2.1239993657218292e-06,
+        "cpu_seconds": 1.943000000004247e-06
+      },
+      "generation.qualification": {
+        "count": 1,
+        "errors": 0,
+        "wall_seconds": 0.06137205399954837,
+        "cpu_seconds": 0.06137373099999999
+      }
+    }
+  },
+  "seconds": 0.8036972800000513,
+  "peak_rss_mib": 59.8203125,
+  "paired_world_hash": "61c7acf3ffb1d2889df84dcd5ca8632ce6894487b1fb447aaa25b6507e6ae0f0",
+  "scenario_family_id": "fc8386c9d247bd6c",
+  "candidates": {
+    "M1": 12
+  },
+  "evidence_rows": {
+    "M1": 2
+  },
+  "viable_causal_hypotheses": 9,
+  "replayed_physical_hypotheses": 9,
+  "minimum_probes": 1,
+  "physical_actions": 12,
+  "guaranteed_actions": 13,
+  "budget": 23,
+  "case": {
+    "seed": 7,
+    "discovery_level": 2,
+    "planning_level": 0,
+    "resource_pressure": 0,
+    "theory_level": 1
+  },
+  "code": "20dd8658c2f7a51c9cff091f388fa2d50f2bf669ff563e988320e87cb59668ea",
+  "python": "3.14.8"
+}

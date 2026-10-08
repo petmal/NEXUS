@@ -1,0 +1,72 @@
+{
+  "status": "passed",
+  "full_suite": {
+    "passed": 255,
+    "warnings": 2,
+    "seconds": 230.39,
+    "stress_seed_count": 3,
+    "note": "Two existing Pydantic enum serialization warnings. One later-added optimized-Python regression is covered by the final ten-test progression gate."
+  },
+  "current_tests_covered": 256,
+  "final_progression_tests": 10,
+  "structural_full_law_oracle": {
+    "seeds": [
+      1,
+      17
+    ],
+    "full_law_replays": 270,
+    "reachable_value_phase_comparisons": 21384
+  },
+  "runtime_sweep": {
+    "cases": 16,
+    "accepted": 16,
+    "policy_replays": 80,
+    "median_generation_seconds": 0.08712944699982472,
+    "min_generation_seconds": 0.0631609700003537,
+    "max_generation_seconds": 0.4213382769994496
+  },
+  "matrix": {
+    "cases": 10,
+    "accepted": 10,
+    "policy_replays": 60
+  },
+  "prior_model_trace_regression": {
+    "episodes": 70,
+    "action_responses": 1690,
+    "manifests": 81,
+    "observations": 82,
+    "evidence_files": 229,
+    "discrepancies": 0
+  },
+  "progression": {
+    "recorded_seeds": [
+      0,
+      1,
+      2,
+      17,
+      2525
+    ],
+    "truths": 20,
+    "independent_review_seed_count": 1000
+  },
+  "cli_smoke": "T3 D2/P3/R2 seed17 generate/qualify/solve/replay passed",
+  "static_checks": [
+    "uv lock --check",
+    "compileall src scripts",
+    "git diff --check"
+  ],
+  "review": "No blocking finding. Optimized Python proof bypass addressed.",
+  "limitations": [
+    "No paid model calls",
+    "No local Docker/Podman",
+    "Existing missing Ruff/ty/basedpyright/coverage gates",
+    "Finite T3 prior and information-only progression PoC; no open-ended discovery claim"
+  ],
+  "schema_commit": "50ea40636bf46313fe5eef46973527dec097d17a",
+  "published_checkpoints": {
+    "optimization": "27af559d72743948fd665bde19c55fc94324712c",
+    "schema": "50ea40636bf46313fe5eef46973527dec097d17a",
+    "runtime": "1f6465ed289ae08a480ed1a45a01ef93306d174c",
+    "progression": "01870b1aa1a45a438560e6269f6bb3638c55d806"
+  }
+}

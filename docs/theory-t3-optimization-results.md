@@ -9,4 +9,4 @@ Cold processes, same host/lockfile, before other runtime changes.
 
 Each trial evidence subset now looks up precomputed mission signatures instead of interpreting the same AST repeatedly. Catalogue JSON indexing is also reused. The per-search signatures are local; there is no unbounded per-seed cache. Ordering and tie-breaking are unchanged.
 
-Validation: 44 evidence-oracle/theory generation tests passed. Earlier targeted difficulty/theory run completed 55 checks before the obsolete T3-rejection assertion; that assertion is updated as part of T3 integration. Both profiled worlds replay all 83 viable hypotheses. These two samples demonstrate a useful local gain, not a universal performance guarantee.
+Validation: 44 evidence-oracle/theory generation tests passed. Both profiled worlds replay all 83 viable hypotheses. These two samples demonstrate a useful local gain, not a universal performance guarantee.

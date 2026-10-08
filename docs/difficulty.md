@@ -125,9 +125,11 @@ pressure changes only the explicit allowance above that baseline:
 | 1 | constrained | `room_count - 1` |
 | 2 | tight | `0` |
 
-Thus R2 remains mechanically guaranteed winnable: it gives exactly
-`guaranteed_policy_actions`, but no action is available for avoidable exploration or redundant
-experiments. R0 preserves the historical exploration + execution cushion.
+R2 gives exactly `guaranteed_policy_actions`. This is a guarantee over causal hypotheses
+**with the topology and role locations known to the solver**; it is not a guaranteed budget
+for discovering the initially hidden map. Even an early legal exploratory move can consume
+all available slack. R0 preserves the exploration + execution cushion and is preferred when
+isolating theory reasoning. This clarification does not change existing resource semantics.
 
 Resource pressure never rerolls topology, mechanics, evidence, goals, physical optimum, or the
 exact guaranteed-policy optimum. The qualifier recomputes the selected allowance and rejects an
@@ -165,3 +167,26 @@ nexus inspect ./episode/private.json
 ```
 
 The command does not print latent rule ASTs, verifier secrets, or the reference plan.
+
+
+## Theory profiles and cumulative research
+
+| T | Information supplied | Supported D | Interpretation |
+|---|---|---|---|
+| 0 | Explicit candidate catalogue | 0–5 | Catalogue-based discovery |
+| 1 | Complete primitive and conditional grammar | 0–4 | Compose/select exact laws in a broad structural prior |
+| 2 | Effective model, exact region, known correction form | 2 | Infer a bounded additive correction |
+| 3 | Dependencies, invariants, complete independent operator-cell prior | 2 | Infer a missing bounded relationship without an effective baseline |
+
+T2/T3 support P0–P3 and R0–R2. Unsupported combinations reject explicitly.
+T3 is `t3-independent-operator-cells-v1`: 729 complete laws, 243 after calibration,
+nine reachable equivalence classes with multiplicity 27, five viable classes (135 full laws).
+For this profile metadata `candidate_rules_before_evidence` counts 729 full laws;
+`candidate_rules_after_evidence` and `evidence_candidate_counts` count the nine solver classes.
+Qualification metrics also report full surviving cardinality and multiplicity explicitly.
+The quotient is sound only for one machine and shape-invariant artifacts of the same shape;
+P3's duplicate cargo preserves that condition. New reachable shapes require a new proof.
+
+T is a theory-information axis, not an ordinal score. Current T3 is deliberately bounded and
+can be easier than T1. Existing levels remain independent families. Cumulative theory
+progression is described and proved separately in the [progression results](theory-t3-progression-results.md).

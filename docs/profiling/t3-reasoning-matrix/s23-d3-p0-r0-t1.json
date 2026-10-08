@@ -1,0 +1,140 @@
+{
+  "status": "ok",
+  "generation_seconds": 1.8747348699998838,
+  "generation_summary": {
+    "event": "complete",
+    "wall_seconds": 1.8746258849996593,
+    "cpu_seconds": 1.8745415769999998,
+    "stages": {
+      "generation.core/core.catalogue_build": {
+        "count": 1,
+        "errors": 0,
+        "wall_seconds": 0.008415469999818015,
+        "cpu_seconds": 0.008418360999999985
+      },
+      "generation.core/core.mechanics_evidence/core.mission_prediction_signatures": {
+        "count": 16,
+        "errors": 0,
+        "wall_seconds": 0.03420160899622715,
+        "cpu_seconds": 0.0341938870000002
+      },
+      "generation.core/core.mechanics_evidence/core.catalogue_signature_matrix": {
+        "count": 1,
+        "errors": 0,
+        "wall_seconds": 0.2485444699996151,
+        "cpu_seconds": 0.248543524
+      },
+      "generation.core/core.mechanics_evidence": {
+        "count": 1,
+        "errors": 0,
+        "wall_seconds": 0.5120131879994005,
+        "cpu_seconds": 0.511992089
+      },
+      "generation.core/policy.hypothesis_physical": {
+        "count": 1,
+        "errors": 0,
+        "wall_seconds": 0.07940332700036379,
+        "cpu_seconds": 0.07939527400000002
+      },
+      "generation.core/policy.minimax": {
+        "count": 1,
+        "errors": 0,
+        "wall_seconds": 0.18984497000019473,
+        "cpu_seconds": 0.18984488899999996
+      },
+      "generation.core/policy.witness": {
+        "count": 1,
+        "errors": 0,
+        "wall_seconds": 0.001005516999612155,
+        "cpu_seconds": 0.0010062160000001708
+      },
+      "generation.core/policy.action_values": {
+        "count": 1,
+        "errors": 0,
+        "wall_seconds": 6.549999852722976e-06,
+        "cpu_seconds": 6.460000000041433e-06
+      },
+      "generation.core": {
+        "count": 1,
+        "errors": 0,
+        "wall_seconds": 0.8979268530001718,
+        "cpu_seconds": 0.897888811
+      },
+      "generation.theory/theory.universe_build": {
+        "count": 1,
+        "errors": 0,
+        "wall_seconds": 0.027751859000090917,
+        "cpu_seconds": 0.02775391599999999
+      },
+      "generation.theory/policy.hypothesis_physical": {
+        "count": 1,
+        "errors": 0,
+        "wall_seconds": 0.4283015039991369,
+        "cpu_seconds": 0.42827387100000003
+      },
+      "generation.theory/policy.minimax": {
+        "count": 1,
+        "errors": 0,
+        "wall_seconds": 0.189460049000445,
+        "cpu_seconds": 0.18946008700000005
+      },
+      "generation.theory/policy.witness": {
+        "count": 1,
+        "errors": 0,
+        "wall_seconds": 0.0009416200000487152,
+        "cpu_seconds": 0.0009422609999998333
+      },
+      "generation.theory/policy.action_values": {
+        "count": 1,
+        "errors": 0,
+        "wall_seconds": 5.978999979561195e-06,
+        "cpu_seconds": 5.958999999888803e-06
+      },
+      "generation.theory": {
+        "count": 1,
+        "errors": 0,
+        "wall_seconds": 0.7959814890000416,
+        "cpu_seconds": 0.7959445759999999
+      },
+      "generation.resource_pressure": {
+        "count": 1,
+        "errors": 0,
+        "wall_seconds": 2.1430005290312693e-06,
+        "cpu_seconds": 2.183000000099966e-06
+      },
+      "generation.qualification": {
+        "count": 1,
+        "errors": 0,
+        "wall_seconds": 0.1787343639998653,
+        "cpu_seconds": 0.17873501800000025
+      }
+    }
+  },
+  "seconds": 2.3035821349994876,
+  "peak_rss_mib": 66.7421875,
+  "paired_world_hash": "4f7f5ef9882518b7760a5182361e2207caaa8f53af4d696e9fa81bbfc98ecf84",
+  "scenario_family_id": "de323cab2c817801",
+  "candidates": {
+    "M1": 4,
+    "M2": 12
+  },
+  "evidence_rows": {
+    "M1": 2,
+    "M2": 2
+  },
+  "viable_causal_hypotheses": 9,
+  "replayed_physical_hypotheses": 9,
+  "minimum_probes": 2,
+  "physical_actions": 19,
+  "guaranteed_actions": 21,
+  "budget": 31,
+  "case": {
+    "seed": 23,
+    "discovery_level": 3,
+    "planning_level": 0,
+    "resource_pressure": 0,
+    "theory_level": 1
+  },
+  "code": "20dd8658c2f7a51c9cff091f388fa2d50f2bf669ff563e988320e87cb59668ea",
+  "python": "3.14.8"
+}

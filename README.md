@@ -437,10 +437,27 @@ uv run nexus generate /tmp/nexus-t2 --seed 17 --discovery-level 2 \
 uv run nexus qualify /tmp/nexus-t2/private.json
 ```
 
-T3 remains research-only. `uv run python scripts/theory_structure_poc.py` checks a
-factorized shape/parity prior against complete enumeration and ordinary-engine policy replay.
-It does not enable `--theory-level 3`. See [T2/T3 results](docs/theory-t2-t3-results.md)
-and the [resumable implementation checkpoint](docs/theory-t2-t3-plan.md).
+T3 now supports **D2/P0–P3/R0–R2** through `--theory-level 3` or
+`NEXUS_THEORY_LEVEL=3`. Its complete bounded prior permits an independently selected
+add-one, add-two or multiply-two operator for each shape/parity context, with no supplied
+baseline law. Another-shape calibration leaves 243 full laws; nine reachable behavior classes
+suffice for exact solving. The reduction is validated against full-law enumeration/replay.
+T3 is a separate family and is not guaranteed harder than T1/T2.
+
+```bash
+uv run nexus generate /tmp/nexus-t3 --seed 7 --discovery-level 2 \
+  --planning-level 0 --resource-pressure 0 --theory-level 3
+uv run nexus qualify /tmp/nexus-t3/private.json
+uv run python scripts/theory_progression_poc.py
+```
+
+The cumulative T1→T2→T3 progression remains a separate information-only PoC. It proves
+correction-to-relationship dependencies and held-out prediction with independent/known-c
+controls; it does not change D semantics or introduce a live progression flag. The earlier
+`scripts/theory_structure_poc.py` remains an additive-only historical research control.
+See [T3/progression results](docs/theory-t3-progression-results.md),
+[the reasoning-focused ten-run matrix](docs/theory-reasoning-model-matrix.md), and
+[the resumable checkpoint](docs/theory-t3-progression-plan.md).
 
 See [validation and model matrix](docs/theory-implementation-results.md) and the
 [resumable checkpoint](docs/theory-implementation-progress.md).

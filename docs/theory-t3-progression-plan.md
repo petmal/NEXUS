@@ -56,4 +56,21 @@ semantics is allowed; player-visible diagnostics/solutions are not.
 - Commit each accepted phase with measured results. Reports are fingerprinted and
   atomically checkpointed so completed cases can be reused after interruption.
 - Do not claim access to credit balances/reset schedules; checkpoints limit rework.
-- Status: baseline/design phase started. Update this section at each checkpoint.
+- Status: implementation, focused gates, matrix preflight and independent review complete;
+  full suite passed: 255 tests / 230.39 s, two existing warnings. A final ten-test
+  progression gate covers the subsequently added -O regression (256 tests total covered). No blocker in review; reject optimized Python for proof reports.
+- Published checkpoints: optimization 27af559d72743948fd665bde19c55fc94324712c
+  (local569a8c8); schema 50ea40636bf46313fe5eef46973527dec097d17a (local92c26ca).
+- T3 runtime: 28 focused tests; 16 accepted sweep cases / 80 policy paths; all P/R
+  combinations covered. Matrix: 10 accepted cases / 60 policy paths. Progression:
+  five recorded seeds / 20 truths; independent reviewer ran 1,000 seeds.
+- Full suite command: NEXUS_STRESS_SEED_COUNT=3 NEXUS_STRESS_FAIL_FAST=1 uv run pytest -q
+  --maxfail=1 --durations=15. Output /tmp/nexus-t3-full-tests.txt.
+- Prior real-model 70-session replay matches all 1,690 action responses after optimization.
+- Runtime published: 1f6465ed289ae08a480ed1a45a01ef93306d174c (localeccf031).
+- Progression published: 01870b1aa1a45a438560e6269f6bb3638c55d806 (local87c10fe).
+- Status: all five requested work items implemented and validated. Final documentation/
+  matrix commit follows these checkpoints; no main merge. Re-run model matrix from
+  docs/theory-reasoning-model-matrix.json after building the feature branch with VCS_REF.
+- Publication uses GitData tree equality and expected-head leases, since local snapshot
+  ancestry differs from the remote branch. No ordinary force push.
