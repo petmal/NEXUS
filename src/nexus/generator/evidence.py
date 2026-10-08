@@ -6,6 +6,7 @@ from dataclasses import dataclass
 from functools import lru_cache
 from itertools import product
 
+from nexus.diagnostics import timed_call
 from nexus.engine.rules import apply_effect
 from nexus.generator.difficulty import artifact_projection
 from nexus.generator.rules import transformation_rule_catalog
@@ -63,6 +64,7 @@ def experiment_pool() -> tuple[Experiment, ...]:
 
 
 @lru_cache(maxsize=1)
+@timed_call("core.catalogue_signature_matrix")
 def _catalog_signature_matrix() -> tuple[tuple[tuple[int, str, str], ...], ...]:
     """Return experiment-major signatures for the finite prototype grammar."""
     catalog = transformation_rule_catalog()

@@ -4,6 +4,7 @@ import random
 from functools import lru_cache
 from itertools import product
 
+from nexus.diagnostics import timed_call
 from nexus.models.rules import Condition, ConditionKind, Effect, EffectKind
 from nexus.models.world import Shape
 
@@ -139,6 +140,7 @@ def sample_transformation_rule(rng: random.Random) -> Effect:
 
 
 @lru_cache(maxsize=1)
+@timed_call("core.catalogue_build")
 def transformation_rule_catalog() -> tuple[Effect, ...]:
     """Finite hypothesis space used only for exact POC evidence validation."""
     return tuple(

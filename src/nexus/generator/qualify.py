@@ -18,6 +18,7 @@ from nexus.generator.constructed import (
     constructed_mission_rules,
 )
 from nexus.generator.difficulty import (
+    GENERATION_SOLVER_BUDGET,
     EXECUTION_SLACK,
     MAX_PHYSICAL_OPTIMAL_ACTIONS,
     artifact_projection,
@@ -126,10 +127,14 @@ def qualify_episode(
         theory_universe, validate_public_theory, validate_theory_profile,
     )
 
+    correction_prior = None
     try:
         validate_theory_profile(metadata.theory_level, metadata.discovery_level)
         if metadata.theory_level == 1:
             validate_public_theory(episode.public.evidence_files)
+        elif metadata.theory_level == 2:
+            from nexus.generator.correction import read_correction_prior
+            correction_prior = read_correction_prior(episode.public.evidence_files)
     except ValueError as exc:
         return QualificationReport(passed=False, checks={"theory_prior": False}, errors=(str(exc),))
     checks["theory_prior"] = True
@@ -178,7 +183,8 @@ def qualify_episode(
 
     machine_ids = tuple(sorted(episode.public.initial_state.machines))
     initial_artifact = episode.public.initial_state.artifacts.get("A1")
-    all_candidates = enumerate_transformation_rules()
+    all_candidates = (correction_prior.hypotheses() if correction_prior is not None
+                      else enumerate_transformation_rules())
 
     evidence_candidate_counts: dict[str, int] = {}
     prediction_counts: dict[str, int] = {}
@@ -284,6 +290,27 @@ def qualify_episode(
             discovery_analysis.minimum_guaranteed_probes
             if discovery_analysis is not None
             else None
+        )
+
+    if correction_prior is not None:
+        from nexus.solver.belief import _episode_for_hypothesis, solve_compressed_physical
+        effective_world = _episode_for_hypothesis(
+            episode, {"M1": correction_prior.effective()}, search_budget=GENERATION_SOLVER_BUDGET,
+        )
+        effective = solve_compressed_physical(effective_world, max_states=max_states, include_plan=False)
+        checks["effective_theory_insufficient"] = not effective.solvable and not effective.exhausted_state_limit
+        checks["correction_calibration"] = (
+            episode.public.phase_modulus == 4
+            and machine_ids == ("M1",)
+            and episode.public.initial_state.machines["M1"].uses_remaining == 1
+            and evidence_rows_by_machine == {"M1": 2}
+            and tuple(int(row["phase"]) for row in csv.DictReader(io.StringIO(
+                episode.public.evidence_files.get("measurements.csv", "")
+            ))) == correction_prior.validity_phases
+            and candidate_rules_by_machine.get("M1") == all_candidates
+            and exact_probe_count == 1
+            and discovery_analysis is not None
+            and discovery_analysis.viable_hypothesis_count == 5
         )
 
     checks["evidence_matches_hidden_rule"] = hidden_rules_match and profile_inputs_valid
@@ -597,6 +624,8 @@ def qualify_episode(
         if metadata.discovery_level == 5
         else "one-machine"
     )
+    if correction_prior is not None:
+        family_kind = correction_prior.family
     expected_family_id = (
         scenario_family_id(
             episode.construction_seed,

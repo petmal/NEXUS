@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Cold, resumable T0/T1 qualification and ordinary-action policy replay sweep."""
+"""Cold, resumable T0/T1/T2 qualification and ordinary-action policy replay sweep."""
 
 from __future__ import annotations
 
@@ -7,6 +7,7 @@ import argparse
 import hashlib
 from itertools import product
 import json
+import logging
 from pathlib import Path
 import platform
 import resource
@@ -15,6 +16,14 @@ import sys
 import time
 
 ROOT = Path(__file__).resolve().parents[1]
+
+
+class GenerationSummaryHandler(logging.Handler):
+    summary = None
+
+    def emit(self, record):
+        if hasattr(record, "generation_summary"):
+            self.summary = record.generation_summary
 
 
 def replay_policy(episode, candidates) -> int:
@@ -70,13 +79,21 @@ def run_case(case: dict) -> dict:
     from nexus.engine.canonical import canonical_hash
     from nexus.generator.generator import GenerationError, generate_episode, _candidate_rules_for_episode
 
+    from nexus.diagnostics import logger
+    handler = GenerationSummaryHandler()
+    previous_level = logger.level
+    logger.addHandler(handler)
+    logger.setLevel(logging.INFO)
     started = time.perf_counter()
     try:
         episode = generate_episode(**case, verifier_secret="theory-profile")
     except GenerationError as exc:
         if "paired T1/" not in str(exc):
             raise
-        return {"status": "rejected_evidence", "error": str(exc), "seconds": time.perf_counter() - started}
+        return {"status": "rejected_evidence", "error": str(exc), "seconds": time.perf_counter() - started, "generation_summary": handler.summary}
+    finally:
+        logger.removeHandler(handler)
+        logger.setLevel(previous_level)
     generation_seconds = time.perf_counter() - started
     metadata = episode.generation_metadata
     state = episode.public.initial_state.model_dump(mode="json")
@@ -90,6 +107,7 @@ def run_case(case: dict) -> dict:
     replayed = replay_policy(episode, _candidate_rules_for_episode(episode))
     return {
         "status": "ok", "generation_seconds": generation_seconds,
+        "generation_summary": handler.summary,
         "seconds": time.perf_counter() - started, "peak_rss_mib": resource.getrusage(resource.RUSAGE_SELF).ru_maxrss / (1024 if sys.platform != "darwin" else 1024**2),
         "paired_world_hash": paired, "scenario_family_id": metadata.scenario_family_id,
         "candidates": metadata.evidence_candidate_counts, "evidence_rows": metadata.evidence_rows_by_machine,
@@ -107,7 +125,7 @@ def main() -> int:
     parser.add_argument("--case", help=argparse.SUPPRESS)
     parser.add_argument("--seeds", type=int, nargs="+", default=[17, 73, 2525])
     parser.add_argument("--levels", type=int, choices=range(6), nargs="+", default=[0, 1, 2, 3])
-    parser.add_argument("--theory-levels", type=int, choices=[0, 1], nargs="+", default=[0, 1])
+    parser.add_argument("--theory-levels", type=int, choices=[0, 1, 2], nargs="+", default=[0, 1])
     parser.add_argument("--planning-level", type=int, choices=range(4), default=2)
     parser.add_argument("--resource-pressure", type=int, choices=range(3), default=0)
     parser.add_argument("--timeout", type=float, default=120)

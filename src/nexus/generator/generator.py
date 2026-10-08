@@ -8,7 +8,7 @@ from itertools import permutations
 
 import networkx as nx
 
-from nexus.diagnostics import timed_stage
+from nexus.diagnostics import generation_diagnostics, timed_call, timed_stage
 from nexus.engine.rules import apply_effect
 from nexus.generator.constructed import (
     CONSTRUCTOR_VALUE,
@@ -336,6 +336,7 @@ def _compile_evidence_profile(
 
 
 @lru_cache(maxsize=256)
+@timed_call("core.mechanics_evidence")
 def _find_mechanics_family(
     seed: int,
     family_kind: str,
@@ -457,6 +458,7 @@ def _shape_probe_samples(shape: Shape) -> list[Artifact]:
 
 
 @lru_cache(maxsize=256)
+@timed_call("core.selective_mechanics_evidence")
 def _find_selective_family(seed: int, max_attempts: int) -> _SelectiveMechanicsFamily:
     all_candidates = enumerate_transformation_rules()
 
@@ -1146,7 +1148,11 @@ def _candidate_rules_for_episode(episode: PrivateEpisode) -> dict[str, list[Effe
             )
             for machine in sorted(episode.machine_rules)
         }
-    catalog = enumerate_transformation_rules()
+    if episode.generation_metadata.theory_level == 2:
+        from nexus.generator.correction import read_correction_prior
+        catalog = read_correction_prior(episode.public.evidence_files).hypotheses()
+    else:
+        catalog = enumerate_transformation_rules()
     result: dict[str, list[Effect]] = {}
     for machine_id in sorted(episode.machine_rules):
         evidence = episode.public.evidence_files.get(measurement_filename(machine_id))
@@ -1641,6 +1647,7 @@ def _generate_episode_core(
 
 
 
+@generation_diagnostics
 def generate_episode(
     seed: int,
     *,
@@ -1663,14 +1670,21 @@ def generate_episode(
     validate_difficulty_levels(discovery_level, planning_level, resource_pressure)
     core_planning = 2 if planning_level == 3 else planning_level
     with timed_stage("generation.core"):
-        episode = _generate_episode_core(
-            seed,
-            discovery_level=discovery_level,
-            planning_level=core_planning,
-            max_attempts=max_attempts,
-            verifier_secret=verifier_secret,
-            qualify_result=planning_level != 3,
-        )
+        if theory_level == 2:
+            from nexus.generator.correction_generation import generate_correction_episode
+            episode = generate_correction_episode(
+                seed, planning_level=core_planning, max_attempts=max_attempts,
+                verifier_secret=verifier_secret,
+            )
+        else:
+            episode = _generate_episode_core(
+                seed,
+                discovery_level=discovery_level,
+                planning_level=core_planning,
+                max_attempts=max_attempts,
+                verifier_secret=verifier_secret,
+                qualify_result=planning_level != 3,
+            )
     transformed = planning_level == 3 or resource_pressure != 0 or theory_level != 0
     if planning_level == 3:
         with timed_stage("generation.planning_dependency"):
