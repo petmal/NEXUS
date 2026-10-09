@@ -104,6 +104,12 @@ jobs:
           uv run nexus qualify /tmp/nexus-science-smoke/private.json
           uv run nexus solve /tmp/nexus-science-smoke/private.json --trace-out /tmp/nexus-science-smoke/run.jsonl
           uv run nexus replay /tmp/nexus-science-smoke/private.json /tmp/nexus-science-smoke/run.jsonl
+          uv run nexus generate /tmp/nexus-network-smoke --axis-version 2 --seed 17 \
+            --science-family coupled-network-v1 --discovery-level 5 --theory-level 3 \
+            --planning-level 1 --resource-pressure 1
+          uv run nexus qualify /tmp/nexus-network-smoke/private.json
+          uv run nexus solve /tmp/nexus-network-smoke/private.json --trace-out /tmp/nexus-network-smoke/run.jsonl
+          uv run nexus replay /tmp/nexus-network-smoke/private.json /tmp/nexus-network-smoke/run.jsonl
 
       - name: Container smoke test
         if: ${{ (github.event_name == 'workflow_dispatch' && inputs.full) || (github.event_name == 'pull_request' && github.base_ref == 'feat/epistemic-calibration') }}
@@ -116,3 +122,6 @@ jobs:
             --discovery-level 2 --planning-level 0 --theory-level 3
           docker run --rm nexus-ci generate /tmp/nexus-science --axis-version 2 --seed 17 \
             --discovery-level 5 --planning-level 0 --theory-level 3 --resource-pressure 0
+          docker run --rm -e NEXUS_SCIENCE_FAMILY=coupled-network-v1 nexus-ci generate \
+            /tmp/nexus-network --axis-version 2 --seed 17 --discovery-level 5 \
+            --planning-level 1 --theory-level 3 --resource-pressure 1

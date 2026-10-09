@@ -110,7 +110,7 @@ def summarize(
         if result is None:
             continue
         sample = result["sample"]
-        name = (
+        name = (f"{sample['x']}:{sample['y']}" if "x" in sample else
             "selector"
             if action.machine == "selector"
             else f"{sample['source']}:property"

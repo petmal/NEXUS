@@ -7,6 +7,7 @@ from nexus.models.goals import GoalPredicate
 from nexus.models.rules import Effect
 from nexus.models.world import Room, WorldState
 from nexus.models.investigation import InvestigationSpec, InvestigationTruth
+from nexus.models.network import NetworkSample, NetworkSpec, NetworkStock, NetworkTruth
 
 
 class PublicEpisode(BaseModel):
@@ -28,7 +29,7 @@ class PublicEpisode(BaseModel):
     initial_state: WorldState
     goal: GoalPredicate
     evidence_files: dict[str, str] = Field(default_factory=dict)
-    investigation: InvestigationSpec | None = Field(default=None, exclude_if=lambda v: v is None)
+    investigation: InvestigationSpec | NetworkSpec | None = Field(default=None, exclude_if=lambda v: v is None)
 
     @model_validator(mode="after")
     def validate_world(self) -> "PublicEpisode":
@@ -44,6 +45,18 @@ class PublicEpisode(BaseModel):
         for machine in self.initial_state.machines.values():
             if machine.room_id not in room_ids:
                 raise ValueError(f"machine {machine.id} has unknown room")
+        network = isinstance(self.investigation, NetworkSpec)
+        if self.investigation is None and (
+            self.initial_state.stocks
+            or any(item.sample is not None for item in self.initial_state.artifacts.values())
+        ):
+            raise ValueError("scientific specimens require an investigation specification")
+        if any(isinstance(stock, NetworkStock) != network
+               for stock in self.initial_state.stocks.values()):
+            raise ValueError("specimen stock and investigation families must match")
+        if any(isinstance(item.sample, NetworkSample) != network
+               for item in self.initial_state.artifacts.values() if item.sample is not None):
+            raise ValueError("specimen sample and investigation families must match")
         for key, stock in self.initial_state.stocks.items():
             if key != stock.id or stock.location not in room_ids or key in self.initial_state.artifacts:
                 raise ValueError("invalid specimen stock")
@@ -151,12 +164,14 @@ class PrivateEpisode(BaseModel):
     construction_seed: int | None = None
     reference_plan: tuple[dict, ...] = ()
     generation_metadata: GenerationMetadata = Field(default_factory=GenerationMetadata)
-    investigation_truth: InvestigationTruth | None = Field(default=None, exclude_if=lambda v: v is None)
+    investigation_truth: InvestigationTruth | NetworkTruth | None = Field(default=None, exclude_if=lambda v: v is None)
 
     @model_validator(mode="after")
     def validate_private_links(self) -> "PrivateEpisode":
         if (self.public.investigation is None) != (self.investigation_truth is None):
             raise ValueError("scientific apparatus requires private truth and public specification")
+        if isinstance(self.public.investigation, NetworkSpec) != isinstance(self.investigation_truth, NetworkTruth):
+            raise ValueError("scientific specification and truth families must match")
         for machine_id, rule_id in self.machine_rules.items():
             if machine_id not in self.public.initial_state.machines:
                 raise ValueError(f"machine rule references unknown machine {machine_id}")

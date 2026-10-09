@@ -18,6 +18,7 @@ from nexus.models.episode import PrivateEpisode
 from nexus.models.events import EngineEvent, StepResult
 from nexus.models.world import INVENTORY, Artifact, TerminalStatus, WorldState
 from nexus.models.investigation import SampleState
+from nexus.models.network import NetworkSample, NetworkSpec, NetworkStock
 from nexus.verification.receipt import victory_receipt
 
 
@@ -71,10 +72,15 @@ def step(state: WorldState, action: Action, episode: PrivateEpisode) -> StepResu
                     raise ValueError("specimen stock is unavailable")
                 _consume_action(next_state)
                 artifact_id = f"{stock.id}.{next_state.turn}"
+                sample = (
+                    NetworkSample(x=stock.x, y=stock.y) if isinstance(stock, NetworkStock)
+                    else SampleState(source=stock.source, q=stock.q)
+                )
                 next_state.artifacts[artifact_id] = Artifact(
                     id=artifact_id, location=INVENTORY, shape="circle", pattern="plain",
-                    orientation="north", value=stock.q, polarity="positive",
-                    sample=SampleState(source=stock.source, q=stock.q),
+                    orientation="north", polarity="positive",
+                    value=0 if isinstance(stock, NetworkStock) else stock.q,
+                    sample=sample,
                 )
                 if stock.remaining is not None:
                     stock.remaining -= 1
@@ -161,9 +167,14 @@ def step(state: WorldState, action: Action, episode: PrivateEpisode) -> StepResu
                 raise ValueError("no configurable controller")
             if next_state.agent_room != spec.controller_room:
                 raise ValueError("controller is not in the current room")
-            size = 1 + len(spec.target_q) * (2 if spec.both_stocks else 1)
-            if len(action.settings) != size or action.settings[0] not in (0, 1):
-                raise ValueError(f"settings require a port 0/1 and {size-1} values in 0..16")
+            if isinstance(spec, NetworkSpec):
+                if (len(action.settings) != 5 or action.settings[0] != 0
+                        or any(v > 6 for v in action.settings)):
+                    raise ValueError("network settings require port 0 and four field values in 0..6")
+            else:
+                size = 1 + len(spec.target_q) * (2 if spec.both_stocks else 1)
+                if len(action.settings) != size or action.settings[0] not in (0, 1):
+                    raise ValueError(f"settings require a port 0/1 and {size-1} values in 0..16")
             _consume_action(next_state)
             next_state.controller_settings = action.settings
             next_state.controller_accepted = False
@@ -207,6 +218,20 @@ def _scientific_transform(artifact: Artifact, machine: str, episode: PrivateEpis
     if spec is None or truth is None or sample is None:
         raise ValueError("apparatus requires a specimen")
     transformed = artifact.model_copy(deep=True)
+    if isinstance(spec, NetworkSpec):
+        from nexus.engine.network import measurement as network_measurement, prepare
+        if not isinstance(sample, NetworkSample):
+            raise ValueError("network apparatus requires a network specimen")
+        if machine in ("shift", "shear"):
+            transformed.sample.x, transformed.sample.y = prepare((sample.x, sample.y), machine)
+            transformed.sample.reading = None
+        elif machine == "meter":
+            transformed.sample.reading = network_measurement(truth, f"{sample.x}:{sample.y}")
+        else:
+            raise ValueError("controller accepts configure and finish; it has no specimen preview")
+        return transformed
+    if not isinstance(sample, SampleState):
+        raise ValueError("shared-response apparatus requires a shared-response specimen")
     if machine == "prepare":
         if sample.q >= 2:
             raise ValueError("preparation range is q=0..2")

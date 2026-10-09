@@ -76,9 +76,25 @@ class FiniteExperimentProblem:
         return belief
 
     @cached_property
+    def target_mask_by_world(self) -> tuple[int, ...]:
+        masks = [0] * len(self.hypotheses)
+        for mask in self.prediction_masks:
+            remaining = mask
+            while remaining:
+                bit = remaining & -remaining
+                masks[bit.bit_length() - 1] = mask
+                remaining ^= bit
+        return tuple(masks)
+
+    def _resolved(self, belief: int) -> bool:
+        target = self.target_mask_by_world[(belief & -belief).bit_length() - 1]
+        return belief & target == belief
+
+    @cached_property
     def _cost(self):
-        # Cache belongs to this immutable problem, not a process-wide bound-method cache.
+        # Bounds prune search only; every returned cost still has an exact witness.
         visited = 0
+        fanout = max(map(len, self.partitions), default=1)
 
         @cache
         def cost(belief: int) -> int | None:
@@ -86,17 +102,40 @@ class FiniteExperimentProblem:
             visited += 1
             if visited > 100_000:
                 raise ValueError("finite experiment qualification exceeded 100000 beliefs")
-            if any(belief & mask == belief for mask in self.prediction_masks):
+            if self._resolved(belief):
                 return 0
+            if fanout < 2:
+                return None
+            targets = set()
+            remaining = belief
+            while remaining:
+                bit = remaining & -remaining
+                targets.add(self.predictions[bit.bit_length() - 1])
+                remaining ^= bit
+            lower, capacity = 0, 1
+            while capacity < len(targets):
+                lower += 1
+                capacity *= fanout
             best = None
+            seen = set()
             for partitions in self.partitions:
-                groups = tuple(mask & belief for _, mask in partitions if mask & belief)
-                if len(groups) <= 1:
+                groups = tuple(sorted(mask & belief for _, mask in partitions if mask & belief))
+                if len(groups) <= 1 or groups in seen:
                     continue
-                children = [cost(group) for group in groups]
-                if all(value is not None for value in children):
-                    candidate = 1 + max(children)
-                    best = candidate if best is None else min(best, candidate)
+                seen.add(groups)
+                worst = 0
+                for child in sorted(groups, key=int.bit_count, reverse=True):
+                    value = cost(child)
+                    if value is None:
+                        worst = None
+                        break
+                    worst = max(worst, value)
+                    if best is not None and 1 + worst >= best:
+                        break
+                if worst is not None:
+                    best = 1 + worst if best is None else min(best, 1 + worst)
+                if best == lower:
+                    return best
             return best
 
         return cost
@@ -116,19 +155,37 @@ class FiniteExperimentProblem:
         raise RuntimeError("no witness for finite experiment optimum")
 
     def minimum_fixed_measurements(self) -> int | None:
-        """Best predetermined measurement set; no adaptive choice or physical costs."""
+        """Exact fixed-set cost, learning necessary separators from counterexamples."""
         full = (1 << len(self.hypotheses)) - 1
-        for size in range(len(self.experiments) + 1):
-            for selected in combinations(self.partitions, size):
+        constraints: list[int] = []
+        rows = tuple(row for _, row in self.experiments)
+        for size in range(len(rows) + 1):
+            for selected in combinations(range(len(rows)), size):
+                chosen = sum(1 << i for i in selected)
+                if any(not chosen & required for required in constraints):
+                    continue
                 beliefs = (full,)
-                for partitions in selected:
+                for i in selected:
                     beliefs = tuple(
                         belief & mask
                         for belief in beliefs
-                        for _, mask in partitions
+                        for _, mask in self.partitions[i]
                         if belief & mask
                     )
-                if all(any(b & mask == b for mask in self.prediction_masks) for b in beliefs):
+                for belief in beliefs:
+                    left = (belief & -belief).bit_length() - 1
+                    different = belief & ~self.target_mask_by_world[left]
+                    if different:
+                        right = (different & -different).bit_length() - 1
+                        separator = sum(
+                            1 << i for i, row in enumerate(rows) if row[left] != row[right]
+                        )
+                        if not separator:
+                            return None
+                        # Every valid fixed set must separate this target-distinct pair.
+                        constraints.append(separator)
+                        break
+                else:
                     return size
         return None
 

@@ -4,6 +4,7 @@ from enum import StrEnum
 
 from pydantic import BaseModel, ConfigDict, Field, model_validator
 from nexus.models.investigation import SampleState, SpecimenStock
+from nexus.models.network import NetworkSample, NetworkStock
 
 INVENTORY = "@inventory"
 
@@ -57,7 +58,7 @@ class Artifact(BaseModel):
     orientation: Orientation
     value: int = Field(ge=0, le=10)
     polarity: Polarity
-    sample: SampleState | None = Field(default=None, exclude_if=lambda v: v is None)
+    sample: SampleState | NetworkSample | None = Field(default=None, exclude_if=lambda v: v is None)
 
 
 class Machine(BaseModel):
@@ -84,7 +85,7 @@ class WorldState(BaseModel):
     machines: dict[str, Machine]
     resources: Resources
     terminal_status: TerminalStatus = TerminalStatus.ACTIVE
-    stocks: dict[str, SpecimenStock] = Field(default_factory=dict, exclude_if=lambda v: not v)
+    stocks: dict[str, SpecimenStock | NetworkStock] = Field(default_factory=dict, exclude_if=lambda v: not v)
     controller_settings: tuple[int, ...] | None = Field(default=None, exclude_if=lambda v: v is None)
     controller_accepted: bool | None = Field(default=None, exclude_if=lambda v: v is None)
 

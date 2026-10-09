@@ -1,0 +1,533 @@
+{
+  "family": "coupled-network-v1",
+  "cases": [
+    {
+      "theory": 1,
+      "worlds": 9,
+      "target_classes": 9,
+      "adaptive": 2,
+      "fixed": 2,
+      "solver_seconds": 0.00023233899992192164,
+      "oracle_comparisons": 441,
+      "total_seconds": 0.007770333999815193
+    },
+    {
+      "theory": 2,
+      "worlds": 81,
+      "target_classes": 73,
+      "adaptive": 3,
+      "fixed": 4,
+      "solver_seconds": 0.004028667000056885,
+      "oracle_comparisons": 3969,
+      "total_seconds": 0.06361820700021781
+    },
+    {
+      "theory": 3,
+      "worlds": 2187,
+      "target_classes": 1175,
+      "adaptive": 5,
+      "fixed": 8,
+      "solver_seconds": 0.5813917780001248,
+      "oracle_comparisons": 107163,
+      "total_seconds": 2.116666387999885,
+      "axes": {
+        "ambiguous_transcripts": 271,
+        "ambiguous_worlds": 887,
+        "max_target_classes": 34,
+        "admissible_world_witness": [
+          {
+            "parameters": {
+              "a": 1,
+              "b": 1,
+              "c": 1,
+              "d": 1,
+              "gates": [
+                0,
+                1,
+                1
+              ]
+            },
+            "field_response": [
+              4,
+              1,
+              3,
+              0
+            ]
+          },
+          {
+            "parameters": {
+              "a": 1,
+              "b": 2,
+              "c": 3,
+              "d": 1,
+              "gates": [
+                0,
+                1,
+                1
+              ]
+            },
+            "field_response": [
+              2,
+              0,
+              6,
+              4
+            ]
+          }
+        ]
+      },
+      "axes_and_diagonal": {
+        "ambiguous_transcripts": 54,
+        "ambiguous_worlds": 145,
+        "max_target_classes": 2,
+        "admissible_world_witness": [
+          {
+            "parameters": {
+              "a": 1,
+              "b": 1,
+              "c": 1,
+              "d": 1,
+              "gates": [
+                0,
+                1,
+                2
+              ]
+            },
+            "field_response": [
+              3,
+              0,
+              2,
+              0
+            ]
+          },
+          {
+            "parameters": {
+              "a": 2,
+              "b": 3,
+              "c": 2,
+              "d": 1,
+              "gates": [
+                2,
+                1,
+                2
+              ]
+            },
+            "field_response": [
+              3,
+              0,
+              2,
+              5
+            ]
+          }
+        ]
+      },
+      "random_fixed_order_baseline": {
+        "permutations": 32,
+        "seed": 81427,
+        "world_paths": 69984,
+        "mean_measurements": 5.2898233882030175,
+        "worst_measurements": 12
+      }
+    }
+  ],
+  "union_polynomial_baseline": {
+    "monomials": [
+      [
+        0,
+        0
+      ],
+      [
+        0,
+        1
+      ],
+      [
+        0,
+        2
+      ],
+      [
+        0,
+        4
+      ],
+      [
+        1,
+        0
+      ],
+      [
+        1,
+        1
+      ],
+      [
+        1,
+        2
+      ],
+      [
+        1,
+        4
+      ],
+      [
+        2,
+        0
+      ],
+      [
+        2,
+        1
+      ],
+      [
+        2,
+        2
+      ],
+      [
+        2,
+        4
+      ],
+      [
+        4,
+        0
+      ],
+      [
+        4,
+        1
+      ],
+      [
+        4,
+        2
+      ]
+    ],
+    "bench_rank": 12,
+    "bench_plus_field_rank": 14,
+    "null_polynomial": "(1-x)*(y-y^4) mod7",
+    "field_delta": [
+      0,
+      0,
+      3,
+      0
+    ],
+    "scope": "relaxed polynomial class; not a pair of admissible generated programs"
+  },
+  "preparation": {
+    "reachable_states": 49,
+    "noncommuting": true,
+    "homogeneous_routes_only_axes": true,
+    "max_origin_to_bench_operations": 4,
+    "routes": {
+      "0:0": [],
+      "0:1": [
+        "shear"
+      ],
+      "0:2": [
+        "shear",
+        "shear"
+      ],
+      "0:3": [
+        "shear",
+        "shear",
+        "shear"
+      ],
+      "0:4": [
+        "shear",
+        "shear",
+        "shear",
+        "shear"
+      ],
+      "0:5": [
+        "shear",
+        "shear",
+        "shear",
+        "shear",
+        "shear"
+      ],
+      "0:6": [
+        "shear",
+        "shear",
+        "shear",
+        "shear",
+        "shear",
+        "shear"
+      ],
+      "1:0": [
+        "shift"
+      ],
+      "1:1": [
+        "shear",
+        "shift"
+      ],
+      "1:2": [
+        "shift",
+        "shear"
+      ],
+      "1:3": [
+        "shear",
+        "shift",
+        "shear"
+      ],
+      "1:4": [
+        "shift",
+        "shear",
+        "shear"
+      ],
+      "1:5": [
+        "shear",
+        "shift",
+        "shear",
+        "shear"
+      ],
+      "1:6": [
+        "shift",
+        "shear",
+        "shear",
+        "shear"
+      ],
+      "2:0": [
+        "shift",
+        "shift"
+      ],
+      "2:1": [
+        "shear",
+        "shift",
+        "shift"
+      ],
+      "2:2": [
+        "shift",
+        "shear",
+        "shift"
+      ],
+      "2:3": [
+        "shift",
+        "shift",
+        "shear"
+      ],
+      "2:4": [
+        "shift",
+        "shear",
+        "shear",
+        "shift"
+      ],
+      "2:5": [
+        "shift",
+        "shear",
+        "shift",
+        "shear"
+      ],
+      "2:6": [
+        "shift",
+        "shift",
+        "shear",
+        "shear"
+      ],
+      "3:0": [
+        "shift",
+        "shift",
+        "shift"
+      ],
+      "3:1": [
+        "shear",
+        "shift",
+        "shift",
+        "shift"
+      ],
+      "3:2": [
+        "shift",
+        "shear",
+        "shift",
+        "shift"
+      ],
+      "3:3": [
+        "shift",
+        "shift",
+        "shear",
+        "shift"
+      ],
+      "3:4": [
+        "shift",
+        "shift",
+        "shift",
+        "shear"
+      ],
+      "3:5": [
+        "shift",
+        "shear",
+        "shift",
+        "shear",
+        "shift"
+      ],
+      "3:6": [
+        "shift",
+        "shift",
+        "shear",
+        "shear",
+        "shift"
+      ],
+      "4:0": [
+        "shift",
+        "shift",
+        "shift",
+        "shift"
+      ],
+      "4:1": [
+        "shear",
+        "shift",
+        "shift",
+        "shift",
+        "shift"
+      ],
+      "4:2": [
+        "shift",
+        "shear",
+        "shift",
+        "shift",
+        "shift"
+      ],
+      "4:3": [
+        "shift",
+        "shift",
+        "shear",
+        "shift",
+        "shift"
+      ],
+      "4:4": [
+        "shift",
+        "shift",
+        "shift",
+        "shear",
+        "shift"
+      ],
+      "4:5": [
+        "shift",
+        "shift",
+        "shift",
+        "shift",
+        "shear"
+      ],
+      "4:6": [
+        "shift",
+        "shift",
+        "shear",
+        "shear",
+        "shift",
+        "shift"
+      ],
+      "5:0": [
+        "shift",
+        "shift",
+        "shift",
+        "shift",
+        "shift"
+      ],
+      "5:1": [
+        "shear",
+        "shift",
+        "shift",
+        "shift",
+        "shift",
+        "shift"
+      ],
+      "5:2": [
+        "shift",
+        "shear",
+        "shift",
+        "shift",
+        "shift",
+        "shift"
+      ],
+      "5:3": [
+        "shift",
+        "shift",
+        "shear",
+        "shift",
+        "shift",
+        "shift"
+      ],
+      "5:4": [
+        "shift",
+        "shift",
+        "shift",
+        "shear",
+        "shift",
+        "shift"
+      ],
+      "5:5": [
+        "shift",
+        "shift",
+        "shift",
+        "shift",
+        "shear",
+        "shift"
+      ],
+      "5:6": [
+        "shift",
+        "shift",
+        "shift",
+        "shift",
+        "shift",
+        "shear"
+      ],
+      "6:0": [
+        "shift",
+        "shift",
+        "shift",
+        "shift",
+        "shift",
+        "shift"
+      ],
+      "6:1": [
+        "shear",
+        "shift",
+        "shift",
+        "shift",
+        "shift",
+        "shift",
+        "shift"
+      ],
+      "6:2": [
+        "shift",
+        "shear",
+        "shift",
+        "shift",
+        "shift",
+        "shift",
+        "shift"
+      ],
+      "6:3": [
+        "shift",
+        "shift",
+        "shear",
+        "shift",
+        "shift",
+        "shift",
+        "shift"
+      ],
+      "6:4": [
+        "shift",
+        "shift",
+        "shift",
+        "shear",
+        "shift",
+        "shift",
+        "shift"
+      ],
+      "6:5": [
+        "shift",
+        "shift",
+        "shift",
+        "shift",
+        "shear",
+        "shift",
+        "shift"
+      ],
+      "6:6": [
+        "shift",
+        "shift",
+        "shift",
+        "shift",
+        "shift",
+        "shear",
+        "shift"
+      ]
+    }
+  },
+  "limitations": [
+    "Information costs exclude movement and construction.",
+    "GF7 readings carry less information than the prior GF17 family; cross-family counts are not a pure structure comparison.",
+    "Finite enumeration is a valid strategy. Real-model difficulty is unmeasured.",
+    "T1/T2 are PoC controls; live support is explicitly narrower."
+  ]
+}

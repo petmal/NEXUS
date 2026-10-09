@@ -1661,6 +1661,7 @@ def generate_episode(
     max_attempts: int = 250,
     verifier_secret: str | None = None,
     axis_version: int = 1,
+    science_family: str = "shared-response-v1",
 ) -> PrivateEpisode:
     """Generate a deterministic, solver-qualified NEXUS episode.
 
@@ -1668,6 +1669,14 @@ def generate_episode(
     dependency. Resource pressure changes only the action allowance above the exact guaranteed
     policy cost.
     """
+    if science_family not in ("shared-response-v1", "coupled-network-v1"):
+        raise ValueError("unknown scientific family")
+    if science_family != "shared-response-v1":
+        if axis_version != 2:
+            raise ValueError("coupled-network-v1 requires axis_version=2")
+        from nexus.generator.network import generate_network
+        return generate_network(seed, discovery_level=discovery_level, theory_level=theory_level,
+            planning_level=planning_level, resource_pressure=resource_pressure, verifier_secret=verifier_secret)
     if axis_version == 2:
         from nexus.generator.investigation import generate_investigation
         return generate_investigation(seed, discovery_level=discovery_level, planning_level=planning_level,

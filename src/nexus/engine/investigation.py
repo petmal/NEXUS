@@ -40,6 +40,10 @@ def measurement(spec: InvestigationSpec, truth: InvestigationTruth, name: str) -
 
 
 def settings(spec: InvestigationSpec, truth: InvestigationTruth) -> tuple[int, ...]:
+    from nexus.models.network import NetworkSpec
+    if isinstance(spec, NetworkSpec):
+        from nexus.engine.network import settings as network_settings
+        return network_settings(truth)
     sources = (0, 1) if spec.both_stocks else (truth.selector,)
     return (
         truth.selector,

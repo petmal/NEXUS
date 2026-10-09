@@ -13,16 +13,19 @@ from pathlib import Path
 from time import perf_counter
 
 from nexus.generator import generate_episode
-from nexus.generator.investigation import base_spec, compile_problem
+from nexus.generator.investigation import prior
+from nexus.models.actions import ACTION_ADAPTER
+from nexus.protocol.session import Session
 
 
-def run_case(d, t, seed):
+def run_case(d, t, seed, family="shared-response-v1"):
     times = []
     for _ in range(2):
         start = perf_counter()
         episode = generate_episode(
             seed,
             axis_version=2,
+            science_family=family,
             discovery_level=d,
             theory_level=t,
             planning_level=1,
@@ -30,7 +33,14 @@ def run_case(d, t, seed):
             verifier_secret="benchmark-only",
         )
         times.append(perf_counter() - start)
-    _, problem = compile_problem(base_spec(episode.public.investigation))
+    _, problem = prior(episode)
+    session = Session(episode)
+    for action in episode.reference_plan:
+        result = session.act(session.state.turn, ACTION_ADAPTER.validate_python(action))
+        if not result.ok:
+            raise RuntimeError("benchmark reference action rejected")
+    if session.state.terminal_status != "won" or not result.victory_code:
+        raise RuntimeError("benchmark reference did not win")
     count = len(problem.hypotheses)
     full = (1 << count) - 1
     partitions = tuple(dict(row) for row in problem.partitions)
@@ -42,7 +52,7 @@ def run_case(d, t, seed):
         order = list(range(len(problem.experiments)))
         rng.shuffle(order)
         belief, used = full, 0
-        while not any(belief & mask == belief for mask in problem.prediction_masks):
+        while not problem._resolved(belief):
             experiment = order.pop()
             value = problem.experiments[experiment][1][truth]
             belief &= partitions[experiment][value]
@@ -51,6 +61,9 @@ def run_case(d, t, seed):
     multiplicities = sorted(Counter(problem.predictions).values(), reverse=True)
     expected_guesses = sum(rank * size for rank, size in enumerate(multiplicities, 1)) / count
     return {
+        "family": family,
+        "reference_won": True,
+        "reference_actions": session.state.turn,
         "D": d,
         "T": t,
         "P": 1,
@@ -76,18 +89,38 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--case", type=int, nargs=3, metavar=("D", "T", "SEED"))
     parser.add_argument("--out", type=Path)
+    parser.add_argument(
+        "--family",
+        choices=("shared-response-v1", "coupled-network-v1"),
+        default="shared-response-v1",
+    )
     args = parser.parse_args()
     if args.case:
-        print(json.dumps(run_case(*args.case)))
+        print(json.dumps(run_case(*args.case, family=args.family)))
         return
     if args.out is None:
         parser.error("--out is required")
     records = []
-    for seed in (7, 23):
-        for d, t in ((3, 1), (3, 2), (3, 3), (4, 3), (5, 3)):
+    seeds = (7, 17, 23, 41, 73) if args.family == "coupled-network-v1" else (7, 23)
+    profiles = (
+        ((4, 3), (5, 3))
+        if args.family == "coupled-network-v1"
+        else ((3, 1), (3, 2), (3, 3), (4, 3), (5, 3))
+    )
+    for seed in seeds:
+        for d, t in profiles:
             start = perf_counter()
             child = subprocess.run(
-                [sys.executable, __file__, "--case", str(d), str(t), str(seed)],
+                [
+                    sys.executable,
+                    __file__,
+                    "--family",
+                    args.family,
+                    "--case",
+                    str(d),
+                    str(t),
+                    str(seed),
+                ],
                 capture_output=True,
                 text=True,
                 check=True,

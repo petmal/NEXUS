@@ -6,6 +6,7 @@ from rich.console import Console
 from rich.table import Table
 
 from nexus.models.episode import PrivateEpisode
+from nexus.models.network import NetworkSample, NetworkStock
 from nexus.models.world import WorldState
 
 
@@ -66,19 +67,28 @@ def render_observer(
 
     if state.stocks:
         stocks = Table(title="Specimen stocks")
-        for column in ("id", "room", "source", "initial q", "remaining"):
+        for column in ("id", "room", "source", "initial condition", "remaining"):
             stocks.add_column(column)
         for stock in state.stocks.values():
-            stocks.add_row(stock.id, stock.location, stock.source, str(stock.q),
-                           "unlimited" if stock.remaining is None else str(stock.remaining))
+            network = isinstance(stock, NetworkStock)
+            stocks.add_row(
+                stock.id, stock.location, "shared" if network else stock.source,
+                str((stock.x, stock.y)) if network else str(stock.q),
+                "unlimited" if stock.remaining is None else str(stock.remaining),
+            )
         console.print(stocks)
         specimens = Table(title="Prepared specimens")
-        for column in ("id", "source", "q", "reading"):
+        for column in ("id", "source", "condition", "reading"):
             specimens.add_column(column)
         for artifact in state.artifacts.values():
             if artifact.sample is not None:
-                specimens.add_row(artifact.id, artifact.sample.source, str(artifact.sample.q),
-                                  str(artifact.sample.reading))
+                sample = artifact.sample
+                network = isinstance(sample, NetworkSample)
+                specimens.add_row(
+                    artifact.id, "shared" if network else sample.source,
+                    str((sample.x, sample.y)) if network else str(sample.q),
+                    str(sample.reading),
+                )
         console.print(specimens)
         if state.controller_settings is not None:
             console.print("Controller settings:", state.controller_settings)

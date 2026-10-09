@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from pydantic import BaseModel, ConfigDict, Field, model_serializer
 from nexus.models.investigation import SpecimenStock
+from nexus.models.network import NetworkStock
 
 from nexus.models.world import Artifact, Machine, TerminalStatus
 
@@ -20,7 +21,7 @@ class Observation(BaseModel):
     carried_artifacts: tuple[Artifact, ...] = ()
     visible_machines: tuple[Machine, ...] = ()
     terminal_status: TerminalStatus
-    visible_stocks: tuple[SpecimenStock, ...] = Field(default=(), exclude_if=lambda v: not v)
+    visible_stocks: tuple[SpecimenStock | NetworkStock, ...] = Field(default=(), exclude_if=lambda v: not v)
     controller_settings: tuple[int, ...] | None = Field(default=None, exclude_if=lambda v: v is None)
 
     # v0.1 compatibility only. v0.2 keeps immutable goal/evidence context in the manifest.
