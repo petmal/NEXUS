@@ -7,6 +7,11 @@ semantics, a true one-room P0 and unlimited/recoverable R0. See the
 [model pilot matrix](scientific-investigation-model-matrix.md). Do not mix scores
 or numeric difficulty labels across versions.
 
+Axes v2 also has an explicit experimental `coupled-network-v1` family. Its live
+support is T3/D4-D5 and D0/T0,T3 controls; T1/T2 remain mathematical PoC comparisons.
+See [rich investigation results](rich-investigation-results.md). Always record the
+family as well as axis version when comparing runs.
+
 NEXUS exposes three orthogonal public generation knobs: causal discovery, planning, and resource
 pressure. Low-level topology, evidence construction, and qualification settings remain internal so
 callers do not need to reason about incompatible parameter combinations. Discovery guarantees are evaluated after conditioning on

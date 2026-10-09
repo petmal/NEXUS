@@ -1,0 +1,148 @@
+{
+  "axis_version": 2,
+  "science_family": "coupled-network-v1",
+  "runs_per_model": 10,
+  "scope": "Uncalibrated paired structural-seed pilot; T3 and P1/R1 fixed. Expected difficulty is relative to the prior shared-response family, not a measured score.",
+  "runs": [
+    {
+      "id": "01-Network-D4-T3-P1-R1-Seed7",
+      "expected_relative_difficulty": "higher",
+      "environment": {
+        "NEXUS_AXIS_VERSION": "2",
+        "NEXUS_SCIENCE_FAMILY": "coupled-network-v1",
+        "NEXUS_DISCOVERY_LEVEL": "4",
+        "NEXUS_THEORY_LEVEL": "3",
+        "NEXUS_PLANNING_LEVEL": "1",
+        "NEXUS_RESOURCE_PRESSURE": "1",
+        "NEXUS_SEED": "7",
+        "NEXUS_GENERATION_TIMING": "true"
+      }
+    },
+    {
+      "id": "02-Network-D5-T3-P1-R1-Seed7",
+      "expected_relative_difficulty": "higher with experiment construction",
+      "environment": {
+        "NEXUS_AXIS_VERSION": "2",
+        "NEXUS_SCIENCE_FAMILY": "coupled-network-v1",
+        "NEXUS_DISCOVERY_LEVEL": "5",
+        "NEXUS_THEORY_LEVEL": "3",
+        "NEXUS_PLANNING_LEVEL": "1",
+        "NEXUS_RESOURCE_PRESSURE": "1",
+        "NEXUS_SEED": "7",
+        "NEXUS_GENERATION_TIMING": "true"
+      }
+    },
+    {
+      "id": "03-Network-D4-T3-P1-R1-Seed17",
+      "expected_relative_difficulty": "higher",
+      "environment": {
+        "NEXUS_AXIS_VERSION": "2",
+        "NEXUS_SCIENCE_FAMILY": "coupled-network-v1",
+        "NEXUS_DISCOVERY_LEVEL": "4",
+        "NEXUS_THEORY_LEVEL": "3",
+        "NEXUS_PLANNING_LEVEL": "1",
+        "NEXUS_RESOURCE_PRESSURE": "1",
+        "NEXUS_SEED": "17",
+        "NEXUS_GENERATION_TIMING": "true"
+      }
+    },
+    {
+      "id": "04-Network-D5-T3-P1-R1-Seed17",
+      "expected_relative_difficulty": "higher with experiment construction",
+      "environment": {
+        "NEXUS_AXIS_VERSION": "2",
+        "NEXUS_SCIENCE_FAMILY": "coupled-network-v1",
+        "NEXUS_DISCOVERY_LEVEL": "5",
+        "NEXUS_THEORY_LEVEL": "3",
+        "NEXUS_PLANNING_LEVEL": "1",
+        "NEXUS_RESOURCE_PRESSURE": "1",
+        "NEXUS_SEED": "17",
+        "NEXUS_GENERATION_TIMING": "true"
+      }
+    },
+    {
+      "id": "05-Network-D4-T3-P1-R1-Seed23",
+      "expected_relative_difficulty": "higher",
+      "environment": {
+        "NEXUS_AXIS_VERSION": "2",
+        "NEXUS_SCIENCE_FAMILY": "coupled-network-v1",
+        "NEXUS_DISCOVERY_LEVEL": "4",
+        "NEXUS_THEORY_LEVEL": "3",
+        "NEXUS_PLANNING_LEVEL": "1",
+        "NEXUS_RESOURCE_PRESSURE": "1",
+        "NEXUS_SEED": "23",
+        "NEXUS_GENERATION_TIMING": "true"
+      }
+    },
+    {
+      "id": "06-Network-D5-T3-P1-R1-Seed23",
+      "expected_relative_difficulty": "higher with experiment construction",
+      "environment": {
+        "NEXUS_AXIS_VERSION": "2",
+        "NEXUS_SCIENCE_FAMILY": "coupled-network-v1",
+        "NEXUS_DISCOVERY_LEVEL": "5",
+        "NEXUS_THEORY_LEVEL": "3",
+        "NEXUS_PLANNING_LEVEL": "1",
+        "NEXUS_RESOURCE_PRESSURE": "1",
+        "NEXUS_SEED": "23",
+        "NEXUS_GENERATION_TIMING": "true"
+      }
+    },
+    {
+      "id": "07-Network-D4-T3-P1-R1-Seed41",
+      "expected_relative_difficulty": "higher",
+      "environment": {
+        "NEXUS_AXIS_VERSION": "2",
+        "NEXUS_SCIENCE_FAMILY": "coupled-network-v1",
+        "NEXUS_DISCOVERY_LEVEL": "4",
+        "NEXUS_THEORY_LEVEL": "3",
+        "NEXUS_PLANNING_LEVEL": "1",
+        "NEXUS_RESOURCE_PRESSURE": "1",
+        "NEXUS_SEED": "41",
+        "NEXUS_GENERATION_TIMING": "true"
+      }
+    },
+    {
+      "id": "08-Network-D5-T3-P1-R1-Seed41",
+      "expected_relative_difficulty": "higher with experiment construction",
+      "environment": {
+        "NEXUS_AXIS_VERSION": "2",
+        "NEXUS_SCIENCE_FAMILY": "coupled-network-v1",
+        "NEXUS_DISCOVERY_LEVEL": "5",
+        "NEXUS_THEORY_LEVEL": "3",
+        "NEXUS_PLANNING_LEVEL": "1",
+        "NEXUS_RESOURCE_PRESSURE": "1",
+        "NEXUS_SEED": "41",
+        "NEXUS_GENERATION_TIMING": "true"
+      }
+    },
+    {
+      "id": "09-Network-D4-T3-P1-R1-Seed73",
+      "expected_relative_difficulty": "higher",
+      "environment": {
+        "NEXUS_AXIS_VERSION": "2",
+        "NEXUS_SCIENCE_FAMILY": "coupled-network-v1",
+        "NEXUS_DISCOVERY_LEVEL": "4",
+        "NEXUS_THEORY_LEVEL": "3",
+        "NEXUS_PLANNING_LEVEL": "1",
+        "NEXUS_RESOURCE_PRESSURE": "1",
+        "NEXUS_SEED": "73",
+        "NEXUS_GENERATION_TIMING": "true"
+      }
+    },
+    {
+      "id": "10-Network-D5-T3-P1-R1-Seed73",
+      "expected_relative_difficulty": "higher with experiment construction",
+      "environment": {
+        "NEXUS_AXIS_VERSION": "2",
+        "NEXUS_SCIENCE_FAMILY": "coupled-network-v1",
+        "NEXUS_DISCOVERY_LEVEL": "5",
+        "NEXUS_THEORY_LEVEL": "3",
+        "NEXUS_PLANNING_LEVEL": "1",
+        "NEXUS_RESOURCE_PRESSURE": "1",
+        "NEXUS_SEED": "73",
+        "NEXUS_GENERATION_TIMING": "true"
+      }
+    }
+  ]
+}

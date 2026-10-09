@@ -123,6 +123,15 @@ P0 has one room. Existing profiles and seed meanings remain the default version1
 See the [results and validation](docs/scientific-investigation-results.md) before
 interpreting these bounded tasks as evidence of frontier-model difficulty.
 
+The richer experimental family is selected separately with
+`NEXUS_SCIENCE_FAMILY=coupled-network-v1` (CLI: `--science-family coupled-network-v1`).
+It requires axes v2 and supports T3/D4 or T3/D5, plus D0/T0,T3 controls.
+Three composed relationship choices replace the simple response curve; D5 requires
+combining noncommuting preparation operations. See the
+[design and validation](docs/rich-investigation-results.md) and
+[ten-run paired pilot](docs/rich-investigation-model-matrix.md).
+Without this setting, the existing `shared-response-v1` family remains unchanged.
+
 The feature branch currently implements the first end-to-end Transformation Facility prototype:
 
 - compositional latent rule grammar with 288 possible generated laws;
