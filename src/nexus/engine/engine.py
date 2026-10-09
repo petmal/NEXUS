@@ -4,6 +4,7 @@ from nexus.engine.goals import evaluate_goal
 from nexus.engine.rules import apply_effect
 from nexus.models.actions import (
     Action,
+    ConfigureAction,
     DropAction,
     FinishAction,
     MoveAction,
@@ -15,7 +16,8 @@ from nexus.models.actions import (
 )
 from nexus.models.episode import PrivateEpisode
 from nexus.models.events import EngineEvent, StepResult
-from nexus.models.world import INVENTORY, TerminalStatus, WorldState
+from nexus.models.world import INVENTORY, Artifact, TerminalStatus, WorldState
+from nexus.models.investigation import SampleState
 from nexus.verification.receipt import victory_receipt
 
 
@@ -30,9 +32,10 @@ def _neighbors(episode: PrivateEpisode, room: str) -> set[str]:
 
 
 def _consume_action(state: WorldState) -> None:
-    if state.resources.actions_remaining <= 0:
-        raise ValueError("no actions remaining")
-    state.resources.actions_remaining -= 1
+    if state.resources.actions_remaining is not None:
+        if state.resources.actions_remaining <= 0:
+            raise ValueError("no actions remaining")
+        state.resources.actions_remaining -= 1
     state.turn += 1
 
 
@@ -62,6 +65,22 @@ def step(state: WorldState, action: Action, episode: PrivateEpisode) -> StepResu
             events.append(EngineEvent(type="move", details={"from": origin, "to": action.target}))
 
         elif isinstance(action, TakeAction):
+            stock = next_state.stocks.get(action.artifact)
+            if stock is not None:
+                if stock.location != next_state.agent_room or stock.remaining == 0:
+                    raise ValueError("specimen stock is unavailable")
+                _consume_action(next_state)
+                artifact_id = f"{stock.id}.{next_state.turn}"
+                next_state.artifacts[artifact_id] = Artifact(
+                    id=artifact_id, location=INVENTORY, shape="circle", pattern="plain",
+                    orientation="north", value=stock.q, polarity="positive",
+                    sample=SampleState(source=stock.source, q=stock.q),
+                )
+                if stock.remaining is not None:
+                    stock.remaining -= 1
+                events.append(EngineEvent(type="take", details={"stock": stock.id, "artifact": artifact_id}))
+                _fail_if_exhausted(next_state, events)
+                return StepResult(ok=True, state=next_state, events=tuple(events))
             artifact = next_state.artifacts.get(action.artifact)
             if artifact is None or artifact.location != next_state.agent_room:
                 raise ValueError("artifact is not available in the current room")
@@ -86,6 +105,21 @@ def step(state: WorldState, action: Action, episode: PrivateEpisode) -> StepResu
                 raise ValueError("machine is not in the current room")
             if artifact is None or artifact.location != INVENTORY:
                 raise ValueError("artifact is not carried")
+            if episode.public.investigation is not None:
+                transformed = _scientific_transform(artifact, machine.id, episode)
+                if isinstance(action, OperateAction):
+                    if machine.uses_remaining == 0:
+                        raise ValueError("machine has no uses remaining")
+                    next_state.artifacts[artifact.id] = transformed
+                    if machine.uses_remaining is not None:
+                        machine.uses_remaining -= 1
+                _consume_action(next_state)
+                events.append(EngineEvent(type=action.type, details={
+                    "machine": machine.id, "artifact": artifact.id,
+                    "result": transformed.model_dump(mode="json"),
+                }))
+                _fail_if_exhausted(next_state, events)
+                return StepResult(ok=True, state=next_state, events=tuple(events))
             rule_id = episode.machine_rules.get(machine.id)
             if rule_id is None:
                 raise ValueError("machine has no configured rule")
@@ -121,8 +155,29 @@ def step(state: WorldState, action: Action, episode: PrivateEpisode) -> StepResu
             next_state.phase = (next_state.phase + 1) % episode.public.phase_modulus
             events.append(EngineEvent(type="wait", details={"phase": next_state.phase}))
 
+        elif isinstance(action, ConfigureAction):
+            spec = episode.public.investigation
+            if spec is None or action.machine != "controller":
+                raise ValueError("no configurable controller")
+            if next_state.agent_room != spec.controller_room:
+                raise ValueError("controller is not in the current room")
+            size = 1 + len(spec.target_q) * (2 if spec.both_stocks else 1)
+            if len(action.settings) != size or action.settings[0] not in (0, 1):
+                raise ValueError(f"settings require a port 0/1 and {size-1} values in 0..16")
+            _consume_action(next_state)
+            next_state.controller_settings = action.settings
+            next_state.controller_accepted = False
+            events.append(EngineEvent(type="configure", details={"machine": "controller", "settings": action.settings}))
+
         elif isinstance(action, FinishAction):
             _consume_action(next_state)
+            if episode.public.investigation is not None:
+                from nexus.engine.investigation import settings
+                spec = episode.public.investigation
+                next_state.controller_accepted = (
+                    next_state.agent_room == spec.controller_room
+                    and next_state.controller_settings == settings(spec, episode.investigation_truth)
+                )
             if evaluate_goal(episode.public.goal, next_state):
                 next_state.terminal_status = TerminalStatus.WON
                 code = victory_receipt(episode)
@@ -143,3 +198,27 @@ def step(state: WorldState, action: Action, episode: PrivateEpisode) -> StepResu
         return StepResult(ok=True, state=next_state, events=tuple(events))
     except (KeyError, ValueError) as exc:
         return StepResult(ok=False, state=state.model_copy(deep=True), message=str(exc))
+
+
+def _scientific_transform(artifact: Artifact, machine: str, episode: PrivateEpisode) -> Artifact:
+    from nexus.engine.investigation import measurement
+    spec, truth = episode.public.investigation, episode.investigation_truth
+    sample = artifact.sample
+    if spec is None or truth is None or sample is None:
+        raise ValueError("apparatus requires a specimen")
+    transformed = artifact.model_copy(deep=True)
+    if machine == "prepare":
+        if sample.q >= 2:
+            raise ValueError("preparation range is q=0..2")
+        transformed.sample.q += 1
+        transformed.sample.reading = None
+        transformed.value = transformed.sample.q
+    elif machine == "meter":
+        transformed.sample.reading = measurement(spec, truth, f"{sample.source}:{sample.q}")
+    elif machine == "selector":
+        transformed.sample.reading = measurement(spec, truth, "selector")
+    elif machine == "material":
+        transformed.sample.reading = measurement(spec, truth, f"{sample.source}:property")
+    else:
+        raise ValueError("controller accepts configure and finish; it has no specimen preview")
+    return transformed

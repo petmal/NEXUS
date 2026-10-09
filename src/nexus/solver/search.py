@@ -172,6 +172,20 @@ def legal_solver_actions(episode: PrivateEpisode, state: WorldState) -> list[Act
 
 
 def solve(episode: PrivateEpisode, max_states: int = 100_000) -> SolveResult:
+    if episode.public.investigation is not None:
+        # Trusted perfect-knowledge physical optimum. Scientific policy is stored separately.
+        from nexus.engine.investigation import settings
+        from nexus.engine.replay import execute_with_trace
+        from nexus.models.actions import ConfigureAction
+        spec = episode.public.investigation
+        plan = tuple(MoveAction(target=f"R{i}") for i in range(1, int(spec.controller_room[1:])+1)) + (
+            ConfigureAction(machine="controller", settings=settings(spec, episode.investigation_truth)),
+            FinishAction(),
+        )
+        state, _ = execute_with_trace(episode, list(plan))
+        return SolveResult(solvable=state.terminal_status == TerminalStatus.WON,
+                           optimal_action_count=len(plan), plan=plan,
+                           terminal_state_hash=canonical_hash(state))
     initial = episode.public.initial_state.model_copy(deep=True)
     frontier: deque[tuple[WorldState, tuple[Action, ...]]] = deque([(initial, ())])
     visited = {search_state_key(initial)}

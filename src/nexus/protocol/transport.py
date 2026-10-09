@@ -88,7 +88,7 @@ def _parse_status(
     payload: dict[str, object],
     *,
     description: str,
-) -> tuple[int, str, int, str | None]:
+) -> tuple[int, str, int | None, str | None]:
     turn = payload["turn"]
     status = payload["status"]
     actions_remaining = payload["actions_remaining"]
@@ -98,15 +98,15 @@ def _parse_status(
         raise ClientError(f"{description} field 'turn' must be an integer")
     if not isinstance(status, str) or status not in {"active", "won", "failed"}:
         raise ClientError(f"{description} field 'status' is invalid")
-    if isinstance(actions_remaining, bool) or not isinstance(actions_remaining, int):
-        raise ClientError(f"{description} field 'actions_remaining' must be an integer")
+    if actions_remaining is not None and (isinstance(actions_remaining, bool) or not isinstance(actions_remaining, int)):
+        raise ClientError(f"{description} field 'actions_remaining' must be an integer or null (unlimited)")
     if victory_code is not None and not isinstance(victory_code, str):
         raise ClientError(f"{description} field 'victory_code' must be a string or null")
 
     return turn, status, actions_remaining, victory_code
 
 
-def _status(base_url: str) -> tuple[int, str, int, str | None]:
+def _status(base_url: str) -> tuple[int, str, int | None, str | None]:
     payload = _object(_json_request(base_url, "GET", "/status"), "service status")
     _exact_keys(
         payload,
@@ -116,7 +116,7 @@ def _status(base_url: str) -> tuple[int, str, int, str | None]:
     return _parse_status(payload, description="service status")
 
 
-def _finalize(base_url: str) -> tuple[int, str, int, str | None, dict[str, object]]:
+def _finalize(base_url: str) -> tuple[int, str, int | None, str | None, dict[str, object]]:
     payload = _object(
         _json_request(base_url, "POST", "/finalize"),
         "service finalization",

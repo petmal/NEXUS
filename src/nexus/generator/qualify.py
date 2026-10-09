@@ -119,6 +119,9 @@ def qualify_episode(
     *,
     max_states: int = 100_000,
 ) -> QualificationReport:
+    if episode.public.investigation is not None:
+        from nexus.generator.investigation_qualify import qualify_investigation
+        return qualify_investigation(episode)
     checks: dict[str, bool] = {}
     errors: list[str] = []
     metrics: dict[str, int | str | bool] = {}

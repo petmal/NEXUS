@@ -1660,6 +1660,7 @@ def generate_episode(
     theory_level: int = 0,
     max_attempts: int = 250,
     verifier_secret: str | None = None,
+    axis_version: int = 1,
 ) -> PrivateEpisode:
     """Generate a deterministic, solver-qualified NEXUS episode.
 
@@ -1667,6 +1668,13 @@ def generate_episode(
     dependency. Resource pressure changes only the action allowance above the exact guaranteed
     policy cost.
     """
+    if axis_version == 2:
+        from nexus.generator.investigation import generate_investigation
+        return generate_investigation(seed, discovery_level=discovery_level, planning_level=planning_level,
+                                      resource_pressure=resource_pressure, theory_level=theory_level,
+                                      verifier_secret=verifier_secret)
+    if axis_version != 1:
+        raise ValueError("axis_version must be 1 (legacy) or 2 (scientific)")
     from nexus.generator.theory import validate_theory_profile
 
     validate_theory_profile(theory_level, discovery_level)

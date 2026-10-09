@@ -63,6 +63,8 @@ def generate(
     output: Path = typer.Argument(..., help="Output directory"),
     seed: int = typer.Option(1, help="Private construction seed"),
     count: int = typer.Option(1, min=1, help="Number of episodes"),
+    axis_version: int = typer.Option(1, min=1, max=2, envvar="NEXUS_AXIS_VERSION",
+                                    help="1=legacy profiles; 2=scientific investigation semantics."),
     discovery_level: int = typer.Option(
         0,
         min=0,
@@ -99,6 +101,7 @@ def generate(
     for offset in range(count):
         episode = generate_episode(
             seed + offset,
+            axis_version=axis_version,
             discovery_level=discovery_level,
             planning_level=planning_level,
             resource_pressure=resource_pressure,
@@ -290,6 +293,8 @@ def serve_session(
     seed: int | None = typer.Option(
         None, envvar="NEXUS_SEED", help="Generate a qualified episode from this seed.",
     ),
+    axis_version: int = typer.Option(1, min=1, max=2, envvar="NEXUS_AXIS_VERSION",
+                                    help="1=legacy profiles; 2=scientific investigation semantics."),
     discovery_level: int = typer.Option(
         0,
         min=0,
@@ -346,6 +351,7 @@ def serve_session(
         if private is not None
         else generate_episode(
             seed,
+            axis_version=axis_version,
             discovery_level=discovery_level,
             planning_level=planning_level,
             resource_pressure=resource_pressure,

@@ -48,6 +48,12 @@ class FinishAction(ActionBase):
     type: Literal["finish"] = "finish"
 
 
+class ConfigureAction(ActionBase):
+    type: Literal["configure"] = "configure"
+    machine: str
+    settings: tuple[Annotated[int, Field(strict=True, ge=0, le=16)], ...] = Field(min_length=1, max_length=9)
+
+
 Action = Annotated[
     ObserveAction
     | MoveAction
@@ -56,7 +62,8 @@ Action = Annotated[
     | OperateAction
     | ProbeAction
     | WaitAction
-    | FinishAction,
+    | FinishAction
+    | ConfigureAction,
     Field(discriminator="type"),
 ]
 ACTION_ADAPTER = TypeAdapter(Action)
@@ -116,9 +123,22 @@ ACTION_REFERENCE: tuple[dict[str, object], ...] = (
 )
 
 
-def action_contract() -> dict[str, object]:
+def action_contract(*, scientific: bool = False) -> dict[str, object]:
     """Player-safe description of the stable interaction contract."""
-    return {
-        "schema": ACTION_ADAPTER.json_schema(),
-        "reference": ACTION_REFERENCE,
-    }
+    if scientific:
+        reference = tuple(dict(item) for item in ACTION_REFERENCE) + ({
+            "type": "configure", "description": "Store the complete controller settings; no correctness feedback until finish.",
+            "example": {"type": "configure", "machine": "controller", "settings": [0, 1, 2, 3, 4]},
+        },)
+        for item in reference:
+            if item["type"] == "take":
+                item["description"] = "Take an individual artifact, or obtain one identical specimen from a designated stock. Only stocks create copies."
+            elif item["type"] == "operate":
+                item["description"] = "Apply the named apparatus to a carried specimen; writes a reading or advances preparation as documented. Uses are unlimited when null."
+            elif item["type"] == "probe":
+                item["description"] = "Preview the named apparatus on a carried specimen, without changing it or consuming a machine use. Advances the action turn. See manual for apparatus ranges."
+        return {"schema": ACTION_ADAPTER.json_schema(), "reference": reference}
+    # Keep legacy player contracts byte-compatible, including their action union.
+    legacy = Annotated[ObserveAction | MoveAction | TakeAction | DropAction | OperateAction
+                       | ProbeAction | WaitAction | FinishAction, Field(discriminator="type")]
+    return {"schema": TypeAdapter(legacy).json_schema(), "reference": ACTION_REFERENCE}

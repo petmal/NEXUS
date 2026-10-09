@@ -3,6 +3,7 @@ from __future__ import annotations
 from enum import StrEnum
 
 from pydantic import BaseModel, ConfigDict, Field, model_validator
+from nexus.models.investigation import SampleState, SpecimenStock
 
 INVENTORY = "@inventory"
 
@@ -56,6 +57,7 @@ class Artifact(BaseModel):
     orientation: Orientation
     value: int = Field(ge=0, le=10)
     polarity: Polarity
+    sample: SampleState | None = Field(default=None, exclude_if=lambda v: v is None)
 
 
 class Machine(BaseModel):
@@ -63,13 +65,13 @@ class Machine(BaseModel):
 
     id: str
     room_id: str
-    uses_remaining: int = Field(default=1, ge=0)
+    uses_remaining: int | None = Field(default=1, ge=0)
 
 
 class Resources(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
-    actions_remaining: int = Field(ge=0)
+    actions_remaining: int | None = Field(ge=0)
 
 
 class WorldState(BaseModel):
@@ -82,6 +84,9 @@ class WorldState(BaseModel):
     machines: dict[str, Machine]
     resources: Resources
     terminal_status: TerminalStatus = TerminalStatus.ACTIVE
+    stocks: dict[str, SpecimenStock] = Field(default_factory=dict, exclude_if=lambda v: not v)
+    controller_settings: tuple[int, ...] | None = Field(default=None, exclude_if=lambda v: v is None)
+    controller_accepted: bool | None = Field(default=None, exclude_if=lambda v: v is None)
 
     @model_validator(mode="after")
     def validate_keys(self) -> "WorldState":

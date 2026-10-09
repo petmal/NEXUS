@@ -9,6 +9,8 @@ def _normalized(value):
 
 
 def evaluate_goal(goal: GoalPredicate, state: WorldState) -> bool:
+    if goal.kind == GoalKind.CONTROLLER_ACCEPTED:
+        return state.controller_accepted is True
     if goal.kind == GoalKind.ARTIFACT_FIELD:
         artifact = state.artifacts.get(goal.artifact_id or "")
         if artifact is None or goal.field is None:

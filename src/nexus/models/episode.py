@@ -6,6 +6,7 @@ from nexus.models.actions import action_contract
 from nexus.models.goals import GoalPredicate
 from nexus.models.rules import Effect
 from nexus.models.world import Room, WorldState
+from nexus.models.investigation import InvestigationSpec, InvestigationTruth
 
 
 class PublicEpisode(BaseModel):
@@ -27,6 +28,7 @@ class PublicEpisode(BaseModel):
     initial_state: WorldState
     goal: GoalPredicate
     evidence_files: dict[str, str] = Field(default_factory=dict)
+    investigation: InvestigationSpec | None = Field(default=None, exclude_if=lambda v: v is None)
 
     @model_validator(mode="after")
     def validate_world(self) -> "PublicEpisode":
@@ -42,6 +44,9 @@ class PublicEpisode(BaseModel):
         for machine in self.initial_state.machines.values():
             if machine.room_id not in room_ids:
                 raise ValueError(f"machine {machine.id} has unknown room")
+        for key, stock in self.initial_state.stocks.items():
+            if key != stock.id or stock.location not in room_ids or key in self.initial_state.artifacts:
+                raise ValueError("invalid specimen stock")
         return self
 
 
@@ -65,7 +70,7 @@ class PlayerManifest(BaseModel):
             description=episode.description,
             goal=episode.goal,
             evidence_files=tuple(sorted(episode.evidence_files)),
-            action_contract=action_contract(),
+            action_contract=action_contract(scientific=episode.investigation is not None),
         )
 
 
@@ -133,6 +138,7 @@ class GenerationMetadata(BaseModel):
 
     solver_visited_states: int = 0
     solver_max_frontier_size: int = 0
+    investigation_certificate: dict[str, object] | None = Field(default=None, exclude_if=lambda v: v is None)
 
 
 class PrivateEpisode(BaseModel):
@@ -145,9 +151,12 @@ class PrivateEpisode(BaseModel):
     construction_seed: int | None = None
     reference_plan: tuple[dict, ...] = ()
     generation_metadata: GenerationMetadata = Field(default_factory=GenerationMetadata)
+    investigation_truth: InvestigationTruth | None = Field(default=None, exclude_if=lambda v: v is None)
 
     @model_validator(mode="after")
     def validate_private_links(self) -> "PrivateEpisode":
+        if (self.public.investigation is None) != (self.investigation_truth is None):
+            raise ValueError("scientific apparatus requires private truth and public specification")
         for machine_id, rule_id in self.machine_rules.items():
             if machine_id not in self.public.initial_state.machines:
                 raise ValueError(f"machine rule references unknown machine {machine_id}")

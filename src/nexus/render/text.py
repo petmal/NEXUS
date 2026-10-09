@@ -48,6 +48,9 @@ def observation(episode: PublicEpisode, state: WorldState) -> Observation:
         carried_artifacts=carried,
         visible_machines=machines,
         terminal_status=state.terminal_status,
+        visible_stocks=tuple(s.model_copy(deep=True) for s in state.stocks.values() if s.location == room_id),
+        controller_settings=(state.controller_settings if episode.investigation is not None
+                             and room_id == episode.investigation.controller_room else None),
         goal=episode.goal.model_dump(mode="json") if include_static_context else None,
         evidence_files=(
             tuple(sorted(episode.evidence_files)) if include_static_context else None

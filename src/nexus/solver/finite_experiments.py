@@ -26,17 +26,13 @@ class FiniteExperimentProblem:
             raise ValueError("experiment and prediction rows must align with hypotheses")
 
     def compatible(self, observations: tuple[tuple[str, int], ...] = ()) -> tuple[int, ...]:
-        rows = dict(self.experiments)
-        if any(name not in rows for name, _ in observations):
-            raise ValueError("unknown experiment")
-        result = tuple(
-            i
-            for i in range(len(self.hypotheses))
-            if all(rows[name][i] == value for name, value in observations)
-        )
-        if not result:
-            raise ValueError("observations contradict the complete prior")
-        return result
+        mask = self.belief_mask(observations)
+        indices = []
+        while mask:
+            bit = mask & -mask
+            indices.append(bit.bit_length() - 1)
+            mask ^= bit
+        return tuple(indices)
 
     def possible_predictions(
         self, observations: tuple[tuple[str, int], ...] = ()
@@ -135,3 +131,28 @@ class FiniteExperimentProblem:
                 if all(any(b & mask == b for mask in self.prediction_masks) for b in beliefs):
                     return size
         return None
+
+    @cached_property
+    def policy_leaf_masks(self) -> tuple[int, ...]:
+        """Disjoint terminal beliefs for the same tie-broken optimal measurement policy.
+
+        Worlds within a leaf produce the same transcript and target, so a physical
+        planner depending only on that transcript needs one witness per leaf.
+        """
+
+        def leaves(belief):
+            optimum = self._cost(belief)
+            if optimum == 0:
+                return (belief,)
+            if optimum is None:
+                raise ValueError("unidentifiable experiment problem has no complete policy")
+            for partitions in self.partitions:
+                groups = tuple(mask & belief for _, mask in partitions if mask & belief)
+                if len(groups) <= 1:
+                    continue
+                costs = [self._cost(group) for group in groups]
+                if all(value is not None for value in costs) and 1 + max(costs) == optimum:
+                    return tuple(leaf for group in groups for leaf in leaves(group))
+            raise RuntimeError("no witness for policy leaf")
+
+        return leaves((1 << len(self.hypotheses)) - 1)
