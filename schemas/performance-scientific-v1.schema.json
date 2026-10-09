@@ -1,0 +1,179 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "$schema": {
+      "title": "$Schema",
+      "type": "string"
+    },
+    "axis_version": {
+      "default": 2,
+      "title": "Axis Version",
+      "type": "integer"
+    },
+    "theory_level": {
+      "title": "Theory Level",
+      "type": "integer"
+    },
+    "discovery_level": {
+      "title": "Discovery Level",
+      "type": "integer"
+    },
+    "planning_level": {
+      "title": "Planning Level",
+      "type": "integer"
+    },
+    "resource_pressure": {
+      "title": "Resource Pressure",
+      "type": "integer"
+    },
+    "terminal_status": {
+      "title": "Terminal Status",
+      "type": "string"
+    },
+    "termination_reason": {
+      "title": "Termination Reason",
+      "type": "string"
+    },
+    "actions_used": {
+      "title": "Actions Used",
+      "type": "integer"
+    },
+    "initial_action_budget": {
+      "anyOf": [
+        {
+          "type": "integer"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Initial Action Budget"
+    },
+    "budget_remaining": {
+      "anyOf": [
+        {
+          "type": "integer"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Budget Remaining"
+    },
+    "action_counts": {
+      "additionalProperties": {
+        "type": "integer"
+      },
+      "title": "Action Counts",
+      "type": "object"
+    },
+    "measurements_used": {
+      "title": "Measurements Used",
+      "type": "integer"
+    },
+    "informative_measurements": {
+      "title": "Informative Measurements",
+      "type": "integer"
+    },
+    "target_reducing_measurements": {
+      "title": "Target Reducing Measurements",
+      "type": "integer"
+    },
+    "redundant_measurements": {
+      "title": "Redundant Measurements",
+      "type": "integer"
+    },
+    "target_classes_before_first_submission": {
+      "anyOf": [
+        {
+          "type": "integer"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Target Classes Before First Submission"
+    },
+    "first_submission_correct": {
+      "anyOf": [
+        {
+          "type": "boolean"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "First Submission Correct"
+    },
+    "controller_submissions": {
+      "title": "Controller Submissions",
+      "type": "integer"
+    },
+    "failed_finishes": {
+      "title": "Failed Finishes",
+      "type": "integer"
+    },
+    "final_correct_field_values": {
+      "title": "Final Correct Field Values",
+      "type": "integer"
+    },
+    "field_value_count": {
+      "title": "Field Value Count",
+      "type": "integer"
+    },
+    "final_port_correct": {
+      "title": "Final Port Correct",
+      "type": "boolean"
+    },
+    "invalid_actions": {
+      "title": "Invalid Actions",
+      "type": "integer"
+    },
+    "duplicate_requests": {
+      "title": "Duplicate Requests",
+      "type": "integer"
+    },
+    "protocol_conflicts": {
+      "title": "Protocol Conflicts",
+      "type": "integer"
+    },
+    "certificate": {
+      "additionalProperties": true,
+      "title": "Certificate",
+      "type": "object"
+    }
+  },
+  "required": [
+    "$schema",
+    "axis_version",
+    "theory_level",
+    "discovery_level",
+    "planning_level",
+    "resource_pressure",
+    "terminal_status",
+    "termination_reason",
+    "actions_used",
+    "initial_action_budget",
+    "budget_remaining",
+    "action_counts",
+    "measurements_used",
+    "informative_measurements",
+    "target_reducing_measurements",
+    "redundant_measurements",
+    "target_classes_before_first_submission",
+    "first_submission_correct",
+    "controller_submissions",
+    "failed_finishes",
+    "final_correct_field_values",
+    "field_value_count",
+    "final_port_correct",
+    "invalid_actions",
+    "duplicate_requests",
+    "protocol_conflicts",
+    "certificate"
+  ],
+  "title": "InvestigationPerformance",
+  "type": "object",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:nexus:performance:scientific:v1"
+}
