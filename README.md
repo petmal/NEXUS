@@ -99,6 +99,8 @@ Conventional game engines are intentionally avoided. NEXUS is primarily a symbol
 
 - [Player tutorial](docs/tutorial.md) — action reference, CLI help, evidence access, and a tiny solved mechanics example.
 - [Difficulty profiles](docs/difficulty.md) — discovery, planning, and resource-pressure knobs and their mechanical guarantees.
+- [Scientific investigation, axes v2](docs/scientific-investigation-design.md) — approved T/D meanings, zero-level controls, proofs and bounded-family limitations.
+- [Scientific model pilot](docs/scientific-investigation-model-matrix.md) — ten nonzero-axis runs with exact environment settings.
 - [Service integration](docs/service-integration.md) — single-session service, client, health, validation, and generated-session configuration.
 - [AGENTS.md](AGENTS.md) — implementation constraints and staged development guidance.
 
@@ -110,6 +112,16 @@ All prototype work should remain isolated from unrelated projects. External harn
 
 
 ## Working prototype
+
+The scientific investigation profiles are opt-in: use `NEXUS_AXIS_VERSION=2` for
+services, or `nexus generate ./episode --axis-version 2 --seed 7 --discovery-level 5
+--theory-level 3 --planning-level 1 --resource-pressure 1`. These profiles combine
+instrument calibration, correction/relationship inference, specimen preparation,
+and predictions at unmeasured field conditions through the existing facility API.
+Use `nexus actions --axis-version 2` for their controls. R0 is unlimited/recoverable;
+P0 has one room. Existing profiles and seed meanings remain the default version1.
+See the [results and validation](docs/scientific-investigation-results.md) before
+interpreting these bounded tasks as evidence of frontier-model difficulty.
 
 The feature branch currently implements the first end-to-end Transformation Facility prototype:
 

@@ -1,0 +1,137 @@
+{
+  "axis_version": 2,
+  "runs_per_model": 10,
+  "scope": "Scientific investigation pilot; uncalibrated relative expectations; all primary P/R nonzero",
+  "runs": [
+    {
+      "id": "01-D2-T1-P1-R1-Seed7",
+      "expected_relative_difficulty": 2,
+      "environment": {
+        "NEXUS_AXIS_VERSION": "2",
+        "NEXUS_DISCOVERY_LEVEL": "2",
+        "NEXUS_THEORY_LEVEL": "1",
+        "NEXUS_PLANNING_LEVEL": "1",
+        "NEXUS_RESOURCE_PRESSURE": "1",
+        "NEXUS_SEED": "7",
+        "NEXUS_GENERATION_TIMING": "true"
+      }
+    },
+    {
+      "id": "02-D2-T2-P1-R1-Seed7",
+      "expected_relative_difficulty": 3,
+      "environment": {
+        "NEXUS_AXIS_VERSION": "2",
+        "NEXUS_DISCOVERY_LEVEL": "2",
+        "NEXUS_THEORY_LEVEL": "2",
+        "NEXUS_PLANNING_LEVEL": "1",
+        "NEXUS_RESOURCE_PRESSURE": "1",
+        "NEXUS_SEED": "7",
+        "NEXUS_GENERATION_TIMING": "true"
+      }
+    },
+    {
+      "id": "03-D2-T3-P1-R1-Seed7",
+      "expected_relative_difficulty": 4,
+      "environment": {
+        "NEXUS_AXIS_VERSION": "2",
+        "NEXUS_DISCOVERY_LEVEL": "2",
+        "NEXUS_THEORY_LEVEL": "3",
+        "NEXUS_PLANNING_LEVEL": "1",
+        "NEXUS_RESOURCE_PRESSURE": "1",
+        "NEXUS_SEED": "7",
+        "NEXUS_GENERATION_TIMING": "true"
+      }
+    },
+    {
+      "id": "04-D3-T1-P1-R1-Seed7",
+      "expected_relative_difficulty": 3,
+      "environment": {
+        "NEXUS_AXIS_VERSION": "2",
+        "NEXUS_DISCOVERY_LEVEL": "3",
+        "NEXUS_THEORY_LEVEL": "1",
+        "NEXUS_PLANNING_LEVEL": "1",
+        "NEXUS_RESOURCE_PRESSURE": "1",
+        "NEXUS_SEED": "7",
+        "NEXUS_GENERATION_TIMING": "true"
+      }
+    },
+    {
+      "id": "05-D3-T2-P1-R1-Seed7",
+      "expected_relative_difficulty": 4,
+      "environment": {
+        "NEXUS_AXIS_VERSION": "2",
+        "NEXUS_DISCOVERY_LEVEL": "3",
+        "NEXUS_THEORY_LEVEL": "2",
+        "NEXUS_PLANNING_LEVEL": "1",
+        "NEXUS_RESOURCE_PRESSURE": "1",
+        "NEXUS_SEED": "7",
+        "NEXUS_GENERATION_TIMING": "true"
+      }
+    },
+    {
+      "id": "06-D3-T3-P1-R1-Seed7",
+      "expected_relative_difficulty": 5,
+      "environment": {
+        "NEXUS_AXIS_VERSION": "2",
+        "NEXUS_DISCOVERY_LEVEL": "3",
+        "NEXUS_THEORY_LEVEL": "3",
+        "NEXUS_PLANNING_LEVEL": "1",
+        "NEXUS_RESOURCE_PRESSURE": "1",
+        "NEXUS_SEED": "7",
+        "NEXUS_GENERATION_TIMING": "true"
+      }
+    },
+    {
+      "id": "07-D4-T3-P1-R1-Seed7",
+      "expected_relative_difficulty": 6,
+      "environment": {
+        "NEXUS_AXIS_VERSION": "2",
+        "NEXUS_DISCOVERY_LEVEL": "4",
+        "NEXUS_THEORY_LEVEL": "3",
+        "NEXUS_PLANNING_LEVEL": "1",
+        "NEXUS_RESOURCE_PRESSURE": "1",
+        "NEXUS_SEED": "7",
+        "NEXUS_GENERATION_TIMING": "true"
+      }
+    },
+    {
+      "id": "08-D5-T3-P1-R1-Seed7",
+      "expected_relative_difficulty": 7,
+      "environment": {
+        "NEXUS_AXIS_VERSION": "2",
+        "NEXUS_DISCOVERY_LEVEL": "5",
+        "NEXUS_THEORY_LEVEL": "3",
+        "NEXUS_PLANNING_LEVEL": "1",
+        "NEXUS_RESOURCE_PRESSURE": "1",
+        "NEXUS_SEED": "7",
+        "NEXUS_GENERATION_TIMING": "true"
+      }
+    },
+    {
+      "id": "09-D5-T3-P2-R1-Seed7",
+      "expected_relative_difficulty": 7,
+      "environment": {
+        "NEXUS_AXIS_VERSION": "2",
+        "NEXUS_DISCOVERY_LEVEL": "5",
+        "NEXUS_THEORY_LEVEL": "3",
+        "NEXUS_PLANNING_LEVEL": "2",
+        "NEXUS_RESOURCE_PRESSURE": "1",
+        "NEXUS_SEED": "7",
+        "NEXUS_GENERATION_TIMING": "true"
+      }
+    },
+    {
+      "id": "10-D5-T3-P1-R1-Seed23",
+      "expected_relative_difficulty": 7,
+      "environment": {
+        "NEXUS_AXIS_VERSION": "2",
+        "NEXUS_DISCOVERY_LEVEL": "5",
+        "NEXUS_THEORY_LEVEL": "3",
+        "NEXUS_PLANNING_LEVEL": "1",
+        "NEXUS_RESOURCE_PRESSURE": "1",
+        "NEXUS_SEED": "23",
+        "NEXUS_GENERATION_TIMING": "true"
+      }
+    }
+  ]
+}

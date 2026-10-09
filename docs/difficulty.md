@@ -1,5 +1,12 @@
 # Difficulty profiles
 
+This page describes the default **axis version1** profiles. Version2 is selected
+explicitly with `NEXUS_AXIS_VERSION=2` or `--axis-version 2` and has revised T/D
+semantics, a true one-room P0 and unlimited/recoverable R0. See the
+[scientific investigation design](scientific-investigation-design.md) and
+[model pilot matrix](scientific-investigation-model-matrix.md). Do not mix scores
+or numeric difficulty labels across versions.
+
 NEXUS exposes three orthogonal public generation knobs: causal discovery, planning, and resource
 pressure. Low-level topology, evidence construction, and qualification settings remain internal so
 callers do not need to reason about incompatible parameter combinations. Discovery guarantees are evaluated after conditioning on

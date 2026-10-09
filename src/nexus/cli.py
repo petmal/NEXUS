@@ -17,14 +17,14 @@ def _write_json(value: object) -> None:
     sys.stdout.write(json.dumps(value, separators=(",", ":")) + "\n")
 
 
-def _print_action_reference() -> None:
-    from nexus.models.actions import ACTION_REFERENCE
+def _print_action_reference(*, scientific: bool = False) -> None:
+    from nexus.models.actions import action_contract
 
     table = Table(title="NEXUS actions")
     table.add_column("action")
     table.add_column("meaning")
     table.add_column("example")
-    for item in ACTION_REFERENCE:
+    for item in action_contract(scientific=scientific)["reference"]:
         table.add_row(
             str(item["type"]),
             str(item["description"]),
@@ -37,8 +37,8 @@ def _print_action_reference() -> None:
     )
 
 
-def _print_play_reference() -> None:
-    _print_action_reference()
+def _print_play_reference(*, scientific: bool = False) -> None:
+    _print_action_reference(scientific=scientific)
     console.print(
         "Human-play meta-command: [bold]evidence <filename>[/bold] reads one of the "
         "public evidence files listed for the episode without consuming an action."
@@ -53,9 +53,9 @@ def help_command(ctx: typer.Context) -> None:
 
 
 @app.command("actions")
-def actions_command() -> None:
+def actions_command(axis_version: int = typer.Option(1, min=1, max=2, envvar="NEXUS_AXIS_VERSION")) -> None:
     """Show the stable player action vocabulary and JSON examples."""
-    _print_action_reference()
+    _print_action_reference(scientific=axis_version == 2)
 
 
 @app.command()
@@ -70,25 +70,25 @@ def generate(
         min=0,
         max=5,
         help=(
-            "Causal-discovery difficulty: 0=demonstrated, 1=inferred, 2=one probe, "
-            "3=two stages, 4=cost-selective experiments, 5=constructed experiments."
+            "Discovery level 0-5. In v2: supplied evidence, direct measurement, "
+            "independent combination, dependent calibration, adaptive selection, construction."
         ),
     ),
     planning_level: int = typer.Option(
         1,
         min=0,
         max=3,
-        help="Planning scale: 0=compact, 1=standard, 2=extended, 3=delivery dependency.",
+        help="Planning scale 0-3. In v2: P+1 disclosed rooms; P0 is the one-room control.",
     ),
     theory_level: int = typer.Option(
         0, min=0, max=3, envvar="NEXUS_THEORY_LEVEL",
-        help="Theory prior: 0=catalogue, 1=structural primitives (D0-D4), 2=bounded corrections, 3=missing relationships (T2/T3: D2 only).",
+        help="Theory level 0-3; see docs/difficulty.md for legacy v1 and docs/scientific-investigation-design.md for v2 support and semantics.",
     ),
     resource_pressure: int = typer.Option(
         0,
         min=0,
         max=2,
-        help="Action-budget pressure: 0=forgiving, 1=constrained, 2=exact guaranteed budget.",
+        help="Resource pressure 0-2. In v2: unlimited, reference-policy bound plus 8, reference-policy bound. Legacy v1 uses finite budgets.",
     ),
 ) -> None:
     """Generate one or more solver-qualified episodes.
@@ -206,7 +206,7 @@ def play(
         command = parts[0].lower() if parts else ""
 
         if command in {"help", "actions", "?"}:
-            _print_play_reference()
+            _print_play_reference(scientific=session.episode.public.investigation is not None)
             continue
         if command in {"quit", "exit"}:
             break
@@ -235,6 +235,8 @@ def play(
             console.print(f"[red]{response.message}[/red]")
             continue
         render_observer(session.episode, session.state, debug_private=debug_private)
+        if session.episode.public.investigation is not None and response.events:
+            console.print_json(data=list(response.events))
         if response.victory_code:
             console.print(f"[bold green]{response.victory_code}[/bold green]")
 
@@ -311,7 +313,7 @@ def serve_session(
     ),
     theory_level: int = typer.Option(
         0, min=0, max=3, envvar="NEXUS_THEORY_LEVEL",
-        help="Theory prior: 0=catalogue, 1=structural primitives (D0-D4), 2=bounded corrections, 3=missing relationships (T2/T3: D2 only).",
+        help="Theory level 0-3; see docs/difficulty.md for legacy v1 and docs/scientific-investigation-design.md for v2 support and semantics.",
     ),
     resource_pressure: int = typer.Option(
         0,

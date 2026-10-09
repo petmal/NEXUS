@@ -298,6 +298,28 @@ def test_known_rescaling_preserves_information_partitions():
         ]
 
 
+def test_scientific_human_play_exposes_stocks_and_probe_readings(tmp_path):
+    from typer.testing import CliRunner
+
+    from nexus.cli import app
+    e=episode(t=1)
+    path=tmp_path/"private.json"
+    path.write_text(e.model_dump_json())
+    commands='{"type":"take","artifact":"S0-0"}\n{"type":"probe","machine":"meter","artifact":"S0-0.1"}\nexit\n'
+    result=CliRunner().invoke(app,["play",str(path)],input=commands)
+    assert result.exit_code==0,result.output
+    assert "Specimen stocks" in result.output and '"reading"' in result.output
+    assert "Private scientific truth" not in result.output
+
+
+def test_scientific_action_help_includes_controller_and_stock_contract():
+    from typer.testing import CliRunner
+
+    from nexus.cli import app
+    result=CliRunner().invoke(app,["actions","--axis-version","2"])
+    assert result.exit_code==0 and "configure" in result.output and "stock" in result.output
+
+
 @pytest.mark.parametrize(
     "tamper", ["goal", "stock", "uses", "fixed", "disclosure", "range", "missing_stock"]
 )
