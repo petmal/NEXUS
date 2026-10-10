@@ -160,3 +160,29 @@ def test_generate_rejects_out_of_range_planning_and_resource_pressure(tmp_path):
     )
     assert planning.exit_code != 0
     assert pressure.exit_code != 0
+
+
+def test_cli_uses_current_family_action_contract(tmp_path):
+    runner = CliRunner()
+    result = runner.invoke(
+        app,
+        ["actions", "--axis-version", "2"],
+        env={"NEXUS_SCIENCE_FAMILY": "resonant-network-v1", "COLUMNS": "200"},
+    )
+    assert result.exit_code == 0, result.output
+    assert "Configure meter" in result.output
+    assert "resonance law" in result.output
+    e = generate_episode(
+        7, axis_version=2, science_family="resonant-network-v1", discovery_level=0,
+        theory_level=0, planning_level=0, resource_pressure=0,
+    )
+    save_episode(e, tmp_path)
+    result = runner.invoke(
+        app, ["play", str(tmp_path / "private.json")], input="help\n", env={"COLUMNS": "200"}
+    )
+    assert result.exit_code == 0, result.output
+    assert "Configure meter" in result.output
+    invalid = runner.invoke(app, ["actions", "--science-family", "unknown"])
+    assert invalid.exit_code != 0
+    invalid = runner.invoke(app, ["actions", "--science-family", "resonant-network-v1"])
+    assert invalid.exit_code != 0

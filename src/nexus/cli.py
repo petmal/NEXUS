@@ -17,14 +17,14 @@ def _write_json(value: object) -> None:
     sys.stdout.write(json.dumps(value, separators=(",", ":")) + "\n")
 
 
-def _print_action_reference(*, scientific: bool = False) -> None:
+def _print_action_reference(*, scientific: bool = False, resonant: bool = False) -> None:
     from nexus.models.actions import action_contract
 
     table = Table(title="NEXUS actions")
     table.add_column("action")
     table.add_column("meaning")
     table.add_column("example")
-    for item in action_contract(scientific=scientific)["reference"]:
+    for item in action_contract(scientific=scientific, resonant=resonant)["reference"]:
         table.add_row(
             str(item["type"]),
             str(item["description"]),
@@ -37,8 +37,8 @@ def _print_action_reference(*, scientific: bool = False) -> None:
     )
 
 
-def _print_play_reference(*, scientific: bool = False) -> None:
-    _print_action_reference(scientific=scientific)
+def _print_play_reference(*, scientific: bool = False, resonant: bool = False) -> None:
+    _print_action_reference(scientific=scientific, resonant=resonant)
     console.print(
         "Human-play meta-command: [bold]evidence <filename>[/bold] reads one of the "
         "public evidence files listed for the episode without consuming an action."
@@ -53,9 +53,18 @@ def help_command(ctx: typer.Context) -> None:
 
 
 @app.command("actions")
-def actions_command(axis_version: int = typer.Option(1, min=1, max=2, envvar="NEXUS_AXIS_VERSION")) -> None:
+def actions_command(
+    axis_version: int = typer.Option(1, min=1, max=2, envvar="NEXUS_AXIS_VERSION"),
+    science_family: str = typer.Option("shared-response-v1", envvar="NEXUS_SCIENCE_FAMILY"),
+) -> None:
     """Show the stable player action vocabulary and JSON examples."""
-    _print_action_reference(scientific=axis_version == 2)
+    if science_family not in ("shared-response-v1", "coupled-network-v1", "resonant-network-v1"):
+        raise typer.BadParameter("unknown scientific family", param_hint="science-family")
+    if science_family != "shared-response-v1" and axis_version != 2:
+        raise typer.BadParameter(f"{science_family} requires axis-version=2")
+    _print_action_reference(
+        scientific=axis_version == 2, resonant=science_family == "resonant-network-v1"
+    )
 
 
 @app.command()
@@ -209,7 +218,11 @@ def play(
         command = parts[0].lower() if parts else ""
 
         if command in {"help", "actions", "?"}:
-            _print_play_reference(scientific=session.episode.public.investigation is not None)
+            spec = session.episode.public.investigation
+            _print_play_reference(
+                scientific=spec is not None,
+                resonant=spec is not None and spec.version == "resonant-network-v1",
+            )
             continue
         if command in {"quit", "exit"}:
             break

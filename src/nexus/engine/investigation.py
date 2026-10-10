@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from nexus.models.investigation import InvestigationSpec, InvestigationTruth, ScalarExpression
+from nexus.models.network import NetworkSpec, NetworkTruth
 
 
 def evaluate_scalar(expression: ScalarExpression, variables: dict[str, int], modulus=17) -> int:
@@ -39,14 +40,19 @@ def measurement(spec: InvestigationSpec, truth: InvestigationTruth, name: str) -
     return (response(truth, source, q) + spec.scale * truth.offset) % spec.modulus
 
 
-def settings(spec: InvestigationSpec, truth: InvestigationTruth) -> tuple[int, ...]:
-    from nexus.models.network import NetworkSpec
+def settings(
+    spec: InvestigationSpec | NetworkSpec, truth: InvestigationTruth | NetworkTruth
+) -> tuple[int, ...]:
     if isinstance(spec, NetworkSpec):
+        if not isinstance(truth, NetworkTruth):
+            raise TypeError("network settings require network truth")
         if spec.version == "resonant-network-v1":
             from nexus.engine.resonance import settings as resonant_settings
             return resonant_settings(truth)
         from nexus.engine.network import settings as network_settings
         return network_settings(truth)
+    if not isinstance(truth, InvestigationTruth):
+        raise TypeError("shared-response settings require shared-response truth")
     sources = (0, 1) if spec.both_stocks else (truth.selector,)
     return (
         truth.selector,

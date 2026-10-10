@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from nexus.engine.canonical import canonical_hash
+from nexus.engine.canonical import canonical_bytes, canonical_hash
 from nexus.engine.engine import step
 from nexus.models.actions import Action
 from nexus.models.episode import PrivateEpisode
@@ -42,6 +42,15 @@ def replay(episode: PrivateEpisode, records: list[TraceRecord]) -> WorldState:
         result = step(state, record.action, episode)
         if not result.ok:
             raise ValueError(f"replay action failed at turn {record.turn}: {result.message}")
+        if result.state.turn != record.turn:
+            raise ValueError(f"replay turn mismatch at turn {record.turn}")
+        # Details may contain tuples in memory and lists after JSONL loading.
+        # Normalize both projections so exact event verification survives disk I/O.
+        # Compare encoded values, not Python dict equality (0 == False == 0.0).
+        if canonical_bytes([event.model_dump(mode="json") for event in result.events]) != (
+            canonical_bytes([event.model_dump(mode="json") for event in record.events])
+        ):
+            raise ValueError(f"replay events mismatch at turn {record.turn}")
         if canonical_hash(result.state) != record.after_hash:
             raise ValueError(f"replay after-hash mismatch at turn {record.turn}")
         if result.state.terminal_status != record.terminal_status:
