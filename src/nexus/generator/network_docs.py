@@ -7,8 +7,8 @@ import json
 from nexus.models.network import BENCH, FIELD
 
 
-def evidence_files(episode):
-    spec = episode.public.investigation
+def theory_contract(spec):
+    """Shared G-law vocabulary; callers may extend this fresh public projection."""
     theory = {
         "axis_version": 2,
         "family": "coupled-network-v1",
@@ -29,6 +29,10 @@ def evidence_files(episode):
     }
     if spec.resolved_settings is not None:
         theory["resolved_controller_settings"] = spec.resolved_settings
+    return theory
+
+
+def evidence_files(episode):
     manual = """# Coupled-network laboratory
 
 Read theory.json, calibration.json and map.json. Infer the field response vector,
@@ -63,6 +67,12 @@ R0 permits fresh specimens and unlimited game actions, subject to harness limits
 No verbal explanation, hypothesis ID, experiment order, or probe count is required.
 Local computation and finite hypothesis enumeration are legitimate.
 """
+    return evidence_bundle(episode, theory_contract(episode.public.investigation), manual)
+
+
+def evidence_bundle(episode, theory: dict, manual: str) -> dict[str, str]:
+    """Render a public contract once; never inspect private truth or certificates."""
+    spec = episode.public.investigation
     return {
         "manual.md": manual,
         "theory.json": json.dumps(theory, indent=2),

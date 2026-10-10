@@ -6,21 +6,18 @@ from typing import Literal
 
 from pydantic import BaseModel, ConfigDict, Field, model_validator
 
-BENCH = (
-    (0, 0),
-    (0, 1),
-    (1, 0),
-    (0, 2),
-    (2, 0),
-    (1, 1),
-    (1, 2),
-    (2, 1),
-    (2, 2),
-    (1, 3),
-    (3, 1),
-    (3, 2),
-)
-FIELD = ((4, 1), (1, 4), (4, 3), (3, 4))
+from nexus.ontology.network import BENCH, FIELD, NetworkFamily
+
+__all__ = [
+    "BENCH",
+    "FIELD",
+    "NetworkExpression",
+    "NetworkSample",
+    "NetworkSpec",
+    "NetworkStock",
+    "NetworkTruth",
+    "ResonanceLaw",
+]
 
 
 class NetworkExpression(BaseModel):
@@ -65,7 +62,7 @@ class NetworkTruth(BaseModel):
 
 class NetworkSpec(BaseModel):
     model_config = ConfigDict(extra="forbid", frozen=True)
-    version: Literal["coupled-network-v1", "resonant-network-v1"] = "coupled-network-v1"
+    version: NetworkFamily = "coupled-network-v1"
     theory: int = Field(ge=0, le=3)
     discovery: int = Field(ge=0, le=5)
     modulus: Literal[7] = 7

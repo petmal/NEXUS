@@ -7,19 +7,28 @@ import hmac
 import json
 import logging
 import secrets
-from collections import Counter, deque
+from collections import Counter
 from functools import lru_cache
 from itertools import product
 from time import perf_counter
 
 from nexus.diagnostics import timed_stage
-from nexus.engine.network import measurement, prepare, program, response, settings
+from nexus.engine.network import measurement, program, response, settings
+from nexus.generator.network_world import NetworkWitness, build_network_world, preparation_route
 from nexus.generator.randomness import rng_for
-from nexus.models.episode import GenerationMetadata, PrivateEpisode, PublicEpisode
-from nexus.models.goals import GoalPredicate
-from nexus.models.network import BENCH, NetworkSpec, NetworkStock, NetworkTruth
-from nexus.models.world import Machine, Resources, Room, WorldState
+from nexus.models.episode import GenerationMetadata, PrivateEpisode
+from nexus.models.network import BENCH, NetworkSpec, NetworkTruth
 from nexus.solver.finite_experiments import FiniteExperimentProblem
+
+__all__ = [
+    "compile_network",
+    "generate_network",
+    "information_certificate",
+    "policy_bound",
+    "preparation_route",
+    "reference_plan",
+    "validate_profile",
+]
 
 LOG = logging.getLogger("nexus.generation")
 
@@ -54,7 +63,7 @@ def information_certificate():
     worlds, problem = compile_network()
     minimum = problem.minimum_guaranteed_measurements()
     fixed = problem.minimum_fixed_measurements()
-    if (minimum, fixed) != (5, 8):
+    if minimum != 5 or fixed != 8:
         raise ValueError("coupled network must retain its exact 5/8 adaptive advantage")
     axes = FiniteExperimentProblem(
         problem.hypotheses,
@@ -81,59 +90,20 @@ def information_certificate():
     }
 
 
-@lru_cache(maxsize=49 * 49)
-def preparation_route(start: tuple[int, int], target: tuple[int, int]) -> tuple[str, ...]:
-    queue = deque(((start, ()),))
-    seen = {start}
-    while queue:
-        point, path = queue.popleft()
-        if point == target:
-            return path
-        for machine in ("shift", "shear"):
-            other = prepare(point, machine)
-            if other not in seen:
-                seen.add(other)
-                queue.append((other, path + (machine,)))
-    raise ValueError("unreachable network preparation")
-
-
 def reference_plan(episode: PrivateEpisode, truth: NetworkTruth | None = None):
     spec = episode.public.investigation
     truth = truth or episode.investigation_truth
     worlds, problem = compile_network()
     observations = spec.supplied_measurements
-    plan = []
-    room = "R0"
-    bench_room = episode.public.initial_state.machines["meter"].room_id
-    artifact, current = None, (0, 0)
-
-    def move(destination):
-        nonlocal room
-        while room != destination:
-            index, target = int(room[1:]), int(destination[1:])
-            room = f"R{index + (1 if target > index else -1)}"
-            plan.append({"type": "move", "target": room})
+    witness = NetworkWitness(episode)
+    plan = witness.actions
 
     while spec.resolved_settings is None:
         name = problem.best_experiment(observations)
         if name is None:
             break
-        target = tuple(map(int, name.split(":")))
-        if spec.discovery == 5:
-            if artifact is None:
-                move("R0")
-                plan.append({"type": "take", "artifact": "S0-0"})
-                artifact = f"S0-0.{len(plan)}"
-            move(bench_room)
-            for machine in preparation_route(current, target):
-                plan.append({"type": "operate", "machine": machine, "artifact": artifact})
-            current = target
-        else:
-            move("R0")
-            stock = f"S{target[0]}-{target[1]}"
-            plan.append({"type": "take", "artifact": stock})
-            artifact = f"{stock}.{len(plan)}"
-            move(bench_room)
+        x, y = map(int, name.split(":"))
+        artifact = witness.prepare((x, y))
         plan.append({"type": "probe", "machine": "meter", "artifact": artifact})
         observations += ((name, measurement(truth, name)),)
     if spec.resolved_settings is None:
@@ -143,7 +113,7 @@ def reference_plan(episode: PrivateEpisode, truth: NetworkTruth | None = None):
         answer = next(iter(answers))
     else:
         answer = spec.resolved_settings
-    move(spec.controller_room)
+    witness.move(spec.controller_room)
     plan.extend(
         (
             {"type": "configure", "machine": "controller", "settings": list(answer)},
@@ -151,6 +121,32 @@ def reference_plan(episode: PrivateEpisode, truth: NetworkTruth | None = None):
         )
     )
     return tuple(plan)
+
+
+@lru_cache(maxsize=12)
+def policy_bound(discovery: int, planning: int) -> int:
+    """Uniform physical bound for a fixed public layout, independent of seed and R.
+
+    Cache only an integer. Constructing an episode never shares mutable state or
+    verifier material with another episode. Information-policy changes require a
+    new process/family version, just like the cached prior and certificate.
+    """
+    validate_profile(discovery, 3, planning, 0)
+    if discovery == 0:
+        return planning + 2
+    worlds, problem = compile_network()
+    template = build_network_world(
+        spec=NetworkSpec(theory=3, discovery=discovery, controller_room=f"R{planning}"),
+        truth=worlds[0],
+        planning=planning,
+        pressure=0,
+        seed=0,
+        secret="bound-only",
+        episode_id="bound-only",
+        description="Policy witness template",
+    )
+    representatives = ((mask & -mask).bit_length() - 1 for mask in problem.policy_leaf_masks)
+    return max(len(reference_plan(template, worlds[i])) for i in representatives)
 
 
 def validate_profile(d: int, t: int, p: int, r: int):
@@ -204,65 +200,19 @@ def generate_network(
             adaptive_gap=0,
             target_classes_after_evidence=1,
         )
-    stocks = {
-        f"S{x}-{y}": NetworkStock(
-            id=f"S{x}-{y}", location="R0", x=x, y=y, remaining=None if r == 0 else 16
-        )
-        for x, y in (((0, 0),) if d == 5 else BENCH)
-    }
-    bench_room = "R0" if p == 0 else "R1"
-    episode = PrivateEpisode(
-        public=PublicEpisode(
-            protocol_version="nexus-0.3",
-            episode_id=episode_id,
-            description="Infer the coupled response network and calibrate its field controller. Read all evidence files.",
-            rooms={
-                f"R{i}": Room(
-                    id=f"R{i}",
-                    label="Laboratory"
-                    if i == 0 and p == 0
-                    else "Specimen stocks"
-                    if i == 0
-                    else "Laboratory"
-                    if i == 1
-                    else "Controller"
-                    if i == p
-                    else "Transit",
-                )
-                for i in range(p + 1)
-            },
-            edges=tuple((f"R{i}", f"R{i + 1}") for i in range(p)),
-            phase_modulus=1,
-            initial_state=WorldState(
-                agent_room="R0",
-                artifacts={},
-                stocks=stocks,
-                machines={
-                    name: Machine(
-                        id=name,
-                        room_id=f"R{p}" if name == "controller" else bench_room,
-                        uses_remaining=None if r == 0 else 128,
-                    )
-                    for name in ("meter", "shift", "shear", "controller")
-                },
-                resources=Resources(actions_remaining=None),
-            ),
-            goal=GoalPredicate(kind="controller_accepted"),
-            investigation=spec,
-        ),
-        rules={},
-        machine_rules={},
-        verifier_secret=secret,
-        construction_seed=seed,
-        investigation_truth=truth,
+    episode = build_network_world(
+        spec=spec,
+        truth=truth,
+        planning=p,
+        pressure=r,
+        seed=seed,
+        secret=secret,
+        episode_id=episode_id,
+        description="Infer the coupled response network and calibrate its field controller. Read all evidence files.",
     )
     with timed_stage("network.physical_witnesses") as metrics:
-        representatives = ((mask & -mask).bit_length() - 1 for mask in problem.policy_leaf_masks)
-        bound = (
-            max(len(reference_plan(episode, worlds[i])) for i in representatives)
-            if d
-            else len(reference_plan(episode))
-        )
+        metrics["bound_cache_entries_before"] = policy_bound.cache_info().currsize
+        bound = policy_bound(d, p)
         budget = None if r == 0 else bound + (8 if r == 1 else 0)
         episode.public.initial_state.resources.actions_remaining = budget
         episode.reference_plan = reference_plan(episode)

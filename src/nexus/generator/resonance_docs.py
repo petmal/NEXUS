@@ -1,15 +1,14 @@
 """Public prior and controls; no private witness, seed, or diagnostic certificates."""
 
-import json
+from __future__ import annotations
 
 from nexus.engine.resonance import RESONANT_BENCH
-from nexus.generator.network_docs import evidence_files as network_evidence
+from nexus.generator.network_docs import evidence_bundle, theory_contract
 from nexus.models.network import FIELD
 
 
 def evidence_files(episode):
-    files = network_evidence(episode)
-    theory = json.loads(files["theory.json"])
+    theory = theory_contract(episode.public.investigation)
     theory.update(
         {
             "family": "resonant-network-v1",
@@ -23,8 +22,7 @@ def evidence_files(episode):
             "identifiability": "Any prediction-equivalent model is accepted. You need not name the true hidden programs or follow a prescribed experiment sequence. Direct fitting, hypothesis enumeration, and interleaved search are legal.",
         }
     )
-    files["theory.json"] = json.dumps(theory, indent=2)
-    files["manual.md"] = """# Resonant laboratory
+    manual = """# Resonant laboratory
 
 Read theory.json, calibration.json and map.json. Investigate two interacting
 relations: resonance H and intrinsic response G. Predict (H+G) modulo7 at each
@@ -66,4 +64,4 @@ harness limit. No verbal justification, hypothesis ID, or experiment order is re
 Use this interface for all in-world observations and actions. Internal calculation
 and finite hypothesis enumeration are valid reasoning methods.
 """
-    return files
+    return evidence_bundle(episode, theory, manual)

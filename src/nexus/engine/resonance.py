@@ -1,12 +1,13 @@
 """Dependent measurement semantics; all arithmetic and instrument controls are public."""
 
-from itertools import product
+from __future__ import annotations
 
 from nexus.engine.network import prepare, response
 from nexus.models.network import FIELD, NetworkSample, NetworkTruth, ResonanceLaw
 from nexus.models.world import Artifact
+from nexus.ontology.network import RESONANT_BENCH
 
-RESONANT_BENCH = tuple(p for p in product(range(7), repeat=2) if p not in FIELD)
+__all__ = ["RESONANT_BENCH", "resonance", "settings", "transform"]
 
 
 def resonance(law: ResonanceLaw, x: int, y: int) -> int:

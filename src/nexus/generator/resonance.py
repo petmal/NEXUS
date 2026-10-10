@@ -1,17 +1,23 @@
 """Composed public-information witnesses without a Cartesian-product minimax search."""
 
+from __future__ import annotations
+
+import hashlib
+import hmac
 import logging
+import secrets
 from functools import lru_cache
 from itertools import product
+from types import MappingProxyType
 
 from nexus.diagnostics import timed_stage
 from nexus.engine.network import response
 from nexus.engine.resonance import RESONANT_BENCH, resonance, settings
-from nexus.generator.network import compile_network, generate_network, preparation_route
+from nexus.generator.network import compile_network, validate_profile
+from nexus.generator.network_world import NetworkWitness, build_network_world
 from nexus.generator.randomness import rng_for
-from nexus.models.episode import PrivateEpisode
-from nexus.models.network import FIELD, NetworkSpec, NetworkStock, NetworkTruth, ResonanceLaw
-from nexus.models.world import Machine
+from nexus.models.episode import GenerationMetadata, PrivateEpisode
+from nexus.models.network import FIELD, NetworkSpec, NetworkTruth, ResonanceLaw
 from nexus.solver.finite_experiments import FiniteExperimentProblem
 
 LOG = logging.getLogger("nexus.generation")
@@ -47,35 +53,13 @@ def _stage_plan(
     g_worlds, g_problem = compile_network()
     problem = h_problem if calibration else g_problem
     observations = ()
-    actions = []
-    room = "R0"
-    lab = episode.public.initial_state.machines["meter"].room_id
-    specimen = None
-    point = (0, 0)
-
-    def move(destination):
-        nonlocal room
-        while room != destination:
-            here, there = int(room[1:]), int(destination[1:])
-            room = f"R{here + (1 if here < there else -1)}"
-            actions.append({"type": "move", "target": room})
+    witness = NetworkWitness(episode, offset=offset)
+    actions = witness.actions
 
     while (name := problem.best_experiment(observations)) is not None:
-        target = tuple(map(int, name.split(":")))
-        if spec.discovery == 5:
-            if specimen is None:
-                actions.append({"type": "take", "artifact": "S0-0"})
-                specimen = f"S0-0.{offset + len(actions)}"
-            move(lab)
-            for machine in preparation_route(point, target):
-                actions.append({"type": "operate", "machine": machine, "artifact": specimen})
-            point = target
-        else:
-            move("R0")
-            stock = f"S{target[0]}-{target[1]}"
-            actions.append({"type": "take", "artifact": stock})
-            specimen = f"{stock}.{offset + len(actions)}"
-            move(lab)
+        x, y = map(int, name.split(":"))
+        target = (x, y)
+        specimen = witness.prepare(target)
         if not calibration:
             # The caller has inferred H before this stage; this is not a hidden-truth query.
             actions.append(
@@ -98,14 +82,14 @@ def _stage_plan(
     if calibration:
         if len(remaining) != 1:
             raise ValueError("calibration witness does not identify H")
-        move("R0")
+        witness.move("R0")
         answer = h_worlds[remaining[0]]
     else:
         answer_set = {tuple(response(g_worlds[i], *p) for p in FIELD) for i in remaining}
         if len(answer_set) != 1:
             raise ValueError("response witness does not identify field predictions")
         answer = next(iter(answer_set))
-        move(spec.controller_room)
+        witness.move(spec.controller_room)
     return tuple(actions), answer
 
 
@@ -138,20 +122,32 @@ def reference_plan(episode: PrivateEpisode, truth: NetworkTruth | None = None) -
     )
 
 
-@lru_cache(maxsize=8)
+@lru_cache(maxsize=12)
 def policy_bound(discovery: int, planning: int) -> int:
     # Stage lengths do not depend on the other factor's values. Each returns to
     # a public stage boundary; adding their maxima is a uniform realizable bound.
-    template = generate_network(
-        0,
-        discovery_level=discovery,
-        theory_level=3,
-        planning_level=planning,
-        resource_pressure=0,
-        verifier_secret="bound-only",
-    )
+    validate_profile(discovery, 3, planning, 0)
+    if discovery == 0:
+        return planning + 2
     h_worlds, _ = calibration_prior()
     g_worlds, g_problem = compile_network()
+    if g_problem.minimum_guaranteed_measurements() != 5:
+        raise ValueError("resonant response witness must retain its five-measurement bound")
+    template = build_network_world(
+        spec=NetworkSpec(
+            version="resonant-network-v1",
+            theory=3,
+            discovery=discovery,
+            controller_room=f"R{planning}",
+        ),
+        truth=g_worlds[0].model_copy(update={"resonance": h_worlds[0]}),
+        planning=planning,
+        pressure=0,
+        seed=0,
+        secret="bound-only",
+        episode_id="bound-only",
+        description="Policy witness template",
+    )
     prefix = max(
         len(_stage_plan(template, g_worlds[0].model_copy(update={"resonance": h}), True)[0])
         for h in h_worlds
@@ -174,8 +170,8 @@ def tables():
     hs, _ = calibration_prior()
     gs, _ = compile_network()
     return (
-        {p: tuple(resonance(h, *p) for h in hs) for p in RESONANT_BENCH},
-        {p: tuple(response(g, *p) for g in gs) for p in RESONANT_BENCH},
+        MappingProxyType({p: tuple(resonance(h, *p) for h in hs) for p in RESONANT_BENCH}),
+        MappingProxyType({p: tuple(response(g, *p) for g in gs) for p in RESONANT_BENCH}),
         tuple(tuple(resonance(h, *p) for p in FIELD) for h in hs),
         tuple(tuple(response(g, *p) for p in FIELD) for g in gs),
     )
@@ -185,11 +181,11 @@ class ResonantBelief:
     """Exact product of scientific factors plus exclusions from joint goal feedback."""
 
     def __init__(self, spec: NetworkSpec):
-        self.h = set(range(27))
-        self.g = set(range(2187))
         self.excluded: set[tuple[int, ...]] = set()
         self.resolved = spec.resolved_settings
         self.h_rows, self.g_rows, self.h_fields, self.g_fields = tables()
+        self.h = set(range(len(self.h_fields)))
+        self.g = set(range(len(self.g_fields)))
         for name, value in spec.supplied_measurements:
             kind, x, y = name.split(":")
             point = (int(x), int(y))
@@ -250,31 +246,16 @@ def generate_resonant(
     verifier_secret: str | None = None,
 ) -> PrivateEpisode:
     d, t, p, r = discovery_level, theory_level, planning_level, resource_pressure
-    with timed_stage("resonance.base_witness"):
-        episode = generate_network(
-            seed,
-            discovery_level=d,
-            theory_level=t,
-            planning_level=p,
-            resource_pressure=r,
-            verifier_secret=verifier_secret,
-        )
+    validate_profile(d, t, p, r)
     with timed_stage("resonance.factor_prior") as metrics:
         hs, _ = calibration_prior()
+        gs, _ = compile_network()
         law = hs[rng_for(seed, "resonant-network-v1").randrange(len(hs))]
-        base_truth = episode.investigation_truth
-        if not isinstance(base_truth, NetworkTruth):
-            raise TypeError("network template requires network truth")
+        base_truth = gs[rng_for(seed, "coupled-network-v1").randrange(len(gs))]
         truth = base_truth.model_copy(update={"resonance": law})
-        episode.investigation_truth = truth
-        episode.public.investigation = episode.public.investigation.model_copy(
-            update={
-                "version": "resonant-network-v1",
-                "supplied_measurements": (),
-                "resolved_settings": None,
-            }
+        spec = NetworkSpec(
+            version="resonant-network-v1", theory=t, discovery=d, controller_room=f"R{p}"
         )
-        spec = episode.public.investigation
         if d == 0:
             _, problem = compile_network()
             supplied = tuple((f"cal:{x}:{y}", resonance(law, x, y)) for x, y in CALIBRATION_WITNESS)
@@ -288,34 +269,29 @@ def generate_resonant(
                     "resolved_settings": settings(truth) if t == 0 else None,
                 }
             )
-            episode.public.investigation = spec
         metrics["calibration_worlds"] = len(hs)
         metrics["joint_worlds"] = len(hs) * len(compile_network()[0])
-    # The family is part of receipt identity even with the same caller-provided secret.
-    import hashlib
-    import hmac
-
-    episode.public.episode_id = hmac.new(
-        episode.verifier_secret.encode(),
+    # Preserve the published identity encoding and paired G seed stream.
+    secret = verifier_secret or secrets.token_hex(32)
+    episode_id = hmac.new(
+        secret.encode(),
         f"resonant-network-v1:{seed}:{d}:{t}:{p}:{r}".encode(),
         hashlib.sha256,
     ).hexdigest()[:24]
-    episode.public.description = "Discover resonance and response laws, combine them to predict the field, and finish the mission. Read all evidence files."
-    initial = episode.public.initial_state
-    initial.stocks = {
-        f"S{x}-{y}": NetworkStock(
-            id=f"S{x}-{y}", location="R0", x=x, y=y, remaining=None if r == 0 else 16
-        )
-        for x, y in (((0, 0),) if d == 5 else RESONANT_BENCH)
-    }
-    initial.machines["calibrator"] = Machine(
-        id="calibrator",
-        room_id=initial.machines["meter"].room_id,
-        uses_remaining=None if r == 0 else 128,
+    episode = build_network_world(
+        spec=spec,
+        truth=truth,
+        planning=p,
+        pressure=r,
+        seed=seed,
+        secret=secret,
+        episode_id=episode_id,
+        description="Discover resonance and response laws, combine them to predict the field, and finish the mission. Read all evidence files.",
     )
-    initial.machines["meter"].settings = (0,)
+    initial = episode.public.initial_state
     with timed_stage("resonance.composed_witness") as metrics:
-        bound = p + 2 if d == 0 else policy_bound(d, p)
+        metrics["bound_cache_entries_before"] = policy_bound.cache_info().currsize
+        bound = policy_bound(d, p)
         budget = None if r == 0 else bound + (8 if r == 1 else 0)
         initial.resources.actions_remaining = budget
         episode.reference_plan = reference_plan(episode)
@@ -344,18 +320,22 @@ def generate_resonant(
         "certificate_scope": "composed public-information policy, not expanded-domain or joint minimax",
         "physical_policy_kind": "realizable upper bound, not physical minimax optimum",
     }
-    episode.generation_metadata = episode.generation_metadata.model_copy(
-        update={
-            "scenario_family_id": "resonant-network-v1",
-            "machine_count": 5,
-            # At most8 outcomes per experiment; 8**3 < 2401 target classes.
-            # This is a lower bound, not an exact joint minimum.
-            "required_probe_count": 0 if d == 0 else 4,
-            "guaranteed_policy_action_count": bound,
-            "action_budget": budget or 0,
-            "recommended_tool_call_limit": bound + 20,
-            "investigation_certificate": certificate,
-        }
+    episode.generation_metadata = GenerationMetadata(
+        theory_level=t,
+        discovery_level=d,
+        planning_level=p,
+        resource_pressure=r,
+        scenario_family_id="resonant-network-v1",
+        room_count=p + 1,
+        machine_count=5,
+        optimal_action_count=p + 2,
+        # At most8 outcomes per experiment; 8**3 < 2401 target classes.
+        # This is a lower bound, not an exact joint minimum.
+        required_probe_count=0 if d == 0 else 4,
+        guaranteed_policy_action_count=bound,
+        action_budget=budget or 0,
+        recommended_tool_call_limit=bound + 20,
+        investigation_certificate=certificate,
     )
     with timed_stage("resonance.public_evidence"):
         from nexus.generator.resonance_docs import evidence_files
