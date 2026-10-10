@@ -123,7 +123,7 @@ ACTION_REFERENCE: tuple[dict[str, object], ...] = (
 )
 
 
-def action_contract(*, scientific: bool = False) -> dict[str, object]:
+def action_contract(*, scientific: bool = False, resonant: bool = False) -> dict[str, object]:
     """Player-safe description of the stable interaction contract."""
     if scientific:
         reference = tuple(dict(item) for item in ACTION_REFERENCE) + ({
@@ -131,7 +131,9 @@ def action_contract(*, scientific: bool = False) -> dict[str, object]:
             "example": {"type": "configure", "machine": "controller", "settings": [0, 1, 2, 3, 4]},
         },)
         for item in reference:
-            if item["type"] == "take":
+            if item["type"] == "configure" and resonant:
+                item["description"] = "Configure meter with [z], z in 0..6, or controller with its full five-value vector. Neither gives correctness feedback. See manual for the resonance law."
+            elif item["type"] == "take":
                 item["description"] = "Take an individual artifact, or obtain one identical specimen from a designated stock. Only stocks create copies."
             elif item["type"] == "operate":
                 item["description"] = "Apply the named apparatus to a carried specimen; writes a reading or advances preparation as documented. Uses are unlimited when null."

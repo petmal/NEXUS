@@ -112,7 +112,7 @@ def step(state: WorldState, action: Action, episode: PrivateEpisode) -> StepResu
             if artifact is None or artifact.location != INVENTORY:
                 raise ValueError("artifact is not carried")
             if episode.public.investigation is not None:
-                transformed = _scientific_transform(artifact, machine.id, episode)
+                transformed = _scientific_transform(artifact, machine.id, episode, machine.settings)
                 if isinstance(action, OperateAction):
                     if machine.uses_remaining == 0:
                         raise ValueError("machine has no uses remaining")
@@ -120,10 +120,13 @@ def step(state: WorldState, action: Action, episode: PrivateEpisode) -> StepResu
                     if machine.uses_remaining is not None:
                         machine.uses_remaining -= 1
                 _consume_action(next_state)
-                events.append(EngineEvent(type=action.type, details={
+                details = {
                     "machine": machine.id, "artifact": artifact.id,
                     "result": transformed.model_dump(mode="json"),
-                }))
+                }
+                if machine.settings is not None:
+                    details["instrument_settings"] = machine.settings
+                events.append(EngineEvent(type=action.type, details=details))
                 _fail_if_exhausted(next_state, events)
                 return StepResult(ok=True, state=next_state, events=tuple(events))
             rule_id = episode.machine_rules.get(machine.id)
@@ -163,6 +166,20 @@ def step(state: WorldState, action: Action, episode: PrivateEpisode) -> StepResu
 
         elif isinstance(action, ConfigureAction):
             spec = episode.public.investigation
+            if (isinstance(spec, NetworkSpec) and spec.version == "resonant-network-v1"
+                    and action.machine == "meter"):
+                machine = next_state.machines.get("meter")
+                if machine is None or machine.room_id != next_state.agent_room:
+                    raise ValueError("meter is not in the current room")
+                if len(action.settings) != 1 or action.settings[0] > 6:
+                    raise ValueError("meter requires one resonance setting in 0..6")
+                _consume_action(next_state)
+                machine.settings = action.settings
+                events.append(EngineEvent(type="configure", details={
+                    "machine": "meter", "settings": action.settings,
+                }))
+                _fail_if_exhausted(next_state, events)
+                return StepResult(ok=True, state=next_state, events=tuple(events))
             if spec is None or action.machine != "controller":
                 raise ValueError("no configurable controller")
             if next_state.agent_room != spec.controller_room:
@@ -211,7 +228,10 @@ def step(state: WorldState, action: Action, episode: PrivateEpisode) -> StepResu
         return StepResult(ok=False, state=state.model_copy(deep=True), message=str(exc))
 
 
-def _scientific_transform(artifact: Artifact, machine: str, episode: PrivateEpisode) -> Artifact:
+def _scientific_transform(
+    artifact: Artifact, machine: str, episode: PrivateEpisode,
+    instrument_settings: tuple[int, ...] | None = None,
+) -> Artifact:
     from nexus.engine.investigation import measurement
     spec, truth = episode.public.investigation, episode.investigation_truth
     sample = artifact.sample
@@ -222,6 +242,9 @@ def _scientific_transform(artifact: Artifact, machine: str, episode: PrivateEpis
         from nexus.engine.network import measurement as network_measurement, prepare
         if not isinstance(sample, NetworkSample):
             raise ValueError("network apparatus requires a network specimen")
+        if spec.version == "resonant-network-v1":
+            from nexus.engine.resonance import transform
+            return transform(artifact, machine, truth, instrument_settings)
         if machine in ("shift", "shear"):
             transformed.sample.x, transformed.sample.y = prepare((sample.x, sample.y), machine)
             transformed.sample.reading = None

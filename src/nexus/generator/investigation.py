@@ -118,6 +118,8 @@ def base_spec(spec: InvestigationSpec) -> InvestigationSpec:
 def prior(episode: PrivateEpisode):
     from nexus.models.network import NetworkSpec
     if isinstance(episode.public.investigation, NetworkSpec):
+        if episode.public.investigation.version == "resonant-network-v1":
+            raise ValueError("resonant worlds use the exact ResonantBelief factor posterior")
         from nexus.generator.network import compile_network
         return compile_network(3)
     return compile_problem(base_spec(episode.public.investigation))

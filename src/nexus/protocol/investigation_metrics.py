@@ -1,6 +1,7 @@
 """Terminal-only diagnostics for axes-v2; no metric is a player hint during play."""
 
 from collections import Counter
+import logging
 
 from pydantic import BaseModel, ConfigDict, Field, model_serializer
 
@@ -9,6 +10,7 @@ from nexus.generator.investigation import prior
 from nexus.models.episode import PrivateEpisode
 from nexus.models.events import TraceRecord
 from nexus.models.world import WorldState
+from nexus.models.network import NetworkSpec
 
 SCIENCE_SCHEMA_URL = (
     "https://raw.githubusercontent.com/petmal/NEXUS/"
@@ -67,38 +69,50 @@ def summarize(
     conflicts: int,
 ) -> InvestigationPerformance:
     spec = episode.public.investigation
-    worlds, problem = prior(episode)
-    belief = set(problem.compatible(spec.supplied_measurements))
+    posterior = None
+    if isinstance(spec, NetworkSpec) and spec.version == "resonant-network-v1":
+        from nexus.generator.resonance import ResonantBelief
+        posterior = ResonantBelief(spec)
+        belief, predictions, rows = set(), (), {}
+    else:
+        worlds, problem = prior(episode)
+        belief = set(problem.compatible(spec.supplied_measurements))
+        predictions = tuple(settings(spec, world) for world in worlds)
+        rows = dict(problem.experiments)
     expected = settings(spec, episode.investigation_truth)
-    predictions = tuple(settings(spec, world) for world in worlds)
-    if spec.resolved_settings is not None:
+    if spec.resolved_settings is not None and posterior is None:
         belief = {i for i in belief if predictions[i] == spec.resolved_settings}
     measurements = informative = target_reducing = submissions = failed = 0
+    calibration_count = no_signal_count = after_resolved_count = 0
     first_correct = first_classes = None
     current_settings = None
     room = episode.public.initial_state.agent_room
-    rows = dict(problem.experiments)
     for record in trace:
         action = record.action
         if action.type == "move":
             room = action.target
-        elif action.type == "configure":
+        elif action.type == "configure" and action.machine == "controller":
             current_settings = action.settings
         elif action.type == "finish":
             submissions += 1
             correct = current_settings == expected and room == spec.controller_room
             if first_correct is None:
                 first_correct = correct
-                first_classes = len({predictions[i] for i in belief})
+                first_classes = (posterior.counts()[1] if posterior is not None
+                                 else len({predictions[i] for i in belief}))
             failed += not correct
             # An unsuccessful submission in the correct room rules out that complete vector.
             # It is evidence, but never counted as a scientific measurement.
             if not correct and room == spec.controller_room:
-                belief = {i for i in belief if predictions[i] != current_settings}
+                if posterior is not None:
+                    posterior.excluded.add(current_settings)
+                else:
+                    belief = {i for i in belief if predictions[i] != current_settings}
         if action.type not in ("probe", "operate") or action.machine not in (
             "meter",
             "selector",
             "material",
+            "calibrator",
         ):
             continue
         result = record.events[-1].details.get("result")
@@ -110,6 +124,19 @@ def summarize(
         if result is None:
             continue
         sample = result["sample"]
+        if posterior is not None:
+            before, before_targets = posterior.counts()
+            calibration_count += action.machine == "calibrator"
+            no_signal_count += action.machine == "meter" and sample.get("signal") is False
+            after_resolved_count += before_targets == 1
+            tuning = next((event.details.get("instrument_settings") for event in record.events
+                           if "result" in event.details), None)
+            posterior.measure(action.machine, sample, tuning[0] if tuning else None)
+            after, after_targets = posterior.counts()
+            measurements += 1
+            informative += after < before
+            target_reducing += after_targets < before_targets
+            continue
         name = (f"{sample['x']}:{sample['y']}" if "x" in sample else
             "selector"
             if action.machine == "selector"
@@ -127,6 +154,11 @@ def summarize(
         target_reducing += len({predictions[i] for i in belief}) < before_targets
     final_settings = state.controller_settings or ()
     matches = sum(left == right for left, right in zip(final_settings[1:], expected[1:]))
+    if posterior is not None:
+        logging.getLogger("nexus.diagnostics").info(
+            "resonance_terminal calibration_measurements=%s no_signal_measurements=%s measurements_after_target_identified=%s first_submission_target_classes=%s",
+            calibration_count, no_signal_count, after_resolved_count, first_classes,
+        )
     return InvestigationPerformance(
         theory_level=spec.theory,
         discovery_level=spec.discovery,

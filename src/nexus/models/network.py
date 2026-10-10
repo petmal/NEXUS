@@ -39,6 +39,13 @@ class NetworkExpression(BaseModel):
         return self
 
 
+class ResonanceLaw(BaseModel):
+    model_config = ConfigDict(extra="forbid", frozen=True)
+    alpha: int = Field(ge=1, le=3)
+    beta: int = Field(ge=1, le=3)
+    gate: int = Field(ge=0, le=2)
+
+
 class NetworkTruth(BaseModel):
     model_config = ConfigDict(extra="forbid", frozen=True)
     a: int = Field(ge=1, le=3)
@@ -47,6 +54,7 @@ class NetworkTruth(BaseModel):
     d: int = Field(ge=1, le=3)
     gates: tuple[int, int, int]
     program: tuple[NetworkExpression, NetworkExpression, NetworkExpression]
+    resonance: ResonanceLaw | None = Field(default=None, exclude_if=lambda v: v is None)
 
     @model_validator(mode="after")
     def bounded_gates(self):
@@ -57,7 +65,7 @@ class NetworkTruth(BaseModel):
 
 class NetworkSpec(BaseModel):
     model_config = ConfigDict(extra="forbid", frozen=True)
-    version: Literal["coupled-network-v1"] = "coupled-network-v1"
+    version: Literal["coupled-network-v1", "resonant-network-v1"] = "coupled-network-v1"
     theory: int = Field(ge=0, le=3)
     discovery: int = Field(ge=0, le=5)
     modulus: Literal[7] = 7
@@ -71,6 +79,7 @@ class NetworkSample(BaseModel):
     x: int = Field(ge=0, le=6)
     y: int = Field(ge=0, le=6)
     reading: int | None = Field(default=None, ge=0, le=6)
+    signal: bool | None = Field(default=None, exclude_if=lambda v: v is None)
 
 
 class NetworkStock(BaseModel):

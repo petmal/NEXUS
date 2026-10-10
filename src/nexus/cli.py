@@ -66,7 +66,7 @@ def generate(
     axis_version: int = typer.Option(1, min=1, max=2, envvar="NEXUS_AXIS_VERSION",
                                     help="1=legacy profiles; 2=scientific investigation semantics."),
     science_family: str = typer.Option("shared-response-v1", envvar="NEXUS_SCIENCE_FAMILY",
-        help="Scientific family: shared-response-v1 or experimental coupled-network-v1 (requires axes v2)."),
+        help="Scientific family: shared-response-v1, coupled-network-v1, or resonant-network-v1 (requires axes v2)."),
     discovery_level: int = typer.Option(
         0,
         min=0,
@@ -301,7 +301,7 @@ def serve_session(
     axis_version: int = typer.Option(1, min=1, max=2, envvar="NEXUS_AXIS_VERSION",
                                     help="1=legacy profiles; 2=scientific investigation semantics."),
     science_family: str = typer.Option("shared-response-v1", envvar="NEXUS_SCIENCE_FAMILY",
-        help="Scientific family: shared-response-v1 or experimental coupled-network-v1 (requires axes v2)."),
+        help="Scientific family: shared-response-v1, coupled-network-v1, or resonant-network-v1 (requires axes v2)."),
     discovery_level: int = typer.Option(
         0,
         min=0,

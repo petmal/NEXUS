@@ -42,6 +42,9 @@ def measurement(spec: InvestigationSpec, truth: InvestigationTruth, name: str) -
 def settings(spec: InvestigationSpec, truth: InvestigationTruth) -> tuple[int, ...]:
     from nexus.models.network import NetworkSpec
     if isinstance(spec, NetworkSpec):
+        if spec.version == "resonant-network-v1":
+            from nexus.engine.resonance import settings as resonant_settings
+            return resonant_settings(truth)
         from nexus.engine.network import settings as network_settings
         return network_settings(truth)
     sources = (0, 1) if spec.both_stocks else (truth.selector,)

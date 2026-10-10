@@ -83,7 +83,11 @@ class PlayerManifest(BaseModel):
             description=episode.description,
             goal=episode.goal,
             evidence_files=tuple(sorted(episode.evidence_files)),
-            action_contract=action_contract(scientific=episode.investigation is not None),
+            action_contract=action_contract(
+                scientific=episode.investigation is not None,
+                resonant=isinstance(episode.investigation, NetworkSpec)
+                and episode.investigation.version == "resonant-network-v1",
+            ),
         )
 
 
@@ -172,6 +176,11 @@ class PrivateEpisode(BaseModel):
             raise ValueError("scientific apparatus requires private truth and public specification")
         if isinstance(self.public.investigation, NetworkSpec) != isinstance(self.investigation_truth, NetworkTruth):
             raise ValueError("scientific specification and truth families must match")
+        if isinstance(self.public.investigation, NetworkSpec) and (
+            (self.public.investigation.version == "resonant-network-v1")
+            != (self.investigation_truth.resonance is not None)
+        ):
+            raise ValueError("resonance specification and truth must match")
         for machine_id, rule_id in self.machine_rules.items():
             if machine_id not in self.public.initial_state.machines:
                 raise ValueError(f"machine rule references unknown machine {machine_id}")

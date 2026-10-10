@@ -33,7 +33,6 @@ def run_case(d, t, seed, family="shared-response-v1"):
             verifier_secret="benchmark-only",
         )
         times.append(perf_counter() - start)
-    _, problem = prior(episode)
     session = Session(episode)
     for action in episode.reference_plan:
         result = session.act(session.state.turn, ACTION_ADAPTER.validate_python(action))
@@ -41,6 +40,17 @@ def run_case(d, t, seed, family="shared-response-v1"):
             raise RuntimeError("benchmark reference action rejected")
     if session.state.terminal_status != "won" or not result.victory_code:
         raise RuntimeError("benchmark reference did not win")
+    if family == "resonant-network-v1":
+        return {
+            "family": family, "D": d, "T": t, "P": 1, "R": 1, "seed": seed,
+            "reference_won": True, "reference_actions": session.state.turn,
+            "cold_generation_seconds": times[0], "warm_generation_seconds": times[1],
+            "constructive_policy_action_bound": episode.generation_metadata.guaranteed_policy_action_count,
+            "action_budget": episode.public.initial_state.resources.actions_remaining,
+            "certificate": episode.generation_metadata.investigation_certificate,
+            "scope": "composed factor policy; no global information minima claimed",
+        }
+    _, problem = prior(episode)
     count = len(problem.hypotheses)
     full = (1 << count) - 1
     partitions = tuple(dict(row) for row in problem.partitions)
@@ -91,7 +101,7 @@ def main():
     parser.add_argument("--out", type=Path)
     parser.add_argument(
         "--family",
-        choices=("shared-response-v1", "coupled-network-v1"),
+        choices=("shared-response-v1", "coupled-network-v1", "resonant-network-v1"),
         default="shared-response-v1",
     )
     args = parser.parse_args()
@@ -101,10 +111,10 @@ def main():
     if args.out is None:
         parser.error("--out is required")
     records = []
-    seeds = (7, 17, 23, 41, 73) if args.family == "coupled-network-v1" else (7, 23)
+    seeds = (7, 17, 23, 41, 73) if args.family != "shared-response-v1" else (7, 23)
     profiles = (
         ((4, 3), (5, 3))
-        if args.family == "coupled-network-v1"
+        if args.family != "shared-response-v1"
         else ((3, 1), (3, 2), (3, 3), (4, 3), (5, 3))
     )
     for seed in seeds:

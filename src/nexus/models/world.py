@@ -67,6 +67,7 @@ class Machine(BaseModel):
     id: str
     room_id: str
     uses_remaining: int | None = Field(default=1, ge=0)
+    settings: tuple[int, ...] | None = Field(default=None, exclude_if=lambda v: v is None)
 
 
 class Resources(BaseModel):
