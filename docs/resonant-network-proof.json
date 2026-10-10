@@ -1,0 +1,61 @@
+{
+  "family": "resonant-network-v1",
+  "upstream_worlds": 27,
+  "downstream_worlds": 2187,
+  "joint_worlds": 59049,
+  "bench_coordinates": 45,
+  "meter_experiments": 315,
+  "calibration_minimum": 2,
+  "calibration_lower_bound": "27 distinct functions; one GF7 reading has at most7 outcomes",
+  "calibration_fixed_minimum": 2,
+  "downstream_adaptive_minimum_on_witness_subset": 5,
+  "calibration_P1_prefix_bounds": {
+    "4": 8,
+    "5": 18
+  },
+  "composed_P1_profiles": {
+    "4": {
+      "policy_action_bound": 34,
+      "R1_budget": 42
+    },
+    "5": {
+      "policy_action_bound": 51,
+      "R1_budget": 59
+    }
+  },
+  "joint_target_classes": 2401,
+  "expanded_domain_fixed_G_witness": [
+    [
+      4,
+      4
+    ],
+    [
+      6,
+      4
+    ],
+    [
+      4,
+      6
+    ],
+    [
+      3,
+      3
+    ],
+    [
+      6,
+      1
+    ],
+    [
+      0,
+      1
+    ],
+    [
+      0,
+      2
+    ]
+  ],
+  "expanded_domain_shortcuts": "Seven fixed G readings suffice; axes plus diagonal suffice; the union polynomial basis is now identifiable. Exact G-program recovery is not required.",
+  "complete_coordinate_sweep_action_lower_bound": 92,
+  "downstream_target_classes_after_full_calibration": 1175,
+  "claims": "Downstream subset minima only; joint and expanded-domain minimax not claimed. No-signal constrains calibration only; active signal constrains each factor independently."
+}

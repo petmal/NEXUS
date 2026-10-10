@@ -75,3 +75,30 @@ H+G field targets replace G-only targets to ensure both discoveries matter.
 Risks: calibration may be a trivial detour; expanded domain
 may admit easy shortcuts; factorization only holds under disclosed outcome
 semantics. Real-model difficulty improvement remains empirical.
+
+## Completion checkpoint
+
+All implementation stages are complete. New family has45bench coordinates,
+315coordinate/tuning experiments,59,049joint worlds and2,401mission targets.
+H takes2measurements; the composed witness takes at most7. A cardinality bound
+proves at least4measurements for a guaranteed scientific policy; exact joint
+minimax is not claimed. P1 bounds/budgets: D4 34/42, D5 51/59; sweep lower92.
+
+Independent design review found calibration and expanded-domain fitting shortcuts;
+they are preserved and documented. Independent implementation review found no
+critical defect. Final checks:413full regression tests, then42focused final-head
+tests including all factor witnesses, plus Ruff/Pyright, lockfile, whitespace,
+CLI generate/solve/replay. Ten fresh-process reference pilots won; generation
+1.318–1.863s cold,0.249–0.389s warm on this host. No paid model/API runs.
+
+Artifacts: `resonant-network-results.md`, `resonant-network-proof.json`,
+`resonant-network-benchmark.json`, `resonant-network-model-matrix.{md,json}`.
+Initial plan local4a62be7 / remote dacf88b13d19d37a627edbe44bfd25f9ab4947c6,
+matching tree f419893bb8528a8d61dcfcc92e7bd9ed550be089. Runtime and final docs
+follow as separate commits. PR6 records the published head and matching tree;
+local imported ancestry must never be force-pushed over the remote branch.
+
+Next action: build the published feature head with VCS_REF and run the proposed
+ten-cell no-Python model matrix. Do not repeat completed deterministic gates
+unless relevant code changes. T1/T2 live expansion, lab-computer support, and
+deeper discovery chains remain separate future decisions.

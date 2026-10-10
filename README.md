@@ -132,6 +132,15 @@ combining noncommuting preparation operations. See the
 [ten-run paired pilot](docs/rich-investigation-model-matrix.md).
 Without this setting, the existing `shared-response-v1` family remains unchanged.
 
+For dependent discovery and a larger experimental domain, select
+`NEXUS_SCIENCE_FAMILY=resonant-network-v1` with the same supported T/D/P/R cells.
+Infer a resonance law to tune downstream measurements, then combine both laws
+for held-out field predictions. There are45 bench coordinates; complete sweeps
+exceed moderate P1/R1 budgets, while a public-information policy is certified.
+See the [proofs and limitations](docs/resonant-network-results.md) and
+[ten-run model matrix](docs/resonant-network-model-matrix.md). Existing families
+remain selectable; real-model difficulty of this new family is not yet measured.
+
 The feature branch currently implements the first end-to-end Transformation Facility prototype:
 
 - compositional latent rule grammar with 288 possible generated laws;
