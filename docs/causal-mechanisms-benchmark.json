@@ -1,0 +1,60 @@
+{
+  "python": "3.14.8",
+  "method": "interleaved fresh processes, same host/interpreter, imports excluded; 20 fresh warm seeds per process; T3/D5/P1/R1",
+  "results": [
+    {
+      "mode": "interpreted",
+      "seed": 7,
+      "cold_seconds": 8.410871350999969,
+      "warm_seconds": 0.0026041835499881925,
+      "reference_seconds": 0.022445291000167344,
+      "reference_actions": 31,
+      "won": true
+    },
+    {
+      "mode": "compiled",
+      "seed": 7,
+      "cold_seconds": 1.3382604629996422,
+      "warm_seconds": 0.004217517600000065,
+      "reference_seconds": 0.03069033900010254,
+      "reference_actions": 31,
+      "won": true
+    },
+    {
+      "mode": "interpreted",
+      "seed": 8,
+      "cold_seconds": 6.3050981920000595,
+      "warm_seconds": 0.0020311623999987203,
+      "reference_seconds": 0.02240050299997165,
+      "reference_actions": 40,
+      "won": true
+    },
+    {
+      "mode": "compiled",
+      "seed": 8,
+      "cold_seconds": 1.3727127560000554,
+      "warm_seconds": 0.0038431888500099374,
+      "reference_seconds": 0.03697143399995184,
+      "reference_actions": 40,
+      "won": true
+    },
+    {
+      "mode": "interpreted",
+      "seed": 9,
+      "cold_seconds": 6.285157055000127,
+      "warm_seconds": 0.002180029700002706,
+      "reference_seconds": 0.02195180699982302,
+      "reference_actions": 37,
+      "won": true
+    },
+    {
+      "mode": "compiled",
+      "seed": 9,
+      "cold_seconds": 0.6564581220000036,
+      "warm_seconds": 0.001928318949990171,
+      "reference_seconds": 0.02332532699983858,
+      "reference_actions": 37,
+      "won": true
+    }
+  ]
+}

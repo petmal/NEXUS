@@ -52,7 +52,7 @@ classes, 126 complete untreated-observation classes of which 120 remain target
 ambiguous; a greedy public-information policy on 568 experiments resolves every
 world in at most six readings and 37 reference experiment actions (before final
 submission and logistics). The policy is not an optimality claim. Actual preloading plus P1 and final submission yields a
-40-action guaranteed reference bound (R1 budget48, R2 budget40). Degenerate
+40-action guaranteed reference bound (R1 budget 48, R2 budget 40). Degenerate
 worlds remain admitted; construction is necessary for a guaranteed policy over
 the disclosed family, not asserted necessary for every selected truth.
 

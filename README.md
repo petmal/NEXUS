@@ -502,3 +502,15 @@ without legacy shape/polarity fields or controller ports. See the
 [implementation checkpoint](docs/ontology-implementation-plan.md).
 The categorical chain example is an exhaustive conformance PoC, not a calibrated
 production difficulty profile or a claim of increased LLM failure rates.
+
+
+### Causal mechanism laboratory
+
+Select `NEXUS_AXIS_VERSION=2` and `NEXUS_SCIENCE_FAMILY=causal-mechanisms-v1`
+for the new experimental ontology. It combines latent preparation state, unknown
+causal wiring, known-shape corrections and six held-out transfer predictions.
+Use T3/D5/P1/R1 for the main pilot. Supported alternatives are T1/D1, T2/D2 and
+D0/T0–T3, with P0/P1 and R0–R2. Existing families and defaults remain available.
+See the [design](docs/causal-mechanisms-design.md),
+[validation and limits](docs/causal-mechanisms-results.md), and
+[ten-run pilot](docs/causal-mechanisms-model-matrix.md).

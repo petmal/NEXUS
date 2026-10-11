@@ -128,3 +128,24 @@ integer normalization. Initial selector checks enforce arity and range after
 that normalization; this refactor does not introduce stricter raw JSON scalar
 semantics for controls. Ontology payload schemas separately validate their own
 properties (including strict integer permutation laws).
+
+
+## Stateful causal example
+
+`ontology/causal` is a second domain adapter, with normal CLI/service selection.
+Its specimens carry their complete public preparation history; immutable private
+laws reconstruct a hidden mode. This avoids storing secret values in publicly
+serialized artifact payloads or state hashes. A bounded history is essential:
+unobserved exogenous updates or unbounded histories need a different state design.
+
+The catalog now owns lazy runtime/generator/qualifier import targets and an optional
+standalone action-reference hook. These paths are code-owned registrations, never
+read from episodes. Register data-only role schemas separately in `payloads.py` to
+avoid model/runtime import cycles. No changes to engine/session/replay are needed.
+
+The causal adapter proves its graph semantics against independent arithmetic,
+compiles complete finite transition/response tables, and maintains a joint bitset
+posterior. The 568-experiment policy pool is only a sufficient witness: all legal
+off-pool measurements still update the posterior exactly. See its tests and
+[design](causal-mechanisms-design.md) before claiming difficulty guarantees for
+another ontology. D/T labels require epistemic evidence, not graph size alone.
