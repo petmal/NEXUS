@@ -491,3 +491,14 @@ See [T3/progression results](docs/theory-t3-progression-results.md),
 
 See [validation and model matrix](docs/theory-implementation-results.md) and the
 [resumable checkpoint](docs/theory-implementation-progress.md).
+
+### Scientific ontology extension
+
+Scientific families now run behind an explicit runtime and inference adapter.
+New domains can use validated entity payloads and composed investigation graphs
+without legacy shape/polarity fields or controller ports. See the
+[ontology author guide](docs/ontology-author-guide.md),
+[architecture plan](docs/ontology-architecture-plan.md), and
+[implementation checkpoint](docs/ontology-implementation-plan.md).
+The categorical chain example is an exhaustive conformance PoC, not a calibrated
+production difficulty profile or a claim of increased LLM failure rates.
