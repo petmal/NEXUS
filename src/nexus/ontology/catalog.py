@@ -7,6 +7,7 @@ catalog contains code-owned definitions only; no player registration is allowed.
 from __future__ import annotations
 
 from dataclasses import dataclass
+from importlib import import_module
 from types import MappingProxyType
 from typing import TYPE_CHECKING
 
@@ -18,59 +19,67 @@ if TYPE_CHECKING:
 class OntologyDefinition:
     family: str
     specification_version: str
+    runtime_module: str = "nexus.ontology.builtin_runtime"
+    generator: tuple[str, str] | None = None
+    qualifier: tuple[str, str] = ("", "")
+    standalone_contract: bool = False
 
     def runtime(self):
-        if self.family == "categorical-chain-poc-v1":
-            from nexus.ontology.categorical import runtime
+        return import_module(self.runtime_module)
 
-            return runtime
-        from nexus.ontology import builtin_runtime
-
-        return builtin_runtime
+    def action_reference(self):
+        """Optional episode-independent contract supplied by the trusted adapter."""
+        return self.runtime().public_contract(None) if self.standalone_contract else None
 
     def generate(self, seed: int, **kwargs) -> PrivateEpisode:
-        if self.family == "categorical-chain-poc-v1":
+        if self.generator is None:
             raise ValueError(
                 "experimental uncalibrated family: use generate_categorical(depth=2 or 3)"
             )
-        if self.family == "shared-response-v1":
-            from nexus.generator.investigation import generate_investigation
-
-            return generate_investigation(seed, **kwargs)
-        if self.family == "coupled-network-v1":
-            from nexus.generator.network import generate_network
-
-            return generate_network(seed, **kwargs)
-        from nexus.generator.resonance import generate_resonant
-
-        return generate_resonant(seed, **kwargs)
+        module, name = self.generator
+        return getattr(import_module(module), name)(seed, **kwargs)
 
     def qualify(self, episode: PrivateEpisode):
-        if self.family == "categorical-chain-poc-v1":
-            from nexus.ontology.categorical.qualification import qualify_categorical
-
-            return qualify_categorical(episode)
-        if self.family == "shared-response-v1":
-            from nexus.generator.investigation_qualify import qualify_investigation
-
-            return qualify_investigation(episode)
-        if self.family == "coupled-network-v1":
-            from nexus.generator.network_qualify import qualify_network
-
-            return qualify_network(episode)
-        from nexus.generator.resonance_qualify import qualify_resonant
-
-        return qualify_resonant(episode)
+        module, name = self.qualifier
+        return getattr(import_module(module), name)(episode)
 
 
 BUILTINS = MappingProxyType(
     {
         item.family: item
         for item in (
-            OntologyDefinition("categorical-chain-poc-v1", "categorical-chain-poc-v1"),
-            OntologyDefinition("shared-response-v1", "scientific-v2"),
-            OntologyDefinition("coupled-network-v1", "coupled-network-v1"),
-            OntologyDefinition("resonant-network-v1", "resonant-network-v1"),
+            OntologyDefinition(
+                "categorical-chain-poc-v1",
+                "categorical-chain-poc-v1",
+                runtime_module="nexus.ontology.categorical.runtime",
+                qualifier=("nexus.ontology.categorical.qualification", "qualify_categorical"),
+            ),
+            OntologyDefinition(
+                "shared-response-v1",
+                "scientific-v2",
+                generator=("nexus.generator.investigation", "generate_investigation"),
+                qualifier=("nexus.generator.investigation_qualify", "qualify_investigation"),
+            ),
+            OntologyDefinition(
+                "coupled-network-v1",
+                "coupled-network-v1",
+                generator=("nexus.generator.network", "generate_network"),
+                qualifier=("nexus.generator.network_qualify", "qualify_network"),
+            ),
+            OntologyDefinition(
+                "resonant-network-v1",
+                "resonant-network-v1",
+                generator=("nexus.generator.resonance", "generate_resonant"),
+                qualifier=("nexus.generator.resonance_qualify", "qualify_resonant"),
+            ),
+            OntologyDefinition(
+                "causal-mechanisms-v1",
+                "causal-mechanisms-v1",
+                runtime_module="nexus.ontology.causal.runtime",
+                generator=("nexus.ontology.causal.generation", "generate_causal"),
+                qualifier=("nexus.ontology.causal.qualification", "qualify_causal"),
+                standalone_contract=True,
+            ),
         )
     }
 )

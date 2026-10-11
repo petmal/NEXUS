@@ -29,6 +29,8 @@ if TYPE_CHECKING:
 class ScientificRuntime(Protocol):
     performance_style: str
 
+    def validate_episode(self, episode: PrivateEpisode) -> None: ...
+
     def spawn(self, stock: ScientificStock, artifact_id: str) -> ScientificArtifact: ...
     def transform(
         self,

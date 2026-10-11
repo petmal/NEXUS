@@ -17,14 +17,14 @@ def _write_json(value: object) -> None:
     sys.stdout.write(json.dumps(value, separators=(",", ":")) + "\n")
 
 
-def _print_action_reference(*, scientific: bool = False, resonant: bool = False) -> None:
+def _print_action_reference(*, scientific: bool = False, resonant: bool = False, contract=None) -> None:
     from nexus.models.actions import action_contract
 
     table = Table(title="NEXUS actions")
     table.add_column("action")
     table.add_column("meaning")
     table.add_column("example")
-    for item in action_contract(scientific=scientific, resonant=resonant)["reference"]:
+    for item in (contract or action_contract(scientific=scientific, resonant=resonant))["reference"]:
         table.add_row(
             str(item["type"]),
             str(item["description"]),
@@ -37,8 +37,8 @@ def _print_action_reference(*, scientific: bool = False, resonant: bool = False)
     )
 
 
-def _print_play_reference(*, scientific: bool = False, resonant: bool = False) -> None:
-    _print_action_reference(scientific=scientific, resonant=resonant)
+def _print_play_reference(*, scientific: bool = False, resonant: bool = False, contract=None) -> None:
+    _print_action_reference(scientific=scientific, resonant=resonant, contract=contract)
     console.print(
         "Human-play meta-command: [bold]evidence <filename>[/bold] reads one of the "
         "public evidence files listed for the episode without consuming an action."
@@ -58,12 +58,15 @@ def actions_command(
     science_family: str = typer.Option("shared-response-v1", envvar="NEXUS_SCIENCE_FAMILY"),
 ) -> None:
     """Show the stable player action vocabulary and JSON examples."""
-    if science_family not in ("shared-response-v1", "coupled-network-v1", "resonant-network-v1"):
+    from nexus.ontology.catalog import BUILTINS
+
+    if science_family not in BUILTINS or BUILTINS[science_family].generator is None:
         raise typer.BadParameter("unknown scientific family", param_hint="science-family")
     if science_family != "shared-response-v1" and axis_version != 2:
         raise typer.BadParameter(f"{science_family} requires axis-version=2")
     _print_action_reference(
-        scientific=axis_version == 2, resonant=science_family == "resonant-network-v1"
+        scientific=axis_version == 2, resonant=science_family == "resonant-network-v1",
+        contract=BUILTINS[science_family].action_reference(),
     )
 
 
@@ -75,7 +78,7 @@ def generate(
     axis_version: int = typer.Option(1, min=1, max=2, envvar="NEXUS_AXIS_VERSION",
                                     help="1=legacy profiles; 2=scientific investigation semantics."),
     science_family: str = typer.Option("shared-response-v1", envvar="NEXUS_SCIENCE_FAMILY",
-        help="Scientific family: shared-response-v1, coupled-network-v1, or resonant-network-v1 (requires axes v2)."),
+        help="Scientific family: shared-response-v1, coupled-network-v1, resonant-network-v1, or causal-mechanisms-v1 (requires axes v2)."),
     discovery_level: int = typer.Option(
         0,
         min=0,
@@ -122,11 +125,19 @@ def generate(
         target = output if count == 1 else output / f"episode-{offset + 1:03d}"
         save_episode(episode, target)
         metadata = episode.generation_metadata
+        policy_summary = f"optimal={metadata.optimal_action_count} probes={metadata.required_probe_count} "
+        certificate = metadata.investigation_certificate or {}
+        if "reference_reading_bound" in certificate:
+            policy_summary = (
+                f"physical-optimal={metadata.optimal_action_count} "
+                f"reference-readings<={certificate['reference_reading_bound']} "
+                f"reference-actions<={certificate['reference_action_bound']} "
+            )
         console.print(
             f"[green]generated[/green] {episode.public.episode_id} -> {target} "
             f"(discovery={metadata.discovery_level} planning={metadata.planning_level} "
             f"resource-pressure={metadata.resource_pressure} theory={metadata.theory_level} "
-            f"optimal={metadata.optimal_action_count} probes={metadata.required_probe_count} "
+            f"{policy_summary}"
             f"budget={metadata.action_budget} "
             f"recommended-tool-calls={metadata.recommended_tool_call_limit})"
         )
@@ -218,10 +229,12 @@ def play(
         command = parts[0].lower() if parts else ""
 
         if command in {"help", "actions", "?"}:
+            from nexus.ontology.catalog import runtime_for
             spec = session.episode.public.investigation
             _print_play_reference(
                 scientific=spec is not None,
                 resonant=spec is not None and spec.version == "resonant-network-v1",
+                contract=runtime_for(spec).public_contract(spec) if spec is not None else None,
             )
             continue
         if command in {"quit", "exit"}:
@@ -314,7 +327,7 @@ def serve_session(
     axis_version: int = typer.Option(1, min=1, max=2, envvar="NEXUS_AXIS_VERSION",
                                     help="1=legacy profiles; 2=scientific investigation semantics."),
     science_family: str = typer.Option("shared-response-v1", envvar="NEXUS_SCIENCE_FAMILY",
-        help="Scientific family: shared-response-v1, coupled-network-v1, or resonant-network-v1 (requires axes v2)."),
+        help="Scientific family: shared-response-v1, coupled-network-v1, resonant-network-v1, or causal-mechanisms-v1 (requires axes v2)."),
     discovery_level: int = typer.Option(
         0,
         min=0,

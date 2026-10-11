@@ -116,6 +116,13 @@ jobs:
           uv run nexus solve /tmp/nexus-resonant-smoke/private.json --trace-out /tmp/nexus-resonant-smoke/run.jsonl
           uv run nexus replay /tmp/nexus-resonant-smoke/private.json /tmp/nexus-resonant-smoke/run.jsonl
 
+          uv run nexus generate /tmp/nexus-causal-smoke --axis-version 2 --seed 17 \
+            --science-family causal-mechanisms-v1 --discovery-level 5 --theory-level 3 \
+            --planning-level 1 --resource-pressure 1
+          uv run nexus qualify /tmp/nexus-causal-smoke/private.json
+          uv run nexus solve /tmp/nexus-causal-smoke/private.json --trace-out /tmp/nexus-causal-smoke/run.jsonl
+          uv run nexus replay /tmp/nexus-causal-smoke/private.json /tmp/nexus-causal-smoke/run.jsonl
+
       - name: Container smoke test
         if: ${{ (github.event_name == 'workflow_dispatch' && inputs.full) || (github.event_name == 'pull_request' && github.base_ref == 'feat/epistemic-calibration') }}
         run: |
@@ -132,4 +139,7 @@ jobs:
             --planning-level 1 --theory-level 3 --resource-pressure 1
           docker run --rm -e NEXUS_SCIENCE_FAMILY=resonant-network-v1 nexus-ci generate \
             /tmp/nexus-resonant --axis-version 2 --seed 17 --discovery-level 5 \
+            --planning-level 1 --theory-level 3 --resource-pressure 1
+          docker run --rm -e NEXUS_SCIENCE_FAMILY=causal-mechanisms-v1 nexus-ci generate \
+            /tmp/nexus-causal --axis-version 2 --seed 17 --discovery-level 5 \
             --planning-level 1 --theory-level 3 --resource-pressure 1
