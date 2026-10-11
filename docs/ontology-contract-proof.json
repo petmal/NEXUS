@@ -1,0 +1,24 @@
+{
+  "proof": [
+    {
+      "depth": 2,
+      "worlds": 36,
+      "target_classes": 6,
+      "reference_measurement_bound": 4,
+      "all_worlds_identified": true,
+      "every_factor_affects_target": true,
+      "no_signal_is_informative": true,
+      "claims_exact_global_minimum": false
+    },
+    {
+      "depth": 3,
+      "worlds": 216,
+      "target_classes": 6,
+      "reference_measurement_bound": 6,
+      "all_worlds_identified": true,
+      "every_factor_affects_target": true,
+      "no_signal_is_informative": true,
+      "claims_exact_global_minimum": false
+    }
+  ]
+}
