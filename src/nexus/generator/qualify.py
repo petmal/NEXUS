@@ -119,16 +119,9 @@ def qualify_episode(
     *,
     max_states: int = 100_000,
 ) -> QualificationReport:
-    from nexus.models.network import NetworkSpec
-    if isinstance(episode.public.investigation, NetworkSpec):
-        if episode.public.investigation.version == "resonant-network-v1":
-            from nexus.generator.resonance_qualify import qualify_resonant
-            return qualify_resonant(episode)
-        from nexus.generator.network_qualify import qualify_network
-        return qualify_network(episode)
     if episode.public.investigation is not None:
-        from nexus.generator.investigation_qualify import qualify_investigation
-        return qualify_investigation(episode)
+        from nexus.ontology.catalog import definition_for
+        return definition_for(episode.public.investigation).qualify(episode)
     checks: dict[str, bool] = {}
     errors: list[str] = []
     metrics: dict[str, int | str | bool] = {}

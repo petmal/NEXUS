@@ -3,6 +3,7 @@ from __future__ import annotations
 from enum import StrEnum
 
 from pydantic import BaseModel, ConfigDict, Field, model_validator
+from nexus.models.domain import DomainArtifact, DomainStock
 from nexus.models.investigation import SampleState, SpecimenStock
 from nexus.models.network import NetworkSample, NetworkStock
 
@@ -82,12 +83,13 @@ class WorldState(BaseModel):
     turn: int = Field(default=0, ge=0)
     phase: int = Field(default=0, ge=0)
     agent_room: str
-    artifacts: dict[str, Artifact]
+    artifacts: dict[str, Artifact | DomainArtifact]
     machines: dict[str, Machine]
     resources: Resources
     terminal_status: TerminalStatus = TerminalStatus.ACTIVE
-    stocks: dict[str, SpecimenStock | NetworkStock] = Field(default_factory=dict, exclude_if=lambda v: not v)
+    stocks: dict[str, SpecimenStock | NetworkStock | DomainStock] = Field(default_factory=dict, exclude_if=lambda v: not v)
     controller_settings: tuple[int, ...] | None = Field(default=None, exclude_if=lambda v: v is None)
+    mission_accepted: bool | None = Field(default=None, exclude_if=lambda v: v is None)
     controller_accepted: bool | None = Field(default=None, exclude_if=lambda v: v is None)
 
     @model_validator(mode="after")
@@ -100,5 +102,5 @@ class WorldState(BaseModel):
                 raise ValueError(f"machine key {key!r} does not match id {machine.id!r}")
         return self
 
-    def carried_artifacts(self) -> list[Artifact]:
+    def carried_artifacts(self) -> list[Artifact | DomainArtifact]:
         return [a for a in self.artifacts.values() if a.location == INVENTORY]

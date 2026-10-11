@@ -7,6 +7,7 @@ from pydantic import BaseModel, ConfigDict, model_validator
 
 
 class GoalKind(StrEnum):
+    MISSION_ACCEPTED = "mission_accepted"
     CONTROLLER_ACCEPTED = "controller_accepted"
     ARTIFACT_FIELD = "artifact_field"
     ARTIFACT_LOCATION = "artifact_location"

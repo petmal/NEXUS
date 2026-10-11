@@ -9,6 +9,8 @@ def _normalized(value):
 
 
 def evaluate_goal(goal: GoalPredicate, state: WorldState) -> bool:
+    if goal.kind == GoalKind.MISSION_ACCEPTED:
+        return state.mission_accepted is True
     if goal.kind == GoalKind.CONTROLLER_ACCEPTED:
         return state.controller_accepted is True
     if goal.kind == GoalKind.ARTIFACT_FIELD:

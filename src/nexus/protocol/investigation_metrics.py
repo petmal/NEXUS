@@ -1,16 +1,13 @@
 """Terminal-only diagnostics for axes-v2; no metric is a player hint during play."""
 
 from collections import Counter
-import logging
 
 from pydantic import BaseModel, ConfigDict, Field, model_serializer
 
-from nexus.engine.investigation import settings
-from nexus.generator.investigation import prior
+from nexus.ontology.catalog import runtime_for
 from nexus.models.episode import PrivateEpisode
 from nexus.models.events import TraceRecord
 from nexus.models.world import WorldState
-from nexus.models.network import NetworkSpec
 
 SCIENCE_SCHEMA_URL = (
     "https://raw.githubusercontent.com/petmal/NEXUS/"
@@ -59,6 +56,41 @@ class InvestigationPerformance(BaseModel):
         return result
 
 
+class MissionPerformance(BaseModel):
+    """Ontology-neutral terminal projection; no legacy controller/port assumptions."""
+    model_config = ConfigDict(extra="forbid", frozen=True)
+    version: str = "mission-performance-v1"
+    ontology: str
+    experimental: bool
+    terminal_status: str
+    termination_reason: str
+    actions_used: int
+    initial_action_budget: int | None
+    budget_remaining: int | None
+    action_counts: dict[str, int]
+    measurements_used: int
+    informative_measurements: int
+    target_reducing_measurements: int
+    redundant_measurements: int
+    target_classes_before_first_submission: int | None
+    first_submission_correct: bool | None
+    mission_submissions: int
+    failed_finishes: int
+    final_submission_correct: bool
+    invalid_actions: int
+    duplicate_requests: int
+    protocol_conflicts: int
+    certificate: dict[str, object]
+
+    @model_serializer(mode="wrap")
+    def preserve_semantic_nulls(self, handler):
+        result = handler(self)
+        for name in type(self).model_fields:
+            if getattr(self, name) is None:
+                result[name] = None
+        return result
+
+
 def summarize(
     episode: PrivateEpisode,
     state: WorldState,
@@ -67,97 +99,67 @@ def summarize(
     invalid: int,
     duplicates: int,
     conflicts: int,
-) -> InvestigationPerformance:
+) -> InvestigationPerformance | MissionPerformance:
     spec = episode.public.investigation
-    posterior = None
-    if isinstance(spec, NetworkSpec) and spec.version == "resonant-network-v1":
-        from nexus.generator.resonance import ResonantBelief
-        posterior = ResonantBelief(spec)
-        belief, predictions, rows = set(), (), {}
-    else:
-        worlds, problem = prior(episode)
-        belief = set(problem.compatible(spec.supplied_measurements))
-        predictions = tuple(settings(spec, world) for world in worlds)
-        rows = dict(problem.experiments)
-    expected = settings(spec, episode.investigation_truth)
-    if spec.resolved_settings is not None and posterior is None:
-        belief = {i for i in belief if predictions[i] == spec.resolved_settings}
+    runtime = runtime_for(spec)
+    posterior = runtime.belief(spec)
+    expected = runtime.expected(episode)
     measurements = informative = target_reducing = submissions = failed = 0
     calibration_count = no_signal_count = after_resolved_count = 0
     first_correct = first_classes = None
-    current_settings = None
+    current_settings = runtime.submitted(episode.public.initial_state)
     room = episode.public.initial_state.agent_room
     for record in trace:
         action = record.action
         if action.type == "move":
             room = action.target
-        elif action.type == "configure" and action.machine == "controller":
+        elif action.type == "configure" and action.machine == runtime.mission_machine(spec):
             current_settings = action.settings
         elif action.type == "finish":
             submissions += 1
-            correct = current_settings == expected and room == spec.controller_room
+            correct = current_settings == expected and room == runtime.mission_room(spec)
             if first_correct is None:
                 first_correct = correct
-                first_classes = (posterior.counts()[1] if posterior is not None
-                                 else len({predictions[i] for i in belief}))
+                first_classes = posterior.counts()[1]
             failed += not correct
             # An unsuccessful submission in the correct room rules out that complete vector.
             # It is evidence, but never counted as a scientific measurement.
-            if not correct and room == spec.controller_room:
-                if posterior is not None:
-                    posterior.excluded.add(current_settings)
-                else:
-                    belief = {i for i in belief if predictions[i] != current_settings}
-        if action.type not in ("probe", "operate") or action.machine not in (
-            "meter",
-            "selector",
-            "material",
-            "calibrator",
-        ):
+            if not correct and room == runtime.mission_room(spec):
+                posterior.exclude_target(current_settings)
+        measurement = runtime.measurement(record)
+        if measurement is None:
             continue
-        result = record.events[-1].details.get("result")
-        # Budget exhaustion can append a second event; locate the actual result explicitly.
-        result = next(
-            (event.details["result"] for event in record.events if "result" in event.details),
-            result,
-        )
-        if result is None:
-            continue
-        sample = result["sample"]
-        if posterior is not None:
-            before, before_targets = posterior.counts()
-            calibration_count += action.machine == "calibrator"
-            no_signal_count += action.machine == "meter" and sample.get("signal") is False
-            after_resolved_count += before_targets == 1
-            tuning = next((event.details.get("instrument_settings") for event in record.events
-                           if "result" in event.details), None)
-            posterior.measure(action.machine, sample, tuning[0] if tuning else None)
-            after, after_targets = posterior.counts()
-            measurements += 1
-            informative += after < before
-            target_reducing += after_targets < before_targets
-            continue
-        name = (f"{sample['x']}:{sample['y']}" if "x" in sample else
-            "selector"
-            if action.machine == "selector"
-            else f"{sample['source']}:property"
-            if action.machine == "material"
-            else f"{sample['source']}:{sample['q']}"
-        )
-        if name not in rows:
-            raise RuntimeError("runtime produced a measurement missing from the certified prior")
-        before = len(belief)
-        before_targets = len({predictions[i] for i in belief})
-        belief = {i for i in belief if rows[name][i] == sample["reading"]}
+        before, before_targets = posterior.counts()
+        calibration_count += measurement.calibration
+        no_signal_count += measurement.no_signal
+        after_resolved_count += before_targets == 1
+        posterior.observe(measurement)
+        after, after_targets = posterior.counts()
         measurements += 1
-        informative += len(belief) < before
-        target_reducing += len({predictions[i] for i in belief}) < before_targets
-    final_settings = state.controller_settings or ()
+        informative += after < before
+        target_reducing += after_targets < before_targets
+    final_settings = runtime.submitted(state) or ()
     matches = sum(left == right for left, right in zip(final_settings[1:], expected[1:]))
-    if posterior is not None:
-        logging.getLogger("nexus.diagnostics").info(
-            "resonance_terminal calibration_measurements=%s no_signal_measurements=%s measurements_after_target_identified=%s first_submission_target_classes=%s",
-            calibration_count, no_signal_count, after_resolved_count, first_classes,
+    runtime.log_terminal(spec, calibration_count, no_signal_count, after_resolved_count, first_classes)
+    if runtime.performance_style == "mission":
+        return MissionPerformance(
+            ontology=spec.ontology, experimental=spec.data().experimental,
+            terminal_status=state.terminal_status.value,
+            termination_reason="victory" if state.terminal_status.value == "won" else
+                "action_budget" if state.resources.actions_remaining == 0 else "harness_finalization",
+            actions_used=state.turn,
+            initial_action_budget=episode.public.initial_state.resources.actions_remaining,
+            budget_remaining=state.resources.actions_remaining,
+            action_counts=dict(Counter(record.action.type for record in trace)),
+            measurements_used=measurements, informative_measurements=informative,
+            target_reducing_measurements=target_reducing,
+            redundant_measurements=measurements-informative,
+            target_classes_before_first_submission=first_classes,
+            first_submission_correct=first_correct, mission_submissions=submissions,
+            failed_finishes=failed,
+            final_submission_correct=final_settings == expected and state.agent_room == runtime.mission_room(spec),
+            invalid_actions=invalid, duplicate_requests=duplicates, protocol_conflicts=conflicts,
+            certificate=episode.generation_metadata.investigation_certificate,
         )
     return InvestigationPerformance(
         theory_level=spec.theory,

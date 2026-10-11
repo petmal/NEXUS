@@ -16,9 +16,8 @@ from nexus.models.actions import (
 )
 from nexus.models.episode import PrivateEpisode
 from nexus.models.events import EngineEvent, StepResult
-from nexus.models.world import INVENTORY, Artifact, TerminalStatus, WorldState
-from nexus.models.investigation import SampleState
-from nexus.models.network import NetworkSample, NetworkSpec, NetworkStock
+from nexus.models.world import INVENTORY, TerminalStatus, WorldState
+from nexus.ontology.catalog import runtime_for
 from nexus.verification.receipt import victory_receipt
 
 
@@ -72,16 +71,9 @@ def step(state: WorldState, action: Action, episode: PrivateEpisode) -> StepResu
                     raise ValueError("specimen stock is unavailable")
                 _consume_action(next_state)
                 artifact_id = f"{stock.id}.{next_state.turn}"
-                sample = (
-                    NetworkSample(x=stock.x, y=stock.y) if isinstance(stock, NetworkStock)
-                    else SampleState(source=stock.source, q=stock.q)
-                )
-                next_state.artifacts[artifact_id] = Artifact(
-                    id=artifact_id, location=INVENTORY, shape="circle", pattern="plain",
-                    orientation="north", polarity="positive",
-                    value=0 if isinstance(stock, NetworkStock) else stock.q,
-                    sample=sample,
-                )
+                next_state.artifacts[artifact_id] = runtime_for(
+                    episode.public.investigation
+                ).spawn(stock, artifact_id)
                 if stock.remaining is not None:
                     stock.remaining -= 1
                 events.append(EngineEvent(type="take", details={"stock": stock.id, "artifact": artifact_id}))
@@ -112,7 +104,9 @@ def step(state: WorldState, action: Action, episode: PrivateEpisode) -> StepResu
             if artifact is None or artifact.location != INVENTORY:
                 raise ValueError("artifact is not carried")
             if episode.public.investigation is not None:
-                transformed = _scientific_transform(artifact, machine.id, episode, machine.settings)
+                transformed = runtime_for(episode.public.investigation).transform(
+                    artifact, machine.id, episode, machine.settings
+                )
                 if isinstance(action, OperateAction):
                     if machine.uses_remaining == 0:
                         raise ValueError("machine has no uses remaining")
@@ -165,47 +159,18 @@ def step(state: WorldState, action: Action, episode: PrivateEpisode) -> StepResu
             events.append(EngineEvent(type="wait", details={"phase": next_state.phase}))
 
         elif isinstance(action, ConfigureAction):
-            spec = episode.public.investigation
-            if (isinstance(spec, NetworkSpec) and spec.version == "resonant-network-v1"
-                    and action.machine == "meter"):
-                machine = next_state.machines.get("meter")
-                if machine is None or machine.room_id != next_state.agent_room:
-                    raise ValueError("meter is not in the current room")
-                if len(action.settings) != 1 or action.settings[0] > 6:
-                    raise ValueError("meter requires one resonance setting in 0..6")
-                _consume_action(next_state)
-                machine.settings = action.settings
-                events.append(EngineEvent(type="configure", details={
-                    "machine": "meter", "settings": action.settings,
-                }))
-                _fail_if_exhausted(next_state, events)
-                return StepResult(ok=True, state=next_state, events=tuple(events))
-            if spec is None or action.machine != "controller":
+            if episode.public.investigation is None:
                 raise ValueError("no configurable controller")
-            if next_state.agent_room != spec.controller_room:
-                raise ValueError("controller is not in the current room")
-            if isinstance(spec, NetworkSpec):
-                if (len(action.settings) != 5 or action.settings[0] != 0
-                        or any(v > 6 for v in action.settings)):
-                    raise ValueError("network settings require port 0 and four field values in 0..6")
-            else:
-                size = 1 + len(spec.target_q) * (2 if spec.both_stocks else 1)
-                if len(action.settings) != size or action.settings[0] not in (0, 1):
-                    raise ValueError(f"settings require a port 0/1 and {size-1} values in 0..16")
+            runtime_for(episode.public.investigation).configure(episode, next_state, action)
             _consume_action(next_state)
-            next_state.controller_settings = action.settings
-            next_state.controller_accepted = False
-            events.append(EngineEvent(type="configure", details={"machine": "controller", "settings": action.settings}))
+            events.append(EngineEvent(type="configure", details={
+                "machine": action.machine, "settings": action.settings,
+            }))
 
         elif isinstance(action, FinishAction):
             _consume_action(next_state)
             if episode.public.investigation is not None:
-                from nexus.engine.investigation import settings
-                spec = episode.public.investigation
-                next_state.controller_accepted = (
-                    next_state.agent_room == spec.controller_room
-                    and next_state.controller_settings == settings(spec, episode.investigation_truth)
-                )
+                runtime_for(episode.public.investigation).assess_mission(episode, next_state)
             if evaluate_goal(episode.public.goal, next_state):
                 next_state.terminal_status = TerminalStatus.WON
                 code = victory_receipt(episode)
@@ -226,47 +191,3 @@ def step(state: WorldState, action: Action, episode: PrivateEpisode) -> StepResu
         return StepResult(ok=True, state=next_state, events=tuple(events))
     except (KeyError, ValueError) as exc:
         return StepResult(ok=False, state=state.model_copy(deep=True), message=str(exc))
-
-
-def _scientific_transform(
-    artifact: Artifact, machine: str, episode: PrivateEpisode,
-    instrument_settings: tuple[int, ...] | None = None,
-) -> Artifact:
-    from nexus.engine.investigation import measurement
-    spec, truth = episode.public.investigation, episode.investigation_truth
-    sample = artifact.sample
-    if spec is None or truth is None or sample is None:
-        raise ValueError("apparatus requires a specimen")
-    transformed = artifact.model_copy(deep=True)
-    if isinstance(spec, NetworkSpec):
-        from nexus.engine.network import measurement as network_measurement, prepare
-        if not isinstance(sample, NetworkSample):
-            raise ValueError("network apparatus requires a network specimen")
-        if spec.version == "resonant-network-v1":
-            from nexus.engine.resonance import transform
-            return transform(artifact, machine, truth, instrument_settings)
-        if machine in ("shift", "shear"):
-            transformed.sample.x, transformed.sample.y = prepare((sample.x, sample.y), machine)
-            transformed.sample.reading = None
-        elif machine == "meter":
-            transformed.sample.reading = network_measurement(truth, f"{sample.x}:{sample.y}")
-        else:
-            raise ValueError("controller accepts configure and finish; it has no specimen preview")
-        return transformed
-    if not isinstance(sample, SampleState):
-        raise ValueError("shared-response apparatus requires a shared-response specimen")
-    if machine == "prepare":
-        if sample.q >= 2:
-            raise ValueError("preparation range is q=0..2")
-        transformed.sample.q += 1
-        transformed.sample.reading = None
-        transformed.value = transformed.sample.q
-    elif machine == "meter":
-        transformed.sample.reading = measurement(spec, truth, f"{sample.source}:{sample.q}")
-    elif machine == "selector":
-        transformed.sample.reading = measurement(spec, truth, "selector")
-    elif machine == "material":
-        transformed.sample.reading = measurement(spec, truth, f"{sample.source}:property")
-    else:
-        raise ValueError("controller accepts configure and finish; it has no specimen preview")
-    return transformed

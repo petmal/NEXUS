@@ -5,6 +5,7 @@ from collections import defaultdict
 from rich.console import Console
 from rich.table import Table
 
+from nexus.models.domain import DomainArtifact, DomainStock
 from nexus.models.episode import PrivateEpisode
 from nexus.models.network import NetworkSample, NetworkStock
 from nexus.models.world import WorldState
@@ -54,6 +55,9 @@ def render_observer(
     for column in ("id", "location", "shape", "pattern", "orientation", "value", "polarity"):
         table.add_column(column)
     for artifact in sorted(state.artifacts.values(), key=lambda a: a.id):
+        if isinstance(artifact, DomainArtifact):
+            console.print(artifact.id, artifact.location, artifact.payload)
+            continue
         table.add_row(
             artifact.id,
             artifact.location,
@@ -70,6 +74,10 @@ def render_observer(
         for column in ("id", "room", "source", "initial condition", "remaining"):
             stocks.add_column(column)
         for stock in state.stocks.values():
+            if isinstance(stock, DomainStock):
+                stocks.add_row(stock.id, stock.location, stock.ontology, str(stock.payload),
+                               "unlimited" if stock.remaining is None else str(stock.remaining))
+                continue
             network = isinstance(stock, NetworkStock)
             stocks.add_row(
                 stock.id, stock.location, "shared" if network else stock.source,
@@ -81,7 +89,7 @@ def render_observer(
         for column in ("id", "source", "condition", "reading"):
             specimens.add_column(column)
         for artifact in state.artifacts.values():
-            if artifact.sample is not None:
+            if not isinstance(artifact, DomainArtifact) and artifact.sample is not None:
                 sample = artifact.sample
                 network = isinstance(sample, NetworkSample)
                 specimens.add_row(

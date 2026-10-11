@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from nexus.ontology.catalog import runtime_for
 from nexus.models.episode import PublicEpisode
 from nexus.models.observation import Observation
 from nexus.models.world import INVENTORY, WorldState
@@ -50,7 +51,7 @@ def observation(episode: PublicEpisode, state: WorldState) -> Observation:
         terminal_status=state.terminal_status,
         visible_stocks=tuple(s.model_copy(deep=True) for s in state.stocks.values() if s.location == room_id),
         controller_settings=(state.controller_settings if episode.investigation is not None
-                             and room_id == episode.investigation.controller_room else None),
+                             and room_id == runtime_for(episode.investigation).mission_room(episode.investigation) else None),
         goal=episode.goal.model_dump(mode="json") if include_static_context else None,
         evidence_files=(
             tuple(sorted(episode.evidence_files)) if include_static_context else None

@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from pydantic import BaseModel, ConfigDict, Field, model_validator
 
+from nexus.models.domain import DomainArtifact, DomainStock, DomainInvestigation, DomainTruth
 from nexus.models.actions import action_contract
 from nexus.models.goals import GoalPredicate
 from nexus.models.rules import Effect
@@ -29,7 +30,7 @@ class PublicEpisode(BaseModel):
     initial_state: WorldState
     goal: GoalPredicate
     evidence_files: dict[str, str] = Field(default_factory=dict)
-    investigation: InvestigationSpec | NetworkSpec | None = Field(default=None, exclude_if=lambda v: v is None)
+    investigation: InvestigationSpec | NetworkSpec | DomainInvestigation | None = Field(default=None, exclude_if=lambda v: v is None)
 
     @model_validator(mode="after")
     def validate_world(self) -> "PublicEpisode":
@@ -45,18 +46,26 @@ class PublicEpisode(BaseModel):
         for machine in self.initial_state.machines.values():
             if machine.room_id not in room_ids:
                 raise ValueError(f"machine {machine.id} has unknown room")
-        network = isinstance(self.investigation, NetworkSpec)
-        if self.investigation is None and (
-            self.initial_state.stocks
-            or any(item.sample is not None for item in self.initial_state.artifacts.values())
-        ):
-            raise ValueError("scientific specimens require an investigation specification")
-        if any(isinstance(stock, NetworkStock) != network
-               for stock in self.initial_state.stocks.values()):
-            raise ValueError("specimen stock and investigation families must match")
-        if any(isinstance(item.sample, NetworkSample) != network
-               for item in self.initial_state.artifacts.values() if item.sample is not None):
-            raise ValueError("specimen sample and investigation families must match")
+        if isinstance(self.investigation, DomainInvestigation):
+            for item in (*self.initial_state.artifacts.values(), *self.initial_state.stocks.values()):
+                if not isinstance(item, (DomainArtifact, DomainStock)) or item.ontology != self.investigation.ontology:
+                    raise ValueError("domain entity and investigation must match")
+        else:
+            if any(isinstance(item, (DomainArtifact, DomainStock)) for item in
+                   (*self.initial_state.artifacts.values(), *self.initial_state.stocks.values())):
+                raise ValueError("domain entities require their domain investigation")
+            network = isinstance(self.investigation, NetworkSpec)
+            if self.investigation is None and (
+                self.initial_state.stocks
+                or any(isinstance(item, DomainArtifact) or item.sample is not None for item in self.initial_state.artifacts.values())
+            ):
+                raise ValueError("scientific specimens require an investigation specification")
+            if any(isinstance(stock, NetworkStock) != network
+                   for stock in self.initial_state.stocks.values()):
+                raise ValueError("specimen stock and investigation families must match")
+            if any(isinstance(item.sample, NetworkSample) != network
+                   for item in self.initial_state.artifacts.values() if item.sample is not None):
+                raise ValueError("specimen sample and investigation families must match")
         for key, stock in self.initial_state.stocks.items():
             if key != stock.id or stock.location not in room_ids or key in self.initial_state.artifacts:
                 raise ValueError("invalid specimen stock")
@@ -77,17 +86,16 @@ class PlayerManifest(BaseModel):
 
     @classmethod
     def from_episode(cls, episode: PublicEpisode) -> "PlayerManifest":
+        from nexus.ontology.catalog import runtime_for
+
         return cls(
             protocol_version=episode.protocol_version,
             episode_id=episode.episode_id,
             description=episode.description,
             goal=episode.goal,
             evidence_files=tuple(sorted(episode.evidence_files)),
-            action_contract=action_contract(
-                scientific=episode.investigation is not None,
-                resonant=isinstance(episode.investigation, NetworkSpec)
-                and episode.investigation.version == "resonant-network-v1",
-            ),
+            action_contract=(runtime_for(episode.investigation).public_contract(episode.investigation)
+                             if episode.investigation is not None else action_contract()),
         )
 
 
@@ -168,12 +176,19 @@ class PrivateEpisode(BaseModel):
     construction_seed: int | None = None
     reference_plan: tuple[dict, ...] = ()
     generation_metadata: GenerationMetadata = Field(default_factory=GenerationMetadata)
-    investigation_truth: InvestigationTruth | NetworkTruth | None = Field(default=None, exclude_if=lambda v: v is None)
+    investigation_truth: InvestigationTruth | NetworkTruth | DomainTruth | None = Field(default=None, exclude_if=lambda v: v is None)
 
     @model_validator(mode="after")
     def validate_private_links(self) -> "PrivateEpisode":
         if (self.public.investigation is None) != (self.investigation_truth is None):
             raise ValueError("scientific apparatus requires private truth and public specification")
+        if isinstance(self.public.investigation, DomainInvestigation):
+            if not isinstance(self.investigation_truth, DomainTruth) or self.investigation_truth.ontology != self.public.investigation.ontology:
+                raise ValueError("domain specification and truth must match")
+            from nexus.ontology.catalog import runtime_for
+            runtime_for(self.public.investigation).validate_episode(self)
+        elif isinstance(self.investigation_truth, DomainTruth):
+            raise ValueError("domain truth requires domain specification")
         if isinstance(self.public.investigation, NetworkSpec) != isinstance(self.investigation_truth, NetworkTruth):
             raise ValueError("scientific specification and truth families must match")
         if isinstance(self.public.investigation, NetworkSpec) and (

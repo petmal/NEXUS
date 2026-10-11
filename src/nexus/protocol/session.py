@@ -15,7 +15,7 @@ from nexus.models.goals import GoalKind, GoalPredicate
 from nexus.models.observation import Observation
 from nexus.models.world import TerminalStatus, WorldState
 from nexus.render.text import observation
-from nexus.protocol.investigation_metrics import InvestigationPerformance
+from nexus.protocol.investigation_metrics import InvestigationPerformance, MissionPerformance
 
 PERFORMANCE_SCHEMA_URL = (
     "https://raw.githubusercontent.com/petmal/NEXUS/"
@@ -80,7 +80,7 @@ class ActionResponse(BaseModel):
     message: str = ""
     victory_code: str | None = None
     duplicate: bool = False
-    performance: PerformanceSummary | InvestigationPerformance | None = None
+    performance: PerformanceSummary | InvestigationPerformance | MissionPerformance | None = None
 
 
 class SessionStatus(BaseModel):
@@ -157,7 +157,7 @@ class Session:
                 victory_code=victory_code,
             )
 
-    def finalize_attempt(self) -> tuple[SessionStatus, PerformanceSummary | InvestigationPerformance]:
+    def finalize_attempt(self) -> tuple[SessionStatus, PerformanceSummary | InvestigationPerformance | MissionPerformance]:
         """Irreversibly end an evaluator attempt and expose terminal-only diagnostics.
 
         This is deliberately not part of the player request contract. If called while the world is
@@ -172,7 +172,7 @@ class Session:
                 raise RuntimeError("finalized attempt did not produce terminal performance")
             return self.status(), performance
 
-    def _performance_summary(self) -> PerformanceSummary | InvestigationPerformance | None:
+    def _performance_summary(self) -> PerformanceSummary | InvestigationPerformance | MissionPerformance | None:
         if self.state.terminal_status == TerminalStatus.ACTIVE:
             return None
         if self.episode.public.investigation is not None:

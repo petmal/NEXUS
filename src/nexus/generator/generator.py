@@ -1669,23 +1669,17 @@ def generate_episode(
     dependency. Resource pressure changes only the action allowance above the exact guaranteed
     policy cost.
     """
-    if science_family not in ("shared-response-v1", "coupled-network-v1", "resonant-network-v1"):
+    from nexus.ontology.catalog import BUILTINS
+    if science_family not in BUILTINS:
         raise ValueError("unknown scientific family")
-    if science_family != "shared-response-v1":
-        if axis_version != 2:
-            raise ValueError(f"{science_family} requires axis_version=2")
-        if science_family == "resonant-network-v1":
-            from nexus.generator.resonance import generate_resonant
-            return generate_resonant(seed, discovery_level=discovery_level, theory_level=theory_level,
-                planning_level=planning_level, resource_pressure=resource_pressure, verifier_secret=verifier_secret)
-        from nexus.generator.network import generate_network
-        return generate_network(seed, discovery_level=discovery_level, theory_level=theory_level,
-            planning_level=planning_level, resource_pressure=resource_pressure, verifier_secret=verifier_secret)
+    if science_family != "shared-response-v1" and axis_version != 2:
+        raise ValueError(f"{science_family} requires axis_version=2")
     if axis_version == 2:
-        from nexus.generator.investigation import generate_investigation
-        return generate_investigation(seed, discovery_level=discovery_level, planning_level=planning_level,
-                                      resource_pressure=resource_pressure, theory_level=theory_level,
-                                      verifier_secret=verifier_secret)
+        return BUILTINS[science_family].generate(
+            seed, discovery_level=discovery_level, planning_level=planning_level,
+            resource_pressure=resource_pressure, theory_level=theory_level,
+            verifier_secret=verifier_secret,
+        )
     if axis_version != 1:
         raise ValueError("axis_version must be 1 (legacy) or 2 (scientific)")
     from nexus.generator.theory import validate_theory_profile
