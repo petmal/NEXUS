@@ -24,8 +24,8 @@ be incorporated into semantic tests. This file is the resumable execution ledger
 
 | Phase | Status | Gate |
 |---|---|---|
-| 0 Baseline | Running | Existing full suite; exact remote/tree anchor |
-| 1 Proof contract | Pending | Tiny oracle, executable rounds, proof payload, shortcut mutations |
+| 0 Baseline | Passed: 507 tests, 3 existing warnings | Existing full suite; exact remote/tree anchor |
+| 1 Proof contract | Finite-model core passed; offline resource/checkpoint runner pending | Tiny oracle, executable rounds, proof payload, shortcut mutations |
 | Shared presentation | Pending | Versioned public rendering across families, historical compatibility |
 | 2 Stateful construction | Pending | All strict gates in one small exact configuration |
 | 3 Runtime integration | Pending | Complete tiny quotient/live conformance, public transcript, receipt/replay |
@@ -46,3 +46,20 @@ NEXUS_STRESS_SEED_COUNT=3 uv run pytest -q --maxfail=1 --durations=12
 Next: finish baseline, implement finite public-policy proof contract, then attempt
 the smallest stateful positive construction. Do not advertise a live deep family
 from the prior static routing proof; that fixture fails the strict success ceiling.
+
+## Phase 1 evidence
+
+- Added exact weighted finite-state policy search with fixed batches, final open-loop
+  commitments, absorbing terminal halt, zero-cost closure and explicit unknown.
+- Independent checker replays the witness and checks all bounded Bellman choices.
+  Its trust boundary is the supplied finite transition table, not the live API.
+- Fourteen retained tests pass. Independent fresh-context review compared 2,100
+  tiny stateful cases against separate enumeration and rejected 145 false proofs.
+- Fixed duplicate-successor timeout bypass, queue allocation before deduplication,
+  and recursion exhaustion. Focused Ruff and Pyright passed.
+- Remaining resource gate: process-isolated offline memory limits and atomic
+  job checkpoints. No live qualification or deep-family registration yet.
+- Construction falsification: the original binary route gives 3/4 two-round
+  success, and one extra reading solves it. Shared-mask F4 gives 7/16 with three
+  readings but a fourth reading gives full two-round success. These are compiled
+  model results, not live-game or T3 guarantees.
