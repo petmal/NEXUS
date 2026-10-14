@@ -218,3 +218,20 @@ Then complete the interface/qualification obligations above. Final full regressi
 `NEXUS_STRESS_SEED_COUNT=3 uv run pytest -q --maxfail=1 --durations=12`.
 
 No paid model requests were made. No account credit/reset state was assumed.
+
+## Resumed integration checkpoint — 14 October 2026
+
+Execution recovered; unpublished work was preserved. Serialized public-policy
+execution/replay passed all7203 truths (15tests,184.11s). Component conformance and
+independent query proof passed. Fresh review found no remaining live-proof blocker
+under the explicit conditional-prior/single-attempt scope. Registration is now
+opt-in and guarded by source/proof/witness identity; compiled episodes also bind
+the semantic release. HTTP play, save/load, human help and packaged proof assets
+pass. The final full regression is running; do not mistake earlier baseline counts
+for its result. A legacy integration assertion was updated for the approved
+versioned presentation while checking that exact mission text is retained.
+
+Local regime:50421 paired cases checked; early treatment reduces it to a stationary
+problem. Its required-revision gate fails, so it is deferred as permitted by Phase4.
+The ten-cell matrix and six-process timing pilot are implemented. Final tasks:
+finish full regression, publish results/matrix and update the PR.

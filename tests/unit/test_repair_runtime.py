@@ -136,6 +136,9 @@ def test_invalid_initial_budget_defaults_and_extra_disclosure_fail_qualification
             e.public.goal.model_copy(update={"value": {"winning_dose": [0, 1, 2, 3]}}),
         ),
         lambda e: setattr(e.generation_metadata, "action_budget", 99),
+        lambda e: e.generation_metadata.investigation_certificate.update(
+            {"semantic_release_sha256": "old-release"}
+        ),
         lambda e: e.public.evidence_files.update({"preview.json": "answer"}),
         lambda e: e.public.initial_state.artifacts["seal"].payload.update({"doses": [0, 0, 0, 0]}),
     ):

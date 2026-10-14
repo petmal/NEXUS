@@ -53,7 +53,9 @@ def test_http_session_round_trip_and_public_evidence():
     assert manifest.status_code == 200
     manifest_payload = manifest.json()
     assert manifest_payload["episode_id"] == episode.public.episode_id
-    assert manifest_payload["description"] == episode.public.description
+    from nexus.models.episode import PlayerManifest
+    assert manifest_payload["description"] == PlayerManifest.from_episode(episode.public).description
+    assert episode.public.description in manifest_payload["description"]
     assert manifest_payload["evidence_files"] == ["facility_manual.txt", "measurements.csv"]
     assert manifest_payload["action_contract"]["reference"]
     assert "initial_state" not in manifest_payload

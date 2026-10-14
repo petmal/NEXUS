@@ -96,6 +96,11 @@ def certificate(planning):
         "two_round_success_upper_numerator": proof.upper_mass,
         "two_round_success_upper_denominator": proof.worlds,
         "query_proof_sha256": digest,
+        "semantic_release_sha256": hashlib.sha256(
+            Path(__file__).with_name("qualified-release.json").read_bytes()
+        ).hexdigest()
+        if qualified
+        else None,
         "live_interface_qualification": "factored-conformance-v1" if qualified else "pending",
         "actual_action_budget": 17 + planning,
         "recovery_allowance": 3,
