@@ -5,6 +5,7 @@ from collections import Counter
 from pydantic import BaseModel, ConfigDict, Field, model_serializer
 
 from nexus.ontology.catalog import runtime_for
+from nexus.ontology.mission import final_acceptance, tracker_for
 from nexus.models.episode import PrivateEpisode
 from nexus.models.events import TraceRecord
 from nexus.models.world import WorldState
@@ -107,25 +108,22 @@ def summarize(
     measurements = informative = target_reducing = submissions = failed = 0
     calibration_count = no_signal_count = after_resolved_count = 0
     first_correct = first_classes = None
-    current_settings = runtime.submitted(episode.public.initial_state)
-    room = episode.public.initial_state.agent_room
+    tracker = tracker_for(runtime, episode)
     for record in trace:
         action = record.action
-        if action.type == "move":
-            room = action.target
-        elif action.type == "configure" and action.machine == runtime.mission_machine(spec):
-            current_settings = action.settings
-        elif action.type == "finish":
+        tracker.observe(record)
+        if action.type == "finish":
             submissions += 1
-            correct = current_settings == expected and room == runtime.mission_room(spec)
+            correct = record.terminal_status.value == "won"
             if first_correct is None:
                 first_correct = correct
                 first_classes = posterior.counts()[1]
             failed += not correct
-            # An unsuccessful submission in the correct room rules out that complete vector.
-            # It is evidence, but never counted as a scientific measurement.
-            if not correct and room == runtime.mission_room(spec):
-                posterior.exclude_target(current_settings)
+            attempted = tracker.attempted()
+            if not correct and attempted is not None:
+                # Only a physically eligible complete decision is excluded.
+                # A wrong room/missing specimen must not falsify its values.
+                posterior.exclude_target(attempted)
         measurement = runtime.measurement(record)
         if measurement is None:
             continue
@@ -157,7 +155,7 @@ def summarize(
             target_classes_before_first_submission=first_classes,
             first_submission_correct=first_correct, mission_submissions=submissions,
             failed_finishes=failed,
-            final_submission_correct=final_settings == expected and state.agent_room == runtime.mission_room(spec),
+            final_submission_correct=final_acceptance(runtime, episode, state),
             invalid_actions=invalid, duplicate_requests=duplicates, protocol_conflicts=conflicts,
             certificate=episode.generation_metadata.investigation_certificate,
         )

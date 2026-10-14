@@ -78,6 +78,11 @@ def _finalize(session: Session) -> dict[str, object]:
 
 def create_app(episode: PrivateEpisode) -> FastAPI:
     """Create the general multi-session HTTP application."""
+    if episode.public.investigation is not None:
+        from nexus.ontology.catalog import runtime_for
+
+        if getattr(runtime_for(episode.public.investigation), "requires_single_session", False):
+            raise ValueError("this profile requires one non-resettable attempt; use serve-session")
     app = _RecordedApp(title="NEXUS", version=episode.public.protocol_version)
     store = SessionStore(episode)
 

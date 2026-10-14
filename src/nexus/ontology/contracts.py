@@ -4,6 +4,11 @@ An adapter is stateless. Only configure/assess_mission may mutate the engine's
 private working copy. No adapter owns turns, resource consumption or receipts.
 Public projections accept no private episode. Inference sees observations, never
 selected truth. New domains keep payload validation in data-only schema modules.
+
+Optional capabilities (queried structurally): mission_tracker(public) follows
+committed physical state for terminal inference; requires_single_session=True
+rejects reset-capable HTTP serving for bounded-attempt profiles. Neither changes
+the engine action protocol or requires family-name branches.
 """
 
 from __future__ import annotations

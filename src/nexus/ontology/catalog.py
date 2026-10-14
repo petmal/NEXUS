@@ -34,7 +34,7 @@ class OntologyDefinition:
     def generate(self, seed: int, **kwargs) -> PrivateEpisode:
         if self.generator is None:
             raise ValueError(
-                "experimental uncalibrated family: use generate_categorical(depth=2 or 3)"
+                f"{self.family} is experimental and unavailable through the general factory"
             )
         module, name = self.generator
         return getattr(import_module(module), name)(seed, **kwargs)
@@ -48,6 +48,14 @@ BUILTINS = MappingProxyType(
     {
         item.family: item
         for item in (
+            OntologyDefinition(
+                "coupled-repair-v1",
+                "coupled-repair-v1",
+                runtime_module="nexus.ontology.repair.runtime",
+                generator=("nexus.ontology.repair.generation", "generate_qualified_repair"),
+                qualifier=("nexus.ontology.repair.qualification", "qualify_repair"),
+                standalone_contract=True,
+            ),
             OntologyDefinition(
                 "categorical-chain-poc-v1",
                 "categorical-chain-poc-v1",

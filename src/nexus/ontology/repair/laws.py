@@ -67,7 +67,7 @@ def transform(world: Truth, specimen: Specimen, machine: str, settings=None) -> 
         if specimen.material == "survey":
             if machine == "reference":
                 reading = (world.a,)
-            elif specimen.charged:
+            elif specimen.charged and specimen.context is not None:
                 reading = response(world, specimen.context)
         return clean.model_copy(update={"reading": reading, "instrument": machine})
     else:
@@ -84,3 +84,13 @@ def worlds() -> tuple[Truth, ...]:
         for d in (1, 2, 3)
         for r in range(Q)
     )
+
+
+def world_at(seed: int) -> Truth:
+    """Constant-space decoding of the declared truth-index sampler."""
+    index = seed % (7**4 * 3)
+    index, r = divmod(index, 7)
+    index, degree = divmod(index, 3)
+    index, c = divmod(index, 7)
+    a, b = divmod(index, 7)
+    return Truth(a=a, b=b, c=c, degree=(1, 2, 3)[degree], r=r)

@@ -53,7 +53,7 @@ class Investigation(Payload):
     stock_room: str
     profile: Literal["stationary-three-round-v1"] = "stationary-three-round-v1"
     # Qualification is task structure, not a claim of empirically calibrated LLM failure.
-    experimental: Literal[True] = True
+    experimental: bool = True
 
 
 SCHEMAS = {"artifact": Specimen, "stock": Stock, "investigation": Investigation, "truth": Truth}

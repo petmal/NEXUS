@@ -78,7 +78,7 @@ def generate(
     axis_version: int = typer.Option(1, min=1, max=2, envvar="NEXUS_AXIS_VERSION",
                                     help="1=legacy profiles; 2=scientific investigation semantics."),
     science_family: str = typer.Option("shared-response-v1", envvar="NEXUS_SCIENCE_FAMILY",
-        help="Scientific family: shared-response-v1, coupled-network-v1, resonant-network-v1, or causal-mechanisms-v1 (requires axes v2)."),
+        help="Scientific family: shared-response-v1, coupled-network-v1, resonant-network-v1, causal-mechanisms-v1, or coupled-repair-v1 (requires axes v2)."),
     discovery_level: int = typer.Option(
         0,
         min=0,
@@ -102,7 +102,7 @@ def generate(
         0,
         min=0,
         max=2,
-        help="Resource pressure 0-2. In v2: unlimited, reference-policy bound plus 8, reference-policy bound. Legacy v1 uses finite budgets.",
+        help="Resource pressure 0-2. Scientific family support and allowances vary; inspect its manifest and profile documentation. Legacy v1 uses finite budgets.",
     ),
 ) -> None:
     """Generate one or more solver-qualified episodes.
@@ -234,7 +234,7 @@ def play(
             spec = session.episode.public.investigation
             _print_play_reference(
                 scientific=spec is not None,
-                resonant=spec is not None and spec.version == "resonant-network-v1",
+                resonant=getattr(spec, "version", None) == "resonant-network-v1",
                 contract=runtime_for(spec).public_contract(spec) if spec is not None else None,
             )
             continue
@@ -328,7 +328,7 @@ def serve_session(
     axis_version: int = typer.Option(1, min=1, max=2, envvar="NEXUS_AXIS_VERSION",
                                     help="1=legacy profiles; 2=scientific investigation semantics."),
     science_family: str = typer.Option("shared-response-v1", envvar="NEXUS_SCIENCE_FAMILY",
-        help="Scientific family: shared-response-v1, coupled-network-v1, resonant-network-v1, or causal-mechanisms-v1 (requires axes v2)."),
+        help="Scientific family: shared-response-v1, coupled-network-v1, resonant-network-v1, causal-mechanisms-v1, or coupled-repair-v1 (requires axes v2)."),
     discovery_level: int = typer.Option(
         0,
         min=0,

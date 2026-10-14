@@ -70,3 +70,10 @@ def test_reorientation_erases_charge_and_partial_repair_is_reversible():
     key = transform(world, Specimen(material="seal"), "doser", (6, 6, 6, 6))
     repaired = transform(world, key, "doser", solution(world.a, world.b, world.c, world.degree))
     assert residuals(world, repaired.doses) == (0, 0, 0, 0)
+
+
+def test_constant_space_seed_decoder_matches_the_exact_uniform_index_order():
+    from nexus.ontology.repair.laws import world_at
+
+    assert tuple(world_at(i) for i in range(7203)) == worlds()
+    assert world_at(7203) == world_at(0) == world_at(-7203)

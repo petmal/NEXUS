@@ -4,11 +4,13 @@ from types import MappingProxyType
 
 from nexus.ontology.categorical.schema import SCHEMAS as CATEGORICAL
 from nexus.ontology.causal.schema import SCHEMAS as CAUSAL
+from nexus.ontology.repair.schema import SCHEMAS as REPAIR
 
 _SCHEMAS = MappingProxyType(
     {
         "categorical-chain-poc-v1": MappingProxyType(dict(CATEGORICAL)),
         "causal-mechanisms-v1": MappingProxyType(dict(CAUSAL)),
+        "coupled-repair-v1": MappingProxyType(dict(REPAIR)),
     }
 )
 

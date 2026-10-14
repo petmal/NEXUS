@@ -1,0 +1,238 @@
+[
+  {
+    "scope": "immutable-weighted-query-and-generic-complete-guess-model-only",
+    "field": "F7",
+    "d_hidden": false,
+    "worlds": 2401,
+    "mission_targets": 343,
+    "queries": 15,
+    "results": [
+      {
+        "bc_cost": 3,
+        "guess_cost": 2,
+        "budget_after_take": 11,
+        "query_batch_subsets": 576,
+        "maximum_query_count": 3,
+        "success_mass": 1029,
+        "success_probability": "3/7",
+        "best_first_batch": [
+          [
+            "A"
+          ]
+        ],
+        "example_branches": [
+          {
+            "second_batch": [
+              [
+                "B",
+                0
+              ]
+            ],
+            "branch_mass": 343,
+            "success_mass": 147
+          },
+          {
+            "second_batch": [
+              [
+                "B",
+                1
+              ]
+            ],
+            "branch_mass": 343,
+            "success_mass": 147
+          }
+        ],
+        "last_batch_cache": {
+          "hits": 119513,
+          "misses": 21225,
+          "maxsize": null,
+          "currsize": 21225
+        },
+        "seconds": 1.126987
+      },
+      {
+        "bc_cost": 4,
+        "guess_cost": 3,
+        "budget_after_take": 15,
+        "query_batch_subsets": 576,
+        "maximum_query_count": 3,
+        "success_mass": 1029,
+        "success_probability": "3/7",
+        "best_first_batch": [
+          [
+            "A"
+          ]
+        ],
+        "example_branches": [
+          {
+            "second_batch": [
+              [
+                "B",
+                0
+              ]
+            ],
+            "branch_mass": 343,
+            "success_mass": 147
+          },
+          {
+            "second_batch": [
+              [
+                "B",
+                1
+              ]
+            ],
+            "branch_mass": 343,
+            "success_mass": 147
+          }
+        ],
+        "last_batch_cache": {
+          "hits": 119513,
+          "misses": 21225,
+          "maxsize": null,
+          "currsize": 21225
+        },
+        "seconds": 0.940901
+      }
+    ],
+    "refinement_cache": {
+      "hits": 389,
+      "misses": 220583,
+      "maxsize": 1024,
+      "currsize": 1024
+    },
+    "target_mass_cache": {
+      "hits": 1967239,
+      "misses": 21127,
+      "maxsize": null,
+      "currsize": 21127
+    },
+    "seconds": 2.07592,
+    "process_peak_rss_kib_linux": 67028
+  },
+  {
+    "scope": "immutable-weighted-query-and-generic-complete-guess-model-only",
+    "field": "F7",
+    "d_hidden": true,
+    "worlds": 7203,
+    "mission_targets": 1029,
+    "queries": 15,
+    "results": [
+      {
+        "bc_cost": 3,
+        "guess_cost": 2,
+        "budget_after_take": 11,
+        "query_batch_subsets": 576,
+        "maximum_query_count": 3,
+        "success_mass": 2793,
+        "success_probability": "19/49",
+        "best_first_batch": [
+          [
+            "A"
+          ]
+        ],
+        "example_branches": [
+          {
+            "second_batch": [
+              [
+                "B",
+                0
+              ],
+              [
+                "C",
+                0
+              ]
+            ],
+            "branch_mass": 1029,
+            "success_mass": 399
+          },
+          {
+            "second_batch": [
+              [
+                "B",
+                1
+              ],
+              [
+                "C",
+                0
+              ]
+            ],
+            "branch_mass": 1029,
+            "success_mass": 399
+          }
+        ],
+        "last_batch_cache": {
+          "hits": 339523,
+          "misses": 61993,
+          "maxsize": null,
+          "currsize": 61993
+        },
+        "seconds": 6.558059
+      },
+      {
+        "bc_cost": 4,
+        "guess_cost": 3,
+        "budget_after_take": 15,
+        "query_batch_subsets": 576,
+        "maximum_query_count": 3,
+        "success_mass": 2793,
+        "success_probability": "19/49",
+        "best_first_batch": [
+          [
+            "A"
+          ]
+        ],
+        "example_branches": [
+          {
+            "second_batch": [
+              [
+                "B",
+                0
+              ],
+              [
+                "C",
+                0
+              ]
+            ],
+            "branch_mass": 1029,
+            "success_mass": 399
+          },
+          {
+            "second_batch": [
+              [
+                "B",
+                1
+              ],
+              [
+                "C",
+                0
+              ]
+            ],
+            "branch_mass": 1029,
+            "success_mass": 399
+          }
+        ],
+        "last_batch_cache": {
+          "hits": 339523,
+          "misses": 61993,
+          "maxsize": null,
+          "currsize": 61993
+        },
+        "seconds": 5.317935
+      }
+    ],
+    "refinement_cache": {
+      "hits": 363,
+      "misses": 581053,
+      "maxsize": 1024,
+      "currsize": 1024
+    },
+    "target_mass_cache": {
+      "hits": 5577069,
+      "misses": 61797,
+      "maxsize": null,
+      "currsize": 61797
+    },
+    "seconds": 11.904004,
+    "process_peak_rss_kib_linux": 433292
+  }
+]
