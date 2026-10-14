@@ -97,3 +97,124 @@ from the prior static routing proof; that fixture fails the strict success ceili
   contract, offline proof payload/checkpoint, runtime registration and final gates.
 - A one-action budget increase permits guaranteed two-round success; no resource
   envelope may conceal this cliff.
+
+## Execution interruption checkpoint — 14 October 2026
+
+**The final plan is not complete. Do not enable the strict family yet.** The shell
+execution service disconnected while final live qualification was in progress;
+even `pwd` and a small file edit stopped returning. GitHub remained available, so
+this checkpoint was published separately. No source was promoted on the strength
+of an incomplete gate.
+
+### Published, verified checkpoints
+
+The five implementation commits through
+`dc8f4fe5fcded7700e354fe0e261684f5f0d877a` contain the approved plan, exact finite
+policy/checker core, common presentation, complete public transcript support,
+and pure repair schema/laws/tests. Baseline: **507 passed**, three existing
+warnings. Focused checks and independent reviews are recorded above.
+
+### Additional work saved in the working directory, not yet published
+
+Repository: `/workspace/scratch/5185b9a844b2/nexus-theory`.
+Preserve the dirty worktree before updating it from this newer documentation
+commit. The latest local source HEAD was the published SHA above.
+
+- New repair modules: `evidence.py`, `generation.py`, `inference.py`,
+  `policy.py`, `proof.py`, `qualification.py`, `runtime.py`,
+  and `query-upper-proof.json`.
+- Shared integration: `ontology/mission.py`, runtime-only catalog and payload
+  registration, mission metrics based on applied key state, and the optional
+  single-session HTTP restriction. The general generator remains disabled.
+- Offline scripts: `prove_repair_queries.py`, `qualify_repair_offline.py`;
+  construction proof/result documents; runtime and qualification tests.
+- Constant-space seed decoder; whole-goal equality, seed/truth agreement and
+  canonical resource/metadata checks. These close independently found
+  qualification bypasses.
+- The reference investigator was replaced by a serialized fixed-batch Program
+  tree and interpreter. It makes scientific choices at three explicit feedback
+  boundaries. Only expected-turn and opaque specimen-handle substitutions occur
+  inside a batch. Serialization and declared round/action ceilings are checked.
+- The offline query runner now rejects any requested round limit other than
+  two, rather than silently reporting the two-round answer under another label.
+
+### Confirmed results and their exact scope
+
+- Independent abstract proof review: complete 576-choice upper payload regenerated
+  and separately checked; **3/7** upper bound when the structural degree is
+  supplied free. Full hidden-degree query model: **19/49**. Forged payload
+  mutations were rejected. This is not yet a complete live-interface certificate.
+- Offline isolated proof job: exact and independently checked, **9.106 s**,
+  **82,252 KiB** peak RSS on Linux, with a 512 MiB cap. The independent full model
+  rerun used **10.438 s / 440,852 KiB**. Jobs checkpoint atomically, but incomplete
+  search cells restart; there is no serialized recursive frontier.
+- Before the serialized-interpreter revision, all **7,203 truths** won through
+  the actual Session engine at P1 in 15 actions, emitted actual receipts and
+  replayed exactly (**72.39 s**). This exhaustive run must be repeated for the
+  final serialized witness.
+- **91 existing network/ontology/causal tests** passed with the new mission seam.
+- After the serialized-policy and qualification fixes, **14 focused live tests**
+  passed; the exhaustive test was deliberately excluded from that quick run.
+- Latest focused Ruff and Pyright passed (run through cached `uvx --offline`;
+  they are not dependencies of the repository environment).
+- Earlier proof/construction checks: **7 passed**. Final full-suite regression,
+  live conformance qualification, performance report and real-model matrix remain
+  unfinished. Do not describe the intermediate results as the final test run.
+
+### Review findings and remaining obligations
+
+Review reports in `/workspace/scratch/5185b9a844b2/analysis/`:
+`repair-live-judgement.md`, `repair-proof-judgement.md`,
+`finite-policy-judgement.md`, `public-boundary-judgement.md`.
+
+The live reviewer found no cheaper distinct contextual reading, cheaper distinct
+key attempt, active-state hidden hint, recovery error, or mission-tracker
+regression in the generated single-session mechanics. However:
+
+1. Prove and test complete public-state/response factorization for every reachable
+   action class; witness trajectories alone do not prove conformance. Include
+   errors, free observations, cached replies, event hashes, previews, arbitrary
+   legal vectors, multiple specimens, terminal/finalize behavior and transports.
+2. Finish exact public-template validation, including complete room objects, not
+   just labels. Verify the new whole-goal, seed and metadata rejection tests.
+3. Scope qualification to **one non-resettable attempt**, no private-process
+   access, uniform truth indices 0..7202, exact P0/P1 R1 budgets, and application
+   responses rather than timing side channels. Test the multi-session rejection.
+4. Re-run all 7,203 worlds through the serialized public witness; add false-program
+   tests and the dropped-key/ineligible-finish/retake telemetry regression.
+5. Bind checked proof and witness artifacts to the actual semantic implementation
+   before cheap per-episode qualification. Digests establish identity, not proof.
+   Missing/changed/unknown qualification must fail closed.
+6. Complete the global action charging argument: each distinct B/C costs at least
+   four across the whole history, each new tested dose at least three. Querying
+   paths pay key + survey acquisition and required travel. Pure-guess paths can
+   omit the survey, but still afford only five attempts. Do not subtract survey
+   acquisition from every policy without this separate case.
+7. Clarify deferred-guess normal form for counterfactual all-fail histories that
+   become unreachable: truncate at the funded budget and commit the reserved
+   guesses; those guesses already cover the otherwise missing successful paths.
+8. Only after this gate may catalog generation be enabled for T3/D5/P0-or-P1/R1.
+   Strict budgets are 17/18 actions, including one failed complete repair.
+   One extra action allows a guaranteed shallow strategy; reject overrides and
+   publish this cliff. This is not an empirical model-failure guarantee.
+9. Attempt the bounded local-regime variant and paired stationary control. Ship
+   it only if it adds real revision and passes its scope. Otherwise record its
+   counterexample and defer as explicitly permitted by Phase 4.
+10. Finish cold/warm generation profiling, terminal telemetry, evaluation matrix,
+    final compatibility suite, documentation, focused commits and leased
+    publication. Do not merge main or alter MindTrial behavior.
+
+### Immediate resume commands
+
+```sh
+git status --short
+uv sync --frozen --all-extras
+uv run pytest -q tests/unit/test_repair_runtime.py --maxfail=1
+uv run pytest -q tests/unit/test_repair_qualification.py tests/unit/test_repair_construction.py
+uv run python scripts/qualify_repair_offline.py --output /tmp/repair-proof.json --max-seconds 120 --memory-mib 512
+```
+
+Then complete the interface/qualification obligations above. Final full regression:
+`NEXUS_STRESS_SEED_COUNT=3 uv run pytest -q --maxfail=1 --durations=12`.
+
+No paid model requests were made. No account credit/reset state was assumed.
