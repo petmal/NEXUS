@@ -13,9 +13,11 @@ from nexus.models.world import Machine, Resources, Room, WorldState
 from nexus.ontology.categorical.laws import PERMUTATIONS, prefix, target
 from nexus.ontology.categorical.runtime import FAMILY
 from nexus.ontology.categorical.schema import SYMBOLS
+from nexus.presentation import CURRENT, PresentationVersion
 
 
-def generate_categorical(seed: int, *, depth: int = 3, verifier_secret: str | None = None):
+def generate_categorical(seed: int, *, depth: int = 3, verifier_secret: str | None = None,
+                         presentation_version: PresentationVersion | None = CURRENT):
     if depth not in (2, 3):
         raise ValueError("categorical PoC supports depth 2 or 3")
     if verifier_secret == "":
@@ -59,6 +61,7 @@ actions advance turns without a resource cap. No staged unlocks apply.
     )
     return PrivateEpisode(
         public=PublicEpisode(
+            presentation_version=presentation_version,
             episode_id=hmac.new(
                 secret.encode(), f"{FAMILY}|{seed}|{depth}".encode(), hashlib.sha256
             ).hexdigest()[:16],

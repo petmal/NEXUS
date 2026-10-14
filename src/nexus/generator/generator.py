@@ -9,6 +9,7 @@ from itertools import permutations
 import networkx as nx
 
 from nexus.diagnostics import generation_diagnostics, timed_call, timed_stage
+from nexus.presentation import CURRENT, PresentationVersion, attach
 from nexus.engine.rules import apply_effect
 from nexus.generator.constructed import (
     CONSTRUCTOR_VALUE,
@@ -1662,6 +1663,7 @@ def generate_episode(
     verifier_secret: str | None = None,
     axis_version: int = 1,
     science_family: str = "shared-response-v1",
+    presentation_version: PresentationVersion | None = CURRENT,
 ) -> PrivateEpisode:
     """Generate a deterministic, solver-qualified NEXUS episode.
 
@@ -1670,16 +1672,19 @@ def generate_episode(
     policy cost.
     """
     from nexus.ontology.catalog import BUILTINS
+    if presentation_version not in (None, CURRENT):
+        raise ValueError("unsupported presentation version")
     if science_family not in BUILTINS:
         raise ValueError("unknown scientific family")
     if science_family != "shared-response-v1" and axis_version != 2:
         raise ValueError(f"{science_family} requires axis_version=2")
     if axis_version == 2:
-        return BUILTINS[science_family].generate(
+        episode = BUILTINS[science_family].generate(
             seed, discovery_level=discovery_level, planning_level=planning_level,
             resource_pressure=resource_pressure, theory_level=theory_level,
             verifier_secret=verifier_secret,
         )
+        return attach(episode, presentation_version)
     if axis_version != 1:
         raise ValueError("axis_version must be 1 (legacy) or 2 (scientific)")
     from nexus.generator.theory import validate_theory_profile
@@ -1736,4 +1741,4 @@ def generate_episode(
                 "generated episode failed final profile qualification: "
                 + ", ".join(name for name, passed in report.checks.items() if not passed)
             )
-    return episode
+    return attach(episode, presentation_version)

@@ -35,6 +35,7 @@ def episode(family="resonant-network-v1", *, d=5, t=3, p=0, r=0, seed=7):
         planning_level=p,
         resource_pressure=r,
         verifier_secret=FIXTURE["secret"],
+        presentation_version=None,  # Historical published wording and hashes.
     )
 
 

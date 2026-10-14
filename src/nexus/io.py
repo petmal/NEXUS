@@ -5,6 +5,7 @@ from pathlib import Path
 
 from nexus.models.episode import PlayerManifest, PrivateEpisode, PublicEpisode
 from nexus.models.events import TraceRecord
+from nexus.presentation import evidence_files
 
 
 def load_private(path: Path) -> PrivateEpisode:
@@ -32,7 +33,7 @@ def save_episode(episode: PrivateEpisode, directory: Path) -> None:
 
     attachments = directory / "attachments"
     attachments.mkdir(exist_ok=True)
-    for filename, content in episode.public.evidence_files.items():
+    for filename, content in evidence_files(episode.public).items():
         (attachments / filename).write_text(content, encoding="utf-8")
 
 

@@ -4,6 +4,7 @@ from nexus.ontology.catalog import runtime_for
 from nexus.models.episode import PublicEpisode
 from nexus.models.observation import Observation
 from nexus.models.world import INVENTORY, WorldState
+from nexus.presentation import room_label
 
 
 def _neighbors(episode: PublicEpisode, room_id: str) -> tuple[str, ...]:
@@ -41,7 +42,7 @@ def observation(episode: PublicEpisode, state: WorldState) -> Observation:
         episode_id=episode.episode_id,
         turn=state.turn,
         room=room_id,
-        room_label=episode.rooms[room_id].label,
+        room_label=room_label(episode, room_id),
         exits=_neighbors(episode, room_id),
         phase=state.phase,
         actions_remaining=state.resources.actions_remaining,

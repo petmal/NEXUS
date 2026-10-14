@@ -7,6 +7,7 @@ from nexus.models.actions import action_contract
 from nexus.models.goals import GoalPredicate
 from nexus.models.rules import Effect
 from nexus.models.world import Room, WorldState
+from nexus.presentation import PresentationVersion
 from nexus.models.investigation import InvestigationSpec, InvestigationTruth
 from nexus.models.network import NetworkSample, NetworkSpec, NetworkStock, NetworkTruth
 
@@ -23,6 +24,7 @@ class PublicEpisode(BaseModel):
 
     protocol_version: str = "nexus-0.2"
     episode_id: str
+    presentation_version: PresentationVersion | None = Field(default=None, exclude_if=lambda v: v is None)
     description: str
     rooms: dict[str, Room]
     edges: tuple[tuple[str, str], ...]
@@ -79,6 +81,7 @@ class PlayerManifest(BaseModel):
 
     protocol_version: str
     episode_id: str
+    presentation_version: PresentationVersion | None = Field(default=None, exclude_if=lambda v: v is None)
     description: str
     goal: GoalPredicate
     evidence_files: tuple[str, ...] = ()
@@ -87,11 +90,13 @@ class PlayerManifest(BaseModel):
     @classmethod
     def from_episode(cls, episode: PublicEpisode) -> "PlayerManifest":
         from nexus.ontology.catalog import runtime_for
+        from nexus.presentation import description
 
         return cls(
             protocol_version=episode.protocol_version,
             episode_id=episode.episode_id,
-            description=episode.description,
+            presentation_version=episode.presentation_version,
+            description=description(episode),
             goal=episode.goal,
             evidence_files=tuple(sorted(episode.evidence_files)),
             action_contract=(runtime_for(episode.investigation).public_contract(episode.investigation)

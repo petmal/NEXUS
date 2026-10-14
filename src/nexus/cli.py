@@ -208,7 +208,8 @@ def play(
 
     session = Session(load_private(private))
     render_observer(session.episode, session.state, debug_private=debug_private)
-    console.print(session.episode.public.description)
+    from nexus.presentation import description, evidence_files
+    console.print(description(session.episode.public))
     console.print(
         "Evidence files: "
         + ", ".join(sorted(session.episode.public.evidence_files))
@@ -244,7 +245,7 @@ def play(
                 console.print("[red]usage:[/red] evidence <filename>")
                 continue
             filename = parts[1].strip()
-            content = session.episode.public.evidence_files.get(filename)
+            content = evidence_files(session.episode.public).get(filename)
             if content is None:
                 console.print(f"[red]evidence file not found:[/red] {filename}")
                 continue

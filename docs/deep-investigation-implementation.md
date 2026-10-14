@@ -26,7 +26,7 @@ be incorporated into semantic tests. This file is the resumable execution ledger
 |---|---|---|
 | 0 Baseline | Passed: 507 tests, 3 existing warnings | Existing full suite; exact remote/tree anchor |
 | 1 Proof contract | Finite-model core passed; offline resource/checkpoint runner pending | Tiny oracle, executable rounds, proof payload, shortcut mutations |
-| Shared presentation | Pending | Versioned public rendering across families, historical compatibility |
+| Shared presentation | Passed | Versioned public rendering across families, historical compatibility |
 | 2 Stateful construction | Pending | All strict gates in one small exact configuration |
 | 3 Runtime integration | Pending | Complete tiny quotient/live conformance, public transcript, receipt/replay |
 | 4 Local regime | Pending | Paired revision problem; otherwise explicitly deferred by its gate |
@@ -63,3 +63,14 @@ from the prior static routing proof; that fixture fails the strict success ceili
   success, and one extra reading solves it. Shared-mask F4 gives 7/16 with three
   readings but a fourth reading gives full two-round success. These are compiled
   model results, not live-game or T3 guarantees.
+
+## Shared presentation evidence
+
+- New current generation selects `sealed-facility-v1`; historical episodes default
+  to absent presentation and retain their exact original serialization.
+- Public-only renderer covers manifest, evidence, observations, CLI, human observer
+  and saved attachments across all six ontology paths. Scientific JSON is unchanged.
+- Map function labels remain explicitly available to public reference policies;
+  changing display labels must not remove public room-role information.
+- 42 existing compatibility/CLI/service tests and 18 presentation/ontology tests
+  passed. Paired old/new presentation traces, final states and receipts match.

@@ -10,6 +10,7 @@ from pydantic import BaseModel, ConfigDict
 from nexus.models.actions import Action
 from nexus.models.episode import PlayerManifest, PrivateEpisode
 from nexus.protocol.session import Session
+from nexus.presentation import evidence as public_evidence
 
 
 class ActionRequest(BaseModel):
@@ -45,7 +46,7 @@ def _player_manifest(episode: PrivateEpisode) -> dict:
 
 def _evidence(episode: PrivateEpisode, filename: str) -> str:
     try:
-        return episode.public.evidence_files[filename]
+        return public_evidence(episode.public, filename)
     except KeyError as exc:
         raise HTTPException(status_code=404, detail="evidence file not found") from exc
 

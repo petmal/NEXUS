@@ -9,6 +9,7 @@ from nexus.models.domain import DomainArtifact, DomainStock
 from nexus.models.episode import PrivateEpisode
 from nexus.models.network import NetworkSample, NetworkStock
 from nexus.models.world import WorldState
+from nexus.presentation import room_label
 
 
 def _room_exits(episode: PrivateEpisode) -> dict[str, tuple[str, ...]]:
@@ -42,11 +43,10 @@ def render_observer(
     map_table.add_column("label")
     map_table.add_column("exits")
     for room_id, exits in _room_exits(episode).items():
-        room = episode.public.rooms[room_id]
         map_table.add_row(
             "●" if room_id == state.agent_room else "",
             room_id,
-            room.label,
+            room_label(episode.public, room_id),
             ", ".join(exits) or "—",
         )
     console.print(map_table)

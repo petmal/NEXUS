@@ -20,7 +20,8 @@ def public_policy(player, evidence: dict[str, str]):
     theory = json.loads(evidence["theory.json"])
     map_data = json.loads(evidence["map.json"])
     stock = player.observe().room
-    lab = next(room for room, label in map_data["rooms"].items() if label == "Causal laboratory")
+    functions = map_data.get("sector_functions", map_data["rooms"])
+    lab = next(room for room, label in functions.items() if label == "Causal laboratory")
     spec = Investigation(
         theory=theory["theory_level"],
         discovery=theory["discovery_level"],
