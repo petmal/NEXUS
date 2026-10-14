@@ -74,3 +74,26 @@ from the prior static routing proof; that fixture fails the strict success ceili
   changing display labels must not remove public room-role information.
 - 42 existing compatibility/CLI/service tests and 18 presentation/ontology tests
   passed. Paired old/new presentation traces, final states and receipts match.
+
+## Public boundary evidence
+
+- Complete application projections now cover HTTP (including framework 500/422),
+  JSONL, and typed Session calls alongside the unchanged action replay trace.
+- Eight focused semantic tests pass. Fresh-context review found and closed four
+  projection/delivery issues; 12 concurrent sessions retained isolated effects.
+- Storage is bounded and incomplete coverage is explicit. Network timing and
+  pre-ASGI transport errors are outside this documented boundary.
+
+## Stateful construction checkpoint
+
+- Pure laws/schema (not yet registered) cover 7,203 F7 worlds with a missing
+  z/z²/z³ relation, shared calibration mask, and coupled four-channel key repair.
+- Four exhaustive primitive tests pass: public three-round inference, target
+  bijection, off-context responses, material insensitivity and reversible repair.
+- Independent exact query abstraction: 19/49 shallow success; granting structure
+  free gives a conservative 3/7 upper bound. Bounded-cache runs take ~2 s / 66 MiB
+  for the relaxation and ~12 s / 423 MiB for the full query model.
+- Still required: complete live cost/observation conformance, actual sampling
+  contract, offline proof payload/checkpoint, runtime registration and final gates.
+- A one-action budget increase permits guaranteed two-round success; no resource
+  envelope may conceal this cliff.

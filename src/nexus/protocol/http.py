@@ -10,7 +10,20 @@ from pydantic import BaseModel, ConfigDict
 from nexus.models.actions import Action
 from nexus.models.episode import PlayerManifest, PrivateEpisode
 from nexus.protocol.session import Session
+from nexus.protocol.public_transcript import PublicTranscript, PublicTranscriptMiddleware
 from nexus.presentation import evidence as public_evidence
+
+
+class _RecordedApp(FastAPI):
+    """Capture outside the framework's error middleware, including its 500 body."""
+
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.state.public_transcript = PublicTranscript()
+        self._capture = PublicTranscriptMiddleware(super().__call__, self.state.public_transcript)
+
+    async def __call__(self, scope, receive, send):
+        await self._capture(scope, receive, send)
 
 
 class ActionRequest(BaseModel):
@@ -65,7 +78,7 @@ def _finalize(session: Session) -> dict[str, object]:
 
 def create_app(episode: PrivateEpisode) -> FastAPI:
     """Create the general multi-session HTTP application."""
-    app = FastAPI(title="NEXUS", version=episode.public.protocol_version)
+    app = _RecordedApp(title="NEXUS", version=episode.public.protocol_version)
     store = SessionStore(episode)
 
     @app.get("/health")
@@ -114,7 +127,7 @@ def create_app(episode: PrivateEpisode) -> FastAPI:
 
 def create_single_session_app(episode: PrivateEpisode) -> FastAPI:
     """Create an HTTP application that owns exactly one non-resettable session."""
-    app = FastAPI(title="NEXUS", version=episode.public.protocol_version)
+    app = _RecordedApp(title="NEXUS", version=episode.public.protocol_version)
     session = Session(episode)
 
     @app.get("/health")

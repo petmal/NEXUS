@@ -15,6 +15,7 @@ from nexus.models.goals import GoalKind, GoalPredicate
 from nexus.models.observation import Observation
 from nexus.models.world import TerminalStatus, WorldState
 from nexus.render.text import observation
+from nexus.protocol.public_transcript import PublicTranscript, record
 from nexus.protocol.investigation_metrics import InvestigationPerformance, MissionPerformance
 
 PERFORMANCE_SCHEMA_URL = (
@@ -125,6 +126,7 @@ class Session:
         self.episode = episode
         self.state: WorldState = episode.public.initial_state.model_copy(deep=True)
         self.trace: list[TraceRecord] = []
+        self.public_transcript = PublicTranscript()
         self._turn_cache: dict[int, tuple[Action, ActionResponse]] = {}
         self._invalid_actions = 0
         self._failed_finishes = 0
@@ -132,7 +134,49 @@ class Session:
         self._protocol_conflicts = 0
         self._lock = RLock()
 
+    def _public_effect(self):
+        return {"turn": self.state.turn, "actions_remaining": self.state.resources.actions_remaining,
+                "terminal_status": self.state.terminal_status.value}
+
+    def _exchange(self, request, operation, *, exclude_none=True):
+        with self._lock:
+            before = self._public_effect()
+            try:
+                response = operation()
+            except Exception as exc:
+                record(self.public_transcript, request,
+                       {"exception": type(exc).__name__, "message": str(exc)},
+                       before, self._public_effect())
+                raise
+            projected = (response.model_dump(mode="json", exclude_none=exclude_none)
+                         if isinstance(response, BaseModel) else response)
+            record(self.public_transcript, request, projected, before, self._public_effect())
+            return response
+
+    def manifest(self):
+        from nexus.models.episode import PlayerManifest
+        return self._exchange({"operation": "manifest"},
+                              lambda: PlayerManifest.from_episode(self.episode.public), exclude_none=False)
+
+    def evidence(self, filename: str):
+        from nexus.presentation import evidence
+        return self._exchange({"operation": "evidence", "filename": filename},
+                              lambda: evidence(self.episode.public, filename))
+
     def observe(self) -> Observation:
+        return self._exchange({"operation": "observe"}, self._observe)
+
+    def status(self) -> SessionStatus:
+        return self._exchange({"operation": "status"}, self._status, exclude_none=False)
+
+    def act(self, expected_turn: int, action: Action) -> ActionResponse:
+        return self._exchange(
+            {"operation": "action", "expected_turn": expected_turn,
+             "action": action.model_dump(mode="json")},
+            lambda: self._act(expected_turn, action),
+        )
+
+    def _observe(self) -> Observation:
         with self._lock:
             return observation(self.episode.public, self.state)
 
@@ -144,7 +188,7 @@ class Session:
         with self._lock:
             return self.state.model_copy(deep=True)
 
-    def status(self) -> SessionStatus:
+    def _status(self) -> SessionStatus:
         with self._lock:
             victory_code = next(
                 (record.victory_code for record in reversed(self.trace) if record.victory_code),
@@ -170,7 +214,7 @@ class Session:
             performance = self._performance_summary()
             if performance is None:
                 raise RuntimeError("finalized attempt did not produce terminal performance")
-            return self.status(), performance
+            return self._status(), performance
 
     def _performance_summary(self) -> PerformanceSummary | InvestigationPerformance | MissionPerformance | None:
         if self.state.terminal_status == TerminalStatus.ACTIVE:
@@ -249,7 +293,7 @@ class Session:
             protocol_conflicts=self._protocol_conflicts,
         )
 
-    def act(self, expected_turn: int, action: Action) -> ActionResponse:
+    def _act(self, expected_turn: int, action: Action) -> ActionResponse:
         with self._lock:
             cached = self._turn_cache.get(expected_turn)
             if cached is not None:
@@ -267,7 +311,7 @@ class Session:
                     ok=False,
                     expected_turn=expected_turn,
                     current_turn=self.state.turn,
-                    observation=self.observe(),
+                    observation=self._observe(),
                     message=(
                         f"turn {expected_turn} was already committed with a different action"
                     ),
@@ -280,7 +324,7 @@ class Session:
                     ok=False,
                     expected_turn=expected_turn,
                     current_turn=self.state.turn,
-                    observation=self.observe(),
+                    observation=self._observe(),
                     message=f"turn mismatch: expected {expected_turn}, current {self.state.turn}",
                     performance=self._performance_summary(),
                 )
@@ -293,7 +337,7 @@ class Session:
                     ok=False,
                     expected_turn=expected_turn,
                     current_turn=self.state.turn,
-                    observation=self.observe(),
+                    observation=self._observe(),
                     message=result.message,
                     performance=self._performance_summary(),
                 )
@@ -325,7 +369,7 @@ class Session:
                 ok=True,
                 expected_turn=expected_turn,
                 current_turn=self.state.turn,
-                observation=self.observe(),
+                observation=self._observe(),
                 events=tuple(event.model_dump(mode="json") for event in result.events),
                 message=result.message,
                 victory_code=result.victory_code,
