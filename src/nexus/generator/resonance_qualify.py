@@ -72,6 +72,8 @@ def qualify_resonant(episode: PrivateEpisode):
         )
         expected.public.evidence_files = evidence_files(expected)
         expected.reference_plan = reference_plan(expected)
+        from nexus.presentation import attach
+        expected = attach(expected, episode.public.presentation_version)
         checks["compiled_public_contract"] = episode.public == expected.public
         checks["compiled_metadata"] = meta == expected.generation_metadata
         checks["no_undeclared_rules"] = not episode.rules and not episode.machine_rules

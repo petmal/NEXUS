@@ -18,10 +18,13 @@ from nexus.protocol.http import create_single_session_app
 @pytest.mark.parametrize("d", range(6))
 def test_t0_retains_pre_theory_compiled_episode(d):
     fixture = json.loads((Path(__file__).parents[1] / "fixtures/theory-t0-baseline.json").read_text())
+    # This fixture predates versioned presentation. Preserve its exact bytes;
+    # current/legacy presentation execution parity is covered separately.
     episode = generate_episode(fixture["seed"], discovery_level=d, planning_level=2,
-                               verifier_secret=fixture["secret"])
+                               verifier_secret=fixture["secret"], presentation_version=None)
     explicit = generate_episode(fixture["seed"], discovery_level=d, planning_level=2,
-                                theory_level=0, verifier_secret=fixture["secret"])
+                                theory_level=0, verifier_secret=fixture["secret"],
+                                presentation_version=None)
     assert episode == explicit
     payload = episode.model_dump(mode="json")
     assert payload["generation_metadata"].pop("theory_level") == 0

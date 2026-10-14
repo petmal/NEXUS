@@ -79,3 +79,21 @@ def test_shared_setting_preserves_every_family_execution_and_receipt(family, tmp
 def test_presentation_version_is_validated_before_expensive_generation():
     with pytest.raises(ValueError, match="presentation"):
         generate_episode(7, presentation_version="future-invalid")
+
+
+@pytest.mark.parametrize("family", ("coupled-network-v1", "resonant-network-v1"))
+@pytest.mark.parametrize("version", (None, CURRENT))
+def test_recompiled_qualification_preserves_selected_presentation(family, version):
+    from nexus.generator import qualify_episode
+
+    episode = generate_episode(
+        7,
+        axis_version=2,
+        science_family=family,
+        theory_level=3,
+        discovery_level=0,
+        planning_level=0,
+        resource_pressure=1,
+        presentation_version=version,
+    )
+    assert qualify_episode(episode).passed
