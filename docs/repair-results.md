@@ -151,3 +151,26 @@ time/state/memory limits. An incomplete search cell restarts; it does not resume
 a serialized recursive stack. Source packages are immutable during a running
 process; restart and requalify after changes. Wheel inspection verifies the exact
 bound Python sources and both required JSON proof assets are packaged.
+
+## Windows packaging correction — 14 October 2026
+
+The first real-model pilot's 42 repair attempts stopped during startup: the installed
+package did not match the qualified release. The image was built on Windows. A
+CRLF-only source conversion reproduces that error even though Linux CI passed.
+Git attributes now require LF for Python/JSON sources. Container builds also
+restore CRLF to LF inside the build copy before installation, then verify the
+installed package against the exact source/proof/witness hashes. No manifest is
+regenerated during a build, and other modifications remain disallowed.
+
+Qualification errors distinguish CRLF-only differences, changed/missing/extra
+sources, proof changes and witness changes. Source-map keys use POSIX separators.
+The image includes `scripts/preflight_repair.py`, which completes and replays both
+qualified profiles; CI runs it inside the actual container.
+
+Verification: 41 focused packaging/repair/service tests passed, including the
+independent upper-bound checker (one unchanged exhaustive slow test deselected).
+A wheel built from a simulated CRLF checkout preserved all 109 qualified Python
+hashes and proof assets; the extracted wheel won/replayed both P0 and P1 in a fresh
+process. Ruff and Pyright passed. Actual container execution remains a CI check;
+the local environment has no Docker/Podman executable. This fix changes packaging
+and operator diagnostics, not world laws, budgets, public evidence or policy.

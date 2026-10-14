@@ -260,3 +260,18 @@ finish full regression, publish results/matrix and update the PR.
 - Local-regime revision is deferred; no unqualified variant is exposed.
 - No remaining implementation gate. Publication/CI is tracked on PR #6; the next
   scientific decision depends on the model pilot, not additional proof claims.
+
+## Packaging follow-up — 14 October 2026
+
+The Windows-built pilot image rejected all 42 repair startups. CRLF-only conversion
+reproduced the stale qualification error. The focused correction enforces LF via
+Git attributes and build-copy preparation, retains strict installed-package
+verification, and adds bounded mismatch diagnostics plus an image-level P0/P1
+victory/replay preflight. It does not change scientific mechanics or budgets.
+
+41 focused tests passed; the independent bound checker and both public profiles
+pass. A wheel built from a simulated CRLF checkout matches all 109 source hashes
+and proof assets, and both profiles win/replay from the wheel in a fresh process.
+Substantive edits still fail qualification. Ruff/Pyright/whitespace checks pass.
+Rebuild the image, run its preflight, then repeat pilot cells 05–10. Do not interpret
+the 42 startup failures as model reasoning failures or repair difficulty evidence.

@@ -427,6 +427,24 @@ docker image inspect nexus:0.1.0 \
   --format '{{ index .Config.Labels "org.opencontainers.image.revision" }}'
 ```
 
+Windows builds are supported. Git attributes keep qualified Python/JSON files at
+LF; the Docker build also restores CRLF to LF in its private source copy for older
+checkouts. It then checks the installed package against the exact qualified source,
+proof and witness hashes. Other changes still fail the build. Do not regenerate
+the qualification manifest merely to make a changed package pass.
+
+Before running the repair model pilot, complete both public missions in the actual
+image (the same command works with Docker or Podman, including PowerShell):
+
+```sh
+docker run --rm --entrypoint python nexus:0.1.0 scripts/preflight_repair.py
+```
+
+Both P0 and P1 must report `qualified`, `won` and `replay verified`. A failed build
+or preflight must be resolved before launching the model runs; an OCI label alone
+does not certify package contents. Direct wheel builds from older CRLF checkouts
+should run `python scripts/prepare_package.py` before `uv build`.
+
 See [Service integration](docs/service-integration.md) for trust boundaries and configuration
 patterns.
 

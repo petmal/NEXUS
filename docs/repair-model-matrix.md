@@ -4,6 +4,18 @@ Ten runs per model; exact environment blocks are in [repair-model-matrix.json](r
 Use the final feature image and record its OCI revision. The default scientific
 family remains unchanged; repair is opt-in. No real-model results are claimed.
 
+Before making model requests, run this against the built image:
+
+```sh
+docker run --rm --entrypoint python nexus:dev scripts/preflight_repair.py
+```
+
+Use `podman` in place of `docker` if applicable. Both P0 and P1 must win and replay.
+The build restores Windows CRLF line endings to canonical LF, then checks the
+installed qualification hashes; it never refreshes or bypasses qualification.
+Resolve any failed build/preflight before proceeding. It uses separate operator
+sessions and does not prepare or reveal the model's live mission.
+
 | Run | Family | T | D | P | Seed | Purpose / expected relative challenge |
 |---|---|---:|---:|---:|---:|---|
 | 1 | Causal | 0 | 0 | 1 | 7 | Control: direct supplied knowledge and correct execution |

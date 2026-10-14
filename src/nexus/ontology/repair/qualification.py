@@ -30,7 +30,7 @@ def source_binding():
     """Identity of the complete installed Python implementation, not proof by hash."""
     root = Path(__file__).resolve().parents[2]
     return {
-        str(path.relative_to(root)): hashlib.sha256(path.read_bytes()).hexdigest()
+        path.relative_to(root).as_posix(): hashlib.sha256(path.read_bytes()).hexdigest()
         for path in sorted(root.rglob("*.py"))
     }
 
@@ -46,6 +46,56 @@ def witness_binding():
     }
 
 
+def release_mismatches() -> tuple[str, ...]:
+    """Operator diagnostics only; exact byte comparison still controls admission."""
+    path = Path(__file__).with_name("qualified-release.json")
+    try:
+        release = json.loads(path.read_text())
+        if release["version"] != "repair-live-conformance-v1":
+            return ("unsupported qualified-release.json version",)
+        expected, actual = release["sources"], source_binding()
+        if not isinstance(expected, dict):
+            return ("invalid source map in qualified-release.json",)
+        groups: dict[str, list[str]] = {}
+        root = Path(__file__).resolve().parents[2]
+        for name in sorted(expected.keys() | actual.keys()):
+            if name not in actual:
+                reason = "source files missing"
+            elif name not in expected:
+                reason = "source files added"
+            elif actual[name] != expected[name]:
+                content = (root / name).read_bytes()
+                crlf_only = hashlib.sha256(content.replace(b"\r\n", b"\n")).hexdigest()
+                reason = (
+                    "source CRLF line endings differ"
+                    if crlf_only == expected[name]
+                    else "source content changed"
+                )
+            else:
+                continue
+            groups.setdefault(reason, []).append(name)
+        if groups:
+            return tuple(
+                f"{reason} ({len(names)}): {', '.join(names[:6])}"
+                + (", ..." if len(names) > 6 else "")
+                for reason, names in groups.items()
+            )
+        proof = Path(__file__).with_name("query-upper-proof.json").read_bytes()
+        if hashlib.sha256(proof).hexdigest() != release["proof_sha256"]:
+            crlf_only = hashlib.sha256(proof.replace(b"\r\n", b"\n")).hexdigest()
+            reason = (
+                "CRLF line endings differ"
+                if crlf_only == release["proof_sha256"]
+                else "content changed"
+            )
+            return (f"query-upper-proof.json {reason}",)
+        if release["witnesses"] != witness_binding():
+            return ("serialized public witness differs from qualified-release.json",)
+        return ()
+    except (OSError, ValueError, KeyError, TypeError) as exc:
+        return (f"cannot verify qualification: {exc}",)
+
+
 @lru_cache(maxsize=1)
 def release_matches():
     """Installed package is immutable for this process; source changes require restart.
@@ -53,26 +103,16 @@ def release_matches():
     The checked-in manifest is produced only after proof, conformance, witness and
     review gates. It avoids repeating the offline search during each generation.
     """
-    path = Path(__file__).with_name("qualified-release.json")
-    try:
-        release = json.loads(path.read_text())
-        return (
-            release["version"] == "repair-live-conformance-v1"
-            and release["sources"] == source_binding()
-            and release["witnesses"] == witness_binding()
-            and release["proof_sha256"]
-            == hashlib.sha256(
-                Path(__file__).with_name("query-upper-proof.json").read_bytes()
-            ).hexdigest()
-        )
-    except OSError, ValueError, KeyError, TypeError:
-        return False
+    return not release_mismatches()
 
 
 def require_release():
     if not release_matches():
         raise ValueError(
-            "repair qualification is missing or stale; rerun the offline release gates"
+            "repair qualification is missing or stale: "
+            + "; ".join(release_mismatches())
+            + ". Build from the qualified commit with canonical LF files; "
+            "source/proof changes require the offline release gates."
         )
 
 

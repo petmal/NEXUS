@@ -1,0 +1,4 @@
+# Qualified package files must have the same bytes on Windows and Linux.
+*.py text eol=lf
+*.json text eol=lf
+Dockerfile text eol=lf
