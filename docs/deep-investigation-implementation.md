@@ -1,8 +1,16 @@
 # Deep investigation implementation checkpoint
 
 Approved design: [deep-investigation-design.md](deep-investigation-design.md),
-including the 14 October robustness revision. The two falsification scripts will
-be incorporated into semantic tests. This file is the resumable execution ledger.
+including the 14 October robustness revision. Falsification cases are retained in
+semantic tests. Historical checkpoints below are superseded by this completion.
+
+**Completed on 14 October 2026.** The qualified opt-in repair family, common
+presentation, complete public transcript, terminal diagnostics, proof checks,
+performance improvements and ten-run model matrix are integrated. The local-regime
+PoC was completed and withheld after its required-revision gate failed.
+Validated source commit: `53bedc7d83737af2ecf272fc80a7628e402d6e73`.
+[Results and limitations](repair-results.md) · [Validation](repair-validation.json) ·
+[Real-model matrix](repair-model-matrix.md).
 
 ## Anchor and invariants
 
@@ -25,27 +33,29 @@ be incorporated into semantic tests. This file is the resumable execution ledger
 | Phase | Status | Gate |
 |---|---|---|
 | 0 Baseline | Passed: 507 tests, 3 existing warnings | Existing full suite; exact remote/tree anchor |
-| 1 Proof contract | Finite-model core passed; offline resource/checkpoint runner pending | Tiny oracle, executable rounds, proof payload, shortcut mutations |
+| 1 Proof contract | Passed | Tiny oracle, serialized rounds, independent upper checker, resource caps/checkpoints, shortcut mutations |
 | Shared presentation | Passed | Versioned public rendering across families, historical compatibility |
-| 2 Stateful construction | Pending | All strict gates in one small exact configuration |
-| 3 Runtime integration | Pending | Complete tiny quotient/live conformance, public transcript, receipt/replay |
-| 4 Local regime | Pending | Paired revision problem; otherwise explicitly deferred by its gate |
-| 5 Hardening/evaluation | Pending | Compatibility, performance, supported matrix, final review |
+| 2 Stateful construction | Passed | Qualified T3/D5/P0-or-P1/R1; scientific dependence and coupled physical repair |
+| 3 Runtime integration | Passed | Complete factored live conformance; 7,203 truths won and replayed; bound release identity |
+| 4 Local regime | PoC complete; release deferred | 50,421 pairs; early-trigger counterpolicy falsifies required revision |
+| 5 Hardening/evaluation | Passed | 572-test passing coverage, 10 reference missions, six-process profile, independent final review |
 
-## Resume
+## Handoff
 
-Read this checkpoint and the approved design, inspect git status and current head,
-then continue the first unfinished phase. Keep findings and commands here after
-each phase. Baseline command:
+Implementation is complete; next run the real-model pilot using the exact
+[environment blocks](repair-model-matrix.json). Build from the final feature head
+and record its OCI revision. Choose public settings before independently sampling
+truth; preserve one non-resettable attempt, exact budgets and private seed/source
+separation. Model failure rates are uncalibrated. A three-round agent may always win.
 
-```sh
-uv sync --frozen --all-extras
-NEXUS_STRESS_SEED_COUNT=3 uv run pytest -q --maxfail=1 --durations=12
-```
+For revalidation, use the commands in [results](repair-results.md), then the full
+suite with `NEXUS_STRESS_SEED_COUNT=3 uv run --no-sync pytest -q`. Final local coverage was
+partitioned: 100 + 421 + 49 + 2 = 572, with three existing warnings. Historical
+snapshot hashes remain unchanged. No paid model calls or main merge were made.
 
-Next: finish baseline, implement finite public-policy proof contract, then attempt
-the smallest stateful positive construction. Do not advertise a live deep family
-from the prior static routing proof; that fixture fails the strict success ceiling.
+## Historical execution log
+
+The entries below are chronological evidence, not outstanding instructions.
 
 ## Phase 1 evidence
 
@@ -222,7 +232,7 @@ No paid model requests were made. No account credit/reset state was assumed.
 ## Resumed integration checkpoint — 14 October 2026
 
 Execution recovered; unpublished work was preserved. Serialized public-policy
-execution/replay passed all7203 truths (15tests,184.11s). Component conformance and
+execution/replay passed all 7,203 truths (15 tests, 184.11 s). Component conformance and
 independent query proof passed. Fresh review found no remaining live-proof blocker
 under the explicit conditional-prior/single-attempt scope. Registration is now
 opt-in and guarded by source/proof/witness identity; compiled episodes also bind
@@ -231,7 +241,22 @@ pass. The final full regression is running; do not mistake earlier baseline coun
 for its result. A legacy integration assertion was updated for the approved
 versioned presentation while checking that exact mission text is retained.
 
-Local regime:50421 paired cases checked; early treatment reduces it to a stationary
-problem. Its required-revision gate fails, so it is deferred as permitted by Phase4.
+Local regime: 50,421 paired cases checked; early treatment reduces it to a stationary
+problem. Its required-revision gate fails, so it is deferred as permitted by Phase 4.
 The ten-cell matrix and six-process timing pilot are implemented. Final tasks:
 finish full regression, publish results/matrix and update the PR.
+
+
+## Completion — 14 October 2026
+
+- Final serialized public-policy replay: all 7,203 truths.
+- 572 collected tests covered by passing groups; presentation regressions fixed
+  without replacing historical fixture hashes. Three-seed legacy stress passed.
+- CLI qualification/replay and the built wheel's 109 source/proof hashes verified.
+- Independent upper proof/check: exact 3/7, 16.15 s, 79.2 MiB under a 512 MiB cap.
+- Ten matrix reference missions won. Six fresh processes: 24/24 public-policy wins;
+  cold generation 0.110–0.163 s, warm 0.00064–0.00124 s, about 61 MiB peak RSS.
+- Focused Ruff, new-module Pyright and whitespace checks passed.
+- Local-regime revision is deferred; no unqualified variant is exposed.
+- No remaining implementation gate. Publication/CI is tracked on PR #6; the next
+  scientific decision depends on the model pilot, not additional proof claims.

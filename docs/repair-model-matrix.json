@@ -1,0 +1,149 @@
+{
+  "runs_per_model": 10,
+  "external_python": false,
+  "recommended_tool_call_limit": 80,
+  "scope": "Uncalibrated model pilot; three independently uniform repair truth indices paired across fixed P0/P1. Seed and private files unavailable to the player. No same-world retries.",
+  "repair_seed_sampling": "Three secrets.randbelow(7203) draws made before inspecting hidden truth; no difficulty selection",
+  "runs": [
+    {
+      "id": "01-causal-mechanisms-v1-T0-D0-P1-R1-seed7",
+      "expected": "Control: direct supplied knowledge and correct execution",
+      "environment": {
+        "NEXUS_AXIS_VERSION": "2",
+        "NEXUS_SCIENCE_FAMILY": "causal-mechanisms-v1",
+        "NEXUS_THEORY_LEVEL": "0",
+        "NEXUS_DISCOVERY_LEVEL": "0",
+        "NEXUS_PLANNING_LEVEL": "1",
+        "NEXUS_RESOURCE_PRESSURE": "1",
+        "NEXUS_SEED": "7",
+        "NEXUS_GENERATION_TIMING": "true"
+      }
+    },
+    {
+      "id": "02-causal-mechanisms-v1-T1-D1-P1-R1-seed7",
+      "expected": "Low: exact-law inference",
+      "environment": {
+        "NEXUS_AXIS_VERSION": "2",
+        "NEXUS_SCIENCE_FAMILY": "causal-mechanisms-v1",
+        "NEXUS_THEORY_LEVEL": "1",
+        "NEXUS_DISCOVERY_LEVEL": "1",
+        "NEXUS_PLANNING_LEVEL": "1",
+        "NEXUS_RESOURCE_PRESSURE": "1",
+        "NEXUS_SEED": "7",
+        "NEXUS_GENERATION_TIMING": "true"
+      }
+    },
+    {
+      "id": "03-causal-mechanisms-v1-T2-D2-P1-R1-seed7",
+      "expected": "Medium: known-form correction",
+      "environment": {
+        "NEXUS_AXIS_VERSION": "2",
+        "NEXUS_SCIENCE_FAMILY": "causal-mechanisms-v1",
+        "NEXUS_THEORY_LEVEL": "2",
+        "NEXUS_DISCOVERY_LEVEL": "2",
+        "NEXUS_PLANNING_LEVEL": "1",
+        "NEXUS_RESOURCE_PRESSURE": "1",
+        "NEXUS_SEED": "7",
+        "NEXUS_GENERATION_TIMING": "true"
+      }
+    },
+    {
+      "id": "04-causal-mechanisms-v1-T3-D5-P1-R1-seed7",
+      "expected": "Previous-family reasoning anchor",
+      "environment": {
+        "NEXUS_AXIS_VERSION": "2",
+        "NEXUS_SCIENCE_FAMILY": "causal-mechanisms-v1",
+        "NEXUS_THEORY_LEVEL": "3",
+        "NEXUS_DISCOVERY_LEVEL": "5",
+        "NEXUS_PLANNING_LEVEL": "1",
+        "NEXUS_RESOURCE_PRESSURE": "1",
+        "NEXUS_SEED": "7",
+        "NEXUS_GENERATION_TIMING": "true"
+      }
+    },
+    {
+      "id": "05-coupled-repair-v1-T3-D5-P0-R1-seed3943",
+      "expected": "Higher intended dependence: three feedback rounds; P0/P1 pair isolates transport",
+      "environment": {
+        "NEXUS_AXIS_VERSION": "2",
+        "NEXUS_SCIENCE_FAMILY": "coupled-repair-v1",
+        "NEXUS_THEORY_LEVEL": "3",
+        "NEXUS_DISCOVERY_LEVEL": "5",
+        "NEXUS_PLANNING_LEVEL": "0",
+        "NEXUS_RESOURCE_PRESSURE": "1",
+        "NEXUS_SEED": "3943",
+        "NEXUS_GENERATION_TIMING": "true"
+      }
+    },
+    {
+      "id": "06-coupled-repair-v1-T3-D5-P1-R1-seed3943",
+      "expected": "Higher intended dependence: three feedback rounds; P0/P1 pair isolates transport",
+      "environment": {
+        "NEXUS_AXIS_VERSION": "2",
+        "NEXUS_SCIENCE_FAMILY": "coupled-repair-v1",
+        "NEXUS_THEORY_LEVEL": "3",
+        "NEXUS_DISCOVERY_LEVEL": "5",
+        "NEXUS_PLANNING_LEVEL": "1",
+        "NEXUS_RESOURCE_PRESSURE": "1",
+        "NEXUS_SEED": "3943",
+        "NEXUS_GENERATION_TIMING": "true"
+      }
+    },
+    {
+      "id": "07-coupled-repair-v1-T3-D5-P0-R1-seed3479",
+      "expected": "Higher intended dependence: three feedback rounds; P0/P1 pair isolates transport",
+      "environment": {
+        "NEXUS_AXIS_VERSION": "2",
+        "NEXUS_SCIENCE_FAMILY": "coupled-repair-v1",
+        "NEXUS_THEORY_LEVEL": "3",
+        "NEXUS_DISCOVERY_LEVEL": "5",
+        "NEXUS_PLANNING_LEVEL": "0",
+        "NEXUS_RESOURCE_PRESSURE": "1",
+        "NEXUS_SEED": "3479",
+        "NEXUS_GENERATION_TIMING": "true"
+      }
+    },
+    {
+      "id": "08-coupled-repair-v1-T3-D5-P1-R1-seed3479",
+      "expected": "Higher intended dependence: three feedback rounds; P0/P1 pair isolates transport",
+      "environment": {
+        "NEXUS_AXIS_VERSION": "2",
+        "NEXUS_SCIENCE_FAMILY": "coupled-repair-v1",
+        "NEXUS_THEORY_LEVEL": "3",
+        "NEXUS_DISCOVERY_LEVEL": "5",
+        "NEXUS_PLANNING_LEVEL": "1",
+        "NEXUS_RESOURCE_PRESSURE": "1",
+        "NEXUS_SEED": "3479",
+        "NEXUS_GENERATION_TIMING": "true"
+      }
+    },
+    {
+      "id": "09-coupled-repair-v1-T3-D5-P0-R1-seed5835",
+      "expected": "Higher intended dependence: three feedback rounds; P0/P1 pair isolates transport",
+      "environment": {
+        "NEXUS_AXIS_VERSION": "2",
+        "NEXUS_SCIENCE_FAMILY": "coupled-repair-v1",
+        "NEXUS_THEORY_LEVEL": "3",
+        "NEXUS_DISCOVERY_LEVEL": "5",
+        "NEXUS_PLANNING_LEVEL": "0",
+        "NEXUS_RESOURCE_PRESSURE": "1",
+        "NEXUS_SEED": "5835",
+        "NEXUS_GENERATION_TIMING": "true"
+      }
+    },
+    {
+      "id": "10-coupled-repair-v1-T3-D5-P1-R1-seed5835",
+      "expected": "Higher intended dependence: three feedback rounds; P0/P1 pair isolates transport",
+      "environment": {
+        "NEXUS_AXIS_VERSION": "2",
+        "NEXUS_SCIENCE_FAMILY": "coupled-repair-v1",
+        "NEXUS_THEORY_LEVEL": "3",
+        "NEXUS_DISCOVERY_LEVEL": "5",
+        "NEXUS_PLANNING_LEVEL": "1",
+        "NEXUS_RESOURCE_PRESSURE": "1",
+        "NEXUS_SEED": "5835",
+        "NEXUS_GENERATION_TIMING": "true"
+      }
+    }
+  ]
+}

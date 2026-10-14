@@ -1,0 +1,75 @@
+{
+  "status": "complete",
+  "rows": [
+    {
+      "id": "01-causal-mechanisms-v1-T0-D0-P1-R1-seed7",
+      "won": true,
+      "actions": 3,
+      "generation_seconds": 0.12910606400009783,
+      "total_seconds": 0.13306487900013053
+    },
+    {
+      "id": "02-causal-mechanisms-v1-T1-D1-P1-R1-seed7",
+      "won": true,
+      "actions": 7,
+      "generation_seconds": 0.4618953460001194,
+      "total_seconds": 0.4757754100000966
+    },
+    {
+      "id": "03-causal-mechanisms-v1-T2-D2-P1-R1-seed7",
+      "won": true,
+      "actions": 16,
+      "generation_seconds": 0.006021393000082753,
+      "total_seconds": 0.018929228000160947
+    },
+    {
+      "id": "04-causal-mechanisms-v1-T3-D5-P1-R1-seed7",
+      "won": true,
+      "actions": 31,
+      "generation_seconds": 0.30926430399995297,
+      "total_seconds": 0.3312967730000764
+    },
+    {
+      "id": "05-coupled-repair-v1-T3-D5-P0-R1-seed3943",
+      "won": true,
+      "actions": 14,
+      "generation_seconds": 0.20647353200001817,
+      "total_seconds": 0.48963171900004454
+    },
+    {
+      "id": "06-coupled-repair-v1-T3-D5-P1-R1-seed3943",
+      "won": true,
+      "actions": 15,
+      "generation_seconds": 0.0008910879998893506,
+      "total_seconds": 0.06983923999996478
+    },
+    {
+      "id": "07-coupled-repair-v1-T3-D5-P0-R1-seed3479",
+      "won": true,
+      "actions": 14,
+      "generation_seconds": 0.00351765899995371,
+      "total_seconds": 0.019403591000127562
+    },
+    {
+      "id": "08-coupled-repair-v1-T3-D5-P1-R1-seed3479",
+      "won": true,
+      "actions": 15,
+      "generation_seconds": 0.0007764839999708784,
+      "total_seconds": 0.0276813770001354
+    },
+    {
+      "id": "09-coupled-repair-v1-T3-D5-P0-R1-seed5835",
+      "won": true,
+      "actions": 14,
+      "generation_seconds": 0.001660055000002103,
+      "total_seconds": 0.012590091999982178
+    },
+    {
+      "id": "10-coupled-repair-v1-T3-D5-P1-R1-seed5835",
+      "won": true,
+      "actions": 15,
+      "generation_seconds": 0.001041213999997126,
+      "total_seconds": 0.011629846000005273
+    }
+  ]
+}

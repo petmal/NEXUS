@@ -4,6 +4,22 @@ NEXUS is a standalone, deterministic interactive environment for evaluating whet
 
 The central design goal is to evaluate **adaptation and reasoning rather than recalled domain knowledge**. NEXUS does not model an existing human game, real-world physics, or a known scientific experiment. Episodes are compiled from a small compositional grammar that can vary the world topology, entities, latent causal laws, evidence, and objective.
 
+## Current research feature: the Sealed Facility
+
+Newly generated episodes share a versioned alien-facility presentation across all
+ontologies; historical episodes retain their saved presentation and mechanics.
+The opt-in `coupled-repair-v1` family adds a physical repair mission with a checked
+three-feedback-round public policy. At its exact T3/D5/P0-or-P1/R1 budgets, any
+policy using at most two feedback rounds has success probability at most 3/7 over
+the declared conditional uniform prior. This is a structural guarantee, not an
+empirical prediction that models will fail. One extra action removes that bound.
+
+Use the [ten-run model matrix](docs/repair-model-matrix.md),
+[exact environment blocks](docs/repair-model-matrix.json),
+[implementation results and scope](docs/repair-results.md), and
+[live conformance argument](docs/repair-live-conformance.md).
+Existing families and default selection remain available.
+
 ## Prototype goals
 
 The first working prototype should demonstrate:

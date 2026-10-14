@@ -1,0 +1,79 @@
+{
+  "date": "2026-10-14",
+  "source_commit": "53bedc7d83737af2ecf272fc80a7628e402d6e73",
+  "semantic_release_sha256": "3699b1d3156a7b3168b381a2c222e88a5721a49bc0a2a0146122fd537f0020ab",
+  "python": "3.14.8",
+  "suite": {
+    "collected": 572,
+    "passing_coverage": 572,
+    "method": "Partitioned validation; failed presentation comparisons fixed and affected groups rerun. Not a single uninterrupted green full-suite invocation.",
+    "partitions": [
+      {
+        "tests": 100,
+        "scope": "test_presentation.py, test_coupled_network.py, test_resonant_network.py",
+        "result": "passed",
+        "seconds": 129.91
+      },
+      {
+        "tests": 421,
+        "scope": "Other non-stress tests preceding test_theory_generation.py in collection order",
+        "result": "passed",
+        "note": "Invocation then stopped at three historical presentation snapshot failures; covered by the passing final partition."
+      },
+      {
+        "tests": 49,
+        "scope": "test_theory_generation.py, test_theory_progression.py, test_theory_structure_poc.py",
+        "result": "passed",
+        "seconds": 78.11
+      },
+      {
+        "tests": 2,
+        "scope": "Cross-seed property stress; NEXUS_STRESS_SEED_COUNT=3",
+        "result": "passed",
+        "note": "72 legacy profile/seed worlds plus resource pairing. Completed before two network-qualification presentation fixes; these stress paths do not call those qualifiers."
+      }
+    ],
+    "existing_warnings": 3,
+    "compatibility_fixes": [
+      "Recompiled network qualification retains selected presentation version.",
+      "Legacy theory fixtures select absent presentation, retaining original hashes.",
+      "Manifest assertion includes shared setting and exact original mission text."
+    ]
+  },
+  "exhaustive_serialized_public_policy": {
+    "worlds": 7203,
+    "won": 7203,
+    "receipt_verified": true,
+    "replay_verified": true
+  },
+  "reference_matrix": {
+    "missions": 10,
+    "won": 10
+  },
+  "fresh_process_performance": {
+    "processes": 6,
+    "missions": 24,
+    "won": 24
+  },
+  "offline_upper_proof": {
+    "status": "exact and independently checked",
+    "upper": "3/7",
+    "first_batches": 576,
+    "seconds": 16.146,
+    "peak_rss_kib": 81072,
+    "memory_cap_mib": 512
+  },
+  "other_checks": {
+    "cli_generate_qualify_solve_replay": "passed",
+    "wheel_bound_sources_and_proof_assets": "passed (109 Python modules)",
+    "focused_ruff": "passed",
+    "new_module_pyright": "0 errors, 0 warnings",
+    "git_diff_check": "passed"
+  },
+  "local_regime": {
+    "status": "deferred by approved release gate",
+    "paired_cases": 50421,
+    "counterexample": "Treat before investigation; solve a stationary world without revision."
+  },
+  "real_models": "Not run; difficulty remains uncalibrated."
+}

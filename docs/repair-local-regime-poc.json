@@ -1,0 +1,10 @@
+{
+  "status": "deferred",
+  "reason": "early treatment removes the need to revise a prior operational model",
+  "pairs_checked": 50421,
+  "old_repair_invalidated_pairs": 43218,
+  "selective_repair": "retain a,b,d and A/B evidence; remeasure the treated C context",
+  "counterpolicy": "treat relevant specimens before any observation, then execute stationary three-round policy",
+  "release_gate": false,
+  "future_requirement": "a separately proved transfer/revision objective; no hidden order lock or unexplained global drift"
+}
