@@ -32,6 +32,40 @@ class PredictionTracker:
         return self.settings if self.room == self.mission_room else None
 
 
+@dataclass
+class AppliedTreatmentTracker:
+    """Follow a carried seal's committed dose, never apparatus configuration."""
+
+    room: str
+    mission_room: str
+    seal_location: str
+    dose: tuple[int, ...] | None = None
+
+    def observe(self, record):
+        from nexus.models.world import INVENTORY
+
+        action = record.action
+        if action.type == "move":
+            self.room = action.target
+        elif action.type == "take" and action.artifact == "seal":
+            self.seal_location = INVENTORY
+        elif action.type == "drop" and action.artifact == "seal":
+            self.seal_location = self.room
+        elif action.type == "operate" and action.artifact == "seal":
+            event = next(e for e in record.events if "result" in e.details)
+            dose = event.details["result"]["payload"]["doses"]
+            self.dose = None if dose is None else tuple(dose)
+
+    def attempted(self):
+        from nexus.models.world import INVENTORY
+
+        return (
+            self.dose
+            if self.room == self.mission_room and self.seal_location == INVENTORY
+            else None
+        )
+
+
 def tracker_for(runtime, episode) -> DecisionTracker:
     factory = getattr(runtime, "mission_tracker", None)
     if factory is not None:

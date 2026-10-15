@@ -1,0 +1,149 @@
+{
+  "version": "difficulty-matrix-v1",
+  "runs_per_model": 10,
+  "external_python": false,
+  "recommended_tool_call_limit": 120,
+  "selection_scope": "Operator-only stratified diagnostic, not a uniform sample or population failure estimate. Five broad structural cases selected by Random(20261015) shuffle of18 strata and nuisance draws; one additional long-history discriminator. Do not disclose seeds, selection roles, candidate pool or these coverage requirements to players. Each live scientific contract admits the full family prior. No selection on model outcomes.",
+  "runs": [
+    {
+      "id": "nexus-01",
+      "role": "compact-control",
+      "environment": {
+        "NEXUS_AXIS_VERSION": "2",
+        "NEXUS_SCIENCE_FAMILY": "coupled-repair-v1",
+        "NEXUS_THEORY_LEVEL": "3",
+        "NEXUS_DISCOVERY_LEVEL": "5",
+        "NEXUS_PLANNING_LEVEL": "1",
+        "NEXUS_RESOURCE_PRESSURE": "1",
+        "NEXUS_SEED": "1198",
+        "NEXUS_GENERATION_TIMING": "true"
+      }
+    },
+    {
+      "id": "nexus-02",
+      "role": "compact-control",
+      "environment": {
+        "NEXUS_AXIS_VERSION": "2",
+        "NEXUS_SCIENCE_FAMILY": "coupled-repair-v1",
+        "NEXUS_THEORY_LEVEL": "3",
+        "NEXUS_DISCOVERY_LEVEL": "5",
+        "NEXUS_PLANNING_LEVEL": "1",
+        "NEXUS_RESOURCE_PRESSURE": "1",
+        "NEXUS_SEED": "1205",
+        "NEXUS_GENERATION_TIMING": "true"
+      }
+    },
+    {
+      "id": "nexus-03",
+      "role": "compact-control",
+      "environment": {
+        "NEXUS_AXIS_VERSION": "2",
+        "NEXUS_SCIENCE_FAMILY": "coupled-repair-v1",
+        "NEXUS_THEORY_LEVEL": "3",
+        "NEXUS_DISCOVERY_LEVEL": "5",
+        "NEXUS_PLANNING_LEVEL": "1",
+        "NEXUS_RESOURCE_PRESSURE": "1",
+        "NEXUS_SEED": "1212",
+        "NEXUS_GENERATION_TIMING": "true"
+      }
+    },
+    {
+      "id": "nexus-04",
+      "role": "execution-control",
+      "environment": {
+        "NEXUS_AXIS_VERSION": "2",
+        "NEXUS_SCIENCE_FAMILY": "coupled-dynamics-v1",
+        "NEXUS_THEORY_LEVEL": "0",
+        "NEXUS_DISCOVERY_LEVEL": "0",
+        "NEXUS_PLANNING_LEVEL": "1",
+        "NEXUS_RESOURCE_PRESSURE": "1",
+        "NEXUS_SEED": "128",
+        "NEXUS_GENERATION_TIMING": "true"
+      }
+    },
+    {
+      "id": "nexus-05",
+      "role": "structural-transfer",
+      "environment": {
+        "NEXUS_AXIS_VERSION": "2",
+        "NEXUS_SCIENCE_FAMILY": "coupled-dynamics-v1",
+        "NEXUS_THEORY_LEVEL": "3",
+        "NEXUS_DISCOVERY_LEVEL": "5",
+        "NEXUS_PLANNING_LEVEL": "1",
+        "NEXUS_RESOURCE_PRESSURE": "1",
+        "NEXUS_SEED": "128",
+        "NEXUS_GENERATION_TIMING": "true"
+      }
+    },
+    {
+      "id": "nexus-06",
+      "role": "structural-transfer",
+      "environment": {
+        "NEXUS_AXIS_VERSION": "2",
+        "NEXUS_SCIENCE_FAMILY": "coupled-dynamics-v1",
+        "NEXUS_THEORY_LEVEL": "3",
+        "NEXUS_DISCOVERY_LEVEL": "5",
+        "NEXUS_PLANNING_LEVEL": "1",
+        "NEXUS_RESOURCE_PRESSURE": "1",
+        "NEXUS_SEED": "839",
+        "NEXUS_GENERATION_TIMING": "true"
+      }
+    },
+    {
+      "id": "nexus-07",
+      "role": "structural-transfer",
+      "environment": {
+        "NEXUS_AXIS_VERSION": "2",
+        "NEXUS_SCIENCE_FAMILY": "coupled-dynamics-v1",
+        "NEXUS_THEORY_LEVEL": "3",
+        "NEXUS_DISCOVERY_LEVEL": "5",
+        "NEXUS_PLANNING_LEVEL": "1",
+        "NEXUS_RESOURCE_PRESSURE": "1",
+        "NEXUS_SEED": "1013",
+        "NEXUS_GENERATION_TIMING": "true"
+      }
+    },
+    {
+      "id": "nexus-08",
+      "role": "structural-transfer",
+      "environment": {
+        "NEXUS_AXIS_VERSION": "2",
+        "NEXUS_SCIENCE_FAMILY": "coupled-dynamics-v1",
+        "NEXUS_THEORY_LEVEL": "3",
+        "NEXUS_DISCOVERY_LEVEL": "5",
+        "NEXUS_PLANNING_LEVEL": "1",
+        "NEXUS_RESOURCE_PRESSURE": "1",
+        "NEXUS_SEED": "649",
+        "NEXUS_GENERATION_TIMING": "true"
+      }
+    },
+    {
+      "id": "nexus-09",
+      "role": "structural-transfer",
+      "environment": {
+        "NEXUS_AXIS_VERSION": "2",
+        "NEXUS_SCIENCE_FAMILY": "coupled-dynamics-v1",
+        "NEXUS_THEORY_LEVEL": "3",
+        "NEXUS_DISCOVERY_LEVEL": "5",
+        "NEXUS_PLANNING_LEVEL": "1",
+        "NEXUS_RESOURCE_PRESSURE": "1",
+        "NEXUS_SEED": "1509",
+        "NEXUS_GENERATION_TIMING": "true"
+      }
+    },
+    {
+      "id": "nexus-10",
+      "role": "history-transfer",
+      "environment": {
+        "NEXUS_AXIS_VERSION": "2",
+        "NEXUS_SCIENCE_FAMILY": "coupled-dynamics-v1",
+        "NEXUS_THEORY_LEVEL": "3",
+        "NEXUS_DISCOVERY_LEVEL": "5",
+        "NEXUS_PLANNING_LEVEL": "1",
+        "NEXUS_RESOURCE_PRESSURE": "1",
+        "NEXUS_SEED": "219",
+        "NEXUS_GENERATION_TIMING": "true"
+      }
+    }
+  ]
+}

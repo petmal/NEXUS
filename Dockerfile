@@ -10,7 +10,8 @@ ENV PATH="/app/.venv/bin:$PATH"
 
 COPY pyproject.toml uv.lock README.md ./
 COPY src ./src
-COPY scripts/prepare_package.py scripts/preflight_repair.py ./scripts/
+COPY scripts/prepare_package.py scripts/preflight_repair.py scripts/preflight_matrix.py ./scripts/
+COPY docs/difficulty-model-matrix.json ./docs/difficulty-model-matrix.json
 
 RUN python scripts/prepare_package.py \
     && python -m pip install --no-cache-dir --no-deps uv==0.12.21 \

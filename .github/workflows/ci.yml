@@ -3,13 +3,17 @@ name: CI
 on:
   push:
     branches: [main]
-    paths-ignore:
-      - "docs/**"
-      - "README.md"
+    paths:
+      - "**"
+      - "!docs/**"
+      - "!README.md"
+      - "docs/difficulty-model-matrix.json"
   pull_request:
-    paths-ignore:
-      - "docs/**"
-      - "README.md"
+    paths:
+      - "**"
+      - "!docs/**"
+      - "!README.md"
+      - "docs/difficulty-model-matrix.json"
   workflow_dispatch:
     inputs:
       full:
@@ -136,6 +140,7 @@ jobs:
           test "$(docker image inspect nexus-ci --format '{{ index .Config.Labels "org.opencontainers.image.revision" }}')" = "$GITHUB_SHA"
           docker run --rm --entrypoint python nexus-ci --version
           docker run --rm --entrypoint python nexus-ci scripts/preflight_repair.py
+          docker run --rm --entrypoint python nexus-ci scripts/preflight_matrix.py --output /tmp/matrix-preflight.json
           docker run --rm nexus-ci --help
           docker run --rm nexus-ci generate /tmp/nexus-t3 --seed 17 \
             --discovery-level 2 --planning-level 0 --theory-level 3
