@@ -1,0 +1,505 @@
+{
+  "version": "difficulty-preflight-v1",
+  "status": "pilot-ready",
+  "matrix_sha256": "f69704061c55ccb23bcdef934e9e4afe72eecb7f7f7a4fa7ddd2454db314aba3",
+  "source_sha256": "63877396da62f920d5af3935a85f715573830ddbfca64b9a3afe9702f1ec6324",
+  "operator_only": true,
+  "empirical_difficulty": "uncalibrated",
+  "full_rollout_ready": false,
+  "rows": [
+    {
+      "id": "nexus-01",
+      "role": "compact-control",
+      "family": "coupled-repair-v1",
+      "difficulty": {
+        "band": "compact-adaptive-control",
+        "law_degree": 1,
+        "universal_shortcut": "reference a; choose x=a to reveal b; choose y=b to reveal c,d; triangular substitution; r need never be identified",
+        "zero_dose_terms": 0,
+        "selected_zero_coupling": false,
+        "deep_admission": false
+      },
+      "target_fingerprint": "c2ba0fe90b4d48c32d7f1bee2402352a6e5fb8764201dbfb603388ddb5612b9d",
+      "won": true,
+      "replay_verified": true,
+      "actions": 15,
+      "action_budget": 18,
+      "qualification": {
+        "passed": true,
+        "checks": {
+          "compiled_contract": true,
+          "reviewed_source_binding": true,
+          "serialized_witness_binding": true,
+          "complete_query_upper_proof": true,
+          "public_three_round_policy_wins": true,
+          "nominal_budget": true,
+          "metadata_scope": true
+        },
+        "metrics": {
+          "query_upper": "3/7",
+          "live_status": "qualified"
+        },
+        "errors": []
+      }
+    },
+    {
+      "id": "nexus-02",
+      "role": "compact-control",
+      "family": "coupled-repair-v1",
+      "difficulty": {
+        "band": "compact-adaptive-control",
+        "law_degree": 2,
+        "universal_shortcut": "reference a; choose x=a to reveal b; choose y=b to reveal c,d; triangular substitution; r need never be identified",
+        "zero_dose_terms": 0,
+        "selected_zero_coupling": false,
+        "deep_admission": false
+      },
+      "target_fingerprint": "7bf8e6eb0a37b290f620520416d2e96d43a3060dde70e456c84cc4525b688531",
+      "won": true,
+      "replay_verified": true,
+      "actions": 15,
+      "action_budget": 18,
+      "qualification": {
+        "passed": true,
+        "checks": {
+          "compiled_contract": true,
+          "reviewed_source_binding": true,
+          "serialized_witness_binding": true,
+          "complete_query_upper_proof": true,
+          "public_three_round_policy_wins": true,
+          "nominal_budget": true,
+          "metadata_scope": true
+        },
+        "metrics": {
+          "query_upper": "3/7",
+          "live_status": "qualified"
+        },
+        "errors": []
+      }
+    },
+    {
+      "id": "nexus-03",
+      "role": "compact-control",
+      "family": "coupled-repair-v1",
+      "difficulty": {
+        "band": "compact-adaptive-control",
+        "law_degree": 3,
+        "universal_shortcut": "reference a; choose x=a to reveal b; choose y=b to reveal c,d; triangular substitution; r need never be identified",
+        "zero_dose_terms": 0,
+        "selected_zero_coupling": false,
+        "deep_admission": false
+      },
+      "target_fingerprint": "9f73493f2069cfd43424ddc2a5494abd420da8a2e4f421e482ed9e08505b4d73",
+      "won": true,
+      "replay_verified": true,
+      "actions": 15,
+      "action_budget": 18,
+      "qualification": {
+        "passed": true,
+        "checks": {
+          "compiled_contract": true,
+          "reviewed_source_binding": true,
+          "serialized_witness_binding": true,
+          "complete_query_upper_proof": true,
+          "public_three_round_policy_wins": true,
+          "nominal_budget": true,
+          "metadata_scope": true
+        },
+        "metrics": {
+          "query_upper": "3/7",
+          "live_status": "qualified"
+        },
+        "errors": []
+      }
+    },
+    {
+      "id": "nexus-04",
+      "role": "execution-control",
+      "family": "coupled-dynamics-v1",
+      "difficulty": {
+        "band": "execution-control",
+        "certificate": {
+          "lower_bound": 0,
+          "exact_minimum": 0
+        },
+        "world_index": 128
+      },
+      "target_fingerprint": "01f629f0807a547c90252f658557d888852aec7555ccbdf041134e56a6755ede",
+      "won": true,
+      "replay_verified": true,
+      "actions": 5,
+      "action_budget": 13,
+      "qualification": {
+        "passed": true,
+        "checks": {
+          "compiled_contract": true,
+          "public_policy_wins": true,
+          "within_reference_bound": true,
+          "exact_replay": true
+        },
+        "metrics": {
+          "actions": 5,
+          "difficulty_scope": "constructive upper only; use matrix preflight for lower bounds"
+        },
+        "errors": []
+      }
+    },
+    {
+      "id": "nexus-05",
+      "role": "structural-transfer",
+      "family": "coupled-dynamics-v1",
+      "difficulty": {
+        "band": "structural-transfer-candidate",
+        "certificate": {
+          "lower_bound": 4,
+          "exact_minimum": null,
+          "witness_rows": [],
+          "pair_checks": 231540
+        },
+        "world_index": 128,
+        "structure": {
+          "wiring": 0,
+          "transition": 0,
+          "response": 2
+        },
+        "untreated_target_classes": 6,
+        "one_pulse_target_classes": 1,
+        "order_sensitive": true,
+        "target_distinct_values": 2,
+        "scope": "minimum sufficient positive measurements under the FULL disclosed prior; not feedback rounds, probability of victory, or empirical difficulty; guesses and rejected finishes excluded"
+      },
+      "target_fingerprint": "01f629f0807a547c90252f658557d888852aec7555ccbdf041134e56a6755ede",
+      "won": true,
+      "replay_verified": true,
+      "actions": 47,
+      "action_budget": 73,
+      "qualification": {
+        "passed": true,
+        "checks": {
+          "compiled_contract": true,
+          "public_policy_wins": true,
+          "within_reference_bound": true,
+          "exact_replay": true
+        },
+        "metrics": {
+          "actions": 47,
+          "difficulty_scope": "constructive upper only; use matrix preflight for lower bounds"
+        },
+        "errors": []
+      }
+    },
+    {
+      "id": "nexus-06",
+      "role": "structural-transfer",
+      "family": "coupled-dynamics-v1",
+      "difficulty": {
+        "band": "structural-transfer-candidate",
+        "certificate": {
+          "lower_bound": 4,
+          "exact_minimum": null,
+          "witness_rows": [],
+          "pair_checks": 231540
+        },
+        "world_index": 839,
+        "structure": {
+          "wiring": 1,
+          "transition": 0,
+          "response": 2
+        },
+        "untreated_target_classes": 24,
+        "one_pulse_target_classes": 1,
+        "order_sensitive": false,
+        "target_distinct_values": 3,
+        "scope": "minimum sufficient positive measurements under the FULL disclosed prior; not feedback rounds, probability of victory, or empirical difficulty; guesses and rejected finishes excluded"
+      },
+      "target_fingerprint": "db8b8090ac603014fee4b46a07c33388f8f4945de40740ac268943a9ad4053ce",
+      "won": true,
+      "replay_verified": true,
+      "actions": 47,
+      "action_budget": 73,
+      "qualification": {
+        "passed": true,
+        "checks": {
+          "compiled_contract": true,
+          "public_policy_wins": true,
+          "within_reference_bound": true,
+          "exact_replay": true
+        },
+        "metrics": {
+          "actions": 47,
+          "difficulty_scope": "constructive upper only; use matrix preflight for lower bounds"
+        },
+        "errors": []
+      }
+    },
+    {
+      "id": "nexus-07",
+      "role": "structural-transfer",
+      "family": "coupled-dynamics-v1",
+      "difficulty": {
+        "band": "structural-transfer-candidate",
+        "certificate": {
+          "lower_bound": 4,
+          "exact_minimum": null,
+          "witness_rows": [],
+          "pair_checks": 231540
+        },
+        "world_index": 1013,
+        "structure": {
+          "wiring": 0,
+          "transition": 1,
+          "response": 2
+        },
+        "untreated_target_classes": 24,
+        "one_pulse_target_classes": 1,
+        "order_sensitive": true,
+        "target_distinct_values": 3,
+        "scope": "minimum sufficient positive measurements under the FULL disclosed prior; not feedback rounds, probability of victory, or empirical difficulty; guesses and rejected finishes excluded"
+      },
+      "target_fingerprint": "c06bda9fd086e8da8b861ea4ce4ee53cfe0176892920b4679ac960ee8438351f",
+      "won": true,
+      "replay_verified": true,
+      "actions": 50,
+      "action_budget": 73,
+      "qualification": {
+        "passed": true,
+        "checks": {
+          "compiled_contract": true,
+          "public_policy_wins": true,
+          "within_reference_bound": true,
+          "exact_replay": true
+        },
+        "metrics": {
+          "actions": 50,
+          "difficulty_scope": "constructive upper only; use matrix preflight for lower bounds"
+        },
+        "errors": []
+      }
+    },
+    {
+      "id": "nexus-08",
+      "role": "structural-transfer",
+      "family": "coupled-dynamics-v1",
+      "difficulty": {
+        "band": "structural-transfer-candidate",
+        "certificate": {
+          "lower_bound": 4,
+          "exact_minimum": null,
+          "witness_rows": [],
+          "pair_checks": 231540
+        },
+        "world_index": 649,
+        "structure": {
+          "wiring": 0,
+          "transition": 0,
+          "response": 1
+        },
+        "untreated_target_classes": 12,
+        "one_pulse_target_classes": 1,
+        "order_sensitive": true,
+        "target_distinct_values": 3,
+        "scope": "minimum sufficient positive measurements under the FULL disclosed prior; not feedback rounds, probability of victory, or empirical difficulty; guesses and rejected finishes excluded"
+      },
+      "target_fingerprint": "dd95ff2b5b26b3109e9a66d6bcfec4b42c8293f0951e11375ff698b75dc89e01",
+      "won": true,
+      "replay_verified": true,
+      "actions": 50,
+      "action_budget": 73,
+      "qualification": {
+        "passed": true,
+        "checks": {
+          "compiled_contract": true,
+          "public_policy_wins": true,
+          "within_reference_bound": true,
+          "exact_replay": true
+        },
+        "metrics": {
+          "actions": 50,
+          "difficulty_scope": "constructive upper only; use matrix preflight for lower bounds"
+        },
+        "errors": []
+      }
+    },
+    {
+      "id": "nexus-09",
+      "role": "structural-transfer",
+      "family": "coupled-dynamics-v1",
+      "difficulty": {
+        "band": "structural-transfer-candidate",
+        "certificate": {
+          "lower_bound": 4,
+          "exact_minimum": null,
+          "witness_rows": [],
+          "pair_checks": 231540
+        },
+        "world_index": 1509,
+        "structure": {
+          "wiring": 1,
+          "transition": 2,
+          "response": 0
+        },
+        "untreated_target_classes": 6,
+        "one_pulse_target_classes": 1,
+        "order_sensitive": false,
+        "target_distinct_values": 2,
+        "scope": "minimum sufficient positive measurements under the FULL disclosed prior; not feedback rounds, probability of victory, or empirical difficulty; guesses and rejected finishes excluded"
+      },
+      "target_fingerprint": "0094d52655e23185bc7a33111a2e27aece10da94524acc9459465a0022f4d539",
+      "won": true,
+      "replay_verified": true,
+      "actions": 50,
+      "action_budget": 73,
+      "qualification": {
+        "passed": true,
+        "checks": {
+          "compiled_contract": true,
+          "public_policy_wins": true,
+          "within_reference_bound": true,
+          "exact_replay": true
+        },
+        "metrics": {
+          "actions": 50,
+          "difficulty_scope": "constructive upper only; use matrix preflight for lower bounds"
+        },
+        "errors": []
+      }
+    },
+    {
+      "id": "nexus-10",
+      "role": "history-transfer",
+      "family": "coupled-dynamics-v1",
+      "difficulty": {
+        "band": "structural-transfer-candidate",
+        "certificate": {
+          "lower_bound": 4,
+          "exact_minimum": null,
+          "witness_rows": [],
+          "pair_checks": 231540
+        },
+        "world_index": 219,
+        "structure": {
+          "wiring": 0,
+          "transition": 1,
+          "response": 0
+        },
+        "untreated_target_classes": 6,
+        "one_pulse_target_classes": 2,
+        "order_sensitive": true,
+        "target_distinct_values": 3,
+        "scope": "minimum sufficient positive measurements under the FULL disclosed prior; not feedback rounds, probability of victory, or empirical difficulty; guesses and rejected finishes excluded"
+      },
+      "target_fingerprint": "0be1cd8a765545bec95edb78b4ebf756f5e1ef81331a3fc2e2c909c7af41260a",
+      "won": true,
+      "replay_verified": true,
+      "actions": 50,
+      "action_budget": 73,
+      "qualification": {
+        "passed": true,
+        "checks": {
+          "compiled_contract": true,
+          "public_policy_wins": true,
+          "within_reference_bound": true,
+          "exact_replay": true
+        },
+        "metrics": {
+          "actions": 50,
+          "difficulty_scope": "constructive upper only; use matrix preflight for lower bounds"
+        },
+        "errors": []
+      }
+    }
+  ],
+  "coverage": {
+    "repair_all_three_laws": true,
+    "repair_no_zero_coupling": true,
+    "six_distinct_scientific_worlds": true,
+    "six_distinct_mission_targets": true,
+    "all_transition_forms": true,
+    "all_response_forms": true,
+    "both_wirings": true,
+    "every_challenge_needs_four_measurements": true,
+    "untreated_data_never_suffices": true,
+    "order_sensitive_and_order_insensitive_cases": true,
+    "history_transfer_needs_longer_experiment": true,
+    "paired_execution_control": true
+  },
+  "population": {
+    "worlds": 1944,
+    "target_classes": 585,
+    "experiments": 4674,
+    "distinct_partitions": 681,
+    "measurement_fanout": 3,
+    "worst_case_reading_lower_bound": 6,
+    "one_reading_best_correct_mass": 9,
+    "probability_scope": "uniform disclosed prior; not a stratified matrix success rate",
+    "history_restrictions": {
+      "0": {
+        "observation_classes": 297,
+        "ambiguous_worlds": 1944,
+        "best_correct_mass": 315
+      },
+      "1": {
+        "observation_classes": 1932,
+        "ambiguous_worlds": 24,
+        "best_correct_mass": 1932
+      },
+      "2": {
+        "observation_classes": 1944,
+        "ambiguous_worlds": 0,
+        "best_correct_mass": 1944
+      }
+    },
+    "complete_scope": "all bit points and sensor histories0..3, excluding eight declared mission protocols; two reference signatures cover every reference history/point; insensitive and free responses carry no additional scientific information",
+    "limited_reading_win_upper_bounds": {
+      "scope": "uniform FULL disclosed prior, T3/D5/P1/R1 with 73 actions; not the selected matrix; permits interleaved rejected finishes",
+      "cost_argument": "take seal + move costs at least 2; each distinct applied dose and finish costs at least 3 (configure + operate + finish); at most floor((73-2)/3)=23 guesses; all measurement/preparation costs ignored as a relaxation",
+      "channel_argument": "each scientific reading has at most three outcomes; finish has one absorbing success or one generic continuing failure; other responses reveal no hidden scientific state",
+      "bounds": [
+        {
+          "maximum_guesses": 23,
+          "maximum_readings": 0,
+          "successful_target_capacity": 23,
+          "correct_mass_upper": 156,
+          "worlds": 1944,
+          "probability_upper": 0.08024691358024691
+        },
+        {
+          "maximum_guesses": 23,
+          "maximum_readings": 1,
+          "successful_target_capacity": 69,
+          "correct_mass_upper": 396,
+          "worlds": 1944,
+          "probability_upper": 0.2037037037037037
+        },
+        {
+          "maximum_guesses": 23,
+          "maximum_readings": 2,
+          "successful_target_capacity": 207,
+          "correct_mass_upper": 810,
+          "worlds": 1944,
+          "probability_upper": 0.4166666666666667
+        },
+        {
+          "maximum_guesses": 23,
+          "maximum_readings": 3,
+          "successful_target_capacity": 585,
+          "correct_mass_upper": 1944,
+          "worlds": 1944,
+          "probability_upper": 1.0
+        }
+      ]
+    }
+  },
+  "selected_pool_disclosure": {
+    "warning": "Never disclose this matrix, seed pool, hidden coverage labels or qualification reports to evaluated players. The full-prior certificate does not apply after conditioning on this selected pool.",
+    "certificate_lower_bounds_if_pool_revealed": [
+      1,
+      1,
+      1,
+      1,
+      1,
+      1
+    ]
+  },
+  "seconds": 43.82083304900016
+}

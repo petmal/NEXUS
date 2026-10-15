@@ -121,6 +121,14 @@ depth. All queries remain serially available; no artificial scientific unlocks.
 - Implementation checkpoint: complete-query audit, experimental dynamics adapter,
   source-bound fail-closed preflight and ten-cell matrix are implemented. Independent
   judgement and all ten live win/replay/coverage checks passed. Fast regression:
-  563 passed. Extended and packaging gates are running. Resume by inspecting
+  563 passed. All 606 tests and the installed-wheel preflight passed. Resume by inspecting
   `docs/difficulty-matrix-preflight.json`, rerunning the documented gates, and
   publishing the final checked tree on the existing feature branch.
+
+- Final local gates: 563 fast, 40 extended, 2 three-seed stress, and 1 Hypothesis
+  determinism test passed. All 1,944 new worlds and 7,203 repair worlds won/replayed.
+  Checkout and installed-wheel ten-cell preflights passed with identical source/
+  matrix digests. CLI, HTTP privacy, Ruff, new-module Pyright, frozen lock and
+  whitespace gates passed. Docker unavailable locally; actual-image preflight is
+  included in the existing full CI workflow. Source edits require requalification
+  and a fresh matrix preflight. No paid model calls were made.

@@ -1,0 +1,45 @@
+{
+  "version": "difficulty-validation-v1",
+  "source_sha256": "63877396da62f920d5af3935a85f715573830ddbfca64b9a3afe9702f1ec6324",
+  "matrix_sha256": "f69704061c55ccb23bcdef934e9e4afe72eecb7f7f7a4fa7ddd2454db314aba3",
+  "tests": {
+    "fast": 563,
+    "extended": 40,
+    "three_seed_stress": 2,
+    "hypothesis_determinism": 1,
+    "total": 606,
+    "existing_warnings": 3
+  },
+  "exhaustive_live_win_and_replay": {
+    "coupled-dynamics-v1": 1944,
+    "coupled-repair-v1": 7203
+  },
+  "matrix": {
+    "cells": 10,
+    "status": "pilot-ready",
+    "checkout_seconds": 43.82083304900016,
+    "installed_wheel_seconds": 44.44622655400008,
+    "identical_source_binding": true,
+    "empirical_difficulty": "uncalibrated"
+  },
+  "checks": [
+    "independent certificate oracle",
+    "independent simultaneous arithmetic",
+    "exact mission response arithmetic",
+    "compiled schema validation",
+    "public-information policy",
+    "HTTP active privacy",
+    "save/load",
+    "exact replay",
+    "failed-finish-inclusive mass bound",
+    "CLI generate/qualify/omniscient solve/replay",
+    "installed wheel",
+    "Ruff",
+    "new-module Pyright",
+    "frozen offline lock",
+    "git diff --check"
+  ],
+  "container": "Docker/Podman unavailable locally; full CI includes actual-image matrix preflight",
+  "scope": "Structural and implementation validation; no real-model runs or failure-rate claim",
+  "repair_release": "Unchanged query proof and serialized witnesses; complete package source binding refreshed and all existing release/conformance tests passed"
+}

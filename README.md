@@ -1,5 +1,12 @@
 # NEXUS
 
+The current operator pilot adds opt-in `coupled-dynamics-v1` and complete-query
+difficulty qualification. See the [validated ten-run matrix](docs/difficulty-model-matrix.md),
+[architecture and proof limits](docs/difficulty-qualification-results.md), and
+[implementation plan](docs/difficulty-qualification-plan.md). Existing families
+remain available. The new family is structurally qualified for a pilot; its
+real-model difficulty is not yet calibrated.
+
 NEXUS is a standalone, deterministic interactive environment for evaluating whether an LLM can enter a procedurally novel artificial micro-world, infer its unfamiliar causal structure from evidence and experimentation, maintain an evolving world model, and plan actions that reach a mechanically verified goal.
 
 The central design goal is to evaluate **adaptation and reasoning rather than recalled domain knowledge**. NEXUS does not model an existing human game, real-world physics, or a known scientific experiment. Episodes are compiled from a small compositional grammar that can vary the world topology, entities, latent causal laws, evidence, and objective.
