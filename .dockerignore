@@ -8,4 +8,6 @@ __pycache__
 dist
 build
 tests
-docs
+# The image preflight needs its operator matrix, but not the rest of the docs.
+docs/*
+!docs/difficulty-model-matrix.json
