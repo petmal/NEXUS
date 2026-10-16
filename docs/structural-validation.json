@@ -1,5 +1,5 @@
 {
-  "status": "local-passed-ci-pending",
+  "status": "passed",
   "tests": {
     "fast_unit_integration": 594,
     "slow_dynamics_and_reference": 2,
@@ -29,7 +29,7 @@
     "selected_intervention_fixture_positive_reading_lower": 3
   },
   "compatibility": "48 normalized dynamics episode hashes unchanged; old families retained; repair proof and witness hashes unchanged, semantic source binding requalified",
-  "package": "Python 3.14.8; frozen lock; separately extracted wheel outside source; strict repair identity and cold dynamics load without witness compilation pass; source digest matches checkout",
+  "package": "Python3.14.8 local and Python3.14.7 CI/image; frozen lock; separately installed final wheel source identity/cache pass; actual Docker image and both matrix preflights pass",
   "source_sha256": "c959d54f01b1551cbb9cce11471bb581e7e47182620335081bf966edf6062a28",
   "quality": "focused Ruff, new-module and metrics Pyright, whitespace, CLI generate/qualify/solve/replay pass",
   "local_container": "Docker/Podman unavailable; actual-image checks delegated to CI",
@@ -41,5 +41,22 @@
     "Intervention obstruction applies to 12 worlds; most worlds lack that necessity.",
     "No timing-side-channel or externally shared/source-assisted evaluation guarantee."
   ],
-  "final_operator_gate": "After full640 passing coverage, added one independent certificate-oracle test and reran20 affected cases. Only operator qualification changed; final CI reruns the whole suite."
+  "final_operator_gate": "After full640 passing coverage, added one independent certificate-oracle test and reran20 affected cases. Only operator qualification changed; final CI reruns the whole suite.",
+  "ci": {
+    "code_commit": "a097fb26cde163153f392b3c8cfe92ef953b586e",
+    "run_id": 38837906295,
+    "url": "https://github.com/petmal/NEXUS/actions/runs/38837906295",
+    "conclusion": "success",
+    "includes": [
+      "immutable proof recomputation",
+      "solver proofs",
+      "fast tests",
+      "extended tests",
+      "cross-seed stress",
+      "CLI smoke",
+      "Docker build",
+      "OCI revision label",
+      "both in-image matrix preflights"
+    ]
+  }
 }

@@ -1,6 +1,8 @@
 # Structural reasoning implementation and resume ledger
 
-Status: active. Baseline `09fe7bb`, `feat/theory-prior-axis`. Design authority:
+Status: complete. Code commit `a097fb2` passed full CI, including Docker and both
+in-image matrix preflights; subsequent edits are documentation only. Baseline
+`09fe7bb`, branch `feat/theory-prior-axis`. Design authority:
 [structural-reasoning-design.md](structural-reasoning-design.md). User request:
 "Plan and implement the recommended changes."
 
@@ -8,12 +10,12 @@ Status: active. Baseline `09fe7bb`, `feat/theory-prior-axis`. Design authority:
 
 | Phase | Work | Acceptance | State |
 |---|---|---|---|
-| 0 | Inspect branch, document design and methods, independent critical review | Source matches current feature head; invariants and scope recorded | in progress |
-| 1 | Dynamics proof artifact, scoped timings, cost-aware public policy | Exact old episode contracts; all-world wins/replay; tamper/stale tests; cold benchmark | pending |
-| 2 | Executable structural PoC and complete shortcut audit | Independently verified arithmetic/ambiguity/witness; failed candidates recorded | pending |
-| 3 | Optional ontology and terminal metrics | Public protocol, privacy, schema, atomicity, replay, generated/loaded qualification | pending |
-| 4 | Small pilot matrix and regression/package validation | Every cell wins/replays; current-source binding; old matrix remains valid | pending |
-| 5 | Independent implementation judgement and publication | Valid findings fixed; feature-branch checkpoints; CI observed | pending |
+| 0 | Inspect branch, document design and methods, independent critical review | Source matches current feature head; invariants and scope recorded | completed |
+| 1 | Dynamics proof artifact, scoped timings, cost-aware public policy | Exact old episode contracts; all-world wins/replay; tamper/stale tests; cold benchmark | completed |
+| 2 | Executable structural PoC and complete shortcut audit | Independently verified arithmetic/ambiguity/witness; failed candidates recorded | completed |
+| 3 | Optional ontology and terminal metrics | Public protocol, privacy, schema, atomicity, replay, generated/loaded qualification | completed |
+| 4 | Small pilot matrix and regression/package validation | Every cell wins/replays; current-source binding; old matrix remains valid | completed |
+| 5 | Independent implementation judgement and publication | Valid findings fixed; feature-branch checkpoints; CI observed | completed |
 
 ## Concrete methods and expected areas
 
@@ -125,3 +127,19 @@ fixtures. This excludes guesses and is not a cognitive-depth claim. The change
 is operator-only; 20 affected tests pass, with 641 unique tests now covered across
 partitions. Requalified the source identity for these two audit modules and reran
 both matrix preflights. Runtime/public policies/proof artifact are unchanged.
+
+
+## Completed release checkpoint
+
+Code commit: `a097fb26cde163153f392b3c8cfe92ef953b586e`.
+[Full CI passed](https://github.com/petmal/NEXUS/actions/runs/38837906295), including
+actual Docker build, OCI revision verification, both matrix preflights, full
+unit/integration gates, stress and CLI checks. Package source identity:
+`c959d54f01b1551cbb9cce11471bb581e7e47182620335081bf966edf6062a28`.
+Documentation-only completion edits do not change that identity.
+
+All authorized implementation work is complete. Next empirical step: build the
+feature branch with its real revision label, require both image preflights to
+pass, and run the eight-cell pilot on one or two models without external Python.
+Do not infer a model failure rate from the mechanical certificates. No main merge,
+paid model call, public MindTrial behavior change or branch deletion was needed.

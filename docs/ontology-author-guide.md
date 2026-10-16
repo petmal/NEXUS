@@ -149,3 +149,30 @@ posterior. The 568-experiment policy pool is only a sufficient witness: all lega
 off-pool measurements still update the posterior exactly. See its tests and
 [design](causal-mechanisms-design.md) before claiming difficulty guarantees for
 another ontology. D/T labels require epistemic evidence, not graph size alone.
+
+## Overlapping accepted decisions
+
+`compositional-repair-v1` demonstrates a mission with multiple valid treatments.
+Its runtime `assess_mission` checks the actual predicate, not equality with the
+canonical vector used by an omniscient physical witness. Never turn overlapping
+winning regions into transitive target-equivalence classes.
+
+A belief adapter may additionally supply `common_decisions()` and `supports(dose)`.
+The former returns decisions accepted by every currently possible world; the
+latter checks a proposed, physically eligible treatment against that set. These
+capabilities select terminal `mission-performance-v2`. Its signature counts are
+explicitly distinguished from guaranteed-repair progress; resolution may occur
+while several hidden worlds and winning-set signatures remain possible.
+`exclude_target(dose)` must remove every world accepting a rejected eligible
+submission. Ineligible failures must not eliminate its values; use the shared
+applied-treatment tracker. No posterior diagnostics belong in active responses.
+
+For offline qualification, `solver.decision_audit.DecisionAudit` accepts complete
+observation rows and decision acceptance masks. It supports common-decision
+closure, bounded exact query/guess success, and an exhaustive zero/one/two-reading
+certificate search. A returned lower bound of three means only at least three
+measurements, including zero-valued readings; it does not cover rejected finishes
+or certify a three-round policy. Qualify selected fixture scope separately from
+uniform-prior probability claims, and keep both separate from empirical LLM
+performance. The family-specific live conformance document must explain why every
+legal response reduces to the mathematical audit's observation classes.
