@@ -64,11 +64,16 @@ selection never changes the generator's disclosed support.
 
 Separate success, scientific evidence sufficiency, first attempted treatment,
 physical execution, budget efficiency, and returned-receipt formatting. For the
-new family, terminal `mission-performance-v2` reports common accepted repairs and
+new family, terminal `mission-performance-v3` retains the v2 common-repair fields and
 whether the first applied submission was supported by all remaining worlds.
 Winning-set signature counts are not exclusive target classes; reducing them
 alone need not establish a guaranteed repair. Multiple hidden worlds may remain
 when a fully justified treatment is already known.
+
+After the first pilot, use the separate [eight-execution budget diagnostic](budget-diagnostic-matrix.md)
+for the targeted 30/36-action comparison. The original seeds and standard budgets
+in this matrix are unchanged. The [plain-language episode guide](compositional-pilot-guide.md)
+explains the original runs and includes verified operator-only examples.
 
 If all models pass, inspect their shortest valid traces and use those policies
 as adversarial baselines before increasing graph size. If failures occur, replay

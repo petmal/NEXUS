@@ -167,6 +167,14 @@ while several hidden worlds and winning-set signatures remain possible.
 submission. Ineligible failures must not eliminate its values; use the shared
 applied-treatment tracker. No posterior diagnostics belong in active responses.
 
+For `mission-performance-v3`, additionally expose belief `accepting_count(dose)`
+and runtime `measurement_features(measurement) -> (context, intervention)`.
+The count is the number of remaining worlds accepting that eligible dose, not a
+probability; features return `(None, None)` for no-signal material readings.
+These optional capabilities add pre-outcome submission classifications, physical
+goal versus escape separation, and experiment coverage. The v2 adapter and parser
+remain supported. See [post-run diagnostic design](budget-diagnostic-design.md).
+
 For offline qualification, `solver.decision_audit.DecisionAudit` accepts complete
 observation rows and decision acceptance masks. It supports common-decision
 closure, bounded exact query/guess success, and an exhaustive zero/one/two-reading

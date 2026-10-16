@@ -72,6 +72,9 @@ class Belief:
     def supports(self, doses):
         return doses is not None and REPAIRS.index(tuple(doses)) in self.common_decisions()
 
+    def accepting_count(self, doses):
+        return (self.mask & winning_masks()[REPAIRS.index(tuple(doses))]).bit_count()
+
     def observe(self, measurement):
         sample = measurement.sample
         if sample["reading"] is None:
@@ -79,7 +82,7 @@ class Belief:
         mode, x, y, z, a, b, c, d = sample["settings"]
         query = QUERIES.index((mode, (x, y, z), (a, b)))
         normalized = (sample["reading"] - c - mode * d) % 3
-        self.mask &= sum(1 << i for i, value in enumerate(rows()[query]) if value == normalized)
+        self.mask &= audit().outcome_masks[query].get(normalized, 0)
         if not self.mask:
             raise ValueError("observations contradict public prior")
 

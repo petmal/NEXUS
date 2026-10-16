@@ -27,13 +27,14 @@ class DecisionAudit:
         if not 1 <= len(rows) <= 50000 or any(len(row) != worlds for row in rows):
             raise ValueError("invalid observation table")
         self.worlds, self.rows, self.winning = worlds, rows, winning
-        self.partitions = tuple(
-            tuple(
-                sum(1 << i for i, v in enumerate(row) if v == outcome)
+        self.outcome_masks = tuple(
+            {
+                outcome: sum(1 << i for i, v in enumerate(row) if v == outcome)
                 for outcome in sorted(set(row))
-            )
+            }
             for row in rows
         )
+        self.partitions = tuple(tuple(row.values()) for row in self.outcome_masks)
 
     def common(self, mask):
         return tuple(i for i, win in enumerate(self.winning) if mask and mask & ~win == 0)
@@ -45,7 +46,7 @@ class DecisionAudit:
         mask = self.full
         for index in query_indices:
             outcome = self.rows[index][world]
-            mask &= sum(1 << i for i, value in enumerate(self.rows[index]) if value == outcome)
+            mask &= self.outcome_masks[index][outcome]
         return mask
 
     def positive_reading_lower(self, world: int) -> int:

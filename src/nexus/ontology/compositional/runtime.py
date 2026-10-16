@@ -30,11 +30,13 @@ def world_for(episode):
 def validate_episode(episode):
     from nexus.ontology.compositional.evidence import files
     from nexus.ontology.compositional.generation import DESCRIPTION, certificate, initial_state
+    from nexus.ontology.compositional.budget import allowance, profile_certificate
 
     spec = episode.public.investigation.data()
     metadata = episode.generation_metadata
     planning = int(spec.stock_room != spec.mission_room)
-    proof = certificate(spec, planning)
+    extra = allowance(metadata.budget_profile, spec.theory, spec.discovery, planning, 1)
+    proof = profile_certificate(certificate(spec, planning), metadata.budget_profile, extra)
     bound = proof["reference_action_upper"]
     if type(episode.construction_seed) is not int or world_for(episode) != world_for_seed(
         episode.construction_seed
@@ -44,7 +46,7 @@ def validate_episode(episode):
         raise ValueError("T0 treatment contradicts the selected compositional repair")
     if episode.public.evidence_files != files(spec):
         raise ValueError("compositional repair evidence differs from the public contract")
-    if episode.public.initial_state != initial_state(spec, bound + 3):
+    if episode.public.initial_state != initial_state(spec, bound + extra):
         raise ValueError("compositional repair initial state or resources differ from profile")
     rooms = {spec.stock_room, spec.mission_room}
     expected_rooms = {
@@ -75,7 +77,7 @@ def validate_episode(episode):
         metadata.resource_allowance,
         metadata.room_count,
         metadata.machine_count,
-    ) != (bound + 3, bound, 3, len(rooms), 3) or metadata.investigation_certificate != proof:
+    ) != (bound + extra, bound, extra, len(rooms), 3) or metadata.investigation_certificate != proof:
         raise ValueError("compositional repair certificate or budget metadata differs from profile")
 
 
@@ -182,6 +184,14 @@ def belief(spec):
     from nexus.ontology.compositional.inference import Belief
 
     return Belief(spec.data())
+
+
+def measurement_features(measurement):
+    """Public context/intervention labels, only for actual survey readings."""
+    if measurement.no_signal:
+        return None, None
+    settings = measurement.sample["settings"]
+    return settings[0], bool(settings[4] or settings[5])
 
 
 def mission_tracker(public):

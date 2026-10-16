@@ -78,7 +78,9 @@ def generate(
     axis_version: int = typer.Option(1, min=1, max=2, envvar="NEXUS_AXIS_VERSION",
                                     help="1=legacy profiles; 2=scientific investigation semantics."),
     science_family: str = typer.Option("shared-response-v1", envvar="NEXUS_SCIENCE_FAMILY",
-        help="Scientific family: shared-response-v1, coupled-network-v1, resonant-network-v1, causal-mechanisms-v1, coupled-repair-v1, or coupled-dynamics-v1 (requires axes v2)."),
+        help="Scientific family: shared-response-v1, coupled-network-v1, resonant-network-v1, causal-mechanisms-v1, coupled-repair-v1, coupled-dynamics-v1, or compositional-repair-v1 (requires axes v2)."),
+    budget_profile: str = typer.Option("standard", envvar="NEXUS_BUDGET_PROFILE",
+        help="standard or diagnostic-plus6 (compositional T3/D5/P1/R1 only)."),
     discovery_level: int = typer.Option(
         0,
         min=0,
@@ -117,6 +119,7 @@ def generate(
             seed + offset,
             axis_version=axis_version,
             science_family=science_family,
+            budget_profile=budget_profile,
             discovery_level=discovery_level,
             planning_level=planning_level,
             resource_pressure=resource_pressure,
@@ -328,7 +331,9 @@ def serve_session(
     axis_version: int = typer.Option(1, min=1, max=2, envvar="NEXUS_AXIS_VERSION",
                                     help="1=legacy profiles; 2=scientific investigation semantics."),
     science_family: str = typer.Option("shared-response-v1", envvar="NEXUS_SCIENCE_FAMILY",
-        help="Scientific family: shared-response-v1, coupled-network-v1, resonant-network-v1, causal-mechanisms-v1, coupled-repair-v1, or coupled-dynamics-v1 (requires axes v2)."),
+        help="Scientific family: shared-response-v1, coupled-network-v1, resonant-network-v1, causal-mechanisms-v1, coupled-repair-v1, coupled-dynamics-v1, or compositional-repair-v1 (requires axes v2)."),
+    budget_profile: str = typer.Option("standard", envvar="NEXUS_BUDGET_PROFILE",
+        help="standard or diagnostic-plus6 (compositional T3/D5/P1/R1 only)."),
     discovery_level: int = typer.Option(
         0,
         min=0,
@@ -358,6 +363,10 @@ def serve_session(
         None, envvar="NEXUS_VERIFIER_SECRET",
         help="Optional fixed verifier secret when generating from --seed.",
     ),
+    extended_diagnostics: bool = typer.Option(
+        False, envvar="NEXUS_EXTENDED_DIAGNOSTICS",
+        help="Private operator action journal and terminal/shutdown evidence diagnostics.",
+    ),
     generation_timing: bool = typer.Option(
         False, envvar="NEXUS_GENERATION_TIMING",
         help="Log generation stage timings to operator stderr; keep service logs private.",
@@ -374,11 +383,15 @@ def serve_session(
     if private is not None and verifier_secret is not None:
         raise typer.BadParameter("--verifier-secret can only be used with --seed")
 
-    if generation_timing:
+    if private is not None and budget_profile != "standard":
+        raise typer.BadParameter("--budget-profile can only be used with --seed; compiled profiles are immutable")
+
+    if generation_timing or extended_diagnostics:
         import logging
 
         logging.basicConfig(level=logging.INFO, format="%(asctime)s %(name)s %(message)s")
-        logging.getLogger("nexus.generation").setLevel(logging.INFO)
+        logging.getLogger("nexus.generation").setLevel(logging.INFO if generation_timing else logging.WARNING)
+        logging.getLogger("nexus.operator").setLevel(logging.INFO if extended_diagnostics else logging.WARNING)
 
     episode = (
         load_private(private)
@@ -387,6 +400,7 @@ def serve_session(
             seed,
             axis_version=axis_version,
             science_family=science_family,
+            budget_profile=budget_profile,
             discovery_level=discovery_level,
             planning_level=planning_level,
             resource_pressure=resource_pressure,
@@ -400,7 +414,7 @@ def serve_session(
         raise typer.BadParameter("install nexus-benchmark[server]") from exc
     from nexus.protocol.http import create_single_session_app
 
-    uvicorn.run(create_single_session_app(episode), host=host, port=port)
+    uvicorn.run(create_single_session_app(episode, extended_diagnostics=extended_diagnostics), host=host, port=port)
 
 
 @app.command("request")
@@ -467,6 +481,11 @@ def validate_command(
         + json.dumps(performance, sort_keys=True, separators=(",", ":")),
         err=True,
     )
+    from nexus.protocol.transport import receipt_classification
+
+    typer.echo("NEXUS receipt classification: " + json.dumps(
+        receipt_classification(result.model_dump(mode="json"), performance), sort_keys=True
+    ), err=True)
     _write_json(result.model_dump(mode="json"))
 
 

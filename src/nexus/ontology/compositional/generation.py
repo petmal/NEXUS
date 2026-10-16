@@ -7,6 +7,7 @@ from nexus.models.episode import GenerationMetadata, PrivateEpisode, PublicEpiso
 from nexus.models.goals import GoalKind, GoalPredicate
 from nexus.models.world import Machine, Resources, Room, WorldState
 from nexus.ontology.compositional.evidence import files
+from nexus.ontology.compositional.budget import allowance, profile_certificate
 from nexus.ontology.compositional.inference import Belief, reading_bound
 from nexus.ontology.compositional.laws import REPAIRS, population, world_for_seed
 from nexus.ontology.compositional.schema import FAMILY, Investigation, Specimen
@@ -63,6 +64,7 @@ def generate_compositional(
     planning_level=1,
     resource_pressure=1,
     verifier_secret=None,
+    budget_profile="standard",
 ):
     if (
         any(
@@ -75,6 +77,7 @@ def generate_compositional(
         raise ValueError("compositional repair requires integer seed and P0/P1,R1")
     if verifier_secret == "":
         raise ValueError("verifier secret must not be empty")
+    extra = allowance(budget_profile, theory_level, discovery_level, planning_level, resource_pressure)
     index = seed % len(population())
     spec = Investigation.model_validate(
         {
@@ -86,7 +89,7 @@ def generate_compositional(
             else None,
         }
     )
-    proof = certificate(spec, planning_level)
+    proof = profile_certificate(certificate(spec, planning_level), budget_profile, extra)
     bound = proof["reference_action_upper"]
     rooms = {spec.stock_room, spec.mission_room}
     return PrivateEpisode(
@@ -99,7 +102,7 @@ def generate_compositional(
             },
             edges=() if len(rooms) == 1 else ((spec.stock_room, spec.mission_room),),
             phase_modulus=1,
-            initial_state=initial_state(spec, bound + 3),
+            initial_state=initial_state(spec, bound + extra),
             goal=GoalPredicate(kind=GoalKind.MISSION_ACCEPTED),
             evidence_files=files(spec),
             investigation=DomainInvestigation(
@@ -119,9 +122,10 @@ def generate_compositional(
             scenario_family_id=FAMILY,
             room_count=len(rooms),
             machine_count=len(APPARATUS),
-            action_budget=bound + 3,
+            action_budget=bound + extra,
             guaranteed_policy_action_count=bound,
-            resource_allowance=3,
+            resource_allowance=extra,
+            budget_profile=budget_profile,
             recommended_tool_call_limit=bound + 32,
             investigation_certificate=proof,
         ),

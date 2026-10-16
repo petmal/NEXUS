@@ -17,6 +17,7 @@ from nexus.models.world import TerminalStatus, WorldState
 from nexus.render.text import observation
 from nexus.protocol.public_transcript import PublicTranscript, record
 from nexus.protocol.investigation_metrics import (
+    AuditedDecisionMissionPerformance,
     DecisionMissionPerformance,
     InvestigationPerformance,
     MissionPerformance,
@@ -75,7 +76,8 @@ class PerformanceSummary(BaseModel):
 
 
 TerminalPerformance = (
-    PerformanceSummary | InvestigationPerformance | DecisionMissionPerformance | MissionPerformance
+    PerformanceSummary | InvestigationPerformance | AuditedDecisionMissionPerformance
+    | DecisionMissionPerformance | MissionPerformance
 )
 
 
@@ -196,6 +198,32 @@ class Session:
     def state_snapshot(self) -> WorldState:
         with self._lock:
             return self.state.model_copy(deep=True)
+
+    def operator_snapshot(self) -> dict:
+        """Private read-only snapshot, including an unfinished attempt at shutdown.
+
+        Not available through the player transport or HTTP routes. In particular,
+        this does not call finalize_attempt or label an active world as failed.
+        """
+        with self._lock:
+            if self.episode.public.investigation is not None:
+                from nexus.protocol.investigation_metrics import summarize
+
+                performance = summarize(
+                    self.episode, self.state, self.trace, invalid=self._invalid_actions,
+                    duplicates=self._duplicate_requests, conflicts=self._protocol_conflicts,
+                    extended=True,
+                )
+            else:
+                performance = self._performance_summary()
+            status = self._status().model_dump(mode="json")
+            status.pop("victory_code")
+            return {
+                "status": status,
+                "performance": None if performance is None else performance.model_dump(mode="json"),
+                "provider_stop_reason": None,
+                "receipt_validation": "not_observed_by_service",
+            }
 
     def _status(self) -> SessionStatus:
         with self._lock:

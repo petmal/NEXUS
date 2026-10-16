@@ -10,6 +10,7 @@ from nexus.protocol.transport import (
     ClientError,
     check_health,
     request_service_payload,
+    receipt_classification,
     validate_candidate_payload_with_performance,
 )
 
@@ -84,6 +85,9 @@ def _validate(argv: Sequence[str]) -> int:
         file=sys.stderr,
     )
     _write_json(result)
+    print("NEXUS receipt classification: " + json.dumps(
+        receipt_classification(result, performance), sort_keys=True, separators=(",", ":")
+    ), file=sys.stderr)
     return 0
 
 

@@ -140,7 +140,7 @@ def test_public_witness_live_replay_and_metrics(seed):
     assert result.victory_code and result.current_turn <= 27
     assert canonical_hash(replay(e, s.trace)) == canonical_hash(s.state)
     metrics = result.model_dump(mode="json")["performance"]
-    assert metrics["version"] == "mission-performance-v2"
+    assert metrics["version"] == "mission-performance-v3"
     assert metrics["first_submission_supported_by_evidence"]
     assert metrics["common_repairs_before_first_submission"] >= 1
 
@@ -227,6 +227,10 @@ def test_ineligible_finish_does_not_eliminate_correct_physical_treatment():
     assert metrics["failed_finishes"] == 1
     assert metrics["target_classes_before_first_submission"] == 216
     assert metrics["first_submission_supported_by_evidence"] is False
+    diagnoses = metrics["decision_diagnostics"]["submissions"]
+    assert diagnoses[0]["evidence"]["classification"] == "ineligible"
+    assert diagnoses[0]["evidence"]["accepting_worlds"] is None
+    assert diagnoses[0]["evidence"]["remaining_worlds"] == diagnoses[1]["evidence"]["remaining_worlds"]
     assert ActionResponse.model_validate_json(result.model_dump_json()) == result
     assert canonical_hash(replay(e, s.trace)) == canonical_hash(s.state)
 

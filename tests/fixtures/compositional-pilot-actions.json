@@ -1,0 +1,1444 @@
+{
+  "provenance": "23-00-26 pilot; accepted public actions only; no model text, receipts or identifiers",
+  "cases": [
+    {
+      "id": "passive-compatible",
+      "seed": 438,
+      "actions": [
+        {
+          "artifact": "seal",
+          "type": "take"
+        },
+        {
+          "artifact": "stock",
+          "type": "take"
+        },
+        {
+          "target": "array",
+          "type": "move"
+        },
+        {
+          "machine": "stage",
+          "settings": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "type": "configure"
+        },
+        {
+          "artifact": "stock.2",
+          "machine": "stage",
+          "type": "operate"
+        },
+        {
+          "artifact": "stock.2",
+          "machine": "sensor",
+          "type": "operate"
+        },
+        {
+          "machine": "stage",
+          "settings": [
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "type": "configure"
+        },
+        {
+          "artifact": "stock.2",
+          "machine": "stage",
+          "type": "operate"
+        },
+        {
+          "artifact": "stock.2",
+          "machine": "sensor",
+          "type": "operate"
+        },
+        {
+          "machine": "stage",
+          "settings": [
+            0,
+            2,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "type": "configure"
+        },
+        {
+          "artifact": "stock.2",
+          "machine": "stage",
+          "type": "operate"
+        },
+        {
+          "artifact": "stock.2",
+          "machine": "sensor",
+          "type": "operate"
+        },
+        {
+          "machine": "stage",
+          "settings": [
+            0,
+            0,
+            0,
+            1,
+            0,
+            0,
+            0,
+            0
+          ],
+          "type": "configure"
+        },
+        {
+          "artifact": "stock.2",
+          "machine": "stage",
+          "type": "operate"
+        },
+        {
+          "artifact": "stock.2",
+          "machine": "sensor",
+          "type": "operate"
+        },
+        {
+          "machine": "stage",
+          "settings": [
+            0,
+            1,
+            1,
+            1,
+            0,
+            0,
+            0,
+            0
+          ],
+          "type": "configure"
+        },
+        {
+          "artifact": "stock.2",
+          "machine": "stage",
+          "type": "operate"
+        },
+        {
+          "artifact": "stock.2",
+          "machine": "sensor",
+          "type": "operate"
+        },
+        {
+          "machine": "stage",
+          "settings": [
+            0,
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "type": "configure"
+        },
+        {
+          "artifact": "stock.2",
+          "machine": "stage",
+          "type": "operate"
+        },
+        {
+          "artifact": "stock.2",
+          "machine": "sensor",
+          "type": "operate"
+        },
+        {
+          "machine": "stage",
+          "settings": [
+            1,
+            2,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "type": "configure"
+        },
+        {
+          "artifact": "stock.2",
+          "machine": "stage",
+          "type": "operate"
+        },
+        {
+          "artifact": "stock.2",
+          "machine": "sensor",
+          "type": "operate"
+        },
+        {
+          "machine": "stage",
+          "settings": [
+            0,
+            2,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "type": "configure"
+        },
+        {
+          "artifact": "stock.2",
+          "machine": "stage",
+          "type": "operate"
+        },
+        {
+          "artifact": "stock.2",
+          "machine": "sensor",
+          "type": "operate"
+        },
+        {
+          "machine": "doser",
+          "settings": [
+            1,
+            1,
+            0,
+            1
+          ],
+          "type": "configure"
+        },
+        {
+          "artifact": "seal",
+          "machine": "doser",
+          "type": "operate"
+        },
+        {
+          "type": "finish"
+        }
+      ]
+    },
+    {
+      "id": "contradicted-retry",
+      "seed": 493,
+      "actions": [
+        {
+          "artifact": "seal",
+          "type": "take"
+        },
+        {
+          "artifact": "stock",
+          "type": "take"
+        },
+        {
+          "target": "array",
+          "type": "move"
+        },
+        {
+          "machine": "stage",
+          "settings": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "type": "configure"
+        },
+        {
+          "artifact": "stock.2",
+          "machine": "stage",
+          "type": "operate"
+        },
+        {
+          "artifact": "stock.2",
+          "machine": "sensor",
+          "type": "operate"
+        },
+        {
+          "machine": "stage",
+          "settings": [
+            0,
+            2,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "type": "configure"
+        },
+        {
+          "artifact": "stock.2",
+          "machine": "stage",
+          "type": "operate"
+        },
+        {
+          "artifact": "stock.2",
+          "machine": "sensor",
+          "type": "operate"
+        },
+        {
+          "machine": "stage",
+          "settings": [
+            0,
+            1,
+            1,
+            1,
+            0,
+            0,
+            0,
+            0
+          ],
+          "type": "configure"
+        },
+        {
+          "artifact": "stock.2",
+          "machine": "stage",
+          "type": "operate"
+        },
+        {
+          "artifact": "stock.2",
+          "machine": "sensor",
+          "type": "operate"
+        },
+        {
+          "machine": "stage",
+          "settings": [
+            1,
+            2,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "type": "configure"
+        },
+        {
+          "artifact": "stock.2",
+          "machine": "stage",
+          "type": "operate"
+        },
+        {
+          "artifact": "stock.2",
+          "machine": "sensor",
+          "type": "operate"
+        },
+        {
+          "machine": "stage",
+          "settings": [
+            1,
+            1,
+            0,
+            2,
+            0,
+            0,
+            0,
+            0
+          ],
+          "type": "configure"
+        },
+        {
+          "artifact": "stock.2",
+          "machine": "stage",
+          "type": "operate"
+        },
+        {
+          "artifact": "stock.2",
+          "machine": "sensor",
+          "type": "operate"
+        },
+        {
+          "machine": "stage",
+          "settings": [
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "type": "configure"
+        },
+        {
+          "artifact": "stock.2",
+          "machine": "stage",
+          "type": "operate"
+        },
+        {
+          "artifact": "stock.2",
+          "machine": "sensor",
+          "type": "operate"
+        },
+        {
+          "machine": "stage",
+          "settings": [
+            0,
+            0,
+            0,
+            1,
+            0,
+            0,
+            0,
+            0
+          ],
+          "type": "configure"
+        },
+        {
+          "artifact": "stock.2",
+          "machine": "stage",
+          "type": "operate"
+        },
+        {
+          "artifact": "stock.2",
+          "machine": "sensor",
+          "type": "operate"
+        },
+        {
+          "machine": "doser",
+          "settings": [
+            2,
+            0,
+            1,
+            1
+          ],
+          "type": "configure"
+        },
+        {
+          "artifact": "seal",
+          "machine": "doser",
+          "type": "operate"
+        },
+        {
+          "type": "finish"
+        },
+        {
+          "machine": "doser",
+          "settings": [
+            2,
+            2,
+            0,
+            0
+          ],
+          "type": "configure"
+        },
+        {
+          "artifact": "seal",
+          "machine": "doser",
+          "type": "operate"
+        },
+        {
+          "type": "finish"
+        }
+      ]
+    },
+    {
+      "id": "correct-without-finish",
+      "seed": 542,
+      "actions": [
+        {
+          "artifact": "seal",
+          "type": "take"
+        },
+        {
+          "artifact": "stock",
+          "type": "take"
+        },
+        {
+          "target": "array",
+          "type": "move"
+        },
+        {
+          "artifact": "stock.2",
+          "machine": "sensor",
+          "type": "probe"
+        },
+        {
+          "machine": "stage",
+          "settings": [
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "type": "configure"
+        },
+        {
+          "artifact": "stock.2",
+          "machine": "stage",
+          "type": "operate"
+        },
+        {
+          "artifact": "stock.2",
+          "machine": "sensor",
+          "type": "probe"
+        },
+        {
+          "machine": "stage",
+          "settings": [
+            0,
+            0,
+            0,
+            1,
+            0,
+            0,
+            0,
+            0
+          ],
+          "type": "configure"
+        },
+        {
+          "artifact": "stock.2",
+          "machine": "stage",
+          "type": "operate"
+        },
+        {
+          "artifact": "stock.2",
+          "machine": "sensor",
+          "type": "probe"
+        },
+        {
+          "machine": "stage",
+          "settings": [
+            0,
+            1,
+            1,
+            1,
+            0,
+            0,
+            0,
+            0
+          ],
+          "type": "configure"
+        },
+        {
+          "artifact": "stock.2",
+          "machine": "stage",
+          "type": "operate"
+        },
+        {
+          "artifact": "stock.2",
+          "machine": "sensor",
+          "type": "probe"
+        },
+        {
+          "machine": "stage",
+          "settings": [
+            0,
+            2,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "type": "configure"
+        },
+        {
+          "artifact": "stock.2",
+          "machine": "stage",
+          "type": "operate"
+        },
+        {
+          "artifact": "stock.2",
+          "machine": "sensor",
+          "type": "probe"
+        },
+        {
+          "machine": "stage",
+          "settings": [
+            0,
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "type": "configure"
+        },
+        {
+          "artifact": "stock.2",
+          "machine": "stage",
+          "type": "operate"
+        },
+        {
+          "artifact": "stock.2",
+          "machine": "sensor",
+          "type": "probe"
+        },
+        {
+          "machine": "stage",
+          "settings": [
+            0,
+            0,
+            1,
+            1,
+            0,
+            0,
+            0,
+            0
+          ],
+          "type": "configure"
+        },
+        {
+          "artifact": "stock.2",
+          "machine": "stage",
+          "type": "operate"
+        },
+        {
+          "artifact": "stock.2",
+          "machine": "sensor",
+          "type": "probe"
+        },
+        {
+          "machine": "stage",
+          "settings": [
+            1,
+            2,
+            1,
+            0,
+            2,
+            0,
+            0,
+            0
+          ],
+          "type": "configure"
+        },
+        {
+          "artifact": "stock.2",
+          "machine": "stage",
+          "type": "operate"
+        },
+        {
+          "artifact": "stock.2",
+          "machine": "sensor",
+          "type": "probe"
+        },
+        {
+          "machine": "doser",
+          "settings": [
+            2,
+            0,
+            0,
+            2
+          ],
+          "type": "configure"
+        },
+        {
+          "artifact": "seal",
+          "machine": "doser",
+          "type": "operate"
+        },
+        {
+          "type": "finish"
+        },
+        {
+          "machine": "doser",
+          "settings": [
+            1,
+            2,
+            1,
+            0
+          ],
+          "type": "configure"
+        },
+        {
+          "artifact": "seal",
+          "machine": "doser",
+          "type": "operate"
+        }
+      ]
+    },
+    {
+      "id": "intervention-compatible",
+      "seed": 438,
+      "actions": [
+        {
+          "artifact": "seal",
+          "type": "take"
+        },
+        {
+          "artifact": "stock",
+          "type": "take"
+        },
+        {
+          "target": "array",
+          "type": "move"
+        },
+        {
+          "machine": "stage",
+          "settings": [
+            0,
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "type": "configure"
+        },
+        {
+          "artifact": "stock.2",
+          "machine": "stage",
+          "type": "operate"
+        },
+        {
+          "artifact": "stock.2",
+          "machine": "sensor",
+          "type": "probe"
+        },
+        {
+          "machine": "stage",
+          "settings": [
+            0,
+            0,
+            1,
+            0,
+            0,
+            1,
+            0,
+            0
+          ],
+          "type": "configure"
+        },
+        {
+          "artifact": "stock.2",
+          "machine": "stage",
+          "type": "operate"
+        },
+        {
+          "artifact": "stock.2",
+          "machine": "sensor",
+          "type": "probe"
+        },
+        {
+          "machine": "stage",
+          "settings": [
+            0,
+            0,
+            1,
+            0,
+            0,
+            2,
+            0,
+            0
+          ],
+          "type": "configure"
+        },
+        {
+          "artifact": "stock.2",
+          "machine": "stage",
+          "type": "operate"
+        },
+        {
+          "artifact": "stock.2",
+          "machine": "sensor",
+          "type": "probe"
+        },
+        {
+          "machine": "stage",
+          "settings": [
+            0,
+            0,
+            1,
+            0,
+            1,
+            0,
+            0,
+            0
+          ],
+          "type": "configure"
+        },
+        {
+          "artifact": "stock.2",
+          "machine": "stage",
+          "type": "operate"
+        },
+        {
+          "artifact": "stock.2",
+          "machine": "sensor",
+          "type": "probe"
+        },
+        {
+          "machine": "stage",
+          "settings": [
+            0,
+            2,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "type": "configure"
+        },
+        {
+          "artifact": "stock.2",
+          "machine": "stage",
+          "type": "operate"
+        },
+        {
+          "artifact": "stock.2",
+          "machine": "sensor",
+          "type": "probe"
+        },
+        {
+          "machine": "stage",
+          "settings": [
+            0,
+            1,
+            1,
+            1,
+            0,
+            0,
+            0,
+            0
+          ],
+          "type": "configure"
+        },
+        {
+          "artifact": "stock.2",
+          "machine": "stage",
+          "type": "operate"
+        },
+        {
+          "artifact": "stock.2",
+          "machine": "sensor",
+          "type": "probe"
+        },
+        {
+          "machine": "stage",
+          "settings": [
+            1,
+            0,
+            2,
+            1,
+            1,
+            0,
+            0,
+            0
+          ],
+          "type": "configure"
+        },
+        {
+          "artifact": "stock.2",
+          "machine": "stage",
+          "type": "operate"
+        },
+        {
+          "artifact": "stock.2",
+          "machine": "sensor",
+          "type": "probe"
+        },
+        {
+          "machine": "stage",
+          "settings": [
+            1,
+            2,
+            2,
+            2,
+            1,
+            1,
+            0,
+            0
+          ],
+          "type": "configure"
+        },
+        {
+          "artifact": "stock.2",
+          "machine": "stage",
+          "type": "operate"
+        },
+        {
+          "artifact": "stock.2",
+          "machine": "sensor",
+          "type": "probe"
+        },
+        {
+          "machine": "doser",
+          "settings": [
+            2,
+            1,
+            0,
+            0
+          ],
+          "type": "configure"
+        },
+        {
+          "artifact": "seal",
+          "machine": "doser",
+          "type": "operate"
+        },
+        {
+          "type": "finish"
+        }
+      ]
+    },
+    {
+      "id": "unsupported-win",
+      "seed": 542,
+      "actions": [
+        {
+          "artifact": "stock",
+          "type": "take"
+        },
+        {
+          "artifact": "seal",
+          "type": "take"
+        },
+        {
+          "target": "array",
+          "type": "move"
+        },
+        {
+          "machine": "stage",
+          "settings": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "type": "configure"
+        },
+        {
+          "artifact": "stock.1",
+          "machine": "stage",
+          "type": "probe"
+        },
+        {
+          "artifact": "stock.1",
+          "machine": "stage",
+          "type": "operate"
+        },
+        {
+          "artifact": "stock.1",
+          "machine": "sensor",
+          "type": "probe"
+        },
+        {
+          "machine": "stage",
+          "settings": [
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "type": "configure"
+        },
+        {
+          "artifact": "stock.1",
+          "machine": "stage",
+          "type": "operate"
+        },
+        {
+          "artifact": "stock.1",
+          "machine": "sensor",
+          "type": "probe"
+        },
+        {
+          "machine": "stage",
+          "settings": [
+            0,
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "type": "configure"
+        },
+        {
+          "artifact": "stock.1",
+          "machine": "stage",
+          "type": "operate"
+        },
+        {
+          "artifact": "stock.1",
+          "machine": "sensor",
+          "type": "probe"
+        },
+        {
+          "machine": "stage",
+          "settings": [
+            0,
+            1,
+            1,
+            1,
+            0,
+            0,
+            0,
+            0
+          ],
+          "type": "configure"
+        },
+        {
+          "artifact": "stock.1",
+          "machine": "stage",
+          "type": "operate"
+        },
+        {
+          "artifact": "stock.1",
+          "machine": "sensor",
+          "type": "probe"
+        },
+        {
+          "machine": "stage",
+          "settings": [
+            0,
+            2,
+            0,
+            1,
+            0,
+            0,
+            0,
+            0
+          ],
+          "type": "configure"
+        },
+        {
+          "artifact": "stock.1",
+          "machine": "stage",
+          "type": "operate"
+        },
+        {
+          "artifact": "stock.1",
+          "machine": "sensor",
+          "type": "probe"
+        },
+        {
+          "machine": "stage",
+          "settings": [
+            0,
+            2,
+            2,
+            1,
+            0,
+            1,
+            0,
+            0
+          ],
+          "type": "configure"
+        },
+        {
+          "artifact": "stock.1",
+          "machine": "stage",
+          "type": "operate"
+        },
+        {
+          "artifact": "stock.1",
+          "machine": "sensor",
+          "type": "probe"
+        },
+        {
+          "machine": "stage",
+          "settings": [
+            1,
+            1,
+            2,
+            1,
+            2,
+            0,
+            0,
+            0
+          ],
+          "type": "configure"
+        },
+        {
+          "artifact": "stock.1",
+          "machine": "sensor",
+          "type": "probe"
+        },
+        {
+          "artifact": "stock.1",
+          "machine": "stage",
+          "type": "operate"
+        },
+        {
+          "artifact": "stock.1",
+          "machine": "sensor",
+          "type": "probe"
+        },
+        {
+          "machine": "doser",
+          "settings": [
+            1,
+            2,
+            1,
+            0
+          ],
+          "type": "configure"
+        },
+        {
+          "artifact": "seal",
+          "machine": "doser",
+          "type": "operate"
+        },
+        {
+          "type": "finish"
+        }
+      ]
+    },
+    {
+      "id": "unfinished",
+      "seed": 438,
+      "actions": [
+        {
+          "artifact": "stock",
+          "type": "take"
+        },
+        {
+          "artifact": "seal",
+          "type": "take"
+        },
+        {
+          "target": "array",
+          "type": "move"
+        },
+        {
+          "machine": "stage",
+          "settings": [
+            0,
+            2,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "type": "configure"
+        },
+        {
+          "artifact": "stock.1",
+          "machine": "stage",
+          "type": "operate"
+        },
+        {
+          "artifact": "stock.1",
+          "machine": "sensor",
+          "type": "probe"
+        },
+        {
+          "machine": "stage",
+          "settings": [
+            0,
+            2,
+            0,
+            0,
+            1,
+            0,
+            0,
+            0
+          ],
+          "type": "configure"
+        },
+        {
+          "artifact": "stock.1",
+          "machine": "stage",
+          "type": "operate"
+        },
+        {
+          "artifact": "stock.1",
+          "machine": "sensor",
+          "type": "probe"
+        },
+        {
+          "machine": "stage",
+          "settings": [
+            0,
+            2,
+            0,
+            0,
+            2,
+            0,
+            0,
+            0
+          ],
+          "type": "configure"
+        },
+        {
+          "artifact": "stock.1",
+          "machine": "stage",
+          "type": "operate"
+        },
+        {
+          "artifact": "stock.1",
+          "machine": "sensor",
+          "type": "probe"
+        },
+        {
+          "machine": "stage",
+          "settings": [
+            0,
+            2,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0
+          ],
+          "type": "configure"
+        },
+        {
+          "artifact": "stock.1",
+          "machine": "stage",
+          "type": "operate"
+        },
+        {
+          "artifact": "stock.1",
+          "machine": "sensor",
+          "type": "probe"
+        },
+        {
+          "machine": "stage",
+          "settings": [
+            0,
+            2,
+            0,
+            0,
+            0,
+            2,
+            0,
+            0
+          ],
+          "type": "configure"
+        },
+        {
+          "artifact": "stock.1",
+          "machine": "stage",
+          "type": "operate"
+        },
+        {
+          "artifact": "stock.1",
+          "machine": "sensor",
+          "type": "probe"
+        }
+      ]
+    },
+    {
+      "id": "supported-win",
+      "seed": 493,
+      "actions": [
+        {
+          "artifact": "seal",
+          "type": "take"
+        },
+        {
+          "artifact": "stock",
+          "type": "take"
+        },
+        {
+          "target": "array",
+          "type": "move"
+        },
+        {
+          "machine": "stage",
+          "settings": [
+            0,
+            2,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "type": "configure"
+        },
+        {
+          "artifact": "stock.2",
+          "machine": "stage",
+          "type": "probe"
+        },
+        {
+          "artifact": "stock.2",
+          "machine": "stage",
+          "type": "operate"
+        },
+        {
+          "artifact": "stock.2",
+          "machine": "sensor",
+          "type": "operate"
+        },
+        {
+          "machine": "stage",
+          "settings": [
+            0,
+            1,
+            1,
+            1,
+            1,
+            0,
+            0,
+            0
+          ],
+          "type": "configure"
+        },
+        {
+          "artifact": "stock.2",
+          "machine": "stage",
+          "type": "operate"
+        },
+        {
+          "artifact": "stock.2",
+          "machine": "sensor",
+          "type": "operate"
+        },
+        {
+          "machine": "stage",
+          "settings": [
+            0,
+            2,
+            1,
+            2,
+            0,
+            1,
+            0,
+            0
+          ],
+          "type": "configure"
+        },
+        {
+          "artifact": "stock.2",
+          "machine": "stage",
+          "type": "operate"
+        },
+        {
+          "artifact": "stock.2",
+          "machine": "sensor",
+          "type": "operate"
+        },
+        {
+          "machine": "stage",
+          "settings": [
+            1,
+            2,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "type": "configure"
+        },
+        {
+          "artifact": "stock.2",
+          "machine": "stage",
+          "type": "operate"
+        },
+        {
+          "artifact": "stock.2",
+          "machine": "sensor",
+          "type": "operate"
+        },
+        {
+          "machine": "stage",
+          "settings": [
+            1,
+            1,
+            0,
+            2,
+            0,
+            0,
+            0,
+            0
+          ],
+          "type": "configure"
+        },
+        {
+          "artifact": "stock.2",
+          "machine": "stage",
+          "type": "operate"
+        },
+        {
+          "artifact": "stock.2",
+          "machine": "sensor",
+          "type": "operate"
+        },
+        {
+          "machine": "stage",
+          "settings": [
+            1,
+            2,
+            1,
+            0,
+            2,
+            1,
+            0,
+            0
+          ],
+          "type": "configure"
+        },
+        {
+          "artifact": "stock.2",
+          "machine": "stage",
+          "type": "operate"
+        },
+        {
+          "artifact": "stock.2",
+          "machine": "sensor",
+          "type": "operate"
+        },
+        {
+          "machine": "doser",
+          "settings": [
+            2,
+            2,
+            1,
+            2
+          ],
+          "type": "configure"
+        },
+        {
+          "artifact": "seal",
+          "machine": "doser",
+          "type": "operate"
+        },
+        {
+          "type": "finish"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,20 @@
+{
+  "version": "budget-diagnostic-v1",
+  "external_python": false,
+  "recommended_tool_call_limit": 120,
+  "fresh_context_per_execution": true,
+  "models": {
+    "gemini": {"provider": "google", "model": "gemini-3.8-flash", "reasoning": "high", "max_completion_tokens": null, "max_requests_per_minute": 3},
+    "grok": {"provider": "xai", "model": "grok-4.7", "reasoning": "xhigh", "max_completion_tokens": 65536, "max_requests_per_minute": 30}
+  },
+  "runs": [
+    {"id": "budget-01", "pair": "gemini-05", "model": "gemini", "original_cell": "structural-05", "seed": 438, "budget_profile": "standard"},
+    {"id": "budget-02", "pair": "gemini-05", "model": "gemini", "original_cell": "structural-05", "seed": 438, "budget_profile": "diagnostic-plus6"},
+    {"id": "budget-03", "pair": "gemini-07", "model": "gemini", "original_cell": "structural-07", "seed": 493, "budget_profile": "diagnostic-plus6"},
+    {"id": "budget-04", "pair": "gemini-07", "model": "gemini", "original_cell": "structural-07", "seed": 493, "budget_profile": "standard"},
+    {"id": "budget-05", "pair": "gemini-08", "model": "gemini", "original_cell": "structural-08", "seed": 542, "budget_profile": "standard"},
+    {"id": "budget-06", "pair": "gemini-08", "model": "gemini", "original_cell": "structural-08", "seed": 542, "budget_profile": "diagnostic-plus6"},
+    {"id": "budget-07", "pair": "grok-05", "model": "grok", "original_cell": "structural-05", "seed": 438, "budget_profile": "diagnostic-plus6"},
+    {"id": "budget-08", "pair": "grok-05", "model": "grok", "original_cell": "structural-05", "seed": 438, "budget_profile": "standard"}
+  ]
+}

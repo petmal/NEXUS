@@ -1,7 +1,7 @@
 {
   "version": "structural-preflight-v1",
   "status": "pilot-ready",
-  "source_sha256": "c959d54f01b1551cbb9cce11471bb581e7e47182620335081bf966edf6062a28",
+  "source_sha256": "3e0a24410be9095171cb0ffeeaf2e688cb7c7595a428e52c5e68d8c4f8f11310",
   "matrix_sha256": "e360d27c252a31f29108d0df4143e5e50d5c2192f99869af8185c95aac8a656e",
   "empirical_difficulty": "uncalibrated",
   "full_rollout_ready": false,
@@ -20,7 +20,7 @@
         "NEXUS_SEED": "0",
         "NEXUS_GENERATION_TIMING": "true"
       },
-      "generation_seconds": 0.016572427000028256,
+      "generation_seconds": 0.0169047080000837,
       "actions": 5,
       "budget": 8,
       "readings": 0,
@@ -41,7 +41,7 @@
         "NEXUS_SEED": "219",
         "NEXUS_GENERATION_TIMING": "true"
       },
-      "generation_seconds": 0.024306788000103552,
+      "generation_seconds": 0.022849422000035702,
       "actions": 40,
       "budget": 73,
       "readings": 7,
@@ -62,7 +62,7 @@
         "NEXUS_SEED": "0",
         "NEXUS_GENERATION_TIMING": "true"
       },
-      "generation_seconds": 0.13710447800031034,
+      "generation_seconds": 0.13862320700013697,
       "actions": 21,
       "budget": 30,
       "readings": 5,
@@ -91,7 +91,7 @@
         "NEXUS_SEED": "250",
         "NEXUS_GENERATION_TIMING": "true"
       },
-      "generation_seconds": 0.001092421000066679,
+      "generation_seconds": 0.0007699410000441276,
       "actions": 21,
       "budget": 30,
       "readings": 5,
@@ -120,7 +120,7 @@
         "NEXUS_SEED": "438",
         "NEXUS_GENERATION_TIMING": "true"
       },
-      "generation_seconds": 0.0010485920001883642,
+      "generation_seconds": 0.0006382379999649856,
       "actions": 24,
       "budget": 30,
       "readings": 6,
@@ -149,7 +149,7 @@
         "NEXUS_SEED": "463",
         "NEXUS_GENERATION_TIMING": "true"
       },
-      "generation_seconds": 0.0008635970002615068,
+      "generation_seconds": 0.0007925950001208548,
       "actions": 24,
       "budget": 30,
       "readings": 6,
@@ -178,7 +178,7 @@
         "NEXUS_SEED": "493",
         "NEXUS_GENERATION_TIMING": "true"
       },
-      "generation_seconds": 0.0008827259998724912,
+      "generation_seconds": 0.0006700749997889943,
       "actions": 24,
       "budget": 30,
       "readings": 6,
@@ -207,7 +207,7 @@
         "NEXUS_SEED": "542",
         "NEXUS_GENERATION_TIMING": "true"
       },
-      "generation_seconds": 0.0010252470001432812,
+      "generation_seconds": 0.0007367030000295927,
       "actions": 24,
       "budget": 30,
       "readings": 6,

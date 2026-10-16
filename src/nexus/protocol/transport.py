@@ -203,6 +203,18 @@ def _validation_result(candidate: str, status: str, victory_code: str | None) ->
     }
 
 
+def receipt_classification(result: dict, performance: dict) -> dict:
+    """Operator label; preserve the existing validator result and stdout contract."""
+    won = performance.get("terminal_status") == "won"
+    matched = bool(result["correct"]) if won else None
+    return {
+        "version": "receipt-classification-v1", "live_mission_won": won,
+        "receipt_match": matched,
+        "classification": "accepted_receipt" if matched else
+        "won_receipt_mismatch" if won else "mission_not_won",
+    }
+
+
 def validate_candidate_payload_with_performance(
     candidate: str,
     *,

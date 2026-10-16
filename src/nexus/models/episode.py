@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from typing import Literal
+
 from pydantic import BaseModel, ConfigDict, Field, model_validator
 
 from nexus.models.domain import DomainArtifact, DomainStock, DomainInvestigation, DomainTruth
@@ -159,6 +161,9 @@ class GenerationMetadata(BaseModel):
     action_budget: int = 0
     exploration_allowance: int = 0
     resource_allowance: int = 0
+    budget_profile: Literal["standard", "diagnostic-plus6"] = Field(
+        default="standard", exclude_if=lambda v: v == "standard"
+    )
     recommended_tool_call_limit: int = 0
 
     rule_ast_nodes: int = 0
@@ -185,6 +190,11 @@ class PrivateEpisode(BaseModel):
 
     @model_validator(mode="after")
     def validate_private_links(self) -> "PrivateEpisode":
+        if self.generation_metadata.budget_profile != "standard" and (
+            not isinstance(self.public.investigation, DomainInvestigation)
+            or self.public.investigation.ontology != "compositional-repair-v1"
+        ):
+            raise ValueError("diagnostic budget profile requires compositional-repair-v1")
         if (self.public.investigation is None) != (self.investigation_truth is None):
             raise ValueError("scientific apparatus requires private truth and public specification")
         if isinstance(self.public.investigation, DomainInvestigation):

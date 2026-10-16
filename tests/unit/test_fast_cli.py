@@ -53,9 +53,11 @@ def test_fast_validate_command_accepts_candidate_file(tmp_path, monkeypatch, cap
     assert json.loads(captured.out) == {"correct": True, "title": "ok", "explanation": "ok"}
     prefix = "NEXUS terminal performance: "
     assert captured.err.startswith(prefix)
-    assert json.loads(captured.err[len(prefix):]) == {
+    assert json.loads(captured.err.splitlines()[0][len(prefix):]) == {
         "terminal_status": "won", "goal_satisfied": True,
     }
+    classification = json.loads(captured.err.splitlines()[1].removeprefix("NEXUS receipt classification: "))
+    assert classification["classification"] == "accepted_receipt"
 
 
 def test_fast_entrypoint_does_not_import_heavy_dependencies():

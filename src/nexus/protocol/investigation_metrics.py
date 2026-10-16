@@ -11,6 +11,7 @@ from nexus.models.domain import DomainInvestigation
 from nexus.models.episode import PrivateEpisode
 from nexus.models.events import TraceRecord
 from nexus.models.world import WorldState
+from nexus.protocol.decision_metrics import DecisionAuditTrail, DecisionDiagnostics
 
 SCIENCE_SCHEMA_URL = (
     "https://raw.githubusercontent.com/petmal/NEXUS/"
@@ -106,6 +107,13 @@ class DecisionMissionPerformance(MissionPerformance):
     measurements_after_guaranteed_repair: int
 
 
+class AuditedDecisionMissionPerformance(DecisionMissionPerformance):
+    """Add classifications while retaining the parser for existing v2 artifacts."""
+
+    version: str = "mission-performance-v3"
+    decision_diagnostics: DecisionDiagnostics
+
+
 def summarize(
     episode: PrivateEpisode,
     state: WorldState,
@@ -114,6 +122,7 @@ def summarize(
     invalid: int,
     duplicates: int,
     conflicts: int,
+    extended: bool = False,
 ) -> InvestigationPerformance | MissionPerformance:
     spec = episode.public.investigation
     certificate = episode.generation_metadata.investigation_certificate
@@ -128,11 +137,19 @@ def summarize(
     first_correct = first_classes = None
     first_common = first_supported = None
     decision_semantics = callable(getattr(posterior, "common_decisions", None))
+    audited_decisions = (
+        decision_semantics
+        and callable(getattr(posterior, "accepting_count", None))
+        and callable(getattr(runtime, "measurement_features", None))
+    )
+    decision_audit = DecisionAuditTrail(posterior) if audited_decisions else None
     tracker = tracker_for(runtime, episode)
     for record in trace:
         action = record.action
         tracker.observe(record)
         if action.type == "finish":
+            if decision_audit is not None:
+                decision_audit.submission(record, posterior, tracker.attempted())
             submissions += 1
             correct = record.terminal_status.value == "won"
             if first_correct is None:
@@ -147,6 +164,8 @@ def summarize(
                 # Only a physically eligible complete decision is excluded.
                 # A wrong room/missing specimen must not falsify its values.
                 posterior.exclude_target(attempted)
+                if decision_audit is not None:
+                    decision_audit.after_evidence(record.turn, posterior)
         measurement = runtime.measurement(record)
         if measurement is None:
             continue
@@ -156,6 +175,10 @@ def summarize(
         before_resolved = bool(posterior.common_decisions()) if decision_semantics else before_targets == 1
         after_resolved_count += before_resolved
         posterior.observe(measurement)
+        if decision_audit is not None:
+            decision_audit.measurement(
+                record, posterior, before, runtime.measurement_features(measurement)
+            )
         after, after_targets = posterior.counts()
         if decision_semantics:
             established_repair_count += not before_resolved and bool(posterior.common_decisions())
@@ -176,19 +199,28 @@ def summarize(
                 "decision_terminal ontology=%s common_repairs_before_first_submission=%s first_submission_supported=%s after_guaranteed_repair=%s",
                 spec.ontology, first_common, first_supported, after_resolved_count,
             )
-        performance_type = DecisionMissionPerformance if decision_semantics else MissionPerformance
+        performance_type = (
+            AuditedDecisionMissionPerformance if audited_decisions else
+            DecisionMissionPerformance if decision_semantics else MissionPerformance
+        )
         decision_fields = {
             "measurements_establishing_guaranteed_repair": established_repair_count,
             "common_repairs_before_first_submission": first_common,
             "first_submission_supported_by_evidence": first_supported,
             "measurements_after_guaranteed_repair": after_resolved_count,
         } if decision_semantics else {}
+        if decision_audit is not None:
+            decision_fields["decision_diagnostics"] = decision_audit.summary(
+                posterior, tracker.attempted(), won=state.terminal_status.value == "won",
+                physical_goal=final_correct, extended=extended,
+            )
         return performance_type(
             **decision_fields,
             ontology=spec.ontology, experimental=spec.data().experimental,
             terminal_status=state.terminal_status.value,
             termination_reason="victory" if state.terminal_status.value == "won" else
-                "action_budget" if state.resources.actions_remaining == 0 else "harness_finalization",
+                "action_budget" if state.resources.actions_remaining == 0 else
+                "active_at_snapshot" if state.terminal_status.value == "active" else "harness_finalization",
             actions_used=state.turn,
             initial_action_budget=episode.public.initial_state.resources.actions_remaining,
             budget_remaining=state.resources.actions_remaining,
@@ -213,6 +245,8 @@ def summarize(
         if state.terminal_status.value == "won"
         else "action_budget"
         if state.resources.actions_remaining == 0
+        else "active_at_snapshot"
+        if state.terminal_status.value == "active"
         else "harness_finalization",
         actions_used=state.turn,
         initial_action_budget=episode.public.initial_state.resources.actions_remaining,

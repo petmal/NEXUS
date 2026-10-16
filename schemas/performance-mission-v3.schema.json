@@ -1,0 +1,447 @@
+{
+  "$defs": {
+    "DecisionDiagnostics": {
+      "additionalProperties": false,
+      "properties": {
+        "version": {
+          "const": "decision-diagnostics-v1",
+          "default": "decision-diagnostics-v1",
+          "title": "Version",
+          "type": "string"
+        },
+        "escape_classification": {
+          "enum": [
+            "supported_win",
+            "compatible_win",
+            "not_won"
+          ],
+          "title": "Escape Classification",
+          "type": "string"
+        },
+        "physical_goal_satisfied": {
+          "title": "Physical Goal Satisfied",
+          "type": "boolean"
+        },
+        "correct_state_without_successful_finish": {
+          "title": "Correct State Without Successful Finish",
+          "type": "boolean"
+        },
+        "final_evidence": {
+          "$ref": "#/$defs/EvidenceAssessment"
+        },
+        "submissions": {
+          "items": {
+            "$ref": "#/$defs/SubmissionAssessment"
+          },
+          "title": "Submissions",
+          "type": "array"
+        },
+        "measured_contexts": {
+          "items": {
+            "type": "integer"
+          },
+          "title": "Measured Contexts",
+          "type": "array"
+        },
+        "passive_measurements": {
+          "title": "Passive Measurements",
+          "type": "integer"
+        },
+        "intervention_measurements": {
+          "title": "Intervention Measurements",
+          "type": "integer"
+        },
+        "no_signal_measurements": {
+          "title": "No Signal Measurements",
+          "type": "integer"
+        },
+        "first_intervention_turn": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "First Intervention Turn"
+        },
+        "first_intervention_measurement": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "First Intervention Measurement"
+        },
+        "first_guaranteed_repair_turn": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "First Guaranteed Repair Turn"
+        },
+        "readings": {
+          "anyOf": [
+            {
+              "items": {
+                "$ref": "#/$defs/ReadingAssessment"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Readings"
+        }
+      },
+      "required": [
+        "escape_classification",
+        "physical_goal_satisfied",
+        "correct_state_without_successful_finish",
+        "final_evidence",
+        "submissions",
+        "measured_contexts",
+        "passive_measurements",
+        "intervention_measurements",
+        "no_signal_measurements",
+        "first_intervention_turn",
+        "first_intervention_measurement",
+        "first_guaranteed_repair_turn"
+      ],
+      "title": "DecisionDiagnostics",
+      "type": "object"
+    },
+    "EvidenceAssessment": {
+      "additionalProperties": false,
+      "properties": {
+        "remaining_worlds": {
+          "title": "Remaining Worlds",
+          "type": "integer"
+        },
+        "winning_set_signatures": {
+          "title": "Winning Set Signatures",
+          "type": "integer"
+        },
+        "common_repairs": {
+          "title": "Common Repairs",
+          "type": "integer"
+        },
+        "accepting_worlds": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Accepting Worlds"
+        },
+        "classification": {
+          "enum": [
+            "guaranteed",
+            "compatible",
+            "contradicted",
+            "ineligible"
+          ],
+          "title": "Classification",
+          "type": "string"
+        }
+      },
+      "required": [
+        "remaining_worlds",
+        "winning_set_signatures",
+        "common_repairs",
+        "accepting_worlds",
+        "classification"
+      ],
+      "title": "EvidenceAssessment",
+      "type": "object"
+    },
+    "ReadingAssessment": {
+      "additionalProperties": false,
+      "properties": {
+        "turn": {
+          "title": "Turn",
+          "type": "integer"
+        },
+        "ordinal": {
+          "title": "Ordinal",
+          "type": "integer"
+        },
+        "context": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Context"
+        },
+        "intervention": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Intervention"
+        },
+        "worlds_before": {
+          "title": "Worlds Before",
+          "type": "integer"
+        },
+        "worlds_after": {
+          "title": "Worlds After",
+          "type": "integer"
+        },
+        "common_repairs_after": {
+          "title": "Common Repairs After",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "turn",
+        "ordinal",
+        "context",
+        "intervention",
+        "worlds_before",
+        "worlds_after",
+        "common_repairs_after"
+      ],
+      "title": "ReadingAssessment",
+      "type": "object"
+    },
+    "SubmissionAssessment": {
+      "additionalProperties": false,
+      "properties": {
+        "turn": {
+          "title": "Turn",
+          "type": "integer"
+        },
+        "won": {
+          "title": "Won",
+          "type": "boolean"
+        },
+        "evidence": {
+          "$ref": "#/$defs/EvidenceAssessment"
+        }
+      },
+      "required": [
+        "turn",
+        "won",
+        "evidence"
+      ],
+      "title": "SubmissionAssessment",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "description": "Add classifications while retaining the parser for existing v2 artifacts.",
+  "properties": {
+    "version": {
+      "default": "mission-performance-v3",
+      "title": "Version",
+      "type": "string"
+    },
+    "ontology": {
+      "title": "Ontology",
+      "type": "string"
+    },
+    "experimental": {
+      "title": "Experimental",
+      "type": "boolean"
+    },
+    "terminal_status": {
+      "title": "Terminal Status",
+      "type": "string"
+    },
+    "termination_reason": {
+      "title": "Termination Reason",
+      "type": "string"
+    },
+    "actions_used": {
+      "title": "Actions Used",
+      "type": "integer"
+    },
+    "initial_action_budget": {
+      "anyOf": [
+        {
+          "type": "integer"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Initial Action Budget"
+    },
+    "budget_remaining": {
+      "anyOf": [
+        {
+          "type": "integer"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Budget Remaining"
+    },
+    "action_counts": {
+      "additionalProperties": {
+        "type": "integer"
+      },
+      "title": "Action Counts",
+      "type": "object"
+    },
+    "measurements_used": {
+      "title": "Measurements Used",
+      "type": "integer"
+    },
+    "informative_measurements": {
+      "title": "Informative Measurements",
+      "type": "integer"
+    },
+    "target_reducing_measurements": {
+      "description": "Measurements reducing the number of distinct winning-set signatures; this is not guaranteed-repair progress.",
+      "title": "Target Reducing Measurements",
+      "type": "integer"
+    },
+    "redundant_measurements": {
+      "title": "Redundant Measurements",
+      "type": "integer"
+    },
+    "target_classes_before_first_submission": {
+      "anyOf": [
+        {
+          "type": "integer"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Target Classes Before First Submission"
+    },
+    "first_submission_correct": {
+      "anyOf": [
+        {
+          "type": "boolean"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "First Submission Correct"
+    },
+    "mission_submissions": {
+      "title": "Mission Submissions",
+      "type": "integer"
+    },
+    "failed_finishes": {
+      "title": "Failed Finishes",
+      "type": "integer"
+    },
+    "final_submission_correct": {
+      "title": "Final Submission Correct",
+      "type": "boolean"
+    },
+    "invalid_actions": {
+      "title": "Invalid Actions",
+      "type": "integer"
+    },
+    "duplicate_requests": {
+      "title": "Duplicate Requests",
+      "type": "integer"
+    },
+    "protocol_conflicts": {
+      "title": "Protocol Conflicts",
+      "type": "integer"
+    },
+    "certificate": {
+      "additionalProperties": true,
+      "title": "Certificate",
+      "type": "object"
+    },
+    "target_count_meaning": {
+      "default": "distinct winning-set signatures; not exclusive target classes",
+      "title": "Target Count Meaning",
+      "type": "string"
+    },
+    "measurements_establishing_guaranteed_repair": {
+      "title": "Measurements Establishing Guaranteed Repair",
+      "type": "integer"
+    },
+    "common_repairs_before_first_submission": {
+      "anyOf": [
+        {
+          "type": "integer"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Common Repairs Before First Submission"
+    },
+    "first_submission_supported_by_evidence": {
+      "anyOf": [
+        {
+          "type": "boolean"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "First Submission Supported By Evidence"
+    },
+    "measurements_after_guaranteed_repair": {
+      "title": "Measurements After Guaranteed Repair",
+      "type": "integer"
+    },
+    "decision_diagnostics": {
+      "$ref": "#/$defs/DecisionDiagnostics"
+    }
+  },
+  "required": [
+    "ontology",
+    "experimental",
+    "terminal_status",
+    "termination_reason",
+    "actions_used",
+    "initial_action_budget",
+    "budget_remaining",
+    "action_counts",
+    "measurements_used",
+    "informative_measurements",
+    "target_reducing_measurements",
+    "redundant_measurements",
+    "target_classes_before_first_submission",
+    "first_submission_correct",
+    "mission_submissions",
+    "failed_finishes",
+    "final_submission_correct",
+    "invalid_actions",
+    "duplicate_requests",
+    "protocol_conflicts",
+    "certificate",
+    "measurements_establishing_guaranteed_repair",
+    "common_repairs_before_first_submission",
+    "first_submission_supported_by_evidence",
+    "measurements_after_guaranteed_repair",
+    "decision_diagnostics"
+  ],
+  "title": "AuditedDecisionMissionPerformance",
+  "type": "object"
+}

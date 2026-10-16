@@ -3,6 +3,7 @@
 The current feature adds opt-in `compositional-repair-v1`: discover shared local
 mechanisms across two contexts and apply one joint physical repair. See the
 [eight-run experimental pilot](docs/structural-model-matrix.md),
+[paired budget diagnostic](docs/budget-diagnostic-matrix.md),
 [construction and proof limits](docs/structural-reasoning-proof.md), and
 [resume ledger](docs/structural-reasoning-implementation.md). Existing families
 and the [ten-run dynamics/control matrix](docs/difficulty-model-matrix.md) remain

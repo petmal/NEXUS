@@ -1,0 +1,219 @@
+{
+  "version": "budget-preflight-v1",
+  "status": "diagnostic-ready",
+  "source_sha256": "3e0a24410be9095171cb0ffeeaf2e688cb7c7595a428e52c5e68d8c4f8f11310",
+  "matrix_sha256": "91ab7a50c9fc68ee0f5e7a8f11432222ef845f550673ba68dd61b4fbe5993a71",
+  "scope": "targeted paired diagnostic; four model/seed pairs, no population difficulty claim",
+  "rows": [
+    {
+      "id": "budget-01",
+      "pair": "gemini-05",
+      "model": "gemini",
+      "environment": {
+        "NEXUS_AXIS_VERSION": "2",
+        "NEXUS_SCIENCE_FAMILY": "compositional-repair-v1",
+        "NEXUS_THEORY_LEVEL": "3",
+        "NEXUS_DISCOVERY_LEVEL": "5",
+        "NEXUS_PLANNING_LEVEL": "1",
+        "NEXUS_RESOURCE_PRESSURE": "1",
+        "NEXUS_SEED": "438",
+        "NEXUS_BUDGET_PROFILE": "standard",
+        "NEXUS_GENERATION_TIMING": "true",
+        "NEXUS_EXTENDED_DIAGNOSTICS": "true"
+      },
+      "generation_seconds": 0.513511200000039,
+      "budget": 30,
+      "reference_actions": 24,
+      "qualified": true,
+      "won": true,
+      "replay_verified": true
+    },
+    {
+      "id": "budget-02",
+      "pair": "gemini-05",
+      "model": "gemini",
+      "environment": {
+        "NEXUS_AXIS_VERSION": "2",
+        "NEXUS_SCIENCE_FAMILY": "compositional-repair-v1",
+        "NEXUS_THEORY_LEVEL": "3",
+        "NEXUS_DISCOVERY_LEVEL": "5",
+        "NEXUS_PLANNING_LEVEL": "1",
+        "NEXUS_RESOURCE_PRESSURE": "1",
+        "NEXUS_SEED": "438",
+        "NEXUS_BUDGET_PROFILE": "diagnostic-plus6",
+        "NEXUS_GENERATION_TIMING": "true",
+        "NEXUS_EXTENDED_DIAGNOSTICS": "true"
+      },
+      "generation_seconds": 0.0006329299999379145,
+      "budget": 36,
+      "reference_actions": 24,
+      "qualified": true,
+      "won": true,
+      "replay_verified": true
+    },
+    {
+      "id": "budget-03",
+      "pair": "gemini-07",
+      "model": "gemini",
+      "environment": {
+        "NEXUS_AXIS_VERSION": "2",
+        "NEXUS_SCIENCE_FAMILY": "compositional-repair-v1",
+        "NEXUS_THEORY_LEVEL": "3",
+        "NEXUS_DISCOVERY_LEVEL": "5",
+        "NEXUS_PLANNING_LEVEL": "1",
+        "NEXUS_RESOURCE_PRESSURE": "1",
+        "NEXUS_SEED": "493",
+        "NEXUS_BUDGET_PROFILE": "diagnostic-plus6",
+        "NEXUS_GENERATION_TIMING": "true",
+        "NEXUS_EXTENDED_DIAGNOSTICS": "true"
+      },
+      "generation_seconds": 0.0006768950001969642,
+      "budget": 36,
+      "reference_actions": 24,
+      "qualified": true,
+      "won": true,
+      "replay_verified": true
+    },
+    {
+      "id": "budget-04",
+      "pair": "gemini-07",
+      "model": "gemini",
+      "environment": {
+        "NEXUS_AXIS_VERSION": "2",
+        "NEXUS_SCIENCE_FAMILY": "compositional-repair-v1",
+        "NEXUS_THEORY_LEVEL": "3",
+        "NEXUS_DISCOVERY_LEVEL": "5",
+        "NEXUS_PLANNING_LEVEL": "1",
+        "NEXUS_RESOURCE_PRESSURE": "1",
+        "NEXUS_SEED": "493",
+        "NEXUS_BUDGET_PROFILE": "standard",
+        "NEXUS_GENERATION_TIMING": "true",
+        "NEXUS_EXTENDED_DIAGNOSTICS": "true"
+      },
+      "generation_seconds": 0.0005783199999314093,
+      "budget": 30,
+      "reference_actions": 24,
+      "qualified": true,
+      "won": true,
+      "replay_verified": true
+    },
+    {
+      "id": "budget-05",
+      "pair": "gemini-08",
+      "model": "gemini",
+      "environment": {
+        "NEXUS_AXIS_VERSION": "2",
+        "NEXUS_SCIENCE_FAMILY": "compositional-repair-v1",
+        "NEXUS_THEORY_LEVEL": "3",
+        "NEXUS_DISCOVERY_LEVEL": "5",
+        "NEXUS_PLANNING_LEVEL": "1",
+        "NEXUS_RESOURCE_PRESSURE": "1",
+        "NEXUS_SEED": "542",
+        "NEXUS_BUDGET_PROFILE": "standard",
+        "NEXUS_GENERATION_TIMING": "true",
+        "NEXUS_EXTENDED_DIAGNOSTICS": "true"
+      },
+      "generation_seconds": 0.0005589620000137074,
+      "budget": 30,
+      "reference_actions": 24,
+      "qualified": true,
+      "won": true,
+      "replay_verified": true
+    },
+    {
+      "id": "budget-06",
+      "pair": "gemini-08",
+      "model": "gemini",
+      "environment": {
+        "NEXUS_AXIS_VERSION": "2",
+        "NEXUS_SCIENCE_FAMILY": "compositional-repair-v1",
+        "NEXUS_THEORY_LEVEL": "3",
+        "NEXUS_DISCOVERY_LEVEL": "5",
+        "NEXUS_PLANNING_LEVEL": "1",
+        "NEXUS_RESOURCE_PRESSURE": "1",
+        "NEXUS_SEED": "542",
+        "NEXUS_BUDGET_PROFILE": "diagnostic-plus6",
+        "NEXUS_GENERATION_TIMING": "true",
+        "NEXUS_EXTENDED_DIAGNOSTICS": "true"
+      },
+      "generation_seconds": 0.0005458519999592681,
+      "budget": 36,
+      "reference_actions": 24,
+      "qualified": true,
+      "won": true,
+      "replay_verified": true
+    },
+    {
+      "id": "budget-07",
+      "pair": "grok-05",
+      "model": "grok",
+      "environment": {
+        "NEXUS_AXIS_VERSION": "2",
+        "NEXUS_SCIENCE_FAMILY": "compositional-repair-v1",
+        "NEXUS_THEORY_LEVEL": "3",
+        "NEXUS_DISCOVERY_LEVEL": "5",
+        "NEXUS_PLANNING_LEVEL": "1",
+        "NEXUS_RESOURCE_PRESSURE": "1",
+        "NEXUS_SEED": "438",
+        "NEXUS_BUDGET_PROFILE": "diagnostic-plus6",
+        "NEXUS_GENERATION_TIMING": "true",
+        "NEXUS_EXTENDED_DIAGNOSTICS": "true"
+      },
+      "generation_seconds": 0.0005539639998914936,
+      "budget": 36,
+      "reference_actions": 24,
+      "qualified": true,
+      "won": true,
+      "replay_verified": true
+    },
+    {
+      "id": "budget-08",
+      "pair": "grok-05",
+      "model": "grok",
+      "environment": {
+        "NEXUS_AXIS_VERSION": "2",
+        "NEXUS_SCIENCE_FAMILY": "compositional-repair-v1",
+        "NEXUS_THEORY_LEVEL": "3",
+        "NEXUS_DISCOVERY_LEVEL": "5",
+        "NEXUS_PLANNING_LEVEL": "1",
+        "NEXUS_RESOURCE_PRESSURE": "1",
+        "NEXUS_SEED": "438",
+        "NEXUS_BUDGET_PROFILE": "standard",
+        "NEXUS_GENERATION_TIMING": "true",
+        "NEXUS_EXTENDED_DIAGNOSTICS": "true"
+      },
+      "generation_seconds": 0.0005893160000596254,
+      "budget": 30,
+      "reference_actions": 24,
+      "qualified": true,
+      "won": true,
+      "replay_verified": true
+    }
+  ],
+  "pairs": [
+    {
+      "pair": "gemini-05",
+      "same_science": true,
+      "same_reference_actions": true,
+      "same_observations": true
+    },
+    {
+      "pair": "gemini-07",
+      "same_science": true,
+      "same_reference_actions": true,
+      "same_observations": true
+    },
+    {
+      "pair": "gemini-08",
+      "same_science": true,
+      "same_reference_actions": true,
+      "same_observations": true
+    },
+    {
+      "pair": "grok-05",
+      "same_science": true,
+      "same_reference_actions": true,
+      "same_observations": true
+    }
+  ]
+}

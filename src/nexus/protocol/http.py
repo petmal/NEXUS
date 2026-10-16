@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from threading import Lock
+from contextlib import asynccontextmanager
 from uuid import uuid4
 
 from fastapi import FastAPI, HTTPException
@@ -130,10 +131,25 @@ def create_app(episode: PrivateEpisode) -> FastAPI:
     return app
 
 
-def create_single_session_app(episode: PrivateEpisode) -> FastAPI:
+def create_single_session_app(episode: PrivateEpisode, *, extended_diagnostics: bool = False) -> FastAPI:
     """Create an HTTP application that owns exactly one non-resettable session."""
-    app = _RecordedApp(title="NEXUS", version=episode.public.protocol_version)
     session = Session(episode)
+    from nexus.protocol.operator_diagnostics import OperatorDiagnostics
+
+    diagnostics = OperatorDiagnostics(session) if extended_diagnostics else None
+
+    @asynccontextmanager
+    async def lifespan(app):
+        if diagnostics is not None:
+            diagnostics.start()
+        try:
+            yield
+        finally:
+            if diagnostics is not None:
+                diagnostics.checkpoint()
+                diagnostics.report("shutdown")
+
+    app = _RecordedApp(title="NEXUS", version=episode.public.protocol_version, lifespan=lifespan)
 
     @app.get("/health")
     def health():
@@ -153,7 +169,10 @@ def create_single_session_app(episode: PrivateEpisode) -> FastAPI:
 
     @app.post("/action")
     def act(request: ActionRequest):
-        return session.act(request.expected_turn, request.action).model_dump(mode="json", exclude_none=True)
+        response = session.act(request.expected_turn, request.action)
+        if diagnostics is not None:
+            diagnostics.checkpoint()
+        return response.model_dump(mode="json", exclude_none=True)
 
     @app.get("/status")
     def status():
@@ -167,6 +186,9 @@ def create_single_session_app(episode: PrivateEpisode) -> FastAPI:
     def finalize():
         # Evaluator-only lifecycle endpoint. It is intentionally absent from the player request
         # contract/OpenAPI surface; premature direct use irreversibly fails an active attempt.
-        return _finalize(session)
+        result = _finalize(session)
+        if diagnostics is not None:
+            diagnostics.checkpoint()
+        return result
 
     return app

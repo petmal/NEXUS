@@ -1663,6 +1663,7 @@ def generate_episode(
     verifier_secret: str | None = None,
     axis_version: int = 1,
     science_family: str = "shared-response-v1",
+    budget_profile: str = "standard",
     presentation_version: PresentationVersion | None = CURRENT,
 ) -> PrivateEpisode:
     """Generate a deterministic, solver-qualified NEXUS episode.
@@ -1672,6 +1673,10 @@ def generate_episode(
     policy cost.
     """
     from nexus.ontology.catalog import BUILTINS
+    if budget_profile not in ("standard", "diagnostic-plus6"):
+        raise ValueError("unknown budget profile")
+    if budget_profile != "standard" and science_family != "compositional-repair-v1":
+        raise ValueError("diagnostic budget profile requires compositional-repair-v1")
     if presentation_version not in (None, CURRENT):
         raise ValueError("unsupported presentation version")
     if science_family not in BUILTINS:
@@ -1683,6 +1688,7 @@ def generate_episode(
             seed, discovery_level=discovery_level, planning_level=planning_level,
             resource_pressure=resource_pressure, theory_level=theory_level,
             verifier_secret=verifier_secret,
+            **({"budget_profile": budget_profile} if science_family == "compositional-repair-v1" else {}),
         )
         return attach(episode, presentation_version)
     if axis_version != 1:

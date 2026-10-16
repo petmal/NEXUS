@@ -1,0 +1,65 @@
+{
+  "version": "budget-diagnostic-validation-v1",
+  "local_status": "passed",
+  "base_commit": "178f59b9219b57dc34cdbedb3555fa93109e1aa4",
+  "source_sha256": "3e0a24410be9095171cb0ffeeaf2e688cb7c7595a428e52c5e68d8c4f8f11310",
+  "matrix_sha256": "91ab7a50c9fc68ee0f5e7a8f11432222ef845f550673ba68dd61b4fbe5993a71",
+  "unique_tests_covered": 678,
+  "partitions": {
+    "fast": {
+      "unique_tests": 622,
+      "status": "passed"
+    },
+    "solver_proof": {
+      "unique_tests": 9,
+      "status": "passed"
+    },
+    "extended": {
+      "unique_tests": 40,
+      "status": "passed"
+    },
+    "compositional_exhaustive": {
+      "unique_tests": 3,
+      "status": "passed"
+    },
+    "repair_exhaustive": {
+      "unique_tests": 1,
+      "status": "passed"
+    },
+    "stress_3_seeds": {
+      "unique_tests": 2,
+      "status": "passed"
+    },
+    "determinism": {
+      "unique_tests": 1,
+      "status": "passed"
+    }
+  },
+  "coverage_note": "678 collected tests covered by passing partitions, not one uninterrupted invocation. Repair exhaustive is one slow test within the 23-test replay/coverage gate; its other tests are included in fast coverage.",
+  "warnings": "Three existing Pydantic warnings from deliberately malformed test objects.",
+  "proofs": {
+    "compositional_worlds_live_won_replayed": 615,
+    "dynamics_worlds_live_won_replayed": 1944,
+    "repair_worlds_live_won_replayed": 7203,
+    "dynamics_checked_policy_nodes_unchanged": 3043
+  },
+  "checks": {
+    "budget_preflight_8": true,
+    "original_structural_preflight_8": true,
+    "original_difficulty_preflight_10": true,
+    "independent_review_findings_fixed": 2,
+    "wheel_source_and_matrix_binding_match": true,
+    "wheel_dynamics_cache_hit": true,
+    "ruff_new_modules": true,
+    "pyright_new_modules_and_metric_integration": true,
+    "frozen_lock": true,
+    "git_diff_check": true
+  },
+  "limitations": [
+    "No paid model calls. Model budget effects remain unmeasured.",
+    "No local Docker/Podman executable. Actual image checks run in PR CI; require current-head CI and repeat preflight on the evaluation image.",
+    "A hard-killed service may omit its shutdown summary; retain the committed-action journal and harness stop reason."
+  ],
+  "ci_location": "https://github.com/petmal/NEXUS/pull/6",
+  "gate_correction": "Initial fast gate detected stale dynamics cache binding after shared metadata/session changes. Independent compiler regenerated it; all 3043 policy nodes were unchanged; final fast gate passed."
+}
