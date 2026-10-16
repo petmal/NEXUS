@@ -1,0 +1,43 @@
+{
+  "status": "local-passed-ci-pending",
+  "tests": {
+    "fast_unit_integration": 593,
+    "slow_dynamics_and_reference": 2,
+    "slow_compositional": 3,
+    "slow_repair": 1,
+    "remaining_slow": 38,
+    "three_seed_stress": 2,
+    "property_determinism": 1,
+    "total": 640,
+    "expected_existing_malformed_object_warnings": 3
+  },
+  "exhaustive_live_worlds": {
+    "dynamics_wins_replay_and_no_reference_action_regression": 1944,
+    "compositional_wins_replay": 615,
+    "repair_wins_replay": 7203
+  },
+  "new_family_arithmetic": {
+    "raw_worlds": 1728,
+    "admitted_worlds": 615,
+    "legal_raw_queries": 4374,
+    "normalized_queries": 486,
+    "legal_repairs": 81,
+    "acceptance": "complete sets, not a preferred target",
+    "public_witness_reading_upper": 7,
+    "public_witness_action_upper_P1": 27,
+    "budget_P1": 30
+  },
+  "compatibility": "48 normalized dynamics episode hashes unchanged; old families retained; repair proof and witness hashes unchanged, semantic source binding requalified",
+  "package": "Python 3.14.8; frozen lock; separately extracted wheel outside source; strict repair identity and cold dynamics load without witness compilation pass; source digest matches checkout",
+  "source_sha256": "221e370d26015c2da0e6a85509d2134b1ebcaab27577627fbc26d37652809f76",
+  "quality": "focused Ruff, new-module and metrics Pyright, whitespace, CLI generate/qualify/solve/replay pass",
+  "local_container": "Docker/Podman unavailable; actual-image checks delegated to CI",
+  "paid_model_calls": 0,
+  "limitations": [
+    "Experimental structural difficulty has not been measured on real models.",
+    "Query-model success ceilings assume uniform admitted world indices, not targeted pilot seeds.",
+    "No mandatory mental revision, three-round lower bound, or model-failure rate is claimed.",
+    "Intervention obstruction applies to 12 worlds; most worlds lack that necessity.",
+    "No timing-side-channel or externally shared/source-assisted evaluation guarantee."
+  ]
+}

@@ -16,7 +16,11 @@ from nexus.models.observation import Observation
 from nexus.models.world import TerminalStatus, WorldState
 from nexus.render.text import observation
 from nexus.protocol.public_transcript import PublicTranscript, record
-from nexus.protocol.investigation_metrics import InvestigationPerformance, MissionPerformance
+from nexus.protocol.investigation_metrics import (
+    DecisionMissionPerformance,
+    InvestigationPerformance,
+    MissionPerformance,
+)
 
 PERFORMANCE_SCHEMA_URL = (
     "https://raw.githubusercontent.com/petmal/NEXUS/"
@@ -70,6 +74,11 @@ class PerformanceSummary(BaseModel):
     protocol_conflicts: int
 
 
+TerminalPerformance = (
+    PerformanceSummary | InvestigationPerformance | DecisionMissionPerformance | MissionPerformance
+)
+
+
 class ActionResponse(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
@@ -81,7 +90,7 @@ class ActionResponse(BaseModel):
     message: str = ""
     victory_code: str | None = None
     duplicate: bool = False
-    performance: PerformanceSummary | InvestigationPerformance | MissionPerformance | None = None
+    performance: TerminalPerformance | None = None
 
 
 class SessionStatus(BaseModel):
@@ -201,7 +210,7 @@ class Session:
                 victory_code=victory_code,
             )
 
-    def finalize_attempt(self) -> tuple[SessionStatus, PerformanceSummary | InvestigationPerformance | MissionPerformance]:
+    def finalize_attempt(self) -> tuple[SessionStatus, TerminalPerformance]:
         """Irreversibly end an evaluator attempt and expose terminal-only diagnostics.
 
         This is deliberately not part of the player request contract. If called while the world is
@@ -216,7 +225,7 @@ class Session:
                 raise RuntimeError("finalized attempt did not produce terminal performance")
             return self._status(), performance
 
-    def _performance_summary(self) -> PerformanceSummary | InvestigationPerformance | MissionPerformance | None:
+    def _performance_summary(self) -> TerminalPerformance | None:
         if self.state.terminal_status == TerminalStatus.ACTIVE:
             return None
         if self.episode.public.investigation is not None:

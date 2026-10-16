@@ -16,7 +16,7 @@ from nexus.ontology.dynamics.schema import Investigation
 from nexus.ontology.inference import Measurement
 
 
-def public_policy(player, evidence):
+def public_policy(player, evidence, *, reuse=True):
     theory = json.loads(evidence["theory.json"])
     resolved = theory["resolved"]
     spec = Investigation(
@@ -42,16 +42,55 @@ def public_policy(player, evidence):
         )
     if spec.stock_room != spec.mission_room:
         act(MoveAction(target=spec.mission_room))
+    states = {artifact: ((), (0, 0, 0)) for artifact in specimens}
+    stage_settings = None
     while (selected := choose(belief.mask)) is not None:
         experiment = experiments(2)[selected]
-        artifact = specimens.pop()
-        for point in experiment.history:
-            act(ConfigureAction(machine="stage", settings=point))
-            act(OperateAction(machine="stage", artifact=artifact))
-            act(OperateAction(machine="pulse", artifact=artifact))
-        if experiment.instrument == "sensor" or experiment.point != (0, 0, 0):
-            act(ConfigureAction(machine="stage", settings=experiment.point))
-            act(OperateAction(machine="stage", artifact=artifact))
+        if reuse:
+            options = []
+            for artifact, (history, current_point) in states.items():
+                if experiment.instrument == "reference":
+                    remaining = ()  # Reference depends only on orientation, never history.
+                elif experiment.history[: len(history)] == history:
+                    remaining = experiment.history[len(history) :]
+                else:
+                    continue
+                actions = []
+                settings = stage_settings
+                point = current_point
+                for desired, pulse in [*((p, True) for p in remaining), (experiment.point, False)]:
+                    if point != desired:
+                        if settings != desired:
+                            actions.append(ConfigureAction(machine="stage", settings=desired))
+                            settings = desired
+                        actions.append(OperateAction(machine="stage", artifact=artifact))
+                        point = desired
+                    if pulse:
+                        actions.append(OperateAction(machine="pulse", artifact=artifact))
+                options.append(
+                    (
+                        len(actions),
+                        artifact,
+                        actions,
+                        settings,
+                        history if experiment.instrument == "reference" else experiment.history,
+                    )
+                )
+            if not options:
+                raise ValueError("reference exhausted compatible survey preparations")
+            _, artifact, actions, stage_settings, history = min(options, key=lambda v: (v[0], v[1]))
+            for action in actions:
+                act(action)
+            states[artifact] = (history, experiment.point)
+        else:
+            artifact = specimens.pop()
+            for point in experiment.history:
+                act(ConfigureAction(machine="stage", settings=point))
+                act(OperateAction(machine="stage", artifact=artifact))
+                act(OperateAction(machine="pulse", artifact=artifact))
+            if experiment.instrument == "sensor" or experiment.point != (0, 0, 0):
+                act(ConfigureAction(machine="stage", settings=experiment.point))
+                act(OperateAction(machine="stage", artifact=artifact))
         result = act(ProbeAction(machine=experiment.instrument, artifact=artifact))
         sample = next(
             e["details"]["result"]["payload"] for e in result.events if "result" in e["details"]

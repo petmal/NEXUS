@@ -1,0 +1,84 @@
+{
+  "python": "3.14.8 (main, Oct  3 2026, 01:04:31) [Clang 22.1.3 ]",
+  "scope": "fresh process, imports excluded, same source with artifact load enabled/disabled; shared host, not container timings",
+  "samples": [
+    {
+      "pair": 0,
+      "cache": false,
+      "generation_seconds": 1.6883532980000382,
+      "budget": 73
+    },
+    {
+      "pair": 0,
+      "cache": true,
+      "generation_seconds": 0.0397817699999905,
+      "budget": 73
+    },
+    {
+      "pair": 1,
+      "cache": true,
+      "generation_seconds": 0.04360127099971578,
+      "budget": 73
+    },
+    {
+      "pair": 1,
+      "cache": false,
+      "generation_seconds": 1.6563322150000204,
+      "budget": 73
+    },
+    {
+      "pair": 2,
+      "cache": false,
+      "generation_seconds": 1.578767876999791,
+      "budget": 73
+    },
+    {
+      "pair": 2,
+      "cache": true,
+      "generation_seconds": 0.04203343900007894,
+      "budget": 73
+    }
+  ],
+  "median_seconds": {
+    "False": 1.6563322150000204,
+    "True": 0.04203343900007894
+  },
+  "selected_policy_comparison": [
+    {
+      "seed": 128,
+      "legacy_actions": 47,
+      "reuse_actions": 37,
+      "budget": 73
+    },
+    {
+      "seed": 839,
+      "legacy_actions": 47,
+      "reuse_actions": 40,
+      "budget": 73
+    },
+    {
+      "seed": 1013,
+      "legacy_actions": 50,
+      "reuse_actions": 45,
+      "budget": 73
+    },
+    {
+      "seed": 649,
+      "legacy_actions": 50,
+      "reuse_actions": 43,
+      "budget": 73
+    },
+    {
+      "seed": 1509,
+      "legacy_actions": 50,
+      "reuse_actions": 46,
+      "budget": 73
+    },
+    {
+      "seed": 219,
+      "legacy_actions": 50,
+      "reuse_actions": 40,
+      "budget": 73
+    }
+  ]
+}

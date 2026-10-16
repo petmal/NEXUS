@@ -2,7 +2,7 @@
   "version": "difficulty-preflight-v1",
   "status": "pilot-ready",
   "matrix_sha256": "f69704061c55ccb23bcdef934e9e4afe72eecb7f7f7a4fa7ddd2454db314aba3",
-  "source_sha256": "63877396da62f920d5af3935a85f715573830ddbfca64b9a3afe9702f1ec6324",
+  "source_sha256": "221e370d26015c2da0e6a85509d2134b1ebcaab27577627fbc26d37652809f76",
   "operator_only": true,
   "empirical_difficulty": "uncalibrated",
   "full_rollout_ready": false,
@@ -171,7 +171,7 @@
       "target_fingerprint": "01f629f0807a547c90252f658557d888852aec7555ccbdf041134e56a6755ede",
       "won": true,
       "replay_verified": true,
-      "actions": 47,
+      "actions": 37,
       "action_budget": 73,
       "qualification": {
         "passed": true,
@@ -182,7 +182,7 @@
           "exact_replay": true
         },
         "metrics": {
-          "actions": 47,
+          "actions": 37,
           "difficulty_scope": "constructive upper only; use matrix preflight for lower bounds"
         },
         "errors": []
@@ -215,7 +215,7 @@
       "target_fingerprint": "db8b8090ac603014fee4b46a07c33388f8f4945de40740ac268943a9ad4053ce",
       "won": true,
       "replay_verified": true,
-      "actions": 47,
+      "actions": 40,
       "action_budget": 73,
       "qualification": {
         "passed": true,
@@ -226,7 +226,7 @@
           "exact_replay": true
         },
         "metrics": {
-          "actions": 47,
+          "actions": 40,
           "difficulty_scope": "constructive upper only; use matrix preflight for lower bounds"
         },
         "errors": []
@@ -259,7 +259,7 @@
       "target_fingerprint": "c06bda9fd086e8da8b861ea4ce4ee53cfe0176892920b4679ac960ee8438351f",
       "won": true,
       "replay_verified": true,
-      "actions": 50,
+      "actions": 45,
       "action_budget": 73,
       "qualification": {
         "passed": true,
@@ -270,7 +270,7 @@
           "exact_replay": true
         },
         "metrics": {
-          "actions": 50,
+          "actions": 45,
           "difficulty_scope": "constructive upper only; use matrix preflight for lower bounds"
         },
         "errors": []
@@ -303,7 +303,7 @@
       "target_fingerprint": "dd95ff2b5b26b3109e9a66d6bcfec4b42c8293f0951e11375ff698b75dc89e01",
       "won": true,
       "replay_verified": true,
-      "actions": 50,
+      "actions": 43,
       "action_budget": 73,
       "qualification": {
         "passed": true,
@@ -314,7 +314,7 @@
           "exact_replay": true
         },
         "metrics": {
-          "actions": 50,
+          "actions": 43,
           "difficulty_scope": "constructive upper only; use matrix preflight for lower bounds"
         },
         "errors": []
@@ -347,7 +347,7 @@
       "target_fingerprint": "0094d52655e23185bc7a33111a2e27aece10da94524acc9459465a0022f4d539",
       "won": true,
       "replay_verified": true,
-      "actions": 50,
+      "actions": 46,
       "action_budget": 73,
       "qualification": {
         "passed": true,
@@ -358,7 +358,7 @@
           "exact_replay": true
         },
         "metrics": {
-          "actions": 50,
+          "actions": 46,
           "difficulty_scope": "constructive upper only; use matrix preflight for lower bounds"
         },
         "errors": []
@@ -391,7 +391,7 @@
       "target_fingerprint": "0be1cd8a765545bec95edb78b4ebf756f5e1ef81331a3fc2e2c909c7af41260a",
       "won": true,
       "replay_verified": true,
-      "actions": 50,
+      "actions": 40,
       "action_budget": 73,
       "qualification": {
         "passed": true,
@@ -402,7 +402,7 @@
           "exact_replay": true
         },
         "metrics": {
-          "actions": 50,
+          "actions": 40,
           "difficulty_scope": "constructive upper only; use matrix preflight for lower bounds"
         },
         "errors": []
@@ -501,5 +501,5 @@
       1
     ]
   },
-  "seconds": 43.82083304900016
+  "seconds": 48.1702293860003
 }

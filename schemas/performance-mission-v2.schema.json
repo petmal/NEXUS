@@ -1,0 +1,192 @@
+{
+  "additionalProperties": false,
+  "description": "Overlapping goals: resolution means a common accepted decision exists.",
+  "properties": {
+    "version": {
+      "default": "mission-performance-v2",
+      "title": "Version",
+      "type": "string"
+    },
+    "ontology": {
+      "title": "Ontology",
+      "type": "string"
+    },
+    "experimental": {
+      "title": "Experimental",
+      "type": "boolean"
+    },
+    "terminal_status": {
+      "title": "Terminal Status",
+      "type": "string"
+    },
+    "termination_reason": {
+      "title": "Termination Reason",
+      "type": "string"
+    },
+    "actions_used": {
+      "title": "Actions Used",
+      "type": "integer"
+    },
+    "initial_action_budget": {
+      "anyOf": [
+        {
+          "type": "integer"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Initial Action Budget"
+    },
+    "budget_remaining": {
+      "anyOf": [
+        {
+          "type": "integer"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Budget Remaining"
+    },
+    "action_counts": {
+      "additionalProperties": {
+        "type": "integer"
+      },
+      "title": "Action Counts",
+      "type": "object"
+    },
+    "measurements_used": {
+      "title": "Measurements Used",
+      "type": "integer"
+    },
+    "informative_measurements": {
+      "title": "Informative Measurements",
+      "type": "integer"
+    },
+    "target_reducing_measurements": {
+      "description": "Measurements reducing the number of distinct winning-set signatures; this is not guaranteed-repair progress.",
+      "title": "Target Reducing Measurements",
+      "type": "integer"
+    },
+    "redundant_measurements": {
+      "title": "Redundant Measurements",
+      "type": "integer"
+    },
+    "target_classes_before_first_submission": {
+      "anyOf": [
+        {
+          "type": "integer"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Target Classes Before First Submission"
+    },
+    "first_submission_correct": {
+      "anyOf": [
+        {
+          "type": "boolean"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "First Submission Correct"
+    },
+    "mission_submissions": {
+      "title": "Mission Submissions",
+      "type": "integer"
+    },
+    "failed_finishes": {
+      "title": "Failed Finishes",
+      "type": "integer"
+    },
+    "final_submission_correct": {
+      "title": "Final Submission Correct",
+      "type": "boolean"
+    },
+    "invalid_actions": {
+      "title": "Invalid Actions",
+      "type": "integer"
+    },
+    "duplicate_requests": {
+      "title": "Duplicate Requests",
+      "type": "integer"
+    },
+    "protocol_conflicts": {
+      "title": "Protocol Conflicts",
+      "type": "integer"
+    },
+    "certificate": {
+      "additionalProperties": true,
+      "title": "Certificate",
+      "type": "object"
+    },
+    "target_count_meaning": {
+      "default": "distinct winning-set signatures; not exclusive target classes",
+      "title": "Target Count Meaning",
+      "type": "string"
+    },
+    "measurements_establishing_guaranteed_repair": {
+      "title": "Measurements Establishing Guaranteed Repair",
+      "type": "integer"
+    },
+    "common_repairs_before_first_submission": {
+      "anyOf": [
+        {
+          "type": "integer"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Common Repairs Before First Submission"
+    },
+    "first_submission_supported_by_evidence": {
+      "anyOf": [
+        {
+          "type": "boolean"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "First Submission Supported By Evidence"
+    },
+    "measurements_after_guaranteed_repair": {
+      "title": "Measurements After Guaranteed Repair",
+      "type": "integer"
+    }
+  },
+  "required": [
+    "ontology",
+    "experimental",
+    "terminal_status",
+    "termination_reason",
+    "actions_used",
+    "initial_action_budget",
+    "budget_remaining",
+    "action_counts",
+    "measurements_used",
+    "informative_measurements",
+    "target_reducing_measurements",
+    "redundant_measurements",
+    "target_classes_before_first_submission",
+    "first_submission_correct",
+    "mission_submissions",
+    "failed_finishes",
+    "final_submission_correct",
+    "invalid_actions",
+    "duplicate_requests",
+    "protocol_conflicts",
+    "certificate",
+    "measurements_establishing_guaranteed_repair",
+    "common_repairs_before_first_submission",
+    "first_submission_supported_by_evidence",
+    "measurements_after_guaranteed_repair"
+  ],
+  "title": "DecisionMissionPerformance",
+  "type": "object"
+}

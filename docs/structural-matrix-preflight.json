@@ -1,0 +1,228 @@
+{
+  "version": "structural-preflight-v1",
+  "status": "pilot-ready",
+  "source_sha256": "221e370d26015c2da0e6a85509d2134b1ebcaab27577627fbc26d37652809f76",
+  "matrix_sha256": "e360d27c252a31f29108d0df4143e5e50d5c2192f99869af8185c95aac8a656e",
+  "empirical_difficulty": "uncalibrated",
+  "full_rollout_ready": false,
+  "selection_scope": "Targeted nonrandom fixtures, not a population failure estimate. No seed, role, pool or private annotation is supplied to players. Fresh context per cell; no external Python.",
+  "rows": [
+    {
+      "id": "structural-01",
+      "role": "execution-control",
+      "environment": {
+        "NEXUS_AXIS_VERSION": "2",
+        "NEXUS_SCIENCE_FAMILY": "compositional-repair-v1",
+        "NEXUS_THEORY_LEVEL": "0",
+        "NEXUS_DISCOVERY_LEVEL": "0",
+        "NEXUS_PLANNING_LEVEL": "1",
+        "NEXUS_RESOURCE_PRESSURE": "1",
+        "NEXUS_SEED": "0",
+        "NEXUS_GENERATION_TIMING": "true"
+      },
+      "generation_seconds": 0.015112124000097538,
+      "actions": 5,
+      "budget": 8,
+      "readings": 0,
+      "won": true,
+      "qualified": true,
+      "replay_verified": true
+    },
+    {
+      "id": "structural-02",
+      "role": "dynamics-control",
+      "environment": {
+        "NEXUS_AXIS_VERSION": "2",
+        "NEXUS_SCIENCE_FAMILY": "coupled-dynamics-v1",
+        "NEXUS_THEORY_LEVEL": "3",
+        "NEXUS_DISCOVERY_LEVEL": "5",
+        "NEXUS_PLANNING_LEVEL": "1",
+        "NEXUS_RESOURCE_PRESSURE": "1",
+        "NEXUS_SEED": "219",
+        "NEXUS_GENERATION_TIMING": "true"
+      },
+      "generation_seconds": 0.02340184800004863,
+      "actions": 40,
+      "budget": 73,
+      "readings": 7,
+      "won": true,
+      "qualified": true,
+      "replay_verified": true
+    },
+    {
+      "id": "structural-03",
+      "role": "structural",
+      "environment": {
+        "NEXUS_AXIS_VERSION": "2",
+        "NEXUS_SCIENCE_FAMILY": "compositional-repair-v1",
+        "NEXUS_THEORY_LEVEL": "3",
+        "NEXUS_DISCOVERY_LEVEL": "5",
+        "NEXUS_PLANNING_LEVEL": "1",
+        "NEXUS_RESOURCE_PRESSURE": "1",
+        "NEXUS_SEED": "0",
+        "NEXUS_GENERATION_TIMING": "true"
+      },
+      "generation_seconds": 0.13448478600003,
+      "actions": 21,
+      "budget": 30,
+      "readings": 5,
+      "won": true,
+      "qualified": true,
+      "replay_verified": true,
+      "topology": 0,
+      "changed_module": 0,
+      "untrimmed_common_repairs": 9,
+      "single_context_common_repairs": [
+        0,
+        0
+      ]
+    },
+    {
+      "id": "structural-04",
+      "role": "structural",
+      "environment": {
+        "NEXUS_AXIS_VERSION": "2",
+        "NEXUS_SCIENCE_FAMILY": "compositional-repair-v1",
+        "NEXUS_THEORY_LEVEL": "3",
+        "NEXUS_DISCOVERY_LEVEL": "5",
+        "NEXUS_PLANNING_LEVEL": "1",
+        "NEXUS_RESOURCE_PRESSURE": "1",
+        "NEXUS_SEED": "250",
+        "NEXUS_GENERATION_TIMING": "true"
+      },
+      "generation_seconds": 0.0005680809999830672,
+      "actions": 21,
+      "budget": 30,
+      "readings": 5,
+      "won": true,
+      "qualified": true,
+      "replay_verified": true,
+      "topology": 1,
+      "changed_module": 0,
+      "untrimmed_common_repairs": 9,
+      "single_context_common_repairs": [
+        0,
+        0
+      ]
+    },
+    {
+      "id": "structural-05",
+      "role": "intervention-fixture",
+      "environment": {
+        "NEXUS_AXIS_VERSION": "2",
+        "NEXUS_SCIENCE_FAMILY": "compositional-repair-v1",
+        "NEXUS_THEORY_LEVEL": "3",
+        "NEXUS_DISCOVERY_LEVEL": "5",
+        "NEXUS_PLANNING_LEVEL": "1",
+        "NEXUS_RESOURCE_PRESSURE": "1",
+        "NEXUS_SEED": "438",
+        "NEXUS_GENERATION_TIMING": "true"
+      },
+      "generation_seconds": 0.0006675370000266412,
+      "actions": 24,
+      "budget": 30,
+      "readings": 6,
+      "won": true,
+      "qualified": true,
+      "replay_verified": true,
+      "topology": 2,
+      "changed_module": 1,
+      "untrimmed_common_repairs": 0,
+      "single_context_common_repairs": [
+        0,
+        0
+      ]
+    },
+    {
+      "id": "structural-06",
+      "role": "intervention-fixture",
+      "environment": {
+        "NEXUS_AXIS_VERSION": "2",
+        "NEXUS_SCIENCE_FAMILY": "compositional-repair-v1",
+        "NEXUS_THEORY_LEVEL": "3",
+        "NEXUS_DISCOVERY_LEVEL": "5",
+        "NEXUS_PLANNING_LEVEL": "1",
+        "NEXUS_RESOURCE_PRESSURE": "1",
+        "NEXUS_SEED": "463",
+        "NEXUS_GENERATION_TIMING": "true"
+      },
+      "generation_seconds": 0.0006836410002506454,
+      "actions": 24,
+      "budget": 30,
+      "readings": 6,
+      "won": true,
+      "qualified": true,
+      "replay_verified": true,
+      "topology": 2,
+      "changed_module": 2,
+      "untrimmed_common_repairs": 0,
+      "single_context_common_repairs": [
+        0,
+        0
+      ]
+    },
+    {
+      "id": "structural-07",
+      "role": "intervention-fixture",
+      "environment": {
+        "NEXUS_AXIS_VERSION": "2",
+        "NEXUS_SCIENCE_FAMILY": "compositional-repair-v1",
+        "NEXUS_THEORY_LEVEL": "3",
+        "NEXUS_DISCOVERY_LEVEL": "5",
+        "NEXUS_PLANNING_LEVEL": "1",
+        "NEXUS_RESOURCE_PRESSURE": "1",
+        "NEXUS_SEED": "493",
+        "NEXUS_GENERATION_TIMING": "true"
+      },
+      "generation_seconds": 0.0005947799995738023,
+      "actions": 24,
+      "budget": 30,
+      "readings": 6,
+      "won": true,
+      "qualified": true,
+      "replay_verified": true,
+      "topology": 2,
+      "changed_module": 1,
+      "untrimmed_common_repairs": 0,
+      "single_context_common_repairs": [
+        0,
+        0
+      ]
+    },
+    {
+      "id": "structural-08",
+      "role": "intervention-fixture",
+      "environment": {
+        "NEXUS_AXIS_VERSION": "2",
+        "NEXUS_SCIENCE_FAMILY": "compositional-repair-v1",
+        "NEXUS_THEORY_LEVEL": "3",
+        "NEXUS_DISCOVERY_LEVEL": "5",
+        "NEXUS_PLANNING_LEVEL": "1",
+        "NEXUS_RESOURCE_PRESSURE": "1",
+        "NEXUS_SEED": "542",
+        "NEXUS_GENERATION_TIMING": "true"
+      },
+      "generation_seconds": 0.000690331999976479,
+      "actions": 24,
+      "budget": 30,
+      "readings": 6,
+      "won": true,
+      "qualified": true,
+      "replay_verified": true,
+      "topology": 2,
+      "changed_module": 2,
+      "untrimmed_common_repairs": 0,
+      "single_context_common_repairs": [
+        0,
+        0
+      ]
+    }
+  ],
+  "coverage": {
+    "all_graphs": true,
+    "multiple_change_locations": true,
+    "four_intervention_obstructions": true,
+    "both_contexts_needed_in_fixtures": true,
+    "live_wins_replay": true
+  }
+}

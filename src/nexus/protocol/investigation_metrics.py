@@ -1,11 +1,13 @@
 """Terminal-only diagnostics for axes-v2; no metric is a player hint during play."""
 
+import logging
 from collections import Counter
 
 from pydantic import BaseModel, ConfigDict, Field, model_serializer
 
 from nexus.ontology.catalog import runtime_for
 from nexus.ontology.mission import final_acceptance, tracker_for
+from nexus.models.domain import DomainInvestigation
 from nexus.models.episode import PrivateEpisode
 from nexus.models.events import TraceRecord
 from nexus.models.world import WorldState
@@ -92,6 +94,18 @@ class MissionPerformance(BaseModel):
         return result
 
 
+class DecisionMissionPerformance(MissionPerformance):
+    """Overlapping goals: resolution means a common accepted decision exists."""
+
+    version: str = "mission-performance-v2"
+    target_count_meaning: str = "distinct winning-set signatures; not exclusive target classes"
+    target_reducing_measurements: int = Field(description="Measurements reducing the number of distinct winning-set signatures; this is not guaranteed-repair progress.")
+    measurements_establishing_guaranteed_repair: int
+    common_repairs_before_first_submission: int | None
+    first_submission_supported_by_evidence: bool | None
+    measurements_after_guaranteed_repair: int
+
+
 def summarize(
     episode: PrivateEpisode,
     state: WorldState,
@@ -102,12 +116,18 @@ def summarize(
     conflicts: int,
 ) -> InvestigationPerformance | MissionPerformance:
     spec = episode.public.investigation
+    certificate = episode.generation_metadata.investigation_certificate
+    if spec is None or certificate is None:
+        raise ValueError("scientific diagnostics require an investigation and certificate")
     runtime = runtime_for(spec)
     posterior = runtime.belief(spec)
     expected = runtime.expected(episode)
     measurements = informative = target_reducing = submissions = failed = 0
     calibration_count = no_signal_count = after_resolved_count = 0
+    established_repair_count = 0
     first_correct = first_classes = None
+    first_common = first_supported = None
+    decision_semantics = callable(getattr(posterior, "common_decisions", None))
     tracker = tracker_for(runtime, episode)
     for record in trace:
         action = record.action
@@ -118,6 +138,9 @@ def summarize(
             if first_correct is None:
                 first_correct = correct
                 first_classes = posterior.counts()[1]
+                if decision_semantics:
+                    first_common = len(posterior.common_decisions())
+                    first_supported = posterior.supports(tracker.attempted())
             failed += not correct
             attempted = tracker.attempted()
             if not correct and attempted is not None:
@@ -130,9 +153,12 @@ def summarize(
         before, before_targets = posterior.counts()
         calibration_count += measurement.calibration
         no_signal_count += measurement.no_signal
-        after_resolved_count += before_targets == 1
+        before_resolved = bool(posterior.common_decisions()) if decision_semantics else before_targets == 1
+        after_resolved_count += before_resolved
         posterior.observe(measurement)
         after, after_targets = posterior.counts()
+        if decision_semantics:
+            established_repair_count += not before_resolved and bool(posterior.common_decisions())
         measurements += 1
         informative += after < before
         target_reducing += after_targets < before_targets
@@ -140,7 +166,25 @@ def summarize(
     matches = sum(left == right for left, right in zip(final_settings[1:], expected[1:]))
     runtime.log_terminal(spec, calibration_count, no_signal_count, after_resolved_count, first_classes)
     if runtime.performance_style == "mission":
-        return MissionPerformance(
+        if not isinstance(spec, DomainInvestigation):
+            raise ValueError("mission adapter requires a domain investigation")
+        final_correct = final_acceptance(runtime, episode, state)
+        if final_correct is None:
+            raise ValueError("mission adapter did not provide an acceptance predicate")
+        if decision_semantics:
+            logging.getLogger("nexus.diagnostics").info(
+                "decision_terminal ontology=%s common_repairs_before_first_submission=%s first_submission_supported=%s after_guaranteed_repair=%s",
+                spec.ontology, first_common, first_supported, after_resolved_count,
+            )
+        performance_type = DecisionMissionPerformance if decision_semantics else MissionPerformance
+        decision_fields = {
+            "measurements_establishing_guaranteed_repair": established_repair_count,
+            "common_repairs_before_first_submission": first_common,
+            "first_submission_supported_by_evidence": first_supported,
+            "measurements_after_guaranteed_repair": after_resolved_count,
+        } if decision_semantics else {}
+        return performance_type(
+            **decision_fields,
             ontology=spec.ontology, experimental=spec.data().experimental,
             terminal_status=state.terminal_status.value,
             termination_reason="victory" if state.terminal_status.value == "won" else
@@ -155,9 +199,9 @@ def summarize(
             target_classes_before_first_submission=first_classes,
             first_submission_correct=first_correct, mission_submissions=submissions,
             failed_finishes=failed,
-            final_submission_correct=final_acceptance(runtime, episode, state),
+            final_submission_correct=final_correct,
             invalid_actions=invalid, duplicate_requests=duplicates, protocol_conflicts=conflicts,
-            certificate=episode.generation_metadata.investigation_certificate,
+            certificate=certificate,
         )
     return InvestigationPerformance(
         theory_level=spec.theory,
@@ -188,5 +232,5 @@ def summarize(
         invalid_actions=invalid,
         duplicate_requests=duplicates,
         protocol_conflicts=conflicts,
-        certificate=episode.generation_metadata.investigation_certificate,
+        certificate=certificate,
     )

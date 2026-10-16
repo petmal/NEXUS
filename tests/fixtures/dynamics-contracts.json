@@ -1,0 +1,338 @@
+[
+  {
+    "seed": 0,
+    "planning": 0,
+    "theory": 0,
+    "discovery": 0,
+    "sha256": "c94bd2bb3c8f04f3bfe29ab96e2d507e01b3f9cf600720cb8829b0f2d82fd5d8"
+  },
+  {
+    "seed": 0,
+    "planning": 0,
+    "theory": 3,
+    "discovery": 5,
+    "sha256": "8db05d57dea5ad2766c6fbb08c0f79c75bff2a6a6bc6abda806adb8988ce36b7"
+  },
+  {
+    "seed": 0,
+    "planning": 1,
+    "theory": 0,
+    "discovery": 0,
+    "sha256": "8738a29df492e16d20f2121786f02131750e08c6ba02836991d03a319690db5f"
+  },
+  {
+    "seed": 0,
+    "planning": 1,
+    "theory": 3,
+    "discovery": 5,
+    "sha256": "de9b342ee5f083fd42c0d25b117c41a5b7ab4545ee3ff721fb5fd280f4e229fa"
+  },
+  {
+    "seed": 1,
+    "planning": 0,
+    "theory": 0,
+    "discovery": 0,
+    "sha256": "bbafc7c92d0e18ccc08284d8d3108700e1780063dc4bdb065f559d33447b8382"
+  },
+  {
+    "seed": 1,
+    "planning": 0,
+    "theory": 3,
+    "discovery": 5,
+    "sha256": "db68b65bf8eb2a20139ca7d467bed3b082ff5728c75a767ea9445027bfb4559e"
+  },
+  {
+    "seed": 1,
+    "planning": 1,
+    "theory": 0,
+    "discovery": 0,
+    "sha256": "28f7e6332c12a07bcc64e33bac51567f9800bd27a954b1ead7b47112e9ae120d"
+  },
+  {
+    "seed": 1,
+    "planning": 1,
+    "theory": 3,
+    "discovery": 5,
+    "sha256": "2f1a36bd69ae961b26f1d15178af9398bdb6d204d51a273323bcbfe13c70322c"
+  },
+  {
+    "seed": 127,
+    "planning": 0,
+    "theory": 0,
+    "discovery": 0,
+    "sha256": "053a7085ced5bc203c74e44fac3079c89c139e32b602847558329d97a943f7eb"
+  },
+  {
+    "seed": 127,
+    "planning": 0,
+    "theory": 3,
+    "discovery": 5,
+    "sha256": "b6ababc6533bcb4941944c31611f04def0096eb3ccf4e56103df43d1bed5b8fd"
+  },
+  {
+    "seed": 127,
+    "planning": 1,
+    "theory": 0,
+    "discovery": 0,
+    "sha256": "c7c9a9686b63bc6fb800f302993a3895e508f4d32f03798a81b4fdf66e6db1b2"
+  },
+  {
+    "seed": 127,
+    "planning": 1,
+    "theory": 3,
+    "discovery": 5,
+    "sha256": "0ac1fac1d2f73fead0ab45c6c4d03f87d976b44e844ad16813c00563403b9fb1"
+  },
+  {
+    "seed": 128,
+    "planning": 0,
+    "theory": 0,
+    "discovery": 0,
+    "sha256": "20534ba752b44f42ceced447ceae65c68542eb5cf82a6e775f8b7985e6cc900b"
+  },
+  {
+    "seed": 128,
+    "planning": 0,
+    "theory": 3,
+    "discovery": 5,
+    "sha256": "2f53f1b4d67c71dae6b58881f888003233510e4bc397a11fb8e579464f8f616d"
+  },
+  {
+    "seed": 128,
+    "planning": 1,
+    "theory": 0,
+    "discovery": 0,
+    "sha256": "5a121125e6ab65ae3afa45ea9f165a81a47f2dae91490b0e0180ee8edb22b98b"
+  },
+  {
+    "seed": 128,
+    "planning": 1,
+    "theory": 3,
+    "discovery": 5,
+    "sha256": "0dbcc5a0b83ea16e78220f0d1bf477aa1481126064c7e9f8136d4fa20a441bbe"
+  },
+  {
+    "seed": 219,
+    "planning": 0,
+    "theory": 0,
+    "discovery": 0,
+    "sha256": "2180e537c5872eea8da51dfea2b0037eb4340afb66f27ab5c92f96d512cf9f90"
+  },
+  {
+    "seed": 219,
+    "planning": 0,
+    "theory": 3,
+    "discovery": 5,
+    "sha256": "1ed9c1dca859678ce272c9c2f1378c531b92ffdd6b08b418473426b3625309d0"
+  },
+  {
+    "seed": 219,
+    "planning": 1,
+    "theory": 0,
+    "discovery": 0,
+    "sha256": "73f3aab177922bac78ef121fe2de5814b16b1eb3b5b1be834904293ce5fe1059"
+  },
+  {
+    "seed": 219,
+    "planning": 1,
+    "theory": 3,
+    "discovery": 5,
+    "sha256": "ede035556ad2c39cb8ae16ed94d99ae0658f4c568c8e6ece4cc6a3ddda4ce5f9"
+  },
+  {
+    "seed": 649,
+    "planning": 0,
+    "theory": 0,
+    "discovery": 0,
+    "sha256": "28472ea7c6833670c9a8c4c6d3ba22c31693b775980ae127c7e4296da575e5dc"
+  },
+  {
+    "seed": 649,
+    "planning": 0,
+    "theory": 3,
+    "discovery": 5,
+    "sha256": "a86f33e74c7be9734276ec1e90e7f9f6a6c4a65ff3326c19c552058ab6e41ca2"
+  },
+  {
+    "seed": 649,
+    "planning": 1,
+    "theory": 0,
+    "discovery": 0,
+    "sha256": "d32fd056f932fb18e28fc318b0494447100a93b10dc5936db729c6381bb78e9d"
+  },
+  {
+    "seed": 649,
+    "planning": 1,
+    "theory": 3,
+    "discovery": 5,
+    "sha256": "4aafccf1cce337793cbb0b4cffd15ad3efaa40206c01a53154bf7c3605c8db41"
+  },
+  {
+    "seed": 839,
+    "planning": 0,
+    "theory": 0,
+    "discovery": 0,
+    "sha256": "8cb861be57f1b3ab4bafb5cb8d404b4ff794893c5c1a14f966f56ae3377c4c07"
+  },
+  {
+    "seed": 839,
+    "planning": 0,
+    "theory": 3,
+    "discovery": 5,
+    "sha256": "785d0e01aca83989d5d9f85d77bf9571bed8c549e38d1d305b93c9d2c5cc6da7"
+  },
+  {
+    "seed": 839,
+    "planning": 1,
+    "theory": 0,
+    "discovery": 0,
+    "sha256": "ecc5f92a04ef54ab463a5120e4349f27425f8ce56acd8ee4c39ea17f2e9b8f72"
+  },
+  {
+    "seed": 839,
+    "planning": 1,
+    "theory": 3,
+    "discovery": 5,
+    "sha256": "75af1e403c58bdcab26a1a858e02e3f899f2eb36025642f860a5a0918fdcb801"
+  },
+  {
+    "seed": 971,
+    "planning": 0,
+    "theory": 0,
+    "discovery": 0,
+    "sha256": "8b3bff4bc8dc472dd3b294e9be0fae49ef45f8b225e8d4bd3cd00dfc9c8f65af"
+  },
+  {
+    "seed": 971,
+    "planning": 0,
+    "theory": 3,
+    "discovery": 5,
+    "sha256": "25b51ca579b0fb44faf412aff21352e2cdd68352c84ebf1aac2cff82b40f3ca3"
+  },
+  {
+    "seed": 971,
+    "planning": 1,
+    "theory": 0,
+    "discovery": 0,
+    "sha256": "a3326edfa4872f3ab84c7bf1923d7ae43123745ec3e39622a90d1327a754df33"
+  },
+  {
+    "seed": 971,
+    "planning": 1,
+    "theory": 3,
+    "discovery": 5,
+    "sha256": "efccad5663fff58c17dbbf6f0005a55f495fec4c0f13512b5b4fc2924fe97a15"
+  },
+  {
+    "seed": 1013,
+    "planning": 0,
+    "theory": 0,
+    "discovery": 0,
+    "sha256": "387952fbdb5dd1b2a0cf96fcb1fef0d6e6c84f87b3552c2a330c76f7506222d7"
+  },
+  {
+    "seed": 1013,
+    "planning": 0,
+    "theory": 3,
+    "discovery": 5,
+    "sha256": "dc21d2d8c143aad378b09a5a7865d3e88f948271a2445a57cdb8b07979745544"
+  },
+  {
+    "seed": 1013,
+    "planning": 1,
+    "theory": 0,
+    "discovery": 0,
+    "sha256": "572aa3529fc77f88ea5062718e0002f383a12016ff6c72d5bc2251c185634804"
+  },
+  {
+    "seed": 1013,
+    "planning": 1,
+    "theory": 3,
+    "discovery": 5,
+    "sha256": "927b66cda693b2447ddbea0a0cab99a8461f54f51c4c64a34f02382255828871"
+  },
+  {
+    "seed": 1509,
+    "planning": 0,
+    "theory": 0,
+    "discovery": 0,
+    "sha256": "06433998917ee11cc59cdb4a313af06a9b15d7425635f76adf6421d770bafe32"
+  },
+  {
+    "seed": 1509,
+    "planning": 0,
+    "theory": 3,
+    "discovery": 5,
+    "sha256": "8a3d323e0fb2877124aac068825fff21458b9cbb3c91838ca480b713f2f2e927"
+  },
+  {
+    "seed": 1509,
+    "planning": 1,
+    "theory": 0,
+    "discovery": 0,
+    "sha256": "39fdb429ef785ce1ea6f831593e7af07747437998b79a31610f5b0e29dfc9b83"
+  },
+  {
+    "seed": 1509,
+    "planning": 1,
+    "theory": 3,
+    "discovery": 5,
+    "sha256": "f2f7911642cbf2396e29c6ce3512237248313f82e015ef08b4bcb1bfb62d6ebb"
+  },
+  {
+    "seed": 1943,
+    "planning": 0,
+    "theory": 0,
+    "discovery": 0,
+    "sha256": "ed151e2ba339a8f0a83ce84b07df952d721daa476148ff0664c2f521c90d7229"
+  },
+  {
+    "seed": 1943,
+    "planning": 0,
+    "theory": 3,
+    "discovery": 5,
+    "sha256": "d5f409359fc3da9410dc463108e5a2922645339aa662295b8471787751722006"
+  },
+  {
+    "seed": 1943,
+    "planning": 1,
+    "theory": 0,
+    "discovery": 0,
+    "sha256": "6044079dcc5898cd7153c94d03c6699a9440f7f2c0029cdba430b0ecb1888997"
+  },
+  {
+    "seed": 1943,
+    "planning": 1,
+    "theory": 3,
+    "discovery": 5,
+    "sha256": "2475dc229a14ee85b79359ff142ffda023f28bcc31bd22a90e609da1617e33ec"
+  },
+  {
+    "seed": 1944,
+    "planning": 0,
+    "theory": 0,
+    "discovery": 0,
+    "sha256": "2fea429e1511459f902657101017a2935f07329f7f619d60d55298c6f2ac1327"
+  },
+  {
+    "seed": 1944,
+    "planning": 0,
+    "theory": 3,
+    "discovery": 5,
+    "sha256": "6500ebfb044a009a40c4c64f6a1c0d51faae5ab63437a0472a5e2e474a3a024d"
+  },
+  {
+    "seed": 1944,
+    "planning": 1,
+    "theory": 0,
+    "discovery": 0,
+    "sha256": "dd43289e62983df0cf1d8be3152a0c3d4e3d0a7fadbaf67a659d8e0da1ec4ca0"
+  },
+  {
+    "seed": 1944,
+    "planning": 1,
+    "theory": 3,
+    "discovery": 5,
+    "sha256": "9c0c39434efd1be7212ad00896de1202ce0e7d3649b368558c9fbcf11e702e97"
+  }
+]

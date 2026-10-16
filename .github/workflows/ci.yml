@@ -8,12 +8,14 @@ on:
       - "!docs/**"
       - "!README.md"
       - "docs/difficulty-model-matrix.json"
+      - "docs/structural-model-matrix.json"
   pull_request:
     paths:
       - "**"
       - "!docs/**"
       - "!README.md"
       - "docs/difficulty-model-matrix.json"
+      - "docs/structural-model-matrix.json"
   workflow_dispatch:
     inputs:
       full:
@@ -66,6 +68,9 @@ jobs:
         run: |
           uv lock --check
           uv sync --frozen --all-extras
+
+      - name: Check immutable dynamics reference
+        run: uv run python scripts/compile_dynamics_reference.py
 
       - name: Solver proof tests
         run: |
@@ -141,6 +146,7 @@ jobs:
           docker run --rm --entrypoint python nexus-ci --version
           docker run --rm --entrypoint python nexus-ci scripts/preflight_repair.py
           docker run --rm --entrypoint python nexus-ci scripts/preflight_matrix.py --output /tmp/matrix-preflight.json
+          docker run --rm --entrypoint python nexus-ci scripts/preflight_structural.py --output /tmp/structural-preflight.json
           docker run --rm nexus-ci --help
           docker run --rm nexus-ci generate /tmp/nexus-t3 --seed 17 \
             --discovery-level 2 --planning-level 0 --theory-level 3

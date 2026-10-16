@@ -87,3 +87,31 @@ checker and safe exact fallback. Cold generation does not compile witness rows.
 The reference reuses survey history prefixes and stage settings while preserving
 query choices and the old episode budgets. Focused tests pass; exhaustive live
 comparison/replay is running. No old family is removed.
+
+## Implementation checkpoint — 2026-10-16
+
+Phases 0–4 complete locally; independent final implementation judgement found no
+unresolved blocker. The T0 posterior was corrected to match its disclosed
+canonical valid-treatment sampler; edge regressions cover ineligible finish and
+offset sensor operations. Versioned terminal metrics support overlapping goals.
+
+- 640 tests pass in partitioned coverage (593 fast, 44 slow, 2 stress, 1 determinism).
+- All 1,944 dynamics worlds win/replay and never exceed legacy actual reference
+  actions. All 615 compositional worlds and 7,203 repair worlds win/replay.
+- Old dynamics normalized episode contracts/budgets are unchanged. Repair's
+  complete source binding was refreshed after proof, conformance and replay gates;
+  mathematical proof and public witness remain identical.
+- Eight new pilot cells and ten retained control cells pass current-source
+  preflight. Installed-wheel source identity and cold cache/no-compilation pass.
+- CLI, privacy/save-load, focused Ruff/Pyright, frozen lock and whitespace pass.
+- Paired local cold generation median: 1.656s uncached versus 0.042s cached;
+  imports excluded, shared host, no end-to-end harness speedup claim.
+- Useful operator instructions: `docs/structural-model-matrix.md`; proof and
+  conformance: `docs/structural-reasoning-proof.md` and
+  `docs/compositional-live-conformance.md`; test record: `structural-validation.json`.
+
+Resume: implementation is ready for feature-branch publication. After publishing,
+observe CI (including Docker/OCI labels and both image preflights), fix any actual
+failure, then update this ledger. No paid model calls or MindTrial changes are
+required. The user should run the small pilot on the resulting image before a
+broader evaluation. Keep `docs/difficulty-model-matrix.json` unchanged as controls.

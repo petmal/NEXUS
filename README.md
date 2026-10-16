@@ -1,11 +1,14 @@
 # NEXUS
 
-The current operator pilot adds opt-in `coupled-dynamics-v1` and complete-query
-difficulty qualification. See the [validated ten-run matrix](docs/difficulty-model-matrix.md),
-[architecture and proof limits](docs/difficulty-qualification-results.md), and
-[implementation plan](docs/difficulty-qualification-plan.md). Existing families
-remain available. The new family is structurally qualified for a pilot; its
-real-model difficulty is not yet calibrated.
+The current feature adds opt-in `compositional-repair-v1`: discover shared local
+mechanisms across two contexts and apply one joint physical repair. See the
+[eight-run experimental pilot](docs/structural-model-matrix.md),
+[construction and proof limits](docs/structural-reasoning-proof.md), and
+[resume ledger](docs/structural-reasoning-implementation.md). Existing families
+and the [ten-run dynamics/control matrix](docs/difficulty-model-matrix.md) remain
+available. Dynamics generation now reuses a checked seed-independent proof;
+episode laws, evidence and budgets are unchanged. New structural difficulty
+remains uncalibrated until real-model trials.
 
 NEXUS is a standalone, deterministic interactive environment for evaluating whether an LLM can enter a procedurally novel artificial micro-world, infer its unfamiliar causal structure from evidence and experimentation, maintain an evolving world model, and plan actions that reach a mechanically verified goal.
 

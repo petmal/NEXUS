@@ -1,0 +1,15 @@
+{
+  "version": "structural-pilot-v1",
+  "external_python": false,
+  "recommended_tool_call_limit": 120,
+  "runs": [
+    {"id": "structural-01", "role": "execution-control", "seed": 0},
+    {"id": "structural-02", "role": "dynamics-control", "seed": 219},
+    {"id": "structural-03", "role": "structural", "seed": 0},
+    {"id": "structural-04", "role": "structural", "seed": 250},
+    {"id": "structural-05", "role": "intervention-fixture", "seed": 438},
+    {"id": "structural-06", "role": "intervention-fixture", "seed": 463},
+    {"id": "structural-07", "role": "intervention-fixture", "seed": 493},
+    {"id": "structural-08", "role": "intervention-fixture", "seed": 542}
+  ]
+}

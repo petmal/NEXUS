@@ -1,0 +1,571 @@
+{
+  "status": "query-level experimental; no live-game or round-budget certificate",
+  "grammar": {
+    "ops": [
+      "add",
+      "subtract",
+      "multiply",
+      "square-left-add"
+    ],
+    "worlds_before_solvability_filter": 1728,
+    "worlds_after_disclosed_filter": 615,
+    "mission": [
+      [
+        0,
+        [
+          2,
+          0,
+          0
+        ]
+      ],
+      [
+        0,
+        [
+          1,
+          1,
+          1
+        ]
+      ],
+      [
+        1,
+        [
+          2,
+          1,
+          0
+        ]
+      ],
+      [
+        1,
+        [
+          1,
+          0,
+          2
+        ]
+      ]
+    ],
+    "topology_counts": {
+      "0": 241,
+      "1": 194,
+      "2": 180
+    },
+    "changed_module_counts": {
+      "0": 194,
+      "1": 205,
+      "2": 216
+    },
+    "primitive_counts_by_module": [
+      {
+        "0": 144,
+        "1": 153,
+        "2": 149,
+        "3": 169
+      },
+      {
+        "0": 134,
+        "1": 107,
+        "2": 198,
+        "3": 176
+      },
+      {
+        "0": 100,
+        "2": 300,
+        "3": 132,
+        "1": 83
+      }
+    ],
+    "semantically_ineffective_changes": 0
+  },
+  "complete_query_domain": 486,
+  "distinct_query_vectors": 485,
+  "complete_observation_signature_classes": 607,
+  "different_winning_repair_sets": 216,
+  "legal_repairs": 81,
+  "winning_repairs_per_world": {
+    "1": 300,
+    "2": 25,
+    "3": 254,
+    "9": 36
+  },
+  "best_uniform_success": {
+    "zero_queries": [
+      41,
+      615
+    ],
+    "one_query": [
+      95,
+      615
+    ],
+    "two_queries": [
+      202,
+      615
+    ]
+  },
+  "finish_feedback_success": {
+    "zero_queries_two_guesses": [
+      75,
+      615
+    ],
+    "one_query_then_two_guesses": [
+      163,
+      615
+    ],
+    "guess_then_query_then_guess": [
+      130,
+      615
+    ],
+    "one_query_two_guesses_arbitrary_order": [
+      163,
+      615
+    ],
+    "unlimited_guesses": "all 81 repairs guarantee eventual success if resources and terminal semantics allow"
+  },
+  "greedy_public_witness": {
+    "worst_queries": 7,
+    "worlds_by_queries": {
+      "5": 163,
+      "6": 446,
+      "7": 6
+    },
+    "belief_nodes": 806
+  },
+  "all_untrimmed_observations": {
+    "classes": 589,
+    "obstructed_classes": 6,
+    "obstructed_worlds": 12,
+    "maximum_one_guess_success_after_complete_data": [
+      609,
+      615
+    ],
+    "example_obstruction": [
+      {
+        "world": [
+          2,
+          0,
+          0,
+          2,
+          1,
+          2
+        ],
+        "repairs": [
+          [
+            1,
+            1,
+            0,
+            2
+          ]
+        ]
+      },
+      {
+        "world": [
+          2,
+          0,
+          2,
+          3,
+          2,
+          2
+        ],
+        "repairs": [
+          [
+            1,
+            1,
+            2,
+            0
+          ]
+        ]
+      }
+    ]
+  },
+  "all_single_mode_queries": [
+    {
+      "mode": 0,
+      "signature_classes": 127,
+      "obstructed_classes": 118,
+      "obstructed_worlds": 601,
+      "maximum_one_guess_success_after_complete_data": [
+        318,
+        615
+      ],
+      "example_obstruction": [
+        {
+          "world": [
+            0,
+            0,
+            0,
+            0,
+            1,
+            3
+          ],
+          "repairs": [
+            [
+              2,
+              0,
+              0,
+              0
+            ],
+            [
+              2,
+              1,
+              2,
+              0
+            ],
+            [
+              2,
+              2,
+              1,
+              0
+            ]
+          ]
+        },
+        {
+          "world": [
+            0,
+            0,
+            0,
+            0,
+            2,
+            2
+          ],
+          "repairs": [
+            [
+              0,
+              0,
+              2,
+              1
+            ],
+            [
+              1,
+              2,
+              2,
+              1
+            ],
+            [
+              2,
+              1,
+              2,
+              1
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "mode": 1,
+      "signature_classes": 130,
+      "obstructed_classes": 113,
+      "obstructed_worlds": 582,
+      "maximum_one_guess_success_after_complete_data": [
+        327,
+        615
+      ],
+      "example_obstruction": [
+        {
+          "world": [
+            0,
+            3,
+            2,
+            0,
+            1,
+            0
+          ],
+          "repairs": [
+            [
+              2,
+              0,
+              1,
+              2
+            ],
+            [
+              2,
+              1,
+              0,
+              2
+            ],
+            [
+              2,
+              2,
+              2,
+              2
+            ]
+          ]
+        },
+        {
+          "world": [
+            0,
+            3,
+            3,
+            0,
+            1,
+            0
+          ],
+          "repairs": [
+            [
+              0,
+              0,
+              0,
+              2
+            ],
+            [
+              0,
+              1,
+              2,
+              2
+            ],
+            [
+              0,
+              2,
+              1,
+              2
+            ]
+          ]
+        }
+      ]
+    }
+  ],
+  "intervention_obstruction_fixtures": {
+    "warning": "targeted fixtures are not uniform-prior random evaluations",
+    "sampler": "random.Random(seed).randrange(615), indexing accepted WORLDS order in this script",
+    "worlds": [
+      {
+        "index": 438,
+        "seed": 2170,
+        "world": [
+          2,
+          0,
+          0,
+          2,
+          1,
+          2
+        ],
+        "repairs": [
+          [
+            1,
+            1,
+            0,
+            2
+          ]
+        ]
+      },
+      {
+        "index": 452,
+        "seed": 519,
+        "world": [
+          2,
+          0,
+          2,
+          0,
+          2,
+          2
+        ],
+        "repairs": [
+          [
+            1,
+            1,
+            2,
+            0
+          ]
+        ]
+      },
+      {
+        "index": 463,
+        "seed": 11,
+        "world": [
+          2,
+          0,
+          2,
+          3,
+          2,
+          2
+        ],
+        "repairs": [
+          [
+            1,
+            1,
+            2,
+            0
+          ]
+        ]
+      },
+      {
+        "index": 468,
+        "seed": 911,
+        "world": [
+          2,
+          0,
+          3,
+          2,
+          1,
+          2
+        ],
+        "repairs": [
+          [
+            1,
+            1,
+            0,
+            2
+          ]
+        ]
+      },
+      {
+        "index": 493,
+        "seed": 498,
+        "world": [
+          2,
+          1,
+          2,
+          2,
+          1,
+          0
+        ],
+        "repairs": [
+          [
+            2,
+            2,
+            1,
+            2
+          ]
+        ]
+      },
+      {
+        "index": 495,
+        "seed": 134,
+        "world": [
+          2,
+          1,
+          2,
+          2,
+          1,
+          3
+        ],
+        "repairs": [
+          [
+            2,
+            2,
+            1,
+            2
+          ]
+        ]
+      },
+      {
+        "index": 496,
+        "seed": 711,
+        "world": [
+          2,
+          1,
+          2,
+          2,
+          2,
+          0
+        ],
+        "repairs": [
+          [
+            2,
+            2,
+            1,
+            0
+          ]
+        ]
+      },
+      {
+        "index": 498,
+        "seed": 1129,
+        "world": [
+          2,
+          1,
+          2,
+          2,
+          2,
+          3
+        ],
+        "repairs": [
+          [
+            2,
+            2,
+            1,
+            0
+          ]
+        ]
+      },
+      {
+        "index": 541,
+        "seed": 34,
+        "world": [
+          2,
+          2,
+          2,
+          2,
+          1,
+          3
+        ],
+        "repairs": [
+          [
+            0,
+            2,
+            0,
+            0
+          ]
+        ]
+      },
+      {
+        "index": 542,
+        "seed": 483,
+        "world": [
+          2,
+          2,
+          2,
+          2,
+          2,
+          0
+        ],
+        "repairs": [
+          [
+            1,
+            2,
+            1,
+            0
+          ]
+        ]
+      },
+      {
+        "index": 586,
+        "seed": 126,
+        "world": [
+          2,
+          3,
+          2,
+          0,
+          2,
+          2
+        ],
+        "repairs": [
+          [
+            0,
+            2,
+            0,
+            2
+          ]
+        ]
+      },
+      {
+        "index": 607,
+        "seed": 2167,
+        "world": [
+          2,
+          3,
+          3,
+          2,
+          1,
+          2
+        ],
+        "repairs": [
+          [
+            1,
+            2,
+            0,
+            0
+          ]
+        ]
+      }
+    ]
+  },
+  "elapsed_seconds": 16.246226386000103
+}

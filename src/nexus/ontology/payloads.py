@@ -2,6 +2,7 @@
 
 from types import MappingProxyType
 
+from nexus.ontology.compositional.schema import SCHEMAS as COMPOSITIONAL
 from nexus.ontology.categorical.schema import SCHEMAS as CATEGORICAL
 from nexus.ontology.causal.schema import SCHEMAS as CAUSAL
 from nexus.ontology.dynamics.schema import SCHEMAS as DYNAMICS
@@ -9,6 +10,7 @@ from nexus.ontology.repair.schema import SCHEMAS as REPAIR
 
 _SCHEMAS = MappingProxyType(
     {
+        "compositional-repair-v1": MappingProxyType(dict(COMPOSITIONAL)),
         "categorical-chain-poc-v1": MappingProxyType(dict(CATEGORICAL)),
         "causal-mechanisms-v1": MappingProxyType(dict(CAUSAL)),
         "coupled-repair-v1": MappingProxyType(dict(REPAIR)),

@@ -52,6 +52,10 @@ def initial_mask(spec: Investigation) -> int:
 
 @lru_cache(maxsize=16384)
 def choose(mask: int) -> int | None:
+    from nexus.ontology.dynamics.reference_cache import load
+
+    if (node := load().get(mask)) is not None:
+        return node.query
     if not mask:
         raise ValueError("observations contradict the disclosed dynamics prior")
     if len(target_set(mask)) == 1:
@@ -79,6 +83,10 @@ def experiment_cost(experiment: Experiment) -> int:
 
 @lru_cache(maxsize=16384)
 def policy_bound(mask: int) -> tuple[int, int]:
+    from nexus.ontology.dynamics.reference_cache import load
+
+    if (node := load().get(mask)) is not None:
+        return node.readings, node.work
     selected = choose(mask)
     if selected is None:
         return 0, 0

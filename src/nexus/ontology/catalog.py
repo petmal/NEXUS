@@ -49,6 +49,13 @@ BUILTINS = MappingProxyType(
         item.family: item
         for item in (
             OntologyDefinition(
+                "compositional-repair-v1", "compositional-repair-v1",
+                runtime_module="nexus.ontology.compositional.runtime",
+                generator=("nexus.ontology.compositional.generation", "generate_compositional"),
+                qualifier=("nexus.ontology.compositional.qualification", "qualify_compositional"),
+                standalone_contract=True,
+            ),
+            OntologyDefinition(
                 "coupled-dynamics-v1",
                 "coupled-dynamics-v1",
                 runtime_module="nexus.ontology.dynamics.runtime",
