@@ -38,7 +38,7 @@ evidence-supported. Do not skip the repair source binding after Python changes.
 
 ## Completion evidence
 
-All 678 collected tests have passing partitioned coverage; see
+All 679 collected tests have passing partitioned coverage; see
 [validation](budget-diagnostic-validation.json). Seven sanitized observed action
 traces reproduce the pilot classifications. Ten numeric guide experiments pass
 live execution. Both independent review findings are repaired with regression
@@ -52,3 +52,7 @@ preflight before model calls. Current publication/CI status is recorded in
 [PR 6](https://github.com/petmal/NEXUS/pull/6); this document intentionally does not
 embed its own future commit hash. No paid model execution or MindTrial behavior
 change is part of this work.
+
+Final HTTP correction: a T0/ineligible-submission wire regression failed on the
+first implementation commit and passed after nested semantic-null preservation.
+All 83 affected proof, replay, metrics and HTTP tests were rerun successfully.

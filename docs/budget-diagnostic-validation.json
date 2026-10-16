@@ -2,12 +2,12 @@
   "version": "budget-diagnostic-validation-v1",
   "local_status": "passed",
   "base_commit": "178f59b9219b57dc34cdbedb3555fa93109e1aa4",
-  "source_sha256": "3e0a24410be9095171cb0ffeeaf2e688cb7c7595a428e52c5e68d8c4f8f11310",
+  "source_sha256": "e73312508fe1c2daee1cbb8bc4b42996ce687fc6b9719804721c4c220f2f3c76",
   "matrix_sha256": "91ab7a50c9fc68ee0f5e7a8f11432222ef845f550673ba68dd61b4fbe5993a71",
-  "unique_tests_covered": 678,
+  "unique_tests_covered": 679,
   "partitions": {
     "fast": {
-      "unique_tests": 622,
+      "unique_tests": 623,
       "status": "passed"
     },
     "solver_proof": {
@@ -35,7 +35,7 @@
       "status": "passed"
     }
   },
-  "coverage_note": "678 collected tests covered by passing partitions, not one uninterrupted invocation. Repair exhaustive is one slow test within the 23-test replay/coverage gate; its other tests are included in fast coverage.",
+  "coverage_note": "679 collected tests have passing partitioned coverage, not one uninterrupted invocation. The 622-test fast run plus the added HTTP regression account for 623 fast tests. After the nullable-HTTP correction, 83 affected tests passed, including exhaustive compositional and repair replay. Repair exhaustive is one slow test within the separate 23-test replay/coverage gate; its other tests are included in fast coverage.",
   "warnings": "Three existing Pydantic warnings from deliberately malformed test objects.",
   "proofs": {
     "compositional_worlds_live_won_replayed": 615,
@@ -61,5 +61,10 @@
     "A hard-killed service may omit its shutdown summary; retain the committed-action journal and harness stop reason."
   ],
   "ci_location": "https://github.com/petmal/NEXUS/pull/6",
-  "gate_correction": "Initial fast gate detected stale dynamics cache binding after shared metadata/session changes. Independent compiler regenerated it; all 3043 policy nodes were unchanged; final fast gate passed."
+  "gate_correction": "Initial fast gate detected stale dynamics cache binding after shared metadata/session changes. Independent compiler regenerated it; all 3043 policy nodes were unchanged; final fast gate passed.",
+  "final_http_correction": {
+    "before": "new terminal HTTP round-trip regression fails on d9a31a4",
+    "after": "83 affected tests pass, including the new HTTP control/ineligible-submission case",
+    "behavior": "nested semantic nulls retained even when the HTTP serializer uses exclude_none=True"
+  }
 }

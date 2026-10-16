@@ -1,7 +1,7 @@
 {
   "version": "budget-preflight-v1",
   "status": "diagnostic-ready",
-  "source_sha256": "3e0a24410be9095171cb0ffeeaf2e688cb7c7595a428e52c5e68d8c4f8f11310",
+  "source_sha256": "e73312508fe1c2daee1cbb8bc4b42996ce687fc6b9719804721c4c220f2f3c76",
   "matrix_sha256": "91ab7a50c9fc68ee0f5e7a8f11432222ef845f550673ba68dd61b4fbe5993a71",
   "scope": "targeted paired diagnostic; four model/seed pairs, no population difficulty claim",
   "rows": [
@@ -21,7 +21,7 @@
         "NEXUS_GENERATION_TIMING": "true",
         "NEXUS_EXTENDED_DIAGNOSTICS": "true"
       },
-      "generation_seconds": 0.513511200000039,
+      "generation_seconds": 0.4242861669999911,
       "budget": 30,
       "reference_actions": 24,
       "qualified": true,
@@ -44,7 +44,7 @@
         "NEXUS_GENERATION_TIMING": "true",
         "NEXUS_EXTENDED_DIAGNOSTICS": "true"
       },
-      "generation_seconds": 0.0006329299999379145,
+      "generation_seconds": 0.000820204999854468,
       "budget": 36,
       "reference_actions": 24,
       "qualified": true,
@@ -67,7 +67,7 @@
         "NEXUS_GENERATION_TIMING": "true",
         "NEXUS_EXTENDED_DIAGNOSTICS": "true"
       },
-      "generation_seconds": 0.0006768950001969642,
+      "generation_seconds": 0.000585540999963996,
       "budget": 36,
       "reference_actions": 24,
       "qualified": true,
@@ -90,7 +90,7 @@
         "NEXUS_GENERATION_TIMING": "true",
         "NEXUS_EXTENDED_DIAGNOSTICS": "true"
       },
-      "generation_seconds": 0.0005783199999314093,
+      "generation_seconds": 0.0007861449998927128,
       "budget": 30,
       "reference_actions": 24,
       "qualified": true,
@@ -113,7 +113,7 @@
         "NEXUS_GENERATION_TIMING": "true",
         "NEXUS_EXTENDED_DIAGNOSTICS": "true"
       },
-      "generation_seconds": 0.0005589620000137074,
+      "generation_seconds": 0.0006919259999449423,
       "budget": 30,
       "reference_actions": 24,
       "qualified": true,
@@ -136,7 +136,7 @@
         "NEXUS_GENERATION_TIMING": "true",
         "NEXUS_EXTENDED_DIAGNOSTICS": "true"
       },
-      "generation_seconds": 0.0005458519999592681,
+      "generation_seconds": 0.000718975999916438,
       "budget": 36,
       "reference_actions": 24,
       "qualified": true,
@@ -159,7 +159,7 @@
         "NEXUS_GENERATION_TIMING": "true",
         "NEXUS_EXTENDED_DIAGNOSTICS": "true"
       },
-      "generation_seconds": 0.0005539639998914936,
+      "generation_seconds": 0.0006811800003561075,
       "budget": 36,
       "reference_actions": 24,
       "qualified": true,
@@ -182,7 +182,7 @@
         "NEXUS_GENERATION_TIMING": "true",
         "NEXUS_EXTENDED_DIAGNOSTICS": "true"
       },
-      "generation_seconds": 0.0005893160000596254,
+      "generation_seconds": 0.0007625000002917659,
       "budget": 30,
       "reference_actions": 24,
       "qualified": true,

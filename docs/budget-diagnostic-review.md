@@ -45,3 +45,8 @@ The v2 response parser and optional adapter capabilities are retained; v3 is an
 additive audited subclass. A recorded v2-shaped response still parses, and the v3
 JSON schema matches its runtime model. No additional blocker remains from this
 review. Full release gate results are recorded in budget-diagnostic-validation.json.
+
+A final owner wire-contract pass found that `exclude_none=True` omitted required
+nullable nested diagnostics. The new real-HTTP T0/ineligible-submission regression
+fails on d9a31a4 and passes after shared nested semantic-null serialization. All
+83 affected tests, including exhaustive compositional/repair replay, passed again.

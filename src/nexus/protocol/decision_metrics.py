@@ -2,13 +2,24 @@
 
 from typing import Literal
 
-from pydantic import BaseModel, ConfigDict
+from pydantic import BaseModel, ConfigDict, model_serializer
 
 EvidenceClass = Literal["guaranteed", "compatible", "contradicted", "ineligible"]
 
 
-class EvidenceAssessment(BaseModel):
+class DiagnosticModel(BaseModel):
     model_config = ConfigDict(extra="forbid", frozen=True)
+
+    @model_serializer(mode="wrap")
+    def preserve_semantic_nulls(self, handler):
+        result = handler(self)
+        for name in type(self).model_fields:
+            if getattr(self, name) is None:
+                result[name] = None
+        return result
+
+
+class EvidenceAssessment(DiagnosticModel):
     remaining_worlds: int
     winning_set_signatures: int
     common_repairs: int
@@ -16,15 +27,13 @@ class EvidenceAssessment(BaseModel):
     classification: EvidenceClass
 
 
-class SubmissionAssessment(BaseModel):
-    model_config = ConfigDict(extra="forbid", frozen=True)
+class SubmissionAssessment(DiagnosticModel):
     turn: int
     won: bool
     evidence: EvidenceAssessment
 
 
-class ReadingAssessment(BaseModel):
-    model_config = ConfigDict(extra="forbid", frozen=True)
+class ReadingAssessment(DiagnosticModel):
     turn: int
     ordinal: int
     context: int | None
@@ -34,8 +43,7 @@ class ReadingAssessment(BaseModel):
     common_repairs_after: int
 
 
-class DecisionDiagnostics(BaseModel):
-    model_config = ConfigDict(extra="forbid", frozen=True)
+class DecisionDiagnostics(DiagnosticModel):
     version: Literal["decision-diagnostics-v1"] = "decision-diagnostics-v1"
     escape_classification: Literal["supported_win", "compatible_win", "not_won"]
     physical_goal_satisfied: bool

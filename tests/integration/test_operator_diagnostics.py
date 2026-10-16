@@ -74,3 +74,38 @@ def test_default_service_emits_no_extended_operator_journal(caplog):
     with TestClient(create_single_session_app(episode)) as client:
         assert client.get("/status").json()["status"] == "active"
     assert not reports(caplog)
+
+
+def test_terminal_http_preserves_nullable_diagnostics_and_round_trips():
+    from nexus.protocol.session import ActionResponse
+
+    episode = generate_episode(
+        0,
+        axis_version=2,
+        science_family="compositional-repair-v1",
+        theory_level=0,
+        discovery_level=0,
+        planning_level=1,
+        resource_pressure=1,
+    )
+    with TestClient(create_single_session_app(episode)) as client:
+        # Ineligible early finish, then the disclosed control recipe. No readings.
+        for turn, action in enumerate(
+            (
+                {"type": "finish"},
+                {"type": "take", "artifact": "seal"},
+                {"type": "move", "target": "array"},
+                {"type": "configure", "machine": "doser", "settings": [0, 0, 2, 0]},
+                {"type": "operate", "machine": "doser", "artifact": "seal"},
+                {"type": "finish"},
+            )
+        ):
+            payload = client.post("/action", json={"expected_turn": turn, "action": action}).json()
+            parsed = ActionResponse.model_validate(payload)
+            assert parsed.ok
+        assert parsed.victory_code
+        diagnostics = payload["performance"]["decision_diagnostics"]
+        assert diagnostics["first_intervention_turn"] is None
+        assert diagnostics["first_intervention_measurement"] is None
+        assert diagnostics["submissions"][0]["evidence"]["accepting_worlds"] is None
+        assert diagnostics["readings"] is None
