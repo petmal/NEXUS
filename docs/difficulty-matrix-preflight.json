@@ -2,7 +2,7 @@
   "version": "difficulty-preflight-v1",
   "status": "pilot-ready",
   "matrix_sha256": "f69704061c55ccb23bcdef934e9e4afe72eecb7f7f7a4fa7ddd2454db314aba3",
-  "source_sha256": "221e370d26015c2da0e6a85509d2134b1ebcaab27577627fbc26d37652809f76",
+  "source_sha256": "c959d54f01b1551cbb9cce11471bb581e7e47182620335081bf966edf6062a28",
   "operator_only": true,
   "empirical_difficulty": "uncalibrated",
   "full_rollout_ready": false,
@@ -501,5 +501,5 @@
       1
     ]
   },
-  "seconds": 48.1702293860003
+  "seconds": 41.48384732500017
 }

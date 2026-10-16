@@ -7,16 +7,24 @@ Keep P1/R1, no external interpreter, and use a fresh context for every cell. Do
 not disclose seeds, fixture roles, candidate pool, or this document to players.
 Do not share a T0 solution with a subsequent challenge context.
 
-| Run | Family | T / D | Seed | Purpose and expected relative challenge |
-|---|---|---|---:|---|
-| 01 | compositional-repair-v1 | 0 / 0 | 0 | Execution control; exact valid treatment supplied; easiest |
-| 02 | coupled-dynamics-v1 | 3 / 5 | 219 | Existing history-transfer control; compare action efficiency |
-| 03 | compositional-repair-v1 | 3 / 5 | 0 | Chain composition and local replacement; baseline structural challenge |
-| 04 | compositional-repair-v1 | 3 / 5 | 250 | Fork composition; joint-context transfer |
-| 05 | compositional-repair-v1 | 3 / 5 | 438 | Reconvergent graph; passive evidence insufficient |
-| 06 | compositional-repair-v1 | 3 / 5 | 463 | Same passive equivalence class as 05, different required repair; separate context essential |
-| 07 | compositional-repair-v1 | 3 / 5 | 493 | Different mechanism combination with intervention obstruction |
-| 08 | compositional-repair-v1 | 3 / 5 | 542 | Different local replacement and joint treatment with intervention obstruction |
+| Run | Family | T / D | Seed | Purpose and expected relative challenge | Reference actions / budget |
+|---|---|---|---:|---|---:|
+| 01 | compositional-repair-v1 | 0 / 0 | 0 | Execution control; exact valid treatment supplied; easiest | 5 / 8 |
+| 02 | coupled-dynamics-v1 | 3 / 5 | 219 | Existing history-transfer control; compare action efficiency | 40 / 73 |
+| 03 | compositional-repair-v1 | 3 / 5 | 0 | Chain composition and local replacement; baseline structural challenge | 21 / 30 |
+| 04 | compositional-repair-v1 | 3 / 5 | 250 | Fork composition; joint-context transfer | 21 / 30 |
+| 05 | compositional-repair-v1 | 3 / 5 | 438 | Reconvergent graph; passive evidence insufficient | 24 / 30 |
+| 06 | compositional-repair-v1 | 3 / 5 | 463 | Same passive equivalence class as 05, different required repair; separate context essential | 24 / 30 |
+| 07 | compositional-repair-v1 | 3 / 5 | 493 | Different mechanism combination with intervention obstruction | 24 / 30 |
+| 08 | compositional-repair-v1 | 3 / 5 | 542 | Different local replacement and joint treatment with intervention obstruction | 24 / 30 |
+
+Preflight also exhaustively rejects every zero-, one-, and two-measurement
+certificate for 05–08, even granting the query chooser knowledge of the actual
+world. At least three readings (including zero-valued readings) are required for
+a guaranteed repair under the full disclosed prior. This excludes guesses and
+rejected finishes; it proves neither an exact minimum of three nor a three-step
+adaptive policy. Cell04 admits a two-reading certificate and is deliberately
+retained as an efficient-choice baseline.
 
 Expect 05–08 to exercise intervention selection more directly than 03–04. This
 is not a proved ranking of LLM difficulty or a prediction that half the models

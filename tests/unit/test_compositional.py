@@ -126,6 +126,8 @@ def test_intervention_and_single_context_obstructions_are_distinct():
         passive = data.closure(index, [i for i, q in enumerate(QUERIES) if q[2] == (0, 0)])
         assert not data.common(passive)
         assert passive.bit_count() == 2
+        assert data.positive_reading_lower(index) == 3
+    assert data.positive_reading_lower(250) == 2
     # This deliberately weak case is a legitimate control, not "deep" by label.
     assert data.common(data.closure(0, [i for i, q in enumerate(QUERIES) if q[2] == (0, 0)]))
 

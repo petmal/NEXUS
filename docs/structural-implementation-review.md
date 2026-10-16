@@ -68,3 +68,15 @@ Re-inspected the updated source and tests after the owner addressed the review f
 - Owner reports wider gates passed (34 release checks, all compositional slow checks, old dynamics all-world replay, and repair live/replay checks). Those broader results remain owner-provided evidence, not tests independently repeated by this reviewer.
 
 **Final recommendation: no unresolved blocker from this review.** Preserve the experimental/uncalibrated scope and the stated claim limits. Additional focused tests listed above are suggestions only unless an existing release gate requires them; they should not delay completion after the mandatory gates pass.
+
+## Addendum: positive-reading certificate lower bound
+
+Reviewed the later operator-only `DecisionAudit.positive_reading_lower(world)` and structural coverage condition `fixtures_need_three_positive_readings`. No runtime mechanics change is involved.
+
+The search is correct for its stated scope. For each repair accepting the actual world, its rivals are exactly the prior worlds rejecting that repair. Each query contributes the actual-world outcome class. A one-reading certificate exists iff one class contains no rival; a two-reading certificate exists iff two classes' rival sets are disjoint. The implementation checks every accepting repair and every actual-outcome query class, preserving overlapping acceptance. Finding a two-reading certificate does not prevent a later repair from producing a better one-reading certificate. A zero-reading result is exactly a globally common repair.
+
+An independently written set-based enumeration of **all query pairs** on the six full-size challenge worlds matched the production results: world 0 returns 3; 250 returns 2, with query indices `(1, 252)` as a certificate; 438, 463, 493, and 542 return 3. Here 3 means **at least three**, not exactly three. Ran the independent small-oracle and matrix test files: **3 passed** in 2.21 seconds.
+
+The lower bound is sound even against an oracle granted the actual world when selecting its measurement certificate, hence excludes every shorter actual-world positive-measurement path for a guaranteed repair. It does not establish a globally valid adaptive policy of length three, a three-round interaction bound, success impossibility after a lucky guess, or difficulty for any model. Rejected finishes and other guessed-decision feedback are outside this certificate search. "Positive" means measurement evidence, including zero-valued readings.
+
+No blocker found. Keep these sentinel and feedback exclusions visible in matrix documentation, not only the method docstring. The four targeted fixtures satisfy the new coverage gate; world 250 is correctly retained as a shorter-certificate contrast.

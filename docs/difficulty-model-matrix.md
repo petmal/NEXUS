@@ -1,4 +1,4 @@
-# Qualified ten-run pilot
+# Retained ten-run control and efficiency matrix
 
 This is an **operator-only diagnostic matrix**, not player evidence or a uniformly
 sampled benchmark. Use the environment blocks in
@@ -6,7 +6,13 @@ sampled benchmark. Use the environment blocks in
 [preflight report](difficulty-matrix-preflight.json) binds qualification to the
 installed package and matrix content. All ten cells must pass before a model run.
 
-## What changed
+As of the 2026-10-16 follow-up, all 70 tested missions in this matrix were won.
+Retain it for controls and efficiency comparisons; the new experimental challenge
+is the [compositional pilot](structural-model-matrix.md). The table below uses the
+improved reference's actual action counts; game budgets and old guaranteed upper
+bounds are unchanged. This historical matrix is not a newly difficult model test.
+
+## Original design rationale
 
 The previous repair pilot achieved 42/42 first-attempt victories, but all three
 seeds used the cubic law. Its reference strategy cancels nuisance terms in three
@@ -34,12 +40,12 @@ between ontologies.
 | nexus-02 | coupled-repair-v1 | 1205 | T3/D5 | Quadratic law; same nuisance parameters | Low; more arithmetic | 15 / 18 |
 | nexus-03 | coupled-repair-v1 | 1212 | T3/D5 | Cubic law; same nuisance parameters | Low; comparison with previous pilot | 15 / 18 |
 | nexus-04 | coupled-dynamics-v1 | 128 | T0/D0 | Exact treatment supplied; physical execution control | Lowest | 5 / 13 |
-| nexus-05 | coupled-dynamics-v1 | 128 | T3/D5 | Matched to execution control; transition 0, response 2, wiring 0 | Higher candidate | 47 / 73 |
-| nexus-06 | coupled-dynamics-v1 | 839 | T3/D5 | Transition 0, response 2, wiring 1; different hidden preparation | Higher candidate | 47 / 73 |
-| nexus-07 | coupled-dynamics-v1 | 1013 | T3/D5 | Transition 1, response 2, wiring 0 | Higher candidate | 50 / 73 |
-| nexus-08 | coupled-dynamics-v1 | 649 | T3/D5 | Transition 0, response 1, wiring 0 | Higher candidate | 50 / 73 |
-| nexus-09 | coupled-dynamics-v1 | 1509 | T3/D5 | Transition 2, response 0, wiring 1 | Higher candidate | 50 / 73 |
-| nexus-10 | coupled-dynamics-v1 | 219 | T3/D5 | Longer-history discriminator | Strongest structural requirement; empirical rank unknown | 50 / 73 |
+| nexus-05 | coupled-dynamics-v1 | 128 | T3/D5 | Matched to execution control; transition 0, response 2, wiring 0 | Higher candidate | 37 / 73 |
+| nexus-06 | coupled-dynamics-v1 | 839 | T3/D5 | Transition 0, response 2, wiring 1; different hidden preparation | Higher candidate | 40 / 73 |
+| nexus-07 | coupled-dynamics-v1 | 1013 | T3/D5 | Transition 1, response 2, wiring 0 | Higher candidate | 45 / 73 |
+| nexus-08 | coupled-dynamics-v1 | 649 | T3/D5 | Transition 0, response 1, wiring 0 | Higher candidate | 43 / 73 |
+| nexus-09 | coupled-dynamics-v1 | 1509 | T3/D5 | Transition 2, response 0, wiring 1 | Higher candidate | 46 / 73 |
+| nexus-10 | coupled-dynamics-v1 | 219 | T3/D5 | Longer-history discriminator | Strongest structural requirement; empirical rank unknown | 40 / 73 |
 
 The five broad dynamics cases span structural strata selected before model
 outcomes. The sixth adds a deliberate longer-history diagnostic; it is not a

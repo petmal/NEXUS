@@ -75,3 +75,10 @@ is experimental and constructive. Twelve worlds require an internal intervention
 for a guaranteed repair even after all passive observations; most worlds do not.
 Both contexts usually matter, but no mandatory mental revision or empirical model
 failure rate follows. Preserve those negative findings when extending the family.
+
+The targeted intervention matrix additionally checks a measurement-only lower
+bound of three by exhausting all 0/1/2 actual-outcome certificates over every
+accepted repair and all normalized queries. Zero-valued measurements count too.
+This oracle-choice certificate search covers arbitrary query choices on that
+realized path; it excludes rejected finishes and cannot be combined with the
+uniform query/guess ceiling to assert an unproved adaptive-action lower bound.

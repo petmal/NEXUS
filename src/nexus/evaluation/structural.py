@@ -81,6 +81,11 @@ def coverage(rows):
             for r in challenge
         )
         == 4,
+        "fixtures_need_three_positive_readings": all(
+            r["positive_reading_lower_bound"] >= 3
+            for r in challenge
+            if r["role"] == "intervention-fixture"
+        ),
         "both_contexts_needed_in_fixtures": all(
             all(n == 0 for n in r["single_context_common_repairs"])
             for r in challenge
@@ -161,6 +166,7 @@ def preflight(pilot: Pilot, output: Path):
                 index = cell.seed % len(population())
                 world, _ = population()[index]
                 row.update(
+                    positive_reading_lower_bound=data.positive_reading_lower(index),
                     topology=world.topology,
                     changed_module=world.changed,
                     untrimmed_common_repairs=len(

@@ -48,6 +48,31 @@ class DecisionAudit:
             mask &= sum(1 << i for i, value in enumerate(self.rows[index]) if value == outcome)
         return mask
 
+    def positive_reading_lower(self, world: int) -> int:
+        """Exact 0/1/2 certificate search; 3 means only 'at least three'.
+
+        The query chooser is granted the actual world. For every repair accepted
+        there, test whether zero, one, or two actual outcomes exclude ALL rivals
+        rejecting that repair. This includes every query and overlapping winning
+        region. It excludes guesses/rejected finishes and is not cognitive depth.
+        """
+        if type(world) is not int or not 0 <= world < self.worlds:
+            raise ValueError("world index outside prior")
+        if self.common(self.full):
+            return 0
+        outcomes = [next(mask for mask in row if mask >> world & 1) for row in self.partitions]
+        best = 3
+        for winning in self.winning:
+            if not winning >> world & 1:
+                continue
+            rivals = self.full & ~winning
+            remaining = {mask & rivals for mask in outcomes}
+            if 0 in remaining:
+                return 1
+            if best == 3 and any(not left & right for left in remaining for right in remaining):
+                best = 2
+        return best
+
     def success_mass(self, readings: int, guesses: int = 1, *, max_seconds=120):
         """Exact adaptive query/guess interleavings, for bounded small horizons."""
         if readings < 0 or guesses < 1 or readings > 2 or guesses > 2 or readings + guesses > 3:

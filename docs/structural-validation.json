@@ -1,14 +1,14 @@
 {
   "status": "local-passed-ci-pending",
   "tests": {
-    "fast_unit_integration": 593,
+    "fast_unit_integration": 594,
     "slow_dynamics_and_reference": 2,
     "slow_compositional": 3,
     "slow_repair": 1,
     "remaining_slow": 38,
     "three_seed_stress": 2,
     "property_determinism": 1,
-    "total": 640,
+    "total": 641,
     "expected_existing_malformed_object_warnings": 3
   },
   "exhaustive_live_worlds": {
@@ -25,11 +25,12 @@
     "acceptance": "complete sets, not a preferred target",
     "public_witness_reading_upper": 7,
     "public_witness_action_upper_P1": 27,
-    "budget_P1": 30
+    "budget_P1": 30,
+    "selected_intervention_fixture_positive_reading_lower": 3
   },
   "compatibility": "48 normalized dynamics episode hashes unchanged; old families retained; repair proof and witness hashes unchanged, semantic source binding requalified",
   "package": "Python 3.14.8; frozen lock; separately extracted wheel outside source; strict repair identity and cold dynamics load without witness compilation pass; source digest matches checkout",
-  "source_sha256": "221e370d26015c2da0e6a85509d2134b1ebcaab27577627fbc26d37652809f76",
+  "source_sha256": "c959d54f01b1551cbb9cce11471bb581e7e47182620335081bf966edf6062a28",
   "quality": "focused Ruff, new-module and metrics Pyright, whitespace, CLI generate/qualify/solve/replay pass",
   "local_container": "Docker/Podman unavailable; actual-image checks delegated to CI",
   "paid_model_calls": 0,
@@ -39,5 +40,6 @@
     "No mandatory mental revision, three-round lower bound, or model-failure rate is claimed.",
     "Intervention obstruction applies to 12 worlds; most worlds lack that necessity.",
     "No timing-side-channel or externally shared/source-assisted evaluation guarantee."
-  ]
+  ],
+  "final_operator_gate": "After full640 passing coverage, added one independent certificate-oracle test and reran20 affected cases. Only operator qualification changed; final CI reruns the whole suite."
 }

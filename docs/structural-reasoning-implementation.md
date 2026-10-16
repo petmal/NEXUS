@@ -115,3 +115,13 @@ observe CI (including Docker/OCI labels and both image preflights), fix any actu
 failure, then update this ledger. No paid model calls or MindTrial changes are
 required. The user should run the small pilot on the resulting image before a
 broader evaluation. Keep `docs/difficulty-model-matrix.json` unchanged as controls.
+
+
+Final shortcut-gate refinement: the fork baseline admits a two-measurement
+certificate; all four intervention fixtures reject every such certificate. Added
+an exact 0/1/2 search over overlapping winning regions, independently checked
+against set-based exhaustive oracles, and made ≥3 a preflight gate for those four
+fixtures. This excludes guesses and is not a cognitive-depth claim. The change
+is operator-only; 20 affected tests pass, with 641 unique tests now covered across
+partitions. Requalified the source identity for these two audit modules and reran
+both matrix preflights. Runtime/public policies/proof artifact are unchanged.
