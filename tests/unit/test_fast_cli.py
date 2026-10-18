@@ -93,3 +93,26 @@ print(json.dumps(heavy))
     )
 
     assert result.stdout.splitlines()[-1] == "[]"
+
+
+def test_action_timeout_has_headroom_while_health_remains_fast(monkeypatch):
+    from io import BytesIO
+
+    from nexus.protocol import transport
+
+    seen = []
+
+    def serve(request, *, timeout):
+        seen.append((request.full_url, timeout))
+        if request.full_url.endswith("/status"):
+            return BytesIO(b'{"turn":0,"status":"active","actions_remaining":43,"victory_code":null}')
+        if request.full_url.endswith("/health"):
+            return BytesIO(b'{"status":"ok"}')
+        return BytesIO(b'{"ok":true}')
+
+    monkeypatch.setattr(transport, "urlopen", serve)
+    assert transport.request_service_payload(
+        {"operation":"action", "action":{"type":"finish"}}, url="http://nexus"
+    ) == {"ok": True}
+    transport.check_health(url="http://nexus")
+    assert seen == [("http://nexus/status", 10.0), ("http://nexus/action", 45.0), ("http://nexus/health", 1.0)]

@@ -77,7 +77,7 @@ def test_evaluator_finalization_fails_closed_and_returns_terminal_diagnostics():
 def test_request_client_sets_current_turn_for_actions(monkeypatch):
     calls = []
 
-    def fake_json_request(base_url, method, path, payload=None):
+    def fake_json_request(base_url, method, path, payload=None, *, timeout=10.0):
         calls.append((base_url, method, path, payload))
         if path == "/status":
             return {
@@ -86,7 +86,7 @@ def test_request_client_sets_current_turn_for_actions(monkeypatch):
                 "actions_remaining": 7,
                 "victory_code": None,
             }
-        assert path == "/action"
+        assert path == "/action" and timeout == 45.0
         return {"ok": True}
 
     monkeypatch.setattr(service_transport, "_json_request", fake_json_request)

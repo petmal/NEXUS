@@ -282,6 +282,65 @@ def test_independent_proof_rejects_disabled_assertions(tmp_path):
         ],
         capture_output=True,
         text=True,
+        check=False,
     )
     assert result.returncode != 0 and "requires Python assertions" in result.stderr
     assert not output.exists()
+
+
+@pytest.mark.parametrize("fault", ["hash", "semantics", "truncated", "overlong", "partition"])
+def test_observation_asset_rejects_corruption_and_staleness(monkeypatch, tmp_path, fault):
+    import base64
+    import hashlib
+    import zlib
+
+    from nexus.ontology.transfer import observations, observations_identity
+
+    original = Path(observations.__file__).with_name("observations.json")
+    data = json.loads(original.read_bytes())
+    if fault == "semantics":
+        data["semantic_digest"] = "stale"
+    elif fault in ("truncated", "overlong", "partition"):
+        decoded = zlib.decompress(base64.b64decode(data["data"]))
+        if fault == "truncated":
+            decoded = decoded[:-1]
+        elif fault == "overlong":
+            decoded += b"x"
+        else:
+            decoded = bytes(len(decoded))
+        data["data"] = base64.b64encode(zlib.compress(decoded)).decode()
+    raw = json.dumps(data).encode()
+    (tmp_path / "observations.json").write_bytes(raw)
+    observations.load.cache_clear()
+    try:
+        with monkeypatch.context() as patch:
+            patch.setattr(observations, "files", lambda package: tmp_path)
+            if fault != "hash":
+                patch.setattr(observations_identity, "SHA256", hashlib.sha256(raw).hexdigest())
+            with pytest.raises(ValueError, match="transfer observation"):
+                observations.load()
+    finally:
+        observations.load.cache_clear()
+    with pytest.raises(TypeError):
+        observations.load()[0][0][0] = 0
+
+
+def test_offline_policy_compiler_does_not_require_existing_policy_asset(monkeypatch):
+    from nexus.ontology.transfer import reference
+
+    compiler = runpy.run_path(
+        str(Path(__file__).parents[2] / "scripts/compile_transfer_reference.py")
+    )
+
+    def missing_policy():
+        raise FileNotFoundError("no compiled policy yet")
+
+    monkeypatch.setattr(reference, "load", missing_policy)
+    # A one-behavior domain keeps this regression focused on bootstrap independence.
+    from nexus.ontology.transfer import tables
+
+    monkeypatch.setattr(tables, "load_reference", missing_policy)
+    table = tables.assemble_tables(False, (0,) * len(PROGRAMS))
+    assert table.common(table.full)
+    monkeypatch.setitem(compiler["tree"].__globals__, "targets", lambda: (0,) * len(PROGRAMS))
+    assert compiler["tree"](False) == {"readings": 0, "nodes": []}

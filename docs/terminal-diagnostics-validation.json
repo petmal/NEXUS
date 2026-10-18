@@ -1,0 +1,32 @@
+{
+  "version": "terminal-diagnostics-validation-v1",
+  "local_status": "passed",
+  "source_digest": "295c5090d94506340c6c55aa87cea13d3806577ad225d3d77d8e49fb2772067f",
+  "tests": {
+    "fast": 665,
+    "extended": 45,
+    "stress_3_seeds": 2,
+    "focused_final": 45
+  },
+  "static": {
+    "ruff": "passed touched modules/tests",
+    "ty": "passed touched modules/compiler",
+    "basedpyright": "0 errors; 121 warnings in existing untyped interfaces and JSON/argparse boundaries; not a strict-clean repository-wide gate"
+  },
+  "checks": {
+    "exact_observation_recompile": true,
+    "unchanged_reference_policy_recompile": true,
+    "independent_scalar_oracle": true,
+    "fresh_terminal_http_win_exhaust_finalize": true,
+    "installed_wheel_outside_checkout": true,
+    "old_matrix_preflights": true,
+    "new_ten_cell_preflight": true,
+    "new_ten_cli_http_validator_executions": true,
+    "fresh_review": "no remaining blocker after correcting compiler cycle"
+  },
+  "image_ci": {
+    "status": "pending",
+    "note": "No local container runtime; PR base runs actual-image gate."
+  },
+  "warnings": "Three existing Pydantic warnings from deliberately malformed test data."
+}

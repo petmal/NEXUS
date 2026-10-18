@@ -1,0 +1,84 @@
+{
+  "version": "transfer-pilot-v1",
+  "external_python": false,
+  "fresh_context_per_execution": true,
+  "recommended_tool_call_limit": 120,
+  "runs": [
+    {
+      "id": "astra-diagnostic-01",
+      "seed": 3550,
+      "family": "coupled-evidence-v1",
+      "control": true,
+      "budget_profile": "standard"
+    },
+    {
+      "id": "astra-diagnostic-02",
+      "seed": 6943,
+      "family": "coupled-transfer-v1",
+      "control": false,
+      "budget_profile": "standard"
+    },
+    {
+      "id": "astra-diagnostic-03",
+      "seed": 6943,
+      "family": "coupled-evidence-v1",
+      "control": false,
+      "budget_profile": "standard",
+      "survey_rival": 7051
+    },
+    {
+      "id": "astra-diagnostic-04",
+      "seed": 6943,
+      "family": "coupled-evidence-v1",
+      "control": false,
+      "budget_profile": "diagnostic-plus6",
+      "survey_rival": 7051
+    },
+    {
+      "id": "astra-diagnostic-05",
+      "seed": 6943,
+      "family": "coupled-evidence-v1",
+      "control": false,
+      "budget_profile": "standard",
+      "survey_rival": 7051
+    },
+    {
+      "id": "astra-diagnostic-06",
+      "seed": 7051,
+      "family": "coupled-transfer-v1",
+      "control": false,
+      "budget_profile": "standard"
+    },
+    {
+      "id": "astra-diagnostic-07",
+      "seed": 7051,
+      "family": "coupled-evidence-v1",
+      "control": false,
+      "budget_profile": "standard",
+      "survey_rival": 6943
+    },
+    {
+      "id": "astra-diagnostic-08",
+      "seed": 7051,
+      "family": "coupled-evidence-v1",
+      "control": false,
+      "budget_profile": "diagnostic-plus6",
+      "survey_rival": 6943
+    },
+    {
+      "id": "astra-diagnostic-09",
+      "seed": 7051,
+      "family": "coupled-evidence-v1",
+      "control": false,
+      "budget_profile": "standard",
+      "survey_rival": 6943
+    },
+    {
+      "id": "astra-diagnostic-10",
+      "seed": 9631,
+      "family": "coupled-evidence-v1",
+      "control": false,
+      "budget_profile": "standard"
+    }
+  ]
+}

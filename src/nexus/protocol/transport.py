@@ -167,6 +167,8 @@ def request_service_payload(request: object, *, url: str | None = None) -> objec
             "POST",
             "/action",
             {"expected_turn": turn, "action": action},
+            # Terminal actions include diagnostics; stay within the 60s tool deadline.
+            timeout=45.0,
         )
 
     raise ClientError(f"unsupported request operation: {operation!r}")

@@ -2,7 +2,8 @@
 
 from functools import lru_cache
 
-from nexus.ontology.transfer.laws import PROGRAM_INDEX, QUERY_INDEX, QUERIES, targets
+from nexus.ontology.transfer.laws import PROGRAM_INDEX, QUERIES, QUERY_INDEX
+from nexus.ontology.transfer.reference import load
 from nexus.ontology.transfer.tables import N, compile_tables
 
 
@@ -15,14 +16,14 @@ def counts(mask, coupled):
     labels = set()
     while projection:
         bit = projection & -projection
-        labels.add(targets()[bit.bit_length() - 1])
+        labels.add(load()["targets"][bit.bit_length() - 1])
         projection ^= bit
     return mask.bit_count(), len(labels)
 
 
 @lru_cache(maxsize=5184)
 def equivalents(label):
-    return tuple(i for i, target in enumerate(targets()) if target == label)
+    return tuple(i for i, target in enumerate(load()["targets"]) if target == label)
 
 
 class Belief:
@@ -40,7 +41,7 @@ class Belief:
         if not self.mask or not self.table.common(self.mask):
             return ()
         first = ((self.mask & -self.mask).bit_length() - 1) % N
-        label = targets()[first]
+        label = load()["targets"][first]
         return equivalents(label)
 
     def accepting_count(self, program):

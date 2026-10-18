@@ -74,3 +74,60 @@ def test_http_public_evidence_privacy_receipt_and_save_load(tmp_path, family):
         "reference_action_upper",
     ):
         assert f'"{key}"' not in public
+
+
+@pytest.mark.parametrize("family", ["coupled-transfer-v1", "coupled-evidence-v1"])
+@pytest.mark.parametrize("ending", ["win", "exhaust", "finalize"])
+def test_cold_terminal_response_uses_verified_tables_without_scalar_compilation(family, ending):
+    # A fresh process prevents a warm cache from hiding the production regression.
+    import subprocess
+    import sys
+
+    script = r"""
+import json, sys
+from time import perf_counter
+from fastapi.testclient import TestClient
+from nexus.generator import generate_episode
+from nexus.ontology.transfer.laws import signatures, targets
+from nexus.ontology.transfer.policy import public_policy
+from nexus.protocol.http import create_single_session_app
+from nexus.protocol.session import ActionResponse, SessionStatus
+from nexus.models.observation import Observation
+
+ep = generate_episode(3550, axis_version=2, science_family=sys.argv[1],
+    discovery_level=5, theory_level=3, planning_level=1, resource_pressure=1)
+client = TestClient(create_single_session_app(ep))
+class Player:
+    def observe(self): return Observation.model_validate(client.get('/observe').json())
+    def status(self): return SessionStatus.model_validate(client.get('/status').json())
+    def act(self, expected_turn, action):
+        response = client.post('/action', json=dict(expected_turn=expected_turn,
+            action=action.model_dump(mode='json')))
+        assert response.status_code == 200, response.text
+        return ActionResponse.model_validate(response.json())
+started = perf_counter()
+if sys.argv[2] == 'win':
+    result = public_policy(Player(), ep.public.evidence_files)
+    assert result.victory_code and result.performance
+elif sys.argv[2] == 'exhaust':
+    for turn in range(ep.generation_metadata.action_budget):
+        result = client.post('/action', json=dict(expected_turn=turn, action={'type':'wait'})).json()
+        if turn + 1 < ep.generation_metadata.action_budget:
+            assert result.get('performance') is None
+    assert result['performance']['terminal_status'] == 'failed'
+else:
+    result = client.post('/finalize').json()
+    assert result['performance']['terminal_status'] == 'failed'
+assert signatures.cache_info().currsize == targets.cache_info().currsize == 0
+print(json.dumps({'seconds':perf_counter()-started}))
+"""
+    result = subprocess.run(
+        [sys.executable, "-c", script, family, ending],
+        check=False,
+        capture_output=True,
+        text=True,
+        timeout=30,
+    )
+    assert result.returncode == 0, result.stderr
+    # Broad guard: far below the former 10s inner deadline; no microbenchmark gate.
+    assert json.loads(result.stdout)["seconds"] < 8

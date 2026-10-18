@@ -1,0 +1,113 @@
+{
+  "scope": "Same shared Linux host, fresh processes; wall time includes complete public policy and cold terminal diagnostics, excludes imports; no container SLA.",
+  "samples": [
+    {
+      "revision": "before",
+      "family": "coupled-transfer-v1",
+      "repetition": 0,
+      "cold_generation_seconds": 0.04720227899997553,
+      "warm_generation_seconds": 0.0004042890000164334,
+      "first_live_policy_including_terminal_seconds": 1.4766829990001042,
+      "peak_rss_kib_linux": 63572
+    },
+    {
+      "revision": "before",
+      "family": "coupled-transfer-v1",
+      "repetition": 1,
+      "cold_generation_seconds": 0.03465083599985519,
+      "warm_generation_seconds": 0.00048134500002561253,
+      "first_live_policy_including_terminal_seconds": 1.4786657559998275,
+      "peak_rss_kib_linux": 63436
+    },
+    {
+      "revision": "before",
+      "family": "coupled-transfer-v1",
+      "repetition": 2,
+      "cold_generation_seconds": 0.02802327500012325,
+      "warm_generation_seconds": 0.00027337100004842796,
+      "first_live_policy_including_terminal_seconds": 1.5139324200001738,
+      "peak_rss_kib_linux": 63420
+    },
+    {
+      "revision": "before",
+      "family": "coupled-evidence-v1",
+      "repetition": 0,
+      "cold_generation_seconds": 0.03146810299995195,
+      "warm_generation_seconds": 0.0005317009999998845,
+      "first_live_policy_including_terminal_seconds": 2.575380152999969,
+      "peak_rss_kib_linux": 78656
+    },
+    {
+      "revision": "before",
+      "family": "coupled-evidence-v1",
+      "repetition": 1,
+      "cold_generation_seconds": 0.02954984399980276,
+      "warm_generation_seconds": 0.00034153500018874183,
+      "first_live_policy_including_terminal_seconds": 2.7040318530000604,
+      "peak_rss_kib_linux": 78448
+    },
+    {
+      "revision": "before",
+      "family": "coupled-evidence-v1",
+      "repetition": 2,
+      "cold_generation_seconds": 0.041996586999857755,
+      "warm_generation_seconds": 0.0005154660000243894,
+      "first_live_policy_including_terminal_seconds": 2.6964020909999817,
+      "peak_rss_kib_linux": 78604
+    },
+    {
+      "revision": "after",
+      "family": "coupled-transfer-v1",
+      "repetition": 0,
+      "cold_generation_seconds": 0.02817817599998307,
+      "warm_generation_seconds": 0.0003641389998847444,
+      "first_live_policy_including_terminal_seconds": 0.03659881599992332,
+      "peak_rss_kib_linux": 67036
+    },
+    {
+      "revision": "after",
+      "family": "coupled-transfer-v1",
+      "repetition": 1,
+      "cold_generation_seconds": 0.027137126999832617,
+      "warm_generation_seconds": 0.0003140630001325917,
+      "first_live_policy_including_terminal_seconds": 0.03507640399993761,
+      "peak_rss_kib_linux": 66996
+    },
+    {
+      "revision": "after",
+      "family": "coupled-transfer-v1",
+      "repetition": 2,
+      "cold_generation_seconds": 0.02840694000019539,
+      "warm_generation_seconds": 0.0003244080000968097,
+      "first_live_policy_including_terminal_seconds": 0.03348686999993333,
+      "peak_rss_kib_linux": 66956
+    },
+    {
+      "revision": "after",
+      "family": "coupled-evidence-v1",
+      "repetition": 0,
+      "cold_generation_seconds": 0.030285499000001437,
+      "warm_generation_seconds": 0.0003560759998890717,
+      "first_live_policy_including_terminal_seconds": 0.05161482099993009,
+      "peak_rss_kib_linux": 76068
+    },
+    {
+      "revision": "after",
+      "family": "coupled-evidence-v1",
+      "repetition": 1,
+      "cold_generation_seconds": 0.029227565999917715,
+      "warm_generation_seconds": 0.0002748539998265187,
+      "first_live_policy_including_terminal_seconds": 0.05169363899995005,
+      "peak_rss_kib_linux": 75908
+    },
+    {
+      "revision": "after",
+      "family": "coupled-evidence-v1",
+      "repetition": 2,
+      "cold_generation_seconds": 0.03003543499994521,
+      "warm_generation_seconds": 0.0002747330001966475,
+      "first_live_policy_including_terminal_seconds": 0.05645780800000466,
+      "peak_rss_kib_linux": 75868
+    }
+  ]
+}

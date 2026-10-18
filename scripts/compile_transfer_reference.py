@@ -3,30 +3,45 @@
 import argparse
 import hashlib
 import json
+from collections.abc import Iterable
 from pathlib import Path
 from time import perf_counter
+from typing import TypedDict
 
 from nexus.ontology.transfer.laws import targets
 from nexus.ontology.transfer.reference import semantic_digest
-from nexus.ontology.transfer.tables import compile_tables
+from nexus.ontology.transfer.tables import assemble_tables
 
 
-def tree(coupled, allowed_queries=None):
-    table = compile_tables(coupled)
+class Policy(TypedDict):
+    readings: int
+    nodes: list[list[int | None]]
+
+
+class Reference(TypedDict):
+    version: str
+    semantic_digest: str
+    targets: tuple[int, ...]
+    calibrated: Policy
+    coupled: Policy
+
+
+def tree(coupled: bool, allowed_queries: Iterable[int] | None = None) -> Policy:
+    table = assemble_tables(coupled, targets())
     candidates = (
         tuple(range(len(table.outcomes))) if allowed_queries is None else tuple(allowed_queries)
     )
-    nodes = []
+    nodes: list[list[int | None]] = []
     started = perf_counter()
 
-    def visit(mask):
+    def visit(mask: int) -> tuple[int, int]:
         if len(nodes) > 16384 or perf_counter() - started > 120:
             raise TimeoutError("offline policy exceeded reviewed node/time cap")
         if table.common(mask):
             physical_index = ((mask & -mask).bit_length() - 1) % 5184
             return -targets()[physical_index] - 1, 0
         index = len(nodes)
-        nodes.append(None)
+        nodes.append([])
         query = min(
             candidates,
             key=lambda i: (
@@ -46,7 +61,7 @@ def tree(coupled, allowed_queries=None):
     return {"readings": bound, "nodes": nodes}
 
 
-def compile_reference():
+def compile_reference() -> Reference:
     return {
         "version": "transfer-reference-v1",
         "semantic_digest": semantic_digest(),
