@@ -2,6 +2,8 @@
 
 from types import MappingProxyType
 
+from nexus.ontology.history.schema import SCHEMAS as HISTORY
+
 from nexus.ontology.compositional.schema import SCHEMAS as COMPOSITIONAL
 from nexus.ontology.categorical.schema import SCHEMAS as CATEGORICAL
 from nexus.ontology.causal.schema import SCHEMAS as CAUSAL
@@ -11,6 +13,7 @@ from nexus.ontology.transfer.schema import SCHEMAS as TRANSFER
 
 _SCHEMAS = MappingProxyType(
     {
+        "history-coupled-v1": MappingProxyType(dict(HISTORY)),
         "coupled-transfer-v1": MappingProxyType(dict(TRANSFER)),
         "coupled-evidence-v1": MappingProxyType(dict(TRANSFER)),
         "compositional-repair-v1": MappingProxyType(dict(COMPOSITIONAL)),

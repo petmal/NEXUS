@@ -190,11 +190,13 @@ class PrivateEpisode(BaseModel):
 
     @model_validator(mode="after")
     def validate_private_links(self) -> "PrivateEpisode":
+        from nexus.ontology.catalog import definition_for
+
         if self.generation_metadata.budget_profile != "standard" and (
             not isinstance(self.public.investigation, DomainInvestigation)
-            or self.public.investigation.ontology not in ("compositional-repair-v1", "coupled-transfer-v1", "coupled-evidence-v1")
+            or not definition_for(self.public.investigation).diagnostic_budget
         ):
-            raise ValueError("diagnostic budget profile requires compositional-repair-v1 or a transfer family")
+            raise ValueError("diagnostic budget profile is unsupported by this family")
         if (self.public.investigation is None) != (self.investigation_truth is None):
             raise ValueError("scientific apparatus requires private truth and public specification")
         if isinstance(self.public.investigation, DomainInvestigation):

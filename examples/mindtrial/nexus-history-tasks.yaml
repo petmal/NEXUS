@@ -1,0 +1,464 @@
+# Experimental NEXUS history pilot. Ten executions; Astra medium enabled.
+# Existing provider settings retained, API keys blank. No external Python.
+# This PoC is NOT certified as an unavoidable deep-reasoning tier.
+task-config:
+  max-turns: 160
+  validation-rules:
+    custom-validator: nexus-victory
+    case-sensitive: true
+    ignore-whitespace: false
+    trim-lines: false
+  system-prompt:
+    enable-for: text
+    template: |-
+      Use the available NEXUS tool to complete the live task. Your final answer
+      must follow this format exactly, with no extra explanation or formatting:
+      {{.ResponseResultFormat}}
+  tool-selector:
+    disabled: false
+    tools:
+    - name: nexus
+      disabled: false
+      max-calls: 120
+      timeout: 60s
+  tasks:
+  - name: NEXUS history-diagnostic-01
+    disabled: false
+    suite: nexus
+    category: history-diagnostic
+    difficulty: experimental-uncalibrated
+    tags:
+    - history-diagnostic-v1
+    - coupled-evidence-v1
+    prompt: |
+      You are confined to an artificial NEXUS facility. Complete the live mission
+      and return its actual victory receipt.
+
+      Begin with manifest and observe, then read every listed evidence file. Learn
+      the exact goal, complete bounded prior, observation model and action contract
+      from those files. Do not assume real-world laws or undisclosed interactions.
+
+      Plan experiments and infer what is needed to satisfy the entire goal. Finite
+      hypothesis enumeration is valid. Use NEXUS for all in-world observations and
+      actions. Interpret each reading according to the disclosed reader contract.
+
+      Use returned specimen IDs. Follow the current apparatus contract; configuration
+      is available only where explicitly documented. Operate commits the documented
+      effect; a probe previews one operation without changing the actual specimen.
+      Track committed history, visible properties, location and remaining actions.
+      A temporary reader result need not describe the actual specimen's state.
+      Use ordinary recovery operations only when disclosed by the current world.
+      Meet the full physical goal and call finish successfully. Return only the actual
+      victory_code from that successful live session.
+    response-result-format: |
+      The actual victory_code returned after successfully finishing the live
+      NEXUS mission, and nothing else. No quotes, Markdown or explanation.
+    tool-selector:
+      service-inputs:
+        nexus:
+          axis-version: 2
+          science-family: coupled-evidence-v1
+          seed: '6943'
+          discovery-level: 5
+          planning-level: 1
+          resource-pressure: 1
+          theory-level: 3
+          budget-profile: standard
+          generation-timing: true
+          extended-diagnostics: true
+  - name: NEXUS history-diagnostic-02
+    disabled: false
+    suite: nexus
+    category: history-diagnostic
+    difficulty: control-known-law
+    tags:
+    - history-diagnostic-v1
+    - history-coupled-v1
+    prompt: |
+      You are confined to an artificial NEXUS facility. Complete the live mission
+      and return its actual victory receipt.
+
+      Begin with manifest and observe, then read every listed evidence file. Learn
+      the exact goal, complete bounded prior, observation model and action contract
+      from those files. Do not assume real-world laws or undisclosed interactions.
+
+      Plan experiments and infer what is needed to satisfy the entire goal. Finite
+      hypothesis enumeration is valid. Use NEXUS for all in-world observations and
+      actions. Interpret each reading according to the disclosed reader contract.
+
+      Use returned specimen IDs. Follow the current apparatus contract; configuration
+      is available only where explicitly documented. Operate commits the documented
+      effect; a probe previews one operation without changing the actual specimen.
+      Track committed history, visible properties, location and remaining actions.
+      A temporary reader result need not describe the actual specimen's state.
+      Use ordinary recovery operations only when disclosed by the current world.
+      Meet the full physical goal and call finish successfully. Return only the actual
+      victory_code from that successful live session.
+    response-result-format: |
+      The actual victory_code returned after successfully finishing the live
+      NEXUS mission, and nothing else. No quotes, Markdown or explanation.
+    tool-selector:
+      service-inputs:
+        nexus:
+          axis-version: 2
+          science-family: history-coupled-v1
+          seed: '440'
+          discovery-level: 0
+          planning-level: 1
+          resource-pressure: 1
+          theory-level: 0
+          budget-profile: standard
+          generation-timing: true
+          extended-diagnostics: true
+  - name: NEXUS history-diagnostic-03
+    disabled: false
+    suite: nexus
+    category: history-diagnostic
+    difficulty: experimental-uncalibrated
+    tags:
+    - history-diagnostic-v1
+    - history-coupled-v1
+    prompt: |
+      You are confined to an artificial NEXUS facility. Complete the live mission
+      and return its actual victory receipt.
+
+      Begin with manifest and observe, then read every listed evidence file. Learn
+      the exact goal, complete bounded prior, observation model and action contract
+      from those files. Do not assume real-world laws or undisclosed interactions.
+
+      Plan experiments and infer what is needed to satisfy the entire goal. Finite
+      hypothesis enumeration is valid. Use NEXUS for all in-world observations and
+      actions. Interpret each reading according to the disclosed reader contract.
+
+      Use returned specimen IDs. Follow the current apparatus contract; configuration
+      is available only where explicitly documented. Operate commits the documented
+      effect; a probe previews one operation without changing the actual specimen.
+      Track committed history, visible properties, location and remaining actions.
+      A temporary reader result need not describe the actual specimen's state.
+      Use ordinary recovery operations only when disclosed by the current world.
+      Meet the full physical goal and call finish successfully. Return only the actual
+      victory_code from that successful live session.
+    response-result-format: |
+      The actual victory_code returned after successfully finishing the live
+      NEXUS mission, and nothing else. No quotes, Markdown or explanation.
+    tool-selector:
+      service-inputs:
+        nexus:
+          axis-version: 2
+          science-family: history-coupled-v1
+          seed: '440'
+          discovery-level: 5
+          planning-level: 1
+          resource-pressure: 1
+          theory-level: 3
+          budget-profile: standard
+          generation-timing: true
+          extended-diagnostics: true
+  - name: NEXUS history-diagnostic-04
+    disabled: false
+    suite: nexus
+    category: history-diagnostic
+    difficulty: experimental-uncalibrated
+    tags:
+    - history-diagnostic-v1
+    - history-coupled-v1
+    prompt: |
+      You are confined to an artificial NEXUS facility. Complete the live mission
+      and return its actual victory receipt.
+
+      Begin with manifest and observe, then read every listed evidence file. Learn
+      the exact goal, complete bounded prior, observation model and action contract
+      from those files. Do not assume real-world laws or undisclosed interactions.
+
+      Plan experiments and infer what is needed to satisfy the entire goal. Finite
+      hypothesis enumeration is valid. Use NEXUS for all in-world observations and
+      actions. Interpret each reading according to the disclosed reader contract.
+
+      Use returned specimen IDs. Follow the current apparatus contract; configuration
+      is available only where explicitly documented. Operate commits the documented
+      effect; a probe previews one operation without changing the actual specimen.
+      Track committed history, visible properties, location and remaining actions.
+      A temporary reader result need not describe the actual specimen's state.
+      Use ordinary recovery operations only when disclosed by the current world.
+      Meet the full physical goal and call finish successfully. Return only the actual
+      victory_code from that successful live session.
+    response-result-format: |
+      The actual victory_code returned after successfully finishing the live
+      NEXUS mission, and nothing else. No quotes, Markdown or explanation.
+    tool-selector:
+      service-inputs:
+        nexus:
+          axis-version: 2
+          science-family: history-coupled-v1
+          seed: '440'
+          discovery-level: 5
+          planning-level: 1
+          resource-pressure: 1
+          theory-level: 3
+          budget-profile: diagnostic-plus6
+          generation-timing: true
+          extended-diagnostics: true
+  - name: NEXUS history-diagnostic-05
+    disabled: false
+    suite: nexus
+    category: history-diagnostic
+    difficulty: experimental-uncalibrated
+    tags:
+    - history-diagnostic-v1
+    - history-coupled-v1
+    prompt: |
+      You are confined to an artificial NEXUS facility. Complete the live mission
+      and return its actual victory receipt.
+
+      Begin with manifest and observe, then read every listed evidence file. Learn
+      the exact goal, complete bounded prior, observation model and action contract
+      from those files. Do not assume real-world laws or undisclosed interactions.
+
+      Plan experiments and infer what is needed to satisfy the entire goal. Finite
+      hypothesis enumeration is valid. Use NEXUS for all in-world observations and
+      actions. Interpret each reading according to the disclosed reader contract.
+
+      Use returned specimen IDs. Follow the current apparatus contract; configuration
+      is available only where explicitly documented. Operate commits the documented
+      effect; a probe previews one operation without changing the actual specimen.
+      Track committed history, visible properties, location and remaining actions.
+      A temporary reader result need not describe the actual specimen's state.
+      Use ordinary recovery operations only when disclosed by the current world.
+      Meet the full physical goal and call finish successfully. Return only the actual
+      victory_code from that successful live session.
+    response-result-format: |
+      The actual victory_code returned after successfully finishing the live
+      NEXUS mission, and nothing else. No quotes, Markdown or explanation.
+    tool-selector:
+      service-inputs:
+        nexus:
+          axis-version: 2
+          science-family: history-coupled-v1
+          seed: '239'
+          discovery-level: 5
+          planning-level: 1
+          resource-pressure: 1
+          theory-level: 3
+          budget-profile: standard
+          generation-timing: true
+          extended-diagnostics: true
+  - name: NEXUS history-diagnostic-06
+    disabled: false
+    suite: nexus
+    category: history-diagnostic
+    difficulty: experimental-uncalibrated
+    tags:
+    - history-diagnostic-v1
+    - history-coupled-v1
+    prompt: |
+      You are confined to an artificial NEXUS facility. Complete the live mission
+      and return its actual victory receipt.
+
+      Begin with manifest and observe, then read every listed evidence file. Learn
+      the exact goal, complete bounded prior, observation model and action contract
+      from those files. Do not assume real-world laws or undisclosed interactions.
+
+      Plan experiments and infer what is needed to satisfy the entire goal. Finite
+      hypothesis enumeration is valid. Use NEXUS for all in-world observations and
+      actions. Interpret each reading according to the disclosed reader contract.
+
+      Use returned specimen IDs. Follow the current apparatus contract; configuration
+      is available only where explicitly documented. Operate commits the documented
+      effect; a probe previews one operation without changing the actual specimen.
+      Track committed history, visible properties, location and remaining actions.
+      A temporary reader result need not describe the actual specimen's state.
+      Use ordinary recovery operations only when disclosed by the current world.
+      Meet the full physical goal and call finish successfully. Return only the actual
+      victory_code from that successful live session.
+    response-result-format: |
+      The actual victory_code returned after successfully finishing the live
+      NEXUS mission, and nothing else. No quotes, Markdown or explanation.
+    tool-selector:
+      service-inputs:
+        nexus:
+          axis-version: 2
+          science-family: history-coupled-v1
+          seed: '216'
+          discovery-level: 5
+          planning-level: 1
+          resource-pressure: 1
+          theory-level: 3
+          budget-profile: standard
+          generation-timing: true
+          extended-diagnostics: true
+  - name: NEXUS history-diagnostic-07
+    disabled: false
+    suite: nexus
+    category: history-diagnostic
+    difficulty: control-known-law
+    tags:
+    - history-diagnostic-v1
+    - history-coupled-v1
+    prompt: |
+      You are confined to an artificial NEXUS facility. Complete the live mission
+      and return its actual victory receipt.
+
+      Begin with manifest and observe, then read every listed evidence file. Learn
+      the exact goal, complete bounded prior, observation model and action contract
+      from those files. Do not assume real-world laws or undisclosed interactions.
+
+      Plan experiments and infer what is needed to satisfy the entire goal. Finite
+      hypothesis enumeration is valid. Use NEXUS for all in-world observations and
+      actions. Interpret each reading according to the disclosed reader contract.
+
+      Use returned specimen IDs. Follow the current apparatus contract; configuration
+      is available only where explicitly documented. Operate commits the documented
+      effect; a probe previews one operation without changing the actual specimen.
+      Track committed history, visible properties, location and remaining actions.
+      A temporary reader result need not describe the actual specimen's state.
+      Use ordinary recovery operations only when disclosed by the current world.
+      Meet the full physical goal and call finish successfully. Return only the actual
+      victory_code from that successful live session.
+    response-result-format: |
+      The actual victory_code returned after successfully finishing the live
+      NEXUS mission, and nothing else. No quotes, Markdown or explanation.
+    tool-selector:
+      service-inputs:
+        nexus:
+          axis-version: 2
+          science-family: history-coupled-v1
+          seed: '216'
+          discovery-level: 0
+          planning-level: 1
+          resource-pressure: 1
+          theory-level: 0
+          budget-profile: standard
+          generation-timing: true
+          extended-diagnostics: true
+  - name: NEXUS history-diagnostic-08
+    disabled: false
+    suite: nexus
+    category: history-diagnostic
+    difficulty: experimental-uncalibrated
+    tags:
+    - history-diagnostic-v1
+    - history-coupled-v1
+    prompt: |
+      You are confined to an artificial NEXUS facility. Complete the live mission
+      and return its actual victory receipt.
+
+      Begin with manifest and observe, then read every listed evidence file. Learn
+      the exact goal, complete bounded prior, observation model and action contract
+      from those files. Do not assume real-world laws or undisclosed interactions.
+
+      Plan experiments and infer what is needed to satisfy the entire goal. Finite
+      hypothesis enumeration is valid. Use NEXUS for all in-world observations and
+      actions. Interpret each reading according to the disclosed reader contract.
+
+      Use returned specimen IDs. Follow the current apparatus contract; configuration
+      is available only where explicitly documented. Operate commits the documented
+      effect; a probe previews one operation without changing the actual specimen.
+      Track committed history, visible properties, location and remaining actions.
+      A temporary reader result need not describe the actual specimen's state.
+      Use ordinary recovery operations only when disclosed by the current world.
+      Meet the full physical goal and call finish successfully. Return only the actual
+      victory_code from that successful live session.
+    response-result-format: |
+      The actual victory_code returned after successfully finishing the live
+      NEXUS mission, and nothing else. No quotes, Markdown or explanation.
+    tool-selector:
+      service-inputs:
+        nexus:
+          axis-version: 2
+          science-family: history-coupled-v1
+          seed: '216'
+          discovery-level: 5
+          planning-level: 1
+          resource-pressure: 1
+          theory-level: 3
+          budget-profile: diagnostic-plus6
+          generation-timing: true
+          extended-diagnostics: true
+  - name: NEXUS history-diagnostic-09
+    disabled: false
+    suite: nexus
+    category: history-diagnostic
+    difficulty: experimental-uncalibrated
+    tags:
+    - history-diagnostic-v1
+    - history-coupled-v1
+    prompt: |
+      You are confined to an artificial NEXUS facility. Complete the live mission
+      and return its actual victory receipt.
+
+      Begin with manifest and observe, then read every listed evidence file. Learn
+      the exact goal, complete bounded prior, observation model and action contract
+      from those files. Do not assume real-world laws or undisclosed interactions.
+
+      Plan experiments and infer what is needed to satisfy the entire goal. Finite
+      hypothesis enumeration is valid. Use NEXUS for all in-world observations and
+      actions. Interpret each reading according to the disclosed reader contract.
+
+      Use returned specimen IDs. Follow the current apparatus contract; configuration
+      is available only where explicitly documented. Operate commits the documented
+      effect; a probe previews one operation without changing the actual specimen.
+      Track committed history, visible properties, location and remaining actions.
+      A temporary reader result need not describe the actual specimen's state.
+      Use ordinary recovery operations only when disclosed by the current world.
+      Meet the full physical goal and call finish successfully. Return only the actual
+      victory_code from that successful live session.
+    response-result-format: |
+      The actual victory_code returned after successfully finishing the live
+      NEXUS mission, and nothing else. No quotes, Markdown or explanation.
+    tool-selector:
+      service-inputs:
+        nexus:
+          axis-version: 2
+          science-family: history-coupled-v1
+          seed: '483'
+          discovery-level: 5
+          planning-level: 1
+          resource-pressure: 1
+          theory-level: 3
+          budget-profile: standard
+          generation-timing: true
+          extended-diagnostics: true
+  - name: NEXUS history-diagnostic-10
+    disabled: false
+    suite: nexus
+    category: history-diagnostic
+    difficulty: experimental-uncalibrated
+    tags:
+    - history-diagnostic-v1
+    - history-coupled-v1
+    prompt: |
+      You are confined to an artificial NEXUS facility. Complete the live mission
+      and return its actual victory receipt.
+
+      Begin with manifest and observe, then read every listed evidence file. Learn
+      the exact goal, complete bounded prior, observation model and action contract
+      from those files. Do not assume real-world laws or undisclosed interactions.
+
+      Plan experiments and infer what is needed to satisfy the entire goal. Finite
+      hypothesis enumeration is valid. Use NEXUS for all in-world observations and
+      actions. Interpret each reading according to the disclosed reader contract.
+
+      Use returned specimen IDs. Follow the current apparatus contract; configuration
+      is available only where explicitly documented. Operate commits the documented
+      effect; a probe previews one operation without changing the actual specimen.
+      Track committed history, visible properties, location and remaining actions.
+      A temporary reader result need not describe the actual specimen's state.
+      Use ordinary recovery operations only when disclosed by the current world.
+      Meet the full physical goal and call finish successfully. Return only the actual
+      victory_code from that successful live session.
+    response-result-format: |
+      The actual victory_code returned after successfully finishing the live
+      NEXUS mission, and nothing else. No quotes, Markdown or explanation.
+    tool-selector:
+      service-inputs:
+        nexus:
+          axis-version: 2
+          science-family: history-coupled-v1
+          seed: '557'
+          discovery-level: 5
+          planning-level: 1
+          resource-pressure: 1
+          theory-level: 3
+          budget-profile: standard
+          generation-timing: true
+          extended-diagnostics: true

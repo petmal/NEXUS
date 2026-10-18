@@ -1,6 +1,6 @@
 """Thin adapter; the engine owns mutations, resources, terminal state and receipt."""
 
-from dataclasses import dataclass
+from nexus.ontology.mission import AppliedTreatmentTracker as RepairTracker
 from typing import cast
 
 from nexus.models.actions import (
@@ -196,32 +196,6 @@ def belief(spec):
     return RepairBelief()
 
 
-@dataclass
-class RepairTracker:
-    room: str
-    mission_room: str
-    seal_location: str
-    dose: tuple[int, ...] | None = None
-
-    def observe(self, record):
-        a = record.action
-        if a.type == "move":
-            self.room = a.target
-        elif a.type == "take" and a.artifact == "seal":
-            self.seal_location = INVENTORY
-        elif a.type == "drop" and a.artifact == "seal":
-            self.seal_location = self.room
-        elif a.type == "operate" and a.artifact == "seal":
-            event = next(e for e in record.events if "result" in e.details)
-            dose = event.details["result"]["payload"]["doses"]
-            self.dose = None if dose is None else tuple(dose)
-
-    def attempted(self):
-        return (
-            self.dose
-            if self.room == self.mission_room and self.seal_location == INVENTORY
-            else None
-        )
 
 
 def mission_tracker(public):

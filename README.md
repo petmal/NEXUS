@@ -567,3 +567,9 @@ D0/T0–T3, with P0/P1 and R0–R2. Existing families and defaults remain availa
 See the [design](docs/causal-mechanisms-design.md),
 [validation and limits](docs/causal-mechanisms-results.md), and
 [ten-run pilot](docs/causal-mechanisms-model-matrix.md).
+
+The opt-in [`history-coupled-v1` PoC](docs/history-coupled-results.md) adds specimen
+history, delayed effects and exact joint-state inference while preserving prior
+families. Its ten-row diagnostic includes known-law and budget controls. It is
+experimental: qualification records legal shortcuts and does not admit a certified
+deep-reasoning tier.

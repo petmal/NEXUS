@@ -15,3 +15,4 @@ docs/*
 !docs/budget-diagnostic-matrix.json
 !docs/transfer-model-matrix.json
 !docs/astra-diagnostic-matrix.json
+!docs/history-diagnostic-matrix.json

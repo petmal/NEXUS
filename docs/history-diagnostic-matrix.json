@@ -1,0 +1,18 @@
+{
+  "version": "history-pilot-v1",
+  "external_python": false,
+  "fresh_context_per_execution": true,
+  "recommended_tool_call_limit": 120,
+  "runs": [
+    {"id":"01","family":"coupled-evidence-v1","seed":6943,"purpose":"Existing transfer regression sentinel"},
+    {"id":"02","family":"history-coupled-v1","seed":440,"control":true,"purpose":"Known-law execution control for the six-pulse case"},
+    {"id":"03","family":"history-coupled-v1","seed":440,"purpose":"Unknown-law six-pulse case; experimental difficulty"},
+    {"id":"04","family":"history-coupled-v1","seed":440,"budget_profile":"diagnostic-plus6","purpose":"Same science with six additional actions"},
+    {"id":"05","family":"history-coupled-v1","seed":239,"orientation_rival":440,"purpose":"Passive-indistinguishable orientation rival; distinct winning histories"},
+    {"id":"06","family":"history-coupled-v1","seed":216,"purpose":"World supporting the reachable joint-marginal inconsistency witness"},
+    {"id":"07","family":"history-coupled-v1","seed":216,"control":true,"purpose":"Matched known-law execution control"},
+    {"id":"08","family":"history-coupled-v1","seed":216,"budget_profile":"diagnostic-plus6","purpose":"Matched resource sensitivity control"},
+    {"id":"09","family":"history-coupled-v1","seed":483,"purpose":"Different gate composition; varied coefficients and biases"},
+    {"id":"10","family":"history-coupled-v1","seed":557,"purpose":"Further held-out gate composition"}
+  ]
+}

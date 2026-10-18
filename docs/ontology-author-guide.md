@@ -184,3 +184,20 @@ or certify a three-round policy. Qualify selected fixture scope separately from
 uniform-prior probability claims, and keep both separate from empirical LLM
 performance. The family-specific live conformance document must explain why every
 legal response reduces to the mathematical audit's observation classes.
+
+## Bounded specimen history example
+
+`history-coupled-v1` demonstrates a physically constructed goal using public pulse
+history and recomputed private state. Its eight-pulse domain has exact overlapping
+winning sets; all committed/probed visible transitions update the public posterior.
+A family-specific tracker follows actual seal history and ignores previews.
+`log_terminal_trace(state, trace, posterior)` is an optional terminal-only hook for
+operational evidence categories and recovery diagnostics. It does not affect play.
+
+`OntologyDefinition.diagnostic_budget` declares support for the explicit
+`budget_profile` generator argument and private-envelope validation. Add support
+in one registration rather than repeating family-name lists in shared code.
+
+The history family's `deep_tier_admitted=false` is intentional: finite proof found
+shortcuts through repeated finishes and apparatus omission. A registered runtime
+and a successful reference policy do not constitute deep-difficulty qualification.

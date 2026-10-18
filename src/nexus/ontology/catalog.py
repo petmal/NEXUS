@@ -23,6 +23,7 @@ class OntologyDefinition:
     generator: tuple[str, str] | None = None
     qualifier: tuple[str, str] = ("", "")
     standalone_contract: bool = False
+    diagnostic_budget: bool = False
 
     def runtime(self):
         return import_module(self.runtime_module)
@@ -49,9 +50,18 @@ BUILTINS = MappingProxyType(
         item.family: item
         for item in (
             OntologyDefinition(
+                "history-coupled-v1", "history-coupled-v1",
+                runtime_module="nexus.ontology.history.runtime",
+                generator=("nexus.ontology.history.generation", "generate_history"),
+                diagnostic_budget=True,
+                qualifier=("nexus.ontology.history.qualification", "qualify_history"),
+                standalone_contract=True,
+            ),
+            OntologyDefinition(
                 "coupled-transfer-v1", "coupled-transfer-v1",
                 runtime_module="nexus.ontology.transfer.runtime",
                 generator=("nexus.ontology.transfer.generation", "generate_transfer"),
+                diagnostic_budget=True,
                 qualifier=("nexus.ontology.transfer.qualification", "qualify_transfer"),
                 standalone_contract=True,
             ),
@@ -59,6 +69,7 @@ BUILTINS = MappingProxyType(
                 "coupled-evidence-v1", "coupled-evidence-v1",
                 runtime_module="nexus.ontology.transfer.runtime",
                 generator=("nexus.ontology.transfer.generation", "generate_evidence"),
+                diagnostic_budget=True,
                 qualifier=("nexus.ontology.transfer.qualification", "qualify_transfer"),
                 standalone_contract=True,
             ),
@@ -66,6 +77,7 @@ BUILTINS = MappingProxyType(
                 "compositional-repair-v1", "compositional-repair-v1",
                 runtime_module="nexus.ontology.compositional.runtime",
                 generator=("nexus.ontology.compositional.generation", "generate_compositional"),
+                diagnostic_budget=True,
                 qualifier=("nexus.ontology.compositional.qualification", "qualify_compositional"),
                 standalone_contract=True,
             ),

@@ -12,6 +12,7 @@ on:
       - "docs/budget-diagnostic-matrix.json"
       - "docs/transfer-model-matrix.json"
       - "docs/astra-diagnostic-matrix.json"
+      - "docs/history-diagnostic-matrix.json"
   pull_request:
     paths:
       - "**"
@@ -22,6 +23,7 @@ on:
       - "docs/budget-diagnostic-matrix.json"
       - "docs/transfer-model-matrix.json"
       - "docs/astra-diagnostic-matrix.json"
+      - "docs/history-diagnostic-matrix.json"
   workflow_dispatch:
     inputs:
       full:
@@ -84,6 +86,11 @@ jobs:
           uv run python scripts/compile_transfer_reference.py
           uv run python scripts/preflight_transfer.py --output /tmp/nexus-transfer-preflight.json
           uv run python scripts/preflight_transfer.py --matrix docs/astra-diagnostic-matrix.json --output /tmp/nexus-astra-preflight.json
+
+      - name: History PoC proof and matrix
+        run: |
+          uv run python scripts/history_oracle.py --output /tmp/history-proof.json
+          uv run python scripts/preflight_history.py --output /tmp/history-preflight.json
 
       - name: Solver proof tests
         run: |
@@ -163,6 +170,7 @@ jobs:
           docker run --rm --entrypoint python nexus-ci scripts/preflight_budget.py --output /tmp/budget-preflight.json
           docker run --rm --entrypoint python nexus-ci scripts/preflight_transfer.py --output /tmp/transfer-preflight.json
           docker run --rm --entrypoint python nexus-ci scripts/preflight_transfer.py --matrix docs/astra-diagnostic-matrix.json --output /tmp/astra-preflight.json
+          docker run --rm --entrypoint python nexus-ci scripts/preflight_history.py --output /tmp/history-preflight.json
           docker run --rm nexus-ci --help
           docker run --rm nexus-ci generate /tmp/nexus-t3 --seed 17 \
             --discovery-level 2 --planning-level 0 --theory-level 3

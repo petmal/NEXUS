@@ -191,6 +191,9 @@ def summarize(
     terminal_belief_logger = getattr(runtime, "log_terminal_belief", None)
     if terminal_belief_logger is not None:
         terminal_belief_logger(posterior)
+    trace_logger = getattr(runtime, "log_terminal_trace", None)
+    if trace_logger is not None:
+        trace_logger(state, trace, posterior)
     if runtime.performance_style == "mission":
         if not isinstance(spec, DomainInvestigation):
             raise ValueError("mission adapter requires a domain investigation")
