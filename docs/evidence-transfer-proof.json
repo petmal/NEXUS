@@ -1,0 +1,44 @@
+{
+  "schema": "evidence-transfer-independent-proof-v1",
+  "physical_programs": 5184,
+  "behavior_classes": 5016,
+  "max_equivalent_programs": 12,
+  "conditions": 486,
+  "reader_offsets": 3,
+  "joint_worlds": 15552,
+  "survey_only_incompatible_rival_for_every_world": true,
+  "reference_only_incompatible_rival_for_every_world": true,
+  "matched_subtraction_recovers_physical_response": true,
+  "passive": {
+    "groups": 4794,
+    "ambiguous_groups": 222,
+    "affected_worlds": 444
+  },
+  "context_0_only": {
+    "groups": 546,
+    "ambiguous_groups": 546,
+    "affected_worlds": 5184
+  },
+  "context_1_only": {
+    "groups": 546,
+    "ambiguous_groups": 546,
+    "affected_worlds": 5184
+  },
+  "unmixed_inputs": {
+    "groups": 4614,
+    "ambiguous_groups": 144,
+    "affected_worlds": 546
+  },
+  "revision_poc": {
+    "integrate_required_revision": false,
+    "reason": "Both contexts are accessible from the start. Early transition plus joint stationary inference is legal; a provisional inherited program does not force belief revision. Context-restricted inference loses target information, but context order is arbitrary.",
+    "scope": "Negative gate for this stationary construction; no claim that all revision designs are impossible."
+  },
+  "claims_excluded": [
+    "required adaptive rounds",
+    "cognitive depth",
+    "model failure rate",
+    "reference-first order is necessary"
+  ],
+  "seconds": 33.282202
+}

@@ -1,6 +1,6 @@
 # Coupled transfer and evidence validity: system design
 
-Status: proof phase, 17 October 2026. Approved baseline is feature branch
+Status: proof qualified; implementation underway, 18 October 2026. Approved baseline is feature branch
 `feat/theory-prior-axis` at `b36703d868f83882543f6a77a6b5ce4b9f7e3f38`,
 confirmed against GitHub PR 6. Existing families and defaults remain supported.
 
@@ -19,32 +19,42 @@ before all laws are identified. These motivate consequential goals and new
 uncertainty, not tighter budgets or forced scientific rituals. No model failure
 rate or cognitive-depth theorem is promised.
 
-## Candidate construction, subject to independent proof
+## Qualified construction
 
 Reuse the trusted three-gate compositional grammar as a scientific building
 block, but create separate versioned families. Keep every one-module replacement
-world (1,728 candidates), with no solvability filtering. A seal is programmed
-with a bounded six-selector countermechanism. The goal is zero physical residual
+world (1,728 candidates), with no solvability filtering, and an independent
+physical output offset q (three values, hence 5,184 programs). A seal is programmed
+with a bounded seven-selector countermechanism. The goal is zero physical residual
 over both contexts, all ternary inputs and both internal trim selectors. Thus
 different world programs that have the same complete behavior are accepted as
 equivalent. The old four-point scalar-repair family is unchanged.
 
 The calibrated `coupled-transfer-v1` control reads physical response directly.
-The combined `coupled-evidence-v1` candidate adds a raw reader:
+The combined `coupled-evidence-v1` adds a raw reader:
 
 ```
+physical current-context response = n3 + q
 survey display = physical current-context response + reader contribution
-reader contribution = offset + gain * companion-context response
+reader contribution = reader_offset + companion-context upstream n2
 reference display = reader contribution
 ```
 
-All arithmetic is modulo 3; gain is 1 or 2 and offset is 0, 1 or 2. A reference
-cancels its current physical output while preserving the companion response.
+All arithmetic is modulo 3; reader strength is the public constant 1, and
+reader_offset is 0, 1 or 2. A reference cancels its current physical output
+while preserving the companion upstream path.
 Shared preparation, context and trim settings are essential to transferring the
 reference. The public contract states these semantics and parameter stability;
-it does not disclose the selected gain, offset or mechanisms. Matched readings
+it does not disclose the selected offsets or mechanisms. Matched readings
 subtract exactly, but cheaper reference-only, survey-only and passive policies
-must also be audited. The proof may reject or refine this construction.
+are audited. Full survey-only and reference-only closures retain incompatible
+physical targets in every joint world. Beyond scalar offset ambiguity, 524 of
+1,728 base worlds retain structural survey ambiguity, including 480 nonlinear
+worlds. Independent reviewer and standalone PoC reproduce these counts.
+
+The rejected original gain/final-response reader is preserved as a negative
+result in the independent review. An independent known-feature calibration
+variant was also rejected as merely a short separable calibration prefix.
 
 All experiments, including mission conditions, remain legal from the start.
 There are no stage locks. Physical preparation is ordinary configure/operate;
@@ -91,7 +101,8 @@ of the canonical engine. Prefer immutable public preparation history plus
 immutable private laws. Maintain raw/physical projections and data-only code.
 
 Compile seed-independent primitive/response tables and observation partitions
-once. Preserve joint posterior correlations and equivalence-class probability
+once. Store an immutable, integrity-checked offline public policy (about 311 KB);
+generation loads it without policy search. Preserve joint posterior correlations and equivalence-class probability
 mass. Bound caches and offline searches; timeouts mean unknown. Measure cold
 generation and peak memory before adopting large artifacts or parallelization.
 Do not blindly raise generic minimax limits; complete-behavior targets can use
@@ -107,9 +118,13 @@ The walkthrough is documentation inspiration, not the complete hard family.
   controls are user requirements. Revisit only for a demonstrated shared bug.
 - Full behavioral goal rather than a canonical hidden program: unresolved
   mechanisms must matter, but equivalent theories must remain valid.
-- Reference cross-talk candidate rather than another independent offset: ordinary
-  survey data can confound the physical and observation mechanisms. Reject if
-  independent proof finds the intended obstruction absent.
+- Use companion upstream cross-talk, not the rejected companion final response.
+  The reference leaves 24–288 physical targets; survey structural ambiguity is
+  present across all topologies and replacement positions. Do not claim every
+  fixture needs intervention or that calibration must occur first.
+- Offline greedy witnesses take at most 9 calibrated or 10 combined readings.
+  These are upper bounds, not optimality or difficulty claims. R1 has six spare
+  actions; diagnostic-plus6 adds six more without changing scientific fields.
 - Keep revision gated: earlier early-transition shortcut is a known negative
   result. A revised story is not evidence of a new capability requirement.
 - Follow existing pytest/Ruff/Pyright and source-binding conventions. This task

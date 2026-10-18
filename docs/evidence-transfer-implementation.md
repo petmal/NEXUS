@@ -7,7 +7,7 @@ This is the durable resume point for the approved feature work.
 - [x] Read AGENTS.md, architecture, current families and skill guidance.
 - [x] Confirm local clean `b36703d` equals PR 6 head.
 - [x] Write system design and this execution plan before source changes.
-- [ ] Baseline fast regression result (running; `/tmp/nexus-baseline-fast.log`).
+- [x] Baseline fast regression: 633 passed, 46 deselected, three existing warnings.
 
 ## Phase 1: independent finite proof
 
@@ -55,6 +55,13 @@ No main merge or paid model testing.
 
 ## Current checkpoint
 
-17 October 2026: plans written; candidate construction is not yet qualified.
-Python 3.14.8 runtime restored. Baseline fast tests started. Next: independent
-finite prototype and design review. No production code changed yet.
+18 October 2026: independent oracle and fresh design review exposed the original
+reader shortcut. Refined n2-companion design adopted and plans updated. Full
+physical prior has 5,184 programs/5,016 behaviors; combined prior 15,552 worlds.
+Public offline witnesses compiled: 9/10 readings, 310,700-byte policy asset.
+Revision is withheld: this stationary two-context construction permits early
+transition/joint inference, so required revision is not established.
+
+Runtime adapter implementation underway; not yet release validated. Next gates:
+independent/runtime conformance, full public policy traversal, live/replay tests,
+matrix and packaging, existing regression/source-binding refresh, fresh review.
