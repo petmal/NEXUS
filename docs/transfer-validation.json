@@ -1,0 +1,103 @@
+{
+  "version": "transfer-validation-v1",
+  "local_status": "passed",
+  "implementation_commit": "6d1525c4ba92cd79f6918101dc1874edc6072674",
+  "implementation_tree": "77c635dfb2ccb85b7717d7f6ce00f479b9c1cf46",
+  "source_sha256": "cfcbf85470644a5adc6986db4fe8850f986957067f449f9af48b48df16e32807",
+  "source_modules": 153,
+  "matrix_sha256": "01bea3595d1f34f1b4321d1f3c20b43f61c278d79f90f0b572cad76d3bc2b321",
+  "unique_tests_covered": 700,
+  "partitions": {
+    "fast": {
+      "unique_tests": 653,
+      "status": "passed",
+      "note": "652-test complete fast gate plus one added assertion-disabled-proof test; final 20-test targeted rerun passed."
+    },
+    "extended": {
+      "unique_tests": 45,
+      "status": "passed",
+      "seconds": 511.58
+    },
+    "stress_3_seeds": {
+      "unique_tests": 2,
+      "status": "passed",
+      "seconds": 135.87
+    }
+  },
+  "warnings": "Three existing Pydantic warnings from deliberately malformed test objects.",
+  "live_conformance": {
+    "physical_worlds": 5184,
+    "combined_worlds": 15552,
+    "total_wins_receipts_exact_replay": 20736,
+    "maximum_p1_actions": [
+      33,
+      37
+    ],
+    "all_wins_supported_by_public_evidence": true
+  },
+  "checks": {
+    "exhaustive_independent_scalar_oracle": true,
+    "every_compiled_policy_branch_independent": true,
+    "immutable_transfer_policy_recompiled": true,
+    "dynamics_reference_recompiled": true,
+    "repair_release_binding": true,
+    "new_pilot_13_rows": true,
+    "old_difficulty_pilot_10_rows": true,
+    "old_structural_pilot_8_rows": true,
+    "old_budget_diagnostic_8_rows": true,
+    "old_repair_p0_p1": true,
+    "isolated_wheel_source_and_preflight_match": true,
+    "http_privacy_and_receipt": true,
+    "cli_generate_public_qualify_private_solve_replay": true,
+    "ruff_new_modules": true,
+    "pyright_new_modules": true,
+    "frozen_lock": true,
+    "git_diff_check": true,
+    "actual_docker_build": true,
+    "oci_revision_label": true,
+    "all_four_matrix_preflights_in_image": true,
+    "repair_profiles_in_image": true
+  },
+  "coverage": {
+    "unique_physical_programs_in_matrix": 9,
+    "topologies": [
+      0,
+      1,
+      2
+    ],
+    "replacement_positions": [
+      0,
+      1,
+      2
+    ],
+    "primitive_union": [
+      0,
+      1,
+      2,
+      3
+    ],
+    "reader_offsets": [
+      0,
+      1,
+      2
+    ]
+  },
+  "revision_poc": {
+    "truthful_inherited_notebooks": 576,
+    "worlds_after_notebook": 9,
+    "early_transition_reading_upper": 3,
+    "required_revision_qualified": false,
+    "integrated": false
+  },
+  "limitations": [
+    "No empirical model difficulty or failure-rate result; no paid model calls.",
+    "Combined references admit a passive-only ten-reading/37-action witness; no universal intervention or stronger-D claim.",
+    "Fixed panels exist; no required adaptive-round or cognitive-depth theorem.",
+    "No local Docker/Podman executable; actual image/OCI/preflight validation is delegated to CI."
+  ],
+  "ci": {
+    "run_url": "https://github.com/petmal/NEXUS/actions/runs/39082935089",
+    "implementation_commit": "6d1525c4ba92cd79f6918101dc1874edc6072674",
+    "status": "success"
+  }
+}

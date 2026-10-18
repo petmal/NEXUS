@@ -1,6 +1,6 @@
 # Coupled transfer and evidence validity: system design
 
-Status: proof qualified; implementation underway, 18 October 2026. Approved baseline is feature branch
+Status: implemented and release-validated; empirical difficulty uncalibrated, 18 October 2026. Approved baseline is feature branch
 `feat/theory-prior-axis` at `b36703d868f83882543f6a77a6b5ce4b9f7e3f38`,
 confirmed against GitHub PR 6. Existing families and defaults remain supported.
 

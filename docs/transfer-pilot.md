@@ -149,3 +149,5 @@ Durable checkpoints: `evidence-transfer-implementation.md`, the two independent
 review reports, `evidence-transfer-proof.json`, `transfer-live-conformance.json`,
 and `transfer-preflight.json`. `verify_transfer_live.py` supports bounded seed
 ranges and source-bound restart checkpoints. No paid model runs were executed.
+The final local/image gate inventory is in `transfer-validation.json`; the tested
+implementation commit is `6d1525c4ba92cd79f6918101dc1874edc6072674`.

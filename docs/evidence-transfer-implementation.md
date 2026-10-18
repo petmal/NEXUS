@@ -74,15 +74,25 @@ Completed gates:
 - All 20,736 worlds win through live Session, within 33/37 P1 actions, with
   evidence-supported receipts and exact replay. Source-bound checkpoints saved.
 - 652 fast tests plus the subsequent assertion-disabled-proof regression pass
-  (653 unique fast tests); 20 final targeted tests pass.
+  (653 unique fast tests); 20 final targeted tests pass. All 45 extended tests
+  also pass: 700 collected tests have passing partitioned coverage overall.
 - Two three-seed property/stress tests pass.
 - Installed isolated wheel: release identity, generate, public qualify,
   omniscient solve/replay, and all 13 matrix rows pass.
 - New-module Ruff/Pyright, whitespace, immutable policy recompilation pass.
 - Public-only walkthrough and measured cold/warm performance are saved.
 
-Remaining at this checkpoint: finish the 45-test extended gate, synchronize the
-feature branch, verify actual-image CI, and record the final tested commit.
-No paid model calls, main merge, or MindTrial changes. Resume commands and proof
-limits are in `transfer-pilot.md`; full live verification uses
-`scripts/verify_transfer_live.py` with explicit seed ranges and checkpoints.
+Implementation and validation complete. Tested implementation commit:
+`6d1525c4ba92cd79f6918101dc1874edc6072674`, tree
+`77c635dfb2ccb85b7717d7f6ce00f479b9c1cf46`; local and remote matched exactly.
+[CI 39082935089](https://github.com/petmal/NEXUS/actions/runs/39082935089)
+passed, including the actual Docker build, OCI revision label, all four matrix
+preflights and both repair profiles in the image. The final documentation
+checkpoint changes no package code, image configuration, script or matrix.
+See `transfer-validation.json` for the evidence inventory and source identity.
+
+Next action belongs to empirical evaluation: run the documented pilot on real
+models with fresh contexts, retaining extended diagnostics. No paid model calls,
+main merge, or MindTrial changes were made. Commands and proof limits are in
+`transfer-pilot.md`; full live verification uses `scripts/verify_transfer_live.py`
+with explicit seed ranges and checkpoints.
