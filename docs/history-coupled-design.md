@@ -1,6 +1,7 @@
 # History-coupled investigation — design and proof contract
 
-Status: implementation in progress. Operator-only document. Existing families,
+Status: implemented as an experimental PoC; strict deep-tier admission failed.
+Operator-only document. Existing families,
 seeds, action charging, receipts and player observations retain their contracts.
 
 ## Why this experiment

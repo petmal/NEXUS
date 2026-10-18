@@ -72,29 +72,29 @@ checks cover win, exhaustion and explicit finalization.
 ## Ten-execution matrix
 
 All rows use P1/R1, fresh service and model context, no external Python, extended
-terminal diagnostics. Standard unknown-law allowance is 43 actions; generous is49.
-T0 keeps the same43-action allowance, separating disclosure from resource pressure.
+terminal diagnostics. Standard unknown-law allowance is 43 actions; generous is 49.
+T0 keeps the same 43-action allowance, separating disclosure from resource pressure.
 Seeds and operator labels are absent from player prompts.
 
 | Row | Family / seed | Condition | Shortest physical pulses | Expected relative challenge |
 |---|---|---|---:|---|
-| 01 | Existing coupled evidence /6943 | Regression | n/a | Previously solved by Astra; baseline |
-| 02 | History /440 | Exact-law/procedure control | 6 | Low; execution and state tracking |
-| 03 | History /440 | Unknown law | 6 | More operational depth than other chosen worlds; empirical difficulty unknown |
-| 04 | History /440 | Same world,+6 actions | 6 | Same science; resource-sensitivity control |
-| 05 | History /239 | Passive-indistinguishable orientation rival of440 | 5 | Different final procedure under similar passive evidence |
-| 06 | History /216 | Joint-consistency witness world | 4 | Correlated explanations; the model may choose a different trajectory |
-| 07 | History /216 | Exact-law/procedure control | 4 | Low |
-| 08 | History /216 | Same world,+6 actions | 4 | Same science; resource-sensitivity control |
-| 09 | History /483 | Different gate composition | 4 | Coverage; difficulty uncalibrated |
-| 10 | History /557 | Further gate composition | 4 | Coverage; difficulty uncalibrated |
+| 01 | Existing coupled evidence / 6943 | Regression | n/a | Previously solved by Astra; baseline |
+| 02 | History / 440 | Exact-law/procedure control | 6 | Low; execution and state tracking |
+| 03 | History / 440 | Unknown law | 6 | More operational depth than other chosen worlds; empirical difficulty unknown |
+| 04 | History / 440 | Same world, +6 actions | 6 | Same science; resource-sensitivity control |
+| 05 | History / 239 | Passive-indistinguishable orientation rival of 440 | 5 | Different final procedure under similar passive evidence |
+| 06 | History / 216 | Joint-consistency witness world | 4 | Correlated explanations; the model may choose a different trajectory |
+| 07 | History / 216 | Exact-law/procedure control | 4 | Low |
+| 08 | History / 216 | Same world, +6 actions | 4 | Same science; resource-sensitivity control |
+| 09 | History / 483 | Different gate composition | 4 | Coverage; difficulty uncalibrated |
+| 10 | History / 557 | Further gate composition | 4 | Coverage; difficulty uncalibrated |
 
-The live reference used34 actions on01 and 9,23,23,27,21,7,21,22,23 respectively on
+The live reference used 34 actions on 01 and 9, 23, 23, 27, 21, 7, 21, 22, 23 respectively on
 02–10. These are achieved witnesses, not optimal player costs. Four distinct
 normalized mechanisms are represented; selecting only the two six-pulse worlds
 would have produced poor coverage.
 
-**Recommendation:** start with03,06,09 if minimizing evaluation spend. If Astra
+**Recommendation:** start with 03, 06, 09 if minimizing evaluation spend. If Astra
 solves them cleanly, do not assume longer runs or tighter budgets will expose the
 intended weakness. The next scientific gate is stronger operational coupling and
 qualification against the actual goal-test channel, preserving fair recovery.
@@ -121,17 +121,37 @@ Replace `podman` with `docker` for Docker. Do not ignore a failing image preflig
 The Docker build preserves the OCI revision label and canonicalizes Windows line
 endings before checking the qualified source binding.
 
-## Validation / resumption
+## Completed validation
 
-See `history-coupled-design.md`, `history-coupled-implementation.md`, independent
-`history-coupled-proof.json`, and both design/implementation review reports.
-The proof and preflight scripts are deterministic, standard repository jobs.
-Matrix preflight records exact source identity and fails closed on stale output,
-false rival claims or any live/replay mismatch. CI runs proof, matrix and actual
-container preflight. Final release results are appended below after completion.
+Tested source commit: `f22541a981347b7fce335ee23786331a5eb193af`.
+[Full CI run 39166735873](https://github.com/petmal/NEXUS/actions/runs/39166735873)
+passed on Python 3.14.7, including:
 
-Local fast gates: **677 passed**, plus **9 solver proof tests**. The15 repair
-construction/conformance/proof prerequisites also passed. Dynamics policy nodes
-were independently rebuilt and remained identical; its source identity and the
-unchanged repair proof/witness source binding were refreshed. Extended and image
-results are pending at this implementation checkpoint.
+- 9 solver-proof, 677 fast, 45 extended, and 2 stress tests.
+- Cross-seed coverage of 72 legacy worlds across 24 profiles and three seeds.
+- Independent history proof and all ten source-bound matrix rows.
+- CLI generation, qualification, solution and canonical replay checks.
+- Actual Docker build, OCI revision label, and repair, difficulty, structural,
+  budget, transfer, Astra and history image preflights.
+
+Local validation also passed on Python 3.14.8: 677 fast tests, 45 extended tests,
+9 solver-proof tests and the 15 repair construction/conformance/proof prerequisites.
+Ten actual CLI-started HTTP sessions from the delivered YAML inputs passed live
+reference play, budgets, schemas, correct/incorrect receipt validation and private
+extended diagnostics. No paid model calls were made.
+
+The legacy dynamics reference was independently rebuilt after the shared
+capability refactor: all 3,043 policy nodes remained identical. Its source identity
+and the unchanged repair proof/witness source binding were refreshed through the
+required checks.
+
+See `history-coupled-validation.json` for counts, timings and source/matrix hashes;
+`history-coupled-proof.json` for scientific findings; and
+`history-coupled-implementation.md` for the completed resumption ledger. Design and
+implementation reviews are also committed. Any later source change requires
+fresh qualification and preflight. A documentation-only follow-up records these
+results without changing the tested source.
+
+All software release gates passed. The separate **unavoidable-deep-reasoning
+admission gate failed**, so the family remains experimental and its real-model
+difficulty remains unmeasured.

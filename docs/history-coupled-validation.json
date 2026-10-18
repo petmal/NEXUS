@@ -1,6 +1,6 @@
 {
   "version": "history-validation-v1",
-  "status": "fast-and-proof-gates-passed-extended-and-image-pending",
+  "status": "passed-experimental-family",
   "matrix_status": "passed",
   "source_digest": "ae69f5a8f540b546660a66c3265b5985889af0f54f6efd43d4cdac99f78d9653",
   "matrix_sha256": "dcd3f03e9ad10a5e233a6979b6f3238bad8ffcf17b56757c3c0532a44d61bc4a",
@@ -256,11 +256,58 @@
   "deep_tier_admitted": false,
   "repair_prerequisite_tests": 15,
   "solver_tests": 9,
-  "image_ci": "pending",
+  "image_ci": "passed",
   "fast_tests": {
     "passed": 677,
     "deselected": 45,
     "seconds": 171.01,
     "warnings": 3
+  },
+  "extended_tests": {
+    "passed": 45,
+    "deselected": 686,
+    "seconds": 573.74
+  },
+  "tested_source_commit": "f22541a981347b7fce335ee23786331a5eb193af",
+  "ci": {
+    "run_id": 39166735873,
+    "job_id": 117791133447,
+    "url": "https://github.com/petmal/NEXUS/actions/runs/39166735873",
+    "conclusion": "success",
+    "python_version": "3.14.7",
+    "solver_tests": {
+      "passed": 9,
+      "seconds": 3.44
+    },
+    "fast_tests": {
+      "passed": 677,
+      "deselected": 45,
+      "warnings": 3,
+      "seconds": 198.81
+    },
+    "extended_tests": {
+      "passed": 45,
+      "deselected": 686,
+      "seconds": 734.08
+    },
+    "stress_tests": {
+      "passed": 2,
+      "deselected": 1,
+      "seconds": 200.97,
+      "profile_seed_worlds": 72
+    },
+    "cli_smoke": "passed",
+    "container_build": "passed",
+    "oci_revision_label": "passed",
+    "container_preflights": [
+      "repair",
+      "difficulty",
+      "structural",
+      "budget",
+      "transfer",
+      "astra",
+      "history"
+    ],
+    "container_smoke": "passed"
   }
 }
