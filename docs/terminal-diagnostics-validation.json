@@ -25,8 +25,19 @@
     "fresh_review": "no remaining blocker after correcting compiler cycle"
   },
   "image_ci": {
-    "status": "pending",
-    "note": "No local container runtime; PR base runs actual-image gate."
+    "status": "pending_after_packaging_correction",
+    "initial_run_id": 39147658305,
+    "initial_job_id": 117734673951,
+    "initial_run_url": "https://github.com/petmal/NEXUS/actions/runs/39147658305",
+    "passed_steps": [
+      "immutable references and both transfer matrix preflights",
+      "solver proof",
+      "fast tests",
+      "extended tests",
+      "cross-seed stress",
+      "CLI smoke"
+    ],
+    "initial_failure": "Docker build context excluded docs/astra-diagnostic-matrix.json; corrected explicit .dockerignore inclusion. Full CI rerun required."
   },
   "warnings": "Three existing Pydantic warnings from deliberately malformed test data."
 }

@@ -76,7 +76,8 @@ a valid terminal state. A large amount of static algebra need not be involved.
 forms. Give reusable specimens, exact readings, a readable action history and
 moderate budgets. Start with 2–3 state variables and 3–4 interacting stages.
 Do not make hidden state arbitrary or repair impossible. D controls the number
-of causally dependent stages; T controls which transition laws are supplied,
+of scientifically necessary dependencies (not merely the number of apparatuses);
+T controls which transition laws are supplied,
 parameterized or structurally unknown. P controls room logistics separately.
 
 **Qualification:** exhibit histories with identical current readings but different
@@ -84,7 +85,10 @@ future responses; prove the history resolves that ambiguity. Show noncommuting
 orders and a reachable exact goal. Compare against single-step fitting, latest-
 observation-only policies, greedy local repair, all legal probes and failed-finish
 feedback. Report a constructive policy and check whether fewer feedback rounds
-still solve the prior. A long witness alone is not evidence of necessary depth.
+still solve the prior. A long witness alone is not evidence of necessary depth. Include a known-law
+control with the same physical execution: failure there is operational planning,
+not evidence that unknown-theory inference became harder. Repeat qualification
+with a generous allowance to expose depth produced only by a tight budget.
 
 **Limits:** state tracking can become a small finite automaton Astra solves easily;
 robotic failures may not transfer to exact symbolic observations. Expected added
@@ -186,6 +190,30 @@ Log decision support, joint contradiction, necessary contrast acquisition,
 history-state mistakes, revision scope and actual repair success separately.
 No chain-of-thought disclosure is required. Test generous-budget controls and
 fresh held-out mechanisms before claiming the candidate topples Astra.
+
+## Compatibility with the current plugin architecture
+
+The versioned ontology registry and `ScientificRuntime` adapter can host these
+families while keeping previous episodes unchanged. Typed specimen schemas,
+`transform`, `assess_mission`, public evidence, posterior inference and public
+policy witnesses belong in the new plugin. The core continues to own action
+charging, transactions, receipts and replay.
+
+There is one important boundary: current observations serialize domain artifact
+payloads. **Do not put a hidden latch directly into that payload.** For the first
+PoC, store a bounded, publicly determined preparation/action history plus cached
+readings; recompute the latent state from that history and the immutable private
+law inside `transform`. This keeps hidden truth out of observations and canonical
+public-state hashes. It is cheap at the proposed depth. Private mutable latent
+state would instead need an explicit, audited projection/replay extension.
+
+Likewise, the current transform hook receives one artifact rather than arbitrary
+world state. Start with interactions between stages of the same specimen.
+Cross-specimen operations would need a deliberate adapter capability, not hidden
+side effects. A simultaneous multi-property goal fits `assess_mission`; its
+terminal inference tracker must follow the new operational semantics. New
+hypothesis/state caps must be proved, not inherited from transfer's 15,552-world
+cap. No new runtime mechanics are included in this timeout-fix patch.
 
 ## Ten-execution diagnostic available now
 

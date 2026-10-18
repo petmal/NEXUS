@@ -14,3 +14,4 @@ docs/*
 !docs/structural-model-matrix.json
 !docs/budget-diagnostic-matrix.json
 !docs/transfer-model-matrix.json
+!docs/astra-diagnostic-matrix.json
