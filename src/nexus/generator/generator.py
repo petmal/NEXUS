@@ -1675,8 +1675,9 @@ def generate_episode(
     from nexus.ontology.catalog import BUILTINS
     if budget_profile not in ("standard", "diagnostic-plus6"):
         raise ValueError("unknown budget profile")
-    if budget_profile != "standard" and science_family != "compositional-repair-v1":
-        raise ValueError("diagnostic budget profile requires compositional-repair-v1")
+    budget_families = ("compositional-repair-v1", "coupled-transfer-v1", "coupled-evidence-v1")
+    if budget_profile != "standard" and science_family not in budget_families:
+        raise ValueError("diagnostic budget profile requires compositional-repair-v1 or a transfer family")
     if presentation_version not in (None, CURRENT):
         raise ValueError("unsupported presentation version")
     if science_family not in BUILTINS:
@@ -1688,7 +1689,7 @@ def generate_episode(
             seed, discovery_level=discovery_level, planning_level=planning_level,
             resource_pressure=resource_pressure, theory_level=theory_level,
             verifier_secret=verifier_secret,
-            **({"budget_profile": budget_profile} if science_family == "compositional-repair-v1" else {}),
+            **({"budget_profile": budget_profile} if science_family in budget_families else {}),
         )
         return attach(episode, presentation_version)
     if axis_version != 1:

@@ -78,9 +78,9 @@ def generate(
     axis_version: int = typer.Option(1, min=1, max=2, envvar="NEXUS_AXIS_VERSION",
                                     help="1=legacy profiles; 2=scientific investigation semantics."),
     science_family: str = typer.Option("shared-response-v1", envvar="NEXUS_SCIENCE_FAMILY",
-        help="Scientific family: shared-response-v1, coupled-network-v1, resonant-network-v1, causal-mechanisms-v1, coupled-repair-v1, coupled-dynamics-v1, or compositional-repair-v1 (requires axes v2)."),
+        help="Scientific family: shared-response-v1, coupled-network-v1, resonant-network-v1, causal-mechanisms-v1, coupled-repair-v1, coupled-dynamics-v1, compositional-repair-v1, coupled-transfer-v1, or coupled-evidence-v1 (requires axes v2)."),
     budget_profile: str = typer.Option("standard", envvar="NEXUS_BUDGET_PROFILE",
-        help="standard or diagnostic-plus6 (compositional T3/D5/P1/R1 only)."),
+        help="standard or diagnostic-plus6 (compositional T3/D5/P1/R1; transfer families P0/P1,R1)."),
     discovery_level: int = typer.Option(
         0,
         min=0,
@@ -331,9 +331,9 @@ def serve_session(
     axis_version: int = typer.Option(1, min=1, max=2, envvar="NEXUS_AXIS_VERSION",
                                     help="1=legacy profiles; 2=scientific investigation semantics."),
     science_family: str = typer.Option("shared-response-v1", envvar="NEXUS_SCIENCE_FAMILY",
-        help="Scientific family: shared-response-v1, coupled-network-v1, resonant-network-v1, causal-mechanisms-v1, coupled-repair-v1, coupled-dynamics-v1, or compositional-repair-v1 (requires axes v2)."),
+        help="Scientific family: shared-response-v1, coupled-network-v1, resonant-network-v1, causal-mechanisms-v1, coupled-repair-v1, coupled-dynamics-v1, compositional-repair-v1, coupled-transfer-v1, or coupled-evidence-v1 (requires axes v2)."),
     budget_profile: str = typer.Option("standard", envvar="NEXUS_BUDGET_PROFILE",
-        help="standard or diagnostic-plus6 (compositional T3/D5/P1/R1 only)."),
+        help="standard or diagnostic-plus6 (compositional T3/D5/P1/R1; transfer families P0/P1,R1)."),
     discovery_level: int = typer.Option(
         0,
         min=0,

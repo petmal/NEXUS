@@ -52,6 +52,16 @@ physical targets in every joint world. Beyond scalar offset ambiguity, 524 of
 1,728 base worlds retain structural survey ambiguity, including 480 nonlinear
 worlds. Independent reviewer and standalone PoC reproduce these counts.
 
+Implementation review exposed a separate limitation: complete paired passive
+raw observations identify every combined world, and one context suffices in
+some worlds. These upstream observations are richer than physical-only data.
+Therefore calibrated physical-only intervention/context obstructions must not
+be transferred to the combined variant. The final matrix reports both scopes;
+combined evidence is an orthogonal capability contrast, not universally stronger
+D. A passive-only greedy witness also uses at most ten readings. Three tested
+delta-reader refinements restore passive obstruction but lose all structural
+survey ambiguity, so they were rejected. No stronger depth claim is attached.
+
 The rejected original gain/final-response reader is preserved as a negative
 result in the independent review. An independent known-feature calibration
 variant was also rejected as merely a short separable calibration prefix.

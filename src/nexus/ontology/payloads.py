@@ -7,9 +7,12 @@ from nexus.ontology.categorical.schema import SCHEMAS as CATEGORICAL
 from nexus.ontology.causal.schema import SCHEMAS as CAUSAL
 from nexus.ontology.dynamics.schema import SCHEMAS as DYNAMICS
 from nexus.ontology.repair.schema import SCHEMAS as REPAIR
+from nexus.ontology.transfer.schema import SCHEMAS as TRANSFER
 
 _SCHEMAS = MappingProxyType(
     {
+        "coupled-transfer-v1": MappingProxyType(dict(TRANSFER)),
+        "coupled-evidence-v1": MappingProxyType(dict(TRANSFER)),
         "compositional-repair-v1": MappingProxyType(dict(COMPOSITIONAL)),
         "categorical-chain-poc-v1": MappingProxyType(dict(CATEGORICAL)),
         "causal-mechanisms-v1": MappingProxyType(dict(CAUSAL)),

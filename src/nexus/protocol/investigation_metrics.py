@@ -188,6 +188,9 @@ def summarize(
     final_settings = runtime.submitted(state) or ()
     matches = sum(left == right for left, right in zip(final_settings[1:], expected[1:]))
     runtime.log_terminal(spec, calibration_count, no_signal_count, after_resolved_count, first_classes)
+    terminal_belief_logger = getattr(runtime, "log_terminal_belief", None)
+    if terminal_belief_logger is not None:
+        terminal_belief_logger(posterior)
     if runtime.performance_style == "mission":
         if not isinstance(spec, DomainInvestigation):
             raise ValueError("mission adapter requires a domain investigation")

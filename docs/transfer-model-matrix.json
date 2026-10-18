@@ -1,0 +1,21 @@
+{
+  "version": "transfer-pilot-v1",
+  "external_python": false,
+  "fresh_context_per_execution": true,
+  "recommended_tool_call_limit": 120,
+  "runs": [
+    {"id":"transfer-01","family":"coupled-evidence-v1","seed":3550,"control":true},
+    {"id":"transfer-02","family":"coupled-transfer-v1","seed":3550,"passive_rival":3562},
+    {"id":"transfer-03","family":"coupled-evidence-v1","seed":3550,"survey_rival":3688,"passive_rival":3562},
+    {"id":"transfer-04","family":"coupled-evidence-v1","seed":3550,"budget_profile":"diagnostic-plus6","survey_rival":3688,"passive_rival":3562},
+    {"id":"transfer-05","family":"coupled-evidence-v1","seed":3688,"survey_rival":3550},
+    {"id":"transfer-06","family":"coupled-transfer-v1","seed":3},
+    {"id":"transfer-07","family":"coupled-evidence-v1","seed":3,"survey_rival":864},
+    {"id":"transfer-08","family":"coupled-evidence-v1","seed":6943,"survey_rival":7051},
+    {"id":"transfer-09","family":"coupled-evidence-v1","seed":13847,"survey_rival":14255},
+    {"id":"transfer-10","family":"coupled-evidence-v1","seed":14255,"survey_rival":13847},
+    {"id":"transfer-11","family":"coupled-evidence-v1","seed":3562,"passive_rival":3550},
+    {"id":"transfer-12","family":"coupled-evidence-v1","seed":7051,"survey_rival":6943},
+    {"id":"transfer-13","family":"coupled-evidence-v1","seed":864,"survey_rival":3}
+  ]
+}

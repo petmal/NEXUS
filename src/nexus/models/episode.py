@@ -192,9 +192,9 @@ class PrivateEpisode(BaseModel):
     def validate_private_links(self) -> "PrivateEpisode":
         if self.generation_metadata.budget_profile != "standard" and (
             not isinstance(self.public.investigation, DomainInvestigation)
-            or self.public.investigation.ontology != "compositional-repair-v1"
+            or self.public.investigation.ontology not in ("compositional-repair-v1", "coupled-transfer-v1", "coupled-evidence-v1")
         ):
-            raise ValueError("diagnostic budget profile requires compositional-repair-v1")
+            raise ValueError("diagnostic budget profile requires compositional-repair-v1 or a transfer family")
         if (self.public.investigation is None) != (self.investigation_truth is None):
             raise ValueError("scientific apparatus requires private truth and public specification")
         if isinstance(self.public.investigation, DomainInvestigation):

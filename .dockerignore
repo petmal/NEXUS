@@ -13,3 +13,4 @@ docs/*
 !docs/difficulty-model-matrix.json
 !docs/structural-model-matrix.json
 !docs/budget-diagnostic-matrix.json
+!docs/transfer-model-matrix.json

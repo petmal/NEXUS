@@ -1,0 +1,141 @@
+{
+  "scope": "Fresh Linux process, imports excluded; shared host, no container timing/SLA or model-cost claim.",
+  "samples": [
+    {
+      "family": "coupled-transfer-v1",
+      "repetition": 0,
+      "cold_generation_seconds": 0.030050068000036845,
+      "warm_generation_seconds": 0.00030769599970881245,
+      "first_live_policy_including_terminal_seconds": 1.7118714719999844,
+      "peak_rss_kib_linux": 62604
+    },
+    {
+      "family": "coupled-evidence-v1",
+      "repetition": 0,
+      "cold_generation_seconds": 0.043279055999846605,
+      "warm_generation_seconds": 0.0004825550004170509,
+      "first_live_policy_including_terminal_seconds": 3.3423865899999328,
+      "peak_rss_kib_linux": 77792
+    },
+    {
+      "family": "coupled-transfer-v1",
+      "repetition": 1,
+      "cold_generation_seconds": 0.028212745000018913,
+      "warm_generation_seconds": 0.00029298399977051304,
+      "first_live_policy_including_terminal_seconds": 1.557693535999988,
+      "peak_rss_kib_linux": 62500
+    },
+    {
+      "family": "coupled-evidence-v1",
+      "repetition": 1,
+      "cold_generation_seconds": 0.032119412000156444,
+      "warm_generation_seconds": 0.0004954169999109581,
+      "first_live_policy_including_terminal_seconds": 3.2217752239998845,
+      "peak_rss_kib_linux": 77808
+    },
+    {
+      "family": "coupled-transfer-v1",
+      "repetition": 2,
+      "cold_generation_seconds": 0.02857556900016789,
+      "warm_generation_seconds": 0.0002811469998960092,
+      "first_live_policy_including_terminal_seconds": 1.529454104999786,
+      "peak_rss_kib_linux": 62656
+    },
+    {
+      "family": "coupled-evidence-v1",
+      "repetition": 2,
+      "cold_generation_seconds": 0.04318590100001529,
+      "warm_generation_seconds": 0.0004427259996191424,
+      "first_live_policy_including_terminal_seconds": 2.8761495779999677,
+      "peak_rss_kib_linux": 77908
+    }
+  ],
+  "fixed_panels": {
+    "calibrated": {
+      "query_indices": [
+        0,
+        221,
+        334,
+        144,
+        404,
+        172,
+        441,
+        183,
+        406,
+        31,
+        457,
+        67,
+        303,
+        408,
+        162
+      ],
+      "readings": 15,
+      "unresolved_groups_after_each": [
+        3,
+        9,
+        27,
+        81,
+        243,
+        711,
+        1386,
+        1245,
+        567,
+        330,
+        138,
+        69,
+        15,
+        6,
+        0
+      ],
+      "seconds": 1.3922714799996356,
+      "scope": "Constructive fixed nonadaptive panel over complete public grammar, not a minimal panel."
+    },
+    "coupled": {
+      "query_indices": [
+        0,
+        486,
+        212,
+        458,
+        161,
+        350,
+        666,
+        467,
+        137,
+        870,
+        249,
+        771,
+        231,
+        675,
+        305,
+        735
+      ],
+      "readings": 16,
+      "unresolved_groups_after_each": [
+        3,
+        9,
+        27,
+        81,
+        243,
+        729,
+        2169,
+        4320,
+        3852,
+        1935,
+        954,
+        369,
+        153,
+        63,
+        18,
+        0
+      ],
+      "seconds": 18.436429171000327,
+      "scope": "Constructive fixed nonadaptive panel over complete public grammar, not a minimal panel."
+    }
+  },
+  "status": "passed",
+  "coupled_passive_only_witness": {
+    "readings": 10,
+    "p1_action_upper": 37,
+    "scope": "Complete-prior public greedy upper, no intervention required; not an optimum."
+  }
+}

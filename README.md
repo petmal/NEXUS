@@ -1,6 +1,14 @@
 # NEXUS
 
-The current feature adds opt-in `compositional-repair-v1`: discover shared local
+The latest opt-in families are `coupled-transfer-v1` (a counterprogram must match
+the complete physical behavior) and `coupled-evidence-v1` (raw readings also
+depend on a coupled upstream mechanism). See the [qualified pilot and limits](docs/transfer-pilot.md),
+[public-response walkthrough](docs/transfer-player-walkthrough.md), and
+[implementation ledger](docs/evidence-transfer-implementation.md). These are
+experimental capability contrasts, not a promise that the combined reader is
+uniformly harder or that models will fail. Existing defaults remain unchanged.
+
+The earlier opt-in `compositional-repair-v1` discovers shared local
 mechanisms across two contexts and apply one joint physical repair. See the
 [eight-run experimental pilot](docs/structural-model-matrix.md),
 [paired budget diagnostic](docs/budget-diagnostic-matrix.md),

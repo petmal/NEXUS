@@ -49,6 +49,20 @@ BUILTINS = MappingProxyType(
         item.family: item
         for item in (
             OntologyDefinition(
+                "coupled-transfer-v1", "coupled-transfer-v1",
+                runtime_module="nexus.ontology.transfer.runtime",
+                generator=("nexus.ontology.transfer.generation", "generate_transfer"),
+                qualifier=("nexus.ontology.transfer.qualification", "qualify_transfer"),
+                standalone_contract=True,
+            ),
+            OntologyDefinition(
+                "coupled-evidence-v1", "coupled-evidence-v1",
+                runtime_module="nexus.ontology.transfer.runtime",
+                generator=("nexus.ontology.transfer.generation", "generate_evidence"),
+                qualifier=("nexus.ontology.transfer.qualification", "qualify_transfer"),
+                standalone_contract=True,
+            ),
+            OntologyDefinition(
                 "compositional-repair-v1", "compositional-repair-v1",
                 runtime_module="nexus.ontology.compositional.runtime",
                 generator=("nexus.ontology.compositional.generation", "generate_compositional"),

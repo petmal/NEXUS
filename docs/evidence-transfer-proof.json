@@ -9,10 +9,47 @@
   "survey_only_incompatible_rival_for_every_world": true,
   "reference_only_incompatible_rival_for_every_world": true,
   "matched_subtraction_recovers_physical_response": true,
+  "structural_survey_closure": {
+    "groups": 1431,
+    "ambiguous_groups": 227,
+    "affected_base_worlds": 524,
+    "nonlinear_affected_base_worlds": 480,
+    "by_topology": {
+      "0": 196,
+      "1": 152,
+      "2": 176
+    },
+    "by_replacement_location": {
+      "0": 168,
+      "1": 308,
+      "2": 48
+    }
+  },
+  "reference_remaining_base_targets_histogram": {
+    "8": 96,
+    "24": 16,
+    "96": 4,
+    "16": 12
+  },
   "passive": {
     "groups": 4794,
     "ambiguous_groups": 222,
     "affected_worlds": 444
+  },
+  "coupled_paired_passive": {
+    "groups": 5184,
+    "ambiguous_groups": 0,
+    "affected_worlds": 0
+  },
+  "coupled_paired_context_0": {
+    "groups": 3336,
+    "ambiguous_groups": 600,
+    "affected_worlds": 2448
+  },
+  "coupled_paired_context_1": {
+    "groups": 3336,
+    "ambiguous_groups": 600,
+    "affected_worlds": 2448
   },
   "context_0_only": {
     "groups": 546,
@@ -29,10 +66,54 @@
     "ambiguous_groups": 144,
     "affected_worlds": 546
   },
+  "guess_bounds": {
+    "scope": "Uniform syntax-world prior; any adaptive sequence with at most listed ternary readings and binary finishes. Successful target leaves <= guesses*3**readings, weighted by largest behavior classes. Preparation is granted free; targeted matrix rates are not bounded by this population statement.",
+    "bounds": [
+      {
+        "readings": 0,
+        "guesses": 1,
+        "correct_world_mass_upper": 12,
+        "population": 5184
+      },
+      {
+        "readings": 0,
+        "guesses": 3,
+        "correct_world_mass_upper": 36,
+        "population": 5184
+      },
+      {
+        "readings": 1,
+        "guesses": 1,
+        "correct_world_mass_upper": 36,
+        "population": 5184
+      },
+      {
+        "readings": 2,
+        "guesses": 2,
+        "correct_world_mass_upper": 108,
+        "population": 5184
+      },
+      {
+        "readings": 3,
+        "guesses": 3,
+        "correct_world_mass_upper": 234,
+        "population": 5184
+      }
+    ]
+  },
   "revision_poc": {
     "integrate_required_revision": false,
-    "reason": "Both contexts are accessible from the start. Early transition plus joint stationary inference is legal; a provisional inherited program does not force belief revision. Context-restricted inference loses target information, but context order is arbitrary.",
-    "scope": "Negative gate for this stationary construction; no claim that all revision designs are impossible."
+    "candidate": "Truthful inherited pre-change topology, primitives and q; one different primitive replacement after a player-triggered transition.",
+    "inherited_notebooks_checked": 576,
+    "conditioned_worlds_per_notebook": 9,
+    "remaining_target_range": [
+      7,
+      9
+    ],
+    "early_transition_then_stationary_reading_upper": 3,
+    "old_context_measurements_in_witness": 0,
+    "reason": "Every conditioned notebook has an after-trigger-only winning witness. Trigger-first leaves exactly the stationary posterior; no mistaken initial commitment, prior investigation or actual belief revision is required.",
+    "scope": "Negative gate for this candidate, no claim that all revision designs are impossible. A merely provisional unsupported note cannot be treated as truthful evidence."
   },
   "claims_excluded": [
     "required adaptive rounds",
@@ -40,5 +121,5 @@
     "model failure rate",
     "reference-first order is necessary"
   ],
-  "seconds": 33.282202
+  "seconds": 37.119403
 }

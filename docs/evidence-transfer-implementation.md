@@ -62,6 +62,27 @@ Public offline witnesses compiled: 9/10 readings, 310,700-byte policy asset.
 Revision is withheld: this stationary two-context construction permits early
 transition/joint inference, so required revision is not established.
 
-Runtime adapter implementation underway; not yet release validated. Next gates:
-independent/runtime conformance, full public policy traversal, live/replay tests,
-matrix and packaging, existing regression/source-binding refresh, fresh review.
+The runtime adapters, registry/schema admission, public contracts, exact
+posterior, terminal logs, immutable policy cache, CLI and image preflight are
+implemented. Fresh implementation review found no remaining correctness blocker.
+It found that combined passive observations resolve the whole prior; that
+negative ablation is now explicit in the oracle, matrix, tests and operator guide.
+Three delta-reader alternatives lost structural survey ambiguity and were rejected.
+
+Completed gates:
+- Every independent policy branch; exhaustive independent arithmetic.
+- All 20,736 worlds win through live Session, within 33/37 P1 actions, with
+  evidence-supported receipts and exact replay. Source-bound checkpoints saved.
+- 652 fast tests plus the subsequent assertion-disabled-proof regression pass
+  (653 unique fast tests); 20 final targeted tests pass.
+- Two three-seed property/stress tests pass.
+- Installed isolated wheel: release identity, generate, public qualify,
+  omniscient solve/replay, and all 13 matrix rows pass.
+- New-module Ruff/Pyright, whitespace, immutable policy recompilation pass.
+- Public-only walkthrough and measured cold/warm performance are saved.
+
+Remaining at this checkpoint: finish the 45-test extended gate, synchronize the
+feature branch, verify actual-image CI, and record the final tested commit.
+No paid model calls, main merge, or MindTrial changes. Resume commands and proof
+limits are in `transfer-pilot.md`; full live verification uses
+`scripts/verify_transfer_live.py` with explicit seed ranges and checkpoints.

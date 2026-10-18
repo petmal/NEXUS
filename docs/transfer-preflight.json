@@ -1,0 +1,850 @@
+{
+  "version": "transfer-preflight-v1",
+  "status": "passed",
+  "sources": {
+    "__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "cli.py": "4e3c6da8cbd6371f24e868f095bf9aa324efe19fd647fe14e681a7d24a61f355",
+    "diagnostics.py": "a4654237788f022f5db1b1a7bc22c0d0fbfec497203a049940cebcfcdea1ba20",
+    "engine/__init__.py": "75976174fce0ad3d8238137d1f10cf64f4f8303dda1af9ba667ff505f063bdfb",
+    "engine/canonical.py": "8376561fe738e77bfacb1b648805631c1f6270f67c1d872278292bf1fd05e72d",
+    "engine/engine.py": "9935fee807c2ec273fa754499b2910864e765a1b1cbd94a44c6e2cfbe7cf62a6",
+    "engine/goals.py": "e7640e41f25e59fce0727c5ff2d724a0e78020e683657402c720f5bc33521afc",
+    "engine/investigation.py": "26ae2b94a7e4009e1f11e0d76abfd0721f0ce39c9f78beb96f4c99f6139bfa6d",
+    "engine/network.py": "af9b5e080894727ae5826a4efb4e0915b8e71bd8723683c9e10450379b23980b",
+    "engine/replay.py": "f02dbbffcfb0f6fca8fc24d8af5f0ee1343caa3c7b002b8303195b82cfd1f93e",
+    "engine/resonance.py": "c9bfa61ae60acc628c651769c20e0503cab4c63c94e0613e57f3e05e4d847e6a",
+    "engine/rules.py": "1150037cc85bfde695e90032ba930f19da24c7910cc28479ec46cc7437be1778",
+    "entrypoint.py": "ee7dd624ebb36b8b20568583892728274744f5a71e6c2e9ece24557ec753a385",
+    "evaluation/__init__.py": "fdf4cf1fa3c7213f2687aa137774dc54b0b8d2a1d624a85ccf9ec151600426e0",
+    "evaluation/budget_diagnostic.py": "f1478f63cd67b54d6334f9ae5a07cb1214a66cc9fc36d88722eea2dbd6f1a137",
+    "evaluation/difficulty.py": "131b89651dcf9108a4ee66a91e31e321adc88707dced6b8355e30d780cbc9e23",
+    "evaluation/matrix.py": "06624362b7f11866d4cc18d09155e34ecd8db41947eda433e528c2fc757fc8b9",
+    "evaluation/structural.py": "e5cb428b44e91e3d41036cdae546a8bf0f9fa75e5d023d7651313f582b6b8095",
+    "evaluation/transfer.py": "34db32f62953cefd6b86703c4f26dcc5f54b44b079df654cade6e6322f56e33a",
+    "generator/__init__.py": "df88f4d83503a2dbfd3ef3c05423a15b41182ec2adf00e1b22cee75240877c50",
+    "generator/constructed.py": "6fd22b43417118a4c4f4a3434ccab2286693734368f2ea1fd938c3c7ee859ca4",
+    "generator/correction.py": "269dc831109135554bf5fc9048d9afe54c77b5ec0830f66c6b09e2ebbd6e398c",
+    "generator/correction_generation.py": "e5972a8742134c8a8d8524ca08a6c49d6e61b4c967d06c71865fca044d4e2fde",
+    "generator/difficulty.py": "efb3c1dd99caf0887f64158ebf68ccee965e16c490b572e588a3286ee8d7134a",
+    "generator/discovery.py": "7ec6dd6e9ce4aab363768ba325e3e9366052740461acf7859145eb3deb70a0ad",
+    "generator/evidence.py": "e00fb5770dc4e8275ca2682da7fc96afc800c8bb2c927ec4000a4acb2a12beef",
+    "generator/generator.py": "9a34ff165da1c4efaf989a1bb915b8d37dfddd3881e096d1da23c88ea374f5fb",
+    "generator/investigation.py": "81f9814f2b0962ca74dde7695c8e33fc1febc84ab31d577ab6e0487dcbb8403f",
+    "generator/investigation_docs.py": "25919e904a7325d03fdb2b77c96ae832a819af00fea0edcae93b5d67cf0692e8",
+    "generator/investigation_qualify.py": "8f3dd06aaa4d0b8e41cf5b54cf9053c8539c46a01d9d725fab61370bd28c36a4",
+    "generator/manual.py": "ee8bfa23d9e0fd1bc169ca778bf6d3bb76135fca1f90f13d036e8512b5c32632",
+    "generator/network.py": "95646e3466abf3ea4f69dff39236005a10ae295a9dafbe0e872abe26a3e3810f",
+    "generator/network_docs.py": "3698aa38b69476115684de7598597921ef570120a97528d06f602ad9ae8ad060",
+    "generator/network_qualify.py": "0fba70b2e7821511b9d90edc3617af4e977594581a36a17584c03466db2a71bb",
+    "generator/network_world.py": "1e8c57684dd96be9aa2a9a4e37039b8853de8fc3dbeec50e3d027ad7c6784e65",
+    "generator/qualify.py": "d495c45ed42e668d2921b1902b8f6dd03f58fa89641acb0e37fe0a233766a749",
+    "generator/randomness.py": "0d7c335477ada6a5fdad85c4a975083bae10bf8c9250d8ff06bd65378f78ba86",
+    "generator/resonance.py": "7f2e453e8f2fc05b22d6afc2b07e6c6d3095a184fd1fafab27d8db64904c01aa",
+    "generator/resonance_docs.py": "118f1c91365a665b861299dd6a21d60a0a82d3b0b7ce1ba4e7cb384976f20f41",
+    "generator/resonance_qualify.py": "ba4ae4235e12017a53fe1345d0f6d23d5eabb913926c5cbc1f46a456fc948abe",
+    "generator/rules.py": "ad0cb14748a6566df1e6804a45017ad6b5c47928ad9574624b269ead60462ee4",
+    "generator/structural.py": "db7d8878307a2aa9cc1b2c153eb24ea002d4fe8c7bc97536b09a7539fd42db49",
+    "generator/structural_generation.py": "52e6b9c8015e70d96cf27052bb6271a67911b8ee5e2857c6a3072f7c6f74c74e",
+    "generator/theory.py": "7235d4e9261cc4c0b10b67ad623e8db28a688fbfcfcc761c2d22e5d2a2d17e57",
+    "generator/theory_generation.py": "06d9741b82c238efe916863f997a4590a749d2f0386a8393d903c1f4e6dca0c2",
+    "io.py": "2a668afc3cef0fbc56e02013290db56373af31d01f1a5acb138adae8684e4e1a",
+    "models/__init__.py": "4bae834eeea9fc03d43fc3f89e2be03d61a8c630e8d7c3ab32f8351cc38b82a4",
+    "models/actions.py": "21fff92178c003eea0f4c3b525cd631274c70b0bcc25d2e1379c0b00f262ca1d",
+    "models/domain.py": "d290d0fff0a3a32b77ef97a70526681d1220871f6e25534fd8596421d684d684",
+    "models/episode.py": "f201be1ee4954de041d8be1e5aea8aa90366aed36aff73bf6000c0618e335553",
+    "models/events.py": "497e08876c1ff0f547afcfe5338e59532f0a6e54241fec2e9ecd3a288a5c0191",
+    "models/goals.py": "4ccabe7c8dd0505776bf8c3ea1c31bcabbfabb5b7c9135c58dcba9e2d7f13302",
+    "models/investigation.py": "46f107f3dc21b5f6732787852b8701f704498a5dbaf5a518bb04c576243861a2",
+    "models/network.py": "a72817eee76bcfd39fcf820d2f3f3caab3dabfa6d680c340936eb6aed878879f",
+    "models/observation.py": "a9e2fa72d16a0b50a08c4b4af44bcccf1faf72a9f9dbf690dd76ba9fcea4631f",
+    "models/rules.py": "41946ac917bf339a70e8857a9edf35c714151afd425cdddcfbbccdff77b75cf7",
+    "models/theory.py": "73a7d3a00de8a7874b8e7e22fb449bd5a7ba71abf87f85e6e75cd5bc99e9c8ef",
+    "models/world.py": "4a14d6ad0e4c496ed933fd352a7337acc7fb60e82c76904b48f1f9a05b667626",
+    "ontology/__init__.py": "0ce80e620e805755619a948825f78591e755c347d4f82a7a548cf1ab005a7342",
+    "ontology/builtin_runtime.py": "d202225154d67b0590a3eea5851409d882cf47a6ac7c4f4e3f252554187bea97",
+    "ontology/catalog.py": "0d476d1cda7b74a9628926da180eafbeade1f98c39c9ad2fc40ce708a5dec4f9",
+    "ontology/categorical/__init__.py": "44c73eb1da7efc0b3a4fc470dadc0ff9048b11abf756c0c39198e2b8ab20780e",
+    "ontology/categorical/generation.py": "f2a2002c54b96d408520cb9e1e1188d61cfa9a21255907ce90d0f2ef048dd97e",
+    "ontology/categorical/inference.py": "2c80384f191551fb651e1e78726c7202bc306232ec618433217aa126eb58e8d3",
+    "ontology/categorical/laws.py": "602ac09cdab50e0fb83772a41354f60445c7449f5b491d94404a8e0de599f394",
+    "ontology/categorical/qualification.py": "8e5819237062347bc0ba77b286d2c795f7f72702378770da71e4388c76ed0dcc",
+    "ontology/categorical/runtime.py": "0bf57060e787abd4f0be9b7132d2ea2892ccf13632e7126182cb900fb1f29d1d",
+    "ontology/categorical/schema.py": "782056023fac4d04bc83eed76233f7c8ab83f8c3a71dfd6d7559d39322034dfd",
+    "ontology/causal/__init__.py": "919c56f2ceb47f08cd27b036093ef218a7486e2e3dab5d34d59e224c78545da3",
+    "ontology/causal/evidence.py": "e673e4f844c510ed637798ffe86d433f7360b0ec209102b40cf7b55e94694de6",
+    "ontology/causal/generation.py": "9847a3a5d40930b9c68e0a58082252c1d7a5f3049102955e441532e1cf49161d",
+    "ontology/causal/inference.py": "6145dacb325b1415715b5cdd86a0631231ba58fd6771325f952080f6f6e8eb4d",
+    "ontology/causal/laws.py": "c38935671ba186b0ae242a3142df80a72eadc1f6d7f19b1f1533f73b8ad09a34",
+    "ontology/causal/policy.py": "c71040ef4e5ae0b48166a61be344fbbf9c61139496076461f81d061e893c7e8c",
+    "ontology/causal/qualification.py": "cb2191c0c26d1e575b5755e1f4279765bde435c97e1533e2585c17c1787e3931",
+    "ontology/causal/runtime.py": "8cfa644b292217be40243a224fedad2abcec9178803ec6d6c1855e9aeaba5432",
+    "ontology/causal/schema.py": "591a9347c9d9037aa091b66a556d17312d3a3eb6f1bd5d7e534bb0d045fd67b0",
+    "ontology/compositional/__init__.py": "fbdd40b14b548b5f1cf2f382b55de7e0af2f2e09d83358f6400e0ac023355fe6",
+    "ontology/compositional/budget.py": "b1f25b8a9b43e0d29df6954cde03e36fe5264887b7325d6db51c37c999f3bf39",
+    "ontology/compositional/evidence.py": "140c39f8aa580d6da00763dfb3e60516106384a57c8070e284869730c60a1950",
+    "ontology/compositional/generation.py": "94be2fff00898153a80da5a6fb347977548b16d346e1acebee1f0e6b6194a1a1",
+    "ontology/compositional/inference.py": "36a06d87e6a55588f13e4881051eda894662c81ccf474dd31db1191579ed2d2b",
+    "ontology/compositional/laws.py": "d340f4fccbdf6238586f3114226fa0a826ac5db79ff6dd85255c46b45336ef4d",
+    "ontology/compositional/policy.py": "794e661a51dfcd37d2deafb5b862903dd60b81870ab3293755d1049a59286eb8",
+    "ontology/compositional/qualification.py": "fb4b962ea8da0ed369fee6abc655bbfaccd6207db132388176eb48f319e14d68",
+    "ontology/compositional/runtime.py": "4bf9c8de32bf56eb5dbb59f7b5ca6d96e3a51605da3f2ac8f0fb9586d3602e75",
+    "ontology/compositional/schema.py": "5c7cfbdd45c333420e248e23aa11901d57e0d4dcd2a6cb25d7a63ec4cbb7ff24",
+    "ontology/contracts.py": "546ea347a0eb0af9e4b44ce7f89c28c4b24be94f7c60104958f661a0d155e808",
+    "ontology/dynamics/__init__.py": "43e2d62f14eed0443c523425e668930cbe48ab3e5fe444c84bcb268dc51c3f3c",
+    "ontology/dynamics/evidence.py": "69ad5b1c8aa3f8362e1861e93d8ea43dc70aceb479c75117ae4acf936b3253b0",
+    "ontology/dynamics/generation.py": "9bf05486d7e5fa3e9bb47a773593c56435a772060edafe08c4dced5b66d78142",
+    "ontology/dynamics/inference.py": "96b4c8090c00345e097147b470c4afd6d161fea402adeaba34cba17d356e4b2c",
+    "ontology/dynamics/laws.py": "88d1524acc1a42690e311d13bb565403ddd8c65205f1db47be9370d9f3ace816",
+    "ontology/dynamics/policy.py": "3744d5160a5ad5c71b88af8edd5da601f9e2fb98c1aedee7e6002d3083ffe55d",
+    "ontology/dynamics/qualification.py": "a5b2ebe01ac63a08bce6880d03675a1465ed797bad7394bbc29ff87c159a91e1",
+    "ontology/dynamics/reference_cache.py": "28a7508c6c22ddb6892372c028cd74e433d69845699fdaf7fce5694e2c40f0ae",
+    "ontology/dynamics/reference_identity.py": "7f486e398139baf4d0eacda32065abf25fc312b759b3214d773c6f3962a0c524",
+    "ontology/dynamics/reference_proof.py": "34e769abc8b6228de49a5c0f802842fb5582572435fff1ba9c72ec71cab818eb",
+    "ontology/dynamics/runtime.py": "6298ca5dea1b77ae2ef7958ea2e2248bf8cb5131b6d1e351199ed7695c186030",
+    "ontology/dynamics/schema.py": "0d718adb94c480ba8d0a56fff1e46468b160247af5ee290580443ae98ba1fbb5",
+    "ontology/graph.py": "cf0e3ccce293f07845f23f603b8934c5ef330a5cd2e83f89cf117ab3ba7bc3b6",
+    "ontology/inference.py": "be14f90dbf8cf20c67c7c23090620edade68c120250ebda36190d6767ebd9e79",
+    "ontology/mission.py": "200f95b997d6c6602d743340dcd3cc84f36f0be01fbe9da807aecff317e6c654",
+    "ontology/network.py": "96c1b44bff91ae12262e12fff08f3c65a4cc2ca1088e06f4c12a39e4e7ea4347",
+    "ontology/payloads.py": "19397fd06e00b8c75f35033cf2038327c3c6912cf2beb75dc2017469556d2ec8",
+    "ontology/repair/__init__.py": "728737b963b145edfb0c9b98117a55b117b32a5ea4ad99c9da390179599d1e25",
+    "ontology/repair/evidence.py": "e0263058ba47105a32d7d658629a855d437095ab2467a013a0afc60a71a98d5e",
+    "ontology/repair/generation.py": "d98c9a78766e6f83dea026424a1da7587c6e369eb2f0d77a20a7898700a321b1",
+    "ontology/repair/inference.py": "2d57a35b4143cf4ab798aeacb175edf6d188968e1c9c882c9b6e69c9a54812ad",
+    "ontology/repair/laws.py": "3525c88cdf6e8a631b58fd642188d3b624749c00f81f0f70511133b10f4f3223",
+    "ontology/repair/policy.py": "640bf9b657fcaae2ed86b3c2efb20027a5b061eb00417cfcf44a16168a904d7c",
+    "ontology/repair/proof.py": "34869fae93a920e1698e13e0a0b03b5e5665cc2f3a165f135b79fddd49799c5c",
+    "ontology/repair/qualification.py": "02bedaebef7b09819d83d5971bba0c8c858aecc5da34c9c5acf5607fc9185b86",
+    "ontology/repair/runtime.py": "73f704836eb14769555c236279f70061a89606d64de213411c1b310eb18fa1c6",
+    "ontology/repair/schema.py": "f75c31ce6dcacae2ca2a20e91d860ad06d098c76dfe50291a6e2dc33a248fa48",
+    "ontology/transfer/__init__.py": "400cebaf81bc7effe3f541bc04faef31c6f38bd65906465c3190fa44934a6110",
+    "ontology/transfer/evidence.py": "41be639431ea0b8d36131d533ab8981c5ddad6e0a34b5a660cbe44a8e20aac51",
+    "ontology/transfer/generation.py": "b724941543650d73c9db2719fd2af6f935925e09aa1d2601f95cff49128e84c1",
+    "ontology/transfer/inference.py": "3a007a7076f904e97b2c79957cacd9c9fd7b83ea5f3610d76be979adefce9df2",
+    "ontology/transfer/laws.py": "442b827ddb0dd9a77fc7247df12f72b23a67830d207930ffbc6ca3d18e0db349",
+    "ontology/transfer/policy.py": "e63b672477ad979d2eac58fed2f490a7a513529d27cdcc4794ad3342a9fd4d9b",
+    "ontology/transfer/qualification.py": "da76962e1b9bbe6e16d404e26cdea4a044e843f2e40b212281aaac11e6c5f1be",
+    "ontology/transfer/reference.py": "77e329f5c42e1b976dfea835c8f6b0236cd248374fda9b610303d7cead0a2a5c",
+    "ontology/transfer/reference_identity.py": "eac71594d6e4dd8018a8b2f74ec37417b57038317d7de9c2ddf647b7d612e521",
+    "ontology/transfer/runtime.py": "1232ba45e74d2a2e19f736b224895549323cbd99b7b4173fa40105ad68d5e533",
+    "ontology/transfer/schema.py": "e6919a4472b2df541f5878de0976b536ec52e515b456550a67ebce1da9440555",
+    "ontology/transfer/tables.py": "09ec2e45094ceef448f54c33ba94b1c99ac50d1a97c79771c6ecc14a47171906",
+    "presentation/__init__.py": "bb8df829acf758152058c00b31c300c86356802420347437c64b581c1ca0bc25",
+    "protocol/__init__.py": "e3b32fa236602d61f8591e0944c0a1cc6b12cbbc97e147ad9e22b42b5c77d9a6",
+    "protocol/client.py": "edc62d0240de0bca2ad5b8b000a2d551886ffa83310fa6b8b3a16706993ede96",
+    "protocol/decision_metrics.py": "0f22d5ba0143cfcb0b0c21fce78202229e9446e40135b23b7f8cb8fe3222a32a",
+    "protocol/fast_cli.py": "ce86a95d4e9e4d467e6b6977fd1a6268e7cec87a2352890ac16926658f6b802c",
+    "protocol/http.py": "a48ca36426cb1408b64ac49263fdb7fa0e694b829d5fb1accea5a38cb975e64f",
+    "protocol/investigation_metrics.py": "69077010b61aec304d11540308c73b304ffff1a9788a27fd19044b1aaf34b268",
+    "protocol/operator_diagnostics.py": "cc986c5f64c9bd12284469a7bbf7a941cf7478c78660ad09a0da6d2c2b20f254",
+    "protocol/public_transcript.py": "d50344bd1adc868390441a1b138f17c7b5b289d1a07b7057031076a9bf08abcb",
+    "protocol/session.py": "2565e513c4bb3b98a61d4aed40b402ca22502eec40dbf94e26bc9d69bbf3ea7d",
+    "protocol/stdio.py": "c3401f5dfb654786fa9a26b0bf1c6f56727adf7455747a1218753f331eed2b29",
+    "protocol/transport.py": "46ec8087cb8fd8daf5ec800040ae907b3d9241cbcff95b60672a2bff89a2da2c",
+    "render/__init__.py": "1e05c362715cc6c241716eb1c0441d6dc80af7118e6a665f60b93213209d5a35",
+    "render/observer.py": "74b910d0ee013bd72418af152c49c9ff1709452fe871e5f4bce93ba039731571",
+    "render/text.py": "928da2ba6175bf23b27215d4415e47ec5336002b11e265164a7251923d7358ef",
+    "solver/__init__.py": "262ee397a4e4a0adcce42babaa4f2424315fc8d7bba423a58f094fbcbd4fdbd4",
+    "solver/belief.py": "cda69643665a91a05631c8eec0a837222e02020ed36aa16231e59d61eb946a50",
+    "solver/budget.py": "f0caf985bb84f477bc306e7be361dd9ddce9cbf7cbbc53521e848a39d70ee270",
+    "solver/decision_audit.py": "0b3b7e40b2bfa7752e4f8ce592f5f7aa4b92f61ec7d6c4731e741f0b9c4e9978",
+    "solver/finite_experiments.py": "0208b9b6735ea01cb64cf6e277b4fa89e8fcdef0adf4accf9b3cb334f8ccec81",
+    "solver/finite_game.py": "1552bbe40968f7aed9f915683684c236bf8c5e16b8c7bd2a335f88c655aaa7f4",
+    "solver/observation_audit.py": "00c1da3e30f7eb97f8ce3c97656b595e0f9986fe42930f1b37e9484abeba2b9b",
+    "solver/policy_check.py": "2dad4f1c49c23a9ea7e7634cd4520027b6cce8e79e09c1eb86b06749018905bc",
+    "solver/search.py": "a190e9fa26dc129df48a386146bbe7333e9af782c2ca5c16736bf0cf32af5b2e",
+    "verification/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "verification/receipt.py": "645386727b368336c6c4114261922aa7c706b487f160cf562c206dae53405ba3"
+  },
+  "empirical_difficulty_calibrated": false,
+  "cells": [
+    {
+      "id": "transfer-01",
+      "family": "coupled-evidence-v1",
+      "seed": 3550,
+      "control": true,
+      "budget_profile": "standard",
+      "survey_rival": null,
+      "passive_rival": null,
+      "checks": {},
+      "complete_observation_closures": null,
+      "qualification": {
+        "passed": true,
+        "checks": {
+          "compiled_contract": true,
+          "public_policy_wins": true,
+          "within_reference_bound": true,
+          "exact_replay": true
+        },
+        "metrics": {
+          "actions": 5,
+          "difficulty_scope": "constructive upper only; see independent proof and matrix"
+        },
+        "errors": []
+      },
+      "program": [
+        2,
+        0,
+        0,
+        3,
+        1,
+        2,
+        1
+      ],
+      "reader_offset": 0,
+      "budget": 11,
+      "reference_action_upper": 5,
+      "scientific_identity": "208264507638fd7aa631d93eb239a9a472a1b741271ae2c392e69647e2897793"
+    },
+    {
+      "id": "transfer-02",
+      "family": "coupled-transfer-v1",
+      "seed": 3550,
+      "control": false,
+      "budget_profile": "standard",
+      "survey_rival": null,
+      "passive_rival": 3562,
+      "checks": {
+        "passive_physical_rival": true,
+        "more_than_two_readings_for_evidence_supported_program": true
+      },
+      "complete_observation_closures": {
+        "all_passive_observations": {
+          "remaining_joint_worlds": 2,
+          "physical_behavior_classes": 2
+        },
+        "context_0_only": {
+          "remaining_joint_worlds": 18,
+          "physical_behavior_classes": 13
+        },
+        "context_1_only": {
+          "remaining_joint_worlds": 9,
+          "physical_behavior_classes": 9
+        }
+      },
+      "qualification": {
+        "passed": true,
+        "checks": {
+          "compiled_contract": true,
+          "public_policy_wins": true,
+          "within_reference_bound": true,
+          "exact_replay": true
+        },
+        "metrics": {
+          "actions": 30,
+          "difficulty_scope": "constructive upper only; see independent proof and matrix"
+        },
+        "errors": []
+      },
+      "program": [
+        2,
+        0,
+        0,
+        3,
+        1,
+        2,
+        1
+      ],
+      "reader_offset": 0,
+      "budget": 39,
+      "reference_action_upper": 33,
+      "scientific_identity": "054837f9ec1c81778c6ece0df14d513ce2d667028eef430f8ff0fa17f09e01be"
+    },
+    {
+      "id": "transfer-03",
+      "family": "coupled-evidence-v1",
+      "seed": 3550,
+      "control": false,
+      "budget_profile": "standard",
+      "survey_rival": 3688,
+      "passive_rival": 3562,
+      "checks": {
+        "structural_survey_rival": true,
+        "passive_physical_rival": true,
+        "more_than_two_readings_for_evidence_supported_program": true
+      },
+      "complete_observation_closures": {
+        "all_passive_observations": {
+          "remaining_joint_worlds": 1,
+          "physical_behavior_classes": 1
+        },
+        "context_0_only": {
+          "remaining_joint_worlds": 2,
+          "physical_behavior_classes": 2
+        },
+        "context_1_only": {
+          "remaining_joint_worlds": 1,
+          "physical_behavior_classes": 1
+        }
+      },
+      "qualification": {
+        "passed": true,
+        "checks": {
+          "compiled_contract": true,
+          "public_policy_wins": true,
+          "within_reference_bound": true,
+          "exact_replay": true
+        },
+        "metrics": {
+          "actions": 34,
+          "difficulty_scope": "constructive upper only; see independent proof and matrix"
+        },
+        "errors": []
+      },
+      "program": [
+        2,
+        0,
+        0,
+        3,
+        1,
+        2,
+        1
+      ],
+      "reader_offset": 0,
+      "budget": 43,
+      "reference_action_upper": 37,
+      "scientific_identity": "ed14a1ac79a70be8ed15257668f5bda31f7dfc822d81e423f519c8ebc05fff0f"
+    },
+    {
+      "id": "transfer-04",
+      "family": "coupled-evidence-v1",
+      "seed": 3550,
+      "control": false,
+      "budget_profile": "diagnostic-plus6",
+      "survey_rival": 3688,
+      "passive_rival": 3562,
+      "checks": {
+        "structural_survey_rival": true,
+        "passive_physical_rival": true,
+        "more_than_two_readings_for_evidence_supported_program": true
+      },
+      "complete_observation_closures": {
+        "all_passive_observations": {
+          "remaining_joint_worlds": 1,
+          "physical_behavior_classes": 1
+        },
+        "context_0_only": {
+          "remaining_joint_worlds": 2,
+          "physical_behavior_classes": 2
+        },
+        "context_1_only": {
+          "remaining_joint_worlds": 1,
+          "physical_behavior_classes": 1
+        }
+      },
+      "qualification": {
+        "passed": true,
+        "checks": {
+          "compiled_contract": true,
+          "public_policy_wins": true,
+          "within_reference_bound": true,
+          "exact_replay": true
+        },
+        "metrics": {
+          "actions": 34,
+          "difficulty_scope": "constructive upper only; see independent proof and matrix"
+        },
+        "errors": []
+      },
+      "program": [
+        2,
+        0,
+        0,
+        3,
+        1,
+        2,
+        1
+      ],
+      "reader_offset": 0,
+      "budget": 49,
+      "reference_action_upper": 37,
+      "scientific_identity": "ed14a1ac79a70be8ed15257668f5bda31f7dfc822d81e423f519c8ebc05fff0f"
+    },
+    {
+      "id": "transfer-05",
+      "family": "coupled-evidence-v1",
+      "seed": 3688,
+      "control": false,
+      "budget_profile": "standard",
+      "survey_rival": 3550,
+      "passive_rival": null,
+      "checks": {
+        "structural_survey_rival": true,
+        "more_than_two_readings_for_evidence_supported_program": true
+      },
+      "complete_observation_closures": {
+        "all_passive_observations": {
+          "remaining_joint_worlds": 1,
+          "physical_behavior_classes": 1
+        },
+        "context_0_only": {
+          "remaining_joint_worlds": 1,
+          "physical_behavior_classes": 1
+        },
+        "context_1_only": {
+          "remaining_joint_worlds": 2,
+          "physical_behavior_classes": 2
+        }
+      },
+      "qualification": {
+        "passed": true,
+        "checks": {
+          "compiled_contract": true,
+          "public_policy_wins": true,
+          "within_reference_bound": true,
+          "exact_replay": true
+        },
+        "metrics": {
+          "actions": 37,
+          "difficulty_scope": "constructive upper only; see independent proof and matrix"
+        },
+        "errors": []
+      },
+      "program": [
+        2,
+        0,
+        2,
+        0,
+        1,
+        3,
+        1
+      ],
+      "reader_offset": 0,
+      "budget": 43,
+      "reference_action_upper": 37,
+      "scientific_identity": "66d2149763e7b1283ed59d95ae63141882fc5d542182d52b862644559d8c840f"
+    },
+    {
+      "id": "transfer-06",
+      "family": "coupled-transfer-v1",
+      "seed": 3,
+      "control": false,
+      "budget_profile": "standard",
+      "survey_rival": null,
+      "passive_rival": null,
+      "checks": {
+        "more_than_two_readings_for_evidence_supported_program": true
+      },
+      "complete_observation_closures": {
+        "all_passive_observations": {
+          "remaining_joint_worlds": 1,
+          "physical_behavior_classes": 1
+        },
+        "context_0_only": {
+          "remaining_joint_worlds": 9,
+          "physical_behavior_classes": 9
+        },
+        "context_1_only": {
+          "remaining_joint_worlds": 9,
+          "physical_behavior_classes": 9
+        }
+      },
+      "qualification": {
+        "passed": true,
+        "checks": {
+          "compiled_contract": true,
+          "public_policy_wins": true,
+          "within_reference_bound": true,
+          "exact_replay": true
+        },
+        "metrics": {
+          "actions": 30,
+          "difficulty_scope": "constructive upper only; see independent proof and matrix"
+        },
+        "errors": []
+      },
+      "program": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        2,
+        0
+      ],
+      "reader_offset": 0,
+      "budget": 39,
+      "reference_action_upper": 33,
+      "scientific_identity": "a4786b5d4920e310c1e14857537506458e99025e11d5363402482f72fea175b8"
+    },
+    {
+      "id": "transfer-07",
+      "family": "coupled-evidence-v1",
+      "seed": 3,
+      "control": false,
+      "budget_profile": "standard",
+      "survey_rival": 864,
+      "passive_rival": null,
+      "checks": {
+        "structural_survey_rival": true,
+        "more_than_two_readings_for_evidence_supported_program": true
+      },
+      "complete_observation_closures": {
+        "all_passive_observations": {
+          "remaining_joint_worlds": 1,
+          "physical_behavior_classes": 1
+        },
+        "context_0_only": {
+          "remaining_joint_worlds": 1,
+          "physical_behavior_classes": 1
+        },
+        "context_1_only": {
+          "remaining_joint_worlds": 1,
+          "physical_behavior_classes": 1
+        }
+      },
+      "qualification": {
+        "passed": true,
+        "checks": {
+          "compiled_contract": true,
+          "public_policy_wins": true,
+          "within_reference_bound": true,
+          "exact_replay": true
+        },
+        "metrics": {
+          "actions": 34,
+          "difficulty_scope": "constructive upper only; see independent proof and matrix"
+        },
+        "errors": []
+      },
+      "program": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        2,
+        0
+      ],
+      "reader_offset": 0,
+      "budget": 43,
+      "reference_action_upper": 37,
+      "scientific_identity": "9bb00457ce4b500abbd66d518bea4eddf041c03d4b507de7cacbc60780270c8a"
+    },
+    {
+      "id": "transfer-08",
+      "family": "coupled-evidence-v1",
+      "seed": 6943,
+      "control": false,
+      "budget_profile": "standard",
+      "survey_rival": 7051,
+      "passive_rival": null,
+      "checks": {
+        "structural_survey_rival": true,
+        "more_than_two_readings_for_evidence_supported_program": true
+      },
+      "complete_observation_closures": {
+        "all_passive_observations": {
+          "remaining_joint_worlds": 1,
+          "physical_behavior_classes": 1
+        },
+        "context_0_only": {
+          "remaining_joint_worlds": 6,
+          "physical_behavior_classes": 6
+        },
+        "context_1_only": {
+          "remaining_joint_worlds": 6,
+          "physical_behavior_classes": 6
+        }
+      },
+      "qualification": {
+        "passed": true,
+        "checks": {
+          "compiled_contract": true,
+          "public_policy_wins": true,
+          "within_reference_bound": true,
+          "exact_replay": true
+        },
+        "metrics": {
+          "actions": 34,
+          "difficulty_scope": "constructive upper only; see independent proof and matrix"
+        },
+        "errors": []
+      },
+      "program": [
+        1,
+        0,
+        0,
+        1,
+        0,
+        2,
+        1
+      ],
+      "reader_offset": 1,
+      "budget": 43,
+      "reference_action_upper": 37,
+      "scientific_identity": "40585652da69b5e1d072ffad654327db2c531e43d0000246cb6e1d769193d627"
+    },
+    {
+      "id": "transfer-09",
+      "family": "coupled-evidence-v1",
+      "seed": 13847,
+      "control": false,
+      "budget_profile": "standard",
+      "survey_rival": 14255,
+      "passive_rival": null,
+      "checks": {
+        "structural_survey_rival": true,
+        "more_than_two_readings_for_evidence_supported_program": true
+      },
+      "complete_observation_closures": {
+        "all_passive_observations": {
+          "remaining_joint_worlds": 1,
+          "physical_behavior_classes": 1
+        },
+        "context_0_only": {
+          "remaining_joint_worlds": 3,
+          "physical_behavior_classes": 3
+        },
+        "context_1_only": {
+          "remaining_joint_worlds": 3,
+          "physical_behavior_classes": 3
+        }
+      },
+      "qualification": {
+        "passed": true,
+        "checks": {
+          "compiled_contract": true,
+          "public_policy_wins": true,
+          "within_reference_bound": true,
+          "exact_replay": true
+        },
+        "metrics": {
+          "actions": 34,
+          "difficulty_scope": "constructive upper only; see independent proof and matrix"
+        },
+        "errors": []
+      },
+      "program": [
+        2,
+        0,
+        0,
+        0,
+        2,
+        2,
+        2
+      ],
+      "reader_offset": 2,
+      "budget": 43,
+      "reference_action_upper": 37,
+      "scientific_identity": "6cfca3f4b9290e30f7590787567bbeaaabc37e9663f46ab391434ad03350731b"
+    },
+    {
+      "id": "transfer-10",
+      "family": "coupled-evidence-v1",
+      "seed": 14255,
+      "control": false,
+      "budget_profile": "standard",
+      "survey_rival": 13847,
+      "passive_rival": null,
+      "checks": {
+        "structural_survey_rival": true,
+        "more_than_two_readings_for_evidence_supported_program": true
+      },
+      "complete_observation_closures": {
+        "all_passive_observations": {
+          "remaining_joint_worlds": 1,
+          "physical_behavior_classes": 1
+        },
+        "context_0_only": {
+          "remaining_joint_worlds": 3,
+          "physical_behavior_classes": 3
+        },
+        "context_1_only": {
+          "remaining_joint_worlds": 3,
+          "physical_behavior_classes": 3
+        }
+      },
+      "qualification": {
+        "passed": true,
+        "checks": {
+          "compiled_contract": true,
+          "public_policy_wins": true,
+          "within_reference_bound": true,
+          "exact_replay": true
+        },
+        "metrics": {
+          "actions": 34,
+          "difficulty_scope": "constructive upper only; see independent proof and matrix"
+        },
+        "errors": []
+      },
+      "program": [
+        2,
+        0,
+        3,
+        3,
+        2,
+        2,
+        2
+      ],
+      "reader_offset": 2,
+      "budget": 43,
+      "reference_action_upper": 37,
+      "scientific_identity": "7ee6a10fafb6c9e55a90837bc82712fb008c3f6c9e850d17b19150440a3e4ec5"
+    },
+    {
+      "id": "transfer-11",
+      "family": "coupled-evidence-v1",
+      "seed": 3562,
+      "control": false,
+      "budget_profile": "standard",
+      "survey_rival": null,
+      "passive_rival": 3550,
+      "checks": {
+        "passive_physical_rival": true,
+        "more_than_two_readings_for_evidence_supported_program": true
+      },
+      "complete_observation_closures": {
+        "all_passive_observations": {
+          "remaining_joint_worlds": 1,
+          "physical_behavior_classes": 1
+        },
+        "context_0_only": {
+          "remaining_joint_worlds": 4,
+          "physical_behavior_classes": 3
+        },
+        "context_1_only": {
+          "remaining_joint_worlds": 3,
+          "physical_behavior_classes": 3
+        }
+      },
+      "qualification": {
+        "passed": true,
+        "checks": {
+          "compiled_contract": true,
+          "public_policy_wins": true,
+          "within_reference_bound": true,
+          "exact_replay": true
+        },
+        "metrics": {
+          "actions": 34,
+          "difficulty_scope": "constructive upper only; see independent proof and matrix"
+        },
+        "errors": []
+      },
+      "program": [
+        2,
+        0,
+        0,
+        3,
+        2,
+        2,
+        1
+      ],
+      "reader_offset": 0,
+      "budget": 43,
+      "reference_action_upper": 37,
+      "scientific_identity": "1fc0ed72807d4cd9900ef5ee69f4eab3b60de9d498e9fd6e6e64237a31e11fc5"
+    },
+    {
+      "id": "transfer-12",
+      "family": "coupled-evidence-v1",
+      "seed": 7051,
+      "control": false,
+      "budget_profile": "standard",
+      "survey_rival": 6943,
+      "passive_rival": null,
+      "checks": {
+        "structural_survey_rival": true,
+        "more_than_two_readings_for_evidence_supported_program": true
+      },
+      "complete_observation_closures": {
+        "all_passive_observations": {
+          "remaining_joint_worlds": 1,
+          "physical_behavior_classes": 1
+        },
+        "context_0_only": {
+          "remaining_joint_worlds": 6,
+          "physical_behavior_classes": 6
+        },
+        "context_1_only": {
+          "remaining_joint_worlds": 6,
+          "physical_behavior_classes": 6
+        }
+      },
+      "qualification": {
+        "passed": true,
+        "checks": {
+          "compiled_contract": true,
+          "public_policy_wins": true,
+          "within_reference_bound": true,
+          "exact_replay": true
+        },
+        "metrics": {
+          "actions": 34,
+          "difficulty_scope": "constructive upper only; see independent proof and matrix"
+        },
+        "errors": []
+      },
+      "program": [
+        1,
+        0,
+        1,
+        1,
+        0,
+        2,
+        1
+      ],
+      "reader_offset": 1,
+      "budget": 43,
+      "reference_action_upper": 37,
+      "scientific_identity": "405355311f31ff4be839d337a945940eff4174864e17d1d785df03d011000552"
+    },
+    {
+      "id": "transfer-13",
+      "family": "coupled-evidence-v1",
+      "seed": 864,
+      "control": false,
+      "budget_profile": "standard",
+      "survey_rival": 3,
+      "passive_rival": null,
+      "checks": {
+        "structural_survey_rival": true,
+        "more_than_two_readings_for_evidence_supported_program": true
+      },
+      "complete_observation_closures": {
+        "all_passive_observations": {
+          "remaining_joint_worlds": 1,
+          "physical_behavior_classes": 1
+        },
+        "context_0_only": {
+          "remaining_joint_worlds": 1,
+          "physical_behavior_classes": 1
+        },
+        "context_1_only": {
+          "remaining_joint_worlds": 1,
+          "physical_behavior_classes": 1
+        }
+      },
+      "qualification": {
+        "passed": true,
+        "checks": {
+          "compiled_contract": true,
+          "public_policy_wins": true,
+          "within_reference_bound": true,
+          "exact_replay": true
+        },
+        "metrics": {
+          "actions": 34,
+          "difficulty_scope": "constructive upper only; see independent proof and matrix"
+        },
+        "errors": []
+      },
+      "program": [
+        0,
+        2,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "reader_offset": 0,
+      "budget": 43,
+      "reference_action_upper": 37,
+      "scientific_identity": "f0259b87a302b0b87443dad57704c80bfd9735b0b467d13c5292e3654e7a9bc7"
+    }
+  ],
+  "scope": "Targeted coverage, public reference wins/replay, positive-certificate obstruction through two readings. No cognitive/adaptive-round or matrix success-rate guarantee; arbitrary failed guesses excluded from per-fixture bound."
+}
