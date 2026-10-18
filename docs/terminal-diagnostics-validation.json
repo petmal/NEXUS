@@ -25,19 +25,29 @@
     "fresh_review": "no remaining blocker after correcting compiler cycle"
   },
   "image_ci": {
-    "status": "pending_after_packaging_correction",
-    "initial_run_id": 39147658305,
-    "initial_job_id": 117734673951,
-    "initial_run_url": "https://github.com/petmal/NEXUS/actions/runs/39147658305",
-    "passed_steps": [
-      "immutable references and both transfer matrix preflights",
-      "solver proof",
-      "fast tests",
-      "extended tests",
-      "cross-seed stress",
-      "CLI smoke"
+    "status": "passed",
+    "validated_commit": "680e4f5034ff25e32339ecbd04a38eea6513eec1",
+    "validated_tree": "0cfcb432406174c3692e0899a876d2e9227c5e5a",
+    "run_id": 39148658419,
+    "job_id": 117737623854,
+    "url": "https://github.com/petmal/NEXUS/actions/runs/39148658419",
+    "checks": [
+      "frozen lock",
+      "independent immutable dynamics and transfer recompilation",
+      "old 13-row and new 10-row transfer preflights",
+      "9 solver proof tests",
+      "656 other fast tests",
+      "45 extended tests",
+      "2 three-seed stress tests",
+      "CLI generation, qualification, solving and replay",
+      "Docker build",
+      "OCI revision label",
+      "legacy repair, matrix, structural and budget image preflights",
+      "old 13-row and new 10-row transfer image preflights",
+      "image CLI and family smoke checks"
     ],
-    "initial_failure": "Docker build context excluded docs/astra-diagnostic-matrix.json; corrected explicit .dockerignore inclusion. Full CI rerun required."
+    "initial_run_id": 39147658305,
+    "initial_failure": "New matrix excluded from Docker context; corrected .dockerignore inclusion in validated commit."
   },
   "warnings": "Three existing Pydantic warnings from deliberately malformed test data."
 }

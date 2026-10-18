@@ -21,8 +21,12 @@ per cell.
 
 The two longest trajectories were seed 6943 (37 actions, 12 readings) and its
 survey-indistinguishable rival 7051 (36 actions, 12 readings). These are useful
-stress sentinels, not failures. Seed 3550 used only two survey readings plus seven
-reference readings. Its combined-reader episode finished in 29 actions versus 31
+stress sentinels, not failures. The public reference policy wins both in 34 actions,
+so there is a small demonstrated efficiency gap (3 and 2 actions). This is an
+upper-bound witness, not a proof of optimal action counts; its full-prior
+computation is also stronger than an unaided model's practical calculation budget.
+Track experiment-selection efficiency separately from failed inference.
+Seed 3550 used only two survey readings plus seven reference readings. Its combined-reader episode finished in 29 actions versus 31
 for the calibrated version. Reference complexity can supply useful upstream
 information rather than make inference harder.
 

@@ -63,3 +63,9 @@ migration remains outside this repair; touched-module static checks are separate
 Final gate outcomes and image CI are recorded in `terminal-diagnostics-validation.json`.
 The ten-row follow-up is `astra-diagnostic-matrix.json`; its preflight has exact
 source binding, public-policy wins, replay, and restricted-observation closures.
+
+Release commit `680e4f5034ff25e32339ecbd04a38eea6513eec1` passed the complete
+[CI run](https://github.com/petmal/NEXUS/actions/runs/39148658419), including Docker
+build, OCI revision validation, legacy image preflights and all ten new matrix
+rows inside the image. The first image attempt caught an omitted Docker-context
+allowlist entry for the new matrix; that packaging omission is corrected.
