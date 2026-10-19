@@ -1,5 +1,12 @@
 # NEXUS
 
+The opt-in `joint-assembly-v1` pilot combines confounded reader/law inference with
+physical component preparation and assembly. Local component validity does not
+imply a compatible final device. Its [guide and ten-run matrix](docs/joint-assembly-guide.md)
+separate exact complete-mission evidence requirements, legitimate shortcuts and
+matched controls. Every selected seed is preflighted, including recovery and replay;
+real-model difficulty remains to be measured. Earlier families remain available.
+
 The opt-in `staged-repair-v1` pilot adds three actual exit seals, coupled hidden
 loads, and independent (D3) versus dependent (D4) experiment contexts. T2 discloses
 operator shapes; T3 requires identifying them. Existing families are unchanged.

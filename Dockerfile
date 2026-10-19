@@ -10,8 +10,8 @@ ENV PATH="/app/.venv/bin:$PATH"
 
 COPY pyproject.toml uv.lock README.md ./
 COPY src ./src
-COPY scripts/prepare_package.py scripts/preflight_repair.py scripts/preflight_matrix.py scripts/preflight_structural.py scripts/preflight_budget.py scripts/preflight_transfer.py scripts/preflight_history.py scripts/preflight_staged_repair.py ./scripts/
-COPY docs/difficulty-model-matrix.json docs/structural-model-matrix.json docs/budget-diagnostic-matrix.json docs/transfer-model-matrix.json docs/astra-diagnostic-matrix.json docs/history-diagnostic-matrix.json docs/staged-repair-matrix.json ./docs/
+COPY scripts/prepare_package.py scripts/preflight_repair.py scripts/preflight_matrix.py scripts/preflight_structural.py scripts/preflight_budget.py scripts/preflight_transfer.py scripts/preflight_history.py scripts/preflight_staged_repair.py scripts/preflight_joint_assembly.py ./scripts/
+COPY docs/difficulty-model-matrix.json docs/structural-model-matrix.json docs/budget-diagnostic-matrix.json docs/transfer-model-matrix.json docs/astra-diagnostic-matrix.json docs/history-diagnostic-matrix.json docs/staged-repair-matrix.json docs/joint-assembly-matrix.json ./docs/
 
 RUN python scripts/prepare_package.py \
     && python -m pip install --no-cache-dir --no-deps uv==0.12.21 \

@@ -50,6 +50,14 @@ BUILTINS = MappingProxyType(
         item.family: item
         for item in (
             OntologyDefinition(
+                "joint-assembly-v1", "joint-assembly-v1",
+                runtime_module="nexus.ontology.assembly.runtime",
+                generator=("nexus.ontology.assembly.generation", "generate_assembly"),
+                qualifier=("nexus.ontology.assembly.qualification", "qualify_assembly"),
+                diagnostic_budget=True,
+                standalone_contract=True,
+            ),
+            OntologyDefinition(
                 "staged-repair-v1", "staged-repair-v1",
                 runtime_module="nexus.ontology.staged.runtime",
                 generator=("nexus.ontology.staged.generation", "generate_staged"),

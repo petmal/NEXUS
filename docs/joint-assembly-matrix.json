@@ -1,0 +1,144 @@
+{
+  "version": "joint-assembly-pilot-v1",
+  "external_python": false,
+  "fresh_context_per_execution": true,
+  "recommended_tool_call_limit": 120,
+  "runs": [
+    {
+      "id": "01",
+      "seed": 349,
+      "theory": 0,
+      "discovery": 0,
+      "tier": "execution-control",
+      "expected_certificate_readings": 0,
+      "expected_policy_readings": 0,
+      "expected_supported_closures": [
+        "local_only",
+        "joint_only",
+        "b_and_joint",
+        "c_and_joint"
+      ],
+      "purpose": "Known laws; check physical mounting and final receipt.",
+      "budget_profile": "standard"
+    },
+    {
+      "id": "02",
+      "seed": 349,
+      "theory": 3,
+      "discovery": 3,
+      "tier": "calibrated-control",
+      "expected_certificate_readings": 4,
+      "expected_policy_readings": 4,
+      "expected_supported_closures": [
+        "c_and_joint"
+      ],
+      "purpose": "Matched calibrated reader for03; same physics and goal.",
+      "budget_profile": "standard"
+    },
+    {
+      "id": "03",
+      "seed": 349,
+      "theory": 3,
+      "discovery": 4,
+      "tier": "joint-three-channel",
+      "expected_certificate_readings": 5,
+      "expected_policy_readings": 7,
+      "expected_supported_closures": [],
+      "purpose": "Unknown sum kernel; all three channels necessary for supported complete build.",
+      "budget_profile": "standard"
+    },
+    {
+      "id": "04",
+      "seed": 136,
+      "theory": 3,
+      "discovery": 4,
+      "tier": "joint-three-channel",
+      "expected_certificate_readings": 5,
+      "expected_policy_readings": 7,
+      "expected_supported_closures": [],
+      "purpose": "Unknown difference kernel; all three channels necessary, different component gains and phases.",
+      "budget_profile": "standard"
+    },
+    {
+      "id": "05",
+      "seed": 127,
+      "theory": 3,
+      "discovery": 4,
+      "tier": "joint-transfer",
+      "expected_certificate_readings": 4,
+      "expected_policy_readings": 6,
+      "expected_supported_closures": [
+        "b_and_joint",
+        "c_and_joint"
+      ],
+      "purpose": "Product kernel; either local channel plus joint is sufficient, valid shortcut control within joint family.",
+      "budget_profile": "standard"
+    },
+    {
+      "id": "06",
+      "seed": 178,
+      "theory": 3,
+      "discovery": 4,
+      "tier": "joint-transfer",
+      "expected_certificate_readings": 4,
+      "expected_policy_readings": 7,
+      "expected_supported_closures": [
+        "b_and_joint"
+      ],
+      "purpose": "Squared-left kernel; B+joint can suffice, C+joint cannot.",
+      "budget_profile": "standard"
+    },
+    {
+      "id": "07",
+      "seed": 178,
+      "theory": 3,
+      "discovery": 3,
+      "tier": "calibrated-control",
+      "expected_certificate_readings": 4,
+      "expected_policy_readings": 5,
+      "expected_supported_closures": [
+        "b_and_joint"
+      ],
+      "purpose": "Matched calibrated reader for06; certificate unchanged but public policy shorter.",
+      "budget_profile": "standard"
+    },
+    {
+      "id": "08",
+      "seed": 349,
+      "theory": 2,
+      "discovery": 4,
+      "tier": "cancellation-control",
+      "expected_certificate_readings": 4,
+      "expected_policy_readings": 4,
+      "expected_supported_closures": [
+        "local_only"
+      ],
+      "purpose": "Known sum kernel: local opposite offsets cancel; joint channel can be omitted.",
+      "budget_profile": "standard"
+    },
+    {
+      "id": "09",
+      "seed": 136,
+      "theory": 2,
+      "discovery": 4,
+      "tier": "known-shape",
+      "expected_certificate_readings": 4,
+      "expected_policy_readings": 4,
+      "expected_supported_closures": [],
+      "purpose": "Known difference kernel: offset remains mission-relevant and all channels still required.",
+      "budget_profile": "standard"
+    },
+    {
+      "id": "10",
+      "seed": 136,
+      "theory": 3,
+      "discovery": 4,
+      "tier": "joint-three-channel",
+      "expected_certificate_readings": 5,
+      "expected_policy_readings": 7,
+      "expected_supported_closures": [],
+      "purpose": "Exact04 with six extra actions; separate reasoning from recovery budget.",
+      "budget_profile": "diagnostic-plus6"
+    }
+  ]
+}

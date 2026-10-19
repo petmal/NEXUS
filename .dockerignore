@@ -17,3 +17,4 @@ docs/*
 !docs/astra-diagnostic-matrix.json
 !docs/history-diagnostic-matrix.json
 !docs/staged-repair-matrix.json
+!docs/joint-assembly-matrix.json

@@ -1,0 +1,248 @@
+{
+  "version": "joint-assembly-proof-v1",
+  "status": "passed",
+  "worlds": 432,
+  "complete_builds": 144,
+  "mission_signatures": 96,
+  "construction_cases": 7056,
+  "physical_optimal_actions_p0": {
+    "6": 54,
+    "7": 108,
+    "8": 270
+  },
+  "profiles": [
+    {
+      "theory": 3,
+      "discovery": 3,
+      "known_kernel": null,
+      "worlds": 432,
+      "certificate_histogram": {
+        "4": 432
+      },
+      "policy_reading_histogram": {
+        "4": 72,
+        "5": 294,
+        "6": 66
+      },
+      "channel_closure_supported_worlds": {
+        "local_only": 0,
+        "joint_only": 0,
+        "b_and_joint": 216,
+        "c_and_joint": 324
+      }
+    },
+    {
+      "theory": 2,
+      "discovery": 3,
+      "known_kernel": 0,
+      "worlds": 108,
+      "certificate_histogram": {
+        "2": 108
+      },
+      "policy_reading_histogram": {
+        "3": 54,
+        "4": 54
+      },
+      "channel_closure_supported_worlds": {
+        "local_only": 108,
+        "joint_only": 108,
+        "b_and_joint": 108,
+        "c_and_joint": 108
+      }
+    },
+    {
+      "theory": 2,
+      "discovery": 3,
+      "known_kernel": 1,
+      "worlds": 108,
+      "certificate_histogram": {
+        "2": 108
+      },
+      "policy_reading_histogram": {
+        "3": 54,
+        "4": 54
+      },
+      "channel_closure_supported_worlds": {
+        "local_only": 108,
+        "joint_only": 108,
+        "b_and_joint": 108,
+        "c_and_joint": 108
+      }
+    },
+    {
+      "theory": 2,
+      "discovery": 3,
+      "known_kernel": 2,
+      "worlds": 108,
+      "certificate_histogram": {
+        "3": 108
+      },
+      "policy_reading_histogram": {
+        "3": 24,
+        "4": 84
+      },
+      "channel_closure_supported_worlds": {
+        "local_only": 108,
+        "joint_only": 0,
+        "b_and_joint": 108,
+        "c_and_joint": 108
+      }
+    },
+    {
+      "theory": 2,
+      "discovery": 3,
+      "known_kernel": 3,
+      "worlds": 108,
+      "certificate_histogram": {
+        "3": 108
+      },
+      "policy_reading_histogram": {
+        "3": 36,
+        "4": 72
+      },
+      "channel_closure_supported_worlds": {
+        "local_only": 108,
+        "joint_only": 0,
+        "b_and_joint": 108,
+        "c_and_joint": 0
+      }
+    },
+    {
+      "theory": 3,
+      "discovery": 4,
+      "known_kernel": null,
+      "worlds": 432,
+      "certificate_histogram": {
+        "4": 216,
+        "5": 216
+      },
+      "policy_reading_histogram": {
+        "5": 69,
+        "6": 321,
+        "7": 42
+      },
+      "channel_closure_supported_worlds": {
+        "local_only": 0,
+        "joint_only": 0,
+        "b_and_joint": 216,
+        "c_and_joint": 108
+      }
+    },
+    {
+      "theory": 2,
+      "discovery": 4,
+      "known_kernel": 0,
+      "worlds": 108,
+      "certificate_histogram": {
+        "4": 108
+      },
+      "policy_reading_histogram": {
+        "4": 54,
+        "5": 54
+      },
+      "channel_closure_supported_worlds": {
+        "local_only": 108,
+        "joint_only": 0,
+        "b_and_joint": 0,
+        "c_and_joint": 0
+      }
+    },
+    {
+      "theory": 2,
+      "discovery": 4,
+      "known_kernel": 1,
+      "worlds": 108,
+      "certificate_histogram": {
+        "4": 108
+      },
+      "policy_reading_histogram": {
+        "4": 54,
+        "5": 54
+      },
+      "channel_closure_supported_worlds": {
+        "local_only": 0,
+        "joint_only": 0,
+        "b_and_joint": 0,
+        "c_and_joint": 0
+      }
+    },
+    {
+      "theory": 2,
+      "discovery": 4,
+      "known_kernel": 2,
+      "worlds": 108,
+      "certificate_histogram": {
+        "3": 108
+      },
+      "policy_reading_histogram": {
+        "4": 36,
+        "5": 60,
+        "6": 12
+      },
+      "channel_closure_supported_worlds": {
+        "local_only": 0,
+        "joint_only": 0,
+        "b_and_joint": 108,
+        "c_and_joint": 108
+      }
+    },
+    {
+      "theory": 2,
+      "discovery": 4,
+      "known_kernel": 3,
+      "worlds": 108,
+      "certificate_histogram": {
+        "4": 108
+      },
+      "policy_reading_histogram": {
+        "4": 54,
+        "5": 54
+      },
+      "channel_closure_supported_worlds": {
+        "local_only": 0,
+        "joint_only": 0,
+        "b_and_joint": 108,
+        "c_and_joint": 0
+      }
+    }
+  ],
+  "exact_query_guess_success_mass": [
+    {
+      "readings": 0,
+      "guesses": 1,
+      "accepted_world_mass": 9
+    },
+    {
+      "readings": 1,
+      "guesses": 1,
+      "accepted_world_mass": 9
+    },
+    {
+      "readings": 2,
+      "guesses": 1,
+      "accepted_world_mass": 27
+    },
+    {
+      "readings": 0,
+      "guesses": 2,
+      "accepted_world_mass": 18
+    },
+    {
+      "readings": 1,
+      "guesses": 2,
+      "accepted_world_mass": 18
+    }
+  ],
+  "feedback_success_upper_mass": [
+    9,
+    27,
+    81,
+    243,
+    432,
+    432,
+    432
+  ],
+  "scope": "Exact complete-build evidence certificates exclude finish feedback and setup; exact small-horizon query/guess success and upper bounds include finishes with free preparation and setup. Uniform prior mass out of432, not model or curated-seed probabilities. Public policy is constructive, not optimal. No cognitive-depth claim.",
+  "conformance": "All legal reader settings reduce to15 ternary query classes. Forge/assembler/stock/error/observation responses depend only on public state. Every complete eligible finish is membership in one of144 build masks. A relaxation grants every build and experiment for free setup; physical order, previews, stock copies and retries cannot give more hidden information than this audit.",
+  "deep_tier_admitted": false
+}

@@ -8,6 +8,12 @@ import typer
 from rich.console import Console
 from rich.table import Table
 
+from nexus.ontology.catalog import BUILTINS
+
+SCIENCE_FAMILY_HELP = "Scientific family: " + ", ".join(
+    family for family, definition in BUILTINS.items() if definition.generator is not None
+) + " (non-default families require axes v2)."
+
 
 app = typer.Typer(no_args_is_help=True, help="NEXUS procedural LLM reasoning environment")
 console = Console()
@@ -58,8 +64,6 @@ def actions_command(
     science_family: str = typer.Option("shared-response-v1", envvar="NEXUS_SCIENCE_FAMILY"),
 ) -> None:
     """Show the stable player action vocabulary and JSON examples."""
-    from nexus.ontology.catalog import BUILTINS
-
     if science_family not in BUILTINS or BUILTINS[science_family].generator is None:
         raise typer.BadParameter("unknown scientific family", param_hint="science-family")
     if science_family != "shared-response-v1" and axis_version != 2:
@@ -78,9 +82,9 @@ def generate(
     axis_version: int = typer.Option(1, min=1, max=2, envvar="NEXUS_AXIS_VERSION",
                                     help="1=legacy profiles; 2=scientific investigation semantics."),
     science_family: str = typer.Option("shared-response-v1", envvar="NEXUS_SCIENCE_FAMILY",
-        help="Scientific family: shared-response-v1, coupled-network-v1, resonant-network-v1, causal-mechanisms-v1, coupled-repair-v1, coupled-dynamics-v1, compositional-repair-v1, coupled-transfer-v1, coupled-evidence-v1, history-coupled-v1, or staged-repair-v1 (requires axes v2)."),
+        help=SCIENCE_FAMILY_HELP),
     budget_profile: str = typer.Option("standard", envvar="NEXUS_BUDGET_PROFILE",
-        help="standard or diagnostic-plus6 (supported compositional, transfer, history, or staged profiles; see the family guide)."),
+        help="standard or diagnostic-plus6 (supported families/profiles only; see the family guide)."),
     discovery_level: int = typer.Option(
         0,
         min=0,
@@ -331,9 +335,9 @@ def serve_session(
     axis_version: int = typer.Option(1, min=1, max=2, envvar="NEXUS_AXIS_VERSION",
                                     help="1=legacy profiles; 2=scientific investigation semantics."),
     science_family: str = typer.Option("shared-response-v1", envvar="NEXUS_SCIENCE_FAMILY",
-        help="Scientific family: shared-response-v1, coupled-network-v1, resonant-network-v1, causal-mechanisms-v1, coupled-repair-v1, coupled-dynamics-v1, compositional-repair-v1, coupled-transfer-v1, coupled-evidence-v1, history-coupled-v1, or staged-repair-v1 (requires axes v2)."),
+        help=SCIENCE_FAMILY_HELP),
     budget_profile: str = typer.Option("standard", envvar="NEXUS_BUDGET_PROFILE",
-        help="standard or diagnostic-plus6 (supported compositional, transfer, history, or staged profiles; see the family guide)."),
+        help="standard or diagnostic-plus6 (supported families/profiles only; see the family guide)."),
     discovery_level: int = typer.Option(
         0,
         min=0,

@@ -2,6 +2,8 @@
 
 from types import MappingProxyType
 
+from nexus.ontology.assembly.schema import SCHEMAS as ASSEMBLY
+
 from nexus.ontology.staged.schema import SCHEMAS as STAGED
 
 from nexus.ontology.history.schema import SCHEMAS as HISTORY
@@ -15,6 +17,7 @@ from nexus.ontology.transfer.schema import SCHEMAS as TRANSFER
 
 _SCHEMAS = MappingProxyType(
     {
+        "joint-assembly-v1": MappingProxyType(dict(ASSEMBLY)),
         "staged-repair-v1": MappingProxyType(dict(STAGED)),
         "history-coupled-v1": MappingProxyType(dict(HISTORY)),
         "coupled-transfer-v1": MappingProxyType(dict(TRANSFER)),
