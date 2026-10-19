@@ -16,3 +16,4 @@ docs/*
 !docs/transfer-model-matrix.json
 !docs/astra-diagnostic-matrix.json
 !docs/history-diagnostic-matrix.json
+!docs/staged-repair-matrix.json

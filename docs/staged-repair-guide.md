@@ -126,7 +126,7 @@ The following walkthrough uses only that public information and returned results
    |1|[1,1,0]|[1,0,0]|
    |2|[1,0,1]|[1,2,0]|
 
-   For tag 0, the middle dose 1 also subtracts route1*1=2 from the last load 1.
+   For tag 0, the middle dose 1 also subtracts r_1 * 1 = 2 from the last load 1.
    The final dose must therefore be 2: 1-2-2=-3=0 modulo 3. Treating each load
    independently would produce the wrong final state.
 6. For each seal, configure its three-dose row and operate trimmer on that seal.

@@ -18,7 +18,10 @@ Purpose and contract: staged-repair-design.md. No paid evaluations or main merge
    paired depth/theory comparisons with moderate P/R and no external Python.
 4. [in progress] Review actual diff independently, resolve findings, run focused and
    existing gates, refresh source-bound legacy artifacts through their generators,
-   run full CI where available, commit in stages to the existing feature branch.
+   run full CI, and publish to the existing feature branch. Implementation commit:
+   33c9181e5ef6256eace257f319c50e0f8bb7eb7c. All 770 local tests and every
+   legacy/new preflight passed. Initial full CI passed behavior gates and caught
+   the missing Docker build-context exception. Packaging follow-up CI is pending.
 
 ## Verification commands (extend as implemented)
 
@@ -50,7 +53,8 @@ Purpose and contract: staged-repair-design.md. No paid evaluations or main merge
 
 ## Resume notes
 
-- Workspace: /workspace/scratch/5185b9a844b2/NEXUS. Native clone is unavailable;
+- Workspace: /workspace/scratch/5185b9a844b2/NEXUS. The workspace disconnected after local verification; GitHub is authoritative.
+  Native clone is unavailable;
   GitHub connector works. Publish via create_tree/create_commit/update_ref with
   expected head; never force. Local Git root is reconstructed from exact objects.
 - Keep old ontologies stable; source-bound qualification manifests need explicit

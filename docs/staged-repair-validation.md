@@ -11,9 +11,10 @@ errors now overwrite a stale successful preflight report with `blocked`.
 | Gate | Result |
 |---|---|
 | Independent scalar proof | All 20 conditional profiles passed; every full repair unique; exact fixed panels checked independently |
-| New live policy coverage | All 216 worlds × 5 supported T/D profiles: 1,080 wins with supported evidence and replay |
+| New live policy coverage | All 216 worlds × 5 supported T/D profiles: 1,080 wins with supported evidence; replay checked separately in representative profiles and every matrix row |
 | Solver proof tests | 9 passed |
 | Fast unit/integration suite | 713 passed, 46 deselected; 3 pre-existing malformed-fixture serializer warnings |
+| Extended unit/integration suite | 46 passed in 531.40 seconds; exhaustive legacy domains and all 1,080 new policy runs |
 | Cross-seed property stress | 2 passed; 72 generated worlds across 24 legacy profiles |
 | CLI invalid/missing matrix regressions | 3 passed |
 | New matrix preflight | All 10 rows passed with exact actual-world certificates, live adaptive and fixed-panel policies, receipts and replay |
@@ -26,10 +27,20 @@ errors now overwrite a stale successful preflight report with `blocked`.
 | Ruff and whitespace | All new Python files pass; `git diff --check` clean |
 
 Repair, the original ten-cell matrix, structural, and eight-cell budget preflights
-also passed. The full extended suite is running. Image
-build and image-contained preflight are delegated to the existing full PR CI gate;
-this workspace has no Docker/Podman runtime. This record will be updated with their
-actual outcomes, not inferred success.
+also passed. Repair, the original ten-cell matrix, structural, and eight-cell budget preflights
+also passed. The four local test gates total **770 passed**.
+
+Full CI for implementation commit `33c9181e5ef6256eace257f319c50e0f8bb7eb7c`
+passed proof/preflight, solver, fast, extended, stress, and CLI gates. Its image
+build caught an omitted `.dockerignore` exception for the new matrix:
+https://github.com/petmal/NEXUS/actions/runs/39297192096.
+
+The packaging follow-up adds that exception and a regression checking every copied
+document against the build-context allowlist. Container verification is now an
+independent CI job with the same full-run conditions, so packaging failures appear
+promptly. Runtime source files and proof bindings are unchanged. The local workspace
+disconnected after the completed tests; the follow-up is verified through GitHub CI.
+The new CI result is pending and will be recorded here before release completion.
 
 ## Performance and meaning
 

@@ -165,8 +165,18 @@ jobs:
           uv run nexus solve /tmp/nexus-repair-smoke/private.json --trace-out /tmp/nexus-repair-smoke/run.jsonl
           uv run nexus replay /tmp/nexus-repair-smoke/private.json /tmp/nexus-repair-smoke/run.jsonl
 
+  # Packaging is independent of Python test execution. Detect missing build-context
+  # files immediately instead of after all exhaustive legacy-domain checks.
+  container:
+    if: ${{ (github.event_name == 'workflow_dispatch' && inputs.full) || (github.event_name == 'pull_request' && github.base_ref == 'feat/epistemic-calibration') }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
       - name: Container smoke test
-        if: ${{ (github.event_name == 'workflow_dispatch' && inputs.full) || (github.event_name == 'pull_request' && github.base_ref == 'feat/epistemic-calibration') }}
         run: |
           docker build --build-arg VCS_REF="$GITHUB_SHA" -t nexus-ci .
           test "$(docker image inspect nexus-ci --format '{{ index .Config.Labels "org.opencontainers.image.revision" }}')" = "$GITHUB_SHA"
