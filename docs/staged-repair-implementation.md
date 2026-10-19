@@ -1,0 +1,59 @@
+# Staged repair implementation ledger
+
+Base: ca471a6702a4da8be9023b4846acef7cc24b2ae6 on feat/theory-prior-axis.
+Purpose and contract: staged-repair-design.md. No paid evaluations or main merge.
+
+## Phases
+
+1. [complete] Inspect source; prove scalar mechanism, unique mission signatures,
+   adaptive witness, fixed-panel comparison and finish-inclusive information bound.
+   Add reusable finite-goal qualification helpers only where the history and new
+   family both demonstrate a need. Persist proof outputs and regression witnesses.
+2. [complete] Implement the opt-in ontology, strict schema/episode validation,
+   public evidence, public-only policy, canonical physical goal and terminal tracker.
+   Add semantic tests (transactionality, privacy, replay, finish feedback, recovery,
+   prior/disclosure consistency, supported vs compatible wins).
+3. [complete] Add source-bound preflight, ~10-run matrix and matching MindTrial YAML.
+   Include old-family regressions, exact-law controls, multiple mechanisms and
+   paired depth/theory comparisons with moderate P/R and no external Python.
+4. [in progress] Review actual diff independently, resolve findings, run focused and
+   existing gates, refresh source-bound legacy artifacts through their generators,
+   run full CI where available, commit in stages to the existing feature branch.
+
+## Verification commands (extend as implemented)
+
+- uv sync --frozen --all-extras
+- uv run python scripts/staged_repair_oracle.py --output /tmp/staged-proof.json
+- uv run pytest -q tests/unit/test_staged_repair.py tests/unit/test_goal_information.py
+- uv run python scripts/preflight_staged_repair.py --output /tmp/staged-preflight.json
+- Existing CI fast/proof/extended/stress and legacy immutable artifact checks.
+- Actual single-session HTTP and CLI play, correct/incorrect receipt validation,
+  deterministic replay, cold-process generation and terminal diagnostics timing.
+
+## Completed / evidence
+
+- Restored all 758 tracked files from pinned GitHub revision. Every blob SHA and
+  the full tree SHA match upstream. Python 3.14.8 and frozen dependencies installed.
+- Independent design review and scalar PoC passed. Full proof covers 20 conditional
+  profiles. Live public-policy check passed all 216 worlds across all 5 supported
+  T/D profiles (1,080 sessions). Fixed-panel live play fits the unchanged budget.
+- Focused tests passed 27 fast semantic tests and 6 service/matrix tests before final
+  review/formatting. Final counts and source-bound reports are regenerated at release.
+- Important negative result: linked contexts leak useful upstream information.
+  Their exact actual-world certificates need 3–4 readings; independent contexts
+  range 3–6. Matrix includes qualified 6/5-reading independent cases, 4-reading linked
+  cases, and a 3-reading shallow control. No claim of mandatory six-stage reasoning.
+- Separate read-only implementation review completed; one stale-report finding
+  fixed and verified. Legacy source bindings refreshed only after their original
+  proof/witness identities and 15 prerequisite tests passed. Extended tests and
+  remaining preflights are running; see staged-repair-validation.md for results.
+
+## Resume notes
+
+- Workspace: /workspace/scratch/5185b9a844b2/NEXUS. Native clone is unavailable;
+  GitHub connector works. Publish via create_tree/create_commit/update_ref with
+  expected head; never force. Local Git root is reconstructed from exact objects.
+- Keep old ontologies stable; source-bound qualification manifests need explicit
+  refresh after verification. Do not weaken checks to make stale artifacts pass.
+- Do not call hypothetical teaching example deep. New proofs measure mission
+  information and experimental adaptation, not arbitrary cognition or failure rate.

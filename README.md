@@ -1,6 +1,14 @@
 # NEXUS
 
-The latest opt-in families are `coupled-transfer-v1` (a counterprogram must match
+The opt-in `staged-repair-v1` pilot adds three actual exit seals, coupled hidden
+loads, and independent (D3) versus dependent (D4) experiment contexts. T2 discloses
+operator shapes; T3 requires identifying them. Existing families are unchanged.
+Read the [pilot guide and validated matrix](docs/staged-repair-guide.md) before
+running it. Qualification distinguishes the actual mission certificate, adaptive
+reference cost, fixed-panel cost and finish-inclusive success bounds. It makes
+no unavoidable-deep-reasoning or real-model failure-rate claim.
+
+Other opt-in families include `coupled-transfer-v1` (a counterprogram must match
 the complete physical behavior) and `coupled-evidence-v1` (raw readings also
 depend on a coupled upstream mechanism). See the [qualified pilot and limits](docs/transfer-pilot.md),
 [public-response walkthrough](docs/transfer-player-walkthrough.md), and

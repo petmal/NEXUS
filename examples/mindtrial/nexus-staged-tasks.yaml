@@ -1,0 +1,473 @@
+# Staged repair pilot: no external Python; source-bound preflight required.
+# Existing families are preserved. No unqualified deep-reasoning claim.
+task-config:
+  max-turns: 160
+  validation-rules:
+    custom-validator: nexus-victory
+    case-sensitive: true
+    ignore-whitespace: false
+    trim-lines: false
+  system-prompt:
+    enable-for: text
+    template: |-
+      Use the available NEXUS tool to complete the live task. Your final answer
+      must follow this format exactly, with no extra explanation or formatting:
+      {{.ResponseResultFormat}}
+  tool-selector:
+    disabled: false
+    tools:
+    - name: nexus
+      disabled: false
+      max-calls: 120
+      timeout: 60s
+  tasks:
+  - name: NEXUS staged-diagnostic-01
+    disabled: false
+    suite: nexus
+    category: staged-diagnostic
+    difficulty: experimental-uncalibrated
+    tags:
+    - staged-repair-pilot-v1
+    - history-coupled-v1
+    prompt: |
+      You are confined to an artificial NEXUS facility. Complete the live mission
+      and return its actual victory receipt.
+
+      Begin with manifest and observe, then read every listed evidence file. Learn
+      the exact physical goal, full bounded prior, reader semantics and action contract.
+      All in-world measurements and actions must use NEXUS. Finite hypothesis
+      enumeration is valid. Names do not imply real-world physical laws.
+
+      Track actual artifacts, applied treatments or history, location and remaining
+      actions. Reader results can describe a temporary experiment on a copy rather
+      than the actual specimen. In staged repair, readings describe the fresh baseline;
+      cumulative doses describe treatment already applied, not remaining hidden loads.
+      Configure stores apparatus settings; operate commits the documented effect.
+      A probe does not apply treatment or advance real specimen history.
+
+      Investigate what is needed for the complete mission. Use every required actual
+      seal, not survey substitutes. Experiments remain legal in any order allowed by
+      the public contract; there is no required theory report. Recovery and rejected
+      finishes work only as documented. A correct-looking setup is insufficient:
+      call finish successfully and return exactly its actual victory_code.
+    response-result-format: |
+      The actual victory_code returned after successfully finishing the live
+      NEXUS mission, and nothing else. No quotes, Markdown or explanation.
+    tool-selector:
+      service-inputs:
+        nexus:
+          axis-version: 2
+          science-family: history-coupled-v1
+          seed: '239'
+          discovery-level: 5
+          planning-level: 1
+          resource-pressure: 1
+          theory-level: 3
+          budget-profile: standard
+          generation-timing: true
+          extended-diagnostics: true
+  - name: NEXUS staged-diagnostic-02
+    disabled: false
+    suite: nexus
+    category: staged-diagnostic
+    difficulty: control-known-law
+    tags:
+    - staged-repair-pilot-v1
+    - staged-repair-v1
+    prompt: |
+      You are confined to an artificial NEXUS facility. Complete the live mission
+      and return its actual victory receipt.
+
+      Begin with manifest and observe, then read every listed evidence file. Learn
+      the exact physical goal, full bounded prior, reader semantics and action contract.
+      All in-world measurements and actions must use NEXUS. Finite hypothesis
+      enumeration is valid. Names do not imply real-world physical laws.
+
+      Track actual artifacts, applied treatments or history, location and remaining
+      actions. Reader results can describe a temporary experiment on a copy rather
+      than the actual specimen. In staged repair, readings describe the fresh baseline;
+      cumulative doses describe treatment already applied, not remaining hidden loads.
+      Configure stores apparatus settings; operate commits the documented effect.
+      A probe does not apply treatment or advance real specimen history.
+
+      Investigate what is needed for the complete mission. Use every required actual
+      seal, not survey substitutes. Experiments remain legal in any order allowed by
+      the public contract; there is no required theory report. Recovery and rejected
+      finishes work only as documented. A correct-looking setup is insufficient:
+      call finish successfully and return exactly its actual victory_code.
+    response-result-format: |
+      The actual victory_code returned after successfully finishing the live
+      NEXUS mission, and nothing else. No quotes, Markdown or explanation.
+    tool-selector:
+      service-inputs:
+        nexus:
+          axis-version: 2
+          science-family: staged-repair-v1
+          seed: '59'
+          discovery-level: 0
+          planning-level: 1
+          resource-pressure: 1
+          theory-level: 0
+          budget-profile: standard
+          generation-timing: true
+          extended-diagnostics: true
+  - name: NEXUS staged-diagnostic-03
+    disabled: false
+    suite: nexus
+    category: staged-diagnostic
+    difficulty: experimental-uncalibrated
+    tags:
+    - staged-repair-pilot-v1
+    - staged-repair-v1
+    prompt: |
+      You are confined to an artificial NEXUS facility. Complete the live mission
+      and return its actual victory receipt.
+
+      Begin with manifest and observe, then read every listed evidence file. Learn
+      the exact physical goal, full bounded prior, reader semantics and action contract.
+      All in-world measurements and actions must use NEXUS. Finite hypothesis
+      enumeration is valid. Names do not imply real-world physical laws.
+
+      Track actual artifacts, applied treatments or history, location and remaining
+      actions. Reader results can describe a temporary experiment on a copy rather
+      than the actual specimen. In staged repair, readings describe the fresh baseline;
+      cumulative doses describe treatment already applied, not remaining hidden loads.
+      Configure stores apparatus settings; operate commits the documented effect.
+      A probe does not apply treatment or advance real specimen history.
+
+      Investigate what is needed for the complete mission. Use every required actual
+      seal, not survey substitutes. Experiments remain legal in any order allowed by
+      the public contract; there is no required theory report. Recovery and rejected
+      finishes work only as documented. A correct-looking setup is insufficient:
+      call finish successfully and return exactly its actual victory_code.
+    response-result-format: |
+      The actual victory_code returned after successfully finishing the live
+      NEXUS mission, and nothing else. No quotes, Markdown or explanation.
+    tool-selector:
+      service-inputs:
+        nexus:
+          axis-version: 2
+          science-family: staged-repair-v1
+          seed: '59'
+          discovery-level: 3
+          planning-level: 1
+          resource-pressure: 1
+          theory-level: 3
+          budget-profile: standard
+          generation-timing: true
+          extended-diagnostics: true
+  - name: NEXUS staged-diagnostic-04
+    disabled: false
+    suite: nexus
+    category: staged-diagnostic
+    difficulty: experimental-uncalibrated
+    tags:
+    - staged-repair-pilot-v1
+    - staged-repair-v1
+    prompt: |
+      You are confined to an artificial NEXUS facility. Complete the live mission
+      and return its actual victory receipt.
+
+      Begin with manifest and observe, then read every listed evidence file. Learn
+      the exact physical goal, full bounded prior, reader semantics and action contract.
+      All in-world measurements and actions must use NEXUS. Finite hypothesis
+      enumeration is valid. Names do not imply real-world physical laws.
+
+      Track actual artifacts, applied treatments or history, location and remaining
+      actions. Reader results can describe a temporary experiment on a copy rather
+      than the actual specimen. In staged repair, readings describe the fresh baseline;
+      cumulative doses describe treatment already applied, not remaining hidden loads.
+      Configure stores apparatus settings; operate commits the documented effect.
+      A probe does not apply treatment or advance real specimen history.
+
+      Investigate what is needed for the complete mission. Use every required actual
+      seal, not survey substitutes. Experiments remain legal in any order allowed by
+      the public contract; there is no required theory report. Recovery and rejected
+      finishes work only as documented. A correct-looking setup is insufficient:
+      call finish successfully and return exactly its actual victory_code.
+    response-result-format: |
+      The actual victory_code returned after successfully finishing the live
+      NEXUS mission, and nothing else. No quotes, Markdown or explanation.
+    tool-selector:
+      service-inputs:
+        nexus:
+          axis-version: 2
+          science-family: staged-repair-v1
+          seed: '59'
+          discovery-level: 4
+          planning-level: 1
+          resource-pressure: 1
+          theory-level: 3
+          budget-profile: standard
+          generation-timing: true
+          extended-diagnostics: true
+  - name: NEXUS staged-diagnostic-05
+    disabled: false
+    suite: nexus
+    category: staged-diagnostic
+    difficulty: experimental-uncalibrated
+    tags:
+    - staged-repair-pilot-v1
+    - staged-repair-v1
+    prompt: |
+      You are confined to an artificial NEXUS facility. Complete the live mission
+      and return its actual victory receipt.
+
+      Begin with manifest and observe, then read every listed evidence file. Learn
+      the exact physical goal, full bounded prior, reader semantics and action contract.
+      All in-world measurements and actions must use NEXUS. Finite hypothesis
+      enumeration is valid. Names do not imply real-world physical laws.
+
+      Track actual artifacts, applied treatments or history, location and remaining
+      actions. Reader results can describe a temporary experiment on a copy rather
+      than the actual specimen. In staged repair, readings describe the fresh baseline;
+      cumulative doses describe treatment already applied, not remaining hidden loads.
+      Configure stores apparatus settings; operate commits the documented effect.
+      A probe does not apply treatment or advance real specimen history.
+
+      Investigate what is needed for the complete mission. Use every required actual
+      seal, not survey substitutes. Experiments remain legal in any order allowed by
+      the public contract; there is no required theory report. Recovery and rejected
+      finishes work only as documented. A correct-looking setup is insufficient:
+      call finish successfully and return exactly its actual victory_code.
+    response-result-format: |
+      The actual victory_code returned after successfully finishing the live
+      NEXUS mission, and nothing else. No quotes, Markdown or explanation.
+    tool-selector:
+      service-inputs:
+        nexus:
+          axis-version: 2
+          science-family: staged-repair-v1
+          seed: '59'
+          discovery-level: 4
+          planning-level: 1
+          resource-pressure: 1
+          theory-level: 2
+          budget-profile: standard
+          generation-timing: true
+          extended-diagnostics: true
+  - name: NEXUS staged-diagnostic-06
+    disabled: false
+    suite: nexus
+    category: staged-diagnostic
+    difficulty: experimental-uncalibrated
+    tags:
+    - staged-repair-pilot-v1
+    - staged-repair-v1
+    prompt: |
+      You are confined to an artificial NEXUS facility. Complete the live mission
+      and return its actual victory receipt.
+
+      Begin with manifest and observe, then read every listed evidence file. Learn
+      the exact physical goal, full bounded prior, reader semantics and action contract.
+      All in-world measurements and actions must use NEXUS. Finite hypothesis
+      enumeration is valid. Names do not imply real-world physical laws.
+
+      Track actual artifacts, applied treatments or history, location and remaining
+      actions. Reader results can describe a temporary experiment on a copy rather
+      than the actual specimen. In staged repair, readings describe the fresh baseline;
+      cumulative doses describe treatment already applied, not remaining hidden loads.
+      Configure stores apparatus settings; operate commits the documented effect.
+      A probe does not apply treatment or advance real specimen history.
+
+      Investigate what is needed for the complete mission. Use every required actual
+      seal, not survey substitutes. Experiments remain legal in any order allowed by
+      the public contract; there is no required theory report. Recovery and rejected
+      finishes work only as documented. A correct-looking setup is insufficient:
+      call finish successfully and return exactly its actual victory_code.
+    response-result-format: |
+      The actual victory_code returned after successfully finishing the live
+      NEXUS mission, and nothing else. No quotes, Markdown or explanation.
+    tool-selector:
+      service-inputs:
+        nexus:
+          axis-version: 2
+          science-family: staged-repair-v1
+          seed: '107'
+          discovery-level: 4
+          planning-level: 1
+          resource-pressure: 1
+          theory-level: 3
+          budget-profile: standard
+          generation-timing: true
+          extended-diagnostics: true
+  - name: NEXUS staged-diagnostic-07
+    disabled: false
+    suite: nexus
+    category: staged-diagnostic
+    difficulty: experimental-uncalibrated
+    tags:
+    - staged-repair-pilot-v1
+    - staged-repair-v1
+    prompt: |
+      You are confined to an artificial NEXUS facility. Complete the live mission
+      and return its actual victory receipt.
+
+      Begin with manifest and observe, then read every listed evidence file. Learn
+      the exact physical goal, full bounded prior, reader semantics and action contract.
+      All in-world measurements and actions must use NEXUS. Finite hypothesis
+      enumeration is valid. Names do not imply real-world physical laws.
+
+      Track actual artifacts, applied treatments or history, location and remaining
+      actions. Reader results can describe a temporary experiment on a copy rather
+      than the actual specimen. In staged repair, readings describe the fresh baseline;
+      cumulative doses describe treatment already applied, not remaining hidden loads.
+      Configure stores apparatus settings; operate commits the documented effect.
+      A probe does not apply treatment or advance real specimen history.
+
+      Investigate what is needed for the complete mission. Use every required actual
+      seal, not survey substitutes. Experiments remain legal in any order allowed by
+      the public contract; there is no required theory report. Recovery and rejected
+      finishes work only as documented. A correct-looking setup is insufficient:
+      call finish successfully and return exactly its actual victory_code.
+    response-result-format: |
+      The actual victory_code returned after successfully finishing the live
+      NEXUS mission, and nothing else. No quotes, Markdown or explanation.
+    tool-selector:
+      service-inputs:
+        nexus:
+          axis-version: 2
+          science-family: staged-repair-v1
+          seed: '107'
+          discovery-level: 3
+          planning-level: 1
+          resource-pressure: 1
+          theory-level: 3
+          budget-profile: standard
+          generation-timing: true
+          extended-diagnostics: true
+  - name: NEXUS staged-diagnostic-08
+    disabled: false
+    suite: nexus
+    category: staged-diagnostic
+    difficulty: experimental-uncalibrated
+    tags:
+    - staged-repair-pilot-v1
+    - staged-repair-v1
+    prompt: |
+      You are confined to an artificial NEXUS facility. Complete the live mission
+      and return its actual victory receipt.
+
+      Begin with manifest and observe, then read every listed evidence file. Learn
+      the exact physical goal, full bounded prior, reader semantics and action contract.
+      All in-world measurements and actions must use NEXUS. Finite hypothesis
+      enumeration is valid. Names do not imply real-world physical laws.
+
+      Track actual artifacts, applied treatments or history, location and remaining
+      actions. Reader results can describe a temporary experiment on a copy rather
+      than the actual specimen. In staged repair, readings describe the fresh baseline;
+      cumulative doses describe treatment already applied, not remaining hidden loads.
+      Configure stores apparatus settings; operate commits the documented effect.
+      A probe does not apply treatment or advance real specimen history.
+
+      Investigate what is needed for the complete mission. Use every required actual
+      seal, not survey substitutes. Experiments remain legal in any order allowed by
+      the public contract; there is no required theory report. Recovery and rejected
+      finishes work only as documented. A correct-looking setup is insufficient:
+      call finish successfully and return exactly its actual victory_code.
+    response-result-format: |
+      The actual victory_code returned after successfully finishing the live
+      NEXUS mission, and nothing else. No quotes, Markdown or explanation.
+    tool-selector:
+      service-inputs:
+        nexus:
+          axis-version: 2
+          science-family: staged-repair-v1
+          seed: '145'
+          discovery-level: 4
+          planning-level: 1
+          resource-pressure: 1
+          theory-level: 3
+          budget-profile: standard
+          generation-timing: true
+          extended-diagnostics: true
+  - name: NEXUS staged-diagnostic-09
+    disabled: false
+    suite: nexus
+    category: staged-diagnostic
+    difficulty: experimental-uncalibrated
+    tags:
+    - staged-repair-pilot-v1
+    - staged-repair-v1
+    prompt: |
+      You are confined to an artificial NEXUS facility. Complete the live mission
+      and return its actual victory receipt.
+
+      Begin with manifest and observe, then read every listed evidence file. Learn
+      the exact physical goal, full bounded prior, reader semantics and action contract.
+      All in-world measurements and actions must use NEXUS. Finite hypothesis
+      enumeration is valid. Names do not imply real-world physical laws.
+
+      Track actual artifacts, applied treatments or history, location and remaining
+      actions. Reader results can describe a temporary experiment on a copy rather
+      than the actual specimen. In staged repair, readings describe the fresh baseline;
+      cumulative doses describe treatment already applied, not remaining hidden loads.
+      Configure stores apparatus settings; operate commits the documented effect.
+      A probe does not apply treatment or advance real specimen history.
+
+      Investigate what is needed for the complete mission. Use every required actual
+      seal, not survey substitutes. Experiments remain legal in any order allowed by
+      the public contract; there is no required theory report. Recovery and rejected
+      finishes work only as documented. A correct-looking setup is insufficient:
+      call finish successfully and return exactly its actual victory_code.
+    response-result-format: |
+      The actual victory_code returned after successfully finishing the live
+      NEXUS mission, and nothing else. No quotes, Markdown or explanation.
+    tool-selector:
+      service-inputs:
+        nexus:
+          axis-version: 2
+          science-family: staged-repair-v1
+          seed: '0'
+          discovery-level: 4
+          planning-level: 1
+          resource-pressure: 1
+          theory-level: 3
+          budget-profile: standard
+          generation-timing: true
+          extended-diagnostics: true
+  - name: NEXUS staged-diagnostic-10
+    disabled: false
+    suite: nexus
+    category: staged-diagnostic
+    difficulty: experimental-uncalibrated
+    tags:
+    - staged-repair-pilot-v1
+    - staged-repair-v1
+    prompt: |
+      You are confined to an artificial NEXUS facility. Complete the live mission
+      and return its actual victory receipt.
+
+      Begin with manifest and observe, then read every listed evidence file. Learn
+      the exact physical goal, full bounded prior, reader semantics and action contract.
+      All in-world measurements and actions must use NEXUS. Finite hypothesis
+      enumeration is valid. Names do not imply real-world physical laws.
+
+      Track actual artifacts, applied treatments or history, location and remaining
+      actions. Reader results can describe a temporary experiment on a copy rather
+      than the actual specimen. In staged repair, readings describe the fresh baseline;
+      cumulative doses describe treatment already applied, not remaining hidden loads.
+      Configure stores apparatus settings; operate commits the documented effect.
+      A probe does not apply treatment or advance real specimen history.
+
+      Investigate what is needed for the complete mission. Use every required actual
+      seal, not survey substitutes. Experiments remain legal in any order allowed by
+      the public contract; there is no required theory report. Recovery and rejected
+      finishes work only as documented. A correct-looking setup is insufficient:
+      call finish successfully and return exactly its actual victory_code.
+    response-result-format: |
+      The actual victory_code returned after successfully finishing the live
+      NEXUS mission, and nothing else. No quotes, Markdown or explanation.
+    tool-selector:
+      service-inputs:
+        nexus:
+          axis-version: 2
+          science-family: staged-repair-v1
+          seed: '59'
+          discovery-level: 4
+          planning-level: 1
+          resource-pressure: 1
+          theory-level: 3
+          budget-profile: diagnostic-plus6
+          generation-timing: true
+          extended-diagnostics: true

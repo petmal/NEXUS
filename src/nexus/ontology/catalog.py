@@ -50,6 +50,14 @@ BUILTINS = MappingProxyType(
         item.family: item
         for item in (
             OntologyDefinition(
+                "staged-repair-v1", "staged-repair-v1",
+                runtime_module="nexus.ontology.staged.runtime",
+                generator=("nexus.ontology.staged.generation", "generate_staged"),
+                qualifier=("nexus.ontology.staged.qualification", "qualify_staged"),
+                diagnostic_budget=True,
+                standalone_contract=True,
+            ),
+            OntologyDefinition(
                 "history-coupled-v1", "history-coupled-v1",
                 runtime_module="nexus.ontology.history.runtime",
                 generator=("nexus.ontology.history.generation", "generate_history"),

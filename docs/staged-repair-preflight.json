@@ -1,0 +1,1184 @@
+{
+  "version": "staged-repair-preflight-v1",
+  "status": "passed",
+  "sources": {
+    "__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "cli.py": "f71e8bc64961111d54fe84989b2abcaed5746d3355bf0a2de54e4ec51042fe06",
+    "diagnostics.py": "a4654237788f022f5db1b1a7bc22c0d0fbfec497203a049940cebcfcdea1ba20",
+    "engine/__init__.py": "75976174fce0ad3d8238137d1f10cf64f4f8303dda1af9ba667ff505f063bdfb",
+    "engine/canonical.py": "8376561fe738e77bfacb1b648805631c1f6270f67c1d872278292bf1fd05e72d",
+    "engine/engine.py": "9935fee807c2ec273fa754499b2910864e765a1b1cbd94a44c6e2cfbe7cf62a6",
+    "engine/goals.py": "e7640e41f25e59fce0727c5ff2d724a0e78020e683657402c720f5bc33521afc",
+    "engine/investigation.py": "26ae2b94a7e4009e1f11e0d76abfd0721f0ce39c9f78beb96f4c99f6139bfa6d",
+    "engine/network.py": "af9b5e080894727ae5826a4efb4e0915b8e71bd8723683c9e10450379b23980b",
+    "engine/replay.py": "f02dbbffcfb0f6fca8fc24d8af5f0ee1343caa3c7b002b8303195b82cfd1f93e",
+    "engine/resonance.py": "c9bfa61ae60acc628c651769c20e0503cab4c63c94e0613e57f3e05e4d847e6a",
+    "engine/rules.py": "1150037cc85bfde695e90032ba930f19da24c7910cc28479ec46cc7437be1778",
+    "entrypoint.py": "ee7dd624ebb36b8b20568583892728274744f5a71e6c2e9ece24557ec753a385",
+    "evaluation/__init__.py": "fdf4cf1fa3c7213f2687aa137774dc54b0b8d2a1d624a85ccf9ec151600426e0",
+    "evaluation/budget_diagnostic.py": "f1478f63cd67b54d6334f9ae5a07cb1214a66cc9fc36d88722eea2dbd6f1a137",
+    "evaluation/difficulty.py": "131b89651dcf9108a4ee66a91e31e321adc88707dced6b8355e30d780cbc9e23",
+    "evaluation/goal_information.py": "242b3f45c0336f979265fe0ea0287d7986cc3942576a24b1f3a1c30fae6f5c63",
+    "evaluation/history.py": "55d0aeebe96681ac16c49e436be61f58bcced5ef331fdf6de412780a4a96c36d",
+    "evaluation/matrix.py": "06624362b7f11866d4cc18d09155e34ecd8db41947eda433e528c2fc757fc8b9",
+    "evaluation/staged.py": "6713d0140e82c6ddf34534f0a38ca50cad253f12ed1c9322d4e6d2a48d683dec",
+    "evaluation/structural.py": "e5cb428b44e91e3d41036cdae546a8bf0f9fa75e5d023d7651313f582b6b8095",
+    "evaluation/transfer.py": "34db32f62953cefd6b86703c4f26dcc5f54b44b079df654cade6e6322f56e33a",
+    "generator/__init__.py": "df88f4d83503a2dbfd3ef3c05423a15b41182ec2adf00e1b22cee75240877c50",
+    "generator/constructed.py": "6fd22b43417118a4c4f4a3434ccab2286693734368f2ea1fd938c3c7ee859ca4",
+    "generator/correction.py": "269dc831109135554bf5fc9048d9afe54c77b5ec0830f66c6b09e2ebbd6e398c",
+    "generator/correction_generation.py": "e5972a8742134c8a8d8524ca08a6c49d6e61b4c967d06c71865fca044d4e2fde",
+    "generator/difficulty.py": "efb3c1dd99caf0887f64158ebf68ccee965e16c490b572e588a3286ee8d7134a",
+    "generator/discovery.py": "7ec6dd6e9ce4aab363768ba325e3e9366052740461acf7859145eb3deb70a0ad",
+    "generator/evidence.py": "e00fb5770dc4e8275ca2682da7fc96afc800c8bb2c927ec4000a4acb2a12beef",
+    "generator/generator.py": "631ef7720c0c9f80fb0f64c7dedcf7782d1b1a170e91b9655ed2f5b9d2922ca6",
+    "generator/investigation.py": "81f9814f2b0962ca74dde7695c8e33fc1febc84ab31d577ab6e0487dcbb8403f",
+    "generator/investigation_docs.py": "25919e904a7325d03fdb2b77c96ae832a819af00fea0edcae93b5d67cf0692e8",
+    "generator/investigation_qualify.py": "8f3dd06aaa4d0b8e41cf5b54cf9053c8539c46a01d9d725fab61370bd28c36a4",
+    "generator/manual.py": "ee8bfa23d9e0fd1bc169ca778bf6d3bb76135fca1f90f13d036e8512b5c32632",
+    "generator/network.py": "95646e3466abf3ea4f69dff39236005a10ae295a9dafbe0e872abe26a3e3810f",
+    "generator/network_docs.py": "3698aa38b69476115684de7598597921ef570120a97528d06f602ad9ae8ad060",
+    "generator/network_qualify.py": "0fba70b2e7821511b9d90edc3617af4e977594581a36a17584c03466db2a71bb",
+    "generator/network_world.py": "1e8c57684dd96be9aa2a9a4e37039b8853de8fc3dbeec50e3d027ad7c6784e65",
+    "generator/qualify.py": "d495c45ed42e668d2921b1902b8f6dd03f58fa89641acb0e37fe0a233766a749",
+    "generator/randomness.py": "0d7c335477ada6a5fdad85c4a975083bae10bf8c9250d8ff06bd65378f78ba86",
+    "generator/resonance.py": "7f2e453e8f2fc05b22d6afc2b07e6c6d3095a184fd1fafab27d8db64904c01aa",
+    "generator/resonance_docs.py": "118f1c91365a665b861299dd6a21d60a0a82d3b0b7ce1ba4e7cb384976f20f41",
+    "generator/resonance_qualify.py": "ba4ae4235e12017a53fe1345d0f6d23d5eabb913926c5cbc1f46a456fc948abe",
+    "generator/rules.py": "ad0cb14748a6566df1e6804a45017ad6b5c47928ad9574624b269ead60462ee4",
+    "generator/structural.py": "db7d8878307a2aa9cc1b2c153eb24ea002d4fe8c7bc97536b09a7539fd42db49",
+    "generator/structural_generation.py": "52e6b9c8015e70d96cf27052bb6271a67911b8ee5e2857c6a3072f7c6f74c74e",
+    "generator/theory.py": "7235d4e9261cc4c0b10b67ad623e8db28a688fbfcfcc761c2d22e5d2a2d17e57",
+    "generator/theory_generation.py": "06d9741b82c238efe916863f997a4590a749d2f0386a8393d903c1f4e6dca0c2",
+    "io.py": "2a668afc3cef0fbc56e02013290db56373af31d01f1a5acb138adae8684e4e1a",
+    "models/__init__.py": "4bae834eeea9fc03d43fc3f89e2be03d61a8c630e8d7c3ab32f8351cc38b82a4",
+    "models/actions.py": "21fff92178c003eea0f4c3b525cd631274c70b0bcc25d2e1379c0b00f262ca1d",
+    "models/domain.py": "d290d0fff0a3a32b77ef97a70526681d1220871f6e25534fd8596421d684d684",
+    "models/episode.py": "8666156ea5e0766f8fbb74af818e0b45a4abf612247f9060de5fd3d0a9bb17f2",
+    "models/events.py": "497e08876c1ff0f547afcfe5338e59532f0a6e54241fec2e9ecd3a288a5c0191",
+    "models/goals.py": "4ccabe7c8dd0505776bf8c3ea1c31bcabbfabb5b7c9135c58dcba9e2d7f13302",
+    "models/investigation.py": "46f107f3dc21b5f6732787852b8701f704498a5dbaf5a518bb04c576243861a2",
+    "models/network.py": "a72817eee76bcfd39fcf820d2f3f3caab3dabfa6d680c340936eb6aed878879f",
+    "models/observation.py": "a9e2fa72d16a0b50a08c4b4af44bcccf1faf72a9f9dbf690dd76ba9fcea4631f",
+    "models/rules.py": "41946ac917bf339a70e8857a9edf35c714151afd425cdddcfbbccdff77b75cf7",
+    "models/theory.py": "73a7d3a00de8a7874b8e7e22fb449bd5a7ba71abf87f85e6e75cd5bc99e9c8ef",
+    "models/world.py": "4a14d6ad0e4c496ed933fd352a7337acc7fb60e82c76904b48f1f9a05b667626",
+    "ontology/__init__.py": "0ce80e620e805755619a948825f78591e755c347d4f82a7a548cf1ab005a7342",
+    "ontology/builtin_runtime.py": "d202225154d67b0590a3eea5851409d882cf47a6ac7c4f4e3f252554187bea97",
+    "ontology/catalog.py": "aa7db02a1a1984f40f8c771dcb1aa3a42fcbce82dc429fea5272a3b993da4f70",
+    "ontology/categorical/__init__.py": "44c73eb1da7efc0b3a4fc470dadc0ff9048b11abf756c0c39198e2b8ab20780e",
+    "ontology/categorical/generation.py": "f2a2002c54b96d408520cb9e1e1188d61cfa9a21255907ce90d0f2ef048dd97e",
+    "ontology/categorical/inference.py": "2c80384f191551fb651e1e78726c7202bc306232ec618433217aa126eb58e8d3",
+    "ontology/categorical/laws.py": "602ac09cdab50e0fb83772a41354f60445c7449f5b491d94404a8e0de599f394",
+    "ontology/categorical/qualification.py": "8e5819237062347bc0ba77b286d2c795f7f72702378770da71e4388c76ed0dcc",
+    "ontology/categorical/runtime.py": "0bf57060e787abd4f0be9b7132d2ea2892ccf13632e7126182cb900fb1f29d1d",
+    "ontology/categorical/schema.py": "782056023fac4d04bc83eed76233f7c8ab83f8c3a71dfd6d7559d39322034dfd",
+    "ontology/causal/__init__.py": "919c56f2ceb47f08cd27b036093ef218a7486e2e3dab5d34d59e224c78545da3",
+    "ontology/causal/evidence.py": "e673e4f844c510ed637798ffe86d433f7360b0ec209102b40cf7b55e94694de6",
+    "ontology/causal/generation.py": "9847a3a5d40930b9c68e0a58082252c1d7a5f3049102955e441532e1cf49161d",
+    "ontology/causal/inference.py": "6145dacb325b1415715b5cdd86a0631231ba58fd6771325f952080f6f6e8eb4d",
+    "ontology/causal/laws.py": "c38935671ba186b0ae242a3142df80a72eadc1f6d7f19b1f1533f73b8ad09a34",
+    "ontology/causal/policy.py": "c71040ef4e5ae0b48166a61be344fbbf9c61139496076461f81d061e893c7e8c",
+    "ontology/causal/qualification.py": "cb2191c0c26d1e575b5755e1f4279765bde435c97e1533e2585c17c1787e3931",
+    "ontology/causal/runtime.py": "8cfa644b292217be40243a224fedad2abcec9178803ec6d6c1855e9aeaba5432",
+    "ontology/causal/schema.py": "591a9347c9d9037aa091b66a556d17312d3a3eb6f1bd5d7e534bb0d045fd67b0",
+    "ontology/compositional/__init__.py": "fbdd40b14b548b5f1cf2f382b55de7e0af2f2e09d83358f6400e0ac023355fe6",
+    "ontology/compositional/budget.py": "b1f25b8a9b43e0d29df6954cde03e36fe5264887b7325d6db51c37c999f3bf39",
+    "ontology/compositional/evidence.py": "140c39f8aa580d6da00763dfb3e60516106384a57c8070e284869730c60a1950",
+    "ontology/compositional/generation.py": "94be2fff00898153a80da5a6fb347977548b16d346e1acebee1f0e6b6194a1a1",
+    "ontology/compositional/inference.py": "36a06d87e6a55588f13e4881051eda894662c81ccf474dd31db1191579ed2d2b",
+    "ontology/compositional/laws.py": "d340f4fccbdf6238586f3114226fa0a826ac5db79ff6dd85255c46b45336ef4d",
+    "ontology/compositional/policy.py": "794e661a51dfcd37d2deafb5b862903dd60b81870ab3293755d1049a59286eb8",
+    "ontology/compositional/qualification.py": "fb4b962ea8da0ed369fee6abc655bbfaccd6207db132388176eb48f319e14d68",
+    "ontology/compositional/runtime.py": "4bf9c8de32bf56eb5dbb59f7b5ca6d96e3a51605da3f2ac8f0fb9586d3602e75",
+    "ontology/compositional/schema.py": "5c7cfbdd45c333420e248e23aa11901d57e0d4dcd2a6cb25d7a63ec4cbb7ff24",
+    "ontology/contracts.py": "546ea347a0eb0af9e4b44ce7f89c28c4b24be94f7c60104958f661a0d155e808",
+    "ontology/dynamics/__init__.py": "43e2d62f14eed0443c523425e668930cbe48ab3e5fe444c84bcb268dc51c3f3c",
+    "ontology/dynamics/evidence.py": "69ad5b1c8aa3f8362e1861e93d8ea43dc70aceb479c75117ae4acf936b3253b0",
+    "ontology/dynamics/generation.py": "9bf05486d7e5fa3e9bb47a773593c56435a772060edafe08c4dced5b66d78142",
+    "ontology/dynamics/inference.py": "96b4c8090c00345e097147b470c4afd6d161fea402adeaba34cba17d356e4b2c",
+    "ontology/dynamics/laws.py": "88d1524acc1a42690e311d13bb565403ddd8c65205f1db47be9370d9f3ace816",
+    "ontology/dynamics/policy.py": "3744d5160a5ad5c71b88af8edd5da601f9e2fb98c1aedee7e6002d3083ffe55d",
+    "ontology/dynamics/qualification.py": "a5b2ebe01ac63a08bce6880d03675a1465ed797bad7394bbc29ff87c159a91e1",
+    "ontology/dynamics/reference_cache.py": "28a7508c6c22ddb6892372c028cd74e433d69845699fdaf7fce5694e2c40f0ae",
+    "ontology/dynamics/reference_identity.py": "6a5785f2c0f975c14379eaaea7bc80be90ac52e1dbc1ca070f1c92a3804475c2",
+    "ontology/dynamics/reference_proof.py": "34e769abc8b6228de49a5c0f802842fb5582572435fff1ba9c72ec71cab818eb",
+    "ontology/dynamics/runtime.py": "6298ca5dea1b77ae2ef7958ea2e2248bf8cb5131b6d1e351199ed7695c186030",
+    "ontology/dynamics/schema.py": "0d718adb94c480ba8d0a56fff1e46468b160247af5ee290580443ae98ba1fbb5",
+    "ontology/graph.py": "cf0e3ccce293f07845f23f603b8934c5ef330a5cd2e83f89cf117ab3ba7bc3b6",
+    "ontology/history/__init__.py": "10c352f45f20464f5eefe132dfb58966e58c21a64482f2083b53d361ddd2f99c",
+    "ontology/history/evidence.py": "051178b0aafc51949adcbf0bc998030986c86874d1480611fa3d81d9c0fd5d78",
+    "ontology/history/generation.py": "2983a72dc0cd58467e9dcd2853ecf8715ac3da899cee61a4f31748ebc2516f27",
+    "ontology/history/inference.py": "8e01f6b4d6e8ac18a622a6d2c60e358d314029349a70914c2e5bb44676d3f23e",
+    "ontology/history/laws.py": "2e68b32560be94eaf8f49e4c3854612a43dd3c732086a012bdebc2b164178763",
+    "ontology/history/policy.py": "ec7bd2855f62fc99d6c77e65f410967d6687223e77bfe9091eccfe0fec15d3ae",
+    "ontology/history/qualification.py": "6c76176884ccbe6823febffe30451291fc4f854a8d9a7c39c75d4e4a327a26d2",
+    "ontology/history/runtime.py": "5508e652d513d34be0ac9b0e72f731c4c5af3c5b320ff35666e814572c4328d9",
+    "ontology/history/schema.py": "afd5d1aa5404e531de3bc568458f3fe851a6ea6bb79caa6a04f3c7b5d3a723bd",
+    "ontology/inference.py": "be14f90dbf8cf20c67c7c23090620edade68c120250ebda36190d6767ebd9e79",
+    "ontology/mission.py": "200f95b997d6c6602d743340dcd3cc84f36f0be01fbe9da807aecff317e6c654",
+    "ontology/network.py": "96c1b44bff91ae12262e12fff08f3c65a4cc2ca1088e06f4c12a39e4e7ea4347",
+    "ontology/payloads.py": "0347a004eca137f3bb9d6da7297e9922c9c7e73a72c0ab55443cb6aeeb6a6045",
+    "ontology/repair/__init__.py": "728737b963b145edfb0c9b98117a55b117b32a5ea4ad99c9da390179599d1e25",
+    "ontology/repair/evidence.py": "e0263058ba47105a32d7d658629a855d437095ab2467a013a0afc60a71a98d5e",
+    "ontology/repair/generation.py": "d98c9a78766e6f83dea026424a1da7587c6e369eb2f0d77a20a7898700a321b1",
+    "ontology/repair/inference.py": "2d57a35b4143cf4ab798aeacb175edf6d188968e1c9c882c9b6e69c9a54812ad",
+    "ontology/repair/laws.py": "3525c88cdf6e8a631b58fd642188d3b624749c00f81f0f70511133b10f4f3223",
+    "ontology/repair/policy.py": "640bf9b657fcaae2ed86b3c2efb20027a5b061eb00417cfcf44a16168a904d7c",
+    "ontology/repair/proof.py": "34869fae93a920e1698e13e0a0b03b5e5665cc2f3a165f135b79fddd49799c5c",
+    "ontology/repair/qualification.py": "02bedaebef7b09819d83d5971bba0c8c858aecc5da34c9c5acf5607fc9185b86",
+    "ontology/repair/runtime.py": "37cf86747ad40c64aad34266d5576575661dd74da9b022b745b7396409d28cf6",
+    "ontology/repair/schema.py": "f75c31ce6dcacae2ca2a20e91d860ad06d098c76dfe50291a6e2dc33a248fa48",
+    "ontology/staged/__init__.py": "6f4f161dd09bb9613a77782b4536769da6674d6523d52f72c10096229b9cc6fc",
+    "ontology/staged/evidence.py": "1beaa167f19bfc42b99b04b80aa4fb8d8a0cd1739e874977048485e672a2c8b0",
+    "ontology/staged/generation.py": "950ec637f88c4e63e738c74abf898b24a213f4896ccfafb5aa85dccf2e724890",
+    "ontology/staged/inference.py": "ad3c84315bae8150ce06a810974818c7d3cf1f7949f9f3f092ac6513fa46d0ec",
+    "ontology/staged/laws.py": "5610e9e9d8a0e1a5f30ad08bce533567d93a79a7cda69f9f0b44bc0cf943de8e",
+    "ontology/staged/policy.py": "4d03e6f52826b9d5dfb27626791a732801a0b1f0d207fdfcf43a5ff680b432f4",
+    "ontology/staged/proof.py": "fa4e6510f3f4b6fa8266398d12ebe7aa1eb095090975cb37c6750c43040ceb26",
+    "ontology/staged/qualification.py": "59b8a6855e0fd102bc38d9ece299382cf3af281a87298f7d4b812d88d50d6031",
+    "ontology/staged/runtime.py": "bd39a8d18f6dad9872fc3367c280977b56b2458f61c20ae07ee66568c90d1608",
+    "ontology/staged/schema.py": "53204458e550a4d5773134281360cfd85a94d2d9f7c00411597d598fe3fca00e",
+    "ontology/transfer/__init__.py": "400cebaf81bc7effe3f541bc04faef31c6f38bd65906465c3190fa44934a6110",
+    "ontology/transfer/evidence.py": "41be639431ea0b8d36131d533ab8981c5ddad6e0a34b5a660cbe44a8e20aac51",
+    "ontology/transfer/generation.py": "b724941543650d73c9db2719fd2af6f935925e09aa1d2601f95cff49128e84c1",
+    "ontology/transfer/inference.py": "9a7451231d93b24a6ab33175300264ee85a1af8e99313a37c5d763444fd1263c",
+    "ontology/transfer/laws.py": "442b827ddb0dd9a77fc7247df12f72b23a67830d207930ffbc6ca3d18e0db349",
+    "ontology/transfer/observations.py": "6f74982ae829c510c12bb19bc5e1c7f7fcf246c1606b3d4fd0dce34f98691555",
+    "ontology/transfer/observations_identity.py": "5cdacba381af30c59d60b44704f64d827cdf79e73965da9ac4f87e64377e105e",
+    "ontology/transfer/policy.py": "e63b672477ad979d2eac58fed2f490a7a513529d27cdcc4794ad3342a9fd4d9b",
+    "ontology/transfer/qualification.py": "da76962e1b9bbe6e16d404e26cdea4a044e843f2e40b212281aaac11e6c5f1be",
+    "ontology/transfer/reference.py": "77e329f5c42e1b976dfea835c8f6b0236cd248374fda9b610303d7cead0a2a5c",
+    "ontology/transfer/reference_identity.py": "eac71594d6e4dd8018a8b2f74ec37417b57038317d7de9c2ddf647b7d612e521",
+    "ontology/transfer/runtime.py": "1232ba45e74d2a2e19f736b224895549323cbd99b7b4173fa40105ad68d5e533",
+    "ontology/transfer/schema.py": "e6919a4472b2df541f5878de0976b536ec52e515b456550a67ebce1da9440555",
+    "ontology/transfer/tables.py": "7c1a4898c7ea159a00f780a92b61f813b4342928a18e8c71496462027fc728ed",
+    "presentation/__init__.py": "bb8df829acf758152058c00b31c300c86356802420347437c64b581c1ca0bc25",
+    "protocol/__init__.py": "e3b32fa236602d61f8591e0944c0a1cc6b12cbbc97e147ad9e22b42b5c77d9a6",
+    "protocol/client.py": "edc62d0240de0bca2ad5b8b000a2d551886ffa83310fa6b8b3a16706993ede96",
+    "protocol/decision_metrics.py": "0f22d5ba0143cfcb0b0c21fce78202229e9446e40135b23b7f8cb8fe3222a32a",
+    "protocol/fast_cli.py": "ce86a95d4e9e4d467e6b6977fd1a6268e7cec87a2352890ac16926658f6b802c",
+    "protocol/http.py": "a48ca36426cb1408b64ac49263fdb7fa0e694b829d5fb1accea5a38cb975e64f",
+    "protocol/investigation_metrics.py": "572e73041e20a7cca83f12fe12825e27d3ab6177fd57f9812be092332689f24f",
+    "protocol/operator_diagnostics.py": "cc986c5f64c9bd12284469a7bbf7a941cf7478c78660ad09a0da6d2c2b20f254",
+    "protocol/public_transcript.py": "d50344bd1adc868390441a1b138f17c7b5b289d1a07b7057031076a9bf08abcb",
+    "protocol/session.py": "2565e513c4bb3b98a61d4aed40b402ca22502eec40dbf94e26bc9d69bbf3ea7d",
+    "protocol/stdio.py": "c3401f5dfb654786fa9a26b0bf1c6f56727adf7455747a1218753f331eed2b29",
+    "protocol/transport.py": "b5829df4547b9e8b363b585d20705caaf6df236bd19cb1c72ba564a7eb53d7c4",
+    "render/__init__.py": "1e05c362715cc6c241716eb1c0441d6dc80af7118e6a665f60b93213209d5a35",
+    "render/observer.py": "74b910d0ee013bd72418af152c49c9ff1709452fe871e5f4bce93ba039731571",
+    "render/text.py": "928da2ba6175bf23b27215d4415e47ec5336002b11e265164a7251923d7358ef",
+    "solver/__init__.py": "262ee397a4e4a0adcce42babaa4f2424315fc8d7bba423a58f094fbcbd4fdbd4",
+    "solver/belief.py": "cda69643665a91a05631c8eec0a837222e02020ed36aa16231e59d61eb946a50",
+    "solver/budget.py": "f0caf985bb84f477bc306e7be361dd9ddce9cbf7cbbc53521e848a39d70ee270",
+    "solver/decision_audit.py": "0b3b7e40b2bfa7752e4f8ce592f5f7aa4b92f61ec7d6c4731e741f0b9c4e9978",
+    "solver/finite_experiments.py": "0208b9b6735ea01cb64cf6e277b4fa89e8fcdef0adf4accf9b3cb334f8ccec81",
+    "solver/finite_game.py": "1552bbe40968f7aed9f915683684c236bf8c5e16b8c7bd2a335f88c655aaa7f4",
+    "solver/observation_audit.py": "00c1da3e30f7eb97f8ce3c97656b595e0f9986fe42930f1b37e9484abeba2b9b",
+    "solver/policy_check.py": "2dad4f1c49c23a9ea7e7634cd4520027b6cce8e79e09c1eb86b06749018905bc",
+    "solver/search.py": "a190e9fa26dc129df48a386146bbe7333e9af782c2ca5c16736bf0cf32af5b2e",
+    "verification/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "verification/receipt.py": "645386727b368336c6c4114261922aa7c706b487f160cf562c206dae53405ba3"
+  },
+  "matrix_sha256": "6ccc89c081f9c21937c1ff191dc083aac7f20e082c2f3ce40a8907d99ac7fd34",
+  "deep_tier_admitted": false,
+  "empirical_difficulty_calibrated": false,
+  "cells": [
+    {
+      "id": "01",
+      "family": "history-coupled-v1",
+      "seed": 239,
+      "theory": 3,
+      "discovery": 5,
+      "budget_profile": "standard",
+      "expected_certificate_readings": null,
+      "purpose": "Legacy regression and known two-reader common-procedure shortcut",
+      "checks": {
+        "public_policy_wins": true,
+        "supported_win": true,
+        "within_reference_bound": true,
+        "exact_replay": true,
+        "walkthrough_shortcut_preserved": true
+      },
+      "actions": 10,
+      "budget": 43,
+      "generation_seconds": 4.979771558000266,
+      "live_policy_seconds": 0.018821538000338478,
+      "certificate": {
+        "family": "history-coupled-v1",
+        "status": "experimental-poc-reference-qualified",
+        "empirical_difficulty_calibrated": false,
+        "deep_tier_admitted": false,
+        "prior_worlds": 1024,
+        "legal_preparation_histories": 87381,
+        "reference_reading_upper": 5,
+        "reference_action_upper": 35,
+        "resource_allowance": 8,
+        "action_budget": 43,
+        "budget_profile": "standard",
+        "decision_meaning": "complete pulse history from zero; a known fresh procedure remains recoverable by one charged anneal",
+        "measurement_meaning": "all visible evidence events, including necessary physical construction; redundant or post-resolution pulses are not automatically waste",
+        "intervention_guarantee": "both physical-clamp channels necessary for guaranteed first submission from measurements alone; excludes rejected-finish evidence",
+        "shortcut": "after normalized law identification, <=8 pulses and <=4 finishes can guarantee escape without either intervention; fixed nine-query panel identifies full prior",
+        "scope": "Exact overlapping winning-history sets. No mandatory adaptive-round or universal deep-reasoning claim. T0 uses identical physical laws, goal and action budget."
+      }
+    },
+    {
+      "id": "02",
+      "family": "staged-repair-v1",
+      "seed": 59,
+      "theory": 0,
+      "discovery": 0,
+      "budget_profile": "standard",
+      "expected_certificate_readings": 0,
+      "purpose": "Matched execution control: exact laws and complete repairs",
+      "mechanisms": {
+        "mechanisms": [
+          {
+            "shift": 0,
+            "exponent": 2
+          },
+          {
+            "shift": 1,
+            "exponent": 2
+          },
+          {
+            "shift": 2,
+            "exponent": 2
+          }
+        ]
+      },
+      "positive_certificate_readings": 0,
+      "positive_certificate_queries": [],
+      "certificate_scope": "Minimum actual-outcome reading certificate, oracle query choice, excludes failed finishes and preparation costs.",
+      "checks": {
+        "public_policy_wins": true,
+        "supported_win": true,
+        "within_reference_bound": true,
+        "exact_replay": true,
+        "exact_positive_certificate": true
+      },
+      "actions": 11,
+      "budget": 40,
+      "generation_seconds": 0.0023170039999058645,
+      "live_policy_seconds": 0.0063533869997627335,
+      "certificate": {
+        "family": "staged-repair-v1",
+        "status": "experimental-full-prior-reference",
+        "deep_tier_admitted": false,
+        "empirical_difficulty_calibrated": false,
+        "profile": "dependent-contexts",
+        "prior_worlds": 1,
+        "prior": "uniform over all mechanisms conditional on public exponent/exact-law disclosures",
+        "sampler": "seed modulo 216; uniform residues give the stated prior, curated matrix rows do not",
+        "mission_signatures": 1,
+        "reference_reading_upper": 0,
+        "reference_action_upper": 11,
+        "action_budget": 40,
+        "resource_allowance": 29,
+        "budget_profile": "standard",
+        "feedback_success_ceilings": [
+          {
+            "feedback_actions": 1,
+            "numerator": 1,
+            "denominator": 1
+          },
+          {
+            "feedback_actions": 2,
+            "numerator": 1,
+            "denominator": 1
+          },
+          {
+            "feedback_actions": 3,
+            "numerator": 1,
+            "denominator": 1
+          },
+          {
+            "feedback_actions": 4,
+            "numerator": 1,
+            "denominator": 1
+          },
+          {
+            "feedback_actions": 5,
+            "numerator": 1,
+            "denominator": 1
+          },
+          {
+            "feedback_actions": 6,
+            "numerator": 1,
+            "denominator": 1
+          },
+          {
+            "feedback_actions": 7,
+            "numerator": 1,
+            "denominator": 1
+          }
+        ],
+        "bound_scope": "Uniform conditional prior; feedback actions include every reading and every finish. Free configurations, treatments and logistics strengthen the player in this relaxation. Not a total-action optimum or a selected-seed/model failure probability.",
+        "fixed_panel_scope": "Offline preflight checks exact reading-only fixed-panel identification. These minima exclude finish guesses and are not universal action lower bounds.",
+        "decision_meaning": "The nine committed cumulative doses on all three actual seals; physically eligible in array. Complete repairs, not parameter guesses, are checked.",
+        "limitations": "A fixed panel and direct baseline measurements remain legal; no mandatory investigation order. T2 may infer an upstream shift indirectly from downstream carrier activation. Full law identification is necessary for a guaranteed repair in this family only because mission-signature injectivity is proved."
+      }
+    },
+    {
+      "id": "03",
+      "family": "staged-repair-v1",
+      "seed": 59,
+      "theory": 3,
+      "discovery": 3,
+      "budget_profile": "standard",
+      "expected_certificate_readings": 6,
+      "purpose": "Independent experiments; six-reading positive certificate; three distinct squared mechanisms",
+      "mechanisms": {
+        "mechanisms": [
+          {
+            "shift": 0,
+            "exponent": 2
+          },
+          {
+            "shift": 1,
+            "exponent": 2
+          },
+          {
+            "shift": 2,
+            "exponent": 2
+          }
+        ]
+      },
+      "positive_certificate_readings": 6,
+      "positive_certificate_queries": [
+        0,
+        2,
+        10,
+        11,
+        18,
+        19
+      ],
+      "certificate_scope": "Minimum actual-outcome reading certificate, oracle query choice, excludes failed finishes and preparation costs.",
+      "fixed_panel_readings_exact": 9,
+      "fixed_panel_actions": 23,
+      "checks": {
+        "public_policy_wins": true,
+        "supported_win": true,
+        "within_reference_bound": true,
+        "exact_replay": true,
+        "exact_positive_certificate": true,
+        "fixed_panel_legal_within_same_budget": true,
+        "fixed_panel_supported": true,
+        "fixed_panel_exact_replay": true
+      },
+      "actions": 20,
+      "budget": 40,
+      "generation_seconds": 0.0007849640001040825,
+      "live_policy_seconds": 0.010244255000088742,
+      "certificate": {
+        "family": "staged-repair-v1",
+        "status": "experimental-full-prior-reference",
+        "deep_tier_admitted": false,
+        "empirical_difficulty_calibrated": false,
+        "profile": "independent-contexts",
+        "prior_worlds": 216,
+        "prior": "uniform over all mechanisms conditional on public exponent/exact-law disclosures",
+        "sampler": "seed modulo 216; uniform residues give the stated prior, curated matrix rows do not",
+        "mission_signatures": 216,
+        "reference_reading_upper": 6,
+        "reference_action_upper": 20,
+        "action_budget": 40,
+        "resource_allowance": 20,
+        "budget_profile": "standard",
+        "feedback_success_ceilings": [
+          {
+            "feedback_actions": 1,
+            "numerator": 1,
+            "denominator": 216
+          },
+          {
+            "feedback_actions": 2,
+            "numerator": 3,
+            "denominator": 216
+          },
+          {
+            "feedback_actions": 3,
+            "numerator": 9,
+            "denominator": 216
+          },
+          {
+            "feedback_actions": 4,
+            "numerator": 27,
+            "denominator": 216
+          },
+          {
+            "feedback_actions": 5,
+            "numerator": 81,
+            "denominator": 216
+          },
+          {
+            "feedback_actions": 6,
+            "numerator": 216,
+            "denominator": 216
+          },
+          {
+            "feedback_actions": 7,
+            "numerator": 216,
+            "denominator": 216
+          }
+        ],
+        "bound_scope": "Uniform conditional prior; feedback actions include every reading and every finish. Free configurations, treatments and logistics strengthen the player in this relaxation. Not a total-action optimum or a selected-seed/model failure probability.",
+        "fixed_panel_scope": "Offline preflight checks exact reading-only fixed-panel identification. These minima exclude finish guesses and are not universal action lower bounds.",
+        "decision_meaning": "The nine committed cumulative doses on all three actual seals; physically eligible in array. Complete repairs, not parameter guesses, are checked.",
+        "limitations": "A fixed panel and direct baseline measurements remain legal; no mandatory investigation order. T2 may infer an upstream shift indirectly from downstream carrier activation. Full law identification is necessary for a guaranteed repair in this family only because mission-signature injectivity is proved."
+      }
+    },
+    {
+      "id": "04",
+      "family": "staged-repair-v1",
+      "seed": 59,
+      "theory": 3,
+      "discovery": 4,
+      "budget_profile": "standard",
+      "expected_certificate_readings": 4,
+      "purpose": "Same physics with dependent reader contexts; test adaptation and useful indirect inference",
+      "mechanisms": {
+        "mechanisms": [
+          {
+            "shift": 0,
+            "exponent": 2
+          },
+          {
+            "shift": 1,
+            "exponent": 2
+          },
+          {
+            "shift": 2,
+            "exponent": 2
+          }
+        ]
+      },
+      "positive_certificate_readings": 4,
+      "positive_certificate_queries": [
+        0,
+        12,
+        24,
+        25
+      ],
+      "certificate_scope": "Minimum actual-outcome reading certificate, oracle query choice, excludes failed finishes and preparation costs.",
+      "fixed_panel_readings_exact": 15,
+      "fixed_panel_actions": 33,
+      "checks": {
+        "public_policy_wins": true,
+        "supported_win": true,
+        "within_reference_bound": true,
+        "exact_replay": true,
+        "exact_positive_certificate": true,
+        "fixed_panel_legal_within_same_budget": true,
+        "fixed_panel_supported": true,
+        "fixed_panel_exact_replay": true
+      },
+      "actions": 20,
+      "budget": 40,
+      "generation_seconds": 0.0008000660000107018,
+      "live_policy_seconds": 0.009026879999964876,
+      "certificate": {
+        "family": "staged-repair-v1",
+        "status": "experimental-full-prior-reference",
+        "deep_tier_admitted": false,
+        "empirical_difficulty_calibrated": false,
+        "profile": "dependent-contexts",
+        "prior_worlds": 216,
+        "prior": "uniform over all mechanisms conditional on public exponent/exact-law disclosures",
+        "sampler": "seed modulo 216; uniform residues give the stated prior, curated matrix rows do not",
+        "mission_signatures": 216,
+        "reference_reading_upper": 6,
+        "reference_action_upper": 20,
+        "action_budget": 40,
+        "resource_allowance": 20,
+        "budget_profile": "standard",
+        "feedback_success_ceilings": [
+          {
+            "feedback_actions": 1,
+            "numerator": 1,
+            "denominator": 216
+          },
+          {
+            "feedback_actions": 2,
+            "numerator": 3,
+            "denominator": 216
+          },
+          {
+            "feedback_actions": 3,
+            "numerator": 9,
+            "denominator": 216
+          },
+          {
+            "feedback_actions": 4,
+            "numerator": 27,
+            "denominator": 216
+          },
+          {
+            "feedback_actions": 5,
+            "numerator": 81,
+            "denominator": 216
+          },
+          {
+            "feedback_actions": 6,
+            "numerator": 216,
+            "denominator": 216
+          },
+          {
+            "feedback_actions": 7,
+            "numerator": 216,
+            "denominator": 216
+          }
+        ],
+        "bound_scope": "Uniform conditional prior; feedback actions include every reading and every finish. Free configurations, treatments and logistics strengthen the player in this relaxation. Not a total-action optimum or a selected-seed/model failure probability.",
+        "fixed_panel_scope": "Offline preflight checks exact reading-only fixed-panel identification. These minima exclude finish guesses and are not universal action lower bounds.",
+        "decision_meaning": "The nine committed cumulative doses on all three actual seals; physically eligible in array. Complete repairs, not parameter guesses, are checked.",
+        "limitations": "A fixed panel and direct baseline measurements remain legal; no mandatory investigation order. T2 may infer an upstream shift indirectly from downstream carrier activation. Full law identification is necessary for a guaranteed repair in this family only because mission-signature injectivity is proved."
+      }
+    },
+    {
+      "id": "05",
+      "family": "staged-repair-v1",
+      "seed": 59,
+      "theory": 2,
+      "discovery": 4,
+      "budget_profile": "standard",
+      "expected_certificate_readings": 3,
+      "purpose": "Matched known-shape correction control; operators disclosed",
+      "mechanisms": {
+        "mechanisms": [
+          {
+            "shift": 0,
+            "exponent": 2
+          },
+          {
+            "shift": 1,
+            "exponent": 2
+          },
+          {
+            "shift": 2,
+            "exponent": 2
+          }
+        ]
+      },
+      "positive_certificate_readings": 3,
+      "positive_certificate_queries": [
+        12,
+        13,
+        25
+      ],
+      "certificate_scope": "Minimum actual-outcome reading certificate, oracle query choice, excludes failed finishes and preparation costs.",
+      "fixed_panel_readings_exact": 8,
+      "fixed_panel_actions": 23,
+      "checks": {
+        "public_policy_wins": true,
+        "supported_win": true,
+        "within_reference_bound": true,
+        "exact_replay": true,
+        "exact_positive_certificate": true,
+        "fixed_panel_legal_within_same_budget": true,
+        "fixed_panel_supported": true,
+        "fixed_panel_exact_replay": true
+      },
+      "actions": 19,
+      "budget": 40,
+      "generation_seconds": 0.000591597000038746,
+      "live_policy_seconds": 0.006317494000086299,
+      "certificate": {
+        "family": "staged-repair-v1",
+        "status": "experimental-full-prior-reference",
+        "deep_tier_admitted": false,
+        "empirical_difficulty_calibrated": false,
+        "profile": "dependent-contexts",
+        "prior_worlds": 27,
+        "prior": "uniform over all mechanisms conditional on public exponent/exact-law disclosures",
+        "sampler": "seed modulo 216; uniform residues give the stated prior, curated matrix rows do not",
+        "mission_signatures": 27,
+        "reference_reading_upper": 6,
+        "reference_action_upper": 20,
+        "action_budget": 40,
+        "resource_allowance": 20,
+        "budget_profile": "standard",
+        "feedback_success_ceilings": [
+          {
+            "feedback_actions": 1,
+            "numerator": 1,
+            "denominator": 27
+          },
+          {
+            "feedback_actions": 2,
+            "numerator": 3,
+            "denominator": 27
+          },
+          {
+            "feedback_actions": 3,
+            "numerator": 9,
+            "denominator": 27
+          },
+          {
+            "feedback_actions": 4,
+            "numerator": 27,
+            "denominator": 27
+          },
+          {
+            "feedback_actions": 5,
+            "numerator": 27,
+            "denominator": 27
+          },
+          {
+            "feedback_actions": 6,
+            "numerator": 27,
+            "denominator": 27
+          },
+          {
+            "feedback_actions": 7,
+            "numerator": 27,
+            "denominator": 27
+          }
+        ],
+        "bound_scope": "Uniform conditional prior; feedback actions include every reading and every finish. Free configurations, treatments and logistics strengthen the player in this relaxation. Not a total-action optimum or a selected-seed/model failure probability.",
+        "fixed_panel_scope": "Offline preflight checks exact reading-only fixed-panel identification. These minima exclude finish guesses and are not universal action lower bounds.",
+        "decision_meaning": "The nine committed cumulative doses on all three actual seals; physically eligible in array. Complete repairs, not parameter guesses, are checked.",
+        "limitations": "A fixed panel and direct baseline measurements remain legal; no mandatory investigation order. T2 may infer an upstream shift indirectly from downstream carrier activation. Full law identification is necessary for a guaranteed repair in this family only because mission-signature injectivity is proved."
+      }
+    },
+    {
+      "id": "06",
+      "family": "staged-repair-v1",
+      "seed": 107,
+      "theory": 3,
+      "discovery": 4,
+      "budget_profile": "standard",
+      "expected_certificate_readings": 4,
+      "purpose": "Mixed linear/squared mechanisms, dependent contexts and coupled repairs",
+      "mechanisms": {
+        "mechanisms": [
+          {
+            "shift": 1,
+            "exponent": 1
+          },
+          {
+            "shift": 2,
+            "exponent": 2
+          },
+          {
+            "shift": 2,
+            "exponent": 2
+          }
+        ]
+      },
+      "positive_certificate_readings": 4,
+      "positive_certificate_queries": [
+        1,
+        12,
+        18,
+        19
+      ],
+      "certificate_scope": "Minimum actual-outcome reading certificate, oracle query choice, excludes failed finishes and preparation costs.",
+      "fixed_panel_readings_exact": 15,
+      "fixed_panel_actions": 33,
+      "checks": {
+        "public_policy_wins": true,
+        "supported_win": true,
+        "within_reference_bound": true,
+        "exact_replay": true,
+        "exact_positive_certificate": true,
+        "fixed_panel_legal_within_same_budget": true,
+        "fixed_panel_supported": true,
+        "fixed_panel_exact_replay": true
+      },
+      "actions": 20,
+      "budget": 40,
+      "generation_seconds": 0.0005564550001508906,
+      "live_policy_seconds": 0.006788542000322195,
+      "certificate": {
+        "family": "staged-repair-v1",
+        "status": "experimental-full-prior-reference",
+        "deep_tier_admitted": false,
+        "empirical_difficulty_calibrated": false,
+        "profile": "dependent-contexts",
+        "prior_worlds": 216,
+        "prior": "uniform over all mechanisms conditional on public exponent/exact-law disclosures",
+        "sampler": "seed modulo 216; uniform residues give the stated prior, curated matrix rows do not",
+        "mission_signatures": 216,
+        "reference_reading_upper": 6,
+        "reference_action_upper": 20,
+        "action_budget": 40,
+        "resource_allowance": 20,
+        "budget_profile": "standard",
+        "feedback_success_ceilings": [
+          {
+            "feedback_actions": 1,
+            "numerator": 1,
+            "denominator": 216
+          },
+          {
+            "feedback_actions": 2,
+            "numerator": 3,
+            "denominator": 216
+          },
+          {
+            "feedback_actions": 3,
+            "numerator": 9,
+            "denominator": 216
+          },
+          {
+            "feedback_actions": 4,
+            "numerator": 27,
+            "denominator": 216
+          },
+          {
+            "feedback_actions": 5,
+            "numerator": 81,
+            "denominator": 216
+          },
+          {
+            "feedback_actions": 6,
+            "numerator": 216,
+            "denominator": 216
+          },
+          {
+            "feedback_actions": 7,
+            "numerator": 216,
+            "denominator": 216
+          }
+        ],
+        "bound_scope": "Uniform conditional prior; feedback actions include every reading and every finish. Free configurations, treatments and logistics strengthen the player in this relaxation. Not a total-action optimum or a selected-seed/model failure probability.",
+        "fixed_panel_scope": "Offline preflight checks exact reading-only fixed-panel identification. These minima exclude finish guesses and are not universal action lower bounds.",
+        "decision_meaning": "The nine committed cumulative doses on all three actual seals; physically eligible in array. Complete repairs, not parameter guesses, are checked.",
+        "limitations": "A fixed panel and direct baseline measurements remain legal; no mandatory investigation order. T2 may infer an upstream shift indirectly from downstream carrier activation. Full law identification is necessary for a guaranteed repair in this family only because mission-signature injectivity is proved."
+      }
+    },
+    {
+      "id": "07",
+      "family": "staged-repair-v1",
+      "seed": 107,
+      "theory": 3,
+      "discovery": 3,
+      "budget_profile": "standard",
+      "expected_certificate_readings": 5,
+      "purpose": "Matched independent-context case with five-reading positive certificate",
+      "mechanisms": {
+        "mechanisms": [
+          {
+            "shift": 1,
+            "exponent": 1
+          },
+          {
+            "shift": 2,
+            "exponent": 2
+          },
+          {
+            "shift": 2,
+            "exponent": 2
+          }
+        ]
+      },
+      "positive_certificate_readings": 5,
+      "positive_certificate_queries": [
+        1,
+        9,
+        10,
+        18,
+        19
+      ],
+      "certificate_scope": "Minimum actual-outcome reading certificate, oracle query choice, excludes failed finishes and preparation costs.",
+      "fixed_panel_readings_exact": 9,
+      "fixed_panel_actions": 23,
+      "checks": {
+        "public_policy_wins": true,
+        "supported_win": true,
+        "within_reference_bound": true,
+        "exact_replay": true,
+        "exact_positive_certificate": true,
+        "fixed_panel_legal_within_same_budget": true,
+        "fixed_panel_supported": true,
+        "fixed_panel_exact_replay": true
+      },
+      "actions": 20,
+      "budget": 40,
+      "generation_seconds": 0.0005896329998904548,
+      "live_policy_seconds": 0.007142206000025908,
+      "certificate": {
+        "family": "staged-repair-v1",
+        "status": "experimental-full-prior-reference",
+        "deep_tier_admitted": false,
+        "empirical_difficulty_calibrated": false,
+        "profile": "independent-contexts",
+        "prior_worlds": 216,
+        "prior": "uniform over all mechanisms conditional on public exponent/exact-law disclosures",
+        "sampler": "seed modulo 216; uniform residues give the stated prior, curated matrix rows do not",
+        "mission_signatures": 216,
+        "reference_reading_upper": 6,
+        "reference_action_upper": 20,
+        "action_budget": 40,
+        "resource_allowance": 20,
+        "budget_profile": "standard",
+        "feedback_success_ceilings": [
+          {
+            "feedback_actions": 1,
+            "numerator": 1,
+            "denominator": 216
+          },
+          {
+            "feedback_actions": 2,
+            "numerator": 3,
+            "denominator": 216
+          },
+          {
+            "feedback_actions": 3,
+            "numerator": 9,
+            "denominator": 216
+          },
+          {
+            "feedback_actions": 4,
+            "numerator": 27,
+            "denominator": 216
+          },
+          {
+            "feedback_actions": 5,
+            "numerator": 81,
+            "denominator": 216
+          },
+          {
+            "feedback_actions": 6,
+            "numerator": 216,
+            "denominator": 216
+          },
+          {
+            "feedback_actions": 7,
+            "numerator": 216,
+            "denominator": 216
+          }
+        ],
+        "bound_scope": "Uniform conditional prior; feedback actions include every reading and every finish. Free configurations, treatments and logistics strengthen the player in this relaxation. Not a total-action optimum or a selected-seed/model failure probability.",
+        "fixed_panel_scope": "Offline preflight checks exact reading-only fixed-panel identification. These minima exclude finish guesses and are not universal action lower bounds.",
+        "decision_meaning": "The nine committed cumulative doses on all three actual seals; physically eligible in array. Complete repairs, not parameter guesses, are checked.",
+        "limitations": "A fixed panel and direct baseline measurements remain legal; no mandatory investigation order. T2 may infer an upstream shift indirectly from downstream carrier activation. Full law identification is necessary for a guaranteed repair in this family only because mission-signature injectivity is proved."
+      }
+    },
+    {
+      "id": "08",
+      "family": "staged-repair-v1",
+      "seed": 145,
+      "theory": 3,
+      "discovery": 4,
+      "budget_profile": "standard",
+      "expected_certificate_readings": 4,
+      "purpose": "Distinct routes; an early uniquely identifying result shortens the adaptive witness",
+      "mechanisms": {
+        "mechanisms": [
+          {
+            "shift": 2,
+            "exponent": 1
+          },
+          {
+            "shift": 0,
+            "exponent": 1
+          },
+          {
+            "shift": 0,
+            "exponent": 2
+          }
+        ]
+      },
+      "positive_certificate_readings": 4,
+      "positive_certificate_queries": [
+        0,
+        17,
+        18,
+        20
+      ],
+      "certificate_scope": "Minimum actual-outcome reading certificate, oracle query choice, excludes failed finishes and preparation costs.",
+      "fixed_panel_readings_exact": 15,
+      "fixed_panel_actions": 33,
+      "checks": {
+        "public_policy_wins": true,
+        "supported_win": true,
+        "within_reference_bound": true,
+        "exact_replay": true,
+        "exact_positive_certificate": true,
+        "fixed_panel_legal_within_same_budget": true,
+        "fixed_panel_supported": true,
+        "fixed_panel_exact_replay": true
+      },
+      "actions": 19,
+      "budget": 40,
+      "generation_seconds": 0.0005854480000380136,
+      "live_policy_seconds": 0.006279568000081781,
+      "certificate": {
+        "family": "staged-repair-v1",
+        "status": "experimental-full-prior-reference",
+        "deep_tier_admitted": false,
+        "empirical_difficulty_calibrated": false,
+        "profile": "dependent-contexts",
+        "prior_worlds": 216,
+        "prior": "uniform over all mechanisms conditional on public exponent/exact-law disclosures",
+        "sampler": "seed modulo 216; uniform residues give the stated prior, curated matrix rows do not",
+        "mission_signatures": 216,
+        "reference_reading_upper": 6,
+        "reference_action_upper": 20,
+        "action_budget": 40,
+        "resource_allowance": 20,
+        "budget_profile": "standard",
+        "feedback_success_ceilings": [
+          {
+            "feedback_actions": 1,
+            "numerator": 1,
+            "denominator": 216
+          },
+          {
+            "feedback_actions": 2,
+            "numerator": 3,
+            "denominator": 216
+          },
+          {
+            "feedback_actions": 3,
+            "numerator": 9,
+            "denominator": 216
+          },
+          {
+            "feedback_actions": 4,
+            "numerator": 27,
+            "denominator": 216
+          },
+          {
+            "feedback_actions": 5,
+            "numerator": 81,
+            "denominator": 216
+          },
+          {
+            "feedback_actions": 6,
+            "numerator": 216,
+            "denominator": 216
+          },
+          {
+            "feedback_actions": 7,
+            "numerator": 216,
+            "denominator": 216
+          }
+        ],
+        "bound_scope": "Uniform conditional prior; feedback actions include every reading and every finish. Free configurations, treatments and logistics strengthen the player in this relaxation. Not a total-action optimum or a selected-seed/model failure probability.",
+        "fixed_panel_scope": "Offline preflight checks exact reading-only fixed-panel identification. These minima exclude finish guesses and are not universal action lower bounds.",
+        "decision_meaning": "The nine committed cumulative doses on all three actual seals; physically eligible in array. Complete repairs, not parameter guesses, are checked.",
+        "limitations": "A fixed panel and direct baseline measurements remain legal; no mandatory investigation order. T2 may infer an upstream shift indirectly from downstream carrier activation. Full law identification is necessary for a guaranteed repair in this family only because mission-signature injectivity is proved."
+      }
+    },
+    {
+      "id": "09",
+      "family": "staged-repair-v1",
+      "seed": 0,
+      "theory": 3,
+      "discovery": 4,
+      "budget_profile": "standard",
+      "expected_certificate_readings": 3,
+      "purpose": "Deliberately shallow shortcut control; all operators linear",
+      "mechanisms": {
+        "mechanisms": [
+          {
+            "shift": 0,
+            "exponent": 1
+          },
+          {
+            "shift": 0,
+            "exponent": 1
+          },
+          {
+            "shift": 0,
+            "exponent": 1
+          }
+        ]
+      },
+      "positive_certificate_readings": 3,
+      "positive_certificate_queries": [
+        2,
+        11,
+        20
+      ],
+      "certificate_scope": "Minimum actual-outcome reading certificate, oracle query choice, excludes failed finishes and preparation costs.",
+      "fixed_panel_readings_exact": 15,
+      "fixed_panel_actions": 33,
+      "checks": {
+        "public_policy_wins": true,
+        "supported_win": true,
+        "within_reference_bound": true,
+        "exact_replay": true,
+        "exact_positive_certificate": true,
+        "fixed_panel_legal_within_same_budget": true,
+        "fixed_panel_supported": true,
+        "fixed_panel_exact_replay": true
+      },
+      "actions": 20,
+      "budget": 40,
+      "generation_seconds": 0.0006731180001224857,
+      "live_policy_seconds": 0.007888252000157081,
+      "certificate": {
+        "family": "staged-repair-v1",
+        "status": "experimental-full-prior-reference",
+        "deep_tier_admitted": false,
+        "empirical_difficulty_calibrated": false,
+        "profile": "dependent-contexts",
+        "prior_worlds": 216,
+        "prior": "uniform over all mechanisms conditional on public exponent/exact-law disclosures",
+        "sampler": "seed modulo 216; uniform residues give the stated prior, curated matrix rows do not",
+        "mission_signatures": 216,
+        "reference_reading_upper": 6,
+        "reference_action_upper": 20,
+        "action_budget": 40,
+        "resource_allowance": 20,
+        "budget_profile": "standard",
+        "feedback_success_ceilings": [
+          {
+            "feedback_actions": 1,
+            "numerator": 1,
+            "denominator": 216
+          },
+          {
+            "feedback_actions": 2,
+            "numerator": 3,
+            "denominator": 216
+          },
+          {
+            "feedback_actions": 3,
+            "numerator": 9,
+            "denominator": 216
+          },
+          {
+            "feedback_actions": 4,
+            "numerator": 27,
+            "denominator": 216
+          },
+          {
+            "feedback_actions": 5,
+            "numerator": 81,
+            "denominator": 216
+          },
+          {
+            "feedback_actions": 6,
+            "numerator": 216,
+            "denominator": 216
+          },
+          {
+            "feedback_actions": 7,
+            "numerator": 216,
+            "denominator": 216
+          }
+        ],
+        "bound_scope": "Uniform conditional prior; feedback actions include every reading and every finish. Free configurations, treatments and logistics strengthen the player in this relaxation. Not a total-action optimum or a selected-seed/model failure probability.",
+        "fixed_panel_scope": "Offline preflight checks exact reading-only fixed-panel identification. These minima exclude finish guesses and are not universal action lower bounds.",
+        "decision_meaning": "The nine committed cumulative doses on all three actual seals; physically eligible in array. Complete repairs, not parameter guesses, are checked.",
+        "limitations": "A fixed panel and direct baseline measurements remain legal; no mandatory investigation order. T2 may infer an upstream shift indirectly from downstream carrier activation. Full law identification is necessary for a guaranteed repair in this family only because mission-signature injectivity is proved."
+      }
+    },
+    {
+      "id": "10",
+      "family": "staged-repair-v1",
+      "seed": 59,
+      "theory": 3,
+      "discovery": 4,
+      "budget_profile": "diagnostic-plus6",
+      "expected_certificate_readings": 4,
+      "purpose": "Matched six-extra-action control; science unchanged",
+      "mechanisms": {
+        "mechanisms": [
+          {
+            "shift": 0,
+            "exponent": 2
+          },
+          {
+            "shift": 1,
+            "exponent": 2
+          },
+          {
+            "shift": 2,
+            "exponent": 2
+          }
+        ]
+      },
+      "positive_certificate_readings": 4,
+      "positive_certificate_queries": [
+        0,
+        12,
+        24,
+        25
+      ],
+      "certificate_scope": "Minimum actual-outcome reading certificate, oracle query choice, excludes failed finishes and preparation costs.",
+      "fixed_panel_readings_exact": 15,
+      "fixed_panel_actions": 33,
+      "checks": {
+        "public_policy_wins": true,
+        "supported_win": true,
+        "within_reference_bound": true,
+        "exact_replay": true,
+        "exact_positive_certificate": true,
+        "fixed_panel_legal_within_same_budget": true,
+        "fixed_panel_supported": true,
+        "fixed_panel_exact_replay": true
+      },
+      "actions": 20,
+      "budget": 46,
+      "generation_seconds": 0.0006219619999683346,
+      "live_policy_seconds": 0.00708128599990232,
+      "certificate": {
+        "family": "staged-repair-v1",
+        "status": "experimental-full-prior-reference",
+        "deep_tier_admitted": false,
+        "empirical_difficulty_calibrated": false,
+        "profile": "dependent-contexts",
+        "prior_worlds": 216,
+        "prior": "uniform over all mechanisms conditional on public exponent/exact-law disclosures",
+        "sampler": "seed modulo 216; uniform residues give the stated prior, curated matrix rows do not",
+        "mission_signatures": 216,
+        "reference_reading_upper": 6,
+        "reference_action_upper": 20,
+        "action_budget": 46,
+        "resource_allowance": 26,
+        "budget_profile": "diagnostic-plus6",
+        "feedback_success_ceilings": [
+          {
+            "feedback_actions": 1,
+            "numerator": 1,
+            "denominator": 216
+          },
+          {
+            "feedback_actions": 2,
+            "numerator": 3,
+            "denominator": 216
+          },
+          {
+            "feedback_actions": 3,
+            "numerator": 9,
+            "denominator": 216
+          },
+          {
+            "feedback_actions": 4,
+            "numerator": 27,
+            "denominator": 216
+          },
+          {
+            "feedback_actions": 5,
+            "numerator": 81,
+            "denominator": 216
+          },
+          {
+            "feedback_actions": 6,
+            "numerator": 216,
+            "denominator": 216
+          },
+          {
+            "feedback_actions": 7,
+            "numerator": 216,
+            "denominator": 216
+          }
+        ],
+        "bound_scope": "Uniform conditional prior; feedback actions include every reading and every finish. Free configurations, treatments and logistics strengthen the player in this relaxation. Not a total-action optimum or a selected-seed/model failure probability.",
+        "fixed_panel_scope": "Offline preflight checks exact reading-only fixed-panel identification. These minima exclude finish guesses and are not universal action lower bounds.",
+        "decision_meaning": "The nine committed cumulative doses on all three actual seals; physically eligible in array. Complete repairs, not parameter guesses, are checked.",
+        "limitations": "A fixed panel and direct baseline measurements remain legal; no mandatory investigation order. T2 may infer an upstream shift indirectly from downstream carrier activation. Full law identification is necessary for a guaranteed repair in this family only because mission-signature injectivity is proved."
+      }
+    }
+  ],
+  "proof_sha256": "aefdb4ed141d595411c33f07456a1a8d6a96c3945665fe4f7b55fe87ba4fcebb",
+  "proof_profiles": 20,
+  "seconds": 13.411719591999827
+}

@@ -13,6 +13,7 @@ on:
       - "docs/transfer-model-matrix.json"
       - "docs/astra-diagnostic-matrix.json"
       - "docs/history-diagnostic-matrix.json"
+      - "docs/staged-repair-matrix.json"
   pull_request:
     paths:
       - "**"
@@ -24,6 +25,7 @@ on:
       - "docs/transfer-model-matrix.json"
       - "docs/astra-diagnostic-matrix.json"
       - "docs/history-diagnostic-matrix.json"
+      - "docs/staged-repair-matrix.json"
   workflow_dispatch:
     inputs:
       full:
@@ -91,6 +93,11 @@ jobs:
         run: |
           uv run python scripts/history_oracle.py --output /tmp/history-proof.json
           uv run python scripts/preflight_history.py --output /tmp/history-preflight.json
+
+      - name: Staged repair independent proof and matrix
+        run: |
+          uv run python scripts/staged_repair_oracle.py --output /tmp/staged-proof.json
+          uv run python scripts/preflight_staged_repair.py --output /tmp/staged-preflight.json
 
       - name: Solver proof tests
         run: |
@@ -171,6 +178,7 @@ jobs:
           docker run --rm --entrypoint python nexus-ci scripts/preflight_transfer.py --output /tmp/transfer-preflight.json
           docker run --rm --entrypoint python nexus-ci scripts/preflight_transfer.py --matrix docs/astra-diagnostic-matrix.json --output /tmp/astra-preflight.json
           docker run --rm --entrypoint python nexus-ci scripts/preflight_history.py --output /tmp/history-preflight.json
+          docker run --rm --entrypoint python nexus-ci scripts/preflight_staged_repair.py --output /tmp/staged-preflight.json
           docker run --rm nexus-ci --help
           docker run --rm nexus-ci generate /tmp/nexus-t3 --seed 17 \
             --discovery-level 2 --planning-level 0 --theory-level 3

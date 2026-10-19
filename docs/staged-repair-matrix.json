@@ -1,0 +1,18 @@
+{
+  "version": "staged-repair-pilot-v1",
+  "external_python": false,
+  "fresh_context_per_execution": true,
+  "recommended_tool_call_limit": 120,
+  "runs": [
+    {"id":"01","family":"history-coupled-v1","seed":239,"theory":3,"discovery":5,"expected_certificate_readings":null,"purpose":"Legacy regression and known two-reader common-procedure shortcut"},
+    {"id":"02","family":"staged-repair-v1","seed":59,"theory":0,"discovery":0,"expected_certificate_readings":0,"purpose":"Matched execution control: exact laws and complete repairs"},
+    {"id":"03","family":"staged-repair-v1","seed":59,"theory":3,"discovery":3,"expected_certificate_readings":6,"purpose":"Independent experiments; six-reading positive certificate; three distinct squared mechanisms"},
+    {"id":"04","family":"staged-repair-v1","seed":59,"theory":3,"discovery":4,"expected_certificate_readings":4,"purpose":"Same physics with dependent reader contexts; test adaptation and useful indirect inference"},
+    {"id":"05","family":"staged-repair-v1","seed":59,"theory":2,"discovery":4,"expected_certificate_readings":3,"purpose":"Matched known-shape correction control; operators disclosed"},
+    {"id":"06","family":"staged-repair-v1","seed":107,"theory":3,"discovery":4,"expected_certificate_readings":4,"purpose":"Mixed linear/squared mechanisms, dependent contexts and coupled repairs"},
+    {"id":"07","family":"staged-repair-v1","seed":107,"theory":3,"discovery":3,"expected_certificate_readings":5,"purpose":"Matched independent-context case with five-reading positive certificate"},
+    {"id":"08","family":"staged-repair-v1","seed":145,"theory":3,"discovery":4,"expected_certificate_readings":4,"purpose":"Distinct routes; an early uniquely identifying result shortens the adaptive witness"},
+    {"id":"09","family":"staged-repair-v1","seed":0,"theory":3,"discovery":4,"expected_certificate_readings":3,"purpose":"Deliberately shallow shortcut control; all operators linear"},
+    {"id":"10","family":"staged-repair-v1","seed":59,"theory":3,"discovery":4,"budget_profile":"diagnostic-plus6","expected_certificate_readings":4,"purpose":"Matched six-extra-action control; science unchanged"}
+  ]
+}
