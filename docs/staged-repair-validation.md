@@ -40,7 +40,20 @@ document against the build-context allowlist. Container verification is now an
 independent CI job with the same full-run conditions, so packaging failures appear
 promptly. Runtime source files and proof bindings are unchanged. The local workspace
 disconnected after the completed tests; the follow-up is verified through GitHub CI.
-The new CI result is pending and will be recorded here before release completion.
+The corrected container job passed, including the OCI revision assertion, Python
+3.14.7, all legacy image preflights and the staged ten-row preflight (17.03 seconds):
+https://github.com/petmal/NEXUS/actions/runs/39300712416/job/118224867360.
+
+On packaging commit `e25887e8aa9836d7880ccd42cecfd4a53e10fba4`, the independent
+proof/preflight, solver and fast gates also passed, including the new packaging
+regression. The follow-up run is repeating the unchanged extended/stress/CLI gates;
+those repeat gates were still running when this record was finalized. The earlier
+full behavior/CLI pass applies to identical runtime source files. Check the run
+page for the eventual aggregate result:
+https://github.com/petmal/NEXUS/actions/runs/39300712416.
+
+Implementation and verification of every changed area are complete. No main merge
+or real-model evaluation was performed. Both independent reviews have no open findings.
 
 ## Performance and meaning
 

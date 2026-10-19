@@ -41,3 +41,13 @@ Result: **33 passed, 1 deselected in 20.08s**. The selection includes all 20 pro
 The repository currently exposes Ruff configuration but does not supply the Short Circuit skill's complete lint/type/coverage toolchain or Makefile gates. This is pre-existing tooling debt, not a blocker introduced by this feature; this read-only review did not migrate the toolchain.
 
 Follow-up owner evidence: the legacy proof/source manifest was refreshed after 15 construction/conformance/qualification tests passed and proof/witness identities were rechecked. That broader release verification was reported by the implementation owner and was not rerun during this narrowly scoped follow-up.
+
+## Packaging follow-up review
+
+A separate narrow read-only review of `e25887e8aa9836d7880ccd42cecfd4a53e10fba4`
+found no issues. All seven Docker-copied matrix files have build-context exceptions,
+and the regression detects the original omission. Container job eligibility
+matches the former step condition exactly; its complete smoke command block is
+unchanged. Independent checkout, inherited read-only permissions and a 60-minute
+timeout are configured. Runtime source files are unchanged. The container and
+follow-up fast gates subsequently passed in CI run 39300712416.

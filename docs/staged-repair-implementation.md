@@ -16,12 +16,14 @@ Purpose and contract: staged-repair-design.md. No paid evaluations or main merge
 3. [complete] Add source-bound preflight, ~10-run matrix and matching MindTrial YAML.
    Include old-family regressions, exact-law controls, multiple mechanisms and
    paired depth/theory comparisons with moderate P/R and no external Python.
-4. [in progress] Review actual diff independently, resolve findings, run focused and
+4. [complete] Review actual diff independently, resolve findings, run focused and
    existing gates, refresh source-bound legacy artifacts through their generators,
    run full CI, and publish to the existing feature branch. Implementation commit:
    33c9181e5ef6256eace257f319c50e0f8bb7eb7c. All 770 local tests and every
    legacy/new preflight passed. Initial full CI passed behavior gates and caught
-   the missing Docker build-context exception. Packaging follow-up CI is pending.
+   the missing Docker build-context exception. Packaging commit e25887e fixes it;
+   its independent image, proof/preflight, solver and fast gates passed. The full
+   follow-up run 39300712416 is repeating unchanged extended/stress/CLI checks.
 
 ## Verification commands (extend as implemented)
 
@@ -40,21 +42,24 @@ Purpose and contract: staged-repair-design.md. No paid evaluations or main merge
 - Independent design review and scalar PoC passed. Full proof covers 20 conditional
   profiles. Live public-policy check passed all 216 worlds across all 5 supported
   T/D profiles (1,080 sessions). Fixed-panel live play fits the unchanged budget.
-- Focused tests passed 27 fast semantic tests and 6 service/matrix tests before final
-  review/formatting. Final counts and source-bound reports are regenerated at release.
+- Final local verification passed 770 tests (9 solver, 713 fast, 46 extended,
+  2 stress). All legacy and staged preflights passed. The packaging-only follow-up
+  adds one regression, which passed in CI; the corrected image also passed every
+  preflight and OCI label verification.
 - Important negative result: linked contexts leak useful upstream information.
   Their exact actual-world certificates need 3–4 readings; independent contexts
   range 3–6. Matrix includes qualified 6/5-reading independent cases, 4-reading linked
   cases, and a 3-reading shallow control. No claim of mandatory six-stage reasoning.
 - Separate read-only implementation review completed; one stale-report finding
   fixed and verified. Legacy source bindings refreshed only after their original
-  proof/witness identities and 15 prerequisite tests passed. Extended tests and
-  remaining preflights are running; see staged-repair-validation.md for results.
+  proof/witness identities and 15 prerequisite tests passed. A separate narrow
+  review cleared the Docker/CI follow-up. See staged-repair-validation.md for
+  exact source revisions, completed gates and the ongoing duplicate CI checks.
 
 ## Resume notes
 
-- Workspace: /workspace/scratch/5185b9a844b2/NEXUS. The workspace disconnected after local verification; GitHub is authoritative.
-  Native clone is unavailable;
+- Workspace: /workspace/scratch/5185b9a844b2/NEXUS. It disconnected after local
+  verification; GitHub is authoritative. Native clone is unavailable;
   GitHub connector works. Publish via create_tree/create_commit/update_ref with
   expected head; never force. Local Git root is reconstructed from exact objects.
 - Keep old ontologies stable; source-bound qualification manifests need explicit
