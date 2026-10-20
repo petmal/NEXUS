@@ -1,0 +1,164 @@
+{
+  "status": "candidate-audited-not-runtime-qualified",
+  "world_count": 972,
+  "reachable_states_per_world": 27,
+  "minimal_predictive_states_per_world": 27,
+  "initial_behavior_classes": 972,
+  "arithmetic": "modulo 3; initial state (0,0,0)",
+  "parameters": "a,b,c,d,e in {0,1,2}; u,v in {0,1}; all 972 combinations",
+  "transition": "(p,q,r) -> (q,r,p+a*q+b*r+c*q*r+d*q*q+e*r*r+input)",
+  "view": "p+u*q*r+v*r*r",
+  "query_contract": "start a fresh zero-state fixture; apply the input word; return one final trit only",
+  "coverage": [
+    {
+      "max_word_length": 1,
+      "queries": 3,
+      "behavior_classes": 2
+    },
+    {
+      "max_word_length": 2,
+      "queries": 12,
+      "behavior_classes": 28
+    },
+    {
+      "max_word_length": 3,
+      "queries": 39,
+      "behavior_classes": 730
+    },
+    {
+      "max_word_length": 4,
+      "queries": 120,
+      "behavior_classes": 738
+    },
+    {
+      "max_word_length": 5,
+      "queries": 363,
+      "behavior_classes": 972
+    }
+  ],
+  "fixed_panel": [
+    [
+      2,
+      1,
+      1,
+      1
+    ],
+    [
+      1,
+      1,
+      1,
+      2,
+      2
+    ],
+    [
+      1,
+      0,
+      0,
+      1,
+      1
+    ],
+    [
+      2,
+      0,
+      0,
+      0,
+      2
+    ],
+    [
+      1,
+      2,
+      1,
+      0,
+      0
+    ],
+    [
+      2,
+      1,
+      1,
+      2
+    ],
+    [
+      2,
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      2,
+      1,
+      2,
+      2,
+      1
+    ],
+    [
+      1,
+      0,
+      1,
+      2,
+      1
+    ],
+    [
+      1,
+      2,
+      0,
+      2
+    ]
+  ],
+  "fixed_panel_steps": [
+    {
+      "queries": 1,
+      "classes": 3,
+      "largest_class": 324
+    },
+    {
+      "queries": 2,
+      "classes": 9,
+      "largest_class": 112
+    },
+    {
+      "queries": 3,
+      "classes": 27,
+      "largest_class": 43
+    },
+    {
+      "queries": 4,
+      "classes": 81,
+      "largest_class": 18
+    },
+    {
+      "queries": 5,
+      "classes": 243,
+      "largest_class": 9
+    },
+    {
+      "queries": 6,
+      "classes": 571,
+      "largest_class": 5
+    },
+    {
+      "queries": 7,
+      "classes": 834,
+      "largest_class": 4
+    },
+    {
+      "queries": 8,
+      "classes": 934,
+      "largest_class": 4
+    },
+    {
+      "queries": 9,
+      "classes": 963,
+      "largest_class": 2
+    },
+    {
+      "queries": 10,
+      "classes": 972,
+      "largest_class": 1
+    }
+  ],
+  "hard_tier_admitted": false,
+  "runtime_integrated": false,
+  "scope": "Exact finite-state future-behavior equivalence and reachability; achieved ten-query fixed panel. Does not prove minimum queries/actions, model failure, an unknown representation requirement, or resistance to all shortcut policies. No finish/error channels exist in this standalone model.",
+  "remaining": "Audit known-feature coefficient fitting and sufficient-state shortcuts; settle player grammar/T2 contrast and action costs; implement and audit the uncertainty candidate before runtime integration."
+}

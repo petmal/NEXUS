@@ -26,14 +26,14 @@ This is a planning and finite-design checkpoint, not a completed implementation.
 The draft matrix has null seeds, qualified=false, and status=draft-not-runnable.
 Do not treat null seeds as requests for random worlds.
 
-## Environment blocker
+## Previous environment blocker (resolved on resumption)
 
-The session reports its execution environment as unavailable. The attempted
+At the initial checkpoint, the session reported its execution environment as unavailable. The attempted
 exec_command call returned: "No usable execution environment is available. Wait
 for an environment to become available before using this tool."
 
 GitHub read/write access is available. No local Python, test, shell, container,
-or filesystem validation was possible in this session. The design checks used
+or filesystem validation was possible during that initial checkpoint. The design checks used
 the JavaScript evaluator only; they did not call the NEXUS runtime.
 
 The current repair release binding covers every installed Python source and
@@ -104,15 +104,55 @@ The JSON file includes complete witnesses and measured counts. These checks
 prove finite arithmetic/behavior statements only. They do not establish a
 NEXUS action-cost optimum, model failure probability, or qualified seed.
 
+## Paused checkpoint: execution restored, first candidate audited
+
+User requested a pause after the current unit of work on 2026-10-20.
+Execution is available again. The local branch was synchronized to remote
+5e4c23bb0f25875a46350a60579ddeb8e2a90253 with exact Git object/tree verification;
+no user work was overwritten. Direct git transport was unavailable, so the
+GitHub connector supplied the two documentation commits.
+
+Completed in this unit:
+- Frozen dependency sync succeeded; local interpreter is Python 3.14.8
+  (the earlier CI run used 3.14.7).
+- Baseline command: `uv run pytest -q -m "not slow and not stress" tests/unit tests/integration --ignore=tests/unit/test_belief_policy.py --maxfail=1 --durations=5`.
+  Result: 748 passed, 47 deselected, the same 3 serializer warnings, 172.06 seconds.
+- Executed a standalone scalar representation candidate over all 972 composed
+  programs. Exact finite-state partition refinement distinguishes all 972
+  initial behaviors; each world has 27 reachable, future-distinguishable states.
+- Exhaustive words through length five suffice to distinguish all programs.
+  A greedy fixed ten-query panel already identifies every world. This is an
+  achieved shortcut, not a minimum-query proof or a deep-reasoning guarantee.
+- Saved the reproducible standard-library script and its deterministic report:
+  `scripts/poc_representation_discovery.py` and
+  `docs/discovery-pocs-representation-candidate.json`.
+  Run `.venv/bin/python scripts/poc_representation_discovery.py --output /tmp/representation-candidate.json`.
+
+Qualification remains deliberately incomplete. The candidate may still reduce
+to fitting coefficients in a disclosed feature basis; 27 predictive states do
+not by themselves prove representation discovery or cognitive depth. Its
+query fixture starts at zero for each word and returns only the final trit;
+actual NEXUS action costs and alternate information channels are not yet modeled.
+Do not register it or select matrix seeds on the strength of this report alone.
+
+Next unit, only after the user resumes: assess whether this candidate provides
+a meaningful T2/T3 representation contrast or replace it; complete its shortcut
+and mission-acceptance audits; implement the independent uncertainty candidate.
+Then proceed through the unchanged runtime/qualification/matrix gates.
+No runtime ontology, source-bound release, runnable YAML, or qualified seed has
+been added. The ten-row inventory remains a draft. Ruff/ty/basedpyright are not
+configured repository gates; adding a new toolchain is deferred outside this
+proof checkpoint rather than silently changing the project's tooling.
+
 ## Resume procedure
 
-1. Restore an execution-enabled environment and recheck the latest feature head.
+1. Confirm execution remains available and recheck the latest feature head.
    Preserve concurrent user changes; do not reset or force-push.
 2. Read discovery-pocs-plan.md and AGENTS.md, then any newly applicable instructions.
 3. Restore the standard frozen Python 3.14 environment:
    uv sync --frozen --all-extras
-4. Run baseline fast tests before runtime edits. Record actual command, revision,
-   result, and duration.
+4. The baseline fast suite above passed before runtime edits. Re-run it only
+   if the baseline changes; preserve its command, revision, result and duration.
 5. Implement independent scalar candidate models first. Reproduce both negative
    witnesses above in Python and use them as admission-regression cases.
 6. Require successful candidate qualification before registering either family.
