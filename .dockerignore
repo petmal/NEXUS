@@ -18,3 +18,4 @@ docs/*
 !docs/history-diagnostic-matrix.json
 !docs/staged-repair-matrix.json
 !docs/joint-assembly-matrix.json
+!docs/discovery-pocs-matrix.json

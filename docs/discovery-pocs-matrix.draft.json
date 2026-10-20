@@ -1,6 +1,6 @@
 {
   "version": "discovery-pocs-pilot-draft-v1",
-  "status": "draft-not-runnable",
+  "status": "superseded-draft-not-runnable",
   "seed_qualification": "pending",
   "base_revision": "9c7939c6531e4a0d6d1e275fafa7420fd3798651",
   "common_action_budget": null,
@@ -148,5 +148,6 @@
     "recovery and privacy",
     "full regression and actual-image preflight"
   ],
-  "disclaimer": "This inventory is planning data. Do not use it for real-model evaluation or interpret null seeds as random seeds."
+  "disclaimer": "This inventory is planning data. Do not use it for real-model evaluation or interpret null seeds as random seeds.",
+  "superseded_by": "docs/discovery-pocs-matrix.json"
 }

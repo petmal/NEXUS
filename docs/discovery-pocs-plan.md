@@ -1,6 +1,6 @@
 # Representation discovery and uncertainty-aware construction: implementation plan
 
-Status: approved scope; design/proof checkpoint only. Runtime integration and seed qualification are pending.
+Status: both experimental plugins implemented; scalar proofs, paired seed preflight and focused tests passed. Final release gates are tracked in discovery-pocs-implementation.md.
 Baseline: petmal/NEXUS, feat/theory-prior-axis, 9c7939c6531e4a0d6d1e275fafa7420fd3798651.
 Date: 2026-10-20. Preserve all existing families, defaults, axes, protocols, receipts, and behavior.
 
@@ -212,3 +212,73 @@ No paid real-model calls, public MindTrial repository edits, main merge, or bran
 ## Resumption
 
 Read discovery-pocs-implementation.md first. Recheck branch head and preserve any concurrent changes. Do not mistake the executed finite design checks for runtime qualification or a completed feature.
+
+## Executed design refinement before integration
+
+The original 972-program shift-register candidate is retained as a rejected
+representation-discovery control: it supplies the fixed latent coordinate
+skeleton and therefore can reduce to coefficient fitting. A ten-query fixed
+panel identifies it. It is not the runtime grammar.
+
+The representation pilot instead composes three synchronous trit-memory cells.
+Each selects the input or an earlier old cell as source, overwrite/accumulate
+as update, and gain 1/2; the readout is the last cell or first plus a product
+of the other two. This gives 768 syntactic programs and, by independent finite
+partition refinement, 138 complete future-behavior classes. Minimal reachable
+predictive state counts range from 2 to 27; 80 syntactic programs require 27.
+T2 supplies the wiring/update/readout skeleton, leaving gains unknown; T3
+supplies only the complete primitive grammar. Reader words of length 1..6
+separate every behavioral class (length <=5 does not). Installed programs
+must agree on every input history, checked by exact finite product automata,
+not only on queried words. Equivalent programs are accepted. Finite enumeration
+remains legal; this is a varied-memory identification pilot, not open-ended
+invention or a proven model-difficulty tier.
+
+The uncertainty pilot composes rank-two parity constraints on five binary
+physical disturbances. All three nonzero rowspace masks must have weight >=3;
+15 rowspaces times four affine cosets give 60 eight-point supports. Each has
+identical single-channel and pairwise marginals. Two shared loading patterns give
+120 physical mechanisms. Each admits all 8! hidden fixture permutations, for
+4,838,400 complete worlds. The earlier cyclic schedule was rejected because
+three fixed readings identified every world. Full joint observations permit an
+exact factored posterior: after k distinct fixtures each surviving mechanism
+has (8-k)! compatible assignments. Partial-channel queries are not admitted;
+they would need a richer matching posterior.
+Physical signs are (-1)^z. Lab displays add persistent loadings; a matched
+blank reference and exact marginal summary are legal. During operation, a
+shared disturbance delta in {-1,+1} enters all sensors with those loadings.
+The installed compensator corrects selected sensors using the operating
+reference delta and computes a signed parity product predicting channel five.
+Every one of the eight physical states and both delta values must succeed.
+Accept all equivalent complete builds, including unused-channel equivalence.
+T2 supplies the constraint rowspace and loading shape; T3 supplies their
+compositional grammar. Full joint panels remain legal and their shortcuts are
+reported. This is finite robust-dependence reasoning, not confidence intervals.
+
+Integration is conditional on independent acceptance/observation conformance,
+zero universal build, one-sample obstruction for the uncertainty prior, complete
+public reference-policy solvability and explicit shortcut reporting. No hard
+cognitive tier is admitted. The ten-row pilot measures whether these distinct
+mechanisms affect real models at a shared generous budget; its qualification
+will state precise behavioral claims, not an unmeasured failure prediction.
+
+## Seed-admission result and decision ledger
+
+Decision: retain both as explicitly experimental mechanism pilots, not a deep tier.
+Reason: independent proof and actual-outcome certificate search find important shortcuts.
+Representation seed 305 requires exactly three supporting readings; seed 753 needs two,
+despite both requiring 27 predictive states. Their reference policies use five readings.
+Uncertainty seeds 123841/123849 have favorable two-reading certificates; sequential
+fixtures 0..4 need five. Those fixture IDs are exchangeable under the prior, so a lucky
+short path is not an adaptive-depth guarantee. Qualification reports all of these facts.
+Invalidates if: acceptance, grammar, observation channels, source binding or matrix changes.
+
+Decision: keep P0 and 64 actions for every R1 row, with paired R0 ablations.
+Reason: public policies cost at most 16 actions over the complete grammar; selected
+rows take at most 14, and injected wrong-build recovery takes at most 17. This pilot
+measures mechanism effects with substantial slack, not deliberately tighter resources.
+
+Decision: keep exact acceptance independent of inference-table caches.
+Reason: representation finish checks product automata over all histories; uncertainty
+finish numerically checks all eight physical states and both operational disturbances.
+Independent partition refinement/dual-space proofs cross-check those implementations.

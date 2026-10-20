@@ -1,5 +1,12 @@
 # NEXUS
 
+The opt-in `representation-discovery-v1` and `uncertainty-construction-v1` pilots
+add varied predictive memory and robust construction under hidden higher-order
+dependence. Their [paired ten-run guide](docs/discovery-pocs-guide.md) includes
+T0/T2/T3 controls, R0 ablations, exact seed certificates, known shortcuts and
+MindTrial YAML. Every R1 row has 64 actions; neither pilot is labelled a proven
+deep tier. Existing families and defaults remain unchanged.
+
 The opt-in `joint-assembly-v1` pilot combines confounded reader/law inference with
 physical component preparation and assembly. Local component validity does not
 imply a compatible final device. Its [guide and ten-run matrix](docs/joint-assembly-guide.md)

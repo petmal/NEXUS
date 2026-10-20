@@ -2,6 +2,9 @@
 
 from types import MappingProxyType
 
+from nexus.ontology.representation.schema import SCHEMAS as REPRESENTATION
+from nexus.ontology.uncertainty.schema import SCHEMAS as UNCERTAINTY
+
 from nexus.ontology.assembly.schema import SCHEMAS as ASSEMBLY
 
 from nexus.ontology.staged.schema import SCHEMAS as STAGED
@@ -17,6 +20,8 @@ from nexus.ontology.transfer.schema import SCHEMAS as TRANSFER
 
 _SCHEMAS = MappingProxyType(
     {
+        "representation-discovery-v1": MappingProxyType(dict(REPRESENTATION)),
+        "uncertainty-construction-v1": MappingProxyType(dict(UNCERTAINTY)),
         "joint-assembly-v1": MappingProxyType(dict(ASSEMBLY)),
         "staged-repair-v1": MappingProxyType(dict(STAGED)),
         "history-coupled-v1": MappingProxyType(dict(HISTORY)),

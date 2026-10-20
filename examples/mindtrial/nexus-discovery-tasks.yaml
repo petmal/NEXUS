@@ -1,0 +1,452 @@
+# Discovery PoCs; source-bound preflight required. No external Python.
+task-config:
+  max-turns: 160
+  validation-rules:
+    custom-validator: nexus-victory
+    case-sensitive: true
+    ignore-whitespace: false
+    trim-lines: false
+  system-prompt:
+    enable-for: text
+    template: |-
+      Use the available NEXUS tool to complete the live task. Your final answer
+      must follow this format exactly, with no extra explanation or formatting:
+      {{.ResponseResultFormat}}
+  tool-selector:
+    disabled: false
+    tools:
+    - name: nexus
+      disabled: false
+      max-calls: 120
+      timeout: 60s
+  tasks:
+  - name: NEXUS discovery-diagnostic-01
+    disabled: false
+    suite: nexus
+    category: discovery-diagnostic
+    difficulty: experimental-control
+    tags:
+    - discovery-pocs-pilot-v1
+    - representation-discovery-v1
+    prompt: |
+      You are confined to an artificial NEXUS facility. Complete the live mission
+      and return its actual victory receipt.
+
+      Begin with manifest and observe, then read every listed evidence file. Learn
+      the exact goal, complete bounded prior, reader semantics and action contract.
+      All in-world measurements and actions must use NEXUS. Finite hypothesis
+      enumeration is valid. Names do not imply real-world physical laws.
+
+      Track actual artifacts, committed preparation, apparatus settings and remaining
+      actions. Distinguish displayed readings from physical responses and reader
+      contributions, using the disclosed equations. Configure stores settings;
+      operate applies the documented effect. Probe does not commit a transformation.
+
+      Investigate what is needed for the complete mission. Use the required actual
+      artifact, not a survey substitute. No particular experiment order or theory
+      report is mandatory. Recovery and rejected finishes work only as documented.
+      A correct-looking setup is insufficient: call finish successfully and return
+      exactly its actual victory_code.
+    response-result-format: |
+      The actual victory_code returned after successfully finishing the live
+      NEXUS mission, and nothing else. No quotes, Markdown or explanation.
+    tool-selector:
+      service-inputs:
+        nexus:
+          axis-version: 2
+          science-family: representation-discovery-v1
+          seed: '305'
+          discovery-level: 0
+          planning-level: 0
+          resource-pressure: 1
+          theory-level: 0
+          budget-profile: standard
+          generation-timing: true
+          extended-diagnostics: true
+  - name: NEXUS discovery-diagnostic-02
+    disabled: false
+    suite: nexus
+    category: discovery-diagnostic
+    difficulty: experimental-discovery
+    tags:
+    - discovery-pocs-pilot-v1
+    - representation-discovery-v1
+    prompt: |
+      You are confined to an artificial NEXUS facility. Complete the live mission
+      and return its actual victory receipt.
+
+      Begin with manifest and observe, then read every listed evidence file. Learn
+      the exact goal, complete bounded prior, reader semantics and action contract.
+      All in-world measurements and actions must use NEXUS. Finite hypothesis
+      enumeration is valid. Names do not imply real-world physical laws.
+
+      Track actual artifacts, committed preparation, apparatus settings and remaining
+      actions. Distinguish displayed readings from physical responses and reader
+      contributions, using the disclosed equations. Configure stores settings;
+      operate applies the documented effect. Probe does not commit a transformation.
+
+      Investigate what is needed for the complete mission. Use the required actual
+      artifact, not a survey substitute. No particular experiment order or theory
+      report is mandatory. Recovery and rejected finishes work only as documented.
+      A correct-looking setup is insufficient: call finish successfully and return
+      exactly its actual victory_code.
+    response-result-format: |
+      The actual victory_code returned after successfully finishing the live
+      NEXUS mission, and nothing else. No quotes, Markdown or explanation.
+    tool-selector:
+      service-inputs:
+        nexus:
+          axis-version: 2
+          science-family: representation-discovery-v1
+          seed: '305'
+          discovery-level: 4
+          planning-level: 0
+          resource-pressure: 1
+          theory-level: 2
+          budget-profile: standard
+          generation-timing: true
+          extended-diagnostics: true
+  - name: NEXUS discovery-diagnostic-03
+    disabled: false
+    suite: nexus
+    category: discovery-diagnostic
+    difficulty: experimental-discovery
+    tags:
+    - discovery-pocs-pilot-v1
+    - representation-discovery-v1
+    prompt: |
+      You are confined to an artificial NEXUS facility. Complete the live mission
+      and return its actual victory receipt.
+
+      Begin with manifest and observe, then read every listed evidence file. Learn
+      the exact goal, complete bounded prior, reader semantics and action contract.
+      All in-world measurements and actions must use NEXUS. Finite hypothesis
+      enumeration is valid. Names do not imply real-world physical laws.
+
+      Track actual artifacts, committed preparation, apparatus settings and remaining
+      actions. Distinguish displayed readings from physical responses and reader
+      contributions, using the disclosed equations. Configure stores settings;
+      operate applies the documented effect. Probe does not commit a transformation.
+
+      Investigate what is needed for the complete mission. Use the required actual
+      artifact, not a survey substitute. No particular experiment order or theory
+      report is mandatory. Recovery and rejected finishes work only as documented.
+      A correct-looking setup is insufficient: call finish successfully and return
+      exactly its actual victory_code.
+    response-result-format: |
+      The actual victory_code returned after successfully finishing the live
+      NEXUS mission, and nothing else. No quotes, Markdown or explanation.
+    tool-selector:
+      service-inputs:
+        nexus:
+          axis-version: 2
+          science-family: representation-discovery-v1
+          seed: '305'
+          discovery-level: 4
+          planning-level: 0
+          resource-pressure: 1
+          theory-level: 3
+          budget-profile: standard
+          generation-timing: true
+          extended-diagnostics: true
+  - name: NEXUS discovery-diagnostic-04
+    disabled: false
+    suite: nexus
+    category: discovery-diagnostic
+    difficulty: experimental-discovery
+    tags:
+    - discovery-pocs-pilot-v1
+    - representation-discovery-v1
+    prompt: |
+      You are confined to an artificial NEXUS facility. Complete the live mission
+      and return its actual victory receipt.
+
+      Begin with manifest and observe, then read every listed evidence file. Learn
+      the exact goal, complete bounded prior, reader semantics and action contract.
+      All in-world measurements and actions must use NEXUS. Finite hypothesis
+      enumeration is valid. Names do not imply real-world physical laws.
+
+      Track actual artifacts, committed preparation, apparatus settings and remaining
+      actions. Distinguish displayed readings from physical responses and reader
+      contributions, using the disclosed equations. Configure stores settings;
+      operate applies the documented effect. Probe does not commit a transformation.
+
+      Investigate what is needed for the complete mission. Use the required actual
+      artifact, not a survey substitute. No particular experiment order or theory
+      report is mandatory. Recovery and rejected finishes work only as documented.
+      A correct-looking setup is insufficient: call finish successfully and return
+      exactly its actual victory_code.
+    response-result-format: |
+      The actual victory_code returned after successfully finishing the live
+      NEXUS mission, and nothing else. No quotes, Markdown or explanation.
+    tool-selector:
+      service-inputs:
+        nexus:
+          axis-version: 2
+          science-family: representation-discovery-v1
+          seed: '753'
+          discovery-level: 4
+          planning-level: 0
+          resource-pressure: 1
+          theory-level: 3
+          budget-profile: standard
+          generation-timing: true
+          extended-diagnostics: true
+  - name: NEXUS discovery-diagnostic-05
+    disabled: false
+    suite: nexus
+    category: discovery-diagnostic
+    difficulty: experimental-discovery
+    tags:
+    - discovery-pocs-pilot-v1
+    - representation-discovery-v1
+    prompt: |
+      You are confined to an artificial NEXUS facility. Complete the live mission
+      and return its actual victory receipt.
+
+      Begin with manifest and observe, then read every listed evidence file. Learn
+      the exact goal, complete bounded prior, reader semantics and action contract.
+      All in-world measurements and actions must use NEXUS. Finite hypothesis
+      enumeration is valid. Names do not imply real-world physical laws.
+
+      Track actual artifacts, committed preparation, apparatus settings and remaining
+      actions. Distinguish displayed readings from physical responses and reader
+      contributions, using the disclosed equations. Configure stores settings;
+      operate applies the documented effect. Probe does not commit a transformation.
+
+      Investigate what is needed for the complete mission. Use the required actual
+      artifact, not a survey substitute. No particular experiment order or theory
+      report is mandatory. Recovery and rejected finishes work only as documented.
+      A correct-looking setup is insufficient: call finish successfully and return
+      exactly its actual victory_code.
+    response-result-format: |
+      The actual victory_code returned after successfully finishing the live
+      NEXUS mission, and nothing else. No quotes, Markdown or explanation.
+    tool-selector:
+      service-inputs:
+        nexus:
+          axis-version: 2
+          science-family: representation-discovery-v1
+          seed: '305'
+          discovery-level: 4
+          planning-level: 0
+          resource-pressure: 0
+          theory-level: 3
+          budget-profile: standard
+          generation-timing: true
+          extended-diagnostics: true
+  - name: NEXUS discovery-diagnostic-06
+    disabled: false
+    suite: nexus
+    category: discovery-diagnostic
+    difficulty: experimental-control
+    tags:
+    - discovery-pocs-pilot-v1
+    - uncertainty-construction-v1
+    prompt: |
+      You are confined to an artificial NEXUS facility. Complete the live mission
+      and return its actual victory receipt.
+
+      Begin with manifest and observe, then read every listed evidence file. Learn
+      the exact goal, complete bounded prior, reader semantics and action contract.
+      All in-world measurements and actions must use NEXUS. Finite hypothesis
+      enumeration is valid. Names do not imply real-world physical laws.
+
+      Track actual artifacts, committed preparation, apparatus settings and remaining
+      actions. Distinguish displayed readings from physical responses and reader
+      contributions, using the disclosed equations. Configure stores settings;
+      operate applies the documented effect. Probe does not commit a transformation.
+
+      Investigate what is needed for the complete mission. Use the required actual
+      artifact, not a survey substitute. No particular experiment order or theory
+      report is mandatory. Recovery and rejected finishes work only as documented.
+      A correct-looking setup is insufficient: call finish successfully and return
+      exactly its actual victory_code.
+    response-result-format: |
+      The actual victory_code returned after successfully finishing the live
+      NEXUS mission, and nothing else. No quotes, Markdown or explanation.
+    tool-selector:
+      service-inputs:
+        nexus:
+          axis-version: 2
+          science-family: uncertainty-construction-v1
+          seed: '123841'
+          discovery-level: 0
+          planning-level: 0
+          resource-pressure: 1
+          theory-level: 0
+          budget-profile: standard
+          generation-timing: true
+          extended-diagnostics: true
+  - name: NEXUS discovery-diagnostic-07
+    disabled: false
+    suite: nexus
+    category: discovery-diagnostic
+    difficulty: experimental-discovery
+    tags:
+    - discovery-pocs-pilot-v1
+    - uncertainty-construction-v1
+    prompt: |
+      You are confined to an artificial NEXUS facility. Complete the live mission
+      and return its actual victory receipt.
+
+      Begin with manifest and observe, then read every listed evidence file. Learn
+      the exact goal, complete bounded prior, reader semantics and action contract.
+      All in-world measurements and actions must use NEXUS. Finite hypothesis
+      enumeration is valid. Names do not imply real-world physical laws.
+
+      Track actual artifacts, committed preparation, apparatus settings and remaining
+      actions. Distinguish displayed readings from physical responses and reader
+      contributions, using the disclosed equations. Configure stores settings;
+      operate applies the documented effect. Probe does not commit a transformation.
+
+      Investigate what is needed for the complete mission. Use the required actual
+      artifact, not a survey substitute. No particular experiment order or theory
+      report is mandatory. Recovery and rejected finishes work only as documented.
+      A correct-looking setup is insufficient: call finish successfully and return
+      exactly its actual victory_code.
+    response-result-format: |
+      The actual victory_code returned after successfully finishing the live
+      NEXUS mission, and nothing else. No quotes, Markdown or explanation.
+    tool-selector:
+      service-inputs:
+        nexus:
+          axis-version: 2
+          science-family: uncertainty-construction-v1
+          seed: '123841'
+          discovery-level: 4
+          planning-level: 0
+          resource-pressure: 1
+          theory-level: 2
+          budget-profile: standard
+          generation-timing: true
+          extended-diagnostics: true
+  - name: NEXUS discovery-diagnostic-08
+    disabled: false
+    suite: nexus
+    category: discovery-diagnostic
+    difficulty: experimental-discovery
+    tags:
+    - discovery-pocs-pilot-v1
+    - uncertainty-construction-v1
+    prompt: |
+      You are confined to an artificial NEXUS facility. Complete the live mission
+      and return its actual victory receipt.
+
+      Begin with manifest and observe, then read every listed evidence file. Learn
+      the exact goal, complete bounded prior, reader semantics and action contract.
+      All in-world measurements and actions must use NEXUS. Finite hypothesis
+      enumeration is valid. Names do not imply real-world physical laws.
+
+      Track actual artifacts, committed preparation, apparatus settings and remaining
+      actions. Distinguish displayed readings from physical responses and reader
+      contributions, using the disclosed equations. Configure stores settings;
+      operate applies the documented effect. Probe does not commit a transformation.
+
+      Investigate what is needed for the complete mission. Use the required actual
+      artifact, not a survey substitute. No particular experiment order or theory
+      report is mandatory. Recovery and rejected finishes work only as documented.
+      A correct-looking setup is insufficient: call finish successfully and return
+      exactly its actual victory_code.
+    response-result-format: |
+      The actual victory_code returned after successfully finishing the live
+      NEXUS mission, and nothing else. No quotes, Markdown or explanation.
+    tool-selector:
+      service-inputs:
+        nexus:
+          axis-version: 2
+          science-family: uncertainty-construction-v1
+          seed: '123841'
+          discovery-level: 4
+          planning-level: 0
+          resource-pressure: 1
+          theory-level: 3
+          budget-profile: standard
+          generation-timing: true
+          extended-diagnostics: true
+  - name: NEXUS discovery-diagnostic-09
+    disabled: false
+    suite: nexus
+    category: discovery-diagnostic
+    difficulty: experimental-discovery
+    tags:
+    - discovery-pocs-pilot-v1
+    - uncertainty-construction-v1
+    prompt: |
+      You are confined to an artificial NEXUS facility. Complete the live mission
+      and return its actual victory receipt.
+
+      Begin with manifest and observe, then read every listed evidence file. Learn
+      the exact goal, complete bounded prior, reader semantics and action contract.
+      All in-world measurements and actions must use NEXUS. Finite hypothesis
+      enumeration is valid. Names do not imply real-world physical laws.
+
+      Track actual artifacts, committed preparation, apparatus settings and remaining
+      actions. Distinguish displayed readings from physical responses and reader
+      contributions, using the disclosed equations. Configure stores settings;
+      operate applies the documented effect. Probe does not commit a transformation.
+
+      Investigate what is needed for the complete mission. Use the required actual
+      artifact, not a survey substitute. No particular experiment order or theory
+      report is mandatory. Recovery and rejected finishes work only as documented.
+      A correct-looking setup is insufficient: call finish successfully and return
+      exactly its actual victory_code.
+    response-result-format: |
+      The actual victory_code returned after successfully finishing the live
+      NEXUS mission, and nothing else. No quotes, Markdown or explanation.
+    tool-selector:
+      service-inputs:
+        nexus:
+          axis-version: 2
+          science-family: uncertainty-construction-v1
+          seed: '123849'
+          discovery-level: 4
+          planning-level: 0
+          resource-pressure: 1
+          theory-level: 3
+          budget-profile: standard
+          generation-timing: true
+          extended-diagnostics: true
+  - name: NEXUS discovery-diagnostic-10
+    disabled: false
+    suite: nexus
+    category: discovery-diagnostic
+    difficulty: experimental-discovery
+    tags:
+    - discovery-pocs-pilot-v1
+    - uncertainty-construction-v1
+    prompt: |
+      You are confined to an artificial NEXUS facility. Complete the live mission
+      and return its actual victory receipt.
+
+      Begin with manifest and observe, then read every listed evidence file. Learn
+      the exact goal, complete bounded prior, reader semantics and action contract.
+      All in-world measurements and actions must use NEXUS. Finite hypothesis
+      enumeration is valid. Names do not imply real-world physical laws.
+
+      Track actual artifacts, committed preparation, apparatus settings and remaining
+      actions. Distinguish displayed readings from physical responses and reader
+      contributions, using the disclosed equations. Configure stores settings;
+      operate applies the documented effect. Probe does not commit a transformation.
+
+      Investigate what is needed for the complete mission. Use the required actual
+      artifact, not a survey substitute. No particular experiment order or theory
+      report is mandatory. Recovery and rejected finishes work only as documented.
+      A correct-looking setup is insufficient: call finish successfully and return
+      exactly its actual victory_code.
+    response-result-format: |
+      The actual victory_code returned after successfully finishing the live
+      NEXUS mission, and nothing else. No quotes, Markdown or explanation.
+    tool-selector:
+      service-inputs:
+        nexus:
+          axis-version: 2
+          science-family: uncertainty-construction-v1
+          seed: '123841'
+          discovery-level: 4
+          planning-level: 0
+          resource-pressure: 0
+          theory-level: 3
+          budget-profile: standard
+          generation-timing: true
+          extended-diagnostics: true

@@ -50,6 +50,22 @@ BUILTINS = MappingProxyType(
         item.family: item
         for item in (
             OntologyDefinition(
+                "representation-discovery-v1", "representation-discovery-v1",
+                runtime_module="nexus.ontology.representation.runtime",
+                generator=("nexus.ontology.representation.generation", "generate_episode"),
+                qualifier=("nexus.ontology.discovery.qualification", "qualify"),
+                diagnostic_budget=True,
+                standalone_contract=True,
+            ),
+            OntologyDefinition(
+                "uncertainty-construction-v1", "uncertainty-construction-v1",
+                runtime_module="nexus.ontology.uncertainty.runtime",
+                generator=("nexus.ontology.uncertainty.generation", "generate_episode"),
+                qualifier=("nexus.ontology.discovery.qualification", "qualify"),
+                diagnostic_budget=True,
+                standalone_contract=True,
+            ),
+            OntologyDefinition(
                 "joint-assembly-v1", "joint-assembly-v1",
                 runtime_module="nexus.ontology.assembly.runtime",
                 generator=("nexus.ontology.assembly.generation", "generate_assembly"),
