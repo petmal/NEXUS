@@ -1,0 +1,109 @@
+{
+  "schema": "discovery-poc-design-checks-v1",
+  "status": "design-witnesses-checked-not-runtime-qualified",
+  "execution": "Exhaustive JavaScript evaluation in functions.exec; no Python or NEXUS runtime execution",
+  "representation": {
+    "states": 8,
+    "reachableStates": 8,
+    "statePairs": 28,
+    "distinguishedPairs": 28,
+    "sameCurrentReadingDifferentFuturePairs": 12,
+    "minimumPredictivelySufficientStateClasses": 8,
+    "fixedReadRotateScheduleObservations": 3,
+    "hardTierAdmitted": false,
+    "rejection": "A three-observation fixed schedule recovers the complete state; hidden representation alone does not establish difficult discovery.",
+    "witness": {
+      "initial": [
+        0,
+        0,
+        0
+      ],
+      "display": "state[0]",
+      "operations": {
+        "rotate": "[state[1], state[2], state[0]]",
+        "toggle": "[1-state[0], state[1], state[2]]"
+      },
+      "fixed_schedule": "read, rotate, read, rotate, read"
+    }
+  },
+  "uncertainty": {
+    "worlds": 2,
+    "scenariosPerWorld": 4,
+    "meansAndPairwiseProducts": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "identicalOneAndTwoCoordinateMarginals": true,
+    "exactRobustSettings": [
+      {
+        "parity": -1,
+        "robustSettings": [
+          -1
+        ]
+      },
+      {
+        "parity": 1,
+        "robustSettings": [
+          1
+        ]
+      }
+    ],
+    "commonRobustSetting": false,
+    "hardTierAdmitted": false,
+    "rejection": "One synchronized triple observation reveals the parity. Higher-order dependence alone does not establish difficult uncertainty reasoning.",
+    "witness": {
+      "minus_support": [
+        [
+          -1,
+          -1,
+          -1
+        ],
+        [
+          -1,
+          1,
+          1
+        ],
+        [
+          1,
+          -1,
+          1
+        ],
+        [
+          1,
+          1,
+          -1
+        ]
+      ],
+      "plus_support": [
+        [
+          -1,
+          -1,
+          1
+        ],
+        [
+          -1,
+          1,
+          -1
+        ],
+        [
+          1,
+          -1,
+          -1
+        ],
+        [
+          1,
+          1,
+          1
+        ]
+      ],
+      "weights": "uniform within each support",
+      "goal": "k*z0*z1*z2 == 1 for every operating scenario; k in {-1,+1}"
+    }
+  },
+  "runtimeIntegration": "not started; execution environment unavailable",
+  "matrixStatus": "draft; no seeds qualified"
+}
