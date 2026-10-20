@@ -41,6 +41,43 @@ requires proof/witness/conformance gates before refresh. Keep these checks intac
 CI can execute committed work, but this checkpoint contains no new game code and
 does not claim that CI has validated the new PoCs.
 
+## CI baseline verification (2026-10-20)
+
+Run: https://github.com/petmal/NEXUS/actions/runs/39461075264
+Conclusion: success; both test and container jobs passed.
+Feature head: d623c8ac55a6fd2cd0c1da9c89477d7b3ce8fa2c.
+The pull-request workflow checked out the synthetic merge
+2cd5a86c4798a8adb165cef06d2daa7a4fb680a2 into base
+cd69107f02af30c10464b85b47fa343a3f96aaef; it was not a separate
+direct-head build. The run completed at 2026-10-20T17:08:28Z.
+
+Verified from the job logs:
+- Solver proof tests: 9 passed in 2.42 seconds.
+- Fast unit/integration tests: 748 passed, 47 deselected, 3 warnings,
+  in 188.63 seconds.
+- Extended slow unit/integration tests: 47 passed, 757 deselected,
+  in 530.95 seconds.
+- Cross-seed property stress: 2 passed, 1 deselected, in 133.48 seconds;
+  the difficulty stress reported 3 seeds x 24 profiles = 72 worlds.
+- Existing immutable references, history/staged/joint-assembly proofs and
+  matrix preflights, and CLI smoke checks passed.
+- The actual Docker image built successfully. The OCI revision-label check,
+  installed-image preflights, and container smoke commands passed.
+- Three Pydantic serialization warnings came from contract-tampering and
+  generic-AST normalization tests. They were warnings, not failed assertions.
+
+Scope: this establishes a green existing-product baseline after the documentation
+checkpoint. Neither new discovery runtime exists in that commit, so the run
+does not validate representation-discovery-v1, uncertainty-construction-v1,
+their difficulty claims, qualified seeds, or the draft ten-row matrix.
+The history preflight explicitly reports that its deep tier is not admitted;
+successful CI does not change that qualification.
+
+Local execution was retried after reviewing this run and remains unavailable
+with the same execution-environment error. GitHub CI is operational, but this
+result does not restore the local Python/shell environment or complete the
+pending PoC implementation. No final-implementation checkbox is closed by it.
+
 ## Executed design checks and scope
 
 Representation check:
