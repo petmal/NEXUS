@@ -1,0 +1,66 @@
+{
+  "version": "discovery-validation-v1",
+  "implementation_commit": "fdbc13ec620e00f9f1e92e058d4c72ef6ac420eb",
+  "implementation_tree": "4bca5cd4785422e6740b692f6f772cbc2bf08081",
+  "status": "passed",
+  "local_python": "3.14.8",
+  "tests": {
+    "fast": {
+      "passed": 804,
+      "deselected": 49,
+      "warnings": 3,
+      "seconds": 195.61
+    },
+    "extended": {
+      "passed": 49,
+      "deselected": 804,
+      "seconds": 576.05
+    },
+    "property": {
+      "passed": 3,
+      "seconds": 149.12,
+      "stress_seed_count": 3
+    },
+    "total": 856,
+    "new_live_t2_t3_games": 1776
+  },
+  "gates": {
+    "independent_proof": "passed",
+    "matrix_cells": 10,
+    "preflight": "passed",
+    "installed_wheel_identity": "passed",
+    "cli_both_families_generate_qualify_solve_replay": "passed",
+    "legacy_repair_proof_witness_conformance": "passed",
+    "focused_ruff": "passed",
+    "frozen_lock": "passed",
+    "yaml_parse_and_matrix_agreement": "passed",
+    "git_whitespace": "passed",
+    "fresh_implementation_review": "all findings addressed"
+  },
+  "proof_sha256": "b3b26234cffc4413964b2dbbd98147f2bb00f5de049e81f26e2b2e02f1258af7",
+  "matrix_sha256": "e3bff2df40b9dd95ba870537f4099a94893ab1b46a21f7dada76cac965622a4d",
+  "ci": {
+    "run_id": 39505676103,
+    "url": "https://github.com/petmal/NEXUS/actions/runs/39505676103",
+    "head_sha": "fdbc13ec620e00f9f1e92e058d4c72ef6ac420eb",
+    "container": "success",
+    "test": "success",
+    "conclusion": "success",
+    "completed_at": "2026-10-20T22:29:08Z",
+    "python": "3.14.7",
+    "passed_tests": {
+      "solver": 9,
+      "fast": 795,
+      "extended": 49,
+      "stress": 2,
+      "total": 855
+    },
+    "cli_smoke": "passed",
+    "installed_image_discovery_rows": 10,
+    "tested_merge_sha": "fd88ed186d7e415baf0c7f6de6328120bd75fdb5",
+    "tested_tree": "4bca5cd4785422e6740b692f6f772cbc2bf08081"
+  },
+  "empirical_difficulty_calibrated": false,
+  "deep_tier_admitted": false,
+  "paid_model_executions": 0
+}

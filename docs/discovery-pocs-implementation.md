@@ -1,7 +1,7 @@
-# Discovery PoCs: implementation checkpoint
+# Discovery PoCs: implementation complete
 
-Updated 2026-10-20. Active branch: `feat/theory-prior-axis`; previous committed
-checkpoint `bd92a63ff24e7cb72ce6994f0f5735a13b0da415`. Approved scope is two opt-in
+Updated 2026-10-20. Active branch: `feat/theory-prior-axis`. Implementation commit:
+`fdbc13ec620e00f9f1e92e058d4c72ef6ac420eb` (tree `4bca5cd4785422e6740b692f6f772cbc2bf08081`). Approved scope is two opt-in
 plugins and a paired ten-execution pilot with exact, honest shortcut qualification.
 
 ## Current implementation
@@ -21,14 +21,25 @@ plugins and a paired ten-execution pilot with exact, honest shortcut qualificati
 - Isolated installed wheel passed legacy source binding and the ten-row preflight;
   source/proof/matrix identities agree with checkout. Both families passed CLI
   generate/qualify/solve/replay. Frozen lock, focused Ruff and whitespace checks pass.
-- Extended regression and property tests are running. Actual image validation is a CI
-  gate because local Docker/Podman are unavailable. No final CI success is claimed yet.
+- All 49 extended tests passed (576.05s). All three property tests passed
+  (149.12s), including the three-seed/24-profile stress sweep. Total local suite: 856 tests.
+- CI run [39505676103](https://github.com/petmal/NEXUS/actions/runs/39505676103)
+  passed completely: 9 solver, 795 fast, 49 extended and 2 stress tests (855 total),
+  all independent proofs and preflights, and CLI smoke tests. The actual Docker
+  image, OCI revision label and every installed-image preflight passed, including
+  all ten discovery matrix rows. The local total additionally includes one
+  determinism property test excluded by CI's stress marker.
+- CI tested synthetic merge `fd88ed186d7e415baf0c7f6de6328120bd75fdb5`, whose
+  tree exactly matches the implementation tree above. The completion record is
+  a documentation-only follow-up; runtime, tests and matrix are unchanged.
 
 ## Resume safely
 
 Read `AGENTS.md`, this checkpoint, `discovery-pocs-plan.md`, and `discovery-pocs-guide.md`.
-Inspect Git status before edits. Implementation is ready for a feature-branch checkpoint while final gates
-run. Inspect the actual head and do not restart the design. No paid model executions were performed.
+Inspect Git status before edits. Implementation and validation are complete.
+The next experimental step is the ten-execution MindTrial pilot described in the
+guide, after building and preflighting the selected image. Inspect the actual head
+and do not restart the design. No paid model executions were performed.
 
 Primary validation commands:
 
