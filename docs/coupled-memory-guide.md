@@ -1,8 +1,9 @@
 # Coupled memory pilot
 
-Status: implementation and independent proof complete; final regression and
-publication tracked in coupled-memory-plan.md. Experimental family, not an admitted
-deep tier. Keep the old discovery pilot available as a baseline.
+Status: implemented and validated on `feat/theory-prior-axis`, implementation
+`17a23bd`. All 886 local tests have passing coverage; implementation CI passed 885
+tests and the actual Docker image. Experimental family, not an admitted deep tier.
+Keep the old discovery pilot available as a baseline.
 
 ## What changes for a player
 
@@ -25,6 +26,9 @@ Public evidence gives all formulas, wiring options, old/new update timing, integ
 ranges and construction syntax. It explicitly distinguishes packet counts,
 transferred amount, memory and displayed signal. Nothing requires real-world physics
 knowledge or an undisclosed operator. The old default family is unchanged.
+Conservation holds for every legal program by construction. This is not a direct
+test of inventing or independently enforcing a conservation law; it constrains
+the inference problem and can make that problem easier.
 
 ## Proved facts and limits
 
@@ -39,7 +43,7 @@ knowledge or an undisclosed operator. The old default family is unchanged.
 | Dynamics disclosed / encoder disclosed | 2 / 4 worst-case readings | Oracle costs are additive, not a demonstrated joint-inference penalty |
 | Binary / five-valued sensor controls | 9 / 4 worst-case readings | More readings can result entirely from bandwidth restrictions |
 | Mixed reader/finish evidence-event bound | 6–7 worst case | Counts reader outcomes AND finish outcomes; not a reader-only or total-action optimum |
-| Public policy environment actions | At most 16 | Construction included; generous R1 remains64 |
+| Public policy environment actions | At most 16 | Construction included; generous R1 remains 64 |
 | T2 blind construction | At most 25 actions | Eight attempts can succeed without reading; a real shortcut |
 
 A single legal query cannot logically eliminate an encoder under the full dynamics
@@ -50,23 +54,23 @@ difficulty from irrelevant nonidentifiability. Multi-query calibration-first pol
 optimality is not proved and is not an admission claim.
 
 Removing material→memory feedback changes observable behavior for every program.
-Removing memory→transfer feedback has a legal-query witness for372/384 programs.
-The remaining12 lack a witness within the laboratory horizon; do not infer full
+Removing memory→transfer feedback has a legal-query witness for 372/384 programs.
+The remaining 12 lack a witness within the laboratory horizon; do not infer full
 behavioral equivalence or no causal feedback from that absence. Every selected new
 matrix truth has witnesses in both directions. The matrix also requires same-display,
 different-future histories and distinct dynamics, behavior and encoder structures.
 
 Eligible failed finish removes one entire behavioral class from the posterior.
-An unsupported lucky guess can still win. T3 has336 disjoint accepting classes;
-a simple21-attempt strategy fits64 actions. Under a uniform program prior, choosing
-21 two-program classes wins on42/384≈10.94%; under uniform classes it is21/336=6.25%.
+An unsupported lucky guess can still win. T3 has 336 disjoint accepting classes;
+a simple 21-attempt strategy fits 64 actions. Under a uniform program prior, choosing
+21 two-program classes wins on 42/384≈10.94%; under uniform classes it is 21/336=6.25%.
 These are explicit blind baselines, not success predictions for the selected seeds
 or trained models. Mixed experiment/build strategies may be better.
 
 ## Ten executions per model
 
-P0 throughout, standard budget64 for R1; R0 is uncapped within NEXUS. Fresh context,
-120 tool calls,160 harness turns, no external Python. Relative difficulty is a
+P0 throughout, standard budget 64 for R1; R0 is uncapped within NEXUS. Fresh context,
+120 tool calls, 160 harness turns, no external Python. Relative difficulty is a
 hypothesis; preflight numbers are properties of the reference policies.
 
 | Run | Family / seed | T/D/R | Reference reads | Exact certificate | Purpose / expected relative difficulty |
@@ -82,8 +86,8 @@ hypothesis; preflight numbers are properties of the reference policies.
 |09|coupled memory /286|3/4/1|6|3|Display without the cross term; isolates its contribution imperfectly|
 |10|coupled memory /7|3/4/1|6|3|Smaller45-state control; more reads need not mean greater reasoning difficulty|
 
-Rows06–10 vary multiple factors and are structural coverage, not clean one-factor
-causal estimates. Only02–05 are matched disclosure/resource controls. Expect T3 to
+Rows 06–10 vary multiple factors and are structural coverage, not clean one-factor
+causal estimates. Only 02–05 are matched disclosure/resource controls. Expect T3 to
 require more simulation/state tracking than T2; there is no justified predicted
 failure rate and no guarantee it is harder than the previous memory family.
 
@@ -138,7 +142,7 @@ failed finish. Active player responses contain no posterior or qualification hin
 
 Track live victory, evidence support, exact installed state, stale configuration,
 readings after support, repeated experiments and final receipt separately. The
-previous pilot's69/70 success and one correct-but-uninstalled construction do not
+previous pilot's 69/70 success and one correct-but-uninstalled construction do not
 establish scientific-inference failures. A model that wins at this pilot also does
 not thereby demonstrate open-ended representation discovery.
 
@@ -154,5 +158,9 @@ not thereby demonstrate open-ended representation discovery.
   required; proof independently checks complete behavioral partitions.
 - Both old and new ten-row preflights passed. The old committed partial/running
   snapshot is replaced with a complete regenerated report.
-- Final full-suite counts, installed-wheel validation, commit and CI are recorded
-  in coupled-memory-plan.md when complete. No paid model evaluation was performed.
+- Full local coverage: 833 fast + 50 extended + 3 property = 886. CI: 9 solver + 824
+  fast + 50 extended + 2 stress = 885, plus actual-image/OCI/preflight/CLI gates.
+  [Implementation CI](https://github.com/petmal/NEXUS/actions/runs/39541221262) passed;
+  its tree exactly matches 17a23bd. Isolated wheel results match the checkout.
+- See coupled-memory-validation.json and coupled-memory-plan.md for the durable
+  completion record. No paid model evaluation was performed.

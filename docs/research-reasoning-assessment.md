@@ -25,6 +25,12 @@ inference to a correct operational result.
   structure. This is a promising comparison for NEXUS, but different models,
   tools, budgets, curated worlds and partially judged explanation scores prevent
   direct score comparisons. [Paper](https://arxiv.org/html/2605.26087v2)
+  Its appendix separates inadequate hypothesis classes from numerical-integration
+  and implementation errors. The failure attribution is LLM-mediated, not a
+  causal intervention proving why a model failed. More experimental rounds also
+  helped different models differently; extra budget did not uniformly repair
+  conceptual errors. These distinctions reinforce our separation of inference,
+  execution and resource failures.
 - **REFUTE**, February 2025: finding counterexamples to incorrect competitive
   programming solutions was substantially harder for the tested agents than
   solving the associated problems. Its o3-mini-era numbers are not forecasts for
@@ -93,6 +99,10 @@ integer change. Continuous derivatives are unnecessary. If future mechanics need
 continuous-time laws, represent rational rates or exact event updates first;
 floating-point integrators and tolerances would complicate exact qualification.
 Conservation is only one invariant; it does not uniquely identify dynamics.
+Every legal construction in this pilot conserves packets by construction, so
+it cannot directly measure whether a player independently enforces conservation.
+That capability needs alternatives or repairs that fit local data but violate a
+global constraint; it should be scored separately from conservation of the engine.
 
 The implemented coupled-memory prototype preserves four packets in three
 reservoirs. Two memory cells alter later transfers and are altered by past

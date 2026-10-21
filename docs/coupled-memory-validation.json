@@ -1,0 +1,71 @@
+{
+  "version": "coupled-memory-validation-v1",
+  "implementation_commit": "17a23bd0b356d8f0e318b0e030f20d736227cd30",
+  "implementation_tree": "ac5ed124f345aa4a5bff3bab7c1a417cf53e9db8",
+  "ci_merge_commit": "e30ce8ca4fd450ca42db3f1467f7c7af8ee50884",
+  "sources_sha256": "18fe3981099ee5d4d45b3e00210f8865b2f8c281944b14add212a6746e12106f",
+  "proof_sha256": "01a900cd95e0474d17e3fd2ff183da66fb91991454bd9defc7dbb59aeec24778",
+  "matrix_sha256": "34962dfa70973b54eb79d66ec3d0c421ea3f6390e1aa74af185c46d7c3d5a79a",
+  "local_tests": {
+    "collected": 886,
+    "fast_main_passed": 829,
+    "final_focused_passed": 11,
+    "focused_overlap_with_fast": 7,
+    "effective_fast_coverage": 833,
+    "extended_passed": 50,
+    "property_passed": 3,
+    "unique_covered": 886,
+    "status": "passed",
+    "scope": "Partitioned coverage, not one combined invocation. Three existing malformed-object serializer warnings."
+  },
+  "proof": {
+    "programs": 384,
+    "all_legal_states": 51840,
+    "inputs_per_state": 3,
+    "behavior_classes": 336,
+    "all_actual_certificates": 3,
+    "adaptive_readings": [
+      6,
+      6
+    ],
+    "fixed_panel_readings": [
+      6,
+      9
+    ],
+    "mixed_reader_finish_events": [
+      6,
+      7
+    ],
+    "new_live_t2_t3_games": 768
+  },
+  "old_episode_snapshots_equal": 30,
+  "legacy_proof_witnesses_unchanged": true,
+  "legacy_conformance_tests_passed": 15,
+  "old_matrix_preflight": "passed",
+  "new_matrix_preflight": "passed",
+  "installed_wheel_source_proof_matrix_and_cells": "identical",
+  "cli_generate_qualify_solve_replay": "passed",
+  "independent_design_review": "experimental_admission_only",
+  "independent_implementation_review": "no_blocking_defect",
+  "ruff": "passed",
+  "frozen_lock": "passed",
+  "paid_model_evaluations": 0,
+  "deep_tier_admitted": false,
+  "empirical_difficulty_calibrated": false,
+  "ci": {
+    "run_id": 39541221262,
+    "url": "https://github.com/petmal/NEXUS/actions/runs/39541221262",
+    "container": "passed",
+    "test": "passed",
+    "tested_tree_matches_implementation": true,
+    "status": "passed",
+    "solver_tests": 9,
+    "fast_tests": 824,
+    "extended_tests": 50,
+    "stress_tests": 2,
+    "total_tests": 885,
+    "oci_revision_label": "passed",
+    "installed_image_preflights": "passed",
+    "cli_smoke": "passed"
+  }
+}

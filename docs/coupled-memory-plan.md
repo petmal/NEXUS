@@ -1,6 +1,6 @@
 # Coupled memory discovery: design and implementation plan
 
-Status: implemented; final validation/publication phase. Updated 2026-10-21 UTC.
+Status: complete. Updated 2026-10-21 UTC.
 Branch: feat/theory-prior-axis. Baseline: b61c6f2.
 
 ## Purpose and evidence
@@ -147,3 +147,43 @@ is unavailable in this host; actual-image testing must be via CI. Do not mark th
 gates passed based on the older image.
 
 Independent implementation judgement found no blocker. Its suggested fifth-pulse and complete reader-surface regressions were added; final new-family focused suite11 passed. Isolated frozen-dependency wheel passed all ten cells with identical source/proof/matrix identity and results, plus CLI generate/qualify/solve/replay. Three property tests passed (three-seed sampling,426s). No source edits after the bound reports. Fast and extended suites still running at this checkpoint.
+
+
+## Completion checkpoint — 2026-10-21
+
+Implemented and published on `feat/theory-prior-axis` at
+`17a23bd0b356d8f0e318b0e030f20d736227cd30` (tree
+`ac5ed124f345aa4a5bff3bab7c1a417cf53e9db8`). Subsequent completion edits are
+operator documentation only; package, matrix, tests, scripts and image sources
+are unchanged from that implementation.
+
+- All 886 collected tests have passing local partitioned coverage: 829 in the
+  main fast run, four additional unique regressions in the final 11-test focused
+  run, 50 extended and 3 property. The seven overlapping focused cases also passed.
+- [CI 39541221262](https://github.com/petmal/NEXUS/actions/runs/39541221262)
+  passed: 9 solver + 824 fast + 50 extended + 2 stress = 885 tests. Local coverage also
+  includes the determinism property. Three existing malformed-object warnings.
+- Actual Docker image, OCI revision label, installed-image old/new preflights,
+  independent proofs, source bindings and CLI smoke passed. CI's synthetic merge
+  tree matches the implementation tree exactly.
+- New tests cover all 384 programs under T2/T3 (768 live supported wins), every
+  legal query through probe and operate, all-history acceptance beyond the reader
+  horizon, conservation/update-order mutations, aliases, blind T2 construction,
+  missing-feedback admission, privacy, atomicity and replay.
+- Frozen-dependency installed wheel and checkout match source/proof/matrix identity
+  and all ten pilot results. Old and new ten-cell preflights are complete and passed.
+- Independent design and implementation reviews are committed; recommended
+  regressions were added. No blocking finding remains. Ruff, lock and whitespace pass.
+- No paid model runs, main merge or public MindTrial behavior changes. Old ontologies,
+  seeds, defaults and 64-action R1 unchanged. New difficulty remains uncalibrated.
+
+See `coupled-memory-validation.json`, `coupled-memory-guide.md`, both review files,
+and `research-reasoning-assessment.md`. The exported MindTrial YAML is in
+`examples/mindtrial/nexus-coupled-memory-{config,tasks}.yaml`.
+
+Next work is empirical: build the image with its actual OCI revision, require the
+image preflight to pass, then run the paired matrix. Interpret supported inference,
+operational installation, over-experimentation and receipt failures separately.
+Do not relabel this as a deep tier: three-reading certificates, additive oracle
+costs and T2 blind-build shortcuts remain available. Future representation revision
+or experiments that alter the goal-relevant hidden state need separate proof gates.
