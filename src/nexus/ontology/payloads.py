@@ -1,6 +1,7 @@
 """Trusted schema registration isolated from runtime imports to avoid model cycles."""
 
 from types import MappingProxyType
+from nexus.ontology.coupled_memory.schema import SCHEMAS as COUPLED_MEMORY
 
 from nexus.ontology.representation.schema import SCHEMAS as REPRESENTATION
 from nexus.ontology.uncertainty.schema import SCHEMAS as UNCERTAINTY
@@ -20,6 +21,7 @@ from nexus.ontology.transfer.schema import SCHEMAS as TRANSFER
 
 _SCHEMAS = MappingProxyType(
     {
+        "coupled-memory-v1": MappingProxyType(dict(COUPLED_MEMORY)),
         "representation-discovery-v1": MappingProxyType(dict(REPRESENTATION)),
         "uncertainty-construction-v1": MappingProxyType(dict(UNCERTAINTY)),
         "joint-assembly-v1": MappingProxyType(dict(ASSEMBLY)),

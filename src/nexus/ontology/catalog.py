@@ -50,6 +50,14 @@ BUILTINS = MappingProxyType(
         item.family: item
         for item in (
             OntologyDefinition(
+                "coupled-memory-v1", "coupled-memory-v1",
+                runtime_module="nexus.ontology.coupled_memory.runtime",
+                generator=("nexus.ontology.coupled_memory.generation", "generate_episode"),
+                qualifier=("nexus.ontology.discovery.qualification", "qualify"),
+                diagnostic_budget=True,
+                standalone_contract=True,
+            ),
+            OntologyDefinition(
                 "representation-discovery-v1", "representation-discovery-v1",
                 runtime_module="nexus.ontology.representation.runtime",
                 generator=("nexus.ontology.representation.generation", "generate_episode"),

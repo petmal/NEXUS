@@ -28,7 +28,7 @@ from nexus.ontology.discovery.proof import (
 from nexus.ontology.inference import Measurement
 from nexus.protocol.session import Session
 
-FAMILIES = ("representation-discovery-v1", "uncertainty-construction-v1")
+FAMILIES = ("representation-discovery-v1", "uncertainty-construction-v1", "coupled-memory-v1")
 
 
 def episode(family, seed=767, theory=3, resource=1):
@@ -297,7 +297,7 @@ def test_rejected_naive_designs_retain_their_shortcuts():
 
 
 @pytest.mark.slow
-@pytest.mark.parametrize("family,worlds", [(FAMILIES[0], 768), (FAMILIES[1], 120)])
+@pytest.mark.parametrize("family,worlds", [(FAMILIES[0], 768), (FAMILIES[1], 120), (FAMILIES[2], 384)])
 def test_every_mechanism_has_supported_live_t2_and_t3_policies(family, worlds):
     for seed in range(worlds):
         for theory in (2, 3):

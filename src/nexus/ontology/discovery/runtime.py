@@ -13,7 +13,7 @@ from nexus.models.actions import (
 from nexus.models.domain import DomainArtifact
 from nexus.models.goals import GoalKind, GoalPredicate
 from nexus.models.world import INVENTORY, Room
-from nexus.ontology.discovery.domains import module
+from nexus.ontology.discovery.domains import ADAPTERS, module
 from nexus.ontology.discovery.schema import Reading, Specimen
 from nexus.ontology.inference import Measurement
 
@@ -98,13 +98,9 @@ def transform(artifact, machine, episode, instrument_settings=None):
     old = artifact.data()
     if machine == "reader":
         laws = module(family, "laws")
-        query = laws.canonical_query(values) if family.startswith("uncertainty") else values
+        query = laws.canonical_query(values)
         world = episode.investigation_truth.data()
-        response = (
-            laws.read(world.program, query)
-            if family.startswith("representation")
-            else laws.read(world, query)
-        )
+        response = laws.read_world(world, query)
         new = Specimen(build=old.build, reading=Reading(query=query, values=response))
     else:
         new = Specimen(build=values)
@@ -208,7 +204,7 @@ def contract(family, spec):
             item["example"] = {
                 "type": "configure",
                 "machine": "reader",
-                "settings": [0] if family.startswith("representation") else [0, 0],
+                "settings": list(ADAPTERS[family].reader),
             }
     result["ontology"] = {
         "family": family,
@@ -237,6 +233,8 @@ def log_terminal_trace(state, trace, posterior):
     audit = type(posterior)(posterior.spec)
     tracker = Tracker("workshop", "workshop", None)
     first = 0 if audit.common_decisions() else None
+    first_reading_ordinal = 0 if first == 0 else None
+    first_source = "public_disclosure" if first == 0 else None
     seen = set()
     repeated = constructs = repairs = observations = 0
     for record in trace:
@@ -264,6 +262,8 @@ def log_terminal_trace(state, trace, posterior):
             audit.exclude_target(tracker.attempted())
         if first is None and audit.common_decisions():
             first = record.turn
+            first_reading_ordinal = observations
+            first_source = "reader" if observed else "finish_feedback"
     logging.getLogger("nexus.diagnostics").info(
         "discovery_operations readings=%s repeated_queries=%s first_supported_build_turn=%s committed_builds=%s replacements=%s remaining_mechanism_programs=%s remaining_mission_classes=%s common_builds=%s audit_seconds=%.6f",
         observations,
@@ -274,6 +274,11 @@ def log_terminal_trace(state, trace, posterior):
         *posterior.counts(),
         len(posterior.common_decisions()),
         perf_counter() - start,
+    )
+    logging.getLogger("nexus.diagnostics").info(
+        "discovery_support first_supported_reading_ordinal=%s first_support_source=%s support_is_behavioral_not_parameter_identity=true",
+        first_reading_ordinal,
+        first_source,
     )
     if state.artifacts["carrier"].ontology == "uncertainty-construction-v1":
         logging.getLogger("nexus.diagnostics").info(

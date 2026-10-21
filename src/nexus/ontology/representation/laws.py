@@ -35,6 +35,14 @@ def read(program, word):
     return (display(program, state),)
 
 
+def read_world(world, query):
+    return read(world.program, query)
+
+
+def canonical_query(query):
+    return tuple(query)
+
+
 @lru_cache(maxsize=16384)
 def equivalent(left, right):
     """Full future behavior, including histories longer than any legal reader word."""

@@ -1,6 +1,6 @@
 {
   "version": "discovery-preflight-v1",
-  "status": "running",
+  "status": "passed",
   "sources": {
     "__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
     "cli.py": "f05b7df0328146f85abc01ce2e2c3cd289030f60e5b4bdd2a09a9525bae87508",
@@ -18,8 +18,9 @@
     "evaluation/__init__.py": "fdf4cf1fa3c7213f2687aa137774dc54b0b8d2a1d624a85ccf9ec151600426e0",
     "evaluation/assembly.py": "4f215340fd207b405e90b257f5c6c8270bc7473b413c46ca1c3f76279b51b566",
     "evaluation/budget_diagnostic.py": "f1478f63cd67b54d6334f9ae5a07cb1214a66cc9fc36d88722eea2dbd6f1a137",
+    "evaluation/coupled_memory.py": "60e3afbffe6e2328725ef503763e5a6e855c7da5528e08bea442085149bc8a63",
     "evaluation/difficulty.py": "131b89651dcf9108a4ee66a91e31e321adc88707dced6b8355e30d780cbc9e23",
-    "evaluation/discovery.py": "8fca1cbaf4d28af77335cee8287eda3650b3adf0e74ca101b739db013cc73d76",
+    "evaluation/discovery.py": "e95a5b3d1c17b52b1b07744f5d8e3ed30acf10f135977067e10c15ab0ec9b78a",
     "evaluation/goal_information.py": "242b3f45c0336f979265fe0ea0287d7986cc3942576a24b1f3a1c30fae6f5c63",
     "evaluation/history.py": "55d0aeebe96681ac16c49e436be61f58bcced5ef331fdf6de412780a4a96c36d",
     "evaluation/matrix.py": "06624362b7f11866d4cc18d09155e34ecd8db41947eda433e528c2fc757fc8b9",
@@ -77,7 +78,7 @@
     "ontology/assembly/runtime.py": "d5a7bb2564ab649bacca318e6ffbe45eca5502c0eef5845cffc0591d4ae9a2c2",
     "ontology/assembly/schema.py": "e71540bdf6e47cc7825e074ed11d5427102e2d5546e7a3c4e7885d201fbf13f4",
     "ontology/builtin_runtime.py": "d202225154d67b0590a3eea5851409d882cf47a6ac7c4f4e3f252554187bea97",
-    "ontology/catalog.py": "13d4b0055973e86f9e2ef92bd1ee4fb984498fec4dd6a3fb361d15856dbef90f",
+    "ontology/catalog.py": "3eca730dc6547a2cbcaf6aa1bddce2b2dbb228cfe31427cd6a8bdf68bf92eff8",
     "ontology/categorical/__init__.py": "44c73eb1da7efc0b3a4fc470dadc0ff9048b11abf756c0c39198e2b8ab20780e",
     "ontology/categorical/generation.py": "f2a2002c54b96d408520cb9e1e1188d61cfa9a21255907ce90d0f2ef048dd97e",
     "ontology/categorical/inference.py": "2c80384f191551fb651e1e78726c7202bc306232ec618433217aa126eb58e8d3",
@@ -105,16 +106,24 @@
     "ontology/compositional/runtime.py": "4bf9c8de32bf56eb5dbb59f7b5ca6d96e3a51605da3f2ac8f0fb9586d3602e75",
     "ontology/compositional/schema.py": "5c7cfbdd45c333420e248e23aa11901d57e0d4dcd2a6cb25d7a63ec4cbb7ff24",
     "ontology/contracts.py": "546ea347a0eb0af9e4b44ce7f89c28c4b24be94f7c60104958f661a0d155e808",
+    "ontology/coupled_memory/__init__.py": "6b704c163d381c0ebdc1171e351f2e6799aaf0e2d6e838d7a21db8e7da5f47c6",
+    "ontology/coupled_memory/evidence.py": "db02c4bfe43de39ef0bdfabb5b99382c65b5221212eb4dffaa2dc1d7dc0c1562",
+    "ontology/coupled_memory/generation.py": "4234d206e90a494b3fbd9a50e0c642f2e641808287589489b154a8fd258aca49",
+    "ontology/coupled_memory/inference.py": "b0f37882a4aa46cc54f9a12e84f91d09f626c57678bfc0d8ed2890044898ac48",
+    "ontology/coupled_memory/laws.py": "7b78453f8acfd0e9b2c592d5afd8f3078c3a4aca5f2bd900cd17bef4fa29831d",
+    "ontology/coupled_memory/proof.py": "3a3396b05721183a05920fe0b56cecaed482b87b73bd728a09762594a7481f89",
+    "ontology/coupled_memory/runtime.py": "b345c16cf998c1aae3cfe4644de36272101490c4bd2f9671c96d719c7adf54a0",
+    "ontology/coupled_memory/schema.py": "cc346c5dbe25403689bf1a6a8bb695b64f881fa266a1fd91af7367756d3cca4d",
     "ontology/discovery/__init__.py": "117676035816e258e91d2937af1a68289b7b9b8f4bae0cb16aab3198539cf770",
-    "ontology/discovery/audit.py": "b66aac4eacefc7935f05f9c29599099c02423f5c79a08b5db27eb3d4fa6897d6",
-    "ontology/discovery/domains.py": "89f15f6e292e5ae504d9bf2b4dbb559601895b88025df50132d4928ce5afedf9",
+    "ontology/discovery/audit.py": "d1c4b58bedcde16c990869176d994a0c4670954d984022c02fd2765c2ac9ae89",
+    "ontology/discovery/domains.py": "5c9d8c2fd031c043360e0036242a506b6f8470b97ce6251f5dc533cb40987963",
     "ontology/discovery/evidence.py": "7ce5575fb1ddcec15c1ca78101b0c239e65bfaa76953bde5b40b5db34e55cb8f",
-    "ontology/discovery/generation.py": "edb98a38b5ce4c863a86022ba92bd6ee308c62895a2f5e77bccb33e3b962f7da",
+    "ontology/discovery/generation.py": "c2d799f268e454aef76fcb583e747195d8cad55743d0730bd26b710939d8ec4f",
     "ontology/discovery/inference.py": "83f8b767538f0101086ded52baedcafa667fe12d77dce7ded6ebd1e6c9946fbb",
     "ontology/discovery/policy.py": "1c0f8a4ae0c0a7cf651d990e0ec42cddf31caddca36958c8f5d597a68abc97b9",
     "ontology/discovery/proof.py": "b3f4109c62ce14c3a98473d0d486790ab7d32bce970dab01a2257778115a981f",
     "ontology/discovery/qualification.py": "a85017877d96538ea61bd56e2d67570ea5f2d22381c8c98131615f4136117dfa",
-    "ontology/discovery/runtime.py": "96a459583377beb73160a4e8b3a8a93a3ab0fa055dfe41758e3dd7e7347c143d",
+    "ontology/discovery/runtime.py": "cfe2e52c9b228749c6a75676b581fc8b110a04e9f5280404e67aedbcab7e8015",
     "ontology/discovery/schema.py": "f44f4c66e29ca6cbddf0b5bbe14740f16ec9875b9997bee455e02d933a26726d",
     "ontology/dynamics/__init__.py": "43e2d62f14eed0443c523425e668930cbe48ab3e5fe444c84bcb268dc51c3f3c",
     "ontology/dynamics/evidence.py": "69ad5b1c8aa3f8362e1861e93d8ea43dc70aceb479c75117ae4acf936b3253b0",
@@ -141,7 +150,7 @@
     "ontology/inference.py": "be14f90dbf8cf20c67c7c23090620edade68c120250ebda36190d6767ebd9e79",
     "ontology/mission.py": "200f95b997d6c6602d743340dcd3cc84f36f0be01fbe9da807aecff317e6c654",
     "ontology/network.py": "96c1b44bff91ae12262e12fff08f3c65a4cc2ca1088e06f4c12a39e4e7ea4347",
-    "ontology/payloads.py": "73b3e149d0cb4d561b4e71fb706a378c22812a02462bf435cae41357edc96397",
+    "ontology/payloads.py": "30359b08a1e24d24852e87bd784b1f5a69ea7ffd59863ca713b86141c3387f8e",
     "ontology/repair/__init__.py": "728737b963b145edfb0c9b98117a55b117b32a5ea4ad99c9da390179599d1e25",
     "ontology/repair/evidence.py": "e0263058ba47105a32d7d658629a855d437095ab2467a013a0afc60a71a98d5e",
     "ontology/repair/generation.py": "d98c9a78766e6f83dea026424a1da7587c6e369eb2f0d77a20a7898700a321b1",
@@ -156,7 +165,7 @@
     "ontology/representation/evidence.py": "96131307ffc4c54e06479932aecbb3fdd213c025c018139e3a528a567ae1508c",
     "ontology/representation/generation.py": "79229fde20b1025835e230218bdd3c97ca4797920187bfe4605980f7eb8a87b7",
     "ontology/representation/inference.py": "63a7d89d7dda2a42d62c2f92e46affb758429144da0f41aaab3efbdcbfcaac00",
-    "ontology/representation/laws.py": "635bc8f007878e408e8bb430b993294392c7d42b367922ba1067db6553748d4c",
+    "ontology/representation/laws.py": "f4e0cba35afdb4a49675cbbd3d62287bd051954698e9840bef3c96c00e1a8cd2",
     "ontology/representation/runtime.py": "29b4f0f80b3f480069f5fb589a90e3b84ee297424a9a690aa8015873df6eab3b",
     "ontology/representation/schema.py": "a24076b26add9831e3763965b0e5b4b3f3e31f990df22efc82dc93069e42aa36",
     "ontology/staged/__init__.py": "6f4f161dd09bb9613a77782b4536769da6674d6523d52f72c10096229b9cc6fc",
@@ -187,7 +196,7 @@
     "ontology/uncertainty/evidence.py": "8f69c2601a272c4b5416306cfd13f3d2db894508aec67763da8b528a34046ceb",
     "ontology/uncertainty/generation.py": "2e30259cea37188eff9ce68387e9f139373e182b90bcc4aa1a96307d012ac2c4",
     "ontology/uncertainty/inference.py": "11c8cd3403cb5de35973b29f33d2abb3518739c4c5fd99e3279e8646122a198a",
-    "ontology/uncertainty/laws.py": "4e15578338ee88d90573cc45dc528a4b4b0b98121133bd6ce350f7862d55f11f",
+    "ontology/uncertainty/laws.py": "91e19fc3df991b7f199bdb7f2655e6e377470f162bdc2ab9f883a09b3cab3ed5",
     "ontology/uncertainty/runtime.py": "662be74da7e2e1fcd6cd3356ca3731f6eca2930b1ba8974d28029c9261b247d9",
     "ontology/uncertainty/schema.py": "99f2a9ec59c0725731941f42573d4ca9269647ea4bc0885b0c4646736041f976",
     "presentation/__init__.py": "bb8df829acf758152058c00b31c300c86356802420347437c64b581c1ca0bc25",
@@ -311,7 +320,7 @@
       "actions": 4,
       "budget": 64,
       "recovery_actions_including_injected_failure": 7,
-      "generation_seconds": 0.030545705999884376
+      "generation_seconds": 0.1143139330001759
     },
     {
       "id": "02",
@@ -436,10 +445,1688 @@
       "actions": 8,
       "budget": 64,
       "recovery_actions_including_injected_failure": 11,
-      "generation_seconds": 0.0007901119997768546
+      "generation_seconds": 0.005784252000012202
+    },
+    {
+      "id": "03",
+      "family": "representation-discovery-v1",
+      "seed": 305,
+      "theory": 3,
+      "discovery": 4,
+      "planning": 0,
+      "resource": 1,
+      "role": "discovery",
+      "expected_policy_readings": 5,
+      "expected_certificate_lower": 3,
+      "expected_certificate_upper": 3,
+      "purpose": "Discover a 27-state nonlinear memory program; no one/two-reading supporting certificate.",
+      "prior_mechanisms": 768,
+      "prior_mission_classes": 138,
+      "public_policy_readings": 5,
+      "public_policy_transcript": [
+        {
+          "query": [
+            1,
+            1,
+            0,
+            1
+          ],
+          "values": [
+            1
+          ],
+          "remaining_mechanisms": 256,
+          "remaining_mission_classes": 48,
+          "common_builds": 0
+        },
+        {
+          "query": [
+            1,
+            0,
+            0,
+            0,
+            2,
+            1
+          ],
+          "values": [
+            2
+          ],
+          "remaining_mechanisms": 86,
+          "remaining_mission_classes": 18,
+          "common_builds": 0
+        },
+        {
+          "query": [
+            1,
+            0,
+            0
+          ],
+          "values": [
+            2
+          ],
+          "remaining_mechanisms": 26,
+          "remaining_mission_classes": 6,
+          "common_builds": 0
+        },
+        {
+          "query": [
+            1
+          ],
+          "values": [
+            1
+          ],
+          "remaining_mechanisms": 4,
+          "remaining_mission_classes": 2,
+          "common_builds": 0
+        },
+        {
+          "query": [
+            1,
+            0
+          ],
+          "values": [
+            1
+          ],
+          "remaining_mechanisms": 2,
+          "remaining_mission_classes": 1,
+          "common_builds": 2
+        }
+      ],
+      "supported_build": [
+        0,
+        2,
+        0,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "deep_tier_admitted": false,
+      "certificate_scope": "Actual-outcome evidence only, with oracle query choice; excludes finish feedback and setup. Not a cognitive or policy-depth bound.",
+      "predictive_states": 27,
+      "behavior_class": 732,
+      "skeleton": [
+        0,
+        2,
+        0,
+        1,
+        1,
+        1
+      ],
+      "predictive_witness": {
+        "histories": [
+          [],
+          [
+            1,
+            1
+          ]
+        ],
+        "same_display": 0,
+        "distinguishing_suffix": [
+          0,
+          0
+        ],
+        "future_displays": [
+          0,
+          1
+        ]
+      },
+      "certificate_reading_lower": 3,
+      "certificate_reading_upper": 3,
+      "certificate_optimality_proven": true,
+      "supporting_certificate": [
+        [
+          1,
+          2,
+          1,
+          1,
+          2
+        ],
+        [
+          1,
+          1,
+          2,
+          1
+        ],
+        [
+          2,
+          1,
+          2,
+          1,
+          2,
+          1
+        ]
+      ],
+      "triple_witness_candidates_checked": 7239,
+      "triple_witness_search_cap": 100000,
+      "universal_fixed_panel_readings": 6,
+      "blind_trial_guarantee_builds": 138,
+      "blind_trial_action_upper": 415,
+      "checks": {
+        "certificate_lower": true,
+        "certificate_upper": true,
+        "policy_readings": true,
+        "live_supported_win": true,
+        "reference_bound": true,
+        "exact_replay": true,
+        "equal_budget": true,
+        "nontrivial_prior": true,
+        "memory_required": true
+      },
+      "mechanism": {
+        "program": [
+          0,
+          2,
+          0,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1
+        ]
+      },
+      "actions": 14,
+      "budget": 64,
+      "recovery_actions_including_injected_failure": 17,
+      "generation_seconds": 0.0017823590001171397
+    },
+    {
+      "id": "04",
+      "family": "representation-discovery-v1",
+      "seed": 753,
+      "theory": 3,
+      "discovery": 4,
+      "planning": 0,
+      "resource": 1,
+      "role": "structure-contrast",
+      "expected_policy_readings": 5,
+      "expected_certificate_lower": 2,
+      "expected_certificate_upper": 2,
+      "purpose": "Different memory wiring, also 27 predictive states; two-reading shortcut remains legal.",
+      "prior_mechanisms": 768,
+      "prior_mission_classes": 138,
+      "public_policy_readings": 5,
+      "public_policy_transcript": [
+        {
+          "query": [
+            1,
+            1,
+            0,
+            1
+          ],
+          "values": [
+            2
+          ],
+          "remaining_mechanisms": 256,
+          "remaining_mission_classes": 48,
+          "common_builds": 0
+        },
+        {
+          "query": [
+            1,
+            0,
+            0,
+            0,
+            2,
+            1
+          ],
+          "values": [
+            2
+          ],
+          "remaining_mechanisms": 86,
+          "remaining_mission_classes": 17,
+          "common_builds": 0
+        },
+        {
+          "query": [
+            1,
+            0,
+            2,
+            1,
+            0
+          ],
+          "values": [
+            1
+          ],
+          "remaining_mechanisms": 26,
+          "remaining_mission_classes": 8,
+          "common_builds": 0
+        },
+        {
+          "query": [
+            2,
+            2
+          ],
+          "values": [
+            1
+          ],
+          "remaining_mechanisms": 8,
+          "remaining_mission_classes": 4,
+          "common_builds": 0
+        },
+        {
+          "query": [
+            1,
+            2
+          ],
+          "values": [
+            0
+          ],
+          "remaining_mechanisms": 2,
+          "remaining_mission_classes": 1,
+          "common_builds": 2
+        }
+      ],
+      "supported_build": [
+        1,
+        2,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "deep_tier_admitted": false,
+      "certificate_scope": "Actual-outcome evidence only, with oracle query choice; excludes finish feedback and setup. Not a cognitive or policy-depth bound.",
+      "predictive_states": 27,
+      "behavior_class": 1949,
+      "skeleton": [
+        1,
+        2,
+        1,
+        1,
+        1,
+        1
+      ],
+      "predictive_witness": {
+        "histories": [
+          [],
+          [
+            1,
+            2
+          ]
+        ],
+        "same_display": 0,
+        "distinguishing_suffix": [
+          0
+        ],
+        "future_displays": [
+          0,
+          1
+        ]
+      },
+      "certificate_reading_lower": 2,
+      "certificate_reading_upper": 2,
+      "certificate_optimality_proven": true,
+      "supporting_certificate": [
+        [
+          1,
+          0
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          0
+        ]
+      ],
+      "triple_witness_candidates_checked": 0,
+      "triple_witness_search_cap": 100000,
+      "universal_fixed_panel_readings": 6,
+      "blind_trial_guarantee_builds": 138,
+      "blind_trial_action_upper": 415,
+      "checks": {
+        "certificate_lower": true,
+        "certificate_upper": true,
+        "policy_readings": true,
+        "live_supported_win": true,
+        "reference_bound": true,
+        "exact_replay": true,
+        "equal_budget": true,
+        "nontrivial_prior": true,
+        "memory_required": true
+      },
+      "mechanism": {
+        "program": [
+          1,
+          2,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1
+        ]
+      },
+      "actions": 14,
+      "budget": 64,
+      "recovery_actions_including_injected_failure": 17,
+      "generation_seconds": 0.0014448440001615381
+    },
+    {
+      "id": "05",
+      "family": "representation-discovery-v1",
+      "seed": 305,
+      "theory": 3,
+      "discovery": 4,
+      "planning": 0,
+      "resource": 0,
+      "role": "budget-ablation",
+      "expected_policy_readings": 5,
+      "expected_certificate_lower": 3,
+      "expected_certificate_upper": 3,
+      "purpose": "Exact same science as 03; remove only environment action limit.",
+      "prior_mechanisms": 768,
+      "prior_mission_classes": 138,
+      "public_policy_readings": 5,
+      "public_policy_transcript": [
+        {
+          "query": [
+            1,
+            1,
+            0,
+            1
+          ],
+          "values": [
+            1
+          ],
+          "remaining_mechanisms": 256,
+          "remaining_mission_classes": 48,
+          "common_builds": 0
+        },
+        {
+          "query": [
+            1,
+            0,
+            0,
+            0,
+            2,
+            1
+          ],
+          "values": [
+            2
+          ],
+          "remaining_mechanisms": 86,
+          "remaining_mission_classes": 18,
+          "common_builds": 0
+        },
+        {
+          "query": [
+            1,
+            0,
+            0
+          ],
+          "values": [
+            2
+          ],
+          "remaining_mechanisms": 26,
+          "remaining_mission_classes": 6,
+          "common_builds": 0
+        },
+        {
+          "query": [
+            1
+          ],
+          "values": [
+            1
+          ],
+          "remaining_mechanisms": 4,
+          "remaining_mission_classes": 2,
+          "common_builds": 0
+        },
+        {
+          "query": [
+            1,
+            0
+          ],
+          "values": [
+            1
+          ],
+          "remaining_mechanisms": 2,
+          "remaining_mission_classes": 1,
+          "common_builds": 2
+        }
+      ],
+      "supported_build": [
+        0,
+        2,
+        0,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "deep_tier_admitted": false,
+      "certificate_scope": "Actual-outcome evidence only, with oracle query choice; excludes finish feedback and setup. Not a cognitive or policy-depth bound.",
+      "predictive_states": 27,
+      "behavior_class": 732,
+      "skeleton": [
+        0,
+        2,
+        0,
+        1,
+        1,
+        1
+      ],
+      "predictive_witness": {
+        "histories": [
+          [],
+          [
+            1,
+            1
+          ]
+        ],
+        "same_display": 0,
+        "distinguishing_suffix": [
+          0,
+          0
+        ],
+        "future_displays": [
+          0,
+          1
+        ]
+      },
+      "certificate_reading_lower": 3,
+      "certificate_reading_upper": 3,
+      "certificate_optimality_proven": true,
+      "supporting_certificate": [
+        [
+          1,
+          2,
+          1,
+          1,
+          2
+        ],
+        [
+          1,
+          1,
+          2,
+          1
+        ],
+        [
+          2,
+          1,
+          2,
+          1,
+          2,
+          1
+        ]
+      ],
+      "triple_witness_candidates_checked": 7239,
+      "triple_witness_search_cap": 100000,
+      "universal_fixed_panel_readings": 6,
+      "blind_trial_guarantee_builds": 138,
+      "blind_trial_action_upper": 415,
+      "checks": {
+        "certificate_lower": true,
+        "certificate_upper": true,
+        "policy_readings": true,
+        "live_supported_win": true,
+        "reference_bound": true,
+        "exact_replay": true,
+        "equal_budget": true,
+        "nontrivial_prior": true,
+        "memory_required": true
+      },
+      "mechanism": {
+        "program": [
+          0,
+          2,
+          0,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1
+        ]
+      },
+      "actions": 14,
+      "budget": null,
+      "recovery_actions_including_injected_failure": 17,
+      "generation_seconds": 0.0019258399997852393
+    },
+    {
+      "id": "06",
+      "family": "uncertainty-construction-v1",
+      "seed": 123841,
+      "theory": 0,
+      "discovery": 0,
+      "planning": 0,
+      "resource": 1,
+      "role": "execution-control",
+      "expected_policy_readings": 0,
+      "expected_certificate_lower": 0,
+      "expected_certificate_upper": 0,
+      "purpose": "Same-world execution control: complete physical laws supplied.",
+      "prior_mechanisms": 1,
+      "prior_mission_classes": 1,
+      "public_policy_readings": 0,
+      "public_policy_transcript": [],
+      "supported_build": [
+        9,
+        0,
+        1
+      ],
+      "deep_tier_admitted": false,
+      "certificate_scope": "Actual-outcome evidence only, with oracle query choice; excludes finish feedback and setup. Not a cognitive or policy-depth bound.",
+      "certificate_reading_lower": 0,
+      "certificate_reading_upper": 0,
+      "certificate_optimality_proven": true,
+      "supporting_certificate": [],
+      "moments_only_supported": true,
+      "loading_matters_to_every_valid_build": true,
+      "valid_builds": [
+        [
+          9,
+          0,
+          1
+        ],
+        [
+          14,
+          0,
+          1
+        ]
+      ],
+      "fixture_assignments": 40320,
+      "universal_fixed_panel_readings": 5,
+      "blind_trial_guarantee_builds": 1,
+      "blind_trial_panel": [
+        [
+          9,
+          0,
+          1
+        ]
+      ],
+      "blind_trial_optimality_proven": false,
+      "blind_trial_action_upper": 4,
+      "checks": {
+        "certificate_lower": true,
+        "certificate_upper": true,
+        "policy_readings": true,
+        "live_supported_win": true,
+        "reference_bound": true,
+        "exact_replay": true,
+        "equal_budget": true
+      },
+      "mechanism": {
+        "checks": [
+          7,
+          25
+        ],
+        "syndrome": [
+          0,
+          0
+        ],
+        "pattern": 1,
+        "order": [
+          0,
+          2,
+          4,
+          6,
+          1,
+          3,
+          5,
+          7
+        ]
+      },
+      "actions": 4,
+      "budget": 64,
+      "recovery_actions_including_injected_failure": 7,
+      "generation_seconds": 0.005850576999819168
+    },
+    {
+      "id": "07",
+      "family": "uncertainty-construction-v1",
+      "seed": 123841,
+      "theory": 2,
+      "discovery": 4,
+      "planning": 0,
+      "resource": 1,
+      "role": "known-shape",
+      "expected_policy_readings": 1,
+      "expected_certificate_lower": 1,
+      "expected_certificate_upper": 1,
+      "purpose": "Dependence masks and nuisance loading supplied; parity constants unknown.",
+      "prior_mechanisms": 4,
+      "prior_mission_classes": 4,
+      "public_policy_readings": 1,
+      "public_policy_transcript": [
+        {
+          "query": [
+            0,
+            0
+          ],
+          "values": [
+            2,
+            0,
+            2,
+            0,
+            2
+          ],
+          "remaining_mechanisms": 1,
+          "remaining_mission_classes": 1,
+          "common_builds": 2
+        }
+      ],
+      "supported_build": [
+        9,
+        0,
+        1
+      ],
+      "deep_tier_admitted": false,
+      "certificate_scope": "Actual-outcome evidence only, with oracle query choice; excludes finish feedback and setup. Not a cognitive or policy-depth bound.",
+      "certificate_reading_lower": 1,
+      "certificate_reading_upper": 1,
+      "certificate_optimality_proven": true,
+      "supporting_certificate": [
+        [
+          0,
+          0
+        ]
+      ],
+      "moments_only_supported": false,
+      "loading_matters_to_every_valid_build": true,
+      "valid_builds": [
+        [
+          9,
+          0,
+          1
+        ],
+        [
+          14,
+          0,
+          1
+        ]
+      ],
+      "fixture_assignments": 161280,
+      "universal_fixed_panel_readings": 5,
+      "blind_trial_guarantee_builds": 2,
+      "blind_trial_panel": [
+        [
+          9,
+          0,
+          1
+        ],
+        [
+          9,
+          1,
+          1
+        ]
+      ],
+      "blind_trial_optimality_proven": false,
+      "blind_trial_action_upper": 7,
+      "checks": {
+        "certificate_lower": true,
+        "certificate_upper": true,
+        "policy_readings": true,
+        "live_supported_win": true,
+        "reference_bound": true,
+        "exact_replay": true,
+        "equal_budget": true,
+        "nontrivial_prior": true,
+        "measurement_relevant": true,
+        "moments_insufficient": true
+      },
+      "mechanism": {
+        "checks": [
+          7,
+          25
+        ],
+        "syndrome": [
+          0,
+          0
+        ],
+        "pattern": 1,
+        "order": [
+          0,
+          2,
+          4,
+          6,
+          1,
+          3,
+          5,
+          7
+        ]
+      },
+      "actions": 6,
+      "budget": 64,
+      "recovery_actions_including_injected_failure": 9,
+      "generation_seconds": 0.0013478129999384691
+    },
+    {
+      "id": "08",
+      "family": "uncertainty-construction-v1",
+      "seed": 123841,
+      "theory": 3,
+      "discovery": 4,
+      "planning": 0,
+      "resource": 1,
+      "role": "discovery",
+      "expected_policy_readings": 5,
+      "expected_certificate_lower": 2,
+      "expected_certificate_upper": 2,
+      "purpose": "Infer higher-order dependence and compensate persistent shared nuisance.",
+      "prior_mechanisms": 120,
+      "prior_mission_classes": 120,
+      "public_policy_readings": 5,
+      "public_policy_transcript": [
+        {
+          "query": [
+            0,
+            0
+          ],
+          "values": [
+            2,
+            0,
+            2,
+            0,
+            2
+          ],
+          "remaining_mechanisms": 30,
+          "remaining_mission_classes": 30,
+          "common_builds": 0
+        },
+        {
+          "query": [
+            0,
+            1
+          ],
+          "values": [
+            0,
+            -2,
+            2,
+            -2,
+            2
+          ],
+          "remaining_mechanisms": 6,
+          "remaining_mission_classes": 6,
+          "common_builds": 0
+        },
+        {
+          "query": [
+            0,
+            2
+          ],
+          "values": [
+            0,
+            -2,
+            2,
+            0,
+            0
+          ],
+          "remaining_mechanisms": 2,
+          "remaining_mission_classes": 2,
+          "common_builds": 0
+        },
+        {
+          "query": [
+            0,
+            3
+          ],
+          "values": [
+            2,
+            0,
+            2,
+            -2,
+            0
+          ],
+          "remaining_mechanisms": 2,
+          "remaining_mission_classes": 2,
+          "common_builds": 0
+        },
+        {
+          "query": [
+            0,
+            4
+          ],
+          "values": [
+            2,
+            -2,
+            0,
+            0,
+            2
+          ],
+          "remaining_mechanisms": 1,
+          "remaining_mission_classes": 1,
+          "common_builds": 2
+        }
+      ],
+      "supported_build": [
+        9,
+        0,
+        1
+      ],
+      "deep_tier_admitted": false,
+      "certificate_scope": "Actual-outcome evidence only, with oracle query choice; excludes finish feedback and setup. Not a cognitive or policy-depth bound.",
+      "certificate_reading_lower": 2,
+      "certificate_reading_upper": 2,
+      "certificate_optimality_proven": true,
+      "supporting_certificate": [
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          4
+        ]
+      ],
+      "moments_only_supported": false,
+      "loading_matters_to_every_valid_build": true,
+      "valid_builds": [
+        [
+          9,
+          0,
+          1
+        ],
+        [
+          14,
+          0,
+          1
+        ]
+      ],
+      "fixture_assignments": 4838400,
+      "universal_fixed_panel_readings": 5,
+      "blind_trial_guarantee_builds": 26,
+      "blind_trial_panel": [
+        [
+          5,
+          0,
+          0
+        ],
+        [
+          5,
+          1,
+          0
+        ],
+        [
+          3,
+          0,
+          0
+        ],
+        [
+          3,
+          0,
+          1
+        ],
+        [
+          3,
+          1,
+          0
+        ],
+        [
+          3,
+          1,
+          1
+        ],
+        [
+          6,
+          0,
+          0
+        ],
+        [
+          6,
+          0,
+          1
+        ],
+        [
+          6,
+          1,
+          0
+        ],
+        [
+          6,
+          1,
+          1
+        ],
+        [
+          7,
+          0,
+          0
+        ],
+        [
+          7,
+          0,
+          1
+        ],
+        [
+          7,
+          1,
+          0
+        ],
+        [
+          7,
+          1,
+          1
+        ],
+        [
+          9,
+          0,
+          0
+        ],
+        [
+          9,
+          0,
+          1
+        ],
+        [
+          9,
+          1,
+          0
+        ],
+        [
+          9,
+          1,
+          1
+        ],
+        [
+          10,
+          0,
+          0
+        ],
+        [
+          10,
+          0,
+          1
+        ],
+        [
+          10,
+          1,
+          0
+        ],
+        [
+          10,
+          1,
+          1
+        ],
+        [
+          11,
+          0,
+          0
+        ],
+        [
+          11,
+          0,
+          1
+        ],
+        [
+          11,
+          1,
+          0
+        ],
+        [
+          11,
+          1,
+          1
+        ]
+      ],
+      "blind_trial_optimality_proven": false,
+      "blind_trial_action_upper": 79,
+      "checks": {
+        "certificate_lower": true,
+        "certificate_upper": true,
+        "policy_readings": true,
+        "live_supported_win": true,
+        "reference_bound": true,
+        "exact_replay": true,
+        "equal_budget": true,
+        "nontrivial_prior": true,
+        "measurement_relevant": true,
+        "moments_insufficient": true
+      },
+      "mechanism": {
+        "checks": [
+          7,
+          25
+        ],
+        "syndrome": [
+          0,
+          0
+        ],
+        "pattern": 1,
+        "order": [
+          0,
+          2,
+          4,
+          6,
+          1,
+          3,
+          5,
+          7
+        ]
+      },
+      "actions": 14,
+      "budget": 64,
+      "recovery_actions_including_injected_failure": 17,
+      "generation_seconds": 0.0017251519998353615
+    },
+    {
+      "id": "09",
+      "family": "uncertainty-construction-v1",
+      "seed": 123849,
+      "theory": 3,
+      "discovery": 4,
+      "planning": 0,
+      "resource": 1,
+      "role": "structure-contrast",
+      "expected_policy_readings": 5,
+      "expected_certificate_lower": 2,
+      "expected_certificate_upper": 2,
+      "purpose": "Different dependence masks; joint measurements and operational robustness.",
+      "prior_mechanisms": 120,
+      "prior_mission_classes": 120,
+      "public_policy_readings": 5,
+      "public_policy_transcript": [
+        {
+          "query": [
+            0,
+            0
+          ],
+          "values": [
+            2,
+            0,
+            2,
+            0,
+            2
+          ],
+          "remaining_mechanisms": 30,
+          "remaining_mission_classes": 30,
+          "common_builds": 0
+        },
+        {
+          "query": [
+            0,
+            1
+          ],
+          "values": [
+            0,
+            -2,
+            2,
+            -2,
+            2
+          ],
+          "remaining_mechanisms": 6,
+          "remaining_mission_classes": 6,
+          "common_builds": 0
+        },
+        {
+          "query": [
+            0,
+            2
+          ],
+          "values": [
+            0,
+            -2,
+            2,
+            0,
+            0
+          ],
+          "remaining_mechanisms": 2,
+          "remaining_mission_classes": 2,
+          "common_builds": 0
+        },
+        {
+          "query": [
+            0,
+            3
+          ],
+          "values": [
+            2,
+            0,
+            2,
+            -2,
+            0
+          ],
+          "remaining_mechanisms": 2,
+          "remaining_mission_classes": 2,
+          "common_builds": 0
+        },
+        {
+          "query": [
+            0,
+            4
+          ],
+          "values": [
+            0,
+            0,
+            0,
+            0,
+            2
+          ],
+          "remaining_mechanisms": 1,
+          "remaining_mission_classes": 1,
+          "common_builds": 2
+        }
+      ],
+      "supported_build": [
+        10,
+        0,
+        1
+      ],
+      "deep_tier_admitted": false,
+      "certificate_scope": "Actual-outcome evidence only, with oracle query choice; excludes finish feedback and setup. Not a cognitive or policy-depth bound.",
+      "certificate_reading_lower": 2,
+      "certificate_reading_upper": 2,
+      "certificate_optimality_proven": true,
+      "supporting_certificate": [
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          7
+        ]
+      ],
+      "moments_only_supported": false,
+      "loading_matters_to_every_valid_build": true,
+      "valid_builds": [
+        [
+          10,
+          0,
+          1
+        ],
+        [
+          13,
+          0,
+          1
+        ]
+      ],
+      "fixture_assignments": 4838400,
+      "universal_fixed_panel_readings": 5,
+      "blind_trial_guarantee_builds": 26,
+      "blind_trial_panel": [
+        [
+          5,
+          0,
+          0
+        ],
+        [
+          5,
+          1,
+          0
+        ],
+        [
+          3,
+          0,
+          0
+        ],
+        [
+          3,
+          0,
+          1
+        ],
+        [
+          3,
+          1,
+          0
+        ],
+        [
+          3,
+          1,
+          1
+        ],
+        [
+          6,
+          0,
+          0
+        ],
+        [
+          6,
+          0,
+          1
+        ],
+        [
+          6,
+          1,
+          0
+        ],
+        [
+          6,
+          1,
+          1
+        ],
+        [
+          7,
+          0,
+          0
+        ],
+        [
+          7,
+          0,
+          1
+        ],
+        [
+          7,
+          1,
+          0
+        ],
+        [
+          7,
+          1,
+          1
+        ],
+        [
+          9,
+          0,
+          0
+        ],
+        [
+          9,
+          0,
+          1
+        ],
+        [
+          9,
+          1,
+          0
+        ],
+        [
+          9,
+          1,
+          1
+        ],
+        [
+          10,
+          0,
+          0
+        ],
+        [
+          10,
+          0,
+          1
+        ],
+        [
+          10,
+          1,
+          0
+        ],
+        [
+          10,
+          1,
+          1
+        ],
+        [
+          11,
+          0,
+          0
+        ],
+        [
+          11,
+          0,
+          1
+        ],
+        [
+          11,
+          1,
+          0
+        ],
+        [
+          11,
+          1,
+          1
+        ]
+      ],
+      "blind_trial_optimality_proven": false,
+      "blind_trial_action_upper": 79,
+      "checks": {
+        "certificate_lower": true,
+        "certificate_upper": true,
+        "policy_readings": true,
+        "live_supported_win": true,
+        "reference_bound": true,
+        "exact_replay": true,
+        "equal_budget": true,
+        "nontrivial_prior": true,
+        "measurement_relevant": true,
+        "moments_insufficient": true
+      },
+      "mechanism": {
+        "checks": [
+          7,
+          26
+        ],
+        "syndrome": [
+          0,
+          0
+        ],
+        "pattern": 1,
+        "order": [
+          0,
+          2,
+          4,
+          6,
+          1,
+          3,
+          5,
+          7
+        ]
+      },
+      "actions": 14,
+      "budget": 64,
+      "recovery_actions_including_injected_failure": 17,
+      "generation_seconds": 0.0005873059999430552
+    },
+    {
+      "id": "10",
+      "family": "uncertainty-construction-v1",
+      "seed": 123841,
+      "theory": 3,
+      "discovery": 4,
+      "planning": 0,
+      "resource": 0,
+      "role": "budget-ablation",
+      "expected_policy_readings": 5,
+      "expected_certificate_lower": 2,
+      "expected_certificate_upper": 2,
+      "purpose": "Exact same science as 08; remove only environment action limit.",
+      "prior_mechanisms": 120,
+      "prior_mission_classes": 120,
+      "public_policy_readings": 5,
+      "public_policy_transcript": [
+        {
+          "query": [
+            0,
+            0
+          ],
+          "values": [
+            2,
+            0,
+            2,
+            0,
+            2
+          ],
+          "remaining_mechanisms": 30,
+          "remaining_mission_classes": 30,
+          "common_builds": 0
+        },
+        {
+          "query": [
+            0,
+            1
+          ],
+          "values": [
+            0,
+            -2,
+            2,
+            -2,
+            2
+          ],
+          "remaining_mechanisms": 6,
+          "remaining_mission_classes": 6,
+          "common_builds": 0
+        },
+        {
+          "query": [
+            0,
+            2
+          ],
+          "values": [
+            0,
+            -2,
+            2,
+            0,
+            0
+          ],
+          "remaining_mechanisms": 2,
+          "remaining_mission_classes": 2,
+          "common_builds": 0
+        },
+        {
+          "query": [
+            0,
+            3
+          ],
+          "values": [
+            2,
+            0,
+            2,
+            -2,
+            0
+          ],
+          "remaining_mechanisms": 2,
+          "remaining_mission_classes": 2,
+          "common_builds": 0
+        },
+        {
+          "query": [
+            0,
+            4
+          ],
+          "values": [
+            2,
+            -2,
+            0,
+            0,
+            2
+          ],
+          "remaining_mechanisms": 1,
+          "remaining_mission_classes": 1,
+          "common_builds": 2
+        }
+      ],
+      "supported_build": [
+        9,
+        0,
+        1
+      ],
+      "deep_tier_admitted": false,
+      "certificate_scope": "Actual-outcome evidence only, with oracle query choice; excludes finish feedback and setup. Not a cognitive or policy-depth bound.",
+      "certificate_reading_lower": 2,
+      "certificate_reading_upper": 2,
+      "certificate_optimality_proven": true,
+      "supporting_certificate": [
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          4
+        ]
+      ],
+      "moments_only_supported": false,
+      "loading_matters_to_every_valid_build": true,
+      "valid_builds": [
+        [
+          9,
+          0,
+          1
+        ],
+        [
+          14,
+          0,
+          1
+        ]
+      ],
+      "fixture_assignments": 4838400,
+      "universal_fixed_panel_readings": 5,
+      "blind_trial_guarantee_builds": 26,
+      "blind_trial_panel": [
+        [
+          5,
+          0,
+          0
+        ],
+        [
+          5,
+          1,
+          0
+        ],
+        [
+          3,
+          0,
+          0
+        ],
+        [
+          3,
+          0,
+          1
+        ],
+        [
+          3,
+          1,
+          0
+        ],
+        [
+          3,
+          1,
+          1
+        ],
+        [
+          6,
+          0,
+          0
+        ],
+        [
+          6,
+          0,
+          1
+        ],
+        [
+          6,
+          1,
+          0
+        ],
+        [
+          6,
+          1,
+          1
+        ],
+        [
+          7,
+          0,
+          0
+        ],
+        [
+          7,
+          0,
+          1
+        ],
+        [
+          7,
+          1,
+          0
+        ],
+        [
+          7,
+          1,
+          1
+        ],
+        [
+          9,
+          0,
+          0
+        ],
+        [
+          9,
+          0,
+          1
+        ],
+        [
+          9,
+          1,
+          0
+        ],
+        [
+          9,
+          1,
+          1
+        ],
+        [
+          10,
+          0,
+          0
+        ],
+        [
+          10,
+          0,
+          1
+        ],
+        [
+          10,
+          1,
+          0
+        ],
+        [
+          10,
+          1,
+          1
+        ],
+        [
+          11,
+          0,
+          0
+        ],
+        [
+          11,
+          0,
+          1
+        ],
+        [
+          11,
+          1,
+          0
+        ],
+        [
+          11,
+          1,
+          1
+        ]
+      ],
+      "blind_trial_optimality_proven": false,
+      "blind_trial_action_upper": 79,
+      "checks": {
+        "certificate_lower": true,
+        "certificate_upper": true,
+        "policy_readings": true,
+        "live_supported_win": true,
+        "reference_bound": true,
+        "exact_replay": true,
+        "equal_budget": true,
+        "nontrivial_prior": true,
+        "measurement_relevant": true,
+        "moments_insufficient": true
+      },
+      "mechanism": {
+        "checks": [
+          7,
+          25
+        ],
+        "syndrome": [
+          0,
+          0
+        ],
+        "pattern": 1,
+        "order": [
+          0,
+          2,
+          4,
+          6,
+          1,
+          3,
+          5,
+          7
+        ]
+      },
+      "actions": 14,
+      "budget": null,
+      "recovery_actions_including_injected_failure": 17,
+      "generation_seconds": 0.0008469149997836212
     }
   ],
   "empirical_difficulty_calibrated": false,
   "deep_tier_admitted": false,
-  "proof_sha256": "b3b26234cffc4413964b2dbbd98147f2bb00f5de049e81f26e2b2e02f1258af7"
+  "proof_sha256": "b3b26234cffc4413964b2dbbd98147f2bb00f5de049e81f26e2b2e02f1258af7",
+  "seconds": 10.999063792000015,
+  "qualification_scope": "Exact finite mechanics, scoped shortcut certificates, matched controls and live supported wins. Not a guarantee of LLM failure or intrinsic deep reasoning."
 }

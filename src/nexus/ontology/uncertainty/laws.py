@@ -7,6 +7,10 @@ from types import MappingProxyType
 
 from nexus.ontology.uncertainty.schema import Investigation, Physics, Truth
 
+
+def read_world(world, query):
+    return read(world, query)
+
 SPACES = tuple(
     sorted(
         {

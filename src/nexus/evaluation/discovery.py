@@ -24,7 +24,7 @@ FAMILIES = ("representation-discovery-v1", "uncertainty-construction-v1")
 class Cell(BaseModel):
     model_config = ConfigDict(extra="forbid", frozen=True)
     id: str
-    family: Literal["representation-discovery-v1", "uncertainty-construction-v1"]
+    family: Literal["representation-discovery-v1", "uncertainty-construction-v1", "coupled-memory-v1"]
     seed: StrictInt
     theory: Literal[0, 2, 3]
     discovery: Literal[0, 4]

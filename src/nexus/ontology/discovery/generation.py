@@ -8,12 +8,13 @@ from nexus.models.domain import DomainArtifact, DomainInvestigation, DomainStock
 from nexus.models.episode import GenerationMetadata, PrivateEpisode, PublicEpisode
 from nexus.models.goals import GoalKind, GoalPredicate
 from nexus.models.world import Machine, Resources, Room, WorldState
-from nexus.ontology.discovery.domains import module
+from nexus.ontology.discovery.domains import ADAPTERS, module
 from nexus.ontology.discovery.schema import Specimen
 
 BUDGET = 64
 REFERENCE_UPPER = 16  # proved public policies: <=6 readings, plus four construction actions
 DESCRIPTIONS = {
+    "coupled-memory-v1": "Reconstruct the transfer lattice's predictive cartridge to reopen the sealed facility.",
     "representation-discovery-v1": "Restore a predictive memory cartridge to open the sealed facility.",
     "uncertainty-construction-v1": "Build a disturbance-tolerant exit compensator in the sealed facility.",
 }
@@ -40,15 +41,13 @@ def initial_state(family, budget):
                 id="reader",
                 room_id="workshop",
                 uses_remaining=None,
-                settings=(0,) if family.startswith("representation") else (0, 0),
+                settings=ADAPTERS[family].reader,
             ),
             "assembler": Machine(
                 id="assembler",
                 room_id="workshop",
                 uses_remaining=None,
-                settings=(0, 0, 0, 0, 0, 1, 1, 1, 0)
-                if family.startswith("representation")
-                else (0, 0, 0),
+                settings=ADAPTERS[family].assembler,
             ),
         },
         resources=Resources(actions_remaining=budget),
@@ -66,7 +65,7 @@ def metadata(family, spec, resource, profile):
         "deep_tier_admitted": False,
         "empirical_difficulty_calibrated": False,
         "prior_mechanism_programs": prior,
-        "schedule_multiplicity": 40320 if family.startswith("uncertainty") else 1,
+        "schedule_multiplicity": ADAPTERS[family].schedule_multiplicity,
         "action_budget": None if resource == 0 else BUDGET,
         "reference_action_upper": 4 if spec.theory == 0 else REFERENCE_UPPER,
         "budget_profile": profile,

@@ -45,17 +45,17 @@ def predictive_witness(program):
 
 
 def world_audit(family, spec, world):
+    if family == "coupled-memory-v1":
+        from nexus.ontology.coupled_memory.proof import world_audit as coupled_audit
+
+        return coupled_audit(spec, world)
     laws = module(family, "laws")
     factory = module(family, "inference").Belief
     prior = factory(spec)
     posterior = factory(spec)
     transcript = []
     while (query := posterior.choose_query()) is not None:
-        values = (
-            laws.read(world.program, query)
-            if family == "representation-discovery-v1"
-            else laws.read(world, query)
-        )
+        values = laws.read_world(world, query)
         posterior.observe(Measurement("reader", {"query": query, "values": values}))
         transcript.append(
             {

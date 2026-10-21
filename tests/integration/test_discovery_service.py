@@ -25,7 +25,7 @@ def episode(family, seed=767):
     )
 
 
-@pytest.mark.parametrize("family", ["representation-discovery-v1", "uncertainty-construction-v1"])
+@pytest.mark.parametrize("family", ["representation-discovery-v1", "uncertainty-construction-v1", "coupled-memory-v1"])
 def test_http_receipt_and_no_active_posterior_or_private_qualification_hints(family):
     ep = episode(family)
     client = TestClient(create_single_session_app(ep, extended_diagnostics=True))

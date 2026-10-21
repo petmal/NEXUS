@@ -16,6 +16,7 @@ on:
       - "docs/staged-repair-matrix.json"
       - "docs/joint-assembly-matrix.json"
       - "docs/discovery-pocs-matrix.json"
+      - "docs/coupled-memory-matrix.json"
   pull_request:
     paths:
       - "**"
@@ -30,6 +31,7 @@ on:
       - "docs/staged-repair-matrix.json"
       - "docs/joint-assembly-matrix.json"
       - "docs/discovery-pocs-matrix.json"
+      - "docs/coupled-memory-matrix.json"
   workflow_dispatch:
     inputs:
       full:
@@ -117,6 +119,9 @@ jobs:
         run: |
           uv run python scripts/discovery_oracle.py --output /tmp/discovery-proof.json
           uv run python scripts/preflight_discovery.py --output /tmp/discovery-preflight.json
+
+      - name: Coupled memory independent proof and paired pilot
+        run: uv run python scripts/preflight_coupled_memory.py --output /tmp/coupled-preflight.json --proof-output /tmp/coupled-proof.json
 
       - name: Fast tests
         run: |
@@ -206,6 +211,7 @@ jobs:
           docker run --rm --entrypoint python nexus-ci scripts/preflight_staged_repair.py --output /tmp/staged-preflight.json
           docker run --rm --entrypoint python nexus-ci scripts/preflight_joint_assembly.py --output /tmp/assembly-preflight.json
           docker run --rm --entrypoint python nexus-ci scripts/preflight_discovery.py --output /tmp/discovery-preflight.json
+          docker run --rm --entrypoint python nexus-ci scripts/preflight_coupled_memory.py --output /tmp/coupled-preflight.json
           docker run --rm nexus-ci --help
           docker run --rm nexus-ci generate /tmp/nexus-t3 --seed 17 \
             --discovery-level 2 --planning-level 0 --theory-level 3
