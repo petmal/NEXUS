@@ -1,0 +1,120 @@
+{
+  "version": "stateful-pilot-v1",
+  "external_python": false,
+  "fresh_context_per_execution": true,
+  "common_action_budget": 64,
+  "recommended_tool_call_limit": 120,
+  "max_turns": 160,
+  "runs": [
+    {
+      "id": "01",
+      "seed": 371,
+      "theory": 3,
+      "discovery": 5,
+      "planning": 1,
+      "resource": 1,
+      "family": "stateful-discovery-v1",
+      "role": "shortcut-control",
+      "purpose": "A deliberately shallow-handoff control; it must fail the hard admission gate."
+    },
+    {
+      "id": "02",
+      "seed": 229,
+      "theory": 0,
+      "discovery": 0,
+      "planning": 1,
+      "resource": 1,
+      "family": "stateful-discovery-v1",
+      "role": "execution-control",
+      "purpose": "Exact laws and a valid procedure; isolates execution."
+    },
+    {
+      "id": "03",
+      "seed": 229,
+      "theory": 0,
+      "discovery": 5,
+      "planning": 1,
+      "resource": 1,
+      "family": "stateful-discovery-v1",
+      "role": "known-law",
+      "purpose": "Same physical world; laws supplied, derive the control sequence."
+    },
+    {
+      "id": "04",
+      "seed": 229,
+      "theory": 3,
+      "discovery": 5,
+      "planning": 1,
+      "resource": 1,
+      "family": "stateful-discovery-v1",
+      "role": "discovery",
+      "purpose": "Coupled discovery on the sole exit seal; qualified feedback trajectory."
+    },
+    {
+      "id": "05",
+      "seed": 229,
+      "theory": 3,
+      "discovery": 5,
+      "planning": 1,
+      "resource": 0,
+      "family": "stateful-discovery-v1",
+      "role": "resource-control",
+      "purpose": "Identical physics and knowledge; unlimited environment actions."
+    },
+    {
+      "id": "06",
+      "seed": 737,
+      "theory": 3,
+      "discovery": 5,
+      "planning": 1,
+      "resource": 1,
+      "family": "stateful-discovery-v1",
+      "role": "structure-contrast",
+      "purpose": "Different gain and nonlinear-power structure; same observation channel and target."
+    },
+    {
+      "id": "07",
+      "seed": 605,
+      "theory": 3,
+      "discovery": 5,
+      "planning": 1,
+      "resource": 1,
+      "family": "stateful-discovery-v1",
+      "role": "structure-contrast",
+      "purpose": "Second nonlinear structure contrast."
+    },
+    {
+      "id": "08",
+      "seed": 468,
+      "theory": 3,
+      "discovery": 5,
+      "planning": 1,
+      "resource": 1,
+      "family": "stateful-discovery-v1",
+      "role": "structure-contrast",
+      "purpose": "Third nonlinear structure contrast."
+    },
+    {
+      "id": "09",
+      "seed": 229,
+      "theory": 3,
+      "discovery": 5,
+      "planning": 0,
+      "resource": 1,
+      "family": "stateful-discovery-v1",
+      "role": "planning-control",
+      "purpose": "Identical discovery world with handling co-located; removes one movement."
+    },
+    {
+      "id": "10",
+      "seed": 95,
+      "theory": 3,
+      "discovery": 4,
+      "planning": 0,
+      "resource": 1,
+      "family": "coupled-memory-v1",
+      "role": "previous-baseline",
+      "purpose": "Unchanged coupled-memory baseline with resettable reference measurements."
+    }
+  ]
+}

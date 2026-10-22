@@ -20,3 +20,4 @@ docs/*
 !docs/joint-assembly-matrix.json
 !docs/discovery-pocs-matrix.json
 !docs/coupled-memory-matrix.json
+!docs/stateful-matrix.json

@@ -1,0 +1,393 @@
+# Stateful pilot. Run image preflight first. Provider settings retained from prior operator config.
+config:
+  log-file: ./nexus/{{.Year}}-{{.Month}}-{{.Day}}/{{.Hour}}-{{.Minute}}-{{.Second}}.log
+  output-dir: ./nexus/{{.Year}}-{{.Month}}-{{.Day}}/
+  output-basename: '{{.Hour}}-{{.Minute}}-{{.Second}}'
+  task-source: ./nexus-stateful-tasks.yaml
+  providers:
+  - name: openai
+    retry-policy:
+      max-retry-attempts: 3
+      initial-delay-seconds: 30
+    client-config:
+      api-key: ''
+    runs:
+    - name: GPT-6 Astra - latest (medium reasoning)
+      disabled: false
+      model: gpt-6-astra
+      max-requests-per-minute: 20
+      pricing:
+        input-per-million: 10.0
+        cache-read-per-million: 1.0
+        cache-write-per-million: 12.5
+        output-per-million: 50.0
+      model-parameters:
+        reasoning-effort: medium
+    - name: GPT-6 Astra - optional high reasoning diagnostic
+      disabled: true
+      model: gpt-6-astra
+      max-requests-per-minute: 20
+      pricing:
+        input-per-million: 10.0
+        cache-read-per-million: 1.0
+        cache-write-per-million: 12.5
+        output-per-million: 50.0
+      model-parameters:
+        reasoning-effort: high
+  - name: openrouter
+    max-parallel-requests-per-minute: 20
+    retry-policy:
+      max-retry-attempts: 2
+      initial-delay-seconds: 30
+    client-config:
+      api-key: ''
+    runs:
+    - name: Meta Muse Wonder (max reasoning)
+      disabled: true
+      model: meta/muse-wonder
+      max-requests-per-minute: 10
+      pricing:
+        input-per-million: 4.0
+        cache-read-per-million: 0.2
+        output-per-million: 20.0
+      model-parameters:
+        reasoning_effort: max
+  - name: google
+    client-config:
+      api-key: ''
+    runs:
+    - name: Gemini 3.8 Flash - latest (high thinking)
+      disabled: true
+      model: gemini-3.8-flash
+      max-requests-per-minute: 3
+      pricing:
+        input-per-million: 0.75
+        cache-read-per-million: 0.075
+        output-per-million: 3.75
+      model-parameters:
+        thinking-level: high
+        media-resolution: high
+    - name: Gemini 4 Argon (high thinking)
+      disabled: true
+      model: gemini-4-argon
+      max-requests-per-minute: 3
+      pricing:
+        input-per-million: 2.0
+        cache-read-per-million: 0.1
+        output-per-million: 10.0
+      model-parameters:
+        thinking-level: high
+        media-resolution: high
+  - name: anthropic
+    client-config:
+      api-key: ''
+    runs:
+    - name: Claude Sonnet 5.5 - latest (xhigh adaptive thinking)
+      disabled: true
+      model: claude-sonnet-5-5
+      max-requests-per-minute: 10
+      pricing:
+        input-per-million: 2.0
+        cache-write-per-million: 2.5
+        cache-read-per-million: 0.2
+        output-per-million: 10.0
+      model-parameters:
+        max-tokens: 65536
+        effort: xhigh
+        stream: true
+        prompt-cache-ttl: 5m
+  - name: deepseek
+    client-config:
+      api-key: ''
+      request-timeout: 15m
+    runs:
+    - name: DeepSeek Flash - DeepSeek-V4.1-Flash (thinking, max effort)
+      disabled: true
+      model: deepseek-flash
+      max-requests-per-minute: 15
+      pricing:
+        input-per-million: 0.3
+        cache-read-per-million: 0.006
+        output-per-million: 1.2
+      disable-structured-output: true
+      model-parameters:
+        reasoning-effort: max
+        max-tokens: 65536
+  - name: mistralai
+    retry-policy:
+      max-retry-attempts: 3
+      initial-delay-seconds: 30
+    client-config:
+      api-key: ''
+    runs:
+    - name: Mistral Large 4 - latest
+      disabled: true
+      model: mistral-large-4
+      max-requests-per-minute: 5
+      pricing:
+        input-per-million: 0.68
+        cache-read-per-million: 0.07
+        output-per-million: 2.09
+      model-parameters:
+        reasoning-effort: high
+  - name: xai
+    retry-policy:
+      max-retry-attempts: 3
+      initial-delay-seconds: 30
+    client-config:
+      api-key: ''
+    runs:
+    - name: Grok 4.7 - latest (xhigh reasoning)
+      disabled: true
+      model: grok-4.7
+      max-requests-per-minute: 30
+      pricing:
+        input-per-million: 2.0
+        cache-read-per-million: 0.5
+        output-per-million: 6.0
+      model-parameters:
+        reasoning-effort: xhigh
+        max-completion-tokens: 65536
+  - name: alibaba
+    retry-policy:
+      max-retry-attempts: 3
+      initial-delay-seconds: 30
+    client-config:
+      api-key: ''
+      endpoint: https://dashscope-intl.aliyuncs.com/compatible-mode/v1
+    runs:
+    - name: Qwen3.8 Max 0902 (xhigh reasoning)
+      disabled: true
+      model: qwen3.8-max-0902
+      max-requests-per-minute: 30
+      pricing:
+        input-per-million: 2.0
+        cache-read-per-million: 0.25
+        output-per-million: 6.0
+      model-parameters:
+        reasoning-effort: xhigh
+        preserve-thinking: true
+        max-completion-tokens: 65536
+        response-format: text
+        stream: true
+  - name: moonshotai
+    retry-policy:
+      max-retry-attempts: 5
+      initial-delay-seconds: 30
+    client-config:
+      api-key: ''
+    runs:
+    - name: Kimi K3 - latest (max reasoning)
+      disabled: true
+      model: kimi-k3
+      max-requests-per-minute: 3
+      model-parameters:
+        reasoning-effort: max
+        max-completion-tokens: 65536
+        response-format: text
+        stream: true
+      disable-structured-output: true
+  tools:
+  - name: nexus
+    image: nexus:stateful-discovery-v1
+    description: |
+      Interact with the current NEXUS world.
+
+      NEXUS is persistent and stateful. The same world remains alive across calls
+      within this task. State changes persist between calls; there is no reset or new game.
+      World details vary between tasks. Use the current manifest and evidence as
+      the authority for the mission, laws, apparatus, observations and action costs.
+
+      START:
+      1. Request manifest for the exact goal, evidence filenames and action contract.
+      2. Request observe for the current room, objects, resources and terminal state.
+      3. Read every evidence file listed by the manifest before acting.
+      4. Investigate, apply the required transformation, satisfy the complete goal,
+         then finish successfully and retain the returned victory_code.
+
+      REQUEST OPERATIONS:
+      - manifest: read public mission metadata and the action contract; no action cost.
+      - evidence: read a public file; requires filename from manifest; no action cost.
+      - observe: inspect the current world; no action cost.
+      - status: inspect turn, terminal state and remaining actions; no action cost.
+      - action: perform one action; requires an action object.
+      Every request still counts toward the harness tool-call allowance.
+
+      ACTION FIELDS:
+      - observe, wait, finish: type only.
+      - move: type and target (an adjacent room ID).
+      - take, drop: type and artifact.
+      - configure: type, machine and settings (an ordered integer array).
+      - operate, probe: type, machine and artifact.
+      Use only identifiers and settings allowed by the current manifest and evidence.
+      Configuration order, length and value ranges are specific to each apparatus.
+      Syntax examples in the public contract do not imply a solution.
+
+      ACTION SEMANTICS:
+      - take from a designated stock creates a specimen and returns its artifact ID;
+        use that returned ID later. Taking an individual artifact retrieves it.
+      - configure changes apparatus settings; it does not apply them to a specimen.
+      - operate applies the named apparatus to a carried artifact. Depending on the
+        apparatus, this commits a preparation, measurement or transformation.
+      - probe previews the named apparatus on a carried artifact without committing
+        the specimen change. It still consumes an environment action. A preview does not advance the actual specimen history.
+      - finish evaluates the complete goal and consumes an environment action.
+        Success sets the world to won and returns a victory_code. A rejected finish
+        is not success; follow the resulting state and remaining budget.
+
+      IMPORTANT:
+      - Read the complete disclosed relationship forms and possible connections;
+        the episode's bounded prior and observation contract govern inference.
+        Finite hypothesis enumeration is allowed. NEXUS is the available interface
+        for every in-world observation, measurement, configuration and action.
+      - Interpret measurement payloads using the public contract. Track artifact
+        preparation, apparatus settings, room and remaining actions.
+      - Respect the action budget and resource limits reported by observe. A null
+        limit means unlimited within NEXUS, subject to the harness limits.
+      - Observing or configuring a seemingly correct setup is insufficient: commit
+        the required transformation, meet the full goal and call finish successfully.
+      - Terminal worlds cannot be reset. Return exactly the actual victory_code,
+        without explanation, quotes or Markdown.
+
+      Read theory.json for the complete grammar, visible/hidden state distinction,
+      apparatus semantics, update order, and exact acceptance rule. Follow only the
+      capabilities disclosed for the current episode. No particular experiment order
+      or explanation is required.
+    parameters:
+      type: object
+      additionalProperties: false
+      properties:
+        request:
+          type: object
+          additionalProperties: false
+          description: |
+            One NEXUS request. Set operation to manifest, evidence, observe,
+            status, or action.
+
+            For evidence, also provide filename. For action, also provide action.
+            Do not provide filename for other operations or action for other operations.
+
+            Required action fields:
+            - observe, wait, finish: type only
+            - move: type and target
+            - take, drop: type and artifact
+            - operate, probe: type, machine, and artifact
+            - configure: type, machine, and settings
+
+            Follow the episode's manifest and evidence for valid identifiers,
+            apparatus restrictions, and configuration settings.
+          properties:
+            operation:
+              type: string
+              enum:
+              - manifest
+              - evidence
+              - observe
+              - status
+              - action
+              description: |
+                Operation to perform. Begin with manifest, then observe and read
+                every listed evidence file.
+            filename:
+              type: string
+              description: |
+                Required only for operation evidence. Use a filename returned
+                by the manifest.
+            action:
+              type: object
+              additionalProperties: false
+              description: |
+                Required only for operation action. Include the fields required
+                by the selected action type and omit unrelated fields.
+              properties:
+                type:
+                  type: string
+                  enum:
+                  - observe
+                  - move
+                  - take
+                  - drop
+                  - operate
+                  - probe
+                  - configure
+                  - wait
+                  - finish
+                  description: NEXUS action type.
+                target:
+                  type: string
+                  description: Adjacent destination room ID for move.
+                artifact:
+                  type: string
+                  description: |
+                    Stock or individual artifact ID for take; individual artifact
+                    ID for drop, operate, or probe. Use IDs returned by NEXUS.
+                machine:
+                  type: string
+                  description: |
+                    Apparatus ID for operate, probe, or configure. Use an ID
+                    disclosed by the current world.
+                settings:
+                  type: array
+                  items:
+                    type: integer
+                  description: |
+                    Complete ordered settings for the named apparatus.
+                    Follow the manifest and evidence for the exact vector length,
+                    configuration order, and allowed values.
+              required:
+              - type
+          required:
+          - operation
+      required:
+      - request
+    parameter-files:
+      request: /input/request.json
+    command:
+    - request
+    - --request-file
+    - /input/request.json
+    dependencies:
+    - service: nexus
+      env:
+        NEXUS_URL: '{{ .Endpoint }}'
+  services:
+  - name: nexus
+    image: nexus:stateful-discovery-v1
+    command:
+    - serve-session
+    env:
+      NEXUS_HOST: 0.0.0.0
+      NEXUS_PORT: '8000'
+    endpoint:
+      scheme: http
+      port: 8000
+    input-env:
+      axis-version: NEXUS_AXIS_VERSION
+      science-family: NEXUS_SCIENCE_FAMILY
+      seed: NEXUS_SEED
+      discovery-level: NEXUS_DISCOVERY_LEVEL
+      planning-level: NEXUS_PLANNING_LEVEL
+      resource-pressure: NEXUS_RESOURCE_PRESSURE
+      theory-level: NEXUS_THEORY_LEVEL
+      generation-timing: NEXUS_GENERATION_TIMING
+      budget-profile: NEXUS_BUDGET_PROFILE
+      extended-diagnostics: NEXUS_EXTENDED_DIAGNOSTICS
+    healthcheck:
+    - nexus
+    - health
+    startup-timeout: 120s
+  validators:
+  - name: nexus-victory
+    image: nexus:stateful-discovery-v1
+    command:
+    - validate
+    - --candidate-file
+    - /input/candidate
+    template-files:
+    - path: /input/candidate
+      template: '{{ .Candidate.Response }}'
+    dependencies:
+    - service: nexus
+      env:
+        NEXUS_URL: '{{ .Endpoint }}'
+    timeout: 30s

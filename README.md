@@ -1,5 +1,13 @@
 # NEXUS
 
+The opt-in `stateful-discovery-v1` pilot makes investigation change the original
+exit seal. Four coupled hidden registers must reach one exact joint target;
+ordinary probes remain nonmutating, but informative later contexts require
+committed transformations. Its [qualified ten-run guide](docs/stateful-guide.md)
+includes shallow, known-law, execution and resource controls. Exact finite audits
+exclude specified short investigation-to-blind-execution shortcuts in the selected
+hard seeds; real-model difficulty remains uncalibrated. Previous ontologies remain.
+
 The opt-in `representation-discovery-v1` and `uncertainty-construction-v1` pilots
 add varied predictive memory and robust construction under hidden higher-order
 dependence. Their [paired ten-run guide](docs/discovery-pocs-guide.md) includes
