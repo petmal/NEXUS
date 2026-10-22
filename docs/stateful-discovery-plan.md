@@ -129,3 +129,9 @@ those results. The leading candidate is controlled model revision that preserves
 earlier valid predictions and global constraints, with matched controls and
 explicit shortcut qualification. This is a deferred research hypothesis, not an
 instruction to change the running pilot or implement another family now.
+
+The same note now also retains the exact-data identifiability discussion, the
+principles-to-response-model example, T/D distinctions and a ranked tentative
+backlog. Model revision/global validity is the leading research candidate;
+deriving response families from primitive laws is a complementary candidate and
+control. Reassess both after the current pilot rather than beginning either now.

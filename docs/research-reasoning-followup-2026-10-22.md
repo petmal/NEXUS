@@ -137,3 +137,112 @@ game-action minimum.
 Then decide whether model revision plus preservation of global validity merits a
 new PoC, or whether the current family first needs better diagnostics, controls or
 qualification. No failure percentage or next architecture is committed in advance.
+
+## Follow-up: derive the admissible model, then identify it
+
+The user proposed withholding the list of complete interaction functions while
+retaining exact, noise-free measurements. The preferred challenge would require
+deriving possible response forms from underlying laws, then fitting parameters
+and checking the model, rather than guessing curves from their appearance. A
+bounded polynomial with unnecessary coefficients equal to zero is one possible
+restricted family. The user agreed to retain this proposal for post-pilot triage.
+
+**Exact data does not imply a unique unrestricted law.** For observations at
+`x = 0, 1, 2`, both `f(x) = 2*x` and
+`g(x) = 2*x + k*x*(x-1)*(x-2)` agree for every k. A finite sample needs a justified
+model class and sufficiently informative experiments. Within polynomials of
+degree at most d over the rationals/reals, d+1 distinct samples determine a unique
+polynomial. Excess coefficients become exactly zero if the true law has lower
+degree and the measurements identify the fit; this does not follow from noise
+removal alone. Multivariable designs require the corresponding full-rank condition.
+The toy argument must not be transplanted blindly into modular worlds: check
+field size, aliasing and identifiability in the actual arithmetic domain.
+
+For deterministic exact measurements, use exact consistency, not a statistical
+chi-squared threshold without a noise model. Several zero-residual candidates
+require discriminating evidence or theoretical constraints. A simplicity
+preference alone is not proof of the true mechanism. Identify laws only up to
+behavioral equivalence where appropriate; a common supported winning strategy
+can be sufficient even when the full law remains ambiguous.
+
+### Illustrative derivation, not a proposed hard matrix row
+
+Public principles for transfer J between chambers with imprints u and v:
+
+1. Shifting both imprints by the same amount leaves J unchanged.
+2. Exchanging chambers reverses J.
+3. J is a polynomial of total degree at most three.
+4. The amount leaving one chamber enters the other.
+
+These principles imply dependence on `d = u-v`, odd symmetry, and consequently
+`J(d) = a*d + b*d^3`. Measurements `J(1)=3`, `J(2)=12` imply `a=2`, `b=1`.
+An independent check at d=3 predicts 33. Conservation gives
+`qA_next=qA-J`, `qB_next=qB+J`; any physical implementation must also constrain
+available inventories and legal settings. The extra check validates the
+assumptions against another case; it is not mathematically necessary to identify
+the coefficients within the supplied class. Do not force redundant experiments.
+
+This illustrates theory-guided derivation and fitting, not a difficulty guarantee.
+A large polynomial can reduce the challenge to linear algebra and bookkeeping.
+Withholding a function menu may even simplify inference when principles collapse
+the possibilities. Symmetries and conservation can make discovery easier.
+
+The proposed semantic distinction, without changing existing profiles, is:
+
+| Axis role | Intended reasoning |
+|---|---|
+| T1 | Derive the apparatus response from complete known laws and constants. |
+| T2 | Derive a constrained response family; identify its unknown parameters. |
+| T3 | Discover missing dependencies, hidden state or mechanism composition within a complete bounded construction language. Merely fitting a larger polynomial is not sufficient evidence of this capability. |
+| D | Compose and reuse discoveries across causally dependent preparations, apparatuses and histories. Shared constraints must affect the actual goal; extra procedural stages alone are insufficient. |
+
+The stronger candidate publishes primitive laws, invariants and construction
+limits, but withholds derived apparatus equations and selected structural facts.
+One model with shared parameters must explain several contexts and enable escape.
+Permitted controls remain explicit; the truth remains within the public prior.
+
+Primary references checked for this follow-up:
+- [NIST interpolation theorem](https://dlmf.nist.gov/3.3): uniqueness requires a
+  degree bound and distinct nodes in the stated setting.
+- [Model structures and structural identifiability](https://arxiv.org/abs/2101.06382):
+  distinguish parameter ambiguity from reliable prediction.
+- [AI Feynman](https://arxiv.org/abs/1905.11481): exploit symmetry, separability and
+  composition to simplify equation discovery.
+- [SINDy](https://arxiv.org/abs/1509.03580): sparse term and coefficient selection;
+  representation assumptions remain necessary.
+- [NIST weighted least squares](https://www.itl.nist.gov/div898/handbook/pmd/section1/pmd143.htm):
+  statistical weighting depends on assumptions about measurement variances.
+
+## Tentative next-step triage (awaiting the current pilot)
+
+These priorities are design judgements, not measured difficulty rankings. The
+user explicitly requested waiting for the pilot before moving on. No new PoC,
+mechanic, test matrix or tool access is authorized by this context-saving step.
+
+| Priority | Candidate | Expected information value and overlap | Main risk / prerequisite |
+|---|---|---|---|
+| Gate | Analyze the existing stateful pilot and its matched controls | Establish whether failures concern inference, experiment choice, tracking, planning or execution; measure supported success and scoped action overhead. | Confirm image identity and separate infrastructure failures. Do not assume a bound is a full-game optimum. |
+| 1 | Controlled model revision with preservation of old predictions and global constraints | Tests detection of an inadequate explanation, discriminating experiments, selective repair and operational use. Combines the earlier representation-expansion, falsification and invariant-constrained repair suggestions into one candidate. | Must genuinely require a goal-relevant model change; reject a disguised repeat of known-template fitting. Laws stay fixed. |
+| 2 | Derive response families from primitive laws; share the resulting model across apparatuses | Adds theoretical deduction and cross-context consistency. Can supply the foundation and T1/T2 controls for candidate 1, or be a separate matched contrast. | Authenticity is more certain than increased difficulty. Derivation may collapse to a tiny fit. Qualify actual shortcuts and shared dependencies. |
+| Supporting requirement | Exact identifiability, behavioral-equivalence handling and shortcut qualification | Makes candidates 1 and 2 interpretable. Global validity must constrain the player's solution, not just be automatic in the engine. | Cheap interpolation, fixed panels, blind construction, synchronization and independent subproblem solutions must be assessed. Keep valid shortcuts legal and label shallow episodes honestly. |
+| Later diagnostic | Isolated in-NEXUS calculation/simulation access | Separates a wrong representation from difficulty executing the right one; useful if no-Python traces show arithmetic or bookkeeping bottlenecks. | Keep tool access a separate controlled factor; no private source/truth exposure. Benefits are not assumed uniform. |
+| Defer | Noise, continuous calculus, unrestricted symbolic regression and larger polynomial families as difficulty drivers | Could eventually probe uncertainty or different mathematical skills. | Noise changes the qualification problem; unrestricted functions destroy finite-data uniqueness; larger fits may add computation instead of scientific reasoning. |
+
+Use the pilot to revise this order:
+
+- Supported success near ceiling with modest overhead strengthens the case for
+  a representation/model-revision PoC rather than another size increase.
+- Failures that persist with the true laws supplied point first to state tracking,
+  control/planning or execution; do not label them discovery failures.
+- A clear discovery-versus-known-law gap motivates diagnosing the current
+  mechanism before adding another one.
+- A shortcut, support-classification defect or insufficient control calls for
+  qualification/diagnostic repair before collecting a more complex matrix.
+
+If a new PoC is selected after review, begin with independent mathematical
+conformance and exact qualification before production integration. Compare the
+same worlds with a supplied response model, a principles-only model, and where
+appropriate a provisional model needing revision. Hold resource and logistics
+settings fixed, account for mechanical action overhead, and retain shallow
+negative controls. Combine new mechanisms only after contrasts establish what
+each contributes. Do not force an investigation order merely to manufacture depth.
