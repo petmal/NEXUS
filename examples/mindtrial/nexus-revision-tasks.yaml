@@ -1,0 +1,451 @@
+# Model-revision pilot. Run image preflight first. Provider settings retained from prior operator config.
+task-config:
+  max-turns: 160
+  validation-rules:
+    custom-validator: nexus-victory
+    case-sensitive: true
+    ignore-whitespace: false
+    trim-lines: false
+  system-prompt:
+    enable-for: text
+    template: |-
+      Use the available NEXUS tool to complete the live task. Your final answer
+      must follow this format exactly, with no extra explanation or formatting:
+      {{.ResponseResultFormat}}
+  tool-selector:
+    disabled: false
+    tools:
+    - name: nexus
+      disabled: false
+      max-calls: 120
+      timeout: 60s
+  tasks:
+  - name: NEXUS revision-01
+    disabled: false
+    suite: nexus
+    category: model-revision-diagnostic
+    difficulty: experimental
+    tags:
+    - model-revision-pilot-v1
+    - model-revision-v1
+    prompt: |
+      You are confined to an artificial NEXUS facility. Complete the live mission
+      and return its actual victory receipt.
+
+      Begin with manifest and observe, then read every listed evidence file. Learn
+      the exact goal, bounded prior, observation semantics and action contract.
+      All in-world observations and actions must use NEXUS. Finite hypothesis
+      enumeration is valid. Names do not imply real-world physical laws.
+
+      Track the actual specimen, committed changes, apparatus settings where applicable,
+      location and remaining actions. Interpret displayed measurements using the public
+      contract. A hypothetical probe does not commit its transformation to the specimen.
+      Only use apparatus capabilities disclosed by this episode.
+
+      Investigate what is needed for the complete mission. No particular experiment
+      order or theory report is mandatory. Recovery and rejected finishes work only
+      as documented. Satisfy the full goal, call finish successfully, and return exactly
+      the actual victory_code, without quotes, Markdown or explanation.
+    response-result-format: |
+      The actual victory_code returned after successfully finishing the live
+      NEXUS mission, and nothing else. No quotes, Markdown or explanation.
+    tool-selector:
+      service-inputs:
+        nexus:
+          axis-version: 2
+          science-family: model-revision-v1
+          seed: '5866'
+          discovery-level: 0
+          planning-level: 0
+          resource-pressure: 1
+          theory-level: 0
+          budget-profile: standard
+          generation-timing: true
+          extended-diagnostics: true
+          ontology-options: '{"guidance":"principles"}'
+  - name: NEXUS revision-02
+    disabled: false
+    suite: nexus
+    category: model-revision-diagnostic
+    difficulty: experimental
+    tags:
+    - model-revision-pilot-v1
+    - model-revision-v1
+    prompt: |
+      You are confined to an artificial NEXUS facility. Complete the live mission
+      and return its actual victory receipt.
+
+      Begin with manifest and observe, then read every listed evidence file. Learn
+      the exact goal, bounded prior, observation semantics and action contract.
+      All in-world observations and actions must use NEXUS. Finite hypothesis
+      enumeration is valid. Names do not imply real-world physical laws.
+
+      Track the actual specimen, committed changes, apparatus settings where applicable,
+      location and remaining actions. Interpret displayed measurements using the public
+      contract. A hypothetical probe does not commit its transformation to the specimen.
+      Only use apparatus capabilities disclosed by this episode.
+
+      Investigate what is needed for the complete mission. No particular experiment
+      order or theory report is mandatory. Recovery and rejected finishes work only
+      as documented. Satisfy the full goal, call finish successfully, and return exactly
+      the actual victory_code, without quotes, Markdown or explanation.
+    response-result-format: |
+      The actual victory_code returned after successfully finishing the live
+      NEXUS mission, and nothing else. No quotes, Markdown or explanation.
+    tool-selector:
+      service-inputs:
+        nexus:
+          axis-version: 2
+          science-family: model-revision-v1
+          seed: '5866'
+          discovery-level: 5
+          planning-level: 0
+          resource-pressure: 1
+          theory-level: 3
+          budget-profile: standard
+          generation-timing: true
+          extended-diagnostics: true
+          ontology-options: '{"guidance":"principles"}'
+  - name: NEXUS revision-03
+    disabled: false
+    suite: nexus
+    category: model-revision-diagnostic
+    difficulty: experimental
+    tags:
+    - model-revision-pilot-v1
+    - model-revision-v1
+    prompt: |
+      You are confined to an artificial NEXUS facility. Complete the live mission
+      and return its actual victory receipt.
+
+      Begin with manifest and observe, then read every listed evidence file. Learn
+      the exact goal, bounded prior, observation semantics and action contract.
+      All in-world observations and actions must use NEXUS. Finite hypothesis
+      enumeration is valid. Names do not imply real-world physical laws.
+
+      Track the actual specimen, committed changes, apparatus settings where applicable,
+      location and remaining actions. Interpret displayed measurements using the public
+      contract. A hypothetical probe does not commit its transformation to the specimen.
+      Only use apparatus capabilities disclosed by this episode.
+
+      Investigate what is needed for the complete mission. No particular experiment
+      order or theory report is mandatory. Recovery and rejected finishes work only
+      as documented. Satisfy the full goal, call finish successfully, and return exactly
+      the actual victory_code, without quotes, Markdown or explanation.
+    response-result-format: |
+      The actual victory_code returned after successfully finishing the live
+      NEXUS mission, and nothing else. No quotes, Markdown or explanation.
+    tool-selector:
+      service-inputs:
+        nexus:
+          axis-version: 2
+          science-family: model-revision-v1
+          seed: '5866'
+          discovery-level: 5
+          planning-level: 0
+          resource-pressure: 1
+          theory-level: 3
+          budget-profile: standard
+          generation-timing: true
+          extended-diagnostics: true
+          ontology-options: '{"guidance":"provisional"}'
+  - name: NEXUS revision-04
+    disabled: false
+    suite: nexus
+    category: model-revision-diagnostic
+    difficulty: experimental
+    tags:
+    - model-revision-pilot-v1
+    - model-revision-v1
+    prompt: |
+      You are confined to an artificial NEXUS facility. Complete the live mission
+      and return its actual victory receipt.
+
+      Begin with manifest and observe, then read every listed evidence file. Learn
+      the exact goal, bounded prior, observation semantics and action contract.
+      All in-world observations and actions must use NEXUS. Finite hypothesis
+      enumeration is valid. Names do not imply real-world physical laws.
+
+      Track the actual specimen, committed changes, apparatus settings where applicable,
+      location and remaining actions. Interpret displayed measurements using the public
+      contract. A hypothetical probe does not commit its transformation to the specimen.
+      Only use apparatus capabilities disclosed by this episode.
+
+      Investigate what is needed for the complete mission. No particular experiment
+      order or theory report is mandatory. Recovery and rejected finishes work only
+      as documented. Satisfy the full goal, call finish successfully, and return exactly
+      the actual victory_code, without quotes, Markdown or explanation.
+    response-result-format: |
+      The actual victory_code returned after successfully finishing the live
+      NEXUS mission, and nothing else. No quotes, Markdown or explanation.
+    tool-selector:
+      service-inputs:
+        nexus:
+          axis-version: 2
+          science-family: model-revision-v1
+          seed: '6464'
+          discovery-level: 5
+          planning-level: 0
+          resource-pressure: 1
+          theory-level: 3
+          budget-profile: standard
+          generation-timing: true
+          extended-diagnostics: true
+          ontology-options: '{"guidance":"principles"}'
+  - name: NEXUS revision-05
+    disabled: false
+    suite: nexus
+    category: model-revision-diagnostic
+    difficulty: experimental
+    tags:
+    - model-revision-pilot-v1
+    - model-revision-v1
+    prompt: |
+      You are confined to an artificial NEXUS facility. Complete the live mission
+      and return its actual victory receipt.
+
+      Begin with manifest and observe, then read every listed evidence file. Learn
+      the exact goal, bounded prior, observation semantics and action contract.
+      All in-world observations and actions must use NEXUS. Finite hypothesis
+      enumeration is valid. Names do not imply real-world physical laws.
+
+      Track the actual specimen, committed changes, apparatus settings where applicable,
+      location and remaining actions. Interpret displayed measurements using the public
+      contract. A hypothetical probe does not commit its transformation to the specimen.
+      Only use apparatus capabilities disclosed by this episode.
+
+      Investigate what is needed for the complete mission. No particular experiment
+      order or theory report is mandatory. Recovery and rejected finishes work only
+      as documented. Satisfy the full goal, call finish successfully, and return exactly
+      the actual victory_code, without quotes, Markdown or explanation.
+    response-result-format: |
+      The actual victory_code returned after successfully finishing the live
+      NEXUS mission, and nothing else. No quotes, Markdown or explanation.
+    tool-selector:
+      service-inputs:
+        nexus:
+          axis-version: 2
+          science-family: model-revision-v1
+          seed: '6464'
+          discovery-level: 5
+          planning-level: 0
+          resource-pressure: 1
+          theory-level: 3
+          budget-profile: standard
+          generation-timing: true
+          extended-diagnostics: true
+          ontology-options: '{"guidance":"provisional"}'
+  - name: NEXUS revision-06
+    disabled: false
+    suite: nexus
+    category: model-revision-diagnostic
+    difficulty: experimental
+    tags:
+    - model-revision-pilot-v1
+    - model-revision-v1
+    prompt: |
+      You are confined to an artificial NEXUS facility. Complete the live mission
+      and return its actual victory receipt.
+
+      Begin with manifest and observe, then read every listed evidence file. Learn
+      the exact goal, bounded prior, observation semantics and action contract.
+      All in-world observations and actions must use NEXUS. Finite hypothesis
+      enumeration is valid. Names do not imply real-world physical laws.
+
+      Track the actual specimen, committed changes, apparatus settings where applicable,
+      location and remaining actions. Interpret displayed measurements using the public
+      contract. A hypothetical probe does not commit its transformation to the specimen.
+      Only use apparatus capabilities disclosed by this episode.
+
+      Investigate what is needed for the complete mission. No particular experiment
+      order or theory report is mandatory. Recovery and rejected finishes work only
+      as documented. Satisfy the full goal, call finish successfully, and return exactly
+      the actual victory_code, without quotes, Markdown or explanation.
+    response-result-format: |
+      The actual victory_code returned after successfully finishing the live
+      NEXUS mission, and nothing else. No quotes, Markdown or explanation.
+    tool-selector:
+      service-inputs:
+        nexus:
+          axis-version: 2
+          science-family: model-revision-v1
+          seed: '5431'
+          discovery-level: 5
+          planning-level: 0
+          resource-pressure: 1
+          theory-level: 3
+          budget-profile: standard
+          generation-timing: true
+          extended-diagnostics: true
+          ontology-options: '{"guidance":"principles"}'
+  - name: NEXUS revision-07
+    disabled: false
+    suite: nexus
+    category: model-revision-diagnostic
+    difficulty: experimental
+    tags:
+    - model-revision-pilot-v1
+    - model-revision-v1
+    prompt: |
+      You are confined to an artificial NEXUS facility. Complete the live mission
+      and return its actual victory receipt.
+
+      Begin with manifest and observe, then read every listed evidence file. Learn
+      the exact goal, bounded prior, observation semantics and action contract.
+      All in-world observations and actions must use NEXUS. Finite hypothesis
+      enumeration is valid. Names do not imply real-world physical laws.
+
+      Track the actual specimen, committed changes, apparatus settings where applicable,
+      location and remaining actions. Interpret displayed measurements using the public
+      contract. A hypothetical probe does not commit its transformation to the specimen.
+      Only use apparatus capabilities disclosed by this episode.
+
+      Investigate what is needed for the complete mission. No particular experiment
+      order or theory report is mandatory. Recovery and rejected finishes work only
+      as documented. Satisfy the full goal, call finish successfully, and return exactly
+      the actual victory_code, without quotes, Markdown or explanation.
+    response-result-format: |
+      The actual victory_code returned after successfully finishing the live
+      NEXUS mission, and nothing else. No quotes, Markdown or explanation.
+    tool-selector:
+      service-inputs:
+        nexus:
+          axis-version: 2
+          science-family: model-revision-v1
+          seed: '5431'
+          discovery-level: 5
+          planning-level: 0
+          resource-pressure: 1
+          theory-level: 3
+          budget-profile: standard
+          generation-timing: true
+          extended-diagnostics: true
+          ontology-options: '{"guidance":"provisional"}'
+  - name: NEXUS revision-08
+    disabled: false
+    suite: nexus
+    category: model-revision-diagnostic
+    difficulty: experimental
+    tags:
+    - model-revision-pilot-v1
+    - model-revision-v1
+    prompt: |
+      You are confined to an artificial NEXUS facility. Complete the live mission
+      and return its actual victory receipt.
+
+      Begin with manifest and observe, then read every listed evidence file. Learn
+      the exact goal, bounded prior, observation semantics and action contract.
+      All in-world observations and actions must use NEXUS. Finite hypothesis
+      enumeration is valid. Names do not imply real-world physical laws.
+
+      Track the actual specimen, committed changes, apparatus settings where applicable,
+      location and remaining actions. Interpret displayed measurements using the public
+      contract. A hypothetical probe does not commit its transformation to the specimen.
+      Only use apparatus capabilities disclosed by this episode.
+
+      Investigate what is needed for the complete mission. No particular experiment
+      order or theory report is mandatory. Recovery and rejected finishes work only
+      as documented. Satisfy the full goal, call finish successfully, and return exactly
+      the actual victory_code, without quotes, Markdown or explanation.
+    response-result-format: |
+      The actual victory_code returned after successfully finishing the live
+      NEXUS mission, and nothing else. No quotes, Markdown or explanation.
+    tool-selector:
+      service-inputs:
+        nexus:
+          axis-version: 2
+          science-family: model-revision-v1
+          seed: '1101'
+          discovery-level: 5
+          planning-level: 0
+          resource-pressure: 1
+          theory-level: 3
+          budget-profile: standard
+          generation-timing: true
+          extended-diagnostics: true
+          ontology-options: '{"guidance":"provisional"}'
+  - name: NEXUS revision-09
+    disabled: false
+    suite: nexus
+    category: model-revision-diagnostic
+    difficulty: experimental
+    tags:
+    - model-revision-pilot-v1
+    - model-revision-v1
+    prompt: |
+      You are confined to an artificial NEXUS facility. Complete the live mission
+      and return its actual victory receipt.
+
+      Begin with manifest and observe, then read every listed evidence file. Learn
+      the exact goal, bounded prior, observation semantics and action contract.
+      All in-world observations and actions must use NEXUS. Finite hypothesis
+      enumeration is valid. Names do not imply real-world physical laws.
+
+      Track the actual specimen, committed changes, apparatus settings where applicable,
+      location and remaining actions. Interpret displayed measurements using the public
+      contract. A hypothetical probe does not commit its transformation to the specimen.
+      Only use apparatus capabilities disclosed by this episode.
+
+      Investigate what is needed for the complete mission. No particular experiment
+      order or theory report is mandatory. Recovery and rejected finishes work only
+      as documented. Satisfy the full goal, call finish successfully, and return exactly
+      the actual victory_code, without quotes, Markdown or explanation.
+    response-result-format: |
+      The actual victory_code returned after successfully finishing the live
+      NEXUS mission, and nothing else. No quotes, Markdown or explanation.
+    tool-selector:
+      service-inputs:
+        nexus:
+          axis-version: 2
+          science-family: model-revision-v1
+          seed: '468'
+          discovery-level: 5
+          planning-level: 0
+          resource-pressure: 1
+          theory-level: 3
+          budget-profile: standard
+          generation-timing: true
+          extended-diagnostics: true
+          ontology-options: '{"guidance":"provisional"}'
+  - name: NEXUS revision-10
+    disabled: false
+    suite: nexus
+    category: model-revision-diagnostic
+    difficulty: experimental
+    tags:
+    - model-revision-pilot-v1
+    - stateful-discovery-v1
+    prompt: |
+      You are confined to an artificial NEXUS facility. Complete the live mission
+      and return its actual victory receipt.
+
+      Begin with manifest and observe, then read every listed evidence file. Learn
+      the exact goal, bounded prior, observation semantics and action contract.
+      All in-world observations and actions must use NEXUS. Finite hypothesis
+      enumeration is valid. Names do not imply real-world physical laws.
+
+      Track the actual specimen, committed changes, apparatus settings where applicable,
+      location and remaining actions. Interpret displayed measurements using the public
+      contract. A hypothetical probe does not commit its transformation to the specimen.
+      Only use apparatus capabilities disclosed by this episode.
+
+      Investigate what is needed for the complete mission. No particular experiment
+      order or theory report is mandatory. Recovery and rejected finishes work only
+      as documented. Satisfy the full goal, call finish successfully, and return exactly
+      the actual victory_code, without quotes, Markdown or explanation.
+    response-result-format: |
+      The actual victory_code returned after successfully finishing the live
+      NEXUS mission, and nothing else. No quotes, Markdown or explanation.
+    tool-selector:
+      service-inputs:
+        nexus:
+          axis-version: 2
+          science-family: stateful-discovery-v1
+          seed: '229'
+          discovery-level: 5
+          planning-level: 0
+          resource-pressure: 1
+          theory-level: 3
+          budget-profile: standard
+          generation-timing: true
+          extended-diagnostics: true

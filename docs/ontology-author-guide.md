@@ -31,7 +31,7 @@ verbal scientific-method rituals or stage unlocks.
 |---|---|---|
 | `ontology/catalog.py` | Explicit version/family selection and lazy factories | Published scientific adapters |
 | `ontology/contracts.py` | Runtime ownership and structural interface | `builtin_runtime.py` |
-| `ontology/payloads.py` | Trusted role-specific schema registration | Categorical specimen/stock/spec/truth |
+| `ontology/payloads.py` | Role lookup through the catalog; no second registration map | Lazy data-only schemas |
 | `models/domain.py` | Common JSON envelopes with load-time validation | No additional core union per future ontology |
 | `ontology/graph.py` | Immutable ordered DAG, trusted primitive evaluation | Categorical chains; resonant dependency description |
 | `ontology/inference.py` | Public measurement and belief interfaces | Flat and resonant posterior adapters |
@@ -123,11 +123,11 @@ Keep new family logic out of session, replay, receipt and generic measurement
 accounting. Performance projections may differ by mission contract, but should
 not require a branch for every ontology.
 
-Shared `Machine` and `ConfigureAction` models retain their existing Pydantic
-integer normalization. Initial selector checks enforce arity and range after
-that normalization; this refactor does not introduce stricter raw JSON scalar
-semantics for controls. Ontology payload schemas separately validate their own
-properties (including strict integer permutation laws).
+Submitted `ConfigureAction.settings` requires strict JSON integers; booleans,
+floats and numeric strings are rejected. Stored `Machine.settings` retains its
+existing Pydantic normalization for saved-world compatibility. Each runtime must
+also check its own arity and range. Payload schemas validate their own properties
+independently (including strict integer permutation laws).
 
 
 ## Stateful causal example
@@ -140,8 +140,9 @@ unobserved exogenous updates or unbounded histories need a different state desig
 
 The catalog now owns lazy runtime/generator/qualifier import targets and an optional
 standalone action-reference hook. These paths are code-owned registrations, never
-read from episodes. Register data-only role schemas separately in `payloads.py` to
-avoid model/runtime import cycles. No changes to engine/session/replay are needed.
+read from episodes. Declare `schema_module` in the same catalog registration. Its data-only `SCHEMAS`
+map is loaded lazily without importing runtime or inference, avoiding model/runtime
+import cycles. No additional map in `payloads.py` is needed. No changes to engine/session/replay are needed.
 
 The causal adapter proves its graph semantics against independent arithmetic,
 compiles complete finite transition/response tables, and maintains a joint bitset
@@ -201,3 +202,93 @@ in one registration rather than repeating family-name lists in shared code.
 The history family's `deep_tier_admitted=false` is intentional: finite proof found
 shortcuts through repeated finishes and apparatus omission. A registered runtime
 and a successful reference policy do not constitute deep-difficulty qualification.
+
+## A concrete author workflow
+
+Start with `uv run nexus ontologies --json`. This lists registered family/version,
+schema location, factory availability and option schema without constructing any
+world or inference prior. Registration is not difficulty admission.
+
+Use `ontology/revision/` as a complete, small adapter example. It shares the
+reader/carrier/assembler interaction with `ontology/discovery/` while owning its
+physics and proof. `ontology/categorical/` demonstrates a different interaction.
+Choose the example matching your controls; do not force every ontology into the
+reader/assembler protocol.
+
+1. Write `schema.py`: strict, extra-forbidden Pydantic models for public specimen,
+   public investigation and private truth. Export `SCHEMAS = {"artifact": Specimen,
+   "investigation": Investigation, "truth": Truth}`; add `"stock"` only if needed.
+   This module must not import runtime, generator or inference.
+2. Write pure laws and typed public evidence. State the complete primitive grammar,
+   update order, measurement meaning, control ranges and success criterion. Derive
+   latent state from bounded public history or keep it in private truth; never
+   put private fields into public specimen payloads.
+3. Implement the interface in `ontology/contracts.py`. Runtime hooks perform only
+   domain work; the engine owns action costs, transactions, locality, receipts
+   and replay. Share a runtime only when these semantics actually match.
+4. Supply a public-data-only belief and measurement adapter, a deterministic
+   generator, and a qualifier. If using the discovery runtime, also add a small
+   `Adapter` in `discovery/domains.py` declaring that runtime's reader/build defaults,
+   package and reference-policy bound. This second declaration describes shared
+   interaction parameters, not payload registration.
+5. Add one `OntologyDefinition` to `REGISTRY` in `ontology/catalog.py`:
+
+```python
+OntologyDefinition(
+    "model-revision-v1", "model-revision-v1",
+    runtime_module="nexus.ontology.revision.runtime",
+    schema_module="nexus.ontology.revision.schema",
+    generator=("nexus.ontology.revision.generation", "generate_episode"),
+    qualifier=("nexus.ontology.discovery.qualification", "qualify"),
+    options_schema=("nexus.ontology.revision.schema", "GenerationOptions"),
+    standalone_contract=True,
+    diagnostic_budget=True,
+)
+```
+
+This is an excerpt of the working registration, not a call to add it twice.
+Use your own unique family and specification identifiers. The registry rejects
+duplicate families/versions and unsupported API versions, and exposes immutable
+indexes. Paths are trusted application code; episode JSON can only select a
+registered identifier. The generic qualifier above checks live solvability and
+inference consistency; the revision family's stronger pilot admission is in
+`evaluation/revision.py`. Keep that distinction explicit for your own family.
+
+6. Add independent scalar or small-world proofs and a public reference policy.
+   Check equivalence, identifiability, legal-query coverage, alternative winning
+   builds, failed-finish feedback, easy worlds, rollback and privacy. A graph,
+   high parameter count or generator rejection does not establish depth.
+7. Add a source-bound preflight and matched evaluation matrix. Record certificate
+   lower bounds separately from constructive policy upper bounds. Run the old
+   compatibility suites and refresh affected immutable proof bindings through
+   their documented proof workflow.
+
+Optional generator settings belong to the adapter's `GenerationOptions` schema,
+not another core CLI flag. For example:
+
+```sh
+uv run nexus generate /tmp/revision-example --axis-version 2 \
+  --science-family model-revision-v1 --seed 5866 --theory-level 3 \
+  --discovery-level 5 --planning-level 0 --resource-pressure 1 \
+  --ontology-options '{"guidance":"principles"}'
+uv run nexus qualify /tmp/revision-example/private.json
+uv run nexus solve /tmp/revision-example/private.json --trace-out /tmp/revision-example/run.jsonl
+uv run nexus replay /tmp/revision-example/private.json /tmp/revision-example/run.jsonl
+```
+
+The same JSON object works as `NEXUS_ONTOLOGY_OPTIONS` for `serve-session`.
+Unknown options fail validation; options cannot modify an already compiled private
+world. Keep the private file, operator tools and source away from evaluated agents.
+Run `examples/ontologies/revision_example.py` for a small executable lifecycle example.
+
+`solver/finite_machine.py` supplies exact canonical Moore-machine minimization
+and shortest product-machine counterexamples without a horizon cutoff. It is a
+semantic building block, not a depth qualifier. Keep an independent proof oracle
+separate from this implementation. Revision compiles immutable tables once per
+process, folds equivalent wirings and updates bitset posteriors; a new family need
+not use enumeration if another inference representation suits it better.
+
+Automatic discovery of installed third-party packages is not implemented. It
+would require explicit trust, distribution/source provenance and qualification
+binding before being safe to claim reproducible evaluation. Human developers can
+add adapters through the catalog today without editing engine, session or replay.

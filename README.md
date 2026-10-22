@@ -1,5 +1,13 @@
 # NEXUS
 
+The opt-in `model-revision-v1` family reconstructs a hidden mechanism from exact
+primitive transfer laws. A matched pilot compares principles-only discovery with
+revision of a provisional explanation on identical worlds and budgets. Its
+[ten-run guide](docs/model-revision-guide.md) separates exact supported-action
+minima from reference-policy upper bounds and includes shallow controls.
+The [ontology author guide](docs/ontology-author-guide.md) documents the lazy,
+validated catalog and reusable runtime/qualification extension points.
+
 The opt-in `stateful-discovery-v1` pilot makes investigation change the original
 exit seal. Four coupled hidden registers must reach one exact joint target;
 ordinary probes remain nonmutating, but informative later contexts require

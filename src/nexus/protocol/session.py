@@ -14,14 +14,15 @@ from nexus.models.events import TraceRecord
 from nexus.models.goals import GoalKind, GoalPredicate
 from nexus.models.observation import Observation
 from nexus.models.world import TerminalStatus, WorldState
-from nexus.render.text import observation
-from nexus.protocol.public_transcript import PublicTranscript, record
 from nexus.protocol.investigation_metrics import (
     AuditedDecisionMissionPerformance,
     DecisionMissionPerformance,
     InvestigationPerformance,
     MissionPerformance,
 )
+from nexus.protocol.public_transcript import PublicTranscript
+from nexus.protocol.public_transcript import record as record_exchange
+from nexus.render.text import observation
 
 PERFORMANCE_SCHEMA_URL = (
     "https://raw.githubusercontent.com/petmal/NEXUS/"
@@ -155,13 +156,13 @@ class Session:
             try:
                 response = operation()
             except Exception as exc:
-                record(self.public_transcript, request,
+                record_exchange(self.public_transcript, request,
                        {"exception": type(exc).__name__, "message": str(exc)},
                        before, self._public_effect())
                 raise
             projected = (response.model_dump(mode="json", exclude_none=exclude_none)
                          if isinstance(response, BaseModel) else response)
-            record(self.public_transcript, request, projected, before, self._public_effect())
+            record_exchange(self.public_transcript, request, projected, before, self._public_effect())
             return response
 
     def manifest(self):
@@ -191,9 +192,11 @@ class Session:
         with self._lock:
             return observation(self.episode.public, self.state)
 
-    def trace_snapshot(self) -> tuple[TraceRecord, ...]:
+    def trace_snapshot(self, *, start: int = 0) -> tuple[TraceRecord, ...]:
         with self._lock:
-            return tuple(record.model_copy(deep=True) for record in self.trace)
+            if type(start) is not int or start < 0:
+                raise ValueError("trace start must be a nonnegative integer")
+            return tuple(record.model_copy(deep=True) for record in self.trace[start:])
 
     def state_snapshot(self) -> WorldState:
         with self._lock:

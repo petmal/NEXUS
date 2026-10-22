@@ -23,6 +23,39 @@ def _write_json(value: object) -> None:
     sys.stdout.write(json.dumps(value, separators=(",", ":")) + "\n")
 
 
+def _ontology_options(raw: str | None) -> dict | None:
+    if raw is None:
+        return None
+    try:
+        value = json.loads(raw)
+    except json.JSONDecodeError as exc:
+        raise typer.BadParameter("ontology-options must be a JSON object") from exc
+    if not isinstance(value, dict):
+        raise typer.BadParameter("ontology-options must be a JSON object")
+    return value
+
+
+@app.command("ontologies")
+def ontologies_command(as_json: bool = typer.Option(False, "--json")) -> None:
+    """List trusted adapters without constructing worlds or inference tables."""
+    rows = [
+        {"family": d.family, "specification_version": d.specification_version,
+         "generatable": d.generator is not None, "schema_module": d.schema_module,
+         "runtime_module": d.runtime_module, "generation_options": d.options_schema}
+        for d in BUILTINS.values()
+    ]
+    if as_json:
+        _write_json(rows)
+        return
+    table = Table(title="NEXUS ontology adapters (registration is not difficulty admission)")
+    for name in ("Family", "Generate", "Payload schemas", "Runtime"):
+        table.add_column(name)
+    for row in rows:
+        table.add_row(row["family"], "yes" if row["generatable"] else "explicit PoC",
+                      row["schema_module"] or "legacy models", row["runtime_module"])
+    console.print(table)
+
+
 def _print_action_reference(*, scientific: bool = False, resonant: bool = False, contract=None) -> None:
     from nexus.models.actions import action_contract
 
@@ -85,6 +118,8 @@ def generate(
         help=SCIENCE_FAMILY_HELP),
     budget_profile: str = typer.Option("standard", envvar="NEXUS_BUDGET_PROFILE",
         help="standard or diagnostic-plus6 (supported families/profiles only; see the family guide)."),
+    ontology_options: str | None = typer.Option(None, envvar="NEXUS_ONTOLOGY_OPTIONS",
+        help="JSON object validated by the selected ontology's generation-options schema."),
     discovery_level: int = typer.Option(
         0,
         min=0,
@@ -124,6 +159,7 @@ def generate(
             axis_version=axis_version,
             science_family=science_family,
             budget_profile=budget_profile,
+            ontology_options=_ontology_options(ontology_options),
             discovery_level=discovery_level,
             planning_level=planning_level,
             resource_pressure=resource_pressure,
@@ -338,6 +374,8 @@ def serve_session(
         help=SCIENCE_FAMILY_HELP),
     budget_profile: str = typer.Option("standard", envvar="NEXUS_BUDGET_PROFILE",
         help="standard or diagnostic-plus6 (supported families/profiles only; see the family guide)."),
+    ontology_options: str | None = typer.Option(None, envvar="NEXUS_ONTOLOGY_OPTIONS",
+        help="JSON object validated by the selected ontology generation schema."),
     discovery_level: int = typer.Option(
         0,
         min=0,
@@ -387,6 +425,9 @@ def serve_session(
     if private is not None and verifier_secret is not None:
         raise typer.BadParameter("--verifier-secret can only be used with --seed")
 
+    if private is not None and ontology_options is not None:
+        raise typer.BadParameter("--ontology-options can only be used with --seed")
+
     if private is not None and budget_profile != "standard":
         raise typer.BadParameter("--budget-profile can only be used with --seed; compiled profiles are immutable")
 
@@ -405,6 +446,7 @@ def serve_session(
             axis_version=axis_version,
             science_family=science_family,
             budget_profile=budget_profile,
+            ontology_options=_ontology_options(ontology_options),
             discovery_level=discovery_level,
             planning_level=planning_level,
             resource_pressure=resource_pressure,

@@ -18,6 +18,7 @@ on:
       - "docs/discovery-pocs-matrix.json"
       - "docs/coupled-memory-matrix.json"
       - "docs/stateful-matrix.json"
+      - "docs/model-revision-matrix.json"
   pull_request:
     paths:
       - "**"
@@ -34,6 +35,7 @@ on:
       - "docs/discovery-pocs-matrix.json"
       - "docs/coupled-memory-matrix.json"
       - "docs/stateful-matrix.json"
+      - "docs/model-revision-matrix.json"
   workflow_dispatch:
     inputs:
       full:
@@ -128,6 +130,9 @@ jobs:
       - name: Stateful trajectory qualification and paired matrix
         run: uv run python scripts/preflight_stateful.py --output /tmp/stateful-preflight.json
 
+      - name: Model revision independent proof and paired matrix
+        run: uv run python scripts/preflight_revision.py --output /tmp/revision-preflight.json
+
       - name: Fast tests
         run: |
           uv run pytest -q -m "not slow and not stress" tests/unit tests/integration \
@@ -218,6 +223,7 @@ jobs:
           docker run --rm --entrypoint python nexus-ci scripts/preflight_discovery.py --output /tmp/discovery-preflight.json
           docker run --rm --entrypoint python nexus-ci scripts/preflight_coupled_memory.py --output /tmp/coupled-preflight.json
           docker run --rm --entrypoint python nexus-ci scripts/preflight_stateful.py --output /tmp/stateful-preflight.json
+          docker run --rm --entrypoint python nexus-ci scripts/preflight_revision.py --output /tmp/revision-preflight.json
           docker run --rm nexus-ci --help
           docker run --rm nexus-ci generate /tmp/nexus-t3 --seed 17 \
             --discovery-level 2 --planning-level 0 --theory-level 3

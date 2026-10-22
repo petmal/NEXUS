@@ -1665,6 +1665,7 @@ def generate_episode(
     science_family: str = "shared-response-v1",
     budget_profile: str = "standard",
     presentation_version: PresentationVersion | None = CURRENT,
+    ontology_options: dict | None = None,
 ) -> PrivateEpisode:
     """Generate a deterministic, solver-qualified NEXUS episode.
 
@@ -1673,6 +1674,8 @@ def generate_episode(
     policy cost.
     """
     from nexus.ontology.catalog import BUILTINS
+    if ontology_options is not None and not isinstance(ontology_options, dict):
+        raise ValueError("ontology options must be a JSON object")
     if budget_profile not in ("standard", "diagnostic-plus6"):
         raise ValueError("unknown budget profile")
     budget_families = {name for name, definition in BUILTINS.items() if definition.diagnostic_budget}
@@ -1689,11 +1692,14 @@ def generate_episode(
             seed, discovery_level=discovery_level, planning_level=planning_level,
             resource_pressure=resource_pressure, theory_level=theory_level,
             verifier_secret=verifier_secret,
+            ontology_options=ontology_options,
             **({"budget_profile": budget_profile} if science_family in budget_families else {}),
         )
         return attach(episode, presentation_version)
     if axis_version != 1:
         raise ValueError("axis_version must be 1 (legacy) or 2 (scientific)")
+    if ontology_options:
+        raise ValueError("ontology options require axes v2")
     from nexus.generator.theory import validate_theory_profile
 
     validate_theory_profile(theory_level, discovery_level)

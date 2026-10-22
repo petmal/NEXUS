@@ -1,0 +1,106 @@
+{
+  "base": "bf86ce8c20f8fc72846456a4ac9474eefb3cc847",
+  "matching_generated_cases": 32,
+  "excluded_fields": [
+    "public.episode_id",
+    "generation_metadata.investigation_certificate.semantic_release_sha256"
+  ],
+  "snapshots": {
+    "stateful-discovery-v1/17/0/0": {
+      "hash": "3c5a675769a356534eb93a3d6e24b762958927884689f16eb0e44b34c2395ea1"
+    },
+    "stateful-discovery-v1/229/3/5": {
+      "hash": "df12fbabab075ed2c1d69e18c46dbbf72625b7456c1d3d76e2a044dacba65b60"
+    },
+    "coupled-memory-v1/17/0/0": {
+      "hash": "b5c34f7778be47de662fe8e15310af95f590851573f953a0696c06a5dfb620c2"
+    },
+    "coupled-memory-v1/229/3/4": {
+      "hash": "334b79a8c264e7c8707f9442f3c16726cc4d7de381ae6b54286b1adf87141f80"
+    },
+    "representation-discovery-v1/17/0/0": {
+      "hash": "6ff164ef948bd52a1bd34fe5cee340f2f972b76f803b30951cfe644b952bbb1c"
+    },
+    "representation-discovery-v1/229/3/4": {
+      "hash": "dedd05782411dadfb4a6d82687f954ac3ccfd952a8d1794814f5d63c366f68a3"
+    },
+    "uncertainty-construction-v1/17/0/0": {
+      "hash": "73829c0b9e52166a32082bbe4234fc430ad24470ed00d3a61784d97c15c3649d"
+    },
+    "uncertainty-construction-v1/229/3/4": {
+      "hash": "141ffc4c03fb0064dc368a831766af3df6885039dc5d0b62a76baf7a49fab409"
+    },
+    "joint-assembly-v1/17/0/0": {
+      "hash": "f762403e588cf64f21a4bc481703aa486662af05ec7a5d3cf476fe0acc0e5c70"
+    },
+    "joint-assembly-v1/229/3/4": {
+      "hash": "8f53488ad8ea509de5a2428460120c697ba01e6fb6bf0e7a2d201f3b7e21b249"
+    },
+    "staged-repair-v1/17/0/0": {
+      "hash": "973f3048e886472f64cf437c1bc45959bdf5a5d2ec0636ededc618177bf98a83"
+    },
+    "staged-repair-v1/229/3/4": {
+      "hash": "f1de9fbb3520c7fcff1e9fcb7f90ab142ea212b1b41432e31d4cbf93c00bf82b"
+    },
+    "history-coupled-v1/17/0/0": {
+      "hash": "b653b63e4a21c8ff50f9fa48765784c781dd598fa0cfdc1f53afe43e5963e432"
+    },
+    "history-coupled-v1/229/3/5": {
+      "hash": "bc1c20b7a7ddd5f6d2d4ab0034ff44fb48bae1e683060f9710a9d8c7ed747956"
+    },
+    "coupled-transfer-v1/17/0/0": {
+      "hash": "ebe90b5a759af1b7bd849cd64c2a54199404fa38ad008e7514c0bff2ede69471"
+    },
+    "coupled-transfer-v1/229/3/5": {
+      "hash": "2e74ead8914b364779327fd31875e85d807923c2b8b820639ea01e2fe5357b32"
+    },
+    "coupled-evidence-v1/17/0/0": {
+      "hash": "80c8658ebb9d9c2c2c7a4aa9976c2b44db43d784d995c121170c3af25e5a765d"
+    },
+    "coupled-evidence-v1/229/3/5": {
+      "hash": "8b346ea1ae830a3d849f0965bdabcd249d2f0aeb602949583efb7c8e830ef2fe"
+    },
+    "compositional-repair-v1/17/0/0": {
+      "hash": "9a45c6df53b34d9a7b91cc1a10a8348bf0e42e572d017ae182110e7499e536d7"
+    },
+    "compositional-repair-v1/229/3/5": {
+      "hash": "ec651002e1ca7d3e262418b4366064ebce6c14fb4def3a573791da9e6ff56b7c"
+    },
+    "coupled-dynamics-v1/17/0/0": {
+      "hash": "c5208b109f03e4f00682ba9466faec88f1f66769f0c1881afe654b204ba5bf8d"
+    },
+    "coupled-dynamics-v1/229/3/5": {
+      "hash": "0b21d72e1c833b1389f45829ee722c5c5d17d041a9c16f4eb0271730c4aca174"
+    },
+    "coupled-repair-v1/17/3/5": {
+      "hash": "5f3a198631d5dba8db6b1cd8474d912942305dcd0d7a4cf6af35458205a2c4ba"
+    },
+    "coupled-repair-v1/229/3/5": {
+      "hash": "ec3369684d080a7dc85968a7408d9cb81730c85f1bc41bf431016d320b0b3b75"
+    },
+    "shared-response-v1/17/0/0": {
+      "hash": "e9cdc8264cc09b293c3e98760b6122f8f98133de822c6448aca26761c5dd521b"
+    },
+    "shared-response-v1/229/3/5": {
+      "hash": "643d57e46c78d04c73f88a88c27b91aab85d37fc23491adc361d73779542b5f1"
+    },
+    "coupled-network-v1/17/0/0": {
+      "hash": "922baab7584059072ae7831f65305cfbd91b10ef2196e8f28d1f67583303fe6b"
+    },
+    "coupled-network-v1/229/3/5": {
+      "hash": "adb7cb0938eabb3a505f8c62224812903224b18b5bac989684477b40f2e14dc6"
+    },
+    "resonant-network-v1/17/0/0": {
+      "hash": "c5c1a62fab559afcb61521cde0d551301a6accb51fd099899c3621b950e977de"
+    },
+    "resonant-network-v1/229/3/5": {
+      "hash": "2e7ff5ba5badd2ef04e4a418020fb4032b0736a72902bef935e2f2339813e0ae"
+    },
+    "causal-mechanisms-v1/17/0/0": {
+      "hash": "0d20a94d5ff053830f88db67da6a8c7c964fb3ddc19a9db58b363f646e09c6b9"
+    },
+    "causal-mechanisms-v1/229/3/5": {
+      "hash": "53965774db21a2e65de058f6c7f51dd273538cd32ee2646268f9792394aabdb4"
+    }
+  }
+}

@@ -1,0 +1,1456 @@
+{
+  "version": "model-revision-preflight-v1",
+  "status": "passed",
+  "cells": [
+    {
+      "id": "01",
+      "family": "model-revision-v1",
+      "seed": 5866,
+      "theory": 0,
+      "discovery": 0,
+      "planning": 0,
+      "resource": 1,
+      "guidance": "principles",
+      "role": "execution-control",
+      "purpose": "Known valid construction; isolates execution.",
+      "prior_behavior_classes": 1,
+      "actual_minimal_machine_states": 8,
+      "minimum_reading_only_certificate": 0,
+      "minimum_supported_actions": 4,
+      "minimum_scope": "Optimistic actual-outcome supported finish, not guaranteed worst-case policy cost. Includes take, reader configuration/read pairs, installation and finish; binary rejected builds cannot lower this minimum.",
+      "certificate_queries": [],
+      "certificate_search_nodes": 1,
+      "reference_worst_case_readings": 0,
+      "single_mode_all_history_closure": [
+        1,
+        1
+      ],
+      "combined_single_mode_all_history_closure": 1,
+      "provisional_matches_archive": true,
+      "provisional_is_globally_valid": null,
+      "provisional_counterexample": null,
+      "counterexample_is_legal_query": false,
+      "classes_after_provisional_counterexample": null,
+      "minimum_additional_reading_certificate_after_counterexample": null,
+      "all_queries_through_length_closure": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "order_sensitive_witness": [
+        [
+          0,
+          0,
+          1
+        ],
+        [
+          0,
+          1,
+          0
+        ]
+      ],
+      "blind_supported_build_exists": true,
+      "blind_guess_probability": null,
+      "blind_guess_note": "No probability is assigned to arbitrary hidden wirings or behavioral classes. One unsupported guess may win; this does not establish evidence support.",
+      "full_grammar_programs": 20736,
+      "full_grammar_behavior_classes": 748,
+      "empirical_difficulty_calibrated": false,
+      "deep_tier_admitted": false,
+      "program": [
+        3,
+        4,
+        8,
+        10
+      ],
+      "topology_key": [
+        [
+          1,
+          0
+        ],
+        [
+          1,
+          2
+        ],
+        [
+          2,
+          3
+        ],
+        [
+          3,
+          1
+        ]
+      ],
+      "fixed_panel_reading_upper": 0,
+      "checks": {
+        "certificate_replays_at_exact_minimum": true,
+        "supported_live_win": true,
+        "replay": true,
+        "common_budget": true,
+        "declared_bound": true
+      },
+      "reference_actual_actions": 4,
+      "reference_action_upper": 4,
+      "seconds": 0.03347115100041265
+    },
+    {
+      "id": "02",
+      "family": "model-revision-v1",
+      "seed": 5866,
+      "theory": 3,
+      "discovery": 5,
+      "planning": 0,
+      "resource": 1,
+      "guidance": "principles",
+      "role": "principles",
+      "purpose": "Derive the first network from primitive laws and trusted archive.",
+      "prior_behavior_classes": 69,
+      "actual_minimal_machine_states": 8,
+      "minimum_reading_only_certificate": 4,
+      "minimum_supported_actions": 12,
+      "minimum_scope": "Optimistic actual-outcome supported finish, not guaranteed worst-case policy cost. Includes take, reader configuration/read pairs, installation and finish; binary rejected builds cannot lower this minimum.",
+      "certificate_queries": [
+        [
+          1,
+          1,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          1,
+          1,
+          0
+        ],
+        [
+          0,
+          1,
+          0
+        ],
+        [
+          1,
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "certificate_search_nodes": 24,
+      "reference_worst_case_readings": 6,
+      "single_mode_all_history_closure": [
+        39,
+        69
+      ],
+      "combined_single_mode_all_history_closure": 39,
+      "provisional_matches_archive": true,
+      "provisional_is_globally_valid": null,
+      "provisional_counterexample": null,
+      "counterexample_is_legal_query": false,
+      "classes_after_provisional_counterexample": null,
+      "minimum_additional_reading_certificate_after_counterexample": null,
+      "all_queries_through_length_closure": [
+        69,
+        18,
+        3,
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "order_sensitive_witness": [
+        [
+          0,
+          0,
+          1
+        ],
+        [
+          0,
+          1,
+          0
+        ]
+      ],
+      "blind_supported_build_exists": false,
+      "blind_guess_probability": null,
+      "blind_guess_note": "No probability is assigned to arbitrary hidden wirings or behavioral classes. One unsupported guess may win; this does not establish evidence support.",
+      "full_grammar_programs": 20736,
+      "full_grammar_behavior_classes": 748,
+      "empirical_difficulty_calibrated": false,
+      "deep_tier_admitted": false,
+      "program": [
+        3,
+        4,
+        8,
+        10
+      ],
+      "topology_key": [
+        [
+          1,
+          0
+        ],
+        [
+          1,
+          2
+        ],
+        [
+          2,
+          3
+        ],
+        [
+          3,
+          1
+        ]
+      ],
+      "fixed_panel_reading_upper": 14,
+      "independent_reading_lower_bound": {
+        "passed": true,
+        "distinct_outcome_masks": 155,
+        "triples_checked": 608685,
+        "scope": "reading-only; no finish feedback"
+      },
+      "mixed_feedback_witness": {
+        "readings": 3,
+        "failed_finishes": 2,
+        "actions": 16,
+        "queries": [
+          [
+            1,
+            1,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            1,
+            1,
+            0
+          ],
+          [
+            0,
+            1,
+            0
+          ]
+        ],
+        "rejected_builds": [
+          [
+            3,
+            4,
+            7,
+            11
+          ],
+          [
+            3,
+            4,
+            10,
+            8
+          ]
+        ],
+        "scope": "Constructive optimistic supported-win witness; not a minimum or a guaranteed policy."
+      },
+      "checks": {
+        "certificate_replays_at_exact_minimum": true,
+        "no_three_reading_certificate": true,
+        "independent_mode_study_insufficient": true,
+        "ordered_interaction_required": true,
+        "nontrivial_observable_memory": true,
+        "supported_live_win": true,
+        "replay": true,
+        "common_budget": true,
+        "declared_bound": true
+      },
+      "reference_actual_actions": 16,
+      "reference_action_upper": 18,
+      "seconds": 0.2526128589997825
+    },
+    {
+      "id": "03",
+      "family": "model-revision-v1",
+      "seed": 5866,
+      "theory": 3,
+      "discovery": 5,
+      "planning": 0,
+      "resource": 1,
+      "guidance": "provisional",
+      "role": "revision",
+      "purpose": "Same first network and archive, with a provisional explanation to assess.",
+      "prior_behavior_classes": 69,
+      "actual_minimal_machine_states": 8,
+      "minimum_reading_only_certificate": 4,
+      "minimum_supported_actions": 12,
+      "minimum_scope": "Optimistic actual-outcome supported finish, not guaranteed worst-case policy cost. Includes take, reader configuration/read pairs, installation and finish; binary rejected builds cannot lower this minimum.",
+      "certificate_queries": [
+        [
+          1,
+          1,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          1,
+          1,
+          0
+        ],
+        [
+          0,
+          1,
+          0
+        ],
+        [
+          1,
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "certificate_search_nodes": 24,
+      "reference_worst_case_readings": 6,
+      "single_mode_all_history_closure": [
+        39,
+        69
+      ],
+      "combined_single_mode_all_history_closure": 39,
+      "provisional_matches_archive": true,
+      "provisional_is_globally_valid": false,
+      "provisional_counterexample": [
+        0,
+        1,
+        0
+      ],
+      "counterexample_is_legal_query": true,
+      "classes_after_provisional_counterexample": 30,
+      "minimum_additional_reading_certificate_after_counterexample": 3,
+      "all_queries_through_length_closure": [
+        69,
+        18,
+        3,
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "order_sensitive_witness": [
+        [
+          0,
+          0,
+          1
+        ],
+        [
+          0,
+          1,
+          0
+        ]
+      ],
+      "blind_supported_build_exists": false,
+      "blind_guess_probability": null,
+      "blind_guess_note": "No probability is assigned to arbitrary hidden wirings or behavioral classes. One unsupported guess may win; this does not establish evidence support.",
+      "full_grammar_programs": 20736,
+      "full_grammar_behavior_classes": 748,
+      "empirical_difficulty_calibrated": false,
+      "deep_tier_admitted": false,
+      "program": [
+        3,
+        4,
+        8,
+        10
+      ],
+      "topology_key": [
+        [
+          1,
+          0
+        ],
+        [
+          1,
+          2
+        ],
+        [
+          2,
+          3
+        ],
+        [
+          3,
+          1
+        ]
+      ],
+      "fixed_panel_reading_upper": 14,
+      "independent_reading_lower_bound": {
+        "passed": true,
+        "distinct_outcome_masks": 155,
+        "triples_checked": 608685,
+        "scope": "reading-only; no finish feedback"
+      },
+      "mixed_feedback_witness": {
+        "readings": 3,
+        "failed_finishes": 2,
+        "actions": 16,
+        "queries": [
+          [
+            1,
+            1,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            1,
+            1,
+            0
+          ],
+          [
+            0,
+            1,
+            0
+          ]
+        ],
+        "rejected_builds": [
+          [
+            3,
+            4,
+            7,
+            11
+          ],
+          [
+            3,
+            4,
+            10,
+            8
+          ]
+        ],
+        "scope": "Constructive optimistic supported-win witness; not a minimum or a guaranteed policy."
+      },
+      "checks": {
+        "certificate_replays_at_exact_minimum": true,
+        "no_three_reading_certificate": true,
+        "independent_mode_study_insufficient": true,
+        "ordered_interaction_required": true,
+        "nontrivial_observable_memory": true,
+        "genuine_provisional_counterexample": true,
+        "counterexample_does_not_solve_repair": true,
+        "supported_live_win": true,
+        "replay": true,
+        "common_budget": true,
+        "declared_bound": true
+      },
+      "reference_actual_actions": 16,
+      "reference_action_upper": 18,
+      "seconds": 0.11408756499986339
+    },
+    {
+      "id": "04",
+      "family": "model-revision-v1",
+      "seed": 6464,
+      "theory": 3,
+      "discovery": 5,
+      "planning": 0,
+      "resource": 1,
+      "guidance": "principles",
+      "role": "principles",
+      "purpose": "Different network with a repeated shared link; primitives only.",
+      "prior_behavior_classes": 69,
+      "actual_minimal_machine_states": 9,
+      "minimum_reading_only_certificate": 4,
+      "minimum_supported_actions": 12,
+      "minimum_scope": "Optimistic actual-outcome supported finish, not guaranteed worst-case policy cost. Includes take, reader configuration/read pairs, installation and finish; binary rejected builds cannot lower this minimum.",
+      "certificate_queries": [
+        [
+          1,
+          1,
+          0,
+          0
+        ],
+        [
+          1,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          1,
+          1,
+          0,
+          1
+        ],
+        [
+          0,
+          1,
+          0
+        ]
+      ],
+      "certificate_search_nodes": 11,
+      "reference_worst_case_readings": 6,
+      "single_mode_all_history_closure": [
+        39,
+        69
+      ],
+      "combined_single_mode_all_history_closure": 39,
+      "provisional_matches_archive": true,
+      "provisional_is_globally_valid": null,
+      "provisional_counterexample": null,
+      "counterexample_is_legal_query": false,
+      "classes_after_provisional_counterexample": null,
+      "minimum_additional_reading_certificate_after_counterexample": null,
+      "all_queries_through_length_closure": [
+        69,
+        18,
+        3,
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "order_sensitive_witness": [
+        [
+          0,
+          0,
+          1
+        ],
+        [
+          0,
+          1,
+          0
+        ]
+      ],
+      "blind_supported_build_exists": false,
+      "blind_guess_probability": null,
+      "blind_guess_note": "No probability is assigned to arbitrary hidden wirings or behavioral classes. One unsupported guess may win; this does not establish evidence support.",
+      "full_grammar_programs": 20736,
+      "full_grammar_behavior_classes": 748,
+      "empirical_difficulty_calibrated": false,
+      "deep_tier_admitted": false,
+      "program": [
+        3,
+        8,
+        10,
+        8
+      ],
+      "topology_key": [
+        [
+          1,
+          0
+        ],
+        [
+          2,
+          3
+        ],
+        [
+          3,
+          1
+        ],
+        [
+          2,
+          3
+        ]
+      ],
+      "fixed_panel_reading_upper": 14,
+      "independent_reading_lower_bound": {
+        "passed": true,
+        "distinct_outcome_masks": 155,
+        "triples_checked": 608685,
+        "scope": "reading-only; no finish feedback"
+      },
+      "mixed_feedback_witness": {
+        "readings": 3,
+        "failed_finishes": 2,
+        "actions": 16,
+        "queries": [
+          [
+            1,
+            1,
+            0,
+            0
+          ],
+          [
+            1,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            1,
+            1,
+            0,
+            1
+          ]
+        ],
+        "rejected_builds": [
+          [
+            3,
+            7,
+            10,
+            8
+          ],
+          [
+            3,
+            8,
+            7,
+            11
+          ]
+        ],
+        "scope": "Constructive optimistic supported-win witness; not a minimum or a guaranteed policy."
+      },
+      "checks": {
+        "certificate_replays_at_exact_minimum": true,
+        "no_three_reading_certificate": true,
+        "independent_mode_study_insufficient": true,
+        "ordered_interaction_required": true,
+        "nontrivial_observable_memory": true,
+        "supported_live_win": true,
+        "replay": true,
+        "common_budget": true,
+        "declared_bound": true
+      },
+      "reference_actual_actions": 16,
+      "reference_action_upper": 18,
+      "seconds": 0.20753513499948895
+    },
+    {
+      "id": "05",
+      "family": "model-revision-v1",
+      "seed": 6464,
+      "theory": 3,
+      "discovery": 5,
+      "planning": 0,
+      "resource": 1,
+      "guidance": "provisional",
+      "role": "revision",
+      "purpose": "Matched repeated-link network with provisional explanation.",
+      "prior_behavior_classes": 69,
+      "actual_minimal_machine_states": 9,
+      "minimum_reading_only_certificate": 4,
+      "minimum_supported_actions": 12,
+      "minimum_scope": "Optimistic actual-outcome supported finish, not guaranteed worst-case policy cost. Includes take, reader configuration/read pairs, installation and finish; binary rejected builds cannot lower this minimum.",
+      "certificate_queries": [
+        [
+          1,
+          1,
+          0,
+          0
+        ],
+        [
+          1,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          1,
+          1,
+          0,
+          1
+        ],
+        [
+          0,
+          1,
+          0
+        ]
+      ],
+      "certificate_search_nodes": 11,
+      "reference_worst_case_readings": 6,
+      "single_mode_all_history_closure": [
+        39,
+        69
+      ],
+      "combined_single_mode_all_history_closure": 39,
+      "provisional_matches_archive": true,
+      "provisional_is_globally_valid": false,
+      "provisional_counterexample": [
+        0,
+        1,
+        0
+      ],
+      "counterexample_is_legal_query": true,
+      "classes_after_provisional_counterexample": 30,
+      "minimum_additional_reading_certificate_after_counterexample": 3,
+      "all_queries_through_length_closure": [
+        69,
+        18,
+        3,
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "order_sensitive_witness": [
+        [
+          0,
+          0,
+          1
+        ],
+        [
+          0,
+          1,
+          0
+        ]
+      ],
+      "blind_supported_build_exists": false,
+      "blind_guess_probability": null,
+      "blind_guess_note": "No probability is assigned to arbitrary hidden wirings or behavioral classes. One unsupported guess may win; this does not establish evidence support.",
+      "full_grammar_programs": 20736,
+      "full_grammar_behavior_classes": 748,
+      "empirical_difficulty_calibrated": false,
+      "deep_tier_admitted": false,
+      "program": [
+        3,
+        8,
+        10,
+        8
+      ],
+      "topology_key": [
+        [
+          1,
+          0
+        ],
+        [
+          2,
+          3
+        ],
+        [
+          3,
+          1
+        ],
+        [
+          2,
+          3
+        ]
+      ],
+      "fixed_panel_reading_upper": 14,
+      "independent_reading_lower_bound": {
+        "passed": true,
+        "distinct_outcome_masks": 155,
+        "triples_checked": 608685,
+        "scope": "reading-only; no finish feedback"
+      },
+      "mixed_feedback_witness": {
+        "readings": 3,
+        "failed_finishes": 2,
+        "actions": 16,
+        "queries": [
+          [
+            1,
+            1,
+            0,
+            0
+          ],
+          [
+            1,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            1,
+            1,
+            0,
+            1
+          ]
+        ],
+        "rejected_builds": [
+          [
+            3,
+            7,
+            10,
+            8
+          ],
+          [
+            3,
+            8,
+            7,
+            11
+          ]
+        ],
+        "scope": "Constructive optimistic supported-win witness; not a minimum or a guaranteed policy."
+      },
+      "checks": {
+        "certificate_replays_at_exact_minimum": true,
+        "no_three_reading_certificate": true,
+        "independent_mode_study_insufficient": true,
+        "ordered_interaction_required": true,
+        "nontrivial_observable_memory": true,
+        "genuine_provisional_counterexample": true,
+        "counterexample_does_not_solve_repair": true,
+        "supported_live_win": true,
+        "replay": true,
+        "common_budget": true,
+        "declared_bound": true
+      },
+      "reference_actual_actions": 16,
+      "reference_action_upper": 18,
+      "seconds": 0.13821397899846488
+    },
+    {
+      "id": "06",
+      "family": "model-revision-v1",
+      "seed": 5431,
+      "theory": 3,
+      "discovery": 5,
+      "planning": 0,
+      "resource": 1,
+      "guidance": "principles",
+      "role": "principles",
+      "purpose": "Different diverging transfer network; primitives only.",
+      "prior_behavior_classes": 58,
+      "actual_minimal_machine_states": 8,
+      "minimum_reading_only_certificate": 4,
+      "minimum_supported_actions": 12,
+      "minimum_scope": "Optimistic actual-outcome supported finish, not guaranteed worst-case policy cost. Includes take, reader configuration/read pairs, installation and finish; binary rejected builds cannot lower this minimum.",
+      "certificate_queries": [
+        [
+          0,
+          1,
+          1,
+          1,
+          1,
+          0,
+          1
+        ],
+        [
+          0,
+          0,
+          1,
+          0
+        ],
+        [
+          1,
+          1,
+          0,
+          0,
+          1
+        ],
+        [
+          1,
+          1,
+          0
+        ]
+      ],
+      "certificate_search_nodes": 12,
+      "reference_worst_case_readings": 5,
+      "single_mode_all_history_closure": [
+        42,
+        58
+      ],
+      "combined_single_mode_all_history_closure": 42,
+      "provisional_matches_archive": true,
+      "provisional_is_globally_valid": null,
+      "provisional_counterexample": null,
+      "counterexample_is_legal_query": false,
+      "classes_after_provisional_counterexample": null,
+      "minimum_additional_reading_certificate_after_counterexample": null,
+      "all_queries_through_length_closure": [
+        58,
+        15,
+        2,
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "order_sensitive_witness": [
+        [
+          0,
+          1
+        ],
+        [
+          1,
+          0
+        ]
+      ],
+      "blind_supported_build_exists": false,
+      "blind_guess_probability": null,
+      "blind_guess_note": "No probability is assigned to arbitrary hidden wirings or behavioral classes. One unsupported guess may win; this does not establish evidence support.",
+      "full_grammar_programs": 20736,
+      "full_grammar_behavior_classes": 748,
+      "empirical_difficulty_calibrated": false,
+      "deep_tier_admitted": false,
+      "program": [
+        3,
+        1,
+        8,
+        7
+      ],
+      "topology_key": [
+        [
+          1,
+          0
+        ],
+        [
+          0,
+          2
+        ],
+        [
+          2,
+          3
+        ],
+        [
+          2,
+          1
+        ]
+      ],
+      "fixed_panel_reading_upper": 12,
+      "independent_reading_lower_bound": {
+        "passed": true,
+        "distinct_outcome_masks": 153,
+        "triples_checked": 585276,
+        "scope": "reading-only; no finish feedback"
+      },
+      "mixed_feedback_witness": {
+        "readings": 3,
+        "failed_finishes": 1,
+        "actions": 13,
+        "queries": [
+          [
+            0,
+            1,
+            1,
+            1,
+            1,
+            0,
+            1
+          ],
+          [
+            0,
+            0,
+            1,
+            0
+          ],
+          [
+            1,
+            1,
+            0,
+            0,
+            1
+          ]
+        ],
+        "rejected_builds": [
+          [
+            3,
+            1,
+            4,
+            7
+          ]
+        ],
+        "scope": "Constructive optimistic supported-win witness; not a minimum or a guaranteed policy."
+      },
+      "checks": {
+        "certificate_replays_at_exact_minimum": true,
+        "no_three_reading_certificate": true,
+        "independent_mode_study_insufficient": true,
+        "ordered_interaction_required": true,
+        "nontrivial_observable_memory": true,
+        "supported_live_win": true,
+        "replay": true,
+        "common_budget": true,
+        "declared_bound": true
+      },
+      "reference_actual_actions": 14,
+      "reference_action_upper": 18,
+      "seconds": 0.1505706799998734
+    },
+    {
+      "id": "07",
+      "family": "model-revision-v1",
+      "seed": 5431,
+      "theory": 3,
+      "discovery": 5,
+      "planning": 0,
+      "resource": 1,
+      "guidance": "provisional",
+      "role": "revision",
+      "purpose": "Matched diverging network with provisional explanation.",
+      "prior_behavior_classes": 58,
+      "actual_minimal_machine_states": 8,
+      "minimum_reading_only_certificate": 4,
+      "minimum_supported_actions": 12,
+      "minimum_scope": "Optimistic actual-outcome supported finish, not guaranteed worst-case policy cost. Includes take, reader configuration/read pairs, installation and finish; binary rejected builds cannot lower this minimum.",
+      "certificate_queries": [
+        [
+          0,
+          1,
+          1,
+          1,
+          1,
+          0,
+          1
+        ],
+        [
+          0,
+          0,
+          1,
+          0
+        ],
+        [
+          1,
+          1,
+          0,
+          0,
+          1
+        ],
+        [
+          1,
+          1,
+          0
+        ]
+      ],
+      "certificate_search_nodes": 12,
+      "reference_worst_case_readings": 5,
+      "single_mode_all_history_closure": [
+        42,
+        58
+      ],
+      "combined_single_mode_all_history_closure": 42,
+      "provisional_matches_archive": true,
+      "provisional_is_globally_valid": false,
+      "provisional_counterexample": [
+        0,
+        0
+      ],
+      "counterexample_is_legal_query": true,
+      "classes_after_provisional_counterexample": 42,
+      "minimum_additional_reading_certificate_after_counterexample": 4,
+      "all_queries_through_length_closure": [
+        58,
+        15,
+        2,
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "order_sensitive_witness": [
+        [
+          0,
+          1
+        ],
+        [
+          1,
+          0
+        ]
+      ],
+      "blind_supported_build_exists": false,
+      "blind_guess_probability": null,
+      "blind_guess_note": "No probability is assigned to arbitrary hidden wirings or behavioral classes. One unsupported guess may win; this does not establish evidence support.",
+      "full_grammar_programs": 20736,
+      "full_grammar_behavior_classes": 748,
+      "empirical_difficulty_calibrated": false,
+      "deep_tier_admitted": false,
+      "program": [
+        3,
+        1,
+        8,
+        7
+      ],
+      "topology_key": [
+        [
+          1,
+          0
+        ],
+        [
+          0,
+          2
+        ],
+        [
+          2,
+          3
+        ],
+        [
+          2,
+          1
+        ]
+      ],
+      "fixed_panel_reading_upper": 12,
+      "independent_reading_lower_bound": {
+        "passed": true,
+        "distinct_outcome_masks": 153,
+        "triples_checked": 585276,
+        "scope": "reading-only; no finish feedback"
+      },
+      "mixed_feedback_witness": {
+        "readings": 3,
+        "failed_finishes": 1,
+        "actions": 13,
+        "queries": [
+          [
+            0,
+            1,
+            1,
+            1,
+            1,
+            0,
+            1
+          ],
+          [
+            0,
+            0,
+            1,
+            0
+          ],
+          [
+            1,
+            1,
+            0,
+            0,
+            1
+          ]
+        ],
+        "rejected_builds": [
+          [
+            3,
+            1,
+            4,
+            7
+          ]
+        ],
+        "scope": "Constructive optimistic supported-win witness; not a minimum or a guaranteed policy."
+      },
+      "checks": {
+        "certificate_replays_at_exact_minimum": true,
+        "no_three_reading_certificate": true,
+        "independent_mode_study_insufficient": true,
+        "ordered_interaction_required": true,
+        "nontrivial_observable_memory": true,
+        "genuine_provisional_counterexample": true,
+        "counterexample_does_not_solve_repair": true,
+        "supported_live_win": true,
+        "replay": true,
+        "common_budget": true,
+        "declared_bound": true
+      },
+      "reference_actual_actions": 14,
+      "reference_action_upper": 18,
+      "seconds": 0.07512528299957921
+    },
+    {
+      "id": "08",
+      "family": "model-revision-v1",
+      "seed": 1101,
+      "theory": 3,
+      "discovery": 5,
+      "planning": 0,
+      "resource": 1,
+      "guidance": "provisional",
+      "role": "structure-contrast",
+      "purpose": "Broader archive ambiguity and a different joint topology.",
+      "prior_behavior_classes": 192,
+      "actual_minimal_machine_states": 6,
+      "minimum_reading_only_certificate": 4,
+      "minimum_supported_actions": 12,
+      "minimum_scope": "Optimistic actual-outcome supported finish, not guaranteed worst-case policy cost. Includes take, reader configuration/read pairs, installation and finish; binary rejected builds cannot lower this minimum.",
+      "certificate_queries": [
+        [
+          1,
+          0
+        ],
+        [
+          0,
+          0,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          0,
+          0
+        ],
+        [
+          1,
+          0,
+          1,
+          0
+        ]
+      ],
+      "certificate_search_nodes": 53,
+      "reference_worst_case_readings": 7,
+      "single_mode_all_history_closure": [
+        126,
+        126
+      ],
+      "combined_single_mode_all_history_closure": 77,
+      "provisional_matches_archive": true,
+      "provisional_is_globally_valid": false,
+      "provisional_counterexample": [
+        0,
+        1
+      ],
+      "counterexample_is_legal_query": true,
+      "classes_after_provisional_counterexample": 111,
+      "minimum_additional_reading_certificate_after_counterexample": 4,
+      "all_queries_through_length_closure": [
+        192,
+        17,
+        2,
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "order_sensitive_witness": [
+        [
+          0,
+          1
+        ],
+        [
+          1,
+          0
+        ]
+      ],
+      "blind_supported_build_exists": false,
+      "blind_guess_probability": null,
+      "blind_guess_note": "No probability is assigned to arbitrary hidden wirings or behavioral classes. One unsupported guess may win; this does not establish evidence support.",
+      "full_grammar_programs": 20736,
+      "full_grammar_behavior_classes": 748,
+      "empirical_difficulty_calibrated": false,
+      "deep_tier_admitted": false,
+      "program": [
+        0,
+        7,
+        7,
+        9
+      ],
+      "topology_key": [
+        [
+          0,
+          1
+        ],
+        [
+          2,
+          1
+        ],
+        [
+          2,
+          1
+        ],
+        [
+          3,
+          0
+        ]
+      ],
+      "fixed_panel_reading_upper": 16,
+      "independent_reading_lower_bound": {
+        "passed": true,
+        "distinct_outcome_masks": 355,
+        "triples_checked": 7393585,
+        "scope": "reading-only; no finish feedback"
+      },
+      "mixed_feedback_witness": {
+        "readings": 3,
+        "failed_finishes": 1,
+        "actions": 13,
+        "queries": [
+          [
+            1,
+            0
+          ],
+          [
+            0,
+            0,
+            1,
+            1
+          ],
+          [
+            1,
+            1,
+            0,
+            0
+          ]
+        ],
+        "rejected_builds": [
+          [
+            0,
+            7,
+            4,
+            9
+          ]
+        ],
+        "scope": "Constructive optimistic supported-win witness; not a minimum or a guaranteed policy."
+      },
+      "checks": {
+        "certificate_replays_at_exact_minimum": true,
+        "no_three_reading_certificate": true,
+        "independent_mode_study_insufficient": true,
+        "ordered_interaction_required": true,
+        "nontrivial_observable_memory": true,
+        "genuine_provisional_counterexample": true,
+        "counterexample_does_not_solve_repair": true,
+        "supported_live_win": true,
+        "replay": true,
+        "common_budget": true,
+        "declared_bound": true
+      },
+      "reference_actual_actions": 18,
+      "reference_action_upper": 18,
+      "seconds": 1.6819777869986865
+    },
+    {
+      "id": "09",
+      "family": "model-revision-v1",
+      "seed": 468,
+      "theory": 3,
+      "discovery": 5,
+      "planning": 0,
+      "resource": 1,
+      "guidance": "provisional",
+      "role": "shortcut-control",
+      "purpose": "One-reading supporting certificate: shallow negative control.",
+      "prior_behavior_classes": 58,
+      "actual_minimal_machine_states": 2,
+      "minimum_reading_only_certificate": 1,
+      "minimum_supported_actions": 6,
+      "minimum_scope": "Optimistic actual-outcome supported finish, not guaranteed worst-case policy cost. Includes take, reader configuration/read pairs, installation and finish; binary rejected builds cannot lower this minimum.",
+      "certificate_queries": [
+        [
+          0,
+          0,
+          1
+        ]
+      ],
+      "certificate_search_nodes": 2,
+      "reference_worst_case_readings": 5,
+      "single_mode_all_history_closure": [
+        16,
+        58
+      ],
+      "combined_single_mode_all_history_closure": 16,
+      "provisional_matches_archive": true,
+      "provisional_is_globally_valid": true,
+      "provisional_counterexample": null,
+      "counterexample_is_legal_query": false,
+      "classes_after_provisional_counterexample": null,
+      "minimum_additional_reading_certificate_after_counterexample": null,
+      "all_queries_through_length_closure": [
+        58,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "order_sensitive_witness": [
+        [
+          0,
+          1
+        ],
+        [
+          1,
+          0
+        ]
+      ],
+      "blind_supported_build_exists": false,
+      "blind_guess_probability": null,
+      "blind_guess_note": "No probability is assigned to arbitrary hidden wirings or behavioral classes. One unsupported guess may win; this does not establish evidence support.",
+      "full_grammar_programs": 20736,
+      "full_grammar_behavior_classes": 748,
+      "empirical_difficulty_calibrated": false,
+      "deep_tier_admitted": false,
+      "program": [
+        0,
+        3,
+        3,
+        0
+      ],
+      "topology_key": [
+        [
+          0,
+          1
+        ],
+        [
+          1,
+          0
+        ],
+        [
+          1,
+          0
+        ],
+        [
+          0,
+          1
+        ]
+      ],
+      "fixed_panel_reading_upper": 12,
+      "checks": {
+        "certificate_replays_at_exact_minimum": true,
+        "negative_control_detected": true,
+        "supported_live_win": true,
+        "replay": true,
+        "common_budget": true,
+        "declared_bound": true
+      },
+      "reference_actual_actions": 12,
+      "reference_action_upper": 18,
+      "seconds": 0.06850257000041893
+    },
+    {
+      "id": "10",
+      "family": "stateful-discovery-v1",
+      "seed": 229,
+      "theory": 3,
+      "discovery": 5,
+      "planning": 0,
+      "resource": 1,
+      "guidance": null,
+      "role": "previous-baseline",
+      "purpose": "Previous stateful family baseline at the same P0/R1 budget.",
+      "checks": {
+        "supported_live_win": true,
+        "replay": true,
+        "common_budget": true,
+        "declared_bound": true
+      },
+      "reference_actual_actions": 24,
+      "reference_action_upper": 40,
+      "seconds": 0.9526538949994574
+    }
+  ],
+  "matrix_sha256": "e869a29e75f4753deba884dc02557764d174715d9b84318da699dfbe9741c76c",
+  "selection_scope": "Operator-selected challenge/control set, not a population estimate. Keep seeds, qualification and private source out of evaluated contexts.",
+  "empirical_difficulty_calibrated": false,
+  "source_sha256": "4f02a9b707e220f539050897f8df88da2a126768c68d92a598231a9e0506f321",
+  "independent_proof": {
+    "passed": true,
+    "programs": 20736,
+    "states": 56,
+    "behavior_classes": 748,
+    "independent_transitions": 2322432,
+    "independent_all_history_equivalence_checks": 20736,
+    "independent_reading_checks": 381480,
+    "laboratory_horizon_identifies_all_history_classes": true,
+    "seconds": 4.454261326000051
+  },
+  "all_archive_policy_bounds": {
+    "(0, 0)": 7,
+    "(0, 1)": 6,
+    "(0, 2)": 6,
+    "(1, 0)": 6,
+    "(1, 1)": 6,
+    "(1, 2)": 5,
+    "(2, 0)": 6,
+    "(2, 1)": 5,
+    "(2, 2)": 4
+  },
+  "seconds": 8.495208299998922,
+  "qualification_scope": "Exact all-history behavior, four-reading actual-outcome certificates, all-unary-history ambiguity, paired guidance and distinct topology. No universal mental non-decomposition or model-failure claim."
+}

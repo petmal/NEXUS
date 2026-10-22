@@ -33,7 +33,13 @@ def validate_episode(episode):
         episode.construction_seed
     ):
         raise ValueError("discovery truth contradicts seed")
-    if spec != laws.specification(world, spec.theory, spec.discovery):
+    options_factory = getattr(laws, "generation_options", None)
+    rebuilt = (
+        laws.specification(world, spec.theory, spec.discovery, options_factory(spec))
+        if options_factory is not None
+        else laws.specification(world, spec.theory, spec.discovery)
+    )
+    if spec != rebuilt:
         raise ValueError("discovery disclosure contradicts truth")
     meta = metadata(
         family,
@@ -265,12 +271,15 @@ def log_terminal_trace(state, trace, posterior):
             first_reading_ordinal = observations
             first_source = "reader" if observed else "finish_feedback"
     logging.getLogger("nexus.diagnostics").info(
-        "discovery_operations readings=%s repeated_queries=%s first_supported_build_turn=%s committed_builds=%s replacements=%s remaining_mechanism_programs=%s remaining_mission_classes=%s common_builds=%s audit_seconds=%.6f",
+        "discovery_operations readings=%s repeated_queries=%s first_supported_build_turn=%s committed_builds=%s replacements=%s %s=%s remaining_mission_classes=%s common_builds=%s audit_seconds=%.6f",
         observations,
         repeated,
         first,
         constructs,
         repairs,
+        ADAPTERS[state.artifacts["carrier"].ontology].prior_count_key.replace(
+            "prior_", "remaining_", 1
+        ),
         *posterior.counts(),
         len(posterior.common_decisions()),
         perf_counter() - start,

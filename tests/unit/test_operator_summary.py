@@ -1,0 +1,100 @@
+"""Long histories retain a compact outcome without changing public schemas."""
+
+import json
+import logging
+
+from nexus.generator import generate_episode
+from nexus.models.actions import ConfigureAction, ProbeAction, TakeAction
+from nexus.ontology.discovery.policy import public_policy
+from nexus.protocol.operator_diagnostics import OperatorDiagnostics
+from nexus.protocol.operator_summary import SUMMARY_LIMIT_BYTES, compact_summary
+from nexus.protocol.session import Session
+
+
+def test_long_report_keeps_complete_summary_in_8192_byte_tail(caplog):
+    episode = generate_episode(
+        95,
+        axis_version=2,
+        science_family="coupled-memory-v1",
+        theory_level=0,
+        discovery_level=0,
+        planning_level=0,
+        resource_pressure=0,
+        verifier_secret="summary-secret",
+    )
+    session = Session(episode)
+    diagnostics = OperatorDiagnostics(session)
+    caplog.set_level(logging.INFO, logger="nexus.operator")
+    diagnostics.start()
+    for action in (
+        TakeAction(artifact="carrier"),
+        ConfigureAction(machine="reader", settings=(1,)),
+        *(ProbeAction(machine="reader", artifact="carrier") for _ in range(100)),
+    ):
+        assert session.act(expected_turn=session.status().turn, action=action).ok
+        diagnostics.checkpoint()
+    assert not any("operator summary:" in r.getMessage() for r in caplog.records)
+    result = public_policy(session, episode.public.evidence_files)
+    assert result.victory_code
+    diagnostics.checkpoint()
+    messages = [r.getMessage() for r in caplog.records]
+    formatter = logging.Formatter("%(asctime)s %(levelname)s %(name)s: %(message)s")
+    tail = (
+        "\n".join(formatter.format(r) for r in caplog.records)
+        .encode()[-8192:]
+        .decode(errors="replace")
+    )
+    prefix = "NEXUS operator summary: "
+    encoded = tail.split(prefix)[-1]
+    summary = json.loads(encoded)
+    assert len(encoded.encode()) <= SUMMARY_LIMIT_BYTES
+    assert summary["status"] == "won"
+    assert summary["escape_classification"] == "supported_win"
+    assert summary["measurement_accounting"]["noninformative_preview_readings"] == 100
+    assert summary["receipt_validation"] == "not_observed_by_service"
+    assert "summary-secret" not in tail and result.victory_code not in tail
+    assert messages[-1].startswith(prefix)
+    assert len(next(m for m in messages if '"kind":"report"' in m)) > 8192
+
+
+def test_known_law_commits_are_not_called_wasted_actions():
+    from nexus.ontology.stateful.policy import public_policy as stateful_policy
+
+    episode = generate_episode(
+        229,
+        axis_version=2,
+        science_family="stateful-discovery-v1",
+        theory_level=0,
+        discovery_level=0,
+        planning_level=0,
+        resource_pressure=1,
+    )
+    session = Session(episode)
+    assert stateful_policy(session, episode.public.evidence_files).victory_code
+    summary = compact_summary(session.operator_snapshot(), session.trace_snapshot())
+    counts = summary["measurement_accounting"]
+    assert counts["committed_readings"] > 0
+    assert counts["noninformative_committed_readings"] == counts["committed_readings"]
+    assert counts["preview_readings"] == 0
+    assert summary["noninformative_measurements"] == counts["committed_readings"]
+
+
+def test_trace_suffix_is_an_independent_snapshot():
+    episode = generate_episode(17)
+    session = Session(episode)
+    assert session.trace_snapshot(start=10) == ()
+    import pytest
+
+    with pytest.raises(ValueError, match="nonnegative"):
+        session.trace_snapshot(start=-1)
+
+
+def test_legacy_summary_counts_committed_actions_from_trace():
+    from nexus.models.actions import WaitAction
+
+    session = Session(generate_episode(17))
+    assert session.act(expected_turn=0, action=WaitAction()).ok
+    session.finalize_attempt()
+    summary = compact_summary(session.operator_snapshot(), session.trace_snapshot())
+    assert summary["action_counts"]["wait"] == 1
+    assert summary["turn"] == 1

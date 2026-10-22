@@ -12,12 +12,14 @@ from nexus.ontology.discovery.domains import ADAPTERS, module
 from nexus.ontology.discovery.schema import Specimen
 
 BUDGET = 64
-REFERENCE_UPPER = 16  # proved public policies: <=6 readings, plus four construction actions
 DESCRIPTIONS = {
     "coupled-memory-v1": "Reconstruct the transfer lattice's predictive cartridge to reopen the sealed facility.",
     "representation-discovery-v1": "Restore a predictive memory cartridge to open the sealed facility.",
     "uncertainty-construction-v1": "Build a disturbance-tolerant exit compensator in the sealed facility.",
 }
+DESCRIPTIONS.update(
+    {family: adapter.description for family, adapter in ADAPTERS.items() if adapter.description}
+)
 
 
 def initial_state(family, budget):
@@ -64,10 +66,12 @@ def metadata(family, spec, resource, profile):
         "status": "experimental-discovery-pilot",
         "deep_tier_admitted": False,
         "empirical_difficulty_calibrated": False,
-        "prior_mechanism_programs": prior,
+        ADAPTERS[family].prior_count_key: prior,
         "schedule_multiplicity": ADAPTERS[family].schedule_multiplicity,
         "action_budget": None if resource == 0 else BUDGET,
-        "reference_action_upper": 4 if spec.theory == 0 else REFERENCE_UPPER,
+        "reference_action_upper": 4
+        if spec.theory == 0
+        else ADAPTERS[family].reference_action_upper,
         "budget_profile": profile,
         "qualification_scope": "Exact behavior and complete-build acceptance; offline shortcut/source/matrix preflight required. No cognitive-depth or model-failure claim.",
     }
@@ -98,6 +102,7 @@ def generate(
     resource_pressure=1,
     verifier_secret=None,
     budget_profile="standard",
+    options=None,
 ):
     start = perf_counter()
     if (
@@ -112,7 +117,11 @@ def generate(
         raise ValueError("verifier secret must not be empty")
     laws = module(family, "laws")
     world = laws.selection(seed)
-    spec = laws.specification(world, theory_level, discovery_level)
+    spec = (
+        laws.specification(world, theory_level, discovery_level, options)
+        if options is not None
+        else laws.specification(world, theory_level, discovery_level)
+    )
     meta = metadata(family, spec, resource_pressure, budget_profile)
     episode = PrivateEpisode(
         public=PublicEpisode(

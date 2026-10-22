@@ -1,46 +1,10 @@
-"""Trusted schema registration isolated from runtime imports to avoid model cycles."""
+"""Lazy role validation through the single trusted ontology registration."""
 
-from types import MappingProxyType
-from nexus.ontology.stateful.schema import SCHEMAS as STATEFUL
-from nexus.ontology.coupled_memory.schema import SCHEMAS as COUPLED_MEMORY
-
-from nexus.ontology.representation.schema import SCHEMAS as REPRESENTATION
-from nexus.ontology.uncertainty.schema import SCHEMAS as UNCERTAINTY
-
-from nexus.ontology.assembly.schema import SCHEMAS as ASSEMBLY
-
-from nexus.ontology.staged.schema import SCHEMAS as STAGED
-
-from nexus.ontology.history.schema import SCHEMAS as HISTORY
-
-from nexus.ontology.compositional.schema import SCHEMAS as COMPOSITIONAL
-from nexus.ontology.categorical.schema import SCHEMAS as CATEGORICAL
-from nexus.ontology.causal.schema import SCHEMAS as CAUSAL
-from nexus.ontology.dynamics.schema import SCHEMAS as DYNAMICS
-from nexus.ontology.repair.schema import SCHEMAS as REPAIR
-from nexus.ontology.transfer.schema import SCHEMAS as TRANSFER
-
-_SCHEMAS = MappingProxyType(
-    {
-        "stateful-discovery-v1": MappingProxyType(dict(STATEFUL)),
-        "coupled-memory-v1": MappingProxyType(dict(COUPLED_MEMORY)),
-        "representation-discovery-v1": MappingProxyType(dict(REPRESENTATION)),
-        "uncertainty-construction-v1": MappingProxyType(dict(UNCERTAINTY)),
-        "joint-assembly-v1": MappingProxyType(dict(ASSEMBLY)),
-        "staged-repair-v1": MappingProxyType(dict(STAGED)),
-        "history-coupled-v1": MappingProxyType(dict(HISTORY)),
-        "coupled-transfer-v1": MappingProxyType(dict(TRANSFER)),
-        "coupled-evidence-v1": MappingProxyType(dict(TRANSFER)),
-        "compositional-repair-v1": MappingProxyType(dict(COMPOSITIONAL)),
-        "categorical-chain-poc-v1": MappingProxyType(dict(CATEGORICAL)),
-        "causal-mechanisms-v1": MappingProxyType(dict(CAUSAL)),
-        "coupled-repair-v1": MappingProxyType(dict(REPAIR)),
-        "coupled-dynamics-v1": MappingProxyType(dict(DYNAMICS)),
-    }
-)
+from nexus.ontology.catalog import BUILTINS
 
 
 def schema_for(ontology: str, role: str):
-    if ontology not in _SCHEMAS or role not in _SCHEMAS[ontology]:
+    definition = BUILTINS.get(ontology)
+    if definition is None or role not in definition.schemas:
         raise ValueError(f"unsupported ontology payload: {ontology}/{role}")
-    return _SCHEMAS[ontology][role]
+    return definition.schemas[role]

@@ -1,0 +1,130 @@
+{
+  "version": "model-revision-pilot-v1",
+  "external_python": false,
+  "fresh_context_per_execution": true,
+  "common_action_budget": 64,
+  "recommended_tool_call_limit": 120,
+  "max_turns": 160,
+  "runs": [
+    {
+      "id": "01",
+      "family": "model-revision-v1",
+      "seed": 5866,
+      "theory": 0,
+      "discovery": 0,
+      "planning": 0,
+      "resource": 1,
+      "guidance": "principles",
+      "role": "execution-control",
+      "purpose": "Known valid construction; isolates execution."
+    },
+    {
+      "id": "02",
+      "family": "model-revision-v1",
+      "seed": 5866,
+      "theory": 3,
+      "discovery": 5,
+      "planning": 0,
+      "resource": 1,
+      "guidance": "principles",
+      "role": "principles",
+      "purpose": "Derive the first network from primitive laws and trusted archive."
+    },
+    {
+      "id": "03",
+      "family": "model-revision-v1",
+      "seed": 5866,
+      "theory": 3,
+      "discovery": 5,
+      "planning": 0,
+      "resource": 1,
+      "guidance": "provisional",
+      "role": "revision",
+      "purpose": "Same first network and archive, with a provisional explanation to assess."
+    },
+    {
+      "id": "04",
+      "family": "model-revision-v1",
+      "seed": 6464,
+      "theory": 3,
+      "discovery": 5,
+      "planning": 0,
+      "resource": 1,
+      "guidance": "principles",
+      "role": "principles",
+      "purpose": "Different network with a repeated shared link; primitives only."
+    },
+    {
+      "id": "05",
+      "family": "model-revision-v1",
+      "seed": 6464,
+      "theory": 3,
+      "discovery": 5,
+      "planning": 0,
+      "resource": 1,
+      "guidance": "provisional",
+      "role": "revision",
+      "purpose": "Matched repeated-link network with provisional explanation."
+    },
+    {
+      "id": "06",
+      "family": "model-revision-v1",
+      "seed": 5431,
+      "theory": 3,
+      "discovery": 5,
+      "planning": 0,
+      "resource": 1,
+      "guidance": "principles",
+      "role": "principles",
+      "purpose": "Different diverging transfer network; primitives only."
+    },
+    {
+      "id": "07",
+      "family": "model-revision-v1",
+      "seed": 5431,
+      "theory": 3,
+      "discovery": 5,
+      "planning": 0,
+      "resource": 1,
+      "guidance": "provisional",
+      "role": "revision",
+      "purpose": "Matched diverging network with provisional explanation."
+    },
+    {
+      "id": "08",
+      "family": "model-revision-v1",
+      "seed": 1101,
+      "theory": 3,
+      "discovery": 5,
+      "planning": 0,
+      "resource": 1,
+      "guidance": "provisional",
+      "role": "structure-contrast",
+      "purpose": "Broader archive ambiguity and a different joint topology."
+    },
+    {
+      "id": "09",
+      "family": "model-revision-v1",
+      "seed": 468,
+      "theory": 3,
+      "discovery": 5,
+      "planning": 0,
+      "resource": 1,
+      "guidance": "provisional",
+      "role": "shortcut-control",
+      "purpose": "One-reading supporting certificate: shallow negative control."
+    },
+    {
+      "id": "10",
+      "family": "stateful-discovery-v1",
+      "seed": 229,
+      "theory": 3,
+      "discovery": 5,
+      "planning": 0,
+      "resource": 1,
+      "guidance": null,
+      "role": "previous-baseline",
+      "purpose": "Previous stateful family baseline at the same P0/R1 budget."
+    }
+  ]
+}

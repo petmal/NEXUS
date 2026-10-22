@@ -21,3 +21,4 @@ docs/*
 !docs/discovery-pocs-matrix.json
 !docs/coupled-memory-matrix.json
 !docs/stateful-matrix.json
+!docs/model-revision-matrix.json

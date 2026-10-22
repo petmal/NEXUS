@@ -40,18 +40,49 @@ digest change requires checking existing immutable proof binding workflows.
 
 ## Current checkpoint
 
-- Base `bf86ce8c`; no old family removed or default changed.
-- Candidate proof complete: 20,736 wirings, 748 exact behaviors, independent
-  all-history equivalence/conservation and complete legal-query coverage.
-- Compact summary, lazy collision-checked registry, schema-owned options and
-  `model-revision-v1` implemented. Targeted semantic tests pass.
-- Ten-cell paired matrix preflight passed; YAML and image/CI wiring added.
-- Author guide and executable example added. Independent implementation review
-  and full regression/release gates in progress; no remote publication yet.
-- No paid model executions or public MindTrial changes.
-- Resume: run focused revision tests, inspect independent review in
-  `../revision-poc/implementation-review.md`, complete legacy gates and source
-  binding refresh, then commit/publish feature branch and verify CI.
+- Plan commit `54876aab`; implementation based on `bf86ce8c`.
+- Implemented the new family, compact diagnostics, lazy schema catalog, validated
+  options, author documentation, live example, paired matrix and MindTrial YAML.
+- Independent review completed with three findings fixed; see
+  [review](model-revision-review.md). The four-reading figure is explicitly a
+  reading-only certificate; live mixed-feedback shortcuts remain documented.
+- The selected-seed preflight now independently enumerates every 0/1/2/3-reading
+  intersection in addition to the production certificate search. Selected cases
+  check 608,685 / 608,685 / 585,276 / 7,393,585 triples independently.
+- 879 fast tests, nine solver tests, two cross-seed stress tests passed. The final
+  source adds one registry regression and independent lower-bound enforcement;
+  35 focused final-source tests pass. All 51 extended tests passed, including
+  every new behavioral class and exhaustive older-family live/replay checks. No paid executions or public MindTrial changes.
+- All 16 legacy/new preflight/reference gates passed. Final ten-cell admission is
+  retained in `model-revision-preflight.json` and was repeated from an installed
+  wheel, including the exact release binding. CLI generate/qualify/solve/replay,
+  author example, YAML parsing/bindings and changed-module Ruff checks pass.
+- All 32 generated prior-family episodes match `bf86ce8c` exactly after excluding
+  random episode IDs and the expected repair release identity. Prior physics,
+  controls, evidence and seeds are unchanged in these comparisons.
+- Dynamics reference regenerated through its independent checker; unchanged repair
+  proof and witness identities plus 15 construction/conformance/qualification
+  gates were verified before refreshing the full-source release binding.
+- Publication/CI pending. No local Docker/Podman binary is available; actual-image
+  execution is delegated to the existing CI container job. Resume by checking
+  the PR6 feature head, publishing the verified tree with an expected-head
+  lease, then watching both CI jobs. Do not repeat finished proofs
+  unless source changes invalidate them.
+
+## Performance and scope
+
+The prior compiles 20,736 constructions into 748 exact behaviors, with immutable
+transition/observation tables and bitset posteriors reused per process. Cold compile
+was about 0.63–1.01 seconds locally (the latter during concurrent tests); a warm
+lookup was about one microsecond. These are observations, not a cross-machine SLA.
+Generation does not execute the exhaustive proof or certificate search. Operator
+checkpoints copy only the newly committed trace suffix, and the compact terminal
+summary projects the existing snapshot without another inference replay.
+
+Automatic installed-package plugin discovery remains deferred until package code
+can be bound into qualification provenance. The supported human extension path is
+one explicit catalog registration, with family-owned schemas/options and optional
+shared discovery mechanics. No generic simulator or dependency migration was added.
 
 ## Decisions
 
