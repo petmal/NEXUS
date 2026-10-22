@@ -119,3 +119,13 @@ results. Rerun after any source change; a previous report is not proof of a new
 image. The current bounded recursive cell restarts after interruption; no Python
 stack or untrusted pickle is loaded. Do not refresh the legacy repair source
 manifest without its unchanged proof, witness and conformance checks.
+
+## Next-iteration decision gate
+
+The user requested that the follow-up research analysis be retained until the
+current real-model pilot is complete. Read
+[the recorded conclusions](research-reasoning-followup-2026-10-22.md) when reviewing
+those results. The leading candidate is controlled model revision that preserves
+earlier valid predictions and global constraints, with matched controls and
+explicit shortcut qualification. This is a deferred research hypothesis, not an
+instruction to change the running pilot or implement another family now.
