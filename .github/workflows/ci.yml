@@ -19,6 +19,7 @@ on:
       - "docs/coupled-memory-matrix.json"
       - "docs/stateful-matrix.json"
       - "docs/model-revision-matrix.json"
+      - "docs/planning-resource-matrix.json"
   pull_request:
     paths:
       - "**"
@@ -36,6 +37,7 @@ on:
       - "docs/coupled-memory-matrix.json"
       - "docs/stateful-matrix.json"
       - "docs/model-revision-matrix.json"
+      - "docs/planning-resource-matrix.json"
   workflow_dispatch:
     inputs:
       full:
@@ -132,6 +134,9 @@ jobs:
 
       - name: Model revision independent proof and paired matrix
         run: uv run python scripts/preflight_revision.py --output /tmp/revision-preflight.json
+
+      - name: Planning/resource independent costs and matched pilot
+        run: uv run python scripts/preflight_planning.py --output /tmp/planning-resource-preflight.json
 
       - name: Fast tests
         run: |
