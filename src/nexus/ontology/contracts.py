@@ -9,6 +9,15 @@ Optional capabilities (queried structurally): mission_tracker(public) follows
 committed physical state for terminal inference; requires_single_session=True
 rejects reset-capable HTTP serving for bounded-attempt profiles. Neither changes
 the engine action protocol or requires family-name branches.
+
+decision_witness(posterior, attempted, earlier_trace) optionally supplies a typed
+public-evidence witness for private operator reports. It receives no hidden truth
+and must explain compatible/contradicted decisions before finish feedback.
+
+checker_available(spec) and check_construction(spec, observations, build) expose an
+explicit optional public-evidence assistance condition. They receive no private
+episode or selected truth. termination_reason(spec, state, trace) optionally names
+a family-defined terminal policy without altering canonical engine actions.
 """
 
 from __future__ import annotations

@@ -25,6 +25,8 @@ class Specimen(Payload):
 
 class GenerationOptions(Payload):
     guidance: Literal["principles", "provisional"] = "provisional"
+    finish_policy: Literal["recoverable", "single"] = "recoverable"
+    consistency_check: Literal["off", "readings"] = "off"
 
 
 class Truth(Payload):
@@ -39,6 +41,8 @@ class Investigation(Payload):
     guidance: Literal["principles", "provisional"] = "provisional"
     provisional: Program | None = None
     resolved: Program | None = None
+    finish_policy: Literal["recoverable", "single"] = "recoverable"
+    consistency_check: Literal["off", "readings"] = "off"
 
     @model_validator(mode="after")
     def disclosure(self):

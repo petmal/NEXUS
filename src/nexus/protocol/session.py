@@ -77,8 +77,11 @@ class PerformanceSummary(BaseModel):
 
 
 TerminalPerformance = (
-    PerformanceSummary | InvestigationPerformance | AuditedDecisionMissionPerformance
-    | DecisionMissionPerformance | MissionPerformance
+    PerformanceSummary
+    | InvestigationPerformance
+    | AuditedDecisionMissionPerformance
+    | DecisionMissionPerformance
+    | MissionPerformance
 )
 
 
@@ -144,6 +147,7 @@ class Session:
         self._failed_finishes = 0
         self._duplicate_requests = 0
         self._protocol_conflicts = 0
+        self._construction_checks = 0
         self._lock = RLock()
 
     def _public_effect(self):
@@ -188,6 +192,44 @@ class Session:
             lambda: self._act(expected_turn, action),
         )
 
+    def can_check_construction(self) -> bool:
+        spec = self.episode.public.investigation
+        if spec is None:
+            return False
+        from nexus.ontology.catalog import runtime_for
+
+        available = getattr(runtime_for(spec), "checker_available", None)
+        return available is not None and available(spec)
+
+    def check_construction(self, build: tuple[int, ...]):
+        """Optional assistance using public observations, not a mission oracle."""
+        from nexus.ontology.assistance import ConstructionCheckRequest, ConstructionCheckResult
+        from nexus.ontology.catalog import runtime_for
+
+        validated = ConstructionCheckRequest(build=build)
+
+        def check():
+            if not self.can_check_construction():
+                raise ValueError("construction checker is not enabled")
+            if self.state.terminal_status != TerminalStatus.ACTIVE:
+                raise ValueError("construction checker requires an active attempt")
+            spec = self.episode.public.investigation
+            runtime = runtime_for(spec)
+            observations = tuple(
+                observed
+                for record in self.trace
+                if (observed := runtime.measurement(record)) is not None
+            )
+            consistent, count = runtime.check_construction(spec, observations, validated.build)
+            self._construction_checks += 1
+            return ConstructionCheckResult(
+                consistent_with_readings=consistent,
+                distinct_readings_checked=count,
+                evidence_turn=self.state.turn,
+            )
+
+        return self._exchange({"operation": "check", "build": list(validated.build)}, check)
+
     def _observe(self) -> Observation:
         with self._lock:
             return observation(self.episode.public, self.state)
@@ -209,23 +251,34 @@ class Session:
         this does not call finalize_attempt or label an active world as failed.
         """
         with self._lock:
+            from nexus.protocol.operator_witnesses import submission_witnesses
+
             if self.episode.public.investigation is not None:
                 from nexus.protocol.investigation_metrics import summarize
 
                 performance = summarize(
-                    self.episode, self.state, self.trace, invalid=self._invalid_actions,
-                    duplicates=self._duplicate_requests, conflicts=self._protocol_conflicts,
+                    self.episode,
+                    self.state,
+                    self.trace,
+                    invalid=self._invalid_actions,
+                    duplicates=self._duplicate_requests,
+                    conflicts=self._protocol_conflicts,
                     extended=True,
                 )
             else:
                 performance = self._performance_summary()
             status = self._status().model_dump(mode="json")
             status.pop("victory_code")
+            witnesses = submission_witnesses(self.episode.public, self.trace)
             return {
                 "status": status,
                 "performance": None if performance is None else performance.model_dump(mode="json"),
                 "provider_stop_reason": None,
                 "receipt_validation": "not_observed_by_service",
+                "evidence_witnesses": None
+                if witnesses is None
+                else witnesses.model_dump(mode="json"),
+                "assistance": {"construction_check_calls": self._construction_checks},
             }
 
     def _status(self) -> SessionStatus:

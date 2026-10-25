@@ -98,8 +98,12 @@ def _parse_status(
         raise ClientError(f"{description} field 'turn' must be an integer")
     if not isinstance(status, str) or status not in {"active", "won", "failed"}:
         raise ClientError(f"{description} field 'status' is invalid")
-    if actions_remaining is not None and (isinstance(actions_remaining, bool) or not isinstance(actions_remaining, int)):
-        raise ClientError(f"{description} field 'actions_remaining' must be an integer or null (unlimited)")
+    if actions_remaining is not None and (
+        isinstance(actions_remaining, bool) or not isinstance(actions_remaining, int)
+    ):
+        raise ClientError(
+            f"{description} field 'actions_remaining' must be an integer or null (unlimited)"
+        )
     if victory_code is not None and not isinstance(victory_code, str):
         raise ClientError(f"{description} field 'victory_code' must be a string or null")
 
@@ -127,7 +131,9 @@ def _finalize(base_url: str) -> tuple[int, str, int | None, str | None, dict[str
         "service finalization",
     )
     performance = _object(payload["performance"], "service finalization performance")
-    status_payload = {key: payload[key] for key in ("turn", "status", "actions_remaining", "victory_code")}
+    status_payload = {
+        key: payload[key] for key in ("turn", "status", "actions_remaining", "victory_code")
+    }
     turn, status, actions_remaining, victory_code = _parse_status(
         status_payload,
         description="service finalization",
@@ -171,6 +177,17 @@ def request_service_payload(request: object, *, url: str | None = None) -> objec
             timeout=45.0,
         )
 
+    if operation == "check":
+        _exact_keys(payload, {"operation", "build"}, "request")
+        build = payload["build"]
+        if (
+            not isinstance(build, list)
+            or not 1 <= len(build) <= 64
+            or any(type(value) is not int for value in build)
+        ):
+            raise ClientError("request field 'build' must be a list of 1..64 integers")
+        return _json_request(base_url, "POST", "/check", {"build": build})
+
     raise ClientError(f"unsupported request operation: {operation!r}")
 
 
@@ -210,10 +227,14 @@ def receipt_classification(result: dict, performance: dict) -> dict:
     won = performance.get("terminal_status") == "won"
     matched = bool(result["correct"]) if won else None
     return {
-        "version": "receipt-classification-v1", "live_mission_won": won,
+        "version": "receipt-classification-v1",
+        "live_mission_won": won,
         "receipt_match": matched,
-        "classification": "accepted_receipt" if matched else
-        "won_receipt_mismatch" if won else "mission_not_won",
+        "classification": "accepted_receipt"
+        if matched
+        else "won_receipt_mismatch"
+        if won
+        else "mission_not_won",
     }
 
 

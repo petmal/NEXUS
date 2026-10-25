@@ -5,12 +5,12 @@ from collections import Counter
 
 from pydantic import BaseModel, ConfigDict, Field, model_serializer
 
-from nexus.ontology.catalog import runtime_for
-from nexus.ontology.mission import final_acceptance, tracker_for
 from nexus.models.domain import DomainInvestigation
 from nexus.models.episode import PrivateEpisode
 from nexus.models.events import TraceRecord
 from nexus.models.world import WorldState
+from nexus.ontology.catalog import runtime_for
+from nexus.ontology.mission import final_acceptance, tracker_for
 from nexus.protocol.decision_metrics import DecisionAuditTrail, DecisionDiagnostics
 
 SCIENCE_SCHEMA_URL = (
@@ -220,13 +220,19 @@ def summarize(
                 posterior, tracker.attempted(), won=state.terminal_status.value == "won",
                 physical_goal=final_correct, extended=extended,
             )
+        reason = (
+            "victory" if state.terminal_status.value == "won" else
+            "action_budget" if state.resources.actions_remaining == 0 else
+            "active_at_snapshot" if state.terminal_status.value == "active" else "harness_finalization"
+        )
+        reason_factory = getattr(runtime, "termination_reason", None)
+        if reason_factory is not None:
+            reason = reason_factory(spec, state, trace) or reason
         return performance_type(
             **decision_fields,
             ontology=spec.ontology, experimental=spec.data().experimental,
             terminal_status=state.terminal_status.value,
-            termination_reason="victory" if state.terminal_status.value == "won" else
-                "action_budget" if state.resources.actions_remaining == 0 else
-                "active_at_snapshot" if state.terminal_status.value == "active" else "harness_finalization",
+            termination_reason=reason,
             actions_used=state.turn,
             initial_action_budget=episode.public.initial_state.resources.actions_remaining,
             budget_remaining=state.resources.actions_remaining,

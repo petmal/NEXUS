@@ -10,7 +10,9 @@ from nexus.ontology.revision.schema import FAMILY
 def files(spec):
     theory = {
         "family": FAMILY,
-        "specification": spec.model_dump(mode="json"),
+        "specification": spec.model_dump(
+            mode="json", exclude={"finish_policy", "consistency_check"}
+        ),
         "resolved_construction": spec.resolved,
         "mission": "Install a routing cartridge on the actual carrier. Its displayed output must equal the facility reference for EVERY finite word of modes 0 and 1, including the empty word and words longer than the reader permits. Equivalent hidden constructions are accepted. Carry the carrier in workshop and finish successfully.",
         "primitive_laws": {
@@ -45,8 +47,32 @@ def files(spec):
         "provisional_status": "If present, this inherited four-link model explains the archive. It may be incomplete or correct; it is NOT an additional law or constraint on possible worlds. You may revise it or derive a model directly from the primitives and measurements. Preserve trusted archive predictions when revising.",
         "theory_disclosure": "T0 supplies resolved_construction. Experimental T3/D5 hides the composed mechanism. Guidance selects whether a provisional explanation accompanies the same trusted archive; it does not change the world, permitted constructions, reader, budget or success test.",
     }
+    apparatus = APPARATUS
+    if spec.finish_policy == "single":
+        policy = (
+            "The first rejected eligible finish with an installed cartridge on the carried "
+            "carrier immediately ends the attempt, even with actions left. Ineligible "
+            "finishes do not test a cartridge and remain recoverable."
+        )
+        theory["finish_policy"] = {"name": "single", "contract": policy}
+        theory["assembler"]["effect"] = theory["assembler"]["effect"].replace(
+            "Failed eligible finishes are binary and recoverable while actions remain.", policy
+        )
+        apparatus = apparatus.replace(
+            "Failure reveals only a binary rejection and is recoverable while actions\n"
+            "remain; no hidden counterexample or component diagnosis is returned.",
+            policy + " No hidden counterexample or component diagnosis is returned.",
+        )
+    if spec.consistency_check == "readings":
+        theory["consistency_assistance"] = {
+            "request": {"operation": "check", "build": [0, 0, 0, 0]},
+            "contract": "Returns only whether this construction matches the archive and all "
+            "distinct reader outputs observed so far. It does not check unobserved words, "
+            "failed finishes, hidden truth, or guaranteed success. No world action is charged; "
+            "the harness tool-call limit still applies. Available only while active.",
+        }
     return {
         "facility.txt": "The sealed facility's return lattice requires a replacement routing cartridge. Its local transfer elements obey exact primitive laws, but the composed routing is hidden. Derive and test an explanation that remains valid as the lattice changes state. Read theory.json and apparatus.txt.",
         "theory.json": json.dumps(theory, sort_keys=True, separators=(",", ":")),
-        "apparatus.txt": APPARATUS,
+        "apparatus.txt": apparatus,
     }

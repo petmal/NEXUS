@@ -37,6 +37,7 @@ class OperatorDiagnostics:
         )
 
     def start(self):
+        from nexus.engine.canonical import canonical_hash
         from nexus.evaluation.matrix import source_digest
 
         episode = self.session.episode
@@ -53,6 +54,13 @@ class OperatorDiagnostics:
                 "resource_pressure": metadata.resource_pressure,
                 "budget_profile": metadata.budget_profile,
                 "initial_action_budget": metadata.action_budget,
+                "public_investigation_sha256": None
+                if episode.public.investigation is None
+                else canonical_hash(episode.public.investigation),
+                "public_evidence_sha256": canonical_hash(episode.public.evidence_files),
+                "public_investigation": None
+                if episode.public.investigation is None
+                else episode.public.investigation.model_dump(mode="json"),
             },
         )
 

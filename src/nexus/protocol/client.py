@@ -5,6 +5,7 @@ from typing import Annotated, Literal
 from pydantic import BaseModel, ConfigDict, Field, TypeAdapter
 
 from nexus.models.actions import Action
+from nexus.ontology.assistance import ConstructionCheckRequest
 from nexus.protocol.transport import (
     ClientError,
     check_health,
@@ -13,6 +14,18 @@ from nexus.protocol.transport import (
     validate_candidate_payload,
     validate_candidate_payload_with_performance,
 )
+
+__all__ = [
+    "SERVICE_REQUEST_ADAPTER",
+    "ClientError",
+    "ServiceRequest",
+    "ValidationResult",
+    "check_health",
+    "request_service",
+    "service_url",
+    "validate_candidate",
+    "validate_candidate_with_performance",
+]
 
 
 class ObserveRequest(BaseModel):
@@ -42,12 +55,17 @@ class ActionClientRequest(BaseModel):
     action: Action
 
 
+class CheckClientRequest(ConstructionCheckRequest):
+    operation: Literal["check"]
+
+
 ServiceRequest = Annotated[
     ObserveRequest
     | StatusRequest
     | ManifestRequest
     | EvidenceRequest
-    | ActionClientRequest,
+    | ActionClientRequest
+    | CheckClientRequest,
     Field(discriminator="operation"),
 ]
 SERVICE_REQUEST_ADAPTER = TypeAdapter(ServiceRequest)

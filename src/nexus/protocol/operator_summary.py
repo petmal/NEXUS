@@ -38,6 +38,8 @@ def compact_summary(snapshot: dict, trace) -> dict:
     # The canonical trace is complete in either format and excludes rejected and
     # duplicate requests. Keep their counters separate below.
     action_counts = Counter(record.action.type for record in trace)
+    submissions = decision.get("submissions") or ()
+    witnesses = (snapshot.get("evidence_witnesses") or {}).get("submissions", ())
     return {
         "version": "operator-summary-v1",
         "family": str(performance.get("ontology") or "legacy")[:128],
@@ -86,6 +88,15 @@ def compact_summary(snapshot: dict, trace) -> dict:
             "first_submission_supported_by_evidence"
         ),
         "first_guaranteed_repair_turn": decision.get("first_guaranteed_repair_turn"),
+        "submission_classifications": dict(
+            Counter(item["evidence"]["classification"] for item in submissions)
+        ),
+        "witnesses_available": snapshot.get("evidence_witnesses") is not None,
+        "witness_kinds": dict(
+            Counter(item["witness"]["kind"] for item in witnesses if item["witness"] is not None)
+        ),
+        "repeated_build_submissions": sum(item["repeated_build"] for item in witnesses),
+        "assistance": snapshot.get("assistance", {"construction_check_calls": 0}),
         "receipt_validation": "not_observed_by_service",
         "provider_completion": "not_observed_by_service",
     }

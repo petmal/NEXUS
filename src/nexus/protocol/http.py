@@ -1,7 +1,7 @@
 from __future__ import annotations
 
-from threading import Lock
 from contextlib import asynccontextmanager
+from threading import Lock
 from uuid import uuid4
 
 from fastapi import FastAPI, HTTPException
@@ -10,9 +10,10 @@ from pydantic import BaseModel, ConfigDict
 
 from nexus.models.actions import Action
 from nexus.models.episode import PlayerManifest, PrivateEpisode
-from nexus.protocol.session import Session
-from nexus.protocol.public_transcript import PublicTranscript, PublicTranscriptMiddleware
+from nexus.ontology.assistance import ConstructionCheckRequest
 from nexus.presentation import evidence as public_evidence
+from nexus.protocol.public_transcript import PublicTranscript, PublicTranscriptMiddleware
+from nexus.protocol.session import Session
 
 
 class _RecordedApp(FastAPI):
@@ -131,7 +132,9 @@ def create_app(episode: PrivateEpisode) -> FastAPI:
     return app
 
 
-def create_single_session_app(episode: PrivateEpisode, *, extended_diagnostics: bool = False) -> FastAPI:
+def create_single_session_app(
+    episode: PrivateEpisode, *, extended_diagnostics: bool = False
+) -> FastAPI:
     """Create an HTTP application that owns exactly one non-resettable session."""
     session = Session(episode)
     from nexus.protocol.operator_diagnostics import OperatorDiagnostics
@@ -150,6 +153,15 @@ def create_single_session_app(episode: PrivateEpisode, *, extended_diagnostics: 
                 diagnostics.report("shutdown")
 
     app = _RecordedApp(title="NEXUS", version=episode.public.protocol_version, lifespan=lifespan)
+
+    if session.can_check_construction():
+
+        @app.post("/check")
+        def check(request: ConstructionCheckRequest):
+            try:
+                return session.check_construction(request.build).model_dump(mode="json")
+            except ValueError as exc:
+                raise HTTPException(status_code=422, detail=str(exc)) from exc
 
     @app.get("/health")
     def health():

@@ -132,11 +132,17 @@ def specification(world, theory, discovery, options=None):
         guidance=options.guidance,
         provisional=provisional,
         resolved=world.program if theory == 0 else None,
+        finish_policy=options.finish_policy,
+        consistency_check=options.consistency_check,
     )
 
 
 def generation_options(spec):
-    return GenerationOptions(guidance=spec.guidance)
+    return GenerationOptions(
+        guidance=spec.guidance,
+        finish_policy=spec.finish_policy,
+        consistency_check=spec.consistency_check,
+    )
 
 
 def prior_mask(spec):
