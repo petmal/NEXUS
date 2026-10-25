@@ -1,3 +1,3 @@
 """Pinned digest of the offline checked, data-only public reference policy."""
 
-SHA256 = "57585ba573e7a0acda249f93125548af07a85a99b8c895870e965df671b265d7"
+SHA256 = "52ce57f71aa83c208a8a7bb225eb3ebb88b2920d97eb519d3c8ade2dba2a0749"
