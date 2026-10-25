@@ -1,0 +1,169 @@
+{
+  "version": "planning-runner-validation-v1",
+  "date": "2026-10-25",
+  "scope": "Local run-readiness checks; Docker execution is reported by the Planning runner smoke CI workflow.",
+  "status": "passed",
+  "qualified_core_commit": "2431a0ea0ba761387d478de3d9ae1fd0a25feba6",
+  "runtime_source_sha256": "f9307e24620cfd68ce5da3caeacc29ca6d4e179e66dafee912b618c2176c5ef8",
+  "runtime_sources_unchanged": true,
+  "qualified_core_ci": "https://github.com/petmal/NEXUS/actions/runs/40180118970",
+  "focused_tests": {
+    "passed": 60,
+    "seconds": 5.03
+  },
+  "preflight": {
+    "passed": true,
+    "cells": 16,
+    "task_export_identical": true
+  },
+  "lint": "passed: Ruff E4,E7,E9,F for new Python files",
+  "typecheck": "passed: ty for smoke script",
+  "real_service_smoke": {
+    "version": "planning-service-smoke-v1",
+    "status": "passed",
+    "cases": [
+      {
+        "case": "NEXUS planning-resource-01",
+        "actions": 11,
+        "tool_requests": 28,
+        "receipt_accepted": true,
+        "wrong_receipt_rejected": true,
+        "supported_win": true
+      },
+      {
+        "case": "NEXUS planning-resource-02",
+        "actions": 16,
+        "tool_requests": 38,
+        "receipt_accepted": true,
+        "wrong_receipt_rejected": true,
+        "supported_win": true
+      },
+      {
+        "case": "NEXUS planning-resource-03",
+        "actions": 20,
+        "tool_requests": 46,
+        "receipt_accepted": true,
+        "wrong_receipt_rejected": true,
+        "supported_win": true
+      },
+      {
+        "case": "NEXUS planning-resource-04",
+        "actions": 22,
+        "tool_requests": 50,
+        "receipt_accepted": true,
+        "wrong_receipt_rejected": true,
+        "supported_win": true
+      },
+      {
+        "case": "NEXUS planning-resource-05",
+        "actions": 22,
+        "tool_requests": 50,
+        "receipt_accepted": true,
+        "wrong_receipt_rejected": true,
+        "supported_win": true
+      },
+      {
+        "case": "NEXUS planning-resource-06",
+        "actions": 31,
+        "tool_requests": 98,
+        "receipt_accepted": true,
+        "wrong_receipt_rejected": true,
+        "supported_win": true
+      },
+      {
+        "case": "NEXUS planning-resource-07",
+        "actions": 77,
+        "tool_requests": 190,
+        "receipt_accepted": true,
+        "wrong_receipt_rejected": true,
+        "supported_win": true
+      },
+      {
+        "case": "NEXUS planning-resource-08",
+        "actions": 77,
+        "tool_requests": 190,
+        "receipt_accepted": true,
+        "wrong_receipt_rejected": true,
+        "supported_win": true
+      },
+      {
+        "case": "NEXUS planning-resource-09",
+        "actions": 10,
+        "tool_requests": 26,
+        "receipt_accepted": true,
+        "wrong_receipt_rejected": true,
+        "supported_win": true
+      },
+      {
+        "case": "NEXUS planning-resource-10",
+        "actions": 15,
+        "tool_requests": 36,
+        "receipt_accepted": true,
+        "wrong_receipt_rejected": true,
+        "supported_win": true
+      },
+      {
+        "case": "NEXUS planning-resource-11",
+        "actions": 19,
+        "tool_requests": 44,
+        "receipt_accepted": true,
+        "wrong_receipt_rejected": true,
+        "supported_win": true
+      },
+      {
+        "case": "NEXUS planning-resource-12",
+        "actions": 19,
+        "tool_requests": 44,
+        "receipt_accepted": true,
+        "wrong_receipt_rejected": true,
+        "supported_win": true
+      },
+      {
+        "case": "NEXUS planning-resource-13",
+        "actions": 19,
+        "tool_requests": 44,
+        "receipt_accepted": true,
+        "wrong_receipt_rejected": true,
+        "supported_win": true
+      },
+      {
+        "case": "NEXUS planning-resource-14",
+        "actions": 33,
+        "tool_requests": 104,
+        "receipt_accepted": true,
+        "wrong_receipt_rejected": true,
+        "supported_win": true
+      },
+      {
+        "case": "NEXUS planning-resource-15",
+        "actions": 87,
+        "tool_requests": 212,
+        "receipt_accepted": true,
+        "wrong_receipt_rejected": true,
+        "supported_win": true
+      },
+      {
+        "case": "NEXUS planning-resource-16",
+        "actions": 87,
+        "tool_requests": 212,
+        "receipt_accepted": true,
+        "wrong_receipt_rejected": true,
+        "supported_win": true
+      }
+    ],
+    "scope": "Actual NEXUS process, HTTP, stateless CLI and receipt validator; no MindTrial/provider execution",
+    "negative_control": {
+      "case": "NEXUS planning-resource-01",
+      "forged_receipt_rejected": true
+    }
+  },
+  "runner_files": {
+    "nexus-planning-resource-config.yaml": "db957d5ea7010bc1828eedee9fdd9bc7be7448b34829f8374d2d47e16cb6c6b0",
+    "nexus-planning-resource-tasks.yaml": "8acfa58879cd1f6f202914df4925475bd990a3eff7fb09577692ac12b07a5116"
+  },
+  "limits": [
+    "No model/provider calls.",
+    "The smoke driver exercises NEXUS process/HTTP/client/validator boundaries, not MindTrial orchestration.",
+    "No local Docker or Podman; dedicated CI supplies built-image checks."
+  ]
+}

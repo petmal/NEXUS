@@ -1,0 +1,185 @@
+{
+  "config": {
+    "log-file": "./nexus-pr/{{.Year}}-{{.Month}}-{{.Day}}/{{.Hour}}-{{.Minute}}-{{.Second}}.log",
+    "output-dir": "./nexus-pr/{{.Year}}-{{.Month}}-{{.Day}}/",
+    "output-basename": "{{.Hour}}-{{.Minute}}-{{.Second}}",
+    "task-source": "./nexus-planning-resource-tasks.yaml",
+    "providers": [
+      {
+        "name": "openai",
+        "retry-policy": {
+          "max-retry-attempts": 0,
+          "initial-delay-seconds": 30
+        },
+        "client-config": {
+          "api-key": ""
+        },
+        "runs": [
+          {
+            "name": "GPT-6 Astra (medium) - P/R pilot",
+            "disabled": false,
+            "model": "gpt-6-astra",
+            "max-requests-per-minute": 20,
+            "model-parameters": {
+              "reasoning-effort": "medium"
+            }
+          }
+        ]
+      }
+    ],
+    "tools": [
+      {
+        "name": "nexus",
+        "image": "nexus:planning-resource-v1",
+        "description": "Interact with one persistent NEXUS world. The world remains alive across calls within this task; there is no reset. Begin with manifest and observe, then read every listed evidence file, including the complete map in layout.json. The manifest and evidence define the exact goal, laws, observations and action costs.\n\nRequests: manifest, observe and status need only operation. evidence also needs filename from the manifest. action also needs an action object. Public reads do not spend world actions, but every tool invocation counts toward the harness call limit.\n\nAction fields: observe/wait/finish require type only; move requires target (an adjacent room ID); take/drop require artifact; operate/probe require machine and artifact. Carry the original seal and be at the machine's disclosed location to use it. operate commits one transformation; probe previews one transformation and its readout without changing the seal. Both spend an action. There are no stocks, reset operations, configuration settings or separate measurement action in this family.\n\nTrack the actual seal, committed changes, location and remaining actions. Movement and finish spend actions too. A display match alone does not establish the joint goal. Return the carried seal to array in the exact target state and call finish. A successful finish returns victory_code; return exactly that receipt without explanation, quotes or Markdown. A failed finish is not success. Use only this tool for in-world interaction; no external compute tool is available. Finite hypothesis enumeration is valid.",
+        "parameters": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "request": {
+              "type": "object",
+              "additionalProperties": false,
+              "description": "One NEXUS request. Provide filename only for evidence and action only for action. Read manifest for controls and evidence names.",
+              "properties": {
+                "operation": {
+                  "type": "string",
+                  "enum": [
+                    "manifest",
+                    "evidence",
+                    "observe",
+                    "status",
+                    "action"
+                  ],
+                  "description": "Operation to perform. Begin with manifest, then observe and read\nevery listed evidence file.\n"
+                },
+                "filename": {
+                  "type": "string",
+                  "description": "Required only for operation evidence. Use a filename returned\nby the manifest.\n"
+                },
+                "action": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "description": "Required only for operation action. Include the fields required\nby the selected action type and omit unrelated fields.\n",
+                  "properties": {
+                    "type": {
+                      "type": "string",
+                      "enum": [
+                        "observe",
+                        "move",
+                        "take",
+                        "drop",
+                        "operate",
+                        "probe",
+                        "wait",
+                        "finish"
+                      ],
+                      "description": "NEXUS action type."
+                    },
+                    "target": {
+                      "type": "string",
+                      "description": "Adjacent destination room ID for move."
+                    },
+                    "artifact": {
+                      "type": "string",
+                      "description": "Individual artifact ID for take/drop/operate/probe; use the original seal described by the manifest."
+                    },
+                    "machine": {
+                      "type": "string",
+                      "description": "Disclosed machine ID for operate or probe; the carried seal and agent must be at that machine."
+                    }
+                  },
+                  "required": [
+                    "type"
+                  ]
+                }
+              },
+              "required": [
+                "operation"
+              ]
+            }
+          },
+          "required": [
+            "request"
+          ]
+        },
+        "parameter-files": {
+          "request": "/input/request.json"
+        },
+        "command": [
+          "request",
+          "--request-file",
+          "/input/request.json"
+        ],
+        "dependencies": [
+          {
+            "service": "nexus",
+            "env": {
+              "NEXUS_URL": "{{ .Endpoint }}"
+            }
+          }
+        ]
+      }
+    ],
+    "services": [
+      {
+        "name": "nexus",
+        "image": "nexus:planning-resource-v1",
+        "command": [
+          "serve-session"
+        ],
+        "env": {
+          "NEXUS_HOST": "0.0.0.0",
+          "NEXUS_PORT": "8000"
+        },
+        "endpoint": {
+          "scheme": "http",
+          "port": 8000
+        },
+        "input-env": {
+          "axis-version": "NEXUS_AXIS_VERSION",
+          "science-family": "NEXUS_SCIENCE_FAMILY",
+          "seed": "NEXUS_SEED",
+          "discovery-level": "NEXUS_DISCOVERY_LEVEL",
+          "planning-level": "NEXUS_PLANNING_LEVEL",
+          "resource-pressure": "NEXUS_RESOURCE_PRESSURE",
+          "theory-level": "NEXUS_THEORY_LEVEL",
+          "generation-timing": "NEXUS_GENERATION_TIMING",
+          "budget-profile": "NEXUS_BUDGET_PROFILE",
+          "extended-diagnostics": "NEXUS_EXTENDED_DIAGNOSTICS",
+          "ontology-options": "NEXUS_ONTOLOGY_OPTIONS"
+        },
+        "healthcheck": [
+          "nexus",
+          "health"
+        ],
+        "startup-timeout": "120s"
+      }
+    ],
+    "validators": [
+      {
+        "name": "nexus-victory",
+        "image": "nexus:planning-resource-v1",
+        "command": [
+          "validate",
+          "--candidate-file",
+          "/input/candidate"
+        ],
+        "template-files": [
+          {
+            "path": "/input/candidate",
+            "template": "{{ .Candidate.Response }}"
+          }
+        ],
+        "dependencies": [
+          {
+            "service": "nexus",
+            "env": {
+              "NEXUS_URL": "{{ .Endpoint }}"
+            }
+          }
+        ],
+        "timeout": "30s"
+      }
+    ]
+  }
+}

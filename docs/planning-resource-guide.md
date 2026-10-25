@@ -144,14 +144,19 @@ Task export rejects stale, failed or mismatched preflight results. The
 uses JSON syntax, which is valid YAML. It contains operator-only seeds and must
 not be mounted into a player's accessible files.
 
-Use this task source with the existing MindTrial NEXUS service and an explicitly
-chosen provider configuration. The task file does not choose a model or launch
-calls. It sets a common 600-tool-call and 650-turn harness ceiling, above the
-largest reference-derived recommendation in the matrix (494 tool calls). These
-are harness ceilings, distinct from the much smaller world action budgets.
-Rebuild the service image from this branch, run the preflight in that image, and
-record its digest before paid evaluation. This workspace did not execute the
-new pilot through a MindTrial container.
+The matching [MindTrial configuration](../examples/mindtrial/nexus-planning-resource-config.yaml)
+includes the provider, NEXUS tool, persistent service and victory validator.
+It enables Astra at medium reasoning, inherited from the previous pilot, and
+disables automatic task retries. See the [run instructions](../examples/mindtrial/planning-resource-run.md)
+for image build, credentials and the evaluation command. No paid calls are made
+by preflight. The common 600-tool-call and 650-turn harness ceilings exceed the
+largest reference-derived recommendation in the matrix (494 tool calls).
+They are separate from environment action budgets.
+
+The dedicated container smoke workflow qualifies all 16 cells in the built image
+and exercises the real service, stateless CLI and receipt validator. It tests
+wrong/forged receipts, terminal finalization, private-field exclusion and shutdown
+telemetry. It does not execute the MindTrial orchestrator or a live provider.
 
 For one standalone episode:
 
