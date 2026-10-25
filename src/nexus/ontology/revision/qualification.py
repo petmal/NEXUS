@@ -41,17 +41,33 @@ class Certificate:
     search_nodes: int
 
 
-def minimum_certificate(mask: int, truth: int, *, max_nodes: int = 200_000) -> Certificate:
+def minimum_certificate(
+    mask: int,
+    truth: int,
+    *,
+    max_nodes: int = 200_000,
+    query_indices: tuple[int, ...] | None = None,
+) -> Certificate:
     """Exact minimum set of truthful legal observations supporting one behavior."""
     prior = compiled()
     goal = 1 << truth
     if not mask & goal:
         raise ValueError("truth is outside the public prior")
     rivals = mask & ~goal
+    indices = tuple(range(len(QUERIES))) if query_indices is None else query_indices
+    if len(set(indices)) != len(indices) or any(
+        type(q) is not int or not 0 <= q < len(QUERIES) for q in indices
+    ):
+        raise ValueError("query indices must be distinct legal indices")
     choices = {}
-    for q, parts in enumerate(prior.partitions):
+    closure = mask
+    for q in indices:
+        parts = prior.partitions[q]
+        closure &= parts[prior.rows[truth][q]]
         remaining = parts[prior.rows[truth][q]] & rivals
         choices.setdefault(remaining, q)
+    if closure != goal:
+        raise ValueError("allowed queries do not identify the target behavior")
     ordered = sorted(choices, key=lambda m: (m.bit_count(), choices[m]))
     useful = []
     for candidate in ordered:
@@ -93,7 +109,10 @@ def minimum_certificate(mask: int, truth: int, *, max_nodes: int = 200_000) -> C
                 return (projected[reduced], *suffix)
         return None
 
-    for depth in range(8):  # seven-reading universal policy is checked independently
+    # The seven-reading proof uses all queries. A restricted alphabet can need
+    # more readings; one useful query per rival is always a finite upper bound.
+    upper = 7 if query_indices is None else min(len(indices), rivals.bit_count())
+    for depth in range(upper + 1):
         result = search(rivals, depth)
         if result is not None:
             return Certificate(depth, tuple(QUERIES[q] for q in result), nodes)

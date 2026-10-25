@@ -1,0 +1,125 @@
+{
+  "version": "td-cycle-v1",
+  "cases": [
+    {
+      "id": "01",
+      "seed": 5866,
+      "role": "balanced",
+      "guidance": "principles",
+      "expected_certificate": 4,
+      "expected_horizon": 4,
+      "pair": null,
+      "single_shot": true
+    },
+    {
+      "id": "02",
+      "seed": 6464,
+      "role": "balanced",
+      "guidance": "principles",
+      "expected_certificate": 4,
+      "expected_horizon": 4,
+      "pair": null,
+      "single_shot": true
+    },
+    {
+      "id": "03",
+      "seed": 6467,
+      "role": "balanced",
+      "guidance": "principles",
+      "expected_certificate": 2,
+      "expected_horizon": 4,
+      "pair": null,
+      "single_shot": true
+    },
+    {
+      "id": "04",
+      "seed": 438,
+      "role": "horizon-contrast",
+      "guidance": "principles",
+      "expected_certificate": 4,
+      "expected_horizon": 5,
+      "pair": null,
+      "single_shot": false
+    },
+    {
+      "id": "05",
+      "seed": 516,
+      "role": "horizon-contrast",
+      "guidance": "principles",
+      "expected_certificate": 4,
+      "expected_horizon": 5,
+      "pair": null,
+      "single_shot": false
+    },
+    {
+      "id": "06",
+      "seed": 3,
+      "role": "rival-pair",
+      "guidance": "principles",
+      "expected_certificate": 3,
+      "expected_horizon": 6,
+      "pair": "A",
+      "single_shot": false
+    },
+    {
+      "id": "07",
+      "seed": 1185,
+      "role": "rival-pair",
+      "guidance": "principles",
+      "expected_certificate": 2,
+      "expected_horizon": 6,
+      "pair": "A",
+      "single_shot": false
+    },
+    {
+      "id": "08",
+      "seed": 678,
+      "role": "rival-pair",
+      "guidance": "principles",
+      "expected_certificate": 3,
+      "expected_horizon": 6,
+      "pair": "B",
+      "single_shot": true
+    },
+    {
+      "id": "09",
+      "seed": 1293,
+      "role": "rival-pair",
+      "guidance": "principles",
+      "expected_certificate": 2,
+      "expected_horizon": 6,
+      "pair": "B",
+      "single_shot": true
+    },
+    {
+      "id": "10",
+      "seed": 1101,
+      "role": "consistency",
+      "guidance": "provisional",
+      "expected_certificate": 4,
+      "expected_horizon": 4,
+      "pair": null,
+      "single_shot": false
+    },
+    {
+      "id": "11",
+      "seed": 468,
+      "role": "shortcut",
+      "guidance": "provisional",
+      "expected_certificate": 1,
+      "expected_horizon": 2,
+      "pair": null,
+      "single_shot": false
+    },
+    {
+      "id": "12",
+      "seed": 5866,
+      "role": "execution",
+      "guidance": "principles",
+      "expected_certificate": 0,
+      "expected_horizon": 0,
+      "pair": null,
+      "single_shot": false
+    }
+  ]
+}

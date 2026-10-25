@@ -22,3 +22,4 @@ docs/*
 !docs/coupled-memory-matrix.json
 !docs/stateful-matrix.json
 !docs/model-revision-matrix.json
+!docs/td-cycle-matrix.json

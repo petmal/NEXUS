@@ -1,0 +1,271 @@
+{
+  "config": {
+    "config": {
+      "log-file": "./nexus/{{.Year}}-{{.Month}}-{{.Day}}/{{.Hour}}-{{.Minute}}-{{.Second}}.log",
+      "output-dir": "./nexus/{{.Year}}-{{.Month}}-{{.Day}}/",
+      "output-basename": "{{.Hour}}-{{.Minute}}-{{.Second}}",
+      "task-source": "./nexus-revision-tasks.yaml",
+      "providers": [
+        {
+          "name": "openai",
+          "retry-policy": {
+            "max-retry-attempts": 3,
+            "initial-delay-seconds": 30
+          },
+          "client-config": {
+            "api-key": ""
+          },
+          "runs": [
+            {
+              "name": "gpt-6-astra (inherited pilot settings)",
+              "disabled": false,
+              "model": "gpt-6-astra",
+              "max-requests-per-minute": 20,
+              "model-parameters": {
+                "reasoning-effort": "medium"
+              }
+            }
+          ]
+        },
+        {
+          "name": "google",
+          "client-config": {
+            "api-key": ""
+          },
+          "runs": [
+            {
+              "name": "gemini-3.8-flash (inherited pilot settings)",
+              "disabled": false,
+              "model": "gemini-3.8-flash",
+              "max-requests-per-minute": 3,
+              "model-parameters": {
+                "thinking-level": "high",
+                "media-resolution": "high"
+              }
+            }
+          ]
+        }
+      ],
+      "tools": [
+        {
+          "name": "nexus",
+          "image": "nexus:model-revision-v1",
+          "description": "Interact with the current NEXUS world.\n\nNEXUS is persistent and stateful. The same world remains alive across calls\nwithin this task. State changes persist between calls; there is no reset or new game.\nWorld details vary between tasks. Use the current manifest and evidence as\nthe authority for the mission, laws, apparatus, observations and action costs.\n\nSTART:\n1. Request manifest for the exact goal, evidence filenames and action contract.\n2. Request observe for the current room, objects, resources and terminal state.\n3. Read every evidence file listed by the manifest before acting.\n4. Investigate, apply the required transformation, satisfy the complete goal,\n   then finish successfully and retain the returned victory_code.\n\nREQUEST OPERATIONS:\n- manifest: read public mission metadata and the action contract; no action cost.\n- evidence: read a public file; requires filename from manifest; no action cost.\n- observe: inspect the current world; no action cost.\n- status: inspect turn, terminal state and remaining actions; no action cost.\n- action: perform one action; requires an action object.\nEvery request still counts toward the harness tool-call allowance.\n\nACTION FIELDS:\n- observe, wait, finish: type only.\n- move: type and target (an adjacent room ID).\n- take, drop: type and artifact.\n- configure: type, machine and settings (an ordered integer array).\n- operate, probe: type, machine and artifact.\nUse only identifiers and settings allowed by the current manifest and evidence.\nConfiguration order, length and value ranges are specific to each apparatus.\nSyntax examples in the public contract do not imply a solution.\n\nACTION SEMANTICS:\n- take from a designated stock creates a specimen and returns its artifact ID;\n  use that returned ID later. Taking an individual artifact retrieves it.\n- configure changes apparatus settings; it does not apply them to a specimen.\n- operate applies the named apparatus to a carried artifact. Depending on the\n  apparatus, this commits a preparation, measurement or transformation.\n- probe previews the named apparatus on a carried artifact without committing\n  the specimen change. It still consumes an environment action. A preview does not advance the actual specimen history.\n- finish evaluates the complete goal and consumes an environment action.\n  Success sets the world to won and returns a victory_code. A rejected finish\n  is not success; follow the resulting state and remaining budget.\n\nIMPORTANT:\n- Read the disclosed primitive laws, construction bounds and evidence status;\n  the episode's bounded prior and observation contract govern inference.\n  Finite hypothesis enumeration is allowed. NEXUS is the available interface\n  for every in-world observation, measurement, configuration and action.\n- Interpret measurement payloads using the public contract. Track artifact\n  preparation, apparatus settings, room and remaining actions.\n- Respect the action budget and resource limits reported by observe. A null\n  limit means unlimited within NEXUS, subject to the harness limits.\n- Observing or configuring a seemingly correct setup is insufficient: commit\n  the required transformation, meet the full goal and call finish successfully.\n- Terminal worlds cannot be reset. Return exactly the actual victory_code,\n  without explanation, quotes or Markdown.\n\nRead theory.json for the complete grammar, visible/hidden state distinction,\napparatus semantics, update order, and exact acceptance rule. Follow only the\ncapabilities disclosed for the current episode. No particular experiment order\nor explanation is required.\n",
+          "parameters": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "request": {
+                "type": "object",
+                "additionalProperties": false,
+                "description": "One NEXUS request. Set operation to manifest, evidence, observe,\nstatus, or action.\n\nFor evidence, also provide filename. For action, also provide action.\nDo not provide filename for other operations or action for other operations.\n\nRequired action fields:\n- observe, wait, finish: type only\n- move: type and target\n- take, drop: type and artifact\n- operate, probe: type, machine, and artifact\n- configure: type, machine, and settings\n\nFollow the episode's manifest and evidence for valid identifiers,\napparatus restrictions, and configuration settings.\n",
+                "properties": {
+                  "operation": {
+                    "type": "string",
+                    "enum": [
+                      "manifest",
+                      "evidence",
+                      "observe",
+                      "status",
+                      "action"
+                    ],
+                    "description": "Operation to perform. Begin with manifest, then observe and read\nevery listed evidence file.\n"
+                  },
+                  "filename": {
+                    "type": "string",
+                    "description": "Required only for operation evidence. Use a filename returned\nby the manifest.\n"
+                  },
+                  "action": {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "description": "Required only for operation action. Include the fields required\nby the selected action type and omit unrelated fields.\n",
+                    "properties": {
+                      "type": {
+                        "type": "string",
+                        "enum": [
+                          "observe",
+                          "move",
+                          "take",
+                          "drop",
+                          "operate",
+                          "probe",
+                          "configure",
+                          "wait",
+                          "finish"
+                        ],
+                        "description": "NEXUS action type."
+                      },
+                      "target": {
+                        "type": "string",
+                        "description": "Adjacent destination room ID for move."
+                      },
+                      "artifact": {
+                        "type": "string",
+                        "description": "Stock or individual artifact ID for take; individual artifact\nID for drop, operate, or probe. Use IDs returned by NEXUS.\n"
+                      },
+                      "machine": {
+                        "type": "string",
+                        "description": "Apparatus ID for operate, probe, or configure. Use an ID\ndisclosed by the current world.\n"
+                      },
+                      "settings": {
+                        "type": "array",
+                        "items": {
+                          "type": "integer"
+                        },
+                        "description": "Complete ordered settings for the named apparatus.\nFollow the manifest and evidence for the exact vector length,\nconfiguration order, and allowed values.\n"
+                      }
+                    },
+                    "required": [
+                      "type"
+                    ]
+                  }
+                },
+                "required": [
+                  "operation"
+                ]
+              }
+            },
+            "required": [
+              "request"
+            ]
+          },
+          "parameter-files": {
+            "request": "/input/request.json"
+          },
+          "command": [
+            "request",
+            "--request-file",
+            "/input/request.json"
+          ],
+          "dependencies": [
+            {
+              "service": "nexus",
+              "env": {
+                "NEXUS_URL": "{{ .Endpoint }}"
+              }
+            }
+          ]
+        }
+      ],
+      "services": [
+        {
+          "name": "nexus",
+          "image": "nexus:model-revision-v1",
+          "command": [
+            "serve-session"
+          ],
+          "env": {
+            "NEXUS_HOST": "0.0.0.0",
+            "NEXUS_PORT": "8000"
+          },
+          "endpoint": {
+            "scheme": "http",
+            "port": 8000
+          },
+          "input-env": {
+            "axis-version": "NEXUS_AXIS_VERSION",
+            "science-family": "NEXUS_SCIENCE_FAMILY",
+            "seed": "NEXUS_SEED",
+            "discovery-level": "NEXUS_DISCOVERY_LEVEL",
+            "planning-level": "NEXUS_PLANNING_LEVEL",
+            "resource-pressure": "NEXUS_RESOURCE_PRESSURE",
+            "theory-level": "NEXUS_THEORY_LEVEL",
+            "generation-timing": "NEXUS_GENERATION_TIMING",
+            "budget-profile": "NEXUS_BUDGET_PROFILE",
+            "extended-diagnostics": "NEXUS_EXTENDED_DIAGNOSTICS",
+            "ontology-options": "NEXUS_ONTOLOGY_OPTIONS"
+          },
+          "healthcheck": [
+            "nexus",
+            "health"
+          ],
+          "startup-timeout": "120s"
+        }
+      ],
+      "validators": [
+        {
+          "name": "nexus-victory",
+          "image": "nexus:model-revision-v1",
+          "command": [
+            "validate",
+            "--candidate-file",
+            "/input/candidate"
+          ],
+          "template-files": [
+            {
+              "path": "/input/candidate",
+              "template": "{{ .Candidate.Response }}"
+            }
+          ],
+          "dependencies": [
+            {
+              "service": "nexus",
+              "env": {
+                "NEXUS_URL": "{{ .Endpoint }}"
+              }
+            }
+          ],
+          "timeout": "30s"
+        }
+      ]
+    }
+  },
+  "tasks": {
+    "task-config": {
+      "max-turns": 160,
+      "validation-rules": {
+        "custom-validator": "nexus-victory",
+        "case-sensitive": true,
+        "ignore-whitespace": false,
+        "trim-lines": false
+      },
+      "system-prompt": {
+        "enable-for": "text",
+        "template": "Use the available NEXUS tool to complete the live task. Your final answer\nmust follow this format exactly, with no extra explanation or formatting:\n{{.ResponseResultFormat}}"
+      },
+      "tool-selector": {
+        "disabled": false,
+        "tools": [
+          {
+            "name": "nexus",
+            "disabled": false,
+            "max-calls": 120,
+            "timeout": "60s"
+          }
+        ]
+      },
+      "tasks": [
+        {
+          "name": "NEXUS revision-01",
+          "disabled": false,
+          "suite": "nexus",
+          "category": "model-revision-diagnostic",
+          "difficulty": "experimental",
+          "tags": [
+            "model-revision-pilot-v1",
+            "model-revision-v1"
+          ],
+          "prompt": "You are confined to an artificial NEXUS facility. Complete the live mission\nand return its actual victory receipt.\n\nBegin with manifest and observe, then read every listed evidence file. Learn\nthe exact goal, bounded prior, observation semantics and action contract.\nAll in-world observations and actions must use NEXUS. Finite hypothesis\nenumeration is valid. Names do not imply real-world physical laws.\n\nTrack the actual specimen, committed changes, apparatus settings where applicable,\nlocation and remaining actions. Interpret displayed measurements using the public\ncontract. A hypothetical probe does not commit its transformation to the specimen.\nOnly use apparatus capabilities disclosed by this episode.\n\nInvestigate what is needed for the complete mission. No particular experiment\norder or theory report is mandatory. Recovery and rejected finishes work only\nas documented. Satisfy the full goal, call finish successfully, and return exactly\nthe actual victory_code, without quotes, Markdown or explanation.\n",
+          "response-result-format": "The actual victory_code returned after successfully finishing the live\nNEXUS mission, and nothing else. No quotes, Markdown or explanation.\n",
+          "tool-selector": {
+            "service-inputs": {
+              "nexus": {
+                "axis-version": 2,
+                "science-family": "model-revision-v1",
+                "seed": "5866",
+                "discovery-level": 0,
+                "planning-level": 0,
+                "resource-pressure": 1,
+                "theory-level": 0,
+                "budget-profile": "standard",
+                "generation-timing": true,
+                "extended-diagnostics": true,
+                "ontology-options": "{\"guidance\":\"principles\"}"
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}
