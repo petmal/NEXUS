@@ -39,9 +39,10 @@ def compact_summary(snapshot: dict, trace) -> dict:
     # duplicate requests. Keep their counters separate below.
     action_counts = Counter(record.action.type for record in trace)
     submissions = decision.get("submissions") or ()
-    witnesses = (snapshot.get("evidence_witnesses") or {}).get("submissions", ())
+    witness_report = snapshot.get("evidence_witnesses") or {}
+    witnesses = witness_report.get("submissions", ())
     return {
-        "version": "operator-summary-v1",
+        "version": "operator-summary-v2",
         "family": str(performance.get("ontology") or "legacy")[:128],
         "status": str(snapshot["status"]["status"])[:80],
         "termination_reason": str(performance.get("termination_reason") or "unknown")[:80],
@@ -96,6 +97,11 @@ def compact_summary(snapshot: dict, trace) -> dict:
             Counter(item["witness"]["kind"] for item in witnesses if item["witness"] is not None)
         ),
         "repeated_build_submissions": sum(item["repeated_build"] for item in witnesses),
+        "rejected_equivalent_submissions": (
+            sum(item.get("previous_rejected_equivalent_turn") is not None for item in witnesses)
+            if witness_report.get("decision_equivalence_available")
+            else None
+        ),
         "assistance": snapshot.get("assistance", {"construction_check_calls": 0}),
         "receipt_validation": "not_observed_by_service",
         "provider_completion": "not_observed_by_service",

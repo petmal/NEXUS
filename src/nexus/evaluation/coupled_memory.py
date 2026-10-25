@@ -7,8 +7,8 @@ from pydantic import BaseModel, ConfigDict, Field, model_validator
 
 from nexus.engine.canonical import canonical_hash
 from nexus.engine.replay import replay
+from nexus.evaluation.artifacts import atomic_json
 from nexus.evaluation.discovery import Cell, digest, recovery_check
-from nexus.evaluation.matrix import atomic_json
 from nexus.generator import generate_episode
 from nexus.ontology.coupled_memory.proof import prove
 from nexus.ontology.discovery.audit import world_audit

@@ -3,7 +3,8 @@
 import argparse
 from pathlib import Path
 
-from nexus.evaluation.matrix import Matrix, atomic_json, preflight
+from nexus.evaluation.artifacts import atomic_json
+from nexus.evaluation.matrix import Matrix, preflight
 
 
 def main():

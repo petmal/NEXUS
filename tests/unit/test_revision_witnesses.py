@@ -80,6 +80,79 @@ def test_rejected_finish_provenance_and_repeated_equivalent_build():
     assert second["classification"] == "contradicted" and second["repeated_build"]
     assert second["witness"]["kind"] == "rejection_contradiction"
     assert second["witness"]["source_turn"] == first["turn"]
+    assert first["previous_rejected_equivalent_turn"] is None
+    assert second["previous_rejected_equivalent_turn"] == first["turn"]
+
+
+@pytest.mark.parametrize("observe_conflict", [False, True])
+def test_different_wiring_repeats_rejected_behavior_even_with_reading_conflict(observe_conflict):
+    from nexus.protocol.operator_summary import compact_summary
+
+    s = session(6464)
+    first_build, equivalent = (3, 4, 8, 10), (3, 4, 11, 7)
+    assert first_build != equivalent and class_id(first_build) == class_id(equivalent)
+    act(s, TakeAction(artifact="carrier"))
+    install(s, first_build)
+    rejected = act(s, FinishAction())
+    assert rejected.victory_code is None
+    if observe_conflict:
+        from nexus.ontology.revision.laws import QUERIES
+
+        truth = s.episode.investigation_truth.data().program
+        word = next(w for w in QUERIES if read(truth, w) != read(first_build, w))
+        act(s, ConfigureAction(machine="reader", settings=word))
+        act(s, ProbeAction(machine="reader", artifact="carrier"))
+    install(s, equivalent)
+    act(s, FinishAction())
+    snapshot = s.operator_snapshot()
+    report = snapshot["evidence_witnesses"]
+    assert report["version"] == "evidence-witnesses-v2"
+    assert report["decision_equivalence_available"]
+    first, second = report["submissions"]
+    assert second["classification"] == "contradicted"
+    assert not second["repeated_build"]
+    assert second["previous_rejected_equivalent_turn"] == first["turn"]
+    assert second["witness"]["kind"] == (
+        "observation_contradiction" if observe_conflict else "rejection_contradiction"
+    )
+    summary = compact_summary(snapshot, s.trace)
+    assert summary["repeated_build_submissions"] == 0
+    assert summary["rejected_equivalent_submissions"] == 1
+
+
+def test_equivalence_is_optional_and_different_behavior_is_not_a_repeat(monkeypatch):
+    from nexus.ontology.revision import runtime
+    from nexus.protocol.operator_summary import compact_summary
+
+    s = session(5866)
+    act(s, FinishAction())  # Ineligible: cannot exclude an unsubmitted program.
+    act(s, TakeAction(artifact="carrier"))
+    install(s, s.episode.public.investigation.data().provisional)
+    act(s, FinishAction())
+    install(s, s.episode.investigation_truth.data().program)
+    assert act(s, FinishAction()).victory_code
+    snapshot = s.operator_snapshot()
+    assert all(
+        x["previous_rejected_equivalent_turn"] is None
+        for x in snapshot["evidence_witnesses"]["submissions"]
+    )
+    assert compact_summary(snapshot, s.trace)["rejected_equivalent_submissions"] == 0
+    monkeypatch.delattr(runtime, "decision_equivalence_key")
+    snapshot = s.operator_snapshot()
+    assert not snapshot["evidence_witnesses"]["decision_equivalence_available"]
+    assert compact_summary(snapshot, s.trace)["rejected_equivalent_submissions"] is None
+
+
+def test_declared_equivalence_cannot_silently_return_an_unavailable_key(monkeypatch):
+    from nexus.ontology.revision import runtime
+
+    s = session(5866)
+    act(s, TakeAction(artifact="carrier"))
+    install(s, s.episode.public.investigation.data().provisional)
+    act(s, FinishAction())
+    monkeypatch.setattr(runtime, "decision_equivalence_key", lambda spec, decision: None)
+    with pytest.raises(ValueError, match="null key"):
+        submission_witnesses(s.episode.public, s.trace)
 
 
 def test_compatible_win_is_not_retroactively_supported_and_alternative_is_a_survivor():

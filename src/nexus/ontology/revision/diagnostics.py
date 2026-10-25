@@ -14,6 +14,15 @@ from nexus.ontology.revision.inference import Belief
 from nexus.ontology.revision.laws import QUERIES, class_id, compiled, read
 
 
+def decision_equivalence_key(spec, decision: tuple[int, ...]) -> int:
+    """Exact all-history behavior, stable across this episode's finish decisions.
+
+    Uses the public primitive grammar, not the selected truth or observed outcome.
+    The spec argument keeps the capability usable for families with public variants.
+    """
+    return class_id(decision)
+
+
 def decision_witness(
     posterior: Belief, attempted: tuple[int, ...] | None, earlier: tuple[TraceRecord, ...]
 ) -> DecisionWitness | None:

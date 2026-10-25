@@ -8,8 +8,8 @@ from pydantic import BaseModel, ConfigDict, Field, StrictInt, model_validator
 
 from nexus.engine.canonical import canonical_hash
 from nexus.engine.replay import replay
+from nexus.evaluation.artifacts import atomic_json
 from nexus.evaluation.discovery import digest
-from nexus.evaluation.matrix import atomic_json, source_digest
 from nexus.generator import generate_episode
 from nexus.models.actions import (
     ConfigureAction,
@@ -25,6 +25,7 @@ from nexus.ontology.revision.laws import EDGES, QUERIES, class_id, compiled
 from nexus.ontology.revision.proof import prove, prove_no_three_reading_certificate, require
 from nexus.ontology.revision.qualification import audit, policy_reading_bound
 from nexus.protocol.session import Session
+from nexus.provenance import source_digest
 
 
 class Cell(BaseModel):

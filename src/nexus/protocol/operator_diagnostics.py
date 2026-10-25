@@ -38,7 +38,7 @@ class OperatorDiagnostics:
 
     def start(self):
         from nexus.engine.canonical import canonical_hash
-        from nexus.evaluation.matrix import source_digest
+        from nexus.provenance import source_digest
 
         episode = self.session.episode
         metadata = episode.generation_metadata

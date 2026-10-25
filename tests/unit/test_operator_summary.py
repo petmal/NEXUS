@@ -98,3 +98,17 @@ def test_legacy_summary_counts_committed_actions_from_trace():
     summary = compact_summary(session.operator_snapshot(), session.trace_snapshot())
     assert summary["action_counts"]["wait"] == 1
     assert summary["turn"] == 1
+    assert summary["rejected_equivalent_submissions"] is None
+
+
+def test_archived_v1_witness_summary_does_not_invent_zero_behavioral_repeats():
+    session = Session(generate_episode(17))
+    snapshot = session.operator_snapshot()
+    snapshot["evidence_witnesses"] = {
+        "version": "evidence-witnesses-v1",
+        "submissions": [{"repeated_build": True, "witness": None}],
+    }
+    summary = compact_summary(snapshot, session.trace_snapshot())
+    assert summary["version"] == "operator-summary-v2"
+    assert summary["repeated_build_submissions"] == 1
+    assert summary["rejected_equivalent_submissions"] is None

@@ -48,6 +48,7 @@ class SubmissionWitness(WitnessModel):
     classification: Literal["guaranteed", "compatible", "contradicted", "ineligible"]
     build: tuple[int, ...] | None
     repeated_build: bool
+    previous_rejected_equivalent_turn: int | None = None
     witness: DecisionWitness | None
 
 
@@ -61,7 +62,8 @@ class SupportedDecisionPoint(WitnessModel):
 
 
 class EvidenceWitnessReport(WitnessModel):
-    version: Literal["evidence-witnesses-v1"] = "evidence-witnesses-v1"
+    version: Literal["evidence-witnesses-v2"] = "evidence-witnesses-v2"
+    decision_equivalence_available: bool = False
     submissions: tuple[SubmissionWitness, ...]
     first_supported_decision: SupportedDecisionPoint | None = None
 

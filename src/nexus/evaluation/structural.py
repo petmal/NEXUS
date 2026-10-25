@@ -9,11 +9,12 @@ from pydantic import Field, model_validator
 
 from nexus.engine.canonical import canonical_hash
 from nexus.engine.replay import replay
-from nexus.evaluation.matrix import StrictModel, atomic_json, source_digest
+from nexus.evaluation.artifacts import StrictModel, atomic_json
 from nexus.generator import generate_episode, qualify_episode
 from nexus.ontology.compositional.inference import audit
 from nexus.ontology.compositional.laws import QUERIES, population
 from nexus.protocol.session import Session
+from nexus.provenance import source_digest
 
 
 class Cell(StrictModel):

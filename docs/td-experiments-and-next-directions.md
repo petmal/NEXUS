@@ -245,6 +245,11 @@ Some conditions supply a provisional program consistent with the initial archive
 the player may revise or ignore it. Conservation is built into the primitives,
 so the task does not test discovery of conservation itself. [Q5]
 
+Checking every finite history does not require running infinitely many tests.
+Each device has finitely many packet states. The verifier can compare the
+reachable pairs of states in two devices: a differing display disproves equivalence;
+agreement throughout this finite comparison proves it for all histories.
+
 The first 30-task pilot produced 28 wins, one genuine reconstruction failure and
 one output-limit interruption. Of the wins, 25 were supported and three remained
 compatible with unresolved alternatives. Astra won all ten cells. Seven challenge

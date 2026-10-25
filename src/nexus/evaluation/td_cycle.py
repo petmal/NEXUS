@@ -10,8 +10,8 @@ from pydantic import BaseModel, ConfigDict, Field, StrictInt, model_validator
 
 from nexus.engine.canonical import canonical_hash
 from nexus.engine.replay import replay
+from nexus.evaluation.artifacts import atomic_json
 from nexus.evaluation.discovery import digest
-from nexus.evaluation.matrix import atomic_json, source_digest
 from nexus.evaluation.revision import certificate_witness, fixed_panel_bound, topology_key
 from nexus.generator import generate_episode
 from nexus.ontology.discovery.policy import public_policy
@@ -20,6 +20,7 @@ from nexus.ontology.revision.laws import QUERIES, class_id, compiled
 from nexus.ontology.revision.proof import prove, prove_no_three_reading_certificate, require
 from nexus.ontology.revision.qualification import audit, minimum_certificate
 from nexus.protocol.session import Session
+from nexus.provenance import source_digest
 
 
 class Case(BaseModel):

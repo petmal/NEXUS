@@ -6,12 +6,18 @@ from typing import Literal
 from pydantic import BaseModel, ConfigDict, Field, StrictInt, model_validator
 
 from nexus.engine.canonical import canonical_hash
-from nexus.evaluation.matrix import atomic_json
+from nexus.evaluation.artifacts import atomic_json
 from nexus.generator import generate_episode, qualify_episode
 from nexus.models.domain import DomainTruth
-from nexus.ontology.transfer.laws import QUERIES, accepted, displayed, physical, selection
-from nexus.ontology.transfer.tables import N, compile_tables
 from nexus.ontology.transfer.inference import counts
+from nexus.ontology.transfer.laws import (
+    QUERIES,
+    accepted,
+    displayed,
+    physical,
+    selection,
+)
+from nexus.ontology.transfer.tables import N, compile_tables
 
 
 class Cell(BaseModel):

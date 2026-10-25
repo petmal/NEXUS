@@ -9,10 +9,11 @@ from pydantic import Field, model_validator
 
 from nexus.engine.canonical import canonical_hash
 from nexus.engine.replay import replay
-from nexus.evaluation.matrix import StrictModel, atomic_json, source_digest
+from nexus.evaluation.artifacts import StrictModel, atomic_json
 from nexus.generator import generate_episode, qualify_episode
 from nexus.ontology.compositional.policy import public_policy
 from nexus.protocol.session import Session
+from nexus.provenance import source_digest
 
 
 class ModelCondition(StrictModel):

@@ -7,7 +7,7 @@ import sys
 from pathlib import Path
 from time import perf_counter
 
-from nexus.evaluation.matrix import atomic_json
+from nexus.evaluation.artifacts import atomic_json
 
 CODE = """
 import json, resource
@@ -85,6 +85,7 @@ if __name__ == "__main__":
         report["fixed_panels"]["coupled" if coupled else "calibrated"] = fixed_panel(coupled)
         atomic_json(args.output, report)
     from compile_transfer_reference import tree
+
     from nexus.ontology.transfer.laws import QUERIES
 
     passive = tree(

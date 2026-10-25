@@ -6,19 +6,23 @@ from pathlib import Path
 from time import perf_counter
 from typing import Literal
 
-from pydantic import BaseModel, ConfigDict, Field, model_validator
+from pydantic import Field, model_validator
 
 from nexus.engine.canonical import canonical_hash
 from nexus.engine.replay import replay
-from nexus.evaluation.difficulty import dynamics_audit, inspect_dynamics, inspect_repair, population
+from nexus.evaluation.artifacts import StrictModel as StrictModel
+from nexus.evaluation.artifacts import atomic_json as atomic_json
+from nexus.evaluation.difficulty import (
+    dynamics_audit,
+    inspect_dynamics,
+    inspect_repair,
+    population,
+)
 from nexus.generator import generate_episode, qualify_episode
 from nexus.models.episode import PrivateEpisode
 from nexus.presentation import evidence_files
 from nexus.protocol.session import Session
-
-
-class StrictModel(BaseModel):
-    model_config = ConfigDict(extra="forbid", frozen=True)
+from nexus.provenance import source_digest as source_digest
 
 
 class Environment(StrictModel):
@@ -76,16 +80,6 @@ class Matrix(StrictModel):
         return self
 
 
-def source_digest() -> str:
-    root = Path(__file__).resolve().parents[1]
-    values = [
-        (p.relative_to(root).as_posix(), hashlib.sha256(p.read_bytes()).hexdigest())
-        for p in sorted(root.rglob("*"))
-        if p.suffix in (".py", ".json")
-    ]
-    return hashlib.sha256(json.dumps(values, separators=(",", ":")).encode()).hexdigest()
-
-
 def matrix_digest(matrix: Matrix) -> str:
     return hashlib.sha256(
         json.dumps(matrix.model_dump(mode="json"), sort_keys=True, separators=(",", ":")).encode()
@@ -121,13 +115,6 @@ def verify_preflight_binding(matrix: Matrix, report: dict) -> None:
         or report.get("empirical_difficulty") != "uncalibrated"
     ):
         raise ValueError("structural preflight cannot authorize a full rollout")
-
-
-def atomic_json(path: Path, value):
-    path.parent.mkdir(parents=True, exist_ok=True)
-    temp = path.with_suffix(path.suffix + ".tmp")
-    temp.write_text(json.dumps(value, indent=2) + "\n", encoding="utf-8")
-    temp.replace(path)
 
 
 def coverage(rows: list[dict]) -> dict[str, bool]:

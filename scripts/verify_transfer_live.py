@@ -7,7 +7,7 @@ from time import perf_counter
 
 from nexus.engine.canonical import canonical_hash
 from nexus.engine.replay import replay
-from nexus.evaluation.matrix import atomic_json
+from nexus.evaluation.artifacts import atomic_json
 from nexus.generator import generate_episode
 from nexus.ontology.repair.qualification import source_binding
 from nexus.ontology.transfer.policy import public_policy

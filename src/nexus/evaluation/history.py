@@ -11,7 +11,7 @@ from pydantic import BaseModel, ConfigDict, Field, StrictInt, model_validator
 
 from nexus.engine.canonical import canonical_hash
 from nexus.engine.replay import replay
-from nexus.evaluation.matrix import atomic_json
+from nexus.evaluation.artifacts import atomic_json
 from nexus.generator import generate_episode
 from nexus.ontology.history.generation import selection
 from nexus.ontology.history.laws import WORLD_INDEX, decisions, shortest

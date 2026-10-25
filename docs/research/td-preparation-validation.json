@@ -1,0 +1,127 @@
+{
+  "version": "td-preparation-validation-v1",
+  "date_utc": "2026-10-25",
+  "base_commit": "8571c8bb1d99b1d3084501bc6310917ee7c595ab",
+  "summary_commit": "012a9b568ed8e1a6817ab140d3b6cbc803e43352",
+  "source_sha256": "54d1d814a7e7917f978f8a233c03a42447069bff9d4b1a65aaf6f028654671a7",
+  "scope": "Documentation and preparation only. No game-action, victory, budget, public schema or provider changes; no live model calls.",
+  "checks": {
+    "fast_regression": {
+      "status": "passed",
+      "tests": 930,
+      "deselected": 51,
+      "warnings": 3,
+      "seconds": 461.87,
+      "command": "uv run --frozen --extra dev --extra server pytest -q -m 'not slow and not stress' tests/unit tests/integration --maxfail=1",
+      "log_sha256": "83c0003ad65245c678c4b07962004d2f2e1e8c22dfece5fcaa82b28273b757f0",
+      "current_unique_fast_tests_covered": 931,
+      "note": "930 tests in main invocation plus the separately passed new archived-v1 test; final collection contains 931 fast tests."
+    },
+    "added_v1_summary_regression": {
+      "status": "passed",
+      "tests": 1,
+      "seconds": 1.97,
+      "note": "Added after the main suite was collected; checked separately."
+    },
+    "focused_before_binding_refresh": [
+      {
+        "tests": 27,
+        "seconds": 6.15,
+        "scope": "repair construction/conformance; revision witnesses; operator summary; provenance"
+      },
+      {
+        "tests": 15,
+        "seconds": 22.11,
+        "scope": "repair qualification proof; revision witnesses"
+      }
+    ],
+    "typecheck": {
+      "status": "passed",
+      "scope": [
+        "src/nexus/provenance.py",
+        "src/nexus/evaluation/artifacts.py",
+        "src/nexus/protocol/operator_witnesses.py",
+        "src/nexus/protocol/operator_summary.py",
+        "src/nexus/ontology/diagnostics.py",
+        "src/nexus/ontology/revision/diagnostics.py",
+        "src/nexus/ontology/revision/runtime.py"
+      ],
+      "repository_wide_clean_claim": false
+    },
+    "lint": {
+      "status": "passed",
+      "scope": "all touched Python files; Ruff isolated E4,E7,E9,F checks"
+    },
+    "repair_binding": {
+      "status": "passed",
+      "proof_hash_unchanged": true,
+      "serialized_witness_hashes_unchanged": true,
+      "public_policy_wins": [
+        {
+          "planning": 0,
+          "actions": 14,
+          "replay_verified": true
+        },
+        {
+          "planning": 1,
+          "actions": 15,
+          "replay_verified": true
+        }
+      ]
+    },
+    "dynamics_cache": {
+      "status": "passed",
+      "source_binding_unchanged": true,
+      "recompiled": false
+    },
+    "recorded_live_trace_regression": {
+      "status": "passed",
+      "sessions": 40,
+      "actions": 929,
+      "checker_calls": 49,
+      "behavioral_repeats": 4,
+      "literal_repeats": 0,
+      "details": "td-preparation-recorded-replay.json",
+      "scope": "Recorded observations/events, checker outputs, success flags and existing witness semantics; no original-secret receipt resigning."
+    },
+    "documentation": {
+      "status": "passed",
+      "relative_links_resolve": true,
+      "latest_ledger_unique_executions": 40,
+      "source_manifest_locally_available_hashes_match": true
+    },
+    "fresh_review": {
+      "status": "passed",
+      "material_correction": "L* is all-survivor query-depth identifiability, not pairwise distinguishing length; corrected.",
+      "implementation_blockers": [],
+      "suggested_regression": "Archived v1 report leaves behavioral repeats null; added and passed."
+    },
+    "td_preflight": {
+      "status": "passed",
+      "cells": 12,
+      "report_sha256": "c17c21ec7adc21428999b91213222af1c1bf739ccff9a9a1dbd152d196347219",
+      "seconds": 14.431352765000156,
+      "binding_matches_current_source": true
+    },
+    "structural_preflight": {
+      "status": "pilot-ready",
+      "cells": 8,
+      "report_sha256": "1582cd4ae6a3a32a6990fcced9b600be34223f7461d8ba58a607b3ea4562ccb8",
+      "seconds": null,
+      "binding_matches_current_source": true
+    },
+    "stateful_preflight": {
+      "status": "passed",
+      "cells": 10,
+      "report_sha256": "04a3672c69882867879dcc1f37fa4c795bd23bc538a8364b8847e417d203b60a",
+      "seconds": 141.28330285699985,
+      "binding_matches_current_source": true
+    }
+  },
+  "limits": [
+    "No Docker/Podman or MindTrial image execution in this workspace.",
+    "No slow or stress suite claimed for this preparation; full fast-suite result recorded separately.",
+    "Historical counts derive from prior audits; older cohorts were not all regenerated in this change."
+  ],
+  "status": "passed"
+}

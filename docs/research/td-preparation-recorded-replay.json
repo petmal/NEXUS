@@ -1,0 +1,249 @@
+{
+  "status": "passed",
+  "source_sha256": "54d1d814a7e7917f978f8a233c03a42447069bff9d4b1a65aaf6f028654671a7",
+  "actions": 929,
+  "checks": 49,
+  "runs": [
+    {
+      "execution_id": "baseline-01-r1",
+      "won": true,
+      "literal_repeats": 0,
+      "rejected_behavior_repeats": 0
+    },
+    {
+      "execution_id": "baseline-02-r1",
+      "won": true,
+      "literal_repeats": 0,
+      "rejected_behavior_repeats": 1
+    },
+    {
+      "execution_id": "baseline-03-r1",
+      "won": true,
+      "literal_repeats": 0,
+      "rejected_behavior_repeats": 1
+    },
+    {
+      "execution_id": "baseline-04-r1",
+      "won": true,
+      "literal_repeats": 0,
+      "rejected_behavior_repeats": 0
+    },
+    {
+      "execution_id": "baseline-05-r1",
+      "won": true,
+      "literal_repeats": 0,
+      "rejected_behavior_repeats": 0
+    },
+    {
+      "execution_id": "baseline-06-r1",
+      "won": true,
+      "literal_repeats": 0,
+      "rejected_behavior_repeats": 0
+    },
+    {
+      "execution_id": "baseline-07-r1",
+      "won": true,
+      "literal_repeats": 0,
+      "rejected_behavior_repeats": 0
+    },
+    {
+      "execution_id": "baseline-08-r1",
+      "won": true,
+      "literal_repeats": 0,
+      "rejected_behavior_repeats": 1
+    },
+    {
+      "execution_id": "baseline-09-r1",
+      "won": true,
+      "literal_repeats": 0,
+      "rejected_behavior_repeats": 0
+    },
+    {
+      "execution_id": "baseline-10-r1",
+      "won": true,
+      "literal_repeats": 0,
+      "rejected_behavior_repeats": 0
+    },
+    {
+      "execution_id": "baseline-11-r1",
+      "won": true,
+      "literal_repeats": 0,
+      "rejected_behavior_repeats": 0
+    },
+    {
+      "execution_id": "baseline-12-r1",
+      "won": true,
+      "literal_repeats": 0,
+      "rejected_behavior_repeats": 0
+    },
+    {
+      "execution_id": "baseline-01-r2",
+      "won": true,
+      "literal_repeats": 0,
+      "rejected_behavior_repeats": 0
+    },
+    {
+      "execution_id": "baseline-02-r2",
+      "won": true,
+      "literal_repeats": 0,
+      "rejected_behavior_repeats": 0
+    },
+    {
+      "execution_id": "baseline-03-r2",
+      "won": true,
+      "literal_repeats": 0,
+      "rejected_behavior_repeats": 0
+    },
+    {
+      "execution_id": "baseline-04-r2",
+      "won": true,
+      "literal_repeats": 0,
+      "rejected_behavior_repeats": 0
+    },
+    {
+      "execution_id": "baseline-05-r2",
+      "won": true,
+      "literal_repeats": 0,
+      "rejected_behavior_repeats": 0
+    },
+    {
+      "execution_id": "baseline-06-r2",
+      "won": true,
+      "literal_repeats": 0,
+      "rejected_behavior_repeats": 0
+    },
+    {
+      "execution_id": "baseline-07-r2",
+      "won": true,
+      "literal_repeats": 0,
+      "rejected_behavior_repeats": 0
+    },
+    {
+      "execution_id": "baseline-08-r2",
+      "won": true,
+      "literal_repeats": 0,
+      "rejected_behavior_repeats": 1
+    },
+    {
+      "execution_id": "baseline-09-r2",
+      "won": true,
+      "literal_repeats": 0,
+      "rejected_behavior_repeats": 0
+    },
+    {
+      "execution_id": "baseline-10-r2",
+      "won": true,
+      "literal_repeats": 0,
+      "rejected_behavior_repeats": 0
+    },
+    {
+      "execution_id": "baseline-11-r2",
+      "won": true,
+      "literal_repeats": 0,
+      "rejected_behavior_repeats": 0
+    },
+    {
+      "execution_id": "baseline-12-r2",
+      "won": true,
+      "literal_repeats": 0,
+      "rejected_behavior_repeats": 0
+    },
+    {
+      "execution_id": "single-shot-01-r1",
+      "won": true,
+      "literal_repeats": 0,
+      "rejected_behavior_repeats": 0
+    },
+    {
+      "execution_id": "single-shot-02-r1",
+      "won": true,
+      "literal_repeats": 0,
+      "rejected_behavior_repeats": 0
+    },
+    {
+      "execution_id": "single-shot-03-r1",
+      "won": true,
+      "literal_repeats": 0,
+      "rejected_behavior_repeats": 0
+    },
+    {
+      "execution_id": "single-shot-08-r1",
+      "won": true,
+      "literal_repeats": 0,
+      "rejected_behavior_repeats": 0
+    },
+    {
+      "execution_id": "single-shot-09-r1",
+      "won": true,
+      "literal_repeats": 0,
+      "rejected_behavior_repeats": 0
+    },
+    {
+      "execution_id": "single-shot-01-r2",
+      "won": true,
+      "literal_repeats": 0,
+      "rejected_behavior_repeats": 0
+    },
+    {
+      "execution_id": "single-shot-02-r2",
+      "won": true,
+      "literal_repeats": 0,
+      "rejected_behavior_repeats": 0
+    },
+    {
+      "execution_id": "single-shot-03-r2",
+      "won": true,
+      "literal_repeats": 0,
+      "rejected_behavior_repeats": 0
+    },
+    {
+      "execution_id": "single-shot-08-r2",
+      "won": true,
+      "literal_repeats": 0,
+      "rejected_behavior_repeats": 0
+    },
+    {
+      "execution_id": "single-shot-09-r2",
+      "won": true,
+      "literal_repeats": 0,
+      "rejected_behavior_repeats": 0
+    },
+    {
+      "execution_id": "consistency-baseline-10-r1",
+      "won": true,
+      "literal_repeats": 0,
+      "rejected_behavior_repeats": 0
+    },
+    {
+      "execution_id": "consistency-baseline-10-r2",
+      "won": true,
+      "literal_repeats": 0,
+      "rejected_behavior_repeats": 0
+    },
+    {
+      "execution_id": "consistency-prompt-10-r1",
+      "won": true,
+      "literal_repeats": 0,
+      "rejected_behavior_repeats": 0
+    },
+    {
+      "execution_id": "consistency-prompt-10-r2",
+      "won": true,
+      "literal_repeats": 0,
+      "rejected_behavior_repeats": 0
+    },
+    {
+      "execution_id": "consistency-checker-10-r1",
+      "won": true,
+      "literal_repeats": 0,
+      "rejected_behavior_repeats": 0
+    },
+    {
+      "execution_id": "consistency-checker-10-r2",
+      "won": true,
+      "literal_repeats": 0,
+      "rejected_behavior_repeats": 0
+    }
+  ],
+  "scope": "Action observation/event equality, checker outputs, success flags and existing witness semantics. Fresh episode IDs and signing receipts intentionally excluded. Not a provider rerun."
+}

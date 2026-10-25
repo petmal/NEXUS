@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from collections.abc import Sequence
+from collections.abc import Hashable, Sequence
 
 from nexus.engine.canonical import canonical_hash
 from nexus.models.episode import PublicEpisode
@@ -25,6 +25,8 @@ def submission_witnesses(
     factory = getattr(runtime, "decision_witness", None)
     if factory is None:
         return None
+    equivalence_key = getattr(runtime, "decision_equivalence_key", None)
+    rejected: dict[Hashable, int] = {}
     posterior = runtime.belief(public.investigation)
     tracker = runtime.mission_tracker(public)
     seen: set[tuple[int, ...]] = set()
@@ -41,6 +43,13 @@ def submission_witnesses(
         tracker.observe(record)
         if record.action.type == "finish":
             attempted = tracker.attempted()
+            key = (
+                equivalence_key(public.investigation, attempted)
+                if equivalence_key is not None and attempted is not None
+                else None
+            )
+            if equivalence_key is not None and attempted is not None and key is None:
+                raise ValueError("decision equivalence capability returned a null key")
             evidence = assess_evidence(posterior, attempted)
             witness = factory(posterior, attempted, tuple(trace[:index]))
             if (evidence.classification in ("compatible", "contradicted")) != (witness is not None):
@@ -51,6 +60,9 @@ def submission_witnesses(
                     classification=evidence.classification,
                     build=attempted,
                     repeated_build=attempted is not None and attempted in seen,
+                    previous_rejected_equivalent_turn=(
+                        rejected.get(key) if key is not None else None
+                    ),
                     witness=witness,
                 )
             )
@@ -58,6 +70,8 @@ def submission_witnesses(
                 seen.add(attempted)
                 if record.terminal_status.value != "won":
                     posterior.exclude_target(attempted)
+                    if key is not None:
+                        rejected.setdefault(key, record.turn)
         observed = runtime.measurement(record)
         if observed is not None:
             posterior.observe(observed)
@@ -66,4 +80,8 @@ def submission_witnesses(
             first = SupportedDecisionPoint(
                 turn=record.turn, state_sha256=record.after_hash, decision=common[0]
             )
-    return EvidenceWitnessReport(submissions=tuple(result), first_supported_decision=first)
+    return EvidenceWitnessReport(
+        submissions=tuple(result),
+        first_supported_decision=first,
+        decision_equivalence_available=equivalence_key is not None,
+    )

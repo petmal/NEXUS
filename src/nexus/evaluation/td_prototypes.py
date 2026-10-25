@@ -10,9 +10,10 @@ from functools import cache
 from itertools import product
 from time import perf_counter
 
-from nexus.evaluation.matrix import atomic_json, source_digest
+from nexus.evaluation.artifacts import atomic_json
 from nexus.ontology.revision.laws import INITIAL, PROGRAMS, advance, display
 from nexus.ontology.revision.proof import require, scalar_step
+from nexus.provenance import source_digest
 from nexus.solver.decision_audit import DecisionAudit
 from nexus.solver.finite_machine import FiniteMachine
 

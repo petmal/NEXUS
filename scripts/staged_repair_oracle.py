@@ -4,7 +4,7 @@ import argparse
 from pathlib import Path
 from time import perf_counter
 
-from nexus.evaluation.matrix import atomic_json
+from nexus.evaluation.artifacts import atomic_json
 from nexus.ontology.staged.proof import prove_all
 
 

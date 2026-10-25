@@ -7,10 +7,11 @@ from copy import deepcopy
 from hashlib import sha256
 from pathlib import Path
 
+from nexus.evaluation.artifacts import atomic_json
 from nexus.evaluation.discovery import digest
-from nexus.evaluation.matrix import atomic_json, source_digest
 from nexus.evaluation.td_cycle import Cycle
 from nexus.ontology.revision.proof import require
+from nexus.provenance import source_digest
 
 TEMPLATE_SHA256 = "e75448f84e9c8cec4b3f161a7ce0911d95db4a62ee6f6c88f32d569ed6c53747"
 

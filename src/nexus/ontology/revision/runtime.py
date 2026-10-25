@@ -24,7 +24,10 @@ from nexus.ontology.discovery.runtime import (
     validate_episode,
 )
 from nexus.ontology.revision.assistance import check_readings
-from nexus.ontology.revision.diagnostics import decision_witness
+from nexus.ontology.revision.diagnostics import (
+    decision_equivalence_key,
+    decision_witness,
+)
 from nexus.ontology.revision.schema import FAMILY
 
 
@@ -94,6 +97,7 @@ __all__ = [
     "check_construction",
     "checker_available",
     "configure",
+    "decision_equivalence_key",
     "decision_witness",
     "expected",
     "log_terminal",

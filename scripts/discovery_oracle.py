@@ -3,7 +3,7 @@
 import argparse
 from pathlib import Path
 
-from nexus.evaluation.matrix import atomic_json
+from nexus.evaluation.artifacts import atomic_json
 from nexus.ontology.discovery.proof import prove_all
 
 
