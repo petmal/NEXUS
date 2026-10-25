@@ -1,5 +1,10 @@
 # Bounded T/D cycle: implementation and local findings
 
+**Historical pre-live checkpoint.** The planned screen has now completed; see the
+[40-run assessment](research/td-evaluation-assessment-2026-10-24.md) and
+[T/D synthesis](td-experiments-and-next-directions.md). Instructions and source
+bindings below describe the original qualified release.
+
 24 October 2026 UTC (23 October in the original planning timezone).
 
 The locally verifiable work is implemented. The next evidence gate is the fixed

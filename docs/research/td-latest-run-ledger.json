@@ -1,0 +1,2909 @@
+{
+  "version": "td-cycle-run-ledger-v1",
+  "export_manifest_sha256": "5a4b13a0a0bcbcd0cb2ac4dd64f71a12ba643d415b15915c41fd5450ae1b049f",
+  "instruction": "Fill from actual harness/provider/image artifacts. Null means unobserved; never infer provider completion from a service shutdown.",
+  "runs": [
+    {
+      "execution_id": "baseline-01-r1",
+      "status": "completed",
+      "started_at": "2026-10-23T22:49:41-04:00",
+      "ended_at": "2026-10-23T22:52:35-04:00",
+      "harness_version": "v0.25.3-0.20261017164258-00dada61a962",
+      "image_id": "sha256:49e255626f3bbeb65693c797db5f2ecf2edceede5577f733b98daa3cb47ac378",
+      "image_repo_digest": "localhost/nexus@sha256:5b544cbf7140c943859b8ecd6d7a98ab9085611022d323ae51bfebac211bd6ab",
+      "image_vcs_revision": "8f5fc0e77262d0772f5193d3f61995dc567885a3",
+      "observed_source_sha256": "a51c008b96a660f8b322f6e4a7528c9d726b7757084fab791773df5a47ec36ee",
+      "resolved_model_version": null,
+      "provider_stop_reason": "completed",
+      "provider_retries": null,
+      "tool_calls": 29,
+      "world_actions": 24,
+      "receipt_validation": {
+        "classification": "accepted_receipt",
+        "live_mission_won": true,
+        "receipt_match": true,
+        "version": "receipt-classification-v1"
+      },
+      "terminal_classification": "supported_win",
+      "log_files_sha256": {
+        "22-49-40.json": "a19ebb865b3bcb12a620222e3fa8f97c070af358a8d8cea5b6d548665bed2634",
+        "22-49-40.log": "808d3adbbb46ba73ab1999104dc38e7288fce40473f2b66535afa651b7805bc6"
+      },
+      "notes": "All expected trace/tool/result joins verified. No retry/error/warning found in supplied logs; SDK-internal retries not exposed. Model name is an alias; immutable resolved model version unavailable. Timestamps use the -0400 offset corroborated by result/tool timestamps.",
+      "trace_id": "01M5NX0RKJCZZHETGVJZB2JK4R",
+      "episode_id": "a8b6d16d021d7f3d98bc13f1ed9626a8",
+      "recorded_model": "gpt-6-astra",
+      "run_config": {
+        "Model": "gpt-6-astra",
+        "MaxRequestsPerMinute": 20,
+        "ModelParameters": {
+          "frequency-penalty": null,
+          "max-completion-tokens": null,
+          "presence-penalty": null,
+          "reasoning-context": null,
+          "reasoning-effort": "medium",
+          "reasoning-mode": null,
+          "temperature": null,
+          "text-response-format": false,
+          "top-p": null,
+          "verbosity": null
+        },
+        "RetryPolicy": {
+          "MaxRetryAttempts": 3,
+          "InitialDelaySeconds": 30
+        }
+      },
+      "evaluation_seed": "6b3b10759c0bd42611acecf57f47a85c",
+      "token_usage": {
+        "InputTokens": 262250,
+        "OutputTokens": 5455,
+        "ReasoningTokens": 4375,
+        "InputCacheWriteTokens": 16900,
+        "InputCacheReadTokens": 245266,
+        "InputTokenAccounting": "cache_tokens_included",
+        "OutputTokenAccounting": "reasoning_tokens_included"
+      },
+      "logged_retry_events": 0,
+      "harness_kind": "Passed",
+      "first_submission_correct": true,
+      "first_submission_supported": true,
+      "measurements": 10,
+      "check_calls": 0,
+      "source_references": {
+        "file": "22-49-40.log",
+        "binding_line": 24,
+        "report_line": 777,
+        "receipt_line": 622
+      }
+    },
+    {
+      "execution_id": "baseline-02-r1",
+      "status": "completed",
+      "started_at": "2026-10-23T22:52:35-04:00",
+      "ended_at": "2026-10-23T22:55:29-04:00",
+      "harness_version": "v0.25.3-0.20261017164258-00dada61a962",
+      "image_id": "sha256:49e255626f3bbeb65693c797db5f2ecf2edceede5577f733b98daa3cb47ac378",
+      "image_repo_digest": "localhost/nexus@sha256:5b544cbf7140c943859b8ecd6d7a98ab9085611022d323ae51bfebac211bd6ab",
+      "image_vcs_revision": "8f5fc0e77262d0772f5193d3f61995dc567885a3",
+      "observed_source_sha256": "a51c008b96a660f8b322f6e4a7528c9d726b7757084fab791773df5a47ec36ee",
+      "resolved_model_version": null,
+      "provider_stop_reason": "completed",
+      "provider_retries": null,
+      "tool_calls": 31,
+      "world_actions": 26,
+      "receipt_validation": {
+        "classification": "accepted_receipt",
+        "live_mission_won": true,
+        "receipt_match": true,
+        "version": "receipt-classification-v1"
+      },
+      "terminal_classification": "supported_win",
+      "log_files_sha256": {
+        "22-49-40.json": "a19ebb865b3bcb12a620222e3fa8f97c070af358a8d8cea5b6d548665bed2634",
+        "22-49-40.log": "808d3adbbb46ba73ab1999104dc38e7288fce40473f2b66535afa651b7805bc6"
+      },
+      "notes": "All expected trace/tool/result joins verified. No retry/error/warning found in supplied logs; SDK-internal retries not exposed. Model name is an alias; immutable resolved model version unavailable. Timestamps use the -0400 offset corroborated by result/tool timestamps.",
+      "trace_id": "01M5NX62C3MWQ4T7S81YW4PNYS",
+      "episode_id": "f065983ae94bc88e5588ee238d4ab044",
+      "recorded_model": "gpt-6-astra",
+      "run_config": {
+        "Model": "gpt-6-astra",
+        "MaxRequestsPerMinute": 20,
+        "ModelParameters": {
+          "frequency-penalty": null,
+          "max-completion-tokens": null,
+          "presence-penalty": null,
+          "reasoning-context": null,
+          "reasoning-effort": "medium",
+          "reasoning-mode": null,
+          "temperature": null,
+          "text-response-format": false,
+          "top-p": null,
+          "verbosity": null
+        },
+        "RetryPolicy": {
+          "MaxRetryAttempts": 3,
+          "InitialDelaySeconds": 30
+        }
+      },
+      "evaluation_seed": "6b3b10759c0bd42611acecf57f47a85c",
+      "token_usage": {
+        "InputTokens": 299823,
+        "OutputTokens": 6002,
+        "ReasoningTokens": 4868,
+        "InputCacheWriteTokens": 16352,
+        "InputCacheReadTokens": 283381,
+        "InputTokenAccounting": "cache_tokens_included",
+        "OutputTokenAccounting": "reasoning_tokens_included"
+      },
+      "logged_retry_events": 0,
+      "harness_kind": "Passed",
+      "first_submission_correct": false,
+      "first_submission_supported": false,
+      "measurements": 8,
+      "check_calls": 0,
+      "source_references": {
+        "file": "22-49-40.log",
+        "binding_line": 804,
+        "report_line": 1592,
+        "receipt_line": 1440
+      }
+    },
+    {
+      "execution_id": "baseline-03-r1",
+      "status": "completed",
+      "started_at": "2026-10-23T22:55:29-04:00",
+      "ended_at": "2026-10-23T22:58:35-04:00",
+      "harness_version": "v0.25.3-0.20261017164258-00dada61a962",
+      "image_id": "sha256:49e255626f3bbeb65693c797db5f2ecf2edceede5577f733b98daa3cb47ac378",
+      "image_repo_digest": "localhost/nexus@sha256:5b544cbf7140c943859b8ecd6d7a98ab9085611022d323ae51bfebac211bd6ab",
+      "image_vcs_revision": "8f5fc0e77262d0772f5193d3f61995dc567885a3",
+      "observed_source_sha256": "a51c008b96a660f8b322f6e4a7528c9d726b7757084fab791773df5a47ec36ee",
+      "resolved_model_version": null,
+      "provider_stop_reason": "completed",
+      "provider_retries": null,
+      "tool_calls": 31,
+      "world_actions": 26,
+      "receipt_validation": {
+        "classification": "accepted_receipt",
+        "live_mission_won": true,
+        "receipt_match": true,
+        "version": "receipt-classification-v1"
+      },
+      "terminal_classification": "supported_win",
+      "log_files_sha256": {
+        "22-49-40.json": "a19ebb865b3bcb12a620222e3fa8f97c070af358a8d8cea5b6d548665bed2634",
+        "22-49-40.log": "808d3adbbb46ba73ab1999104dc38e7288fce40473f2b66535afa651b7805bc6"
+      },
+      "notes": "All expected trace/tool/result joins verified. No retry/error/warning found in supplied logs; SDK-internal retries not exposed. Model name is an alias; immutable resolved model version unavailable. Timestamps use the -0400 offset corroborated by result/tool timestamps.",
+      "trace_id": "01M5NXBD3RJN41ZB1205N5APH0",
+      "episode_id": "5a41ca046cb926f57e8c93963b9214fe",
+      "recorded_model": "gpt-6-astra",
+      "run_config": {
+        "Model": "gpt-6-astra",
+        "MaxRequestsPerMinute": 20,
+        "ModelParameters": {
+          "frequency-penalty": null,
+          "max-completion-tokens": null,
+          "presence-penalty": null,
+          "reasoning-context": null,
+          "reasoning-effort": "medium",
+          "reasoning-mode": null,
+          "temperature": null,
+          "text-response-format": false,
+          "top-p": null,
+          "verbosity": null
+        },
+        "RetryPolicy": {
+          "MaxRetryAttempts": 3,
+          "InitialDelaySeconds": 30
+        }
+      },
+      "evaluation_seed": "6b3b10759c0bd42611acecf57f47a85c",
+      "token_usage": {
+        "InputTokens": 311734,
+        "OutputTokens": 6342,
+        "ReasoningTokens": 5217,
+        "InputCacheWriteTokens": 16916,
+        "InputCacheReadTokens": 294728,
+        "InputTokenAccounting": "cache_tokens_included",
+        "OutputTokenAccounting": "reasoning_tokens_included"
+      },
+      "logged_retry_events": 0,
+      "harness_kind": "Passed",
+      "first_submission_correct": false,
+      "first_submission_supported": false,
+      "measurements": 8,
+      "check_calls": 0,
+      "source_references": {
+        "file": "22-49-40.log",
+        "binding_line": 1619,
+        "report_line": 2407,
+        "receipt_line": 2255
+      }
+    },
+    {
+      "execution_id": "baseline-04-r1",
+      "status": "completed",
+      "started_at": "2026-10-23T22:58:35-04:00",
+      "ended_at": "2026-10-23T23:00:18-04:00",
+      "harness_version": "v0.25.3-0.20261017164258-00dada61a962",
+      "image_id": "sha256:49e255626f3bbeb65693c797db5f2ecf2edceede5577f733b98daa3cb47ac378",
+      "image_repo_digest": "localhost/nexus@sha256:5b544cbf7140c943859b8ecd6d7a98ab9085611022d323ae51bfebac211bd6ab",
+      "image_vcs_revision": "8f5fc0e77262d0772f5193d3f61995dc567885a3",
+      "observed_source_sha256": "a51c008b96a660f8b322f6e4a7528c9d726b7757084fab791773df5a47ec36ee",
+      "resolved_model_version": null,
+      "provider_stop_reason": "completed",
+      "provider_retries": null,
+      "tool_calls": 21,
+      "world_actions": 16,
+      "receipt_validation": {
+        "classification": "accepted_receipt",
+        "live_mission_won": true,
+        "receipt_match": true,
+        "version": "receipt-classification-v1"
+      },
+      "terminal_classification": "supported_win",
+      "log_files_sha256": {
+        "22-49-40.json": "a19ebb865b3bcb12a620222e3fa8f97c070af358a8d8cea5b6d548665bed2634",
+        "22-49-40.log": "808d3adbbb46ba73ab1999104dc38e7288fce40473f2b66535afa651b7805bc6"
+      },
+      "notes": "All expected trace/tool/result joins verified. No retry/error/warning found in supplied logs; SDK-internal retries not exposed. Model name is an alias; immutable resolved model version unavailable. Timestamps use the -0400 offset corroborated by result/tool timestamps.",
+      "trace_id": "01M5NXH2PC0F2875M9KAC6RAWJ",
+      "episode_id": "4d998809ae1a8eb9b9730ef77bba93dd",
+      "recorded_model": "gpt-6-astra",
+      "run_config": {
+        "Model": "gpt-6-astra",
+        "MaxRequestsPerMinute": 20,
+        "ModelParameters": {
+          "frequency-penalty": null,
+          "max-completion-tokens": null,
+          "presence-penalty": null,
+          "reasoning-context": null,
+          "reasoning-effort": "medium",
+          "reasoning-mode": null,
+          "temperature": null,
+          "text-response-format": false,
+          "top-p": null,
+          "verbosity": null
+        },
+        "RetryPolicy": {
+          "MaxRetryAttempts": 3,
+          "InitialDelaySeconds": 30
+        }
+      },
+      "evaluation_seed": "6b3b10759c0bd42611acecf57f47a85c",
+      "token_usage": {
+        "InputTokens": 143300,
+        "OutputTokens": 2833,
+        "ReasoningTokens": 2076,
+        "InputCacheWriteTokens": 10475,
+        "InputCacheReadTokens": 132765,
+        "InputTokenAccounting": "cache_tokens_included",
+        "OutputTokenAccounting": "reasoning_tokens_included"
+      },
+      "logged_retry_events": 0,
+      "harness_kind": "Passed",
+      "first_submission_correct": true,
+      "first_submission_supported": true,
+      "measurements": 6,
+      "check_calls": 0,
+      "source_references": {
+        "file": "22-49-40.log",
+        "binding_line": 2434,
+        "report_line": 2984,
+        "receipt_line": 2880
+      }
+    },
+    {
+      "execution_id": "baseline-05-r1",
+      "status": "completed",
+      "started_at": "2026-10-23T23:00:18-04:00",
+      "ended_at": "2026-10-23T23:02:26-04:00",
+      "harness_version": "v0.25.3-0.20261017164258-00dada61a962",
+      "image_id": "sha256:49e255626f3bbeb65693c797db5f2ecf2edceede5577f733b98daa3cb47ac378",
+      "image_repo_digest": "localhost/nexus@sha256:5b544cbf7140c943859b8ecd6d7a98ab9085611022d323ae51bfebac211bd6ab",
+      "image_vcs_revision": "8f5fc0e77262d0772f5193d3f61995dc567885a3",
+      "observed_source_sha256": "a51c008b96a660f8b322f6e4a7528c9d726b7757084fab791773df5a47ec36ee",
+      "resolved_model_version": null,
+      "provider_stop_reason": "completed",
+      "provider_retries": null,
+      "tool_calls": 23,
+      "world_actions": 18,
+      "receipt_validation": {
+        "classification": "accepted_receipt",
+        "live_mission_won": true,
+        "receipt_match": true,
+        "version": "receipt-classification-v1"
+      },
+      "terminal_classification": "supported_win",
+      "log_files_sha256": {
+        "22-49-40.json": "a19ebb865b3bcb12a620222e3fa8f97c070af358a8d8cea5b6d548665bed2634",
+        "22-49-40.log": "808d3adbbb46ba73ab1999104dc38e7288fce40473f2b66535afa651b7805bc6"
+      },
+      "notes": "All expected trace/tool/result joins verified. No retry/error/warning found in supplied logs; SDK-internal retries not exposed. Model name is an alias; immutable resolved model version unavailable. Timestamps use the -0400 offset corroborated by result/tool timestamps.",
+      "trace_id": "01M5NXM735R15K9GEP6H797C6Q",
+      "episode_id": "dd629e49bf2baf195e27e29598a63043",
+      "recorded_model": "gpt-6-astra",
+      "run_config": {
+        "Model": "gpt-6-astra",
+        "MaxRequestsPerMinute": 20,
+        "ModelParameters": {
+          "frequency-penalty": null,
+          "max-completion-tokens": null,
+          "presence-penalty": null,
+          "reasoning-context": null,
+          "reasoning-effort": "medium",
+          "reasoning-mode": null,
+          "temperature": null,
+          "text-response-format": false,
+          "top-p": null,
+          "verbosity": null
+        },
+        "RetryPolicy": {
+          "MaxRetryAttempts": 3,
+          "InitialDelaySeconds": 30
+        }
+      },
+      "evaluation_seed": "6b3b10759c0bd42611acecf57f47a85c",
+      "token_usage": {
+        "InputTokens": 176830,
+        "OutputTokens": 4009,
+        "ReasoningTokens": 3170,
+        "InputCacheWriteTokens": 12243,
+        "InputCacheReadTokens": 164521,
+        "InputTokenAccounting": "cache_tokens_included",
+        "OutputTokenAccounting": "reasoning_tokens_included"
+      },
+      "logged_retry_events": 0,
+      "harness_kind": "Passed",
+      "first_submission_correct": true,
+      "first_submission_supported": true,
+      "measurements": 7,
+      "check_calls": 0,
+      "source_references": {
+        "file": "22-49-40.log",
+        "binding_line": 3011,
+        "report_line": 3618,
+        "receipt_line": 3495
+      }
+    },
+    {
+      "execution_id": "baseline-06-r1",
+      "status": "completed",
+      "started_at": "2026-10-23T23:02:26-04:00",
+      "ended_at": "2026-10-23T23:04:12-04:00",
+      "harness_version": "v0.25.3-0.20261017164258-00dada61a962",
+      "image_id": "sha256:49e255626f3bbeb65693c797db5f2ecf2edceede5577f733b98daa3cb47ac378",
+      "image_repo_digest": "localhost/nexus@sha256:5b544cbf7140c943859b8ecd6d7a98ab9085611022d323ae51bfebac211bd6ab",
+      "image_vcs_revision": "8f5fc0e77262d0772f5193d3f61995dc567885a3",
+      "observed_source_sha256": "a51c008b96a660f8b322f6e4a7528c9d726b7757084fab791773df5a47ec36ee",
+      "resolved_model_version": null,
+      "provider_stop_reason": "completed",
+      "provider_retries": null,
+      "tool_calls": 21,
+      "world_actions": 16,
+      "receipt_validation": {
+        "classification": "accepted_receipt",
+        "live_mission_won": true,
+        "receipt_match": true,
+        "version": "receipt-classification-v1"
+      },
+      "terminal_classification": "compatible_win",
+      "log_files_sha256": {
+        "22-49-40.json": "a19ebb865b3bcb12a620222e3fa8f97c070af358a8d8cea5b6d548665bed2634",
+        "22-49-40.log": "808d3adbbb46ba73ab1999104dc38e7288fce40473f2b66535afa651b7805bc6"
+      },
+      "notes": "All expected trace/tool/result joins verified. No retry/error/warning found in supplied logs; SDK-internal retries not exposed. Model name is an alias; immutable resolved model version unavailable. Timestamps use the -0400 offset corroborated by result/tool timestamps.",
+      "trace_id": "01M5NXR3NE477CACM5D7Y4R6DX",
+      "episode_id": "04131c0a1fcfe2e5a81dc9498bc229af",
+      "recorded_model": "gpt-6-astra",
+      "run_config": {
+        "Model": "gpt-6-astra",
+        "MaxRequestsPerMinute": 20,
+        "ModelParameters": {
+          "frequency-penalty": null,
+          "max-completion-tokens": null,
+          "presence-penalty": null,
+          "reasoning-context": null,
+          "reasoning-effort": "medium",
+          "reasoning-mode": null,
+          "temperature": null,
+          "text-response-format": false,
+          "top-p": null,
+          "verbosity": null
+        },
+        "RetryPolicy": {
+          "MaxRetryAttempts": 3,
+          "InitialDelaySeconds": 30
+        }
+      },
+      "evaluation_seed": "6b3b10759c0bd42611acecf57f47a85c",
+      "token_usage": {
+        "InputTokens": 146613,
+        "OutputTokens": 2988,
+        "ReasoningTokens": 2233,
+        "InputCacheWriteTokens": 10620,
+        "InputCacheReadTokens": 135933,
+        "InputTokenAccounting": "cache_tokens_included",
+        "OutputTokenAccounting": "reasoning_tokens_included"
+      },
+      "logged_retry_events": 0,
+      "harness_kind": "Passed",
+      "first_submission_correct": true,
+      "first_submission_supported": false,
+      "measurements": 6,
+      "check_calls": 0,
+      "source_references": {
+        "file": "22-49-40.log",
+        "binding_line": 3645,
+        "report_line": 4198,
+        "receipt_line": 4091
+      }
+    },
+    {
+      "execution_id": "baseline-07-r1",
+      "status": "completed",
+      "started_at": "2026-10-23T23:04:12-04:00",
+      "ended_at": "2026-10-23T23:07:01-04:00",
+      "harness_version": "v0.25.3-0.20261017164258-00dada61a962",
+      "image_id": "sha256:49e255626f3bbeb65693c797db5f2ecf2edceede5577f733b98daa3cb47ac378",
+      "image_repo_digest": "localhost/nexus@sha256:5b544cbf7140c943859b8ecd6d7a98ab9085611022d323ae51bfebac211bd6ab",
+      "image_vcs_revision": "8f5fc0e77262d0772f5193d3f61995dc567885a3",
+      "observed_source_sha256": "a51c008b96a660f8b322f6e4a7528c9d726b7757084fab791773df5a47ec36ee",
+      "resolved_model_version": null,
+      "provider_stop_reason": "completed",
+      "provider_retries": null,
+      "tool_calls": 27,
+      "world_actions": 22,
+      "receipt_validation": {
+        "classification": "accepted_receipt",
+        "live_mission_won": true,
+        "receipt_match": true,
+        "version": "receipt-classification-v1"
+      },
+      "terminal_classification": "supported_win",
+      "log_files_sha256": {
+        "22-49-40.json": "a19ebb865b3bcb12a620222e3fa8f97c070af358a8d8cea5b6d548665bed2634",
+        "22-49-40.log": "808d3adbbb46ba73ab1999104dc38e7288fce40473f2b66535afa651b7805bc6"
+      },
+      "notes": "All expected trace/tool/result joins verified. No retry/error/warning found in supplied logs; SDK-internal retries not exposed. Model name is an alias; immutable resolved model version unavailable. Timestamps use the -0400 offset corroborated by result/tool timestamps.",
+      "trace_id": "01M5NXVB3W7BMG63FB0YV0MM9R",
+      "episode_id": "409644c533cd7f99131620db4f692ce5",
+      "recorded_model": "gpt-6-astra",
+      "run_config": {
+        "Model": "gpt-6-astra",
+        "MaxRequestsPerMinute": 20,
+        "ModelParameters": {
+          "frequency-penalty": null,
+          "max-completion-tokens": null,
+          "presence-penalty": null,
+          "reasoning-context": null,
+          "reasoning-effort": "medium",
+          "reasoning-mode": null,
+          "temperature": null,
+          "text-response-format": false,
+          "top-p": null,
+          "verbosity": null
+        },
+        "RetryPolicy": {
+          "MaxRetryAttempts": 3,
+          "InitialDelaySeconds": 30
+        }
+      },
+      "evaluation_seed": "6b3b10759c0bd42611acecf57f47a85c",
+      "token_usage": {
+        "InputTokens": 238492,
+        "OutputTokens": 5260,
+        "ReasoningTokens": 4269,
+        "InputCacheWriteTokens": 14361,
+        "InputCacheReadTokens": 224053,
+        "InputTokenAccounting": "cache_tokens_included",
+        "OutputTokenAccounting": "reasoning_tokens_included"
+      },
+      "logged_retry_events": 0,
+      "harness_kind": "Passed",
+      "first_submission_correct": true,
+      "first_submission_supported": true,
+      "measurements": 9,
+      "check_calls": 0,
+      "source_references": {
+        "file": "22-49-40.log",
+        "binding_line": 4225,
+        "report_line": 4938,
+        "receipt_line": 4785
+      }
+    },
+    {
+      "execution_id": "baseline-08-r1",
+      "status": "completed",
+      "started_at": "2026-10-23T23:07:01-04:00",
+      "ended_at": "2026-10-23T23:09:21-04:00",
+      "harness_version": "v0.25.3-0.20261017164258-00dada61a962",
+      "image_id": "sha256:49e255626f3bbeb65693c797db5f2ecf2edceede5577f733b98daa3cb47ac378",
+      "image_repo_digest": "localhost/nexus@sha256:5b544cbf7140c943859b8ecd6d7a98ab9085611022d323ae51bfebac211bd6ab",
+      "image_vcs_revision": "8f5fc0e77262d0772f5193d3f61995dc567885a3",
+      "observed_source_sha256": "a51c008b96a660f8b322f6e4a7528c9d726b7757084fab791773df5a47ec36ee",
+      "resolved_model_version": null,
+      "provider_stop_reason": "completed",
+      "provider_retries": null,
+      "tool_calls": 27,
+      "world_actions": 22,
+      "receipt_validation": {
+        "classification": "accepted_receipt",
+        "live_mission_won": true,
+        "receipt_match": true,
+        "version": "receipt-classification-v1"
+      },
+      "terminal_classification": "compatible_win",
+      "log_files_sha256": {
+        "22-49-40.json": "a19ebb865b3bcb12a620222e3fa8f97c070af358a8d8cea5b6d548665bed2634",
+        "22-49-40.log": "808d3adbbb46ba73ab1999104dc38e7288fce40473f2b66535afa651b7805bc6"
+      },
+      "notes": "All expected trace/tool/result joins verified. No retry/error/warning found in supplied logs; SDK-internal retries not exposed. Model name is an alias; immutable resolved model version unavailable. Timestamps use the -0400 offset corroborated by result/tool timestamps.",
+      "trace_id": "01M5NY0GF0HSN3QZHQBD7KG769",
+      "episode_id": "0277bc3346ce7fdc149dfbf6778d4b24",
+      "recorded_model": "gpt-6-astra",
+      "run_config": {
+        "Model": "gpt-6-astra",
+        "MaxRequestsPerMinute": 20,
+        "ModelParameters": {
+          "frequency-penalty": null,
+          "max-completion-tokens": null,
+          "presence-penalty": null,
+          "reasoning-context": null,
+          "reasoning-effort": "medium",
+          "reasoning-mode": null,
+          "temperature": null,
+          "text-response-format": false,
+          "top-p": null,
+          "verbosity": null
+        },
+        "RetryPolicy": {
+          "MaxRetryAttempts": 3,
+          "InitialDelaySeconds": 30
+        }
+      },
+      "evaluation_seed": "6b3b10759c0bd42611acecf57f47a85c",
+      "token_usage": {
+        "InputTokens": 236102,
+        "OutputTokens": 4439,
+        "ReasoningTokens": 3480,
+        "InputCacheWriteTokens": 13745,
+        "InputCacheReadTokens": 222279,
+        "InputTokenAccounting": "cache_tokens_included",
+        "OutputTokenAccounting": "reasoning_tokens_included"
+      },
+      "logged_retry_events": 0,
+      "harness_kind": "Passed",
+      "first_submission_correct": false,
+      "first_submission_supported": false,
+      "measurements": 6,
+      "check_calls": 0,
+      "source_references": {
+        "file": "22-49-40.log",
+        "binding_line": 4965,
+        "report_line": 5657,
+        "receipt_line": 5525
+      }
+    },
+    {
+      "execution_id": "baseline-09-r1",
+      "status": "completed",
+      "started_at": "2026-10-23T23:09:21-04:00",
+      "ended_at": "2026-10-23T23:11:47-04:00",
+      "harness_version": "v0.25.3-0.20261017164258-00dada61a962",
+      "image_id": "sha256:49e255626f3bbeb65693c797db5f2ecf2edceede5577f733b98daa3cb47ac378",
+      "image_repo_digest": "localhost/nexus@sha256:5b544cbf7140c943859b8ecd6d7a98ab9085611022d323ae51bfebac211bd6ab",
+      "image_vcs_revision": "8f5fc0e77262d0772f5193d3f61995dc567885a3",
+      "observed_source_sha256": "a51c008b96a660f8b322f6e4a7528c9d726b7757084fab791773df5a47ec36ee",
+      "resolved_model_version": null,
+      "provider_stop_reason": "completed",
+      "provider_retries": null,
+      "tool_calls": 28,
+      "world_actions": 23,
+      "receipt_validation": {
+        "classification": "accepted_receipt",
+        "live_mission_won": true,
+        "receipt_match": true,
+        "version": "receipt-classification-v1"
+      },
+      "terminal_classification": "supported_win",
+      "log_files_sha256": {
+        "22-49-40.json": "a19ebb865b3bcb12a620222e3fa8f97c070af358a8d8cea5b6d548665bed2634",
+        "22-49-40.log": "808d3adbbb46ba73ab1999104dc38e7288fce40473f2b66535afa651b7805bc6"
+      },
+      "notes": "All expected trace/tool/result joins verified. No retry/error/warning found in supplied logs; SDK-internal retries not exposed. Model name is an alias; immutable resolved model version unavailable. Timestamps use the -0400 offset corroborated by result/tool timestamps.",
+      "trace_id": "01M5NY4SK4S9ZD2J7SN8M4TA5Y",
+      "episode_id": "ef3a680079ad482daf4448173df5bce1",
+      "recorded_model": "gpt-6-astra",
+      "run_config": {
+        "Model": "gpt-6-astra",
+        "MaxRequestsPerMinute": 20,
+        "ModelParameters": {
+          "frequency-penalty": null,
+          "max-completion-tokens": null,
+          "presence-penalty": null,
+          "reasoning-context": null,
+          "reasoning-effort": "medium",
+          "reasoning-mode": null,
+          "temperature": null,
+          "text-response-format": false,
+          "top-p": null,
+          "verbosity": null
+        },
+        "RetryPolicy": {
+          "MaxRetryAttempts": 3,
+          "InitialDelaySeconds": 30
+        }
+      },
+      "evaluation_seed": "6b3b10759c0bd42611acecf57f47a85c",
+      "token_usage": {
+        "InputTokens": 234423,
+        "OutputTokens": 4574,
+        "ReasoningTokens": 3562,
+        "InputCacheWriteTokens": 13975,
+        "InputCacheReadTokens": 220367,
+        "InputTokenAccounting": "cache_tokens_included",
+        "OutputTokenAccounting": "reasoning_tokens_included"
+      },
+      "logged_retry_events": 0,
+      "harness_kind": "Passed",
+      "first_submission_correct": false,
+      "first_submission_supported": false,
+      "measurements": 8,
+      "check_calls": 0,
+      "source_references": {
+        "file": "22-49-40.log",
+        "binding_line": 5684,
+        "report_line": 6400,
+        "receipt_line": 6263
+      }
+    },
+    {
+      "execution_id": "baseline-10-r1",
+      "status": "completed",
+      "started_at": "2026-10-23T23:11:47-04:00",
+      "ended_at": "2026-10-23T23:14:21-04:00",
+      "harness_version": "v0.25.3-0.20261017164258-00dada61a962",
+      "image_id": "sha256:49e255626f3bbeb65693c797db5f2ecf2edceede5577f733b98daa3cb47ac378",
+      "image_repo_digest": "localhost/nexus@sha256:5b544cbf7140c943859b8ecd6d7a98ab9085611022d323ae51bfebac211bd6ab",
+      "image_vcs_revision": "8f5fc0e77262d0772f5193d3f61995dc567885a3",
+      "observed_source_sha256": "a51c008b96a660f8b322f6e4a7528c9d726b7757084fab791773df5a47ec36ee",
+      "resolved_model_version": null,
+      "provider_stop_reason": "completed",
+      "provider_retries": null,
+      "tool_calls": 32,
+      "world_actions": 27,
+      "receipt_validation": {
+        "classification": "accepted_receipt",
+        "live_mission_won": true,
+        "receipt_match": true,
+        "version": "receipt-classification-v1"
+      },
+      "terminal_classification": "supported_win",
+      "log_files_sha256": {
+        "22-49-40.json": "a19ebb865b3bcb12a620222e3fa8f97c070af358a8d8cea5b6d548665bed2634",
+        "22-49-40.log": "808d3adbbb46ba73ab1999104dc38e7288fce40473f2b66535afa651b7805bc6"
+      },
+      "notes": "All expected trace/tool/result joins verified. No retry/error/warning found in supplied logs; SDK-internal retries not exposed. Model name is an alias; immutable resolved model version unavailable. Timestamps use the -0400 offset corroborated by result/tool timestamps.",
+      "trace_id": "01M5NY9855T4639XM0QSV0GATB",
+      "episode_id": "4d22d383613dc6b5ae96a232aa574281",
+      "recorded_model": "gpt-6-astra",
+      "run_config": {
+        "Model": "gpt-6-astra",
+        "MaxRequestsPerMinute": 20,
+        "ModelParameters": {
+          "frequency-penalty": null,
+          "max-completion-tokens": null,
+          "presence-penalty": null,
+          "reasoning-context": null,
+          "reasoning-effort": "medium",
+          "reasoning-mode": null,
+          "temperature": null,
+          "text-response-format": false,
+          "top-p": null,
+          "verbosity": null
+        },
+        "RetryPolicy": {
+          "MaxRetryAttempts": 3,
+          "InitialDelaySeconds": 30
+        }
+      },
+      "evaluation_seed": "6b3b10759c0bd42611acecf57f47a85c",
+      "token_usage": {
+        "InputTokens": 293526,
+        "OutputTokens": 4339,
+        "ReasoningTokens": 3173,
+        "InputCacheWriteTokens": 15259,
+        "InputCacheReadTokens": 278174,
+        "InputTokenAccounting": "cache_tokens_included",
+        "OutputTokenAccounting": "reasoning_tokens_included"
+      },
+      "logged_retry_events": 0,
+      "harness_kind": "Passed",
+      "first_submission_correct": false,
+      "first_submission_supported": false,
+      "measurements": 10,
+      "check_calls": 0,
+      "source_references": {
+        "file": "22-49-40.log",
+        "binding_line": 6427,
+        "report_line": 7231,
+        "receipt_line": 7082
+      }
+    },
+    {
+      "execution_id": "baseline-11-r1",
+      "status": "completed",
+      "started_at": "2026-10-23T23:14:21-04:00",
+      "ended_at": "2026-10-23T23:15:33-04:00",
+      "harness_version": "v0.25.3-0.20261017164258-00dada61a962",
+      "image_id": "sha256:49e255626f3bbeb65693c797db5f2ecf2edceede5577f733b98daa3cb47ac378",
+      "image_repo_digest": "localhost/nexus@sha256:5b544cbf7140c943859b8ecd6d7a98ab9085611022d323ae51bfebac211bd6ab",
+      "image_vcs_revision": "8f5fc0e77262d0772f5193d3f61995dc567885a3",
+      "observed_source_sha256": "a51c008b96a660f8b322f6e4a7528c9d726b7757084fab791773df5a47ec36ee",
+      "resolved_model_version": null,
+      "provider_stop_reason": "completed",
+      "provider_retries": null,
+      "tool_calls": 13,
+      "world_actions": 8,
+      "receipt_validation": {
+        "classification": "accepted_receipt",
+        "live_mission_won": true,
+        "receipt_match": true,
+        "version": "receipt-classification-v1"
+      },
+      "terminal_classification": "supported_win",
+      "log_files_sha256": {
+        "22-49-40.json": "a19ebb865b3bcb12a620222e3fa8f97c070af358a8d8cea5b6d548665bed2634",
+        "22-49-40.log": "808d3adbbb46ba73ab1999104dc38e7288fce40473f2b66535afa651b7805bc6"
+      },
+      "notes": "All expected trace/tool/result joins verified. No retry/error/warning found in supplied logs; SDK-internal retries not exposed. Model name is an alias; immutable resolved model version unavailable. Timestamps use the -0400 offset corroborated by result/tool timestamps.",
+      "trace_id": "01M5NYDXT09ACHFZF7KVQ53HHP",
+      "episode_id": "dce3dd2bc6552c8fc1f37dba15ff3cee",
+      "recorded_model": "gpt-6-astra",
+      "run_config": {
+        "Model": "gpt-6-astra",
+        "MaxRequestsPerMinute": 20,
+        "ModelParameters": {
+          "frequency-penalty": null,
+          "max-completion-tokens": null,
+          "presence-penalty": null,
+          "reasoning-context": null,
+          "reasoning-effort": "medium",
+          "reasoning-mode": null,
+          "temperature": null,
+          "text-response-format": false,
+          "top-p": null,
+          "verbosity": null
+        },
+        "RetryPolicy": {
+          "MaxRetryAttempts": 3,
+          "InitialDelaySeconds": 30
+        }
+      },
+      "evaluation_seed": "6b3b10759c0bd42611acecf57f47a85c",
+      "token_usage": {
+        "InputTokens": 65578,
+        "OutputTokens": 1958,
+        "ReasoningTokens": 1507,
+        "InputCacheWriteTokens": 7276,
+        "InputCacheReadTokens": 58266,
+        "InputTokenAccounting": "cache_tokens_included",
+        "OutputTokenAccounting": "reasoning_tokens_included"
+      },
+      "logged_retry_events": 0,
+      "harness_kind": "Passed",
+      "first_submission_correct": true,
+      "first_submission_supported": true,
+      "measurements": 2,
+      "check_calls": 0,
+      "source_references": {
+        "file": "22-49-40.log",
+        "binding_line": 7258,
+        "report_line": 7627,
+        "receipt_line": 7552
+      }
+    },
+    {
+      "execution_id": "baseline-12-r1",
+      "status": "completed",
+      "started_at": "2026-10-23T23:15:33-04:00",
+      "ended_at": "2026-10-23T23:16:09-04:00",
+      "harness_version": "v0.25.3-0.20261017164258-00dada61a962",
+      "image_id": "sha256:49e255626f3bbeb65693c797db5f2ecf2edceede5577f733b98daa3cb47ac378",
+      "image_repo_digest": "localhost/nexus@sha256:5b544cbf7140c943859b8ecd6d7a98ab9085611022d323ae51bfebac211bd6ab",
+      "image_vcs_revision": "8f5fc0e77262d0772f5193d3f61995dc567885a3",
+      "observed_source_sha256": "a51c008b96a660f8b322f6e4a7528c9d726b7757084fab791773df5a47ec36ee",
+      "resolved_model_version": null,
+      "provider_stop_reason": "completed",
+      "provider_retries": null,
+      "tool_calls": 9,
+      "world_actions": 4,
+      "receipt_validation": {
+        "classification": "accepted_receipt",
+        "live_mission_won": true,
+        "receipt_match": true,
+        "version": "receipt-classification-v1"
+      },
+      "terminal_classification": "supported_win",
+      "log_files_sha256": {
+        "22-49-40.json": "a19ebb865b3bcb12a620222e3fa8f97c070af358a8d8cea5b6d548665bed2634",
+        "22-49-40.log": "808d3adbbb46ba73ab1999104dc38e7288fce40473f2b66535afa651b7805bc6"
+      },
+      "notes": "All expected trace/tool/result joins verified. No retry/error/warning found in supplied logs; SDK-internal retries not exposed. Model name is an alias; immutable resolved model version unavailable. Timestamps use the -0400 offset corroborated by result/tool timestamps.",
+      "trace_id": "01M5NYG4610E25Q4BK4VVV3FCW",
+      "episode_id": "0737ae10e077c38d7096f994d3e89c9d",
+      "recorded_model": "gpt-6-astra",
+      "run_config": {
+        "Model": "gpt-6-astra",
+        "MaxRequestsPerMinute": 20,
+        "ModelParameters": {
+          "frequency-penalty": null,
+          "max-completion-tokens": null,
+          "presence-penalty": null,
+          "reasoning-context": null,
+          "reasoning-effort": "medium",
+          "reasoning-mode": null,
+          "temperature": null,
+          "text-response-format": false,
+          "top-p": null,
+          "verbosity": null
+        },
+        "RetryPolicy": {
+          "MaxRetryAttempts": 3,
+          "InitialDelaySeconds": 30
+        }
+      },
+      "evaluation_seed": "6b3b10759c0bd42611acecf57f47a85c",
+      "token_usage": {
+        "InputTokens": 32457,
+        "OutputTokens": 316,
+        "ReasoningTokens": 16,
+        "InputCacheWriteTokens": 4487,
+        "InputCacheReadTokens": 27946,
+        "InputTokenAccounting": "cache_tokens_included",
+        "OutputTokenAccounting": "reasoning_tokens_included"
+      },
+      "logged_retry_events": 0,
+      "harness_kind": "Passed",
+      "first_submission_correct": true,
+      "first_submission_supported": true,
+      "measurements": 0,
+      "check_calls": 0,
+      "source_references": {
+        "file": "22-49-40.log",
+        "binding_line": 7654,
+        "report_line": 7920,
+        "receipt_line": 7872
+      }
+    },
+    {
+      "execution_id": "baseline-01-r2",
+      "status": "completed",
+      "started_at": "2026-10-23T23:16:09-04:00",
+      "ended_at": "2026-10-23T23:18:47-04:00",
+      "harness_version": "v0.25.3-0.20261017164258-00dada61a962",
+      "image_id": "sha256:49e255626f3bbeb65693c797db5f2ecf2edceede5577f733b98daa3cb47ac378",
+      "image_repo_digest": "localhost/nexus@sha256:5b544cbf7140c943859b8ecd6d7a98ab9085611022d323ae51bfebac211bd6ab",
+      "image_vcs_revision": "8f5fc0e77262d0772f5193d3f61995dc567885a3",
+      "observed_source_sha256": "a51c008b96a660f8b322f6e4a7528c9d726b7757084fab791773df5a47ec36ee",
+      "resolved_model_version": null,
+      "provider_stop_reason": "completed",
+      "provider_retries": null,
+      "tool_calls": 23,
+      "world_actions": 18,
+      "receipt_validation": {
+        "classification": "accepted_receipt",
+        "live_mission_won": true,
+        "receipt_match": true,
+        "version": "receipt-classification-v1"
+      },
+      "terminal_classification": "compatible_win",
+      "log_files_sha256": {
+        "22-49-40.json": "a19ebb865b3bcb12a620222e3fa8f97c070af358a8d8cea5b6d548665bed2634",
+        "22-49-40.log": "808d3adbbb46ba73ab1999104dc38e7288fce40473f2b66535afa651b7805bc6"
+      },
+      "notes": "All expected trace/tool/result joins verified. No retry/error/warning found in supplied logs; SDK-internal retries not exposed. Model name is an alias; immutable resolved model version unavailable. Timestamps use the -0400 offset corroborated by result/tool timestamps.",
+      "trace_id": "01M5NYH7NB0KMX493V2HHTKQMQ",
+      "episode_id": "c33d72bd759682b18267e56962769797",
+      "recorded_model": "gpt-6-astra",
+      "run_config": {
+        "Model": "gpt-6-astra",
+        "MaxRequestsPerMinute": 20,
+        "ModelParameters": {
+          "frequency-penalty": null,
+          "max-completion-tokens": null,
+          "presence-penalty": null,
+          "reasoning-context": null,
+          "reasoning-effort": "medium",
+          "reasoning-mode": null,
+          "temperature": null,
+          "text-response-format": false,
+          "top-p": null,
+          "verbosity": null
+        },
+        "RetryPolicy": {
+          "MaxRetryAttempts": 3,
+          "InitialDelaySeconds": 30
+        }
+      },
+      "evaluation_seed": "6b3b10759c0bd42611acecf57f47a85c",
+      "token_usage": {
+        "InputTokens": 171783,
+        "OutputTokens": 5479,
+        "ReasoningTokens": 4640,
+        "InputCacheWriteTokens": 13482,
+        "InputCacheReadTokens": 158235,
+        "InputTokenAccounting": "cache_tokens_included",
+        "OutputTokenAccounting": "reasoning_tokens_included"
+      },
+      "logged_retry_events": 0,
+      "harness_kind": "Passed",
+      "first_submission_correct": true,
+      "first_submission_supported": false,
+      "measurements": 7,
+      "check_calls": 0,
+      "source_references": {
+        "file": "22-49-40.log",
+        "binding_line": 7947,
+        "report_line": 8567,
+        "receipt_line": 8431
+      }
+    },
+    {
+      "execution_id": "baseline-02-r2",
+      "status": "completed",
+      "started_at": "2026-10-23T23:18:47-04:00",
+      "ended_at": "2026-10-23T23:22:03-04:00",
+      "harness_version": "v0.25.3-0.20261017164258-00dada61a962",
+      "image_id": "sha256:49e255626f3bbeb65693c797db5f2ecf2edceede5577f733b98daa3cb47ac378",
+      "image_repo_digest": "localhost/nexus@sha256:5b544cbf7140c943859b8ecd6d7a98ab9085611022d323ae51bfebac211bd6ab",
+      "image_vcs_revision": "8f5fc0e77262d0772f5193d3f61995dc567885a3",
+      "observed_source_sha256": "a51c008b96a660f8b322f6e4a7528c9d726b7757084fab791773df5a47ec36ee",
+      "resolved_model_version": null,
+      "provider_stop_reason": "completed",
+      "provider_retries": null,
+      "tool_calls": 29,
+      "world_actions": 24,
+      "receipt_validation": {
+        "classification": "accepted_receipt",
+        "live_mission_won": true,
+        "receipt_match": true,
+        "version": "receipt-classification-v1"
+      },
+      "terminal_classification": "supported_win",
+      "log_files_sha256": {
+        "22-49-40.json": "a19ebb865b3bcb12a620222e3fa8f97c070af358a8d8cea5b6d548665bed2634",
+        "22-49-40.log": "808d3adbbb46ba73ab1999104dc38e7288fce40473f2b66535afa651b7805bc6"
+      },
+      "notes": "All expected trace/tool/result joins verified. No retry/error/warning found in supplied logs; SDK-internal retries not exposed. Model name is an alias; immutable resolved model version unavailable. Timestamps use the -0400 offset corroborated by result/tool timestamps.",
+      "trace_id": "01M5NYP1Z6SW8A4BFK7GN70PSX",
+      "episode_id": "a8a6ebddffb9b9f6ed86feab5708a9d4",
+      "recorded_model": "gpt-6-astra",
+      "run_config": {
+        "Model": "gpt-6-astra",
+        "MaxRequestsPerMinute": 20,
+        "ModelParameters": {
+          "frequency-penalty": null,
+          "max-completion-tokens": null,
+          "presence-penalty": null,
+          "reasoning-context": null,
+          "reasoning-effort": "medium",
+          "reasoning-mode": null,
+          "temperature": null,
+          "text-response-format": false,
+          "top-p": null,
+          "verbosity": null
+        },
+        "RetryPolicy": {
+          "MaxRetryAttempts": 3,
+          "InitialDelaySeconds": 30
+        }
+      },
+      "evaluation_seed": "6b3b10759c0bd42611acecf57f47a85c",
+      "token_usage": {
+        "InputTokens": 285249,
+        "OutputTokens": 7908,
+        "ReasoningTokens": 6835,
+        "InputCacheWriteTokens": 17802,
+        "InputCacheReadTokens": 267363,
+        "InputTokenAccounting": "cache_tokens_included",
+        "OutputTokenAccounting": "reasoning_tokens_included"
+      },
+      "logged_retry_events": 0,
+      "harness_kind": "Passed",
+      "first_submission_correct": true,
+      "first_submission_supported": true,
+      "measurements": 10,
+      "check_calls": 0,
+      "source_references": {
+        "file": "22-49-40.log",
+        "binding_line": 8594,
+        "report_line": 9348,
+        "receipt_line": 9192
+      }
+    },
+    {
+      "execution_id": "baseline-03-r2",
+      "status": "completed",
+      "started_at": "2026-10-23T23:22:03-04:00",
+      "ended_at": "2026-10-23T23:25:02-04:00",
+      "harness_version": "v0.25.3-0.20261017164258-00dada61a962",
+      "image_id": "sha256:49e255626f3bbeb65693c797db5f2ecf2edceede5577f733b98daa3cb47ac378",
+      "image_repo_digest": "localhost/nexus@sha256:5b544cbf7140c943859b8ecd6d7a98ab9085611022d323ae51bfebac211bd6ab",
+      "image_vcs_revision": "8f5fc0e77262d0772f5193d3f61995dc567885a3",
+      "observed_source_sha256": "a51c008b96a660f8b322f6e4a7528c9d726b7757084fab791773df5a47ec36ee",
+      "resolved_model_version": null,
+      "provider_stop_reason": "completed",
+      "provider_retries": null,
+      "tool_calls": 27,
+      "world_actions": 22,
+      "receipt_validation": {
+        "classification": "accepted_receipt",
+        "live_mission_won": true,
+        "receipt_match": true,
+        "version": "receipt-classification-v1"
+      },
+      "terminal_classification": "supported_win",
+      "log_files_sha256": {
+        "22-49-40.json": "a19ebb865b3bcb12a620222e3fa8f97c070af358a8d8cea5b6d548665bed2634",
+        "22-49-40.log": "808d3adbbb46ba73ab1999104dc38e7288fce40473f2b66535afa651b7805bc6"
+      },
+      "notes": "All expected trace/tool/result joins verified. No retry/error/warning found in supplied logs; SDK-internal retries not exposed. Model name is an alias; immutable resolved model version unavailable. Timestamps use the -0400 offset corroborated by result/tool timestamps.",
+      "trace_id": "01M5NYW1TDTSVSHQZ051C4EK0X",
+      "episode_id": "19827efef2e16933cf9b2de99ab53d21",
+      "recorded_model": "gpt-6-astra",
+      "run_config": {
+        "Model": "gpt-6-astra",
+        "MaxRequestsPerMinute": 20,
+        "ModelParameters": {
+          "frequency-penalty": null,
+          "max-completion-tokens": null,
+          "presence-penalty": null,
+          "reasoning-context": null,
+          "reasoning-effort": "medium",
+          "reasoning-mode": null,
+          "temperature": null,
+          "text-response-format": false,
+          "top-p": null,
+          "verbosity": null
+        },
+        "RetryPolicy": {
+          "MaxRetryAttempts": 3,
+          "InitialDelaySeconds": 30
+        }
+      },
+      "evaluation_seed": "6b3b10759c0bd42611acecf57f47a85c",
+      "token_usage": {
+        "InputTokens": 236739,
+        "OutputTokens": 6387,
+        "ReasoningTokens": 5379,
+        "InputCacheWriteTokens": 15664,
+        "InputCacheReadTokens": 220997,
+        "InputTokenAccounting": "cache_tokens_included",
+        "OutputTokenAccounting": "reasoning_tokens_included"
+      },
+      "logged_retry_events": 0,
+      "harness_kind": "Passed",
+      "first_submission_correct": true,
+      "first_submission_supported": true,
+      "measurements": 9,
+      "check_calls": 0,
+      "source_references": {
+        "file": "22-49-40.log",
+        "binding_line": 9375,
+        "report_line": 10090,
+        "receipt_line": 9935
+      }
+    },
+    {
+      "execution_id": "baseline-04-r2",
+      "status": "completed",
+      "started_at": "2026-10-23T23:25:02-04:00",
+      "ended_at": "2026-10-23T23:26:58-04:00",
+      "harness_version": "v0.25.3-0.20261017164258-00dada61a962",
+      "image_id": "sha256:49e255626f3bbeb65693c797db5f2ecf2edceede5577f733b98daa3cb47ac378",
+      "image_repo_digest": "localhost/nexus@sha256:5b544cbf7140c943859b8ecd6d7a98ab9085611022d323ae51bfebac211bd6ab",
+      "image_vcs_revision": "8f5fc0e77262d0772f5193d3f61995dc567885a3",
+      "observed_source_sha256": "a51c008b96a660f8b322f6e4a7528c9d726b7757084fab791773df5a47ec36ee",
+      "resolved_model_version": null,
+      "provider_stop_reason": "completed",
+      "provider_retries": null,
+      "tool_calls": 23,
+      "world_actions": 18,
+      "receipt_validation": {
+        "classification": "accepted_receipt",
+        "live_mission_won": true,
+        "receipt_match": true,
+        "version": "receipt-classification-v1"
+      },
+      "terminal_classification": "supported_win",
+      "log_files_sha256": {
+        "22-49-40.json": "a19ebb865b3bcb12a620222e3fa8f97c070af358a8d8cea5b6d548665bed2634",
+        "22-49-40.log": "808d3adbbb46ba73ab1999104dc38e7288fce40473f2b66535afa651b7805bc6"
+      },
+      "notes": "All expected trace/tool/result joins verified. No retry/error/warning found in supplied logs; SDK-internal retries not exposed. Model name is an alias; immutable resolved model version unavailable. Timestamps use the -0400 offset corroborated by result/tool timestamps.",
+      "trace_id": "01M5NZ1GFFRKZ46XGJ44HT8JGE",
+      "episode_id": "50b380abc80e7c77abf6ae2644517870",
+      "recorded_model": "gpt-6-astra",
+      "run_config": {
+        "Model": "gpt-6-astra",
+        "MaxRequestsPerMinute": 20,
+        "ModelParameters": {
+          "frequency-penalty": null,
+          "max-completion-tokens": null,
+          "presence-penalty": null,
+          "reasoning-context": null,
+          "reasoning-effort": "medium",
+          "reasoning-mode": null,
+          "temperature": null,
+          "text-response-format": false,
+          "top-p": null,
+          "verbosity": null
+        },
+        "RetryPolicy": {
+          "MaxRetryAttempts": 3,
+          "InitialDelaySeconds": 30
+        }
+      },
+      "evaluation_seed": "6b3b10759c0bd42611acecf57f47a85c",
+      "token_usage": {
+        "InputTokens": 170186,
+        "OutputTokens": 3453,
+        "ReasoningTokens": 2619,
+        "InputCacheWriteTokens": 11482,
+        "InputCacheReadTokens": 158638,
+        "InputTokenAccounting": "cache_tokens_included",
+        "OutputTokenAccounting": "reasoning_tokens_included"
+      },
+      "logged_retry_events": 0,
+      "harness_kind": "Passed",
+      "first_submission_correct": true,
+      "first_submission_supported": true,
+      "measurements": 7,
+      "check_calls": 0,
+      "source_references": {
+        "file": "22-49-40.log",
+        "binding_line": 10117,
+        "report_line": 10717,
+        "receipt_line": 10601
+      }
+    },
+    {
+      "execution_id": "baseline-05-r2",
+      "status": "completed",
+      "started_at": "2026-10-23T23:26:58-04:00",
+      "ended_at": "2026-10-23T23:28:45-04:00",
+      "harness_version": "v0.25.3-0.20261017164258-00dada61a962",
+      "image_id": "sha256:49e255626f3bbeb65693c797db5f2ecf2edceede5577f733b98daa3cb47ac378",
+      "image_repo_digest": "localhost/nexus@sha256:5b544cbf7140c943859b8ecd6d7a98ab9085611022d323ae51bfebac211bd6ab",
+      "image_vcs_revision": "8f5fc0e77262d0772f5193d3f61995dc567885a3",
+      "observed_source_sha256": "a51c008b96a660f8b322f6e4a7528c9d726b7757084fab791773df5a47ec36ee",
+      "resolved_model_version": null,
+      "provider_stop_reason": "completed",
+      "provider_retries": null,
+      "tool_calls": 19,
+      "world_actions": 14,
+      "receipt_validation": {
+        "classification": "accepted_receipt",
+        "live_mission_won": true,
+        "receipt_match": true,
+        "version": "receipt-classification-v1"
+      },
+      "terminal_classification": "compatible_win",
+      "log_files_sha256": {
+        "22-49-40.json": "a19ebb865b3bcb12a620222e3fa8f97c070af358a8d8cea5b6d548665bed2634",
+        "22-49-40.log": "808d3adbbb46ba73ab1999104dc38e7288fce40473f2b66535afa651b7805bc6"
+      },
+      "notes": "All expected trace/tool/result joins verified. No retry/error/warning found in supplied logs; SDK-internal retries not exposed. Model name is an alias; immutable resolved model version unavailable. Timestamps use the -0400 offset corroborated by result/tool timestamps.",
+      "trace_id": "01M5NZ51MSYJSNXQ8TNP3T7R2Z",
+      "episode_id": "f3e55fb16261c2fda72caa01255f2baa",
+      "recorded_model": "gpt-6-astra",
+      "run_config": {
+        "Model": "gpt-6-astra",
+        "MaxRequestsPerMinute": 20,
+        "ModelParameters": {
+          "frequency-penalty": null,
+          "max-completion-tokens": null,
+          "presence-penalty": null,
+          "reasoning-context": null,
+          "reasoning-effort": "medium",
+          "reasoning-mode": null,
+          "temperature": null,
+          "text-response-format": false,
+          "top-p": null,
+          "verbosity": null
+        },
+        "RetryPolicy": {
+          "MaxRetryAttempts": 3,
+          "InitialDelaySeconds": 30
+        }
+      },
+      "evaluation_seed": "6b3b10759c0bd42611acecf57f47a85c",
+      "token_usage": {
+        "InputTokens": 126197,
+        "OutputTokens": 3832,
+        "ReasoningTokens": 3154,
+        "InputCacheWriteTokens": 10747,
+        "InputCacheReadTokens": 115396,
+        "InputTokenAccounting": "cache_tokens_included",
+        "OutputTokenAccounting": "reasoning_tokens_included"
+      },
+      "logged_retry_events": 0,
+      "harness_kind": "Passed",
+      "first_submission_correct": true,
+      "first_submission_supported": false,
+      "measurements": 5,
+      "check_calls": 0,
+      "source_references": {
+        "file": "22-49-40.log",
+        "binding_line": 10744,
+        "report_line": 11254,
+        "receipt_line": 11152
+      }
+    },
+    {
+      "execution_id": "baseline-06-r2",
+      "status": "completed",
+      "started_at": "2026-10-23T23:28:45-04:00",
+      "ended_at": "2026-10-23T23:31:01-04:00",
+      "harness_version": "v0.25.3-0.20261017164258-00dada61a962",
+      "image_id": "sha256:49e255626f3bbeb65693c797db5f2ecf2edceede5577f733b98daa3cb47ac378",
+      "image_repo_digest": "localhost/nexus@sha256:5b544cbf7140c943859b8ecd6d7a98ab9085611022d323ae51bfebac211bd6ab",
+      "image_vcs_revision": "8f5fc0e77262d0772f5193d3f61995dc567885a3",
+      "observed_source_sha256": "a51c008b96a660f8b322f6e4a7528c9d726b7757084fab791773df5a47ec36ee",
+      "resolved_model_version": null,
+      "provider_stop_reason": "completed",
+      "provider_retries": null,
+      "tool_calls": 23,
+      "world_actions": 18,
+      "receipt_validation": {
+        "classification": "accepted_receipt",
+        "live_mission_won": true,
+        "receipt_match": true,
+        "version": "receipt-classification-v1"
+      },
+      "terminal_classification": "supported_win",
+      "log_files_sha256": {
+        "22-49-40.json": "a19ebb865b3bcb12a620222e3fa8f97c070af358a8d8cea5b6d548665bed2634",
+        "22-49-40.log": "808d3adbbb46ba73ab1999104dc38e7288fce40473f2b66535afa651b7805bc6"
+      },
+      "notes": "All expected trace/tool/result joins verified. No retry/error/warning found in supplied logs; SDK-internal retries not exposed. Model name is an alias; immutable resolved model version unavailable. Timestamps use the -0400 offset corroborated by result/tool timestamps.",
+      "trace_id": "01M5NZ89HCMTC4N37867Q64ZHE",
+      "episode_id": "fae2718b3cf1fbf69a0e1c55e6cd7c0e",
+      "recorded_model": "gpt-6-astra",
+      "run_config": {
+        "Model": "gpt-6-astra",
+        "MaxRequestsPerMinute": 20,
+        "ModelParameters": {
+          "frequency-penalty": null,
+          "max-completion-tokens": null,
+          "presence-penalty": null,
+          "reasoning-context": null,
+          "reasoning-effort": "medium",
+          "reasoning-mode": null,
+          "temperature": null,
+          "text-response-format": false,
+          "top-p": null,
+          "verbosity": null
+        },
+        "RetryPolicy": {
+          "MaxRetryAttempts": 3,
+          "InitialDelaySeconds": 30
+        }
+      },
+      "evaluation_seed": "6b3b10759c0bd42611acecf57f47a85c",
+      "token_usage": {
+        "InputTokens": 179049,
+        "OutputTokens": 4279,
+        "ReasoningTokens": 3447,
+        "InputCacheWriteTokens": 12639,
+        "InputCacheReadTokens": 166344,
+        "InputTokenAccounting": "cache_tokens_included",
+        "OutputTokenAccounting": "reasoning_tokens_included"
+      },
+      "logged_retry_events": 0,
+      "harness_kind": "Passed",
+      "first_submission_correct": true,
+      "first_submission_supported": true,
+      "measurements": 7,
+      "check_calls": 0,
+      "source_references": {
+        "file": "22-49-40.log",
+        "binding_line": 11281,
+        "report_line": 11891,
+        "receipt_line": 11765
+      }
+    },
+    {
+      "execution_id": "baseline-07-r2",
+      "status": "completed",
+      "started_at": "2026-10-23T23:31:01-04:00",
+      "ended_at": "2026-10-23T23:33:26-04:00",
+      "harness_version": "v0.25.3-0.20261017164258-00dada61a962",
+      "image_id": "sha256:49e255626f3bbeb65693c797db5f2ecf2edceede5577f733b98daa3cb47ac378",
+      "image_repo_digest": "localhost/nexus@sha256:5b544cbf7140c943859b8ecd6d7a98ab9085611022d323ae51bfebac211bd6ab",
+      "image_vcs_revision": "8f5fc0e77262d0772f5193d3f61995dc567885a3",
+      "observed_source_sha256": "a51c008b96a660f8b322f6e4a7528c9d726b7757084fab791773df5a47ec36ee",
+      "resolved_model_version": null,
+      "provider_stop_reason": "completed",
+      "provider_retries": null,
+      "tool_calls": 23,
+      "world_actions": 18,
+      "receipt_validation": {
+        "classification": "accepted_receipt",
+        "live_mission_won": true,
+        "receipt_match": true,
+        "version": "receipt-classification-v1"
+      },
+      "terminal_classification": "supported_win",
+      "log_files_sha256": {
+        "22-49-40.json": "a19ebb865b3bcb12a620222e3fa8f97c070af358a8d8cea5b6d548665bed2634",
+        "22-49-40.log": "808d3adbbb46ba73ab1999104dc38e7288fce40473f2b66535afa651b7805bc6"
+      },
+      "notes": "All expected trace/tool/result joins verified. No retry/error/warning found in supplied logs; SDK-internal retries not exposed. Model name is an alias; immutable resolved model version unavailable. Timestamps use the -0400 offset corroborated by result/tool timestamps.",
+      "trace_id": "01M5NZCF07VZT16GYX0J5NXTDC",
+      "episode_id": "30a893d078cd806e0657fafb5f22e500",
+      "recorded_model": "gpt-6-astra",
+      "run_config": {
+        "Model": "gpt-6-astra",
+        "MaxRequestsPerMinute": 20,
+        "ModelParameters": {
+          "frequency-penalty": null,
+          "max-completion-tokens": null,
+          "presence-penalty": null,
+          "reasoning-context": null,
+          "reasoning-effort": "medium",
+          "reasoning-mode": null,
+          "temperature": null,
+          "text-response-format": false,
+          "top-p": null,
+          "verbosity": null
+        },
+        "RetryPolicy": {
+          "MaxRetryAttempts": 3,
+          "InitialDelaySeconds": 30
+        }
+      },
+      "evaluation_seed": "6b3b10759c0bd42611acecf57f47a85c",
+      "token_usage": {
+        "InputTokens": 164634,
+        "OutputTokens": 4104,
+        "ReasoningTokens": 3257,
+        "InputCacheWriteTokens": 12176,
+        "InputCacheReadTokens": 152392,
+        "InputTokenAccounting": "cache_tokens_included",
+        "OutputTokenAccounting": "reasoning_tokens_included"
+      },
+      "logged_retry_events": 0,
+      "harness_kind": "Passed",
+      "first_submission_correct": true,
+      "first_submission_supported": true,
+      "measurements": 7,
+      "check_calls": 0,
+      "source_references": {
+        "file": "22-49-40.log",
+        "binding_line": 11918,
+        "report_line": 12531,
+        "receipt_line": 12402
+      }
+    },
+    {
+      "execution_id": "baseline-08-r2",
+      "status": "completed",
+      "started_at": "2026-10-23T23:33:26-04:00",
+      "ended_at": "2026-10-23T23:35:47-04:00",
+      "harness_version": "v0.25.3-0.20261017164258-00dada61a962",
+      "image_id": "sha256:49e255626f3bbeb65693c797db5f2ecf2edceede5577f733b98daa3cb47ac378",
+      "image_repo_digest": "localhost/nexus@sha256:5b544cbf7140c943859b8ecd6d7a98ab9085611022d323ae51bfebac211bd6ab",
+      "image_vcs_revision": "8f5fc0e77262d0772f5193d3f61995dc567885a3",
+      "observed_source_sha256": "a51c008b96a660f8b322f6e4a7528c9d726b7757084fab791773df5a47ec36ee",
+      "resolved_model_version": null,
+      "provider_stop_reason": "completed",
+      "provider_retries": null,
+      "tool_calls": 27,
+      "world_actions": 22,
+      "receipt_validation": {
+        "classification": "accepted_receipt",
+        "live_mission_won": true,
+        "receipt_match": true,
+        "version": "receipt-classification-v1"
+      },
+      "terminal_classification": "compatible_win",
+      "log_files_sha256": {
+        "22-49-40.json": "a19ebb865b3bcb12a620222e3fa8f97c070af358a8d8cea5b6d548665bed2634",
+        "22-49-40.log": "808d3adbbb46ba73ab1999104dc38e7288fce40473f2b66535afa651b7805bc6"
+      },
+      "notes": "All expected trace/tool/result joins verified. No retry/error/warning found in supplied logs; SDK-internal retries not exposed. Model name is an alias; immutable resolved model version unavailable. Timestamps use the -0400 offset corroborated by result/tool timestamps.",
+      "trace_id": "01M5NZGW745HGH8MDMKC6NBF9B",
+      "episode_id": "be5d89805656540b67cb634ed2f8e71c",
+      "recorded_model": "gpt-6-astra",
+      "run_config": {
+        "Model": "gpt-6-astra",
+        "MaxRequestsPerMinute": 20,
+        "ModelParameters": {
+          "frequency-penalty": null,
+          "max-completion-tokens": null,
+          "presence-penalty": null,
+          "reasoning-context": null,
+          "reasoning-effort": "medium",
+          "reasoning-mode": null,
+          "temperature": null,
+          "text-response-format": false,
+          "top-p": null,
+          "verbosity": null
+        },
+        "RetryPolicy": {
+          "MaxRetryAttempts": 3,
+          "InitialDelaySeconds": 30
+        }
+      },
+      "evaluation_seed": "6b3b10759c0bd42611acecf57f47a85c",
+      "token_usage": {
+        "InputTokens": 232614,
+        "OutputTokens": 4155,
+        "ReasoningTokens": 3194,
+        "InputCacheWriteTokens": 13334,
+        "InputCacheReadTokens": 219202,
+        "InputTokenAccounting": "cache_tokens_included",
+        "OutputTokenAccounting": "reasoning_tokens_included"
+      },
+      "logged_retry_events": 0,
+      "harness_kind": "Passed",
+      "first_submission_correct": false,
+      "first_submission_supported": false,
+      "measurements": 6,
+      "check_calls": 0,
+      "source_references": {
+        "file": "22-49-40.log",
+        "binding_line": 12558,
+        "report_line": 13250,
+        "receipt_line": 13118
+      }
+    },
+    {
+      "execution_id": "baseline-09-r2",
+      "status": "completed",
+      "started_at": "2026-10-23T23:35:47-04:00",
+      "ended_at": "2026-10-23T23:38:12-04:00",
+      "harness_version": "v0.25.3-0.20261017164258-00dada61a962",
+      "image_id": "sha256:49e255626f3bbeb65693c797db5f2ecf2edceede5577f733b98daa3cb47ac378",
+      "image_repo_digest": "localhost/nexus@sha256:5b544cbf7140c943859b8ecd6d7a98ab9085611022d323ae51bfebac211bd6ab",
+      "image_vcs_revision": "8f5fc0e77262d0772f5193d3f61995dc567885a3",
+      "observed_source_sha256": "a51c008b96a660f8b322f6e4a7528c9d726b7757084fab791773df5a47ec36ee",
+      "resolved_model_version": null,
+      "provider_stop_reason": "completed",
+      "provider_retries": null,
+      "tool_calls": 22,
+      "world_actions": 17,
+      "receipt_validation": {
+        "classification": "accepted_receipt",
+        "live_mission_won": true,
+        "receipt_match": true,
+        "version": "receipt-classification-v1"
+      },
+      "terminal_classification": "compatible_win",
+      "log_files_sha256": {
+        "22-49-40.json": "a19ebb865b3bcb12a620222e3fa8f97c070af358a8d8cea5b6d548665bed2634",
+        "22-49-40.log": "808d3adbbb46ba73ab1999104dc38e7288fce40473f2b66535afa651b7805bc6"
+      },
+      "notes": "All expected trace/tool/result joins verified. No retry/error/warning found in supplied logs; SDK-internal retries not exposed. Model name is an alias; immutable resolved model version unavailable. Timestamps use the -0400 offset corroborated by result/tool timestamps.",
+      "trace_id": "01M5NZN6A6GTCGT7Z5KTYRAAVK",
+      "episode_id": "a354c544a39f3a09aeab36ef312edde2",
+      "recorded_model": "gpt-6-astra",
+      "run_config": {
+        "Model": "gpt-6-astra",
+        "MaxRequestsPerMinute": 20,
+        "ModelParameters": {
+          "frequency-penalty": null,
+          "max-completion-tokens": null,
+          "presence-penalty": null,
+          "reasoning-context": null,
+          "reasoning-effort": "medium",
+          "reasoning-mode": null,
+          "temperature": null,
+          "text-response-format": false,
+          "top-p": null,
+          "verbosity": null
+        },
+        "RetryPolicy": {
+          "MaxRetryAttempts": 3,
+          "InitialDelaySeconds": 30
+        }
+      },
+      "evaluation_seed": "6b3b10759c0bd42611acecf57f47a85c",
+      "token_usage": {
+        "InputTokens": 178433,
+        "OutputTokens": 5285,
+        "ReasoningTokens": 4500,
+        "InputCacheWriteTokens": 13210,
+        "InputCacheReadTokens": 165160,
+        "InputTokenAccounting": "cache_tokens_included",
+        "OutputTokenAccounting": "reasoning_tokens_included"
+      },
+      "logged_retry_events": 0,
+      "harness_kind": "Passed",
+      "first_submission_correct": false,
+      "first_submission_supported": false,
+      "measurements": 5,
+      "check_calls": 0,
+      "source_references": {
+        "file": "22-49-40.log",
+        "binding_line": 13277,
+        "report_line": 13869,
+        "receipt_line": 13742
+      }
+    },
+    {
+      "execution_id": "baseline-10-r2",
+      "status": "completed",
+      "started_at": "2026-10-23T23:38:12-04:00",
+      "ended_at": "2026-10-23T23:41:24-04:00",
+      "harness_version": "v0.25.3-0.20261017164258-00dada61a962",
+      "image_id": "sha256:49e255626f3bbeb65693c797db5f2ecf2edceede5577f733b98daa3cb47ac378",
+      "image_repo_digest": "localhost/nexus@sha256:5b544cbf7140c943859b8ecd6d7a98ab9085611022d323ae51bfebac211bd6ab",
+      "image_vcs_revision": "8f5fc0e77262d0772f5193d3f61995dc567885a3",
+      "observed_source_sha256": "a51c008b96a660f8b322f6e4a7528c9d726b7757084fab791773df5a47ec36ee",
+      "resolved_model_version": null,
+      "provider_stop_reason": "completed",
+      "provider_retries": null,
+      "tool_calls": 34,
+      "world_actions": 29,
+      "receipt_validation": {
+        "classification": "accepted_receipt",
+        "live_mission_won": true,
+        "receipt_match": true,
+        "version": "receipt-classification-v1"
+      },
+      "terminal_classification": "supported_win",
+      "log_files_sha256": {
+        "22-49-40.json": "a19ebb865b3bcb12a620222e3fa8f97c070af358a8d8cea5b6d548665bed2634",
+        "22-49-40.log": "808d3adbbb46ba73ab1999104dc38e7288fce40473f2b66535afa651b7805bc6"
+      },
+      "notes": "All expected trace/tool/result joins verified. No retry/error/warning found in supplied logs; SDK-internal retries not exposed. Model name is an alias; immutable resolved model version unavailable. Timestamps use the -0400 offset corroborated by result/tool timestamps.",
+      "trace_id": "01M5NZSK9B8QCGQA1RWQBYZ5N3",
+      "episode_id": "9df81bfd5aa66eb764103738bb2ee32d",
+      "recorded_model": "gpt-6-astra",
+      "run_config": {
+        "Model": "gpt-6-astra",
+        "MaxRequestsPerMinute": 20,
+        "ModelParameters": {
+          "frequency-penalty": null,
+          "max-completion-tokens": null,
+          "presence-penalty": null,
+          "reasoning-context": null,
+          "reasoning-effort": "medium",
+          "reasoning-mode": null,
+          "temperature": null,
+          "text-response-format": false,
+          "top-p": null,
+          "verbosity": null
+        },
+        "RetryPolicy": {
+          "MaxRetryAttempts": 3,
+          "InitialDelaySeconds": 30
+        }
+      },
+      "evaluation_seed": "6b3b10759c0bd42611acecf57f47a85c",
+      "token_usage": {
+        "InputTokens": 334692,
+        "OutputTokens": 5683,
+        "ReasoningTokens": 4450,
+        "InputCacheWriteTokens": 17063,
+        "InputCacheReadTokens": 317530,
+        "InputTokenAccounting": "cache_tokens_included",
+        "OutputTokenAccounting": "reasoning_tokens_included"
+      },
+      "logged_retry_events": 0,
+      "harness_kind": "Passed",
+      "first_submission_correct": false,
+      "first_submission_supported": false,
+      "measurements": 10,
+      "check_calls": 0,
+      "source_references": {
+        "file": "22-49-40.log",
+        "binding_line": 13896,
+        "report_line": 14740,
+        "receipt_line": 14589
+      }
+    },
+    {
+      "execution_id": "baseline-11-r2",
+      "status": "completed",
+      "started_at": "2026-10-23T23:41:24-04:00",
+      "ended_at": "2026-10-23T23:42:37-04:00",
+      "harness_version": "v0.25.3-0.20261017164258-00dada61a962",
+      "image_id": "sha256:49e255626f3bbeb65693c797db5f2ecf2edceede5577f733b98daa3cb47ac378",
+      "image_repo_digest": "localhost/nexus@sha256:5b544cbf7140c943859b8ecd6d7a98ab9085611022d323ae51bfebac211bd6ab",
+      "image_vcs_revision": "8f5fc0e77262d0772f5193d3f61995dc567885a3",
+      "observed_source_sha256": "a51c008b96a660f8b322f6e4a7528c9d726b7757084fab791773df5a47ec36ee",
+      "resolved_model_version": null,
+      "provider_stop_reason": "completed",
+      "provider_retries": null,
+      "tool_calls": 13,
+      "world_actions": 8,
+      "receipt_validation": {
+        "classification": "accepted_receipt",
+        "live_mission_won": true,
+        "receipt_match": true,
+        "version": "receipt-classification-v1"
+      },
+      "terminal_classification": "supported_win",
+      "log_files_sha256": {
+        "22-49-40.json": "a19ebb865b3bcb12a620222e3fa8f97c070af358a8d8cea5b6d548665bed2634",
+        "22-49-40.log": "808d3adbbb46ba73ab1999104dc38e7288fce40473f2b66535afa651b7805bc6"
+      },
+      "notes": "All expected trace/tool/result joins verified. No retry/error/warning found in supplied logs; SDK-internal retries not exposed. Model name is an alias; immutable resolved model version unavailable. Timestamps use the -0400 offset corroborated by result/tool timestamps.",
+      "trace_id": "01M5NZZFJ54Z3VRGJZHF6WQF7W",
+      "episode_id": "21a2bda2f40838284303b9bc29efcea5",
+      "recorded_model": "gpt-6-astra",
+      "run_config": {
+        "Model": "gpt-6-astra",
+        "MaxRequestsPerMinute": 20,
+        "ModelParameters": {
+          "frequency-penalty": null,
+          "max-completion-tokens": null,
+          "presence-penalty": null,
+          "reasoning-context": null,
+          "reasoning-effort": "medium",
+          "reasoning-mode": null,
+          "temperature": null,
+          "text-response-format": false,
+          "top-p": null,
+          "verbosity": null
+        },
+        "RetryPolicy": {
+          "MaxRetryAttempts": 3,
+          "InitialDelaySeconds": 30
+        }
+      },
+      "evaluation_seed": "6b3b10759c0bd42611acecf57f47a85c",
+      "token_usage": {
+        "InputTokens": 65148,
+        "OutputTokens": 1909,
+        "ReasoningTokens": 1459,
+        "InputCacheWriteTokens": 7172,
+        "InputCacheReadTokens": 57940,
+        "InputTokenAccounting": "cache_tokens_included",
+        "OutputTokenAccounting": "reasoning_tokens_included"
+      },
+      "logged_retry_events": 0,
+      "harness_kind": "Passed",
+      "first_submission_correct": true,
+      "first_submission_supported": true,
+      "measurements": 2,
+      "check_calls": 0,
+      "source_references": {
+        "file": "22-49-40.log",
+        "binding_line": 14767,
+        "report_line": 15135,
+        "receipt_line": 15061
+      }
+    },
+    {
+      "execution_id": "baseline-12-r2",
+      "status": "completed",
+      "started_at": "2026-10-23T23:42:37-04:00",
+      "ended_at": "2026-10-23T23:43:12-04:00",
+      "harness_version": "v0.25.3-0.20261017164258-00dada61a962",
+      "image_id": "sha256:49e255626f3bbeb65693c797db5f2ecf2edceede5577f733b98daa3cb47ac378",
+      "image_repo_digest": "localhost/nexus@sha256:5b544cbf7140c943859b8ecd6d7a98ab9085611022d323ae51bfebac211bd6ab",
+      "image_vcs_revision": "8f5fc0e77262d0772f5193d3f61995dc567885a3",
+      "observed_source_sha256": "a51c008b96a660f8b322f6e4a7528c9d726b7757084fab791773df5a47ec36ee",
+      "resolved_model_version": null,
+      "provider_stop_reason": "completed",
+      "provider_retries": null,
+      "tool_calls": 9,
+      "world_actions": 4,
+      "receipt_validation": {
+        "classification": "accepted_receipt",
+        "live_mission_won": true,
+        "receipt_match": true,
+        "version": "receipt-classification-v1"
+      },
+      "terminal_classification": "supported_win",
+      "log_files_sha256": {
+        "22-49-40.json": "a19ebb865b3bcb12a620222e3fa8f97c070af358a8d8cea5b6d548665bed2634",
+        "22-49-40.log": "808d3adbbb46ba73ab1999104dc38e7288fce40473f2b66535afa651b7805bc6"
+      },
+      "notes": "All expected trace/tool/result joins verified. No retry/error/warning found in supplied logs; SDK-internal retries not exposed. Model name is an alias; immutable resolved model version unavailable. Timestamps use the -0400 offset corroborated by result/tool timestamps.",
+      "trace_id": "01M5P01P962TGE06T7QSS3ABZJ",
+      "episode_id": "7507f337afee61e49da2d1f38062c759",
+      "recorded_model": "gpt-6-astra",
+      "run_config": {
+        "Model": "gpt-6-astra",
+        "MaxRequestsPerMinute": 20,
+        "ModelParameters": {
+          "frequency-penalty": null,
+          "max-completion-tokens": null,
+          "presence-penalty": null,
+          "reasoning-context": null,
+          "reasoning-effort": "medium",
+          "reasoning-mode": null,
+          "temperature": null,
+          "text-response-format": false,
+          "top-p": null,
+          "verbosity": null
+        },
+        "RetryPolicy": {
+          "MaxRetryAttempts": 3,
+          "InitialDelaySeconds": 30
+        }
+      },
+      "evaluation_seed": "6b3b10759c0bd42611acecf57f47a85c",
+      "token_usage": {
+        "InputTokens": 32340,
+        "OutputTokens": 331,
+        "ReasoningTokens": 31,
+        "InputCacheWriteTokens": 4458,
+        "InputCacheReadTokens": 27858,
+        "InputTokenAccounting": "cache_tokens_included",
+        "OutputTokenAccounting": "reasoning_tokens_included"
+      },
+      "logged_retry_events": 0,
+      "harness_kind": "Passed",
+      "first_submission_correct": true,
+      "first_submission_supported": true,
+      "measurements": 0,
+      "check_calls": 0,
+      "source_references": {
+        "file": "22-49-40.log",
+        "binding_line": 15162,
+        "report_line": 15427,
+        "receipt_line": 15380
+      }
+    },
+    {
+      "execution_id": "single-shot-01-r1",
+      "status": "completed",
+      "started_at": "2026-10-24T10:44:05-04:00",
+      "ended_at": "2026-10-24T10:48:00-04:00",
+      "harness_version": "v0.25.3-0.20261017164258-00dada61a962",
+      "image_id": "sha256:49e255626f3bbeb65693c797db5f2ecf2edceede5577f733b98daa3cb47ac378",
+      "image_repo_digest": "localhost/nexus@sha256:5b544cbf7140c943859b8ecd6d7a98ab9085611022d323ae51bfebac211bd6ab",
+      "image_vcs_revision": "8f5fc0e77262d0772f5193d3f61995dc567885a3",
+      "observed_source_sha256": "a51c008b96a660f8b322f6e4a7528c9d726b7757084fab791773df5a47ec36ee",
+      "resolved_model_version": null,
+      "provider_stop_reason": "completed",
+      "provider_retries": null,
+      "tool_calls": 31,
+      "world_actions": 26,
+      "receipt_validation": {
+        "classification": "accepted_receipt",
+        "live_mission_won": true,
+        "receipt_match": true,
+        "version": "receipt-classification-v1"
+      },
+      "terminal_classification": "supported_win",
+      "log_files_sha256": {
+        "10-44-05.json": "b6de88380b5eaee5628c80f82093d9acb60919b8eb21873c9ed2b3f621af7791",
+        "10-44-05.log": "410e36e8f605e3febf58968967358fd4f9c6336e9c9e38cfd3611e581cdf18dd"
+      },
+      "notes": "All expected trace/tool/result joins verified. No retry/error/warning found in supplied logs; SDK-internal retries not exposed. Model name is an alias; immutable resolved model version unavailable. Timestamps use the -0400 offset corroborated by result/tool timestamps.",
+      "trace_id": "01M5Q5WWQ65W0WW4Y10N53N6FF",
+      "episode_id": "283c40b14ccc2dc834b2912d24a8913d",
+      "recorded_model": "gpt-6-astra",
+      "run_config": {
+        "Model": "gpt-6-astra",
+        "MaxRequestsPerMinute": 20,
+        "ModelParameters": {
+          "frequency-penalty": null,
+          "max-completion-tokens": null,
+          "presence-penalty": null,
+          "reasoning-context": null,
+          "reasoning-effort": "medium",
+          "reasoning-mode": null,
+          "temperature": null,
+          "text-response-format": false,
+          "top-p": null,
+          "verbosity": null
+        },
+        "RetryPolicy": {
+          "MaxRetryAttempts": 3,
+          "InitialDelaySeconds": 30
+        }
+      },
+      "evaluation_seed": "46c648598851670ac347e048a57817d2",
+      "token_usage": {
+        "InputTokens": 301358,
+        "OutputTokens": 8148,
+        "ReasoningTokens": 7002,
+        "InputCacheWriteTokens": 20096,
+        "InputCacheReadTokens": 281172,
+        "InputTokenAccounting": "cache_tokens_included",
+        "OutputTokenAccounting": "reasoning_tokens_included"
+      },
+      "logged_retry_events": 0,
+      "harness_kind": "Passed",
+      "first_submission_correct": true,
+      "first_submission_supported": true,
+      "measurements": 11,
+      "check_calls": 0,
+      "source_references": {
+        "file": "10-44-05.log",
+        "binding_line": 24,
+        "report_line": 815,
+        "receipt_line": 660
+      }
+    },
+    {
+      "execution_id": "single-shot-02-r1",
+      "status": "completed",
+      "started_at": "2026-10-24T10:48:00-04:00",
+      "ended_at": "2026-10-24T10:50:45-04:00",
+      "harness_version": "v0.25.3-0.20261017164258-00dada61a962",
+      "image_id": "sha256:49e255626f3bbeb65693c797db5f2ecf2edceede5577f733b98daa3cb47ac378",
+      "image_repo_digest": "localhost/nexus@sha256:5b544cbf7140c943859b8ecd6d7a98ab9085611022d323ae51bfebac211bd6ab",
+      "image_vcs_revision": "8f5fc0e77262d0772f5193d3f61995dc567885a3",
+      "observed_source_sha256": "a51c008b96a660f8b322f6e4a7528c9d726b7757084fab791773df5a47ec36ee",
+      "resolved_model_version": null,
+      "provider_stop_reason": "completed",
+      "provider_retries": null,
+      "tool_calls": 25,
+      "world_actions": 20,
+      "receipt_validation": {
+        "classification": "accepted_receipt",
+        "live_mission_won": true,
+        "receipt_match": true,
+        "version": "receipt-classification-v1"
+      },
+      "terminal_classification": "supported_win",
+      "log_files_sha256": {
+        "10-44-05.json": "b6de88380b5eaee5628c80f82093d9acb60919b8eb21873c9ed2b3f621af7791",
+        "10-44-05.log": "410e36e8f605e3febf58968967358fd4f9c6336e9c9e38cfd3611e581cdf18dd"
+      },
+      "notes": "All expected trace/tool/result joins verified. No retry/error/warning found in supplied logs; SDK-internal retries not exposed. Model name is an alias; immutable resolved model version unavailable. Timestamps use the -0400 offset corroborated by result/tool timestamps.",
+      "trace_id": "01M5Q6419QBSANTYFH463699J2",
+      "episode_id": "5dbdcd0061676a8ea8662190502862fc",
+      "recorded_model": "gpt-6-astra",
+      "run_config": {
+        "Model": "gpt-6-astra",
+        "MaxRequestsPerMinute": 20,
+        "ModelParameters": {
+          "frequency-penalty": null,
+          "max-completion-tokens": null,
+          "presence-penalty": null,
+          "reasoning-context": null,
+          "reasoning-effort": "medium",
+          "reasoning-mode": null,
+          "temperature": null,
+          "text-response-format": false,
+          "top-p": null,
+          "verbosity": null
+        },
+        "RetryPolicy": {
+          "MaxRetryAttempts": 3,
+          "InitialDelaySeconds": 30
+        }
+      },
+      "evaluation_seed": "46c648598851670ac347e048a57817d2",
+      "token_usage": {
+        "InputTokens": 196901,
+        "OutputTokens": 4434,
+        "ReasoningTokens": 3518,
+        "InputCacheWriteTokens": 13156,
+        "InputCacheReadTokens": 183673,
+        "InputTokenAccounting": "cache_tokens_included",
+        "OutputTokenAccounting": "reasoning_tokens_included"
+      },
+      "logged_retry_events": 0,
+      "harness_kind": "Passed",
+      "first_submission_correct": true,
+      "first_submission_supported": true,
+      "measurements": 8,
+      "check_calls": 0,
+      "source_references": {
+        "file": "10-44-05.log",
+        "binding_line": 842,
+        "report_line": 1508,
+        "receipt_line": 1364
+      }
+    },
+    {
+      "execution_id": "single-shot-03-r1",
+      "status": "completed",
+      "started_at": "2026-10-24T10:50:45-04:00",
+      "ended_at": "2026-10-24T10:54:21-04:00",
+      "harness_version": "v0.25.3-0.20261017164258-00dada61a962",
+      "image_id": "sha256:49e255626f3bbeb65693c797db5f2ecf2edceede5577f733b98daa3cb47ac378",
+      "image_repo_digest": "localhost/nexus@sha256:5b544cbf7140c943859b8ecd6d7a98ab9085611022d323ae51bfebac211bd6ab",
+      "image_vcs_revision": "8f5fc0e77262d0772f5193d3f61995dc567885a3",
+      "observed_source_sha256": "a51c008b96a660f8b322f6e4a7528c9d726b7757084fab791773df5a47ec36ee",
+      "resolved_model_version": null,
+      "provider_stop_reason": "completed",
+      "provider_retries": null,
+      "tool_calls": 29,
+      "world_actions": 24,
+      "receipt_validation": {
+        "classification": "accepted_receipt",
+        "live_mission_won": true,
+        "receipt_match": true,
+        "version": "receipt-classification-v1"
+      },
+      "terminal_classification": "supported_win",
+      "log_files_sha256": {
+        "10-44-05.json": "b6de88380b5eaee5628c80f82093d9acb60919b8eb21873c9ed2b3f621af7791",
+        "10-44-05.log": "410e36e8f605e3febf58968967358fd4f9c6336e9c9e38cfd3611e581cdf18dd"
+      },
+      "notes": "All expected trace/tool/result joins verified. No retry/error/warning found in supplied logs; SDK-internal retries not exposed. Model name is an alias; immutable resolved model version unavailable. Timestamps use the -0400 offset corroborated by result/tool timestamps.",
+      "trace_id": "01M5Q692J21MZTMEWBW9PSVKRJ",
+      "episode_id": "8728eeab0da25626d6641247c9a824bf",
+      "recorded_model": "gpt-6-astra",
+      "run_config": {
+        "Model": "gpt-6-astra",
+        "MaxRequestsPerMinute": 20,
+        "ModelParameters": {
+          "frequency-penalty": null,
+          "max-completion-tokens": null,
+          "presence-penalty": null,
+          "reasoning-context": null,
+          "reasoning-effort": "medium",
+          "reasoning-mode": null,
+          "temperature": null,
+          "text-response-format": false,
+          "top-p": null,
+          "verbosity": null
+        },
+        "RetryPolicy": {
+          "MaxRetryAttempts": 3,
+          "InitialDelaySeconds": 30
+        }
+      },
+      "evaluation_seed": "46c648598851670ac347e048a57817d2",
+      "token_usage": {
+        "InputTokens": 270036,
+        "OutputTokens": 7191,
+        "ReasoningTokens": 6089,
+        "InputCacheWriteTokens": 17209,
+        "InputCacheReadTokens": 252743,
+        "InputTokenAccounting": "cache_tokens_included",
+        "OutputTokenAccounting": "reasoning_tokens_included"
+      },
+      "logged_retry_events": 0,
+      "harness_kind": "Passed",
+      "first_submission_correct": true,
+      "first_submission_supported": true,
+      "measurements": 10,
+      "check_calls": 0,
+      "source_references": {
+        "file": "10-44-05.log",
+        "binding_line": 1535,
+        "report_line": 2289,
+        "receipt_line": 2133
+      }
+    },
+    {
+      "execution_id": "single-shot-08-r1",
+      "status": "completed",
+      "started_at": "2026-10-24T10:54:21-04:00",
+      "ended_at": "2026-10-24T10:57:14-04:00",
+      "harness_version": "v0.25.3-0.20261017164258-00dada61a962",
+      "image_id": "sha256:49e255626f3bbeb65693c797db5f2ecf2edceede5577f733b98daa3cb47ac378",
+      "image_repo_digest": "localhost/nexus@sha256:5b544cbf7140c943859b8ecd6d7a98ab9085611022d323ae51bfebac211bd6ab",
+      "image_vcs_revision": "8f5fc0e77262d0772f5193d3f61995dc567885a3",
+      "observed_source_sha256": "a51c008b96a660f8b322f6e4a7528c9d726b7757084fab791773df5a47ec36ee",
+      "resolved_model_version": null,
+      "provider_stop_reason": "completed",
+      "provider_retries": null,
+      "tool_calls": 25,
+      "world_actions": 20,
+      "receipt_validation": {
+        "classification": "accepted_receipt",
+        "live_mission_won": true,
+        "receipt_match": true,
+        "version": "receipt-classification-v1"
+      },
+      "terminal_classification": "supported_win",
+      "log_files_sha256": {
+        "10-44-05.json": "b6de88380b5eaee5628c80f82093d9acb60919b8eb21873c9ed2b3f621af7791",
+        "10-44-05.log": "410e36e8f605e3febf58968967358fd4f9c6336e9c9e38cfd3611e581cdf18dd"
+      },
+      "notes": "All expected trace/tool/result joins verified. No retry/error/warning found in supplied logs; SDK-internal retries not exposed. Model name is an alias; immutable resolved model version unavailable. Timestamps use the -0400 offset corroborated by result/tool timestamps.",
+      "trace_id": "01M5Q6FP598N56Z8R6914VRSYW",
+      "episode_id": "1145ba45a54cfbb12a04d66f8b3108e6",
+      "recorded_model": "gpt-6-astra",
+      "run_config": {
+        "Model": "gpt-6-astra",
+        "MaxRequestsPerMinute": 20,
+        "ModelParameters": {
+          "frequency-penalty": null,
+          "max-completion-tokens": null,
+          "presence-penalty": null,
+          "reasoning-context": null,
+          "reasoning-effort": "medium",
+          "reasoning-mode": null,
+          "temperature": null,
+          "text-response-format": false,
+          "top-p": null,
+          "verbosity": null
+        },
+        "RetryPolicy": {
+          "MaxRetryAttempts": 3,
+          "InitialDelaySeconds": 30
+        }
+      },
+      "evaluation_seed": "46c648598851670ac347e048a57817d2",
+      "token_usage": {
+        "InputTokens": 220265,
+        "OutputTokens": 6139,
+        "ReasoningTokens": 5224,
+        "InputCacheWriteTokens": 14931,
+        "InputCacheReadTokens": 205262,
+        "InputTokenAccounting": "cache_tokens_included",
+        "OutputTokenAccounting": "reasoning_tokens_included"
+      },
+      "logged_retry_events": 0,
+      "harness_kind": "Passed",
+      "first_submission_correct": true,
+      "first_submission_supported": true,
+      "measurements": 8,
+      "check_calls": 0,
+      "source_references": {
+        "file": "10-44-05.log",
+        "binding_line": 2316,
+        "report_line": 2986,
+        "receipt_line": 2838
+      }
+    },
+    {
+      "execution_id": "single-shot-09-r1",
+      "status": "completed",
+      "started_at": "2026-10-24T10:57:14-04:00",
+      "ended_at": "2026-10-24T10:59:56-04:00",
+      "harness_version": "v0.25.3-0.20261017164258-00dada61a962",
+      "image_id": "sha256:49e255626f3bbeb65693c797db5f2ecf2edceede5577f733b98daa3cb47ac378",
+      "image_repo_digest": "localhost/nexus@sha256:5b544cbf7140c943859b8ecd6d7a98ab9085611022d323ae51bfebac211bd6ab",
+      "image_vcs_revision": "8f5fc0e77262d0772f5193d3f61995dc567885a3",
+      "observed_source_sha256": "a51c008b96a660f8b322f6e4a7528c9d726b7757084fab791773df5a47ec36ee",
+      "resolved_model_version": null,
+      "provider_stop_reason": "completed",
+      "provider_retries": null,
+      "tool_calls": 25,
+      "world_actions": 20,
+      "receipt_validation": {
+        "classification": "accepted_receipt",
+        "live_mission_won": true,
+        "receipt_match": true,
+        "version": "receipt-classification-v1"
+      },
+      "terminal_classification": "supported_win",
+      "log_files_sha256": {
+        "10-44-05.json": "b6de88380b5eaee5628c80f82093d9acb60919b8eb21873c9ed2b3f621af7791",
+        "10-44-05.log": "410e36e8f605e3febf58968967358fd4f9c6336e9c9e38cfd3611e581cdf18dd"
+      },
+      "notes": "All expected trace/tool/result joins verified. No retry/error/warning found in supplied logs; SDK-internal retries not exposed. Model name is an alias; immutable resolved model version unavailable. Timestamps use the -0400 offset corroborated by result/tool timestamps.",
+      "trace_id": "01M5Q6MZ5FJ46QQM1N6ATBT65E",
+      "episode_id": "52bdfd019e309ce53705d20bb57a309d",
+      "recorded_model": "gpt-6-astra",
+      "run_config": {
+        "Model": "gpt-6-astra",
+        "MaxRequestsPerMinute": 20,
+        "ModelParameters": {
+          "frequency-penalty": null,
+          "max-completion-tokens": null,
+          "presence-penalty": null,
+          "reasoning-context": null,
+          "reasoning-effort": "medium",
+          "reasoning-mode": null,
+          "temperature": null,
+          "text-response-format": false,
+          "top-p": null,
+          "verbosity": null
+        },
+        "RetryPolicy": {
+          "MaxRetryAttempts": 3,
+          "InitialDelaySeconds": 30
+        }
+      },
+      "evaluation_seed": "46c648598851670ac347e048a57817d2",
+      "token_usage": {
+        "InputTokens": 210623,
+        "OutputTokens": 5598,
+        "ReasoningTokens": 4675,
+        "InputCacheWriteTokens": 14374,
+        "InputCacheReadTokens": 196177,
+        "InputTokenAccounting": "cache_tokens_included",
+        "OutputTokenAccounting": "reasoning_tokens_included"
+      },
+      "logged_retry_events": 0,
+      "harness_kind": "Passed",
+      "first_submission_correct": true,
+      "first_submission_supported": true,
+      "measurements": 8,
+      "check_calls": 0,
+      "source_references": {
+        "file": "10-44-05.log",
+        "binding_line": 3013,
+        "report_line": 3676,
+        "receipt_line": 3535
+      }
+    },
+    {
+      "execution_id": "single-shot-01-r2",
+      "status": "completed",
+      "started_at": "2026-10-24T10:59:56-04:00",
+      "ended_at": "2026-10-24T11:03:51-04:00",
+      "harness_version": "v0.25.3-0.20261017164258-00dada61a962",
+      "image_id": "sha256:49e255626f3bbeb65693c797db5f2ecf2edceede5577f733b98daa3cb47ac378",
+      "image_repo_digest": "localhost/nexus@sha256:5b544cbf7140c943859b8ecd6d7a98ab9085611022d323ae51bfebac211bd6ab",
+      "image_vcs_revision": "8f5fc0e77262d0772f5193d3f61995dc567885a3",
+      "observed_source_sha256": "a51c008b96a660f8b322f6e4a7528c9d726b7757084fab791773df5a47ec36ee",
+      "resolved_model_version": null,
+      "provider_stop_reason": "completed",
+      "provider_retries": null,
+      "tool_calls": 35,
+      "world_actions": 30,
+      "receipt_validation": {
+        "classification": "accepted_receipt",
+        "live_mission_won": true,
+        "receipt_match": true,
+        "version": "receipt-classification-v1"
+      },
+      "terminal_classification": "supported_win",
+      "log_files_sha256": {
+        "10-44-05.json": "b6de88380b5eaee5628c80f82093d9acb60919b8eb21873c9ed2b3f621af7791",
+        "10-44-05.log": "410e36e8f605e3febf58968967358fd4f9c6336e9c9e38cfd3611e581cdf18dd"
+      },
+      "notes": "All expected trace/tool/result joins verified. No retry/error/warning found in supplied logs; SDK-internal retries not exposed. Model name is an alias; immutable resolved model version unavailable. Timestamps use the -0400 offset corroborated by result/tool timestamps.",
+      "trace_id": "01M5Q6SX325GGEZD0B4MEQM063",
+      "episode_id": "da78398704f34b0cdc406ee0024b13e5",
+      "recorded_model": "gpt-6-astra",
+      "run_config": {
+        "Model": "gpt-6-astra",
+        "MaxRequestsPerMinute": 20,
+        "ModelParameters": {
+          "frequency-penalty": null,
+          "max-completion-tokens": null,
+          "presence-penalty": null,
+          "reasoning-context": null,
+          "reasoning-effort": "medium",
+          "reasoning-mode": null,
+          "temperature": null,
+          "text-response-format": false,
+          "top-p": null,
+          "verbosity": null
+        },
+        "RetryPolicy": {
+          "MaxRetryAttempts": 3,
+          "InitialDelaySeconds": 30
+        }
+      },
+      "evaluation_seed": "46c648598851670ac347e048a57817d2",
+      "token_usage": {
+        "InputTokens": 398420,
+        "OutputTokens": 8582,
+        "ReasoningTokens": 7263,
+        "InputCacheWriteTokens": 20575,
+        "InputCacheReadTokens": 377743,
+        "InputTokenAccounting": "cache_tokens_included",
+        "OutputTokenAccounting": "reasoning_tokens_included"
+      },
+      "logged_retry_events": 0,
+      "harness_kind": "Passed",
+      "first_submission_correct": true,
+      "first_submission_supported": true,
+      "measurements": 13,
+      "check_calls": 0,
+      "source_references": {
+        "file": "10-44-05.log",
+        "binding_line": 3703,
+        "report_line": 4569,
+        "receipt_line": 4415
+      }
+    },
+    {
+      "execution_id": "single-shot-02-r2",
+      "status": "completed",
+      "started_at": "2026-10-24T11:03:51-04:00",
+      "ended_at": "2026-10-24T11:07:18-04:00",
+      "harness_version": "v0.25.3-0.20261017164258-00dada61a962",
+      "image_id": "sha256:49e255626f3bbeb65693c797db5f2ecf2edceede5577f733b98daa3cb47ac378",
+      "image_repo_digest": "localhost/nexus@sha256:5b544cbf7140c943859b8ecd6d7a98ab9085611022d323ae51bfebac211bd6ab",
+      "image_vcs_revision": "8f5fc0e77262d0772f5193d3f61995dc567885a3",
+      "observed_source_sha256": "a51c008b96a660f8b322f6e4a7528c9d726b7757084fab791773df5a47ec36ee",
+      "resolved_model_version": null,
+      "provider_stop_reason": "completed",
+      "provider_retries": null,
+      "tool_calls": 31,
+      "world_actions": 26,
+      "receipt_validation": {
+        "classification": "accepted_receipt",
+        "live_mission_won": true,
+        "receipt_match": true,
+        "version": "receipt-classification-v1"
+      },
+      "terminal_classification": "supported_win",
+      "log_files_sha256": {
+        "10-44-05.json": "b6de88380b5eaee5628c80f82093d9acb60919b8eb21873c9ed2b3f621af7791",
+        "10-44-05.log": "410e36e8f605e3febf58968967358fd4f9c6336e9c9e38cfd3611e581cdf18dd"
+      },
+      "notes": "All expected trace/tool/result joins verified. No retry/error/warning found in supplied logs; SDK-internal retries not exposed. Model name is an alias; immutable resolved model version unavailable. Timestamps use the -0400 offset corroborated by result/tool timestamps.",
+      "trace_id": "01M5Q712E8X51GNH40ZNFDC77N",
+      "episode_id": "dd45ce752e72b5b267858c3c37cefa7a",
+      "recorded_model": "gpt-6-astra",
+      "run_config": {
+        "Model": "gpt-6-astra",
+        "MaxRequestsPerMinute": 20,
+        "ModelParameters": {
+          "frequency-penalty": null,
+          "max-completion-tokens": null,
+          "presence-penalty": null,
+          "reasoning-context": null,
+          "reasoning-effort": "medium",
+          "reasoning-mode": null,
+          "temperature": null,
+          "text-response-format": false,
+          "top-p": null,
+          "verbosity": null
+        },
+        "RetryPolicy": {
+          "MaxRetryAttempts": 3,
+          "InitialDelaySeconds": 30
+        }
+      },
+      "evaluation_seed": "46c648598851670ac347e048a57817d2",
+      "token_usage": {
+        "InputTokens": 309737,
+        "OutputTokens": 7226,
+        "ReasoningTokens": 6060,
+        "InputCacheWriteTokens": 18040,
+        "InputCacheReadTokens": 291607,
+        "InputTokenAccounting": "cache_tokens_included",
+        "OutputTokenAccounting": "reasoning_tokens_included"
+      },
+      "logged_retry_events": 0,
+      "harness_kind": "Passed",
+      "first_submission_correct": true,
+      "first_submission_supported": true,
+      "measurements": 11,
+      "check_calls": 0,
+      "source_references": {
+        "file": "10-44-05.log",
+        "binding_line": 4596,
+        "report_line": 5387,
+        "receipt_line": 5232
+      }
+    },
+    {
+      "execution_id": "single-shot-03-r2",
+      "status": "completed",
+      "started_at": "2026-10-24T11:07:18-04:00",
+      "ended_at": "2026-10-24T11:10:33-04:00",
+      "harness_version": "v0.25.3-0.20261017164258-00dada61a962",
+      "image_id": "sha256:49e255626f3bbeb65693c797db5f2ecf2edceede5577f733b98daa3cb47ac378",
+      "image_repo_digest": "localhost/nexus@sha256:5b544cbf7140c943859b8ecd6d7a98ab9085611022d323ae51bfebac211bd6ab",
+      "image_vcs_revision": "8f5fc0e77262d0772f5193d3f61995dc567885a3",
+      "observed_source_sha256": "a51c008b96a660f8b322f6e4a7528c9d726b7757084fab791773df5a47ec36ee",
+      "resolved_model_version": null,
+      "provider_stop_reason": "completed",
+      "provider_retries": null,
+      "tool_calls": 27,
+      "world_actions": 22,
+      "receipt_validation": {
+        "classification": "accepted_receipt",
+        "live_mission_won": true,
+        "receipt_match": true,
+        "version": "receipt-classification-v1"
+      },
+      "terminal_classification": "supported_win",
+      "log_files_sha256": {
+        "10-44-05.json": "b6de88380b5eaee5628c80f82093d9acb60919b8eb21873c9ed2b3f621af7791",
+        "10-44-05.log": "410e36e8f605e3febf58968967358fd4f9c6336e9c9e38cfd3611e581cdf18dd"
+      },
+      "notes": "All expected trace/tool/result joins verified. No retry/error/warning found in supplied logs; SDK-internal retries not exposed. Model name is an alias; immutable resolved model version unavailable. Timestamps use the -0400 offset corroborated by result/tool timestamps.",
+      "trace_id": "01M5Q77CBAM6K1FFKWBSRXZJAH",
+      "episode_id": "81000331978c9848533c571fee8c59d6",
+      "recorded_model": "gpt-6-astra",
+      "run_config": {
+        "Model": "gpt-6-astra",
+        "MaxRequestsPerMinute": 20,
+        "ModelParameters": {
+          "frequency-penalty": null,
+          "max-completion-tokens": null,
+          "presence-penalty": null,
+          "reasoning-context": null,
+          "reasoning-effort": "medium",
+          "reasoning-mode": null,
+          "temperature": null,
+          "text-response-format": false,
+          "top-p": null,
+          "verbosity": null
+        },
+        "RetryPolicy": {
+          "MaxRetryAttempts": 3,
+          "InitialDelaySeconds": 30
+        }
+      },
+      "evaluation_seed": "46c648598851670ac347e048a57817d2",
+      "token_usage": {
+        "InputTokens": 250424,
+        "OutputTokens": 6690,
+        "ReasoningTokens": 5696,
+        "InputCacheWriteTokens": 16227,
+        "InputCacheReadTokens": 234119,
+        "InputTokenAccounting": "cache_tokens_included",
+        "OutputTokenAccounting": "reasoning_tokens_included"
+      },
+      "logged_retry_events": 0,
+      "harness_kind": "Passed",
+      "first_submission_correct": true,
+      "first_submission_supported": true,
+      "measurements": 9,
+      "check_calls": 0,
+      "source_references": {
+        "file": "10-44-05.log",
+        "binding_line": 5414,
+        "report_line": 6129,
+        "receipt_line": 5974
+      }
+    },
+    {
+      "execution_id": "single-shot-08-r2",
+      "status": "completed",
+      "started_at": "2026-10-24T11:10:33-04:00",
+      "ended_at": "2026-10-24T11:13:10-04:00",
+      "harness_version": "v0.25.3-0.20261017164258-00dada61a962",
+      "image_id": "sha256:49e255626f3bbeb65693c797db5f2ecf2edceede5577f733b98daa3cb47ac378",
+      "image_repo_digest": "localhost/nexus@sha256:5b544cbf7140c943859b8ecd6d7a98ab9085611022d323ae51bfebac211bd6ab",
+      "image_vcs_revision": "8f5fc0e77262d0772f5193d3f61995dc567885a3",
+      "observed_source_sha256": "a51c008b96a660f8b322f6e4a7528c9d726b7757084fab791773df5a47ec36ee",
+      "resolved_model_version": null,
+      "provider_stop_reason": "completed",
+      "provider_retries": null,
+      "tool_calls": 23,
+      "world_actions": 18,
+      "receipt_validation": {
+        "classification": "accepted_receipt",
+        "live_mission_won": true,
+        "receipt_match": true,
+        "version": "receipt-classification-v1"
+      },
+      "terminal_classification": "supported_win",
+      "log_files_sha256": {
+        "10-44-05.json": "b6de88380b5eaee5628c80f82093d9acb60919b8eb21873c9ed2b3f621af7791",
+        "10-44-05.log": "410e36e8f605e3febf58968967358fd4f9c6336e9c9e38cfd3611e581cdf18dd"
+      },
+      "notes": "All expected trace/tool/result joins verified. No retry/error/warning found in supplied logs; SDK-internal retries not exposed. Model name is an alias; immutable resolved model version unavailable. Timestamps use the -0400 offset corroborated by result/tool timestamps.",
+      "trace_id": "01M5Q7DB44KBXCJZWFG93RYSVW",
+      "episode_id": "4e933e96a122f5f507ac33a1acfbf644",
+      "recorded_model": "gpt-6-astra",
+      "run_config": {
+        "Model": "gpt-6-astra",
+        "MaxRequestsPerMinute": 20,
+        "ModelParameters": {
+          "frequency-penalty": null,
+          "max-completion-tokens": null,
+          "presence-penalty": null,
+          "reasoning-context": null,
+          "reasoning-effort": "medium",
+          "reasoning-mode": null,
+          "temperature": null,
+          "text-response-format": false,
+          "top-p": null,
+          "verbosity": null
+        },
+        "RetryPolicy": {
+          "MaxRetryAttempts": 3,
+          "InitialDelaySeconds": 30
+        }
+      },
+      "evaluation_seed": "46c648598851670ac347e048a57817d2",
+      "token_usage": {
+        "InputTokens": 195479,
+        "OutputTokens": 5649,
+        "ReasoningTokens": 4811,
+        "InputCacheWriteTokens": 13860,
+        "InputCacheReadTokens": 181553,
+        "InputTokenAccounting": "cache_tokens_included",
+        "OutputTokenAccounting": "reasoning_tokens_included"
+      },
+      "logged_retry_events": 0,
+      "harness_kind": "Passed",
+      "first_submission_correct": true,
+      "first_submission_supported": true,
+      "measurements": 7,
+      "check_calls": 0,
+      "source_references": {
+        "file": "10-44-05.log",
+        "binding_line": 6156,
+        "report_line": 6775,
+        "receipt_line": 6640
+      }
+    },
+    {
+      "execution_id": "single-shot-09-r2",
+      "status": "completed",
+      "started_at": "2026-10-24T11:13:10-04:00",
+      "ended_at": "2026-10-24T11:15:43-04:00",
+      "harness_version": "v0.25.3-0.20261017164258-00dada61a962",
+      "image_id": "sha256:49e255626f3bbeb65693c797db5f2ecf2edceede5577f733b98daa3cb47ac378",
+      "image_repo_digest": "localhost/nexus@sha256:5b544cbf7140c943859b8ecd6d7a98ab9085611022d323ae51bfebac211bd6ab",
+      "image_vcs_revision": "8f5fc0e77262d0772f5193d3f61995dc567885a3",
+      "observed_source_sha256": "a51c008b96a660f8b322f6e4a7528c9d726b7757084fab791773df5a47ec36ee",
+      "resolved_model_version": null,
+      "provider_stop_reason": "completed",
+      "provider_retries": null,
+      "tool_calls": 25,
+      "world_actions": 20,
+      "receipt_validation": {
+        "classification": "accepted_receipt",
+        "live_mission_won": true,
+        "receipt_match": true,
+        "version": "receipt-classification-v1"
+      },
+      "terminal_classification": "supported_win",
+      "log_files_sha256": {
+        "10-44-05.json": "b6de88380b5eaee5628c80f82093d9acb60919b8eb21873c9ed2b3f621af7791",
+        "10-44-05.log": "410e36e8f605e3febf58968967358fd4f9c6336e9c9e38cfd3611e581cdf18dd"
+      },
+      "notes": "All expected trace/tool/result joins verified. No retry/error/warning found in supplied logs; SDK-internal retries not exposed. Model name is an alias; immutable resolved model version unavailable. Timestamps use the -0400 offset corroborated by result/tool timestamps.",
+      "trace_id": "01M5Q7J4DTHFZ516ED096TTVTR",
+      "episode_id": "d4b1df0ec7f99a282ee81e855d1da49d",
+      "recorded_model": "gpt-6-astra",
+      "run_config": {
+        "Model": "gpt-6-astra",
+        "MaxRequestsPerMinute": 20,
+        "ModelParameters": {
+          "frequency-penalty": null,
+          "max-completion-tokens": null,
+          "presence-penalty": null,
+          "reasoning-context": null,
+          "reasoning-effort": "medium",
+          "reasoning-mode": null,
+          "temperature": null,
+          "text-response-format": false,
+          "top-p": null,
+          "verbosity": null
+        },
+        "RetryPolicy": {
+          "MaxRetryAttempts": 3,
+          "InitialDelaySeconds": 30
+        }
+      },
+      "evaluation_seed": "46c648598851670ac347e048a57817d2",
+      "token_usage": {
+        "InputTokens": 212456,
+        "OutputTokens": 5155,
+        "ReasoningTokens": 4239,
+        "InputCacheWriteTokens": 13969,
+        "InputCacheReadTokens": 198415,
+        "InputTokenAccounting": "cache_tokens_included",
+        "OutputTokenAccounting": "reasoning_tokens_included"
+      },
+      "logged_retry_events": 0,
+      "harness_kind": "Passed",
+      "first_submission_correct": true,
+      "first_submission_supported": true,
+      "measurements": 8,
+      "check_calls": 0,
+      "source_references": {
+        "file": "10-44-05.log",
+        "binding_line": 6802,
+        "report_line": 7462,
+        "receipt_line": 7324
+      }
+    },
+    {
+      "execution_id": "consistency-baseline-10-r1",
+      "status": "completed",
+      "started_at": "2026-10-24T11:51:35-04:00",
+      "ended_at": "2026-10-24T12:03:55-04:00",
+      "harness_version": "v0.25.3-0.20261017164258-00dada61a962",
+      "image_id": "sha256:49e255626f3bbeb65693c797db5f2ecf2edceede5577f733b98daa3cb47ac378",
+      "image_repo_digest": "localhost/nexus@sha256:5b544cbf7140c943859b8ecd6d7a98ab9085611022d323ae51bfebac211bd6ab",
+      "image_vcs_revision": "8f5fc0e77262d0772f5193d3f61995dc567885a3",
+      "observed_source_sha256": "a51c008b96a660f8b322f6e4a7528c9d726b7757084fab791773df5a47ec36ee",
+      "resolved_model_version": null,
+      "provider_stop_reason": "STOP",
+      "provider_retries": null,
+      "tool_calls": 44,
+      "world_actions": 39,
+      "receipt_validation": {
+        "classification": "accepted_receipt",
+        "live_mission_won": true,
+        "receipt_match": true,
+        "version": "receipt-classification-v1"
+      },
+      "terminal_classification": "supported_win",
+      "log_files_sha256": {
+        "11-51-35.json": "7de9f6f571630638f3c0159887b5d14981206493100c626dc976ed03238eeec7",
+        "11-51-35.log": "60f6638b7ac7ba73acb980b9232ad27604f96de03dfe2f582ae450efda50e48b"
+      },
+      "notes": "All expected trace/tool/result joins verified. No retry/error/warning found in supplied logs; SDK-internal retries not exposed. Model name is an alias; immutable resolved model version unavailable. Timestamps use the -0400 offset corroborated by result/tool timestamps.",
+      "trace_id": "01M5Q9RFP2W6CRP2BQ9BFGD5FF",
+      "episode_id": "8253ce63b7b906604385c7bbbf770e2d",
+      "recorded_model": "gemini-3.8-flash",
+      "run_config": {
+        "Model": "gemini-3.8-flash",
+        "MaxRequestsPerMinute": 3,
+        "ModelParameters": {
+          "frequency-penalty": null,
+          "media-resolution": "high",
+          "presence-penalty": null,
+          "seed": null,
+          "temperature": null,
+          "text-response-format": false,
+          "text-response-format-with-tools": false,
+          "thinking-level": "high",
+          "top-k": null,
+          "top-p": null
+        }
+      },
+      "evaluation_seed": "b6719a5b750a747d31a50503f02b243d",
+      "token_usage": {
+        "InputTokens": 1075608,
+        "OutputTokens": 1770,
+        "ReasoningTokens": 84761,
+        "InputCacheReadTokens": 673170,
+        "InputTokenAccounting": "cache_tokens_included",
+        "OutputTokenAccounting": "reasoning_tokens_separate"
+      },
+      "logged_retry_events": 0,
+      "harness_kind": "Passed",
+      "first_submission_correct": true,
+      "first_submission_supported": true,
+      "measurements": 18,
+      "check_calls": 0,
+      "source_references": {
+        "file": "11-51-35.log",
+        "binding_line": 24,
+        "report_line": 1063,
+        "receipt_line": 910
+      }
+    },
+    {
+      "execution_id": "consistency-baseline-10-r2",
+      "status": "completed",
+      "started_at": "2026-10-24T12:03:55-04:00",
+      "ended_at": "2026-10-24T12:16:14-04:00",
+      "harness_version": "v0.25.3-0.20261017164258-00dada61a962",
+      "image_id": "sha256:49e255626f3bbeb65693c797db5f2ecf2edceede5577f733b98daa3cb47ac378",
+      "image_repo_digest": "localhost/nexus@sha256:5b544cbf7140c943859b8ecd6d7a98ab9085611022d323ae51bfebac211bd6ab",
+      "image_vcs_revision": "8f5fc0e77262d0772f5193d3f61995dc567885a3",
+      "observed_source_sha256": "a51c008b96a660f8b322f6e4a7528c9d726b7757084fab791773df5a47ec36ee",
+      "resolved_model_version": null,
+      "provider_stop_reason": "STOP",
+      "provider_retries": null,
+      "tool_calls": 56,
+      "world_actions": 51,
+      "receipt_validation": {
+        "classification": "accepted_receipt",
+        "live_mission_won": true,
+        "receipt_match": true,
+        "version": "receipt-classification-v1"
+      },
+      "terminal_classification": "supported_win",
+      "log_files_sha256": {
+        "11-51-35.json": "7de9f6f571630638f3c0159887b5d14981206493100c626dc976ed03238eeec7",
+        "11-51-35.log": "60f6638b7ac7ba73acb980b9232ad27604f96de03dfe2f582ae450efda50e48b"
+      },
+      "notes": "All expected trace/tool/result joins verified. No retry/error/warning found in supplied logs; SDK-internal retries not exposed. Model name is an alias; immutable resolved model version unavailable. Timestamps use the -0400 offset corroborated by result/tool timestamps.",
+      "trace_id": "01M5QAF1TPH99MK7X1GSN16P9C",
+      "episode_id": "12a7bcad6ad19069870d042305a9bc17",
+      "recorded_model": "gemini-3.8-flash",
+      "run_config": {
+        "Model": "gemini-3.8-flash",
+        "MaxRequestsPerMinute": 3,
+        "ModelParameters": {
+          "frequency-penalty": null,
+          "media-resolution": "high",
+          "presence-penalty": null,
+          "seed": null,
+          "temperature": null,
+          "text-response-format": false,
+          "text-response-format-with-tools": false,
+          "thinking-level": "high",
+          "top-k": null,
+          "top-p": null
+        }
+      },
+      "evaluation_seed": "b6719a5b750a747d31a50503f02b243d",
+      "token_usage": {
+        "InputTokens": 1351603,
+        "OutputTokens": 2327,
+        "ReasoningTokens": 74487,
+        "InputCacheReadTokens": 922356,
+        "InputTokenAccounting": "cache_tokens_included",
+        "OutputTokenAccounting": "reasoning_tokens_separate"
+      },
+      "logged_retry_events": 0,
+      "harness_kind": "Passed",
+      "first_submission_correct": true,
+      "first_submission_supported": true,
+      "measurements": 24,
+      "check_calls": 0,
+      "source_references": {
+        "file": "11-51-35.log",
+        "binding_line": 1090,
+        "report_line": 2353,
+        "receipt_line": 2204
+      }
+    },
+    {
+      "execution_id": "consistency-prompt-10-r1",
+      "status": "completed",
+      "started_at": "2026-10-24T12:24:44-04:00",
+      "ended_at": "2026-10-24T12:37:18-04:00",
+      "harness_version": "v0.25.3-0.20261017164258-00dada61a962",
+      "image_id": "sha256:49e255626f3bbeb65693c797db5f2ecf2edceede5577f733b98daa3cb47ac378",
+      "image_repo_digest": "localhost/nexus@sha256:5b544cbf7140c943859b8ecd6d7a98ab9085611022d323ae51bfebac211bd6ab",
+      "image_vcs_revision": "8f5fc0e77262d0772f5193d3f61995dc567885a3",
+      "observed_source_sha256": "a51c008b96a660f8b322f6e4a7528c9d726b7757084fab791773df5a47ec36ee",
+      "resolved_model_version": null,
+      "provider_stop_reason": "STOP",
+      "provider_retries": null,
+      "tool_calls": 54,
+      "world_actions": 49,
+      "receipt_validation": {
+        "classification": "accepted_receipt",
+        "live_mission_won": true,
+        "receipt_match": true,
+        "version": "receipt-classification-v1"
+      },
+      "terminal_classification": "supported_win",
+      "log_files_sha256": {
+        "12-24-44.json": "197e29f989b773e0bd2866293eedac16e67c206f58e5f3a29cd7eaaca89022c4",
+        "12-24-44.log": "2014add211e647e220ea4a7305dab38fd631d6d1ff113b552cb5bafea491572d"
+      },
+      "notes": "All expected trace/tool/result joins verified. No retry/error/warning found in supplied logs; SDK-internal retries not exposed. Model name is an alias; immutable resolved model version unavailable. Timestamps use the -0400 offset corroborated by result/tool timestamps.",
+      "trace_id": "01M5QBN5R9CCADZR0MV1F8SXEP",
+      "episode_id": "538adecef7370cd777a9523c13ed7103",
+      "recorded_model": "gemini-3.8-flash",
+      "run_config": {
+        "Model": "gemini-3.8-flash",
+        "MaxRequestsPerMinute": 3,
+        "ModelParameters": {
+          "frequency-penalty": null,
+          "media-resolution": "high",
+          "presence-penalty": null,
+          "seed": null,
+          "temperature": null,
+          "text-response-format": false,
+          "text-response-format-with-tools": false,
+          "thinking-level": "high",
+          "top-k": null,
+          "top-p": null
+        }
+      },
+      "evaluation_seed": "820638f1d66588464b6dfc7a49c7f679",
+      "token_usage": {
+        "InputTokens": 1434236,
+        "OutputTokens": 2237,
+        "ReasoningTokens": 82247,
+        "InputCacheReadTokens": 1061835,
+        "InputTokenAccounting": "cache_tokens_included",
+        "OutputTokenAccounting": "reasoning_tokens_separate"
+      },
+      "logged_retry_events": 0,
+      "harness_kind": "Passed",
+      "first_submission_correct": true,
+      "first_submission_supported": true,
+      "measurements": 23,
+      "check_calls": 0,
+      "source_references": {
+        "file": "12-24-44.log",
+        "binding_line": 24,
+        "report_line": 1252,
+        "receipt_line": 1102
+      }
+    },
+    {
+      "execution_id": "consistency-prompt-10-r2",
+      "status": "completed",
+      "started_at": "2026-10-24T12:37:18-04:00",
+      "ended_at": "2026-10-24T12:47:16-04:00",
+      "harness_version": "v0.25.3-0.20261017164258-00dada61a962",
+      "image_id": "sha256:49e255626f3bbeb65693c797db5f2ecf2edceede5577f733b98daa3cb47ac378",
+      "image_repo_digest": "localhost/nexus@sha256:5b544cbf7140c943859b8ecd6d7a98ab9085611022d323ae51bfebac211bd6ab",
+      "image_vcs_revision": "8f5fc0e77262d0772f5193d3f61995dc567885a3",
+      "observed_source_sha256": "a51c008b96a660f8b322f6e4a7528c9d726b7757084fab791773df5a47ec36ee",
+      "resolved_model_version": null,
+      "provider_stop_reason": "STOP",
+      "provider_retries": null,
+      "tool_calls": 56,
+      "world_actions": 51,
+      "receipt_validation": {
+        "classification": "accepted_receipt",
+        "live_mission_won": true,
+        "receipt_match": true,
+        "version": "receipt-classification-v1"
+      },
+      "terminal_classification": "supported_win",
+      "log_files_sha256": {
+        "12-24-44.json": "197e29f989b773e0bd2866293eedac16e67c206f58e5f3a29cd7eaaca89022c4",
+        "12-24-44.log": "2014add211e647e220ea4a7305dab38fd631d6d1ff113b552cb5bafea491572d"
+      },
+      "notes": "All expected trace/tool/result joins verified. No retry/error/warning found in supplied logs; SDK-internal retries not exposed. Model name is an alias; immutable resolved model version unavailable. Timestamps use the -0400 offset corroborated by result/tool timestamps.",
+      "trace_id": "01M5QCC68YWQCPEH89YWJQ65JH",
+      "episode_id": "88ab064e86bd36275e9836239fc7cdc6",
+      "recorded_model": "gemini-3.8-flash",
+      "run_config": {
+        "Model": "gemini-3.8-flash",
+        "MaxRequestsPerMinute": 3,
+        "ModelParameters": {
+          "frequency-penalty": null,
+          "media-resolution": "high",
+          "presence-penalty": null,
+          "seed": null,
+          "temperature": null,
+          "text-response-format": false,
+          "text-response-format-with-tools": false,
+          "thinking-level": "high",
+          "top-k": null,
+          "top-p": null
+        }
+      },
+      "evaluation_seed": "820638f1d66588464b6dfc7a49c7f679",
+      "token_usage": {
+        "InputTokens": 1488778,
+        "OutputTokens": 2248,
+        "ReasoningTokens": 54188,
+        "InputCacheReadTokens": 1202886,
+        "InputTokenAccounting": "cache_tokens_included",
+        "OutputTokenAccounting": "reasoning_tokens_separate"
+      },
+      "logged_retry_events": 0,
+      "harness_kind": "Passed",
+      "first_submission_correct": true,
+      "first_submission_supported": true,
+      "measurements": 24,
+      "check_calls": 0,
+      "source_references": {
+        "file": "12-24-44.log",
+        "binding_line": 1279,
+        "report_line": 2544,
+        "receipt_line": 2395
+      }
+    },
+    {
+      "execution_id": "consistency-checker-10-r1",
+      "status": "completed",
+      "started_at": "2026-10-24T12:54:08-04:00",
+      "ended_at": "2026-10-24T13:07:03-04:00",
+      "harness_version": "v0.25.3-0.20261017164258-00dada61a962",
+      "image_id": "sha256:49e255626f3bbeb65693c797db5f2ecf2edceede5577f733b98daa3cb47ac378",
+      "image_repo_digest": "localhost/nexus@sha256:5b544cbf7140c943859b8ecd6d7a98ab9085611022d323ae51bfebac211bd6ab",
+      "image_vcs_revision": "8f5fc0e77262d0772f5193d3f61995dc567885a3",
+      "observed_source_sha256": "a51c008b96a660f8b322f6e4a7528c9d726b7757084fab791773df5a47ec36ee",
+      "resolved_model_version": null,
+      "provider_stop_reason": "STOP",
+      "provider_retries": null,
+      "tool_calls": 79,
+      "world_actions": 36,
+      "receipt_validation": {
+        "classification": "accepted_receipt",
+        "live_mission_won": true,
+        "receipt_match": true,
+        "version": "receipt-classification-v1"
+      },
+      "terminal_classification": "supported_win",
+      "log_files_sha256": {
+        "12-54-08.json": "bcb471bf17e56043ecb6e495f6e4d0acc12a5b0c31aa33056f91b84d39c584af",
+        "12-54-08.log": "51a93914f0d7042af89fef94ce8686cb08de4cc27522a0855d63a3309391ccce"
+      },
+      "notes": "All expected trace/tool/result joins verified. No retry/error/warning found in supplied logs; SDK-internal retries not exposed. Model name is an alias; immutable resolved model version unavailable. Timestamps use the -0400 offset corroborated by result/tool timestamps.",
+      "trace_id": "01M5QDB0Q4RP38Y6HHB736V6G7",
+      "episode_id": "5168aac000a893f9417da1ae7446718c",
+      "recorded_model": "gemini-3.8-flash",
+      "run_config": {
+        "Model": "gemini-3.8-flash",
+        "MaxRequestsPerMinute": 3,
+        "ModelParameters": {
+          "frequency-penalty": null,
+          "media-resolution": "high",
+          "presence-penalty": null,
+          "seed": null,
+          "temperature": null,
+          "text-response-format": false,
+          "text-response-format-with-tools": false,
+          "thinking-level": "high",
+          "top-k": null,
+          "top-p": null
+        }
+      },
+      "evaluation_seed": "1bda4a53ce528c3e938979675e1fd17b",
+      "token_usage": {
+        "InputTokens": 3555900,
+        "OutputTokens": 2814,
+        "ReasoningTokens": 67260,
+        "InputCacheReadTokens": 2976854,
+        "InputTokenAccounting": "cache_tokens_included",
+        "OutputTokenAccounting": "reasoning_tokens_separate"
+      },
+      "logged_retry_events": 0,
+      "harness_kind": "Passed",
+      "first_submission_correct": false,
+      "first_submission_supported": false,
+      "measurements": 15,
+      "check_calls": 38,
+      "source_references": {
+        "file": "12-54-08.log",
+        "binding_line": 24,
+        "report_line": 1728,
+        "receipt_line": 1577
+      }
+    },
+    {
+      "execution_id": "consistency-checker-10-r2",
+      "status": "completed",
+      "started_at": "2026-10-24T13:07:03-04:00",
+      "ended_at": "2026-10-24T13:15:06-04:00",
+      "harness_version": "v0.25.3-0.20261017164258-00dada61a962",
+      "image_id": "sha256:49e255626f3bbeb65693c797db5f2ecf2edceede5577f733b98daa3cb47ac378",
+      "image_repo_digest": "localhost/nexus@sha256:5b544cbf7140c943859b8ecd6d7a98ab9085611022d323ae51bfebac211bd6ab",
+      "image_vcs_revision": "8f5fc0e77262d0772f5193d3f61995dc567885a3",
+      "observed_source_sha256": "a51c008b96a660f8b322f6e4a7528c9d726b7757084fab791773df5a47ec36ee",
+      "resolved_model_version": null,
+      "provider_stop_reason": "STOP",
+      "provider_retries": null,
+      "tool_calls": 49,
+      "world_actions": 33,
+      "receipt_validation": {
+        "classification": "accepted_receipt",
+        "live_mission_won": true,
+        "receipt_match": true,
+        "version": "receipt-classification-v1"
+      },
+      "terminal_classification": "supported_win",
+      "log_files_sha256": {
+        "12-54-08.json": "bcb471bf17e56043ecb6e495f6e4d0acc12a5b0c31aa33056f91b84d39c584af",
+        "12-54-08.log": "51a93914f0d7042af89fef94ce8686cb08de4cc27522a0855d63a3309391ccce"
+      },
+      "notes": "All expected trace/tool/result joins verified. No retry/error/warning found in supplied logs; SDK-internal retries not exposed. Model name is an alias; immutable resolved model version unavailable. Timestamps use the -0400 offset corroborated by result/tool timestamps.",
+      "trace_id": "01M5QE2NB1YD4MS15219H08V39",
+      "episode_id": "15f59196d5a9e112cf22cfe4fdae9c36",
+      "recorded_model": "gemini-3.8-flash",
+      "run_config": {
+        "Model": "gemini-3.8-flash",
+        "MaxRequestsPerMinute": 3,
+        "ModelParameters": {
+          "frequency-penalty": null,
+          "media-resolution": "high",
+          "presence-penalty": null,
+          "seed": null,
+          "temperature": null,
+          "text-response-format": false,
+          "text-response-format-with-tools": false,
+          "thinking-level": "high",
+          "top-k": null,
+          "top-p": null
+        }
+      },
+      "evaluation_seed": "1bda4a53ce528c3e938979675e1fd17b",
+      "token_usage": {
+        "InputTokens": 1328245,
+        "OutputTokens": 1948,
+        "ReasoningTokens": 41448,
+        "InputCacheReadTokens": 1101220,
+        "InputTokenAccounting": "cache_tokens_included",
+        "OutputTokenAccounting": "reasoning_tokens_separate"
+      },
+      "logged_retry_events": 0,
+      "harness_kind": "Passed",
+      "first_submission_correct": true,
+      "first_submission_supported": true,
+      "measurements": 15,
+      "check_calls": 11,
+      "source_references": {
+        "file": "12-54-08.log",
+        "binding_line": 1755,
+        "report_line": 2892,
+        "receipt_line": 2738
+      }
+    }
+  ],
+  "audit_status": "passed",
+  "audit_scope": {
+    "actions": 929,
+    "readings": 367,
+    "submissions": 54,
+    "witnesses": 20,
+    "checks": 49,
+    "programs_all_history_checked": 20736,
+    "behavior_classes": 748,
+    "runs": 40
+  },
+  "remaining_reserve_runs": 20
+}

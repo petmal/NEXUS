@@ -1,0 +1,242 @@
+{
+  "version": "td-research-source-manifest-v1",
+  "scope": "Historical audited reports read for the synthesis. Hashes identify retrieved text snapshots, which may normalize line endings; raw evaluation input hashes remain separate. Null identifiers were not recovered. Historical reports are evidence, not current run instructions.",
+  "reports": [
+    {
+      "filename": "NEXUS-12-05-35-analysis.md",
+      "sha256": "85e72bb3b52039efa3c4c634bb4c9167525f2a13536bad100772891390cba9ef",
+      "bytes": 15856,
+      "library_file_id": "libfile_42a3a0f2355c8191a43eebcaca7e6775",
+      "report_version": null,
+      "url": "https://chatgpt.com/library?file_id=libfile_42a3a0f2355c8191a43eebcaca7e6775&account_id=personal"
+    },
+    {
+      "filename": "NEXUS-23-00-26-pilot-analysis.md",
+      "sha256": "b757ce6e3e27c9c54d4d09a591a8064bd541110bf4aa36406ac92d55397bbbe8",
+      "bytes": 20754,
+      "library_file_id": "libfile_fde5f81024508191a2443ece3c38cefd",
+      "report_version": null,
+      "url": "https://chatgpt.com/library?file_id=libfile_fde5f81024508191a2443ece3c38cefd&account_id=personal"
+    },
+    {
+      "filename": "NEXUS-30-action-budget-analysis-2026-10-17.md",
+      "sha256": "2778faed8f0814b71bb6d647ac8acb180a7d9d352ae52822f9107635e5231e0e",
+      "bytes": 14593,
+      "library_file_id": "libfile_ea1496894b9c81919c9db9ff82f5fd0e",
+      "report_version": null,
+      "url": "https://chatgpt.com/library?file_id=libfile_ea1496894b9c81919c9db9ff82f5fd0e&account_id=personal"
+    },
+    {
+      "filename": "NEXUS-action-overhead-and-state-changing-experiments.md",
+      "sha256": "21021a2e9fee0a8ac76d5479dd16fdc993a75055c34d172472a694364855acf5",
+      "bytes": 14724,
+      "library_file_id": "libfile_c3d2ab1828fc819182b95fe9e00a9f9d",
+      "report_version": null,
+      "url": "https://chatgpt.com/library?file_id=libfile_c3d2ab1828fc819182b95fe9e00a9f9d&account_id=personal"
+    },
+    {
+      "filename": "NEXUS-model-revision-pilot-analysis.md",
+      "sha256": "4dc9d58ade3ffe9f02625a5c7415de7a6804d6b87411b6352bcbfb8479b252f1",
+      "bytes": 22378,
+      "library_file_id": "libfile_c0236b38301c81918ce8bf1fc0dce24e",
+      "report_version": null,
+      "url": "https://chatgpt.com/library?file_id=libfile_c0236b38301c81918ce8bf1fc0dce24e&account_id=personal"
+    },
+    {
+      "filename": "NEXUS-run-13-22-12-analysis.md",
+      "sha256": "01df72a531c0e0ee16f5f50b546869613abf9f95c31e6a2a71c9136c45c5bdd6",
+      "bytes": 15522,
+      "library_file_id": "libfile_efadd7fa1ae88191916c7138419198aa",
+      "report_version": null,
+      "url": "https://chatgpt.com/library?file_id=libfile_efadd7fa1ae88191916c7138419198aa&account_id=personal"
+    },
+    {
+      "filename": "NEXUS-stateful-pilot-2026-10-22.md",
+      "sha256": "5a5103ee67b49d7a496c3a3dcb72c631f5bf0bb279575f4d7a31f9b5918c57e8",
+      "bytes": 19529,
+      "library_file_id": "libfile_b09959fb76fc81919caa5cf9456ee819",
+      "report_version": null,
+      "url": "https://chatgpt.com/library?file_id=libfile_b09959fb76fc81919caa5cf9456ee819&account_id=personal"
+    },
+    {
+      "filename": "NEXUS-test-matrix-audit-2026-10-07.md",
+      "sha256": "8a9bcc2f1d6c5360604565d4acd1a60ab7725e4d17b34cb467141007646d36d9",
+      "bytes": 24684,
+      "library_file_id": "libfile_e1341c0c8cdc819191e55fc3790b59a1",
+      "report_version": null,
+      "url": "https://chatgpt.com/library?file_id=libfile_e1341c0c8cdc819191e55fc3790b59a1&account_id=personal"
+    },
+    {
+      "filename": "nexus-11-50-21-analysis.md",
+      "sha256": "143ede5046aa24581ee27ed852c8a8a2481276c835d88f9efbecbcf34be77342",
+      "bytes": 14779,
+      "library_file_id": "libfile_bf47f08bbb8c8191a687e63bd07c97d9",
+      "report_version": null,
+      "url": "https://chatgpt.com/library?file_id=libfile_bf47f08bbb8c8191a687e63bd07c97d9&account_id=personal"
+    },
+    {
+      "filename": "nexus-13-26-53-review.md",
+      "sha256": "f2b51b21aff552b0b50fa1e36db081b2599b882cf99205688df9b3606335d3f7",
+      "bytes": 23872,
+      "library_file_id": "libfile_d10a5a855ad48191b38d299be231fc03",
+      "report_version": null,
+      "url": "https://chatgpt.com/library?file_id=libfile_d10a5a855ad48191b38d299be231fc03&account_id=personal"
+    },
+    {
+      "filename": "nexus-17-09-01-review.md",
+      "sha256": "111cc95826566a2eed33b9ccdc96be1a0b4b40e69b10412a2b20a83375961b21",
+      "bytes": 16608,
+      "library_file_id": "libfile_bfb523fd39dc8191be389cbad419a39b",
+      "report_version": null,
+      "url": "https://chatgpt.com/library?file_id=libfile_bfb523fd39dc8191be389cbad419a39b&account_id=personal"
+    },
+    {
+      "filename": "nexus-21-29-08-analysis.md",
+      "sha256": "753403ae9e6196807eeac324d9d0ca44373df8b4b9f841f3002c2f6535fceef3",
+      "bytes": 15288,
+      "library_file_id": "libfile_02cd858adcfc81918caf1e7e35d45bb8",
+      "report_version": null,
+      "url": "https://chatgpt.com/library?file_id=libfile_02cd858adcfc81918caf1e7e35d45bb8&account_id=personal"
+    },
+    {
+      "filename": "nexus-architecture-and-findings-2026-10-13.md",
+      "sha256": "55e6ec08b52a0d1b682f839378de51b6a0f71d7dd8f9bc8d75eabda9acc181f8",
+      "bytes": 18851,
+      "library_file_id": "libfile_86b392738fd88191b9d873fc8155c365",
+      "report_version": null,
+      "url": "https://chatgpt.com/library?file_id=libfile_86b392738fd88191b9d873fc8155c365&account_id=personal"
+    },
+    {
+      "filename": "nexus-astra-investigation.md",
+      "sha256": "4c6470fe1e3d659dd8652df9f246de5b07e8a5b723cbfd340ee5d4b5f92516f9",
+      "bytes": 21364,
+      "library_file_id": "libfile_2ee60c063cc481919630350b0f6811b3",
+      "report_version": "2",
+      "url": "https://chatgpt.com/library?file_id=libfile_2ee60c063cc481919630350b0f6811b3&account_id=personal"
+    },
+    {
+      "filename": "nexus-coupled-memory-results-2026-10-21.md",
+      "sha256": "bb4756db209d6fa59898bf33890660ad00341f363e26142e8730a896a037e42f",
+      "bytes": 16910,
+      "library_file_id": "libfile_e88dbdfe545c8191ab6885737c077097",
+      "report_version": null,
+      "url": "https://chatgpt.com/library?file_id=libfile_e88dbdfe545c8191ab6885737c077097&account_id=personal"
+    },
+    {
+      "filename": "nexus-history-run-17-50-17-analysis.ipynb",
+      "sha256": "f73988da3a74255c58e9cddbd409a2e989b69eb4107e0ea7c9216cbd8bcafff2",
+      "bytes": 39619,
+      "library_file_id": "libfile_8366e28ab85481919514dcbeedb7776f",
+      "report_version": null,
+      "url": "https://chatgpt.com/library?file_id=libfile_8366e28ab85481919514dcbeedb7776f&account_id=personal"
+    },
+    {
+      "filename": "NEXUS-TD-evaluation-assessment-2026-10-24.md",
+      "sha256": "4d0239583f3b57f43a792c10b0c71a2019e365700e625b6ae205458b53e338e3",
+      "bytes": 22851,
+      "library_file_id": "libfile_f5edfdca34a48191bb31bfb92da4f4e8",
+      "report_version": null,
+      "url": "https://chatgpt.com/library?file_id=libfile_f5edfdca34a48191bb31bfb92da4f4e8&account_id=personal"
+    },
+    {
+      "filename": "NEXUS-rerun-analysis-2026-10-23.md",
+      "sha256": "fb6014dfc8c1fd4a74904a3932fb77e0416d20a6aad7ac5be4677fd59bcc1522",
+      "bytes": 15496,
+      "library_file_id": null,
+      "report_version": null,
+      "url": null
+    },
+    {
+      "filename": "NEXUS-self-contained-briefing-2026-10-22.md",
+      "sha256": "59515c7fb0f1148332590d6d9d28a4533275c307890e026d69586b90a4166219",
+      "bytes": 24347,
+      "library_file_id": null,
+      "report_version": null,
+      "url": null
+    },
+    {
+      "filename": "NEXUS-review-synthesis-and-next-steps-2026-10-23.md",
+      "sha256": "2de2b30066cd04072a4497054147281ac3973a2c2ec73700d4665f49f38a3f6e",
+      "bytes": 20273,
+      "library_file_id": null,
+      "report_version": null,
+      "url": null
+    },
+    {
+      "filename": "NEXUS-challenge-design-essay-review-2026-10-23.md",
+      "sha256": "4bee4d21cfab2c560d83194f0d5e0d6638a15126b26c1c8c17b683fe9f2b5e7b",
+      "bytes": 18778,
+      "library_file_id": null,
+      "report_version": null,
+      "url": null
+    },
+    {
+      "filename": "NEXUS-third-reviewer-assessment-2026-10-23.md",
+      "sha256": "b614c1fbbab5d3b70860974e3326c8d8d03c219394ce5a719a60b4a1e638226f",
+      "bytes": 16741,
+      "library_file_id": null,
+      "report_version": null,
+      "url": null
+    },
+    {
+      "filename": "NEXUS-recommended-roadmap-2026-10-23.md",
+      "sha256": "6cb04ec179d36e0c0dbad97174f9eb507f64e634722a157bea62dba8214327ff",
+      "bytes": 25190,
+      "library_file_id": null,
+      "report_version": null,
+      "url": null
+    }
+  ],
+  "latest_raw_inputs": [
+    {
+      "name": "22-49-40.json",
+      "bytes": 399331,
+      "sha256": "a19ebb865b3bcb12a620222e3fa8f97c070af358a8d8cea5b6d548665bed2634"
+    },
+    {
+      "name": "22-49-40.log",
+      "bytes": 3357924,
+      "sha256": "808d3adbbb46ba73ab1999104dc38e7288fce40473f2b66535afa651b7805bc6"
+    },
+    {
+      "name": "10-44-05.json",
+      "bytes": 191528,
+      "sha256": "b6de88380b5eaee5628c80f82093d9acb60919b8eb21873c9ed2b3f621af7791"
+    },
+    {
+      "name": "10-44-05.log",
+      "bytes": 1616111,
+      "sha256": "410e36e8f605e3febf58968967358fd4f9c6336e9c9e38cfd3611e581cdf18dd"
+    },
+    {
+      "name": "11-51-35.json",
+      "bytes": 65860,
+      "sha256": "7de9f6f571630638f3c0159887b5d14981206493100c626dc976ed03238eeec7"
+    },
+    {
+      "name": "11-51-35.log",
+      "bytes": 523610,
+      "sha256": "60f6638b7ac7ba73acb980b9232ad27604f96de03dfe2f582ae450efda50e48b"
+    },
+    {
+      "name": "12-24-44.json",
+      "bytes": 71588,
+      "sha256": "197e29f989b773e0bd2866293eedac16e67c206f58e5f3a29cd7eaaca89022c4"
+    },
+    {
+      "name": "12-24-44.log",
+      "bytes": 565067,
+      "sha256": "2014add211e647e220ea4a7305dab38fd631d6d1ff113b552cb5bafea491572d"
+    },
+    {
+      "name": "12-54-08.json",
+      "bytes": 82549,
+      "sha256": "bcb471bf17e56043ecb6e495f6e4d0acc12a5b0c31aa33056f91b84d39c584af"
+    },
+    {
+      "name": "12-54-08.log",
+      "bytes": 606641,
+      "sha256": "51a93914f0d7042af89fef94ce8686cb08de4cc27522a0855d63a3309391ccce"
+    }
+  ]
+}

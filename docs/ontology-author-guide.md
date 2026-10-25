@@ -292,3 +292,6 @@ Automatic discovery of installed third-party packages is not implemented. It
 would require explicit trust, distribution/source provenance and qualification
 binding before being safe to claim reproducible evaluation. Human developers can
 add adapters through the catalog today without editing engine, session or replay.
+
+For architecture selection, shared artifact utilities and the optional private
+decision-equivalence hook, see [Preparing future experiments](future-experiments.md).

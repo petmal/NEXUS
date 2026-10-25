@@ -1,81 +1,42 @@
 # NEXUS
 
-The opt-in `model-revision-v1` family reconstructs a hidden mechanism from exact
-primitive transfer laws. A matched pilot compares principles-only discovery with
-revision of a provisional explanation on identical worlds and budgets. Its
-[ten-run guide](docs/model-revision-guide.md) separates exact supported-action
-minima from reference-policy upper bounds and includes shallow controls.
-The [ontology author guide](docs/ontology-author-guide.md) documents the lazy,
-validated catalog and reusable runtime/qualification extension points.
-
-The opt-in `stateful-discovery-v1` pilot makes investigation change the original
-exit seal. Four coupled hidden registers must reach one exact joint target;
-ordinary probes remain nonmutating, but informative later contexts require
-committed transformations. Its [qualified ten-run guide](docs/stateful-guide.md)
-includes shallow, known-law, execution and resource controls. Exact finite audits
-exclude specified short investigation-to-blind-execution shortcuts in the selected
-hard seeds; real-model difficulty remains uncalibrated. Previous ontologies remain.
-
-The opt-in `representation-discovery-v1` and `uncertainty-construction-v1` pilots
-add varied predictive memory and robust construction under hidden higher-order
-dependence. Their [paired ten-run guide](docs/discovery-pocs-guide.md) includes
-T0/T2/T3 controls, R0 ablations, exact seed certificates, known shortcuts and
-MindTrial YAML. Every R1 row has 64 actions; neither pilot is labelled a proven
-deep tier. Existing families and defaults remain unchanged.
-
-The opt-in `joint-assembly-v1` pilot combines confounded reader/law inference with
-physical component preparation and assembly. Local component validity does not
-imply a compatible final device. Its [guide and ten-run matrix](docs/joint-assembly-guide.md)
-separate exact complete-mission evidence requirements, legitimate shortcuts and
-matched controls. Every selected seed is preflighted, including recovery and replay;
-real-model difficulty remains to be measured. Earlier families remain available.
-
-The opt-in `staged-repair-v1` pilot adds three actual exit seals, coupled hidden
-loads, and independent (D3) versus dependent (D4) experiment contexts. T2 discloses
-operator shapes; T3 requires identifying them. Existing families are unchanged.
-Read the [pilot guide and validated matrix](docs/staged-repair-guide.md) before
-running it. Qualification distinguishes the actual mission certificate, adaptive
-reference cost, fixed-panel cost and finish-inclusive success bounds. It makes
-no unavoidable-deep-reasoning or real-model failure-rate claim.
-
-Other opt-in families include `coupled-transfer-v1` (a counterprogram must match
-the complete physical behavior) and `coupled-evidence-v1` (raw readings also
-depend on a coupled upstream mechanism). See the [qualified pilot and limits](docs/transfer-pilot.md),
-[public-response walkthrough](docs/transfer-player-walkthrough.md), and
-[implementation ledger](docs/evidence-transfer-implementation.md). These are
-experimental capability contrasts, not a promise that the combined reader is
-uniformly harder or that models will fail. Existing defaults remain unchanged.
-
-The earlier opt-in `compositional-repair-v1` discovers shared local
-mechanisms across two contexts and apply one joint physical repair. See the
-[eight-run experimental pilot](docs/structural-model-matrix.md),
-[paired budget diagnostic](docs/budget-diagnostic-matrix.md),
-[construction and proof limits](docs/structural-reasoning-proof.md), and
-[resume ledger](docs/structural-reasoning-implementation.md). Existing families
-and the [ten-run dynamics/control matrix](docs/difficulty-model-matrix.md) remain
-available. Dynamics generation now reuses a checked seed-independent proof;
-episode laws, evidence and budgets are unchanged. New structural difficulty
-remains uncalibrated until real-model trials.
-
 NEXUS is a standalone, deterministic interactive environment for evaluating whether an LLM can enter a procedurally novel artificial micro-world, infer its unfamiliar causal structure from evidence and experimentation, maintain an evolving world model, and plan actions that reach a mechanically verified goal.
 
 The central design goal is to evaluate **adaptation and reasoning rather than recalled domain knowledge**. NEXUS does not model an existing human game, real-world physics, or a known scientific experiment. Episodes are compiled from a small compositional grammar that can vary the world topology, entities, latent causal laws, evidence, and objective.
 
-## Current research feature: the Sealed Facility
+## Research checkpoint and next experiments
 
-Newly generated episodes share a versioned alien-facility presentation across all
-ontologies; historical episodes retain their saved presentation and mechanics.
-The opt-in `coupled-repair-v1` family adds a physical repair mission with a checked
-three-feedback-round public policy. At its exact T3/D5/P0-or-P1/R1 budgets, any
-policy using at most two feedback rounds has success probability at most 3/7 over
-the declared conditional uniform prior. This is a structural guarantee, not an
-empirical prediction that models will fail. One extra action removes that bound.
+The [T/D experiment synthesis](docs/td-experiments-and-next-directions.md) covers
+all documented architecture experiments through the latest 40-execution screen,
+including negative qualification results, measured outcomes and their limits.
+The screen produced 40 live wins, but only 28 supported first submissions and
+34 supported final submissions. T/D alone has not established a reliable
+strongest-model failure boundary in the tested designs.
 
-Use the [ten-run model matrix](docs/repair-model-matrix.md),
-[exact environment blocks](docs/repair-model-matrix.json),
-[implementation results and scope](docs/repair-results.md), and
-[live conformance argument](docs/repair-live-conformance.md).
-Existing families and default selection remain available.
+The next phase should use complementary bases:
+
+- **Model revision** for evidence use, construction and commitment;
+- **Compositional repair** for interacting interventions and joint constraints;
+- **Stateful discovery** for planning on shared, changing physical state.
+
+See the [future-experiment guide](docs/future-experiments.md) for controls and
+qualification gates, and the [ontology author guide](docs/ontology-author-guide.md)
+for implementation boundaries. Older families remain available for reproducibility
+and controls. Individual pilot guides are historical specifications; statements
+that their difficulty is unmeasured refer to their original publication stage.
+
+| Research record | Purpose |
+|---|---|
+| [Latest evaluation assessment](docs/research/td-evaluation-assessment-2026-10-24.md) | The 40 live runs, independent audit and intervention limits |
+| [Bounded T/D cycle](docs/td-cycle-results.md) | C/L selection, local selective-control and cascade prototypes |
+| [Model revision](docs/model-revision-guide.md) | Primitive construction and all-history acceptance |
+| [Compositional repair](docs/structural-model-matrix.md) and [budget diagnostic](docs/budget-diagnostic-matrix.md) | Interventions, alternative repairs and resource sensitivity |
+| [Stateful discovery](docs/stateful-guide.md) | Investigation on the actual goal object |
+| [Joint assembly](docs/joint-assembly-guide.md) | Component compatibility and physical construction |
+| [Staged repair](docs/staged-repair-guide.md) | Multiple seals and dependent contexts |
+| [Memory/discovery PoCs](docs/discovery-pocs-guide.md) | Predictive memory and correlated uncertainty |
+| [Transfer and evidence](docs/transfer-pilot.md) | Counterprograms and coupled readers |
+| [Repair qualification](docs/repair-results.md) and [dynamics matrix](docs/difficulty-model-matrix.md) | Exact bounded guarantees and calibration controls |
 
 ## Prototype goals
 
