@@ -1,0 +1,47 @@
+name: Planning runner smoke
+
+on:
+  pull_request:
+    paths:
+      - "src/**"
+      - "scripts/smoke_planning_service.py"
+      - "scripts/preflight_planning.py"
+      - "examples/mindtrial/nexus-planning-resource-*.yaml"
+      - "docs/planning-resource-matrix.json"
+      - "Dockerfile"
+      - ".dockerignore"
+      - "pyproject.toml"
+      - "uv.lock"
+      - ".github/workflows/planning-smoke.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: planning-smoke-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  planning-container:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          persist-credentials: false
+      - name: Build the exact feature revision
+        run: |
+          revision=$(git rev-parse HEAD)
+          docker build --build-arg VCS_REF="$revision" -t nexus:planning-resource-v1 .
+          test "$(docker image inspect nexus:planning-resource-v1 --format '{{ index .Config.Labels "org.opencontainers.image.revision" }}')" = "$revision"
+      - name: Qualify all 16 cases inside the image
+        run: docker run --rm --entrypoint python nexus:planning-resource-v1 scripts/preflight_planning.py
+      - name: Exercise real service, tool client, validator and shutdown telemetry
+        run: |
+          docker run --rm --entrypoint python \
+            --mount "type=bind,source=$PWD/examples/mindtrial,target=/run-config,readonly" \
+            nexus:planning-resource-v1 scripts/smoke_planning_service.py \
+            --config /run-config/nexus-planning-resource-config.yaml \
+            --tasks /run-config/nexus-planning-resource-tasks.yaml --rows all
