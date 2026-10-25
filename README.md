@@ -27,6 +27,7 @@ that their difficulty is unmeasured refer to their original publication stage.
 
 | Research record | Purpose |
 |---|---|
+| [Planning/resource pilot](docs/planning-resource-guide.md) | Disclosed spatial planning, exact known-law budgets and a qualified 16-cell next evaluation |
 | [Latest evaluation assessment](docs/research/td-evaluation-assessment-2026-10-24.md) | The 40 live runs, independent audit and intervention limits |
 | [Bounded T/D cycle](docs/td-cycle-results.md) | C/L selection, local selective-control and cascade prototypes |
 | [Model revision](docs/model-revision-guide.md) | Primitive construction and all-history acceptance |

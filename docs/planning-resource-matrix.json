@@ -1,0 +1,138 @@
+{
+  "version": "planning-resource-pilot-v1",
+  "family": "stateful-planning-v1",
+  "external_python": false,
+  "fresh_context_per_execution": true,
+  "recommended_tool_call_limit": 600,
+  "max_turns": 650,
+  "runs": [
+    {
+      "id": "01",
+      "seed": 21,
+      "theory": 0,
+      "discovery": 5,
+      "planning": 0,
+      "resource": 2
+    },
+    {
+      "id": "02",
+      "seed": 21,
+      "theory": 0,
+      "discovery": 5,
+      "planning": 1,
+      "resource": 2
+    },
+    {
+      "id": "03",
+      "seed": 21,
+      "theory": 0,
+      "discovery": 5,
+      "planning": 2,
+      "resource": 2
+    },
+    {
+      "id": "04",
+      "seed": 21,
+      "theory": 0,
+      "discovery": 5,
+      "planning": 3,
+      "resource": 2
+    },
+    {
+      "id": "05",
+      "seed": 21,
+      "theory": 0,
+      "discovery": 5,
+      "planning": 3,
+      "resource": 1
+    },
+    {
+      "id": "06",
+      "seed": 21,
+      "theory": 3,
+      "discovery": 5,
+      "planning": 0,
+      "resource": 2
+    },
+    {
+      "id": "07",
+      "seed": 21,
+      "theory": 3,
+      "discovery": 5,
+      "planning": 3,
+      "resource": 2
+    },
+    {
+      "id": "08",
+      "seed": 21,
+      "theory": 3,
+      "discovery": 5,
+      "planning": 3,
+      "resource": 1
+    },
+    {
+      "id": "09",
+      "seed": 31,
+      "theory": 0,
+      "discovery": 5,
+      "planning": 0,
+      "resource": 2
+    },
+    {
+      "id": "10",
+      "seed": 31,
+      "theory": 0,
+      "discovery": 5,
+      "planning": 1,
+      "resource": 2
+    },
+    {
+      "id": "11",
+      "seed": 31,
+      "theory": 0,
+      "discovery": 5,
+      "planning": 2,
+      "resource": 2
+    },
+    {
+      "id": "12",
+      "seed": 31,
+      "theory": 0,
+      "discovery": 5,
+      "planning": 3,
+      "resource": 2
+    },
+    {
+      "id": "13",
+      "seed": 31,
+      "theory": 0,
+      "discovery": 5,
+      "planning": 3,
+      "resource": 1
+    },
+    {
+      "id": "14",
+      "seed": 31,
+      "theory": 3,
+      "discovery": 5,
+      "planning": 0,
+      "resource": 2
+    },
+    {
+      "id": "15",
+      "seed": 31,
+      "theory": 3,
+      "discovery": 5,
+      "planning": 3,
+      "resource": 2
+    },
+    {
+      "id": "16",
+      "seed": 31,
+      "theory": 3,
+      "discovery": 5,
+      "planning": 3,
+      "resource": 1
+    }
+  ]
+}

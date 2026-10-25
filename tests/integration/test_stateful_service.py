@@ -1,6 +1,7 @@
 """The state-changing mission survives the HTTP boundary without resets or hints."""
 
 import json
+import pytest
 
 from fastapi.testclient import TestClient
 
@@ -10,18 +11,26 @@ from nexus.io import load_private, save_episode
 from nexus.models.episode import PlayerManifest
 from nexus.models.observation import Observation
 from nexus.ontology.stateful.policy import public_policy
+from nexus.ontology.planning.policy import public_policy as planning_policy
 from nexus.protocol.http import create_single_session_app
 from nexus.protocol.session import ActionResponse, SessionStatus
 
 
-def test_stateful_http_policy_privacy_and_saved_episode(tmp_path):
+@pytest.mark.parametrize(
+    "family,planning,policy",
+    [
+        ("stateful-discovery-v1", 1, public_policy),
+        ("stateful-planning-v1", 3, planning_policy),
+    ],
+)
+def test_stateful_http_policy_privacy_and_saved_episode(tmp_path, family, planning, policy):
     episode = generate_episode(
         229,
         axis_version=2,
-        science_family="stateful-discovery-v1",
+        science_family=family,
         theory_level=3,
         discovery_level=5,
-        planning_level=1,
+        planning_level=planning,
         resource_pressure=1,
     )
     save_episode(episode, tmp_path)
@@ -51,7 +60,7 @@ def test_stateful_http_policy_privacy_and_saved_episode(tmp_path):
                 transcript.append(data)
             return ActionResponse.model_validate(data)
 
-    result = public_policy(Player(), evidence)
+    result = policy(Player(), evidence)
     assert result.victory_code
     assert result.performance.decision_diagnostics.escape_classification == "supported_win"
     assert client.get("/status").json()["status"] == "won"

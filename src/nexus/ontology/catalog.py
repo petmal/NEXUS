@@ -137,6 +137,15 @@ class OntologyRegistry:
 REGISTRY = OntologyRegistry.from_definitions(
     (
         OntologyDefinition(
+            "stateful-planning-v1",
+            "stateful-planning-v1",
+            runtime_module="nexus.ontology.planning.runtime",
+            schema_module="nexus.ontology.planning.schema",
+            generator=("nexus.ontology.planning.generation", "generate_episode"),
+            qualifier=("nexus.ontology.planning.qualification", "qualify"),
+            standalone_contract=True,
+        ),
+        OntologyDefinition(
             "model-revision-v1",
             "model-revision-v1",
             runtime_module="nexus.ontology.revision.runtime",

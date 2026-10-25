@@ -1,0 +1,120 @@
+{
+  "version": "planning-resource-validation-v1",
+  "date_utc": "2026-10-25",
+  "status": "passed",
+  "base_commit": "2080b7de842f8b17ec8f54b9ece30708fedfc7a2",
+  "source_sha256": "f9307e24620cfd68ce5da3caeacc29ca6d4e179e66dafee912b618c2176c5ef8",
+  "python": "3.14.7",
+  "scope": "New stateful-planning-v1 pilot; no live model calls and no changes to prior family physics.",
+  "integration": {
+    "td_pull_request": 6,
+    "main_commit": "2080b7de842f8b17ec8f54b9ece30708fedfc7a2",
+    "method": "fast-forward after no-op rebase: main was an ancestor and full feature history was linear; GitHub rebase endpoint returned405",
+    "main_previous": "bd39bcc5f59efc9cfd99e5ed1d7a803a042c8028",
+    "completed_td_ci_run": 40177914216,
+    "td_ci": "test and container passed, including extended/stress/CLI stages",
+    "future_branch": "feat/planning-resource-axes"
+  },
+  "checks": {
+    "preflight": {
+      "status": "passed",
+      "cells": 16,
+      "seconds": 2.088006785000289,
+      "sha256": "63693bfbf8d8f38a89d02d4a68ae17f0dd81a2f6c836b20155a0d6980a6ccd69"
+    },
+    "focused_final": {
+      "status": "passed",
+      "tests": 57,
+      "seconds": 4.49,
+      "scope": "55 planning unit cases and2 stateful/planning HTTP integration cases"
+    },
+    "independent_kernel": {
+      "transitions": 641024,
+      "status": "passed"
+    },
+    "all_world_spatial_policy": {
+      "targets": 3,
+      "layouts": 4,
+      "laws_per_case": 256,
+      "executions": 3072,
+      "status": "passed",
+      "scope": "Scalar physics and independent travel counts; supported goal and bound for the chosen policy, not policy optimality"
+    },
+    "known_law_minima": {
+      "status": "passed",
+      "scope": "Production weighted planner agrees with independent unit-action BFS for3 seeds across4 layouts; pilot P3 tradeoffs strict"
+    },
+    "source_and_tasks": {
+      "status": "passed",
+      "tasks_sha256": "8acfa58879cd1f6f202914df4925475bd990a3eff7fb09577692ac12b07a5116",
+      "reexport_identical": true
+    },
+    "typecheck": {
+      "status": "passed",
+      "scope": [
+        "src/nexus/ontology/planning",
+        "src/nexus/evaluation/planning.py"
+      ],
+      "repository_wide_clean_claim": false
+    },
+    "lint": {
+      "status": "passed",
+      "scope": "Touched Python, isolated Ruff E4/E7/E9/F"
+    },
+    "repair": {
+      "status": "passed",
+      "proof_hash_unchanged": true,
+      "witness_hashes_unchanged": true,
+      "pre_refresh_focused_tests": 62,
+      "live_actions": [
+        14,
+        15
+      ],
+      "replay": true
+    },
+    "dynamics": {
+      "status": "passed",
+      "independently_checked_bytes": 926952,
+      "source_binding_unchanged": true
+    },
+    "cli": {
+      "status": "passed",
+      "known_law_seed": 21,
+      "planning": 3,
+      "resource": 1,
+      "optimal_actions": 22,
+      "qualification": true,
+      "replay": true
+    },
+    "fresh_review": {
+      "status": "passed",
+      "material_fixes": [
+        "Exporter rejects missing/failed cell evidence and missing cost bounds."
+      ],
+      "remaining_material_blockers": []
+    },
+    "packaging_context": {
+      "status": "passed",
+      "correction": "Added new matrix to Docker build context allowlist; existing context test passed."
+    },
+    "final_fast_regression": {
+      "status": "passed",
+      "tests": 987,
+      "deselected": 51,
+      "warnings": 3,
+      "seconds": 196.0,
+      "command": ".venv/bin/python -m pytest -q -m \"not slow and not stress\" tests/unit tests/integration --maxfail=1 --durations=10",
+      "log_sha256": "830c45185c0b1e498245f0a52e922746f3c9174cb4292018f02327f1bfbe7933"
+    },
+    "documentation": {
+      "status": "passed",
+      "relative_links_resolve": true
+    }
+  },
+  "limits": [
+    "No paid model evaluation; empirical difficulty remains uncalibrated.",
+    "No local Docker/Podman or MindTrial image execution for the new family.",
+    "P/R slow/stress suite not claimed; T/D integration CI completed those stages.",
+    "Two operator-selected fixtures; no population generalization claim."
+  ]
+}

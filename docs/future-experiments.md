@@ -4,6 +4,11 @@ Read the [T/D synthesis](td-experiments-and-next-directions.md) for the evidence
 behind the architecture choices. This guide is for authors and operators. It does
 not add new axis levels or claim that a multi-module production family exists.
 
+The first implemented follow-up is the separate
+[planning/resource pilot](planning-resource-guide.md): fully disclosed spatial
+layouts over the stateful laws, exact known-law costs and public unknown-law policy
+bounds. Its live model evaluation is pending.
+
 ## Choose a base by the question
 
 | Question | Start here | Matched control |
