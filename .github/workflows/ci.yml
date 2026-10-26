@@ -20,6 +20,7 @@ on:
       - "docs/stateful-matrix.json"
       - "docs/model-revision-matrix.json"
       - "docs/planning-resource-matrix.json"
+      - "docs/coordination-matrix.json"
   pull_request:
     paths:
       - "**"
@@ -38,6 +39,7 @@ on:
       - "docs/stateful-matrix.json"
       - "docs/model-revision-matrix.json"
       - "docs/planning-resource-matrix.json"
+      - "docs/coordination-matrix.json"
   workflow_dispatch:
     inputs:
       full:
@@ -137,6 +139,9 @@ jobs:
 
       - name: Planning/resource independent costs and matched pilot
         run: uv run python scripts/preflight_planning.py --output /tmp/planning-resource-preflight.json
+
+      - name: Coordination independent costs and paired controls
+        run: uv run python scripts/preflight_coordination.py --output /tmp/coordination-preflight.json --tasks-output /tmp/coordination-tasks
 
       - name: Fast tests
         run: |

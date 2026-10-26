@@ -3,8 +3,11 @@
 `stateful-planning-v1` begins the next stage after the
 [T/D synthesis](td-experiments-and-next-directions.md). It asks whether a model can
 coordinate transformation order and travel, and whether a smaller action allowance
-changes its success. The first implementation is mechanically qualified. **No live
-model evaluations have been run for this family.**
+changes its success. The first implementation is mechanically qualified. The
+[first pilot and selected-row rerun](research/planning-resource-pilot-results-2026-10-25.md)
+produced 21 physical wins in 21 Astra-medium attempts, of which 19 were supported
+by the evidence before finish. All eight exact-budget known-law pilot cells were
+optimal. These selected cases do not establish a general difficulty calibration.
 
 ## What changes, and why
 
@@ -200,4 +203,5 @@ composition framework are intentionally outside this first experiment.
 
 The [dated preflight](research/planning-resource-preflight-2026-10-25.json) and
 [validation record](research/planning-resource-validation-2026-10-25.json) document
-mechanical evidence. Live model results remain the next decision point.
+mechanical evidence. The [coordination pilot](coordination-guide.md) now adds
+paired independent/coupled goals while retaining this family as a control.

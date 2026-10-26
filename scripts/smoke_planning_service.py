@@ -11,10 +11,10 @@ from __future__ import annotations
 import argparse
 import json
 import os
-from pathlib import Path
 import socket
 import subprocess
 import sys
+from pathlib import Path
 from tempfile import TemporaryDirectory
 from time import monotonic, sleep
 from urllib.error import HTTPError
@@ -22,14 +22,15 @@ from urllib.request import urlopen
 
 from nexus.evaluation.artifacts import atomic_json
 from nexus.models.observation import Observation
-from nexus.ontology.planning.policy import public_policy
 from nexus.protocol.session import ActionResponse, SessionStatus
 
 CLI = str(Path(sys.executable).parent / "nexus")
 
 
 def cli(command, env):
-    result = subprocess.run([CLI, *command], env=env, capture_output=True, text=True, timeout=60)
+    result = subprocess.run(
+        [CLI, *command], check=False, env=env, capture_output=True, text=True, timeout=60
+    )
     if result.returncode:
         raise RuntimeError(f"NEXUS CLI failed: {result.stderr[-2000:]}")
     return result
@@ -38,6 +39,12 @@ def cli(command, env):
 def run_case(config, task, folder, *, forged=False):
     service, tool, validator = (config[key][0] for key in ("services", "tools", "validators"))
     inputs = task["tool-selector"]["service-inputs"][service["name"]]
+    if inputs["science-family"] == "stateful-planning-v1":
+        from nexus.ontology.planning.policy import public_policy
+    elif inputs["science-family"] == "stateful-coordination-v1":
+        from nexus.ontology.coordination.policy import public_policy
+    else:
+        raise ValueError("this smoke driver supports planning and coordination tasks only")
     env = {k: v for k, v in os.environ.items() if not k.startswith("NEXUS_")}
     env.update(service["env"])
     env.update(

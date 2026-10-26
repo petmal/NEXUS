@@ -24,3 +24,4 @@ docs/*
 !docs/model-revision-matrix.json
 !docs/td-cycle-matrix.json
 !docs/planning-resource-matrix.json
+!docs/coordination-matrix.json

@@ -1,0 +1,338 @@
+{
+  "task-config": {
+    "max-turns": 650,
+    "validation-rules": {
+      "custom-validator": "nexus-victory",
+      "case-sensitive": true,
+      "ignore-whitespace": false,
+      "trim-lines": false
+    },
+    "system-prompt": {
+      "enable-for": "text",
+      "template": "Use NEXUS to complete the live task. Your final answer must match: {{.ResponseResultFormat}}"
+    },
+    "tool-selector": {
+      "disabled": false,
+      "tools": [
+        {
+          "name": "nexus",
+          "disabled": false,
+          "max-calls": 600,
+          "timeout": "60s"
+        }
+      ]
+    },
+    "tasks": [
+      {
+        "name": "NEXUS planning-resource-06-repeat-03",
+        "disabled": false,
+        "suite": "nexus",
+        "category": "planning-resource-pilot",
+        "difficulty": "experimental",
+        "tags": [
+          "planning-resource-pilot-v1",
+          "stateful-planning-v1",
+          "planning-resource-repeat-v1",
+          "attempt-03"
+        ],
+        "prompt": "Complete the live NEXUS mission and return its actual victory receipt. Begin with manifest and observe, then read every listed evidence file. Use only the NEXUS tool for in-world observations and actions. No external Python, source access or solver is available. Finite hypothesis enumeration is valid. Track the carried seal, committed changes, location and remaining actions. A probe previews one operation without committing it. Satisfy the full goal, call finish successfully, then return exactly the victory_code.",
+        "response-result-format": "The actual victory_code and nothing else. No quotes, Markdown or explanation.",
+        "tool-selector": {
+          "service-inputs": {
+            "nexus": {
+              "axis-version": 2,
+              "science-family": "stateful-planning-v1",
+              "seed": "21",
+              "theory-level": 3,
+              "discovery-level": 5,
+              "planning-level": 0,
+              "resource-pressure": 2,
+              "budget-profile": "standard",
+              "generation-timing": true,
+              "extended-diagnostics": true
+            }
+          }
+        }
+      },
+      {
+        "name": "NEXUS planning-resource-07-repeat-03",
+        "disabled": false,
+        "suite": "nexus",
+        "category": "planning-resource-pilot",
+        "difficulty": "experimental",
+        "tags": [
+          "planning-resource-pilot-v1",
+          "stateful-planning-v1",
+          "planning-resource-repeat-v1",
+          "attempt-03"
+        ],
+        "prompt": "Complete the live NEXUS mission and return its actual victory receipt. Begin with manifest and observe, then read every listed evidence file. Use only the NEXUS tool for in-world observations and actions. No external Python, source access or solver is available. Finite hypothesis enumeration is valid. Track the carried seal, committed changes, location and remaining actions. A probe previews one operation without committing it. Satisfy the full goal, call finish successfully, then return exactly the victory_code.",
+        "response-result-format": "The actual victory_code and nothing else. No quotes, Markdown or explanation.",
+        "tool-selector": {
+          "service-inputs": {
+            "nexus": {
+              "axis-version": 2,
+              "science-family": "stateful-planning-v1",
+              "seed": "21",
+              "theory-level": 3,
+              "discovery-level": 5,
+              "planning-level": 3,
+              "resource-pressure": 2,
+              "budget-profile": "standard",
+              "generation-timing": true,
+              "extended-diagnostics": true
+            }
+          }
+        }
+      },
+      {
+        "name": "NEXUS planning-resource-15-repeat-03",
+        "disabled": false,
+        "suite": "nexus",
+        "category": "planning-resource-pilot",
+        "difficulty": "experimental",
+        "tags": [
+          "planning-resource-pilot-v1",
+          "stateful-planning-v1",
+          "planning-resource-repeat-v1",
+          "attempt-03"
+        ],
+        "prompt": "Complete the live NEXUS mission and return its actual victory receipt. Begin with manifest and observe, then read every listed evidence file. Use only the NEXUS tool for in-world observations and actions. No external Python, source access or solver is available. Finite hypothesis enumeration is valid. Track the carried seal, committed changes, location and remaining actions. A probe previews one operation without committing it. Satisfy the full goal, call finish successfully, then return exactly the victory_code.",
+        "response-result-format": "The actual victory_code and nothing else. No quotes, Markdown or explanation.",
+        "tool-selector": {
+          "service-inputs": {
+            "nexus": {
+              "axis-version": 2,
+              "science-family": "stateful-planning-v1",
+              "seed": "31",
+              "theory-level": 3,
+              "discovery-level": 5,
+              "planning-level": 3,
+              "resource-pressure": 2,
+              "budget-profile": "standard",
+              "generation-timing": true,
+              "extended-diagnostics": true
+            }
+          }
+        }
+      },
+      {
+        "name": "NEXUS planning-resource-08-repeat-03",
+        "disabled": false,
+        "suite": "nexus",
+        "category": "planning-resource-pilot",
+        "difficulty": "experimental",
+        "tags": [
+          "planning-resource-pilot-v1",
+          "stateful-planning-v1",
+          "planning-resource-repeat-v1",
+          "attempt-03"
+        ],
+        "prompt": "Complete the live NEXUS mission and return its actual victory receipt. Begin with manifest and observe, then read every listed evidence file. Use only the NEXUS tool for in-world observations and actions. No external Python, source access or solver is available. Finite hypothesis enumeration is valid. Track the carried seal, committed changes, location and remaining actions. A probe previews one operation without committing it. Satisfy the full goal, call finish successfully, then return exactly the victory_code.",
+        "response-result-format": "The actual victory_code and nothing else. No quotes, Markdown or explanation.",
+        "tool-selector": {
+          "service-inputs": {
+            "nexus": {
+              "axis-version": 2,
+              "science-family": "stateful-planning-v1",
+              "seed": "21",
+              "theory-level": 3,
+              "discovery-level": 5,
+              "planning-level": 3,
+              "resource-pressure": 1,
+              "budget-profile": "standard",
+              "generation-timing": true,
+              "extended-diagnostics": true
+            }
+          }
+        }
+      },
+      {
+        "name": "NEXUS planning-resource-16-repeat-03",
+        "disabled": false,
+        "suite": "nexus",
+        "category": "planning-resource-pilot",
+        "difficulty": "experimental",
+        "tags": [
+          "planning-resource-pilot-v1",
+          "stateful-planning-v1",
+          "planning-resource-repeat-v1",
+          "attempt-03"
+        ],
+        "prompt": "Complete the live NEXUS mission and return its actual victory receipt. Begin with manifest and observe, then read every listed evidence file. Use only the NEXUS tool for in-world observations and actions. No external Python, source access or solver is available. Finite hypothesis enumeration is valid. Track the carried seal, committed changes, location and remaining actions. A probe previews one operation without committing it. Satisfy the full goal, call finish successfully, then return exactly the victory_code.",
+        "response-result-format": "The actual victory_code and nothing else. No quotes, Markdown or explanation.",
+        "tool-selector": {
+          "service-inputs": {
+            "nexus": {
+              "axis-version": 2,
+              "science-family": "stateful-planning-v1",
+              "seed": "31",
+              "theory-level": 3,
+              "discovery-level": 5,
+              "planning-level": 3,
+              "resource-pressure": 1,
+              "budget-profile": "standard",
+              "generation-timing": true,
+              "extended-diagnostics": true
+            }
+          }
+        }
+      },
+      {
+        "name": "NEXUS planning-resource-16-repeat-04",
+        "disabled": false,
+        "suite": "nexus",
+        "category": "planning-resource-pilot",
+        "difficulty": "experimental",
+        "tags": [
+          "planning-resource-pilot-v1",
+          "stateful-planning-v1",
+          "planning-resource-repeat-v1",
+          "attempt-04"
+        ],
+        "prompt": "Complete the live NEXUS mission and return its actual victory receipt. Begin with manifest and observe, then read every listed evidence file. Use only the NEXUS tool for in-world observations and actions. No external Python, source access or solver is available. Finite hypothesis enumeration is valid. Track the carried seal, committed changes, location and remaining actions. A probe previews one operation without committing it. Satisfy the full goal, call finish successfully, then return exactly the victory_code.",
+        "response-result-format": "The actual victory_code and nothing else. No quotes, Markdown or explanation.",
+        "tool-selector": {
+          "service-inputs": {
+            "nexus": {
+              "axis-version": 2,
+              "science-family": "stateful-planning-v1",
+              "seed": "31",
+              "theory-level": 3,
+              "discovery-level": 5,
+              "planning-level": 3,
+              "resource-pressure": 1,
+              "budget-profile": "standard",
+              "generation-timing": true,
+              "extended-diagnostics": true
+            }
+          }
+        }
+      },
+      {
+        "name": "NEXUS planning-resource-08-repeat-04",
+        "disabled": false,
+        "suite": "nexus",
+        "category": "planning-resource-pilot",
+        "difficulty": "experimental",
+        "tags": [
+          "planning-resource-pilot-v1",
+          "stateful-planning-v1",
+          "planning-resource-repeat-v1",
+          "attempt-04"
+        ],
+        "prompt": "Complete the live NEXUS mission and return its actual victory receipt. Begin with manifest and observe, then read every listed evidence file. Use only the NEXUS tool for in-world observations and actions. No external Python, source access or solver is available. Finite hypothesis enumeration is valid. Track the carried seal, committed changes, location and remaining actions. A probe previews one operation without committing it. Satisfy the full goal, call finish successfully, then return exactly the victory_code.",
+        "response-result-format": "The actual victory_code and nothing else. No quotes, Markdown or explanation.",
+        "tool-selector": {
+          "service-inputs": {
+            "nexus": {
+              "axis-version": 2,
+              "science-family": "stateful-planning-v1",
+              "seed": "21",
+              "theory-level": 3,
+              "discovery-level": 5,
+              "planning-level": 3,
+              "resource-pressure": 1,
+              "budget-profile": "standard",
+              "generation-timing": true,
+              "extended-diagnostics": true
+            }
+          }
+        }
+      },
+      {
+        "name": "NEXUS planning-resource-15-repeat-04",
+        "disabled": false,
+        "suite": "nexus",
+        "category": "planning-resource-pilot",
+        "difficulty": "experimental",
+        "tags": [
+          "planning-resource-pilot-v1",
+          "stateful-planning-v1",
+          "planning-resource-repeat-v1",
+          "attempt-04"
+        ],
+        "prompt": "Complete the live NEXUS mission and return its actual victory receipt. Begin with manifest and observe, then read every listed evidence file. Use only the NEXUS tool for in-world observations and actions. No external Python, source access or solver is available. Finite hypothesis enumeration is valid. Track the carried seal, committed changes, location and remaining actions. A probe previews one operation without committing it. Satisfy the full goal, call finish successfully, then return exactly the victory_code.",
+        "response-result-format": "The actual victory_code and nothing else. No quotes, Markdown or explanation.",
+        "tool-selector": {
+          "service-inputs": {
+            "nexus": {
+              "axis-version": 2,
+              "science-family": "stateful-planning-v1",
+              "seed": "31",
+              "theory-level": 3,
+              "discovery-level": 5,
+              "planning-level": 3,
+              "resource-pressure": 2,
+              "budget-profile": "standard",
+              "generation-timing": true,
+              "extended-diagnostics": true
+            }
+          }
+        }
+      },
+      {
+        "name": "NEXUS planning-resource-07-repeat-04",
+        "disabled": false,
+        "suite": "nexus",
+        "category": "planning-resource-pilot",
+        "difficulty": "experimental",
+        "tags": [
+          "planning-resource-pilot-v1",
+          "stateful-planning-v1",
+          "planning-resource-repeat-v1",
+          "attempt-04"
+        ],
+        "prompt": "Complete the live NEXUS mission and return its actual victory receipt. Begin with manifest and observe, then read every listed evidence file. Use only the NEXUS tool for in-world observations and actions. No external Python, source access or solver is available. Finite hypothesis enumeration is valid. Track the carried seal, committed changes, location and remaining actions. A probe previews one operation without committing it. Satisfy the full goal, call finish successfully, then return exactly the victory_code.",
+        "response-result-format": "The actual victory_code and nothing else. No quotes, Markdown or explanation.",
+        "tool-selector": {
+          "service-inputs": {
+            "nexus": {
+              "axis-version": 2,
+              "science-family": "stateful-planning-v1",
+              "seed": "21",
+              "theory-level": 3,
+              "discovery-level": 5,
+              "planning-level": 3,
+              "resource-pressure": 2,
+              "budget-profile": "standard",
+              "generation-timing": true,
+              "extended-diagnostics": true
+            }
+          }
+        }
+      },
+      {
+        "name": "NEXUS planning-resource-06-repeat-04",
+        "disabled": false,
+        "suite": "nexus",
+        "category": "planning-resource-pilot",
+        "difficulty": "experimental",
+        "tags": [
+          "planning-resource-pilot-v1",
+          "stateful-planning-v1",
+          "planning-resource-repeat-v1",
+          "attempt-04"
+        ],
+        "prompt": "Complete the live NEXUS mission and return its actual victory receipt. Begin with manifest and observe, then read every listed evidence file. Use only the NEXUS tool for in-world observations and actions. No external Python, source access or solver is available. Finite hypothesis enumeration is valid. Track the carried seal, committed changes, location and remaining actions. A probe previews one operation without committing it. Satisfy the full goal, call finish successfully, then return exactly the victory_code.",
+        "response-result-format": "The actual victory_code and nothing else. No quotes, Markdown or explanation.",
+        "tool-selector": {
+          "service-inputs": {
+            "nexus": {
+              "axis-version": 2,
+              "science-family": "stateful-planning-v1",
+              "seed": "21",
+              "theory-level": 3,
+              "discovery-level": 5,
+              "planning-level": 0,
+              "resource-pressure": 2,
+              "budget-profile": "standard",
+              "generation-timing": true,
+              "extended-diagnostics": true
+            }
+          }
+        }
+      }
+    ]
+  }
+}

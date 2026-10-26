@@ -1,0 +1,462 @@
+{
+  "version": "planning-resource-pilot-results-v1",
+  "audit_date_utc": "2026-10-25",
+  "scope": "Offline audit of the original 16-row pilot and one new attempt on each of five selected rows; no live model calls.",
+  "historical_source_checkpoint": {
+    "commit": "0deb982c6d04e3591f69750eb4ad51fdc9283025",
+    "source_sha256": "f9307e24620cfd68ce5da3caeacc29ca6d4e179e66dafee912b618c2176c5ef8",
+    "source_digest_recomputed_from_immutable_commit": true,
+    "image": {
+      "revision": "0deb982c6d04e3591f69750eb4ad51fdc9283025",
+      "id": "sha256:5db10c8f072a1d7efe45089ef3e65274054de21b1d1b3842aa547654050cfc10",
+      "digest": "localhost/nexus@sha256:7907311ecdd735b54b60350c9b80bf99295eac412e6d19718597b16e8e7dfec4"
+    },
+    "matrix_file_sha256": "4a0595878a969eb1b63054bf460fa9196c1da7acb9194847186f8388cab2aad7",
+    "matrix_canonical_sha256": "9218ffc3fd8ac59206ef6284710f1f337fd73240eb44f8d1167c529cef4dd428",
+    "preflight_file_sha256": "63693bfbf8d8f38a89d02d4a68ae17f0dd81a2f6c836b20155a0d6980a6ccd69",
+    "future_source_changes": "These observations remain bound to the historical source above; later edits require a new preflight and do not rebind these model attempts."
+  },
+  "input_sha256": {
+    "12-29-30.json": "091920d752ae1cf4688feb9506c7b77a90554037038884dcc75330a49a9aaf19",
+    "12-29-30.log": "a8de543e1c7bd75094c7f7092661bed0cc9249bba0b27059833be77657041fab",
+    "19-37-58.json": "712b309edf8da5e623b443c6b18c148003816f5a8021789437ece30f1f821444",
+    "19-37-58.log": "482543747dfc212f9af82a97ac4bf80451efe39247bce8c569525e1473672170"
+  },
+  "execution": {
+    "model": "gpt-6-astra",
+    "reasoning_effort": "medium",
+    "mindtrial_version": "v0.25.3-0.20261017164258-00dada61a962",
+    "new_attempts_per_selected_row": 1,
+    "total_attempts_per_selected_row_in_supplied_inputs": 2,
+    "selected_rows": [
+      "06",
+      "07",
+      "08",
+      "15",
+      "16"
+    ]
+  },
+  "checks": {
+    "unique_task_record_trace_and_start_block_per_new_row": true,
+    "tool_call_ids_and_success_statuses_reconcile": true,
+    "all_public_responses_and_action_events_replayed": true,
+    "public_evidence_and_investigation_binding_hashes_match": true,
+    "all_recorded_image_revisions_and_source_bindings_match_checkpoint": true,
+    "independent_scalar_transition_and_256_law_belief_reconstruction": true,
+    "submission_support_evaluated_before_success_feedback": true,
+    "fresh_original_reaudit_matches_prior_audit_all_16_rows": true,
+    "receipt_hmac_recomputed": false,
+    "receipt_hmac_limit": "Original verifier secrets are not supplied. Receipt strings agree among terminal response, returned answer and result, with a recorded successful custom validator; fresh replay independently proves the win."
+  },
+  "totals": {
+    "original_full": {
+      "tasks": 16,
+      "passed": 16,
+      "supported_wins": 15,
+      "tool_calls": 573,
+      "actions": 477,
+      "available_operator_hashes_matched": 34
+    },
+    "original_selected": {
+      "tasks": 5,
+      "passed": 5,
+      "supported_wins": 4,
+      "tool_calls": 311,
+      "actions": 281,
+      "available_operator_hashes_matched": 2
+    },
+    "rerun": {
+      "tasks": 5,
+      "passed": 5,
+      "supported_wins": 4,
+      "tool_calls": 251,
+      "actions": 221,
+      "available_operator_hashes_matched": 3
+    }
+  },
+  "rows": [
+    {
+      "id": "06",
+      "seed": 21,
+      "theory": 3,
+      "planning": 0,
+      "resource": 2,
+      "budget": 41,
+      "physical_minimum": 11,
+      "reference_realized": 31,
+      "reference_policy_worst_case_bound": 41,
+      "original": {
+        "physical_win": true,
+        "evidence_classification": "compatible_win",
+        "actions": 41,
+        "action_counts": {
+          "take": 1,
+          "operate": 38,
+          "finish": 2
+        },
+        "tool_calls": 47,
+        "failed_finishes": 1,
+        "submissions": [
+          {
+            "turn": 29,
+            "won": false,
+            "remaining_worlds": 6,
+            "accepting_worlds": 2,
+            "guaranteed": false
+          },
+          {
+            "turn": 41,
+            "won": true,
+            "remaining_worlds": 4,
+            "accepting_worlds": 2,
+            "guaranteed": false
+          }
+        ],
+        "first_guaranteed_repair_turn": null,
+        "captured_operator_action_hashes_matched": 0,
+        "captured_operator_reports": 0,
+        "replay_observations_events_and_performance_match": true,
+        "public_binding_hashes_match": true,
+        "receipt_matches_terminal_result_and_answer": true,
+        "recorded_validator": "Valid victory code; session won and code matches",
+        "ordered_action_sequence_sha256": "afac1268b58fa3dbf300da8f65aee0754c9a23c5488c567259f1e7e2157fbd5a"
+      },
+      "rerun": {
+        "physical_win": true,
+        "evidence_classification": "supported_win",
+        "actions": 29,
+        "action_counts": {
+          "take": 1,
+          "operate": 27,
+          "finish": 1
+        },
+        "tool_calls": 35,
+        "failed_finishes": 0,
+        "submissions": [
+          {
+            "turn": 29,
+            "won": true,
+            "remaining_worlds": 2,
+            "accepting_worlds": 2,
+            "guaranteed": true
+          }
+        ],
+        "first_guaranteed_repair_turn": 28,
+        "captured_operator_action_hashes_matched": 0,
+        "captured_operator_reports": 1,
+        "replay_observations_events_and_performance_match": true,
+        "public_binding_hashes_match": true,
+        "receipt_matches_terminal_result_and_answer": true,
+        "recorded_validator": "Valid victory code; session won and code matches",
+        "ordered_action_sequence_sha256": "8ab1b518185baece69c9aafa1e7f8382d9421aef6c1eb419d84b2bac071e6633"
+      },
+      "action_delta": -12
+    },
+    {
+      "id": "07",
+      "seed": 21,
+      "theory": 3,
+      "planning": 3,
+      "resource": 2,
+      "budget": 105,
+      "physical_minimum": 22,
+      "reference_realized": 77,
+      "reference_policy_worst_case_bound": 105,
+      "original": {
+        "physical_win": true,
+        "evidence_classification": "supported_win",
+        "actions": 80,
+        "action_counts": {
+          "take": 1,
+          "move": 44,
+          "operate": 29,
+          "probe": 5,
+          "finish": 1
+        },
+        "tool_calls": 86,
+        "failed_finishes": 0,
+        "submissions": [
+          {
+            "turn": 80,
+            "won": true,
+            "remaining_worlds": 2,
+            "accepting_worlds": 2,
+            "guaranteed": true
+          }
+        ],
+        "first_guaranteed_repair_turn": 76,
+        "captured_operator_action_hashes_matched": 0,
+        "captured_operator_reports": 0,
+        "replay_observations_events_and_performance_match": true,
+        "public_binding_hashes_match": true,
+        "receipt_matches_terminal_result_and_answer": true,
+        "recorded_validator": "Valid victory code; session won and code matches",
+        "ordered_action_sequence_sha256": "375b8f963e73a6c395fda12a2237167531376d776dfd02ec6498ab93f0ab9116"
+      },
+      "rerun": {
+        "physical_win": true,
+        "evidence_classification": "supported_win",
+        "actions": 48,
+        "action_counts": {
+          "take": 1,
+          "move": 28,
+          "probe": 5,
+          "operate": 13,
+          "finish": 1
+        },
+        "tool_calls": 54,
+        "failed_finishes": 0,
+        "submissions": [
+          {
+            "turn": 48,
+            "won": true,
+            "remaining_worlds": 4,
+            "accepting_worlds": 4,
+            "guaranteed": true
+          }
+        ],
+        "first_guaranteed_repair_turn": 44,
+        "captured_operator_action_hashes_matched": 1,
+        "captured_operator_reports": 1,
+        "replay_observations_events_and_performance_match": true,
+        "public_binding_hashes_match": true,
+        "receipt_matches_terminal_result_and_answer": true,
+        "recorded_validator": "Valid victory code; session won and code matches",
+        "ordered_action_sequence_sha256": "1cd127e6a5b5c0b2e6b48c262a2668e31d926e735e2177756b8c4477ab995792"
+      },
+      "action_delta": -32
+    },
+    {
+      "id": "08",
+      "seed": 21,
+      "theory": 3,
+      "planning": 3,
+      "resource": 1,
+      "budget": 158,
+      "physical_minimum": 22,
+      "reference_realized": 77,
+      "reference_policy_worst_case_bound": 105,
+      "original": {
+        "physical_win": true,
+        "evidence_classification": "supported_win",
+        "actions": 48,
+        "action_counts": {
+          "take": 1,
+          "move": 28,
+          "probe": 5,
+          "operate": 13,
+          "finish": 1
+        },
+        "tool_calls": 54,
+        "failed_finishes": 0,
+        "submissions": [
+          {
+            "turn": 48,
+            "won": true,
+            "remaining_worlds": 4,
+            "accepting_worlds": 4,
+            "guaranteed": true
+          }
+        ],
+        "first_guaranteed_repair_turn": 44,
+        "captured_operator_action_hashes_matched": 1,
+        "captured_operator_reports": 1,
+        "replay_observations_events_and_performance_match": true,
+        "public_binding_hashes_match": true,
+        "receipt_matches_terminal_result_and_answer": true,
+        "recorded_validator": "Valid victory code; session won and code matches",
+        "ordered_action_sequence_sha256": "1cd127e6a5b5c0b2e6b48c262a2668e31d926e735e2177756b8c4477ab995792"
+      },
+      "rerun": {
+        "physical_win": true,
+        "evidence_classification": "supported_win",
+        "actions": 48,
+        "action_counts": {
+          "take": 1,
+          "move": 28,
+          "probe": 5,
+          "operate": 13,
+          "finish": 1
+        },
+        "tool_calls": 54,
+        "failed_finishes": 0,
+        "submissions": [
+          {
+            "turn": 48,
+            "won": true,
+            "remaining_worlds": 4,
+            "accepting_worlds": 4,
+            "guaranteed": true
+          }
+        ],
+        "first_guaranteed_repair_turn": 44,
+        "captured_operator_action_hashes_matched": 1,
+        "captured_operator_reports": 1,
+        "replay_observations_events_and_performance_match": true,
+        "public_binding_hashes_match": true,
+        "receipt_matches_terminal_result_and_answer": true,
+        "recorded_validator": "Valid victory code; session won and code matches",
+        "ordered_action_sequence_sha256": "1cd127e6a5b5c0b2e6b48c262a2668e31d926e735e2177756b8c4477ab995792"
+      },
+      "action_delta": 0
+    },
+    {
+      "id": "15",
+      "seed": 31,
+      "theory": 3,
+      "planning": 3,
+      "resource": 2,
+      "budget": 98,
+      "physical_minimum": 19,
+      "reference_realized": 87,
+      "reference_policy_worst_case_bound": 98,
+      "original": {
+        "physical_win": true,
+        "evidence_classification": "supported_win",
+        "actions": 61,
+        "action_counts": {
+          "take": 1,
+          "move": 34,
+          "operate": 20,
+          "probe": 5,
+          "finish": 1
+        },
+        "tool_calls": 67,
+        "failed_finishes": 0,
+        "submissions": [
+          {
+            "turn": 61,
+            "won": true,
+            "remaining_worlds": 2,
+            "accepting_worlds": 2,
+            "guaranteed": true
+          }
+        ],
+        "first_guaranteed_repair_turn": 58,
+        "captured_operator_action_hashes_matched": 0,
+        "captured_operator_reports": 1,
+        "replay_observations_events_and_performance_match": true,
+        "public_binding_hashes_match": true,
+        "receipt_matches_terminal_result_and_answer": true,
+        "recorded_validator": "Valid victory code; session won and code matches",
+        "ordered_action_sequence_sha256": "9a40d762813e008c42069662daf3f4906ed70945e44bc5bcaee7bc9397fa9793"
+      },
+      "rerun": {
+        "physical_win": true,
+        "evidence_classification": "compatible_win",
+        "actions": 37,
+        "action_counts": {
+          "take": 1,
+          "move": 18,
+          "operate": 15,
+          "probe": 2,
+          "finish": 1
+        },
+        "tool_calls": 43,
+        "failed_finishes": 0,
+        "submissions": [
+          {
+            "turn": 37,
+            "won": true,
+            "remaining_worlds": 16,
+            "accepting_worlds": 8,
+            "guaranteed": false
+          }
+        ],
+        "first_guaranteed_repair_turn": null,
+        "captured_operator_action_hashes_matched": 1,
+        "captured_operator_reports": 1,
+        "replay_observations_events_and_performance_match": true,
+        "public_binding_hashes_match": true,
+        "receipt_matches_terminal_result_and_answer": true,
+        "recorded_validator": "Valid victory code; session won and code matches",
+        "ordered_action_sequence_sha256": "3dd54ccbf12301b2d62350494f8c489db2a216cb95f54ce8a346fcb600514b16"
+      },
+      "action_delta": -24
+    },
+    {
+      "id": "16",
+      "seed": 31,
+      "theory": 3,
+      "planning": 3,
+      "resource": 1,
+      "budget": 147,
+      "physical_minimum": 19,
+      "reference_realized": 87,
+      "reference_policy_worst_case_bound": 98,
+      "original": {
+        "physical_win": true,
+        "evidence_classification": "supported_win",
+        "actions": 51,
+        "action_counts": {
+          "take": 1,
+          "move": 28,
+          "probe": 5,
+          "operate": 16,
+          "finish": 1
+        },
+        "tool_calls": 57,
+        "failed_finishes": 0,
+        "submissions": [
+          {
+            "turn": 51,
+            "won": true,
+            "remaining_worlds": 4,
+            "accepting_worlds": 4,
+            "guaranteed": true
+          }
+        ],
+        "first_guaranteed_repair_turn": 48,
+        "captured_operator_action_hashes_matched": 1,
+        "captured_operator_reports": 1,
+        "replay_observations_events_and_performance_match": true,
+        "public_binding_hashes_match": true,
+        "receipt_matches_terminal_result_and_answer": true,
+        "recorded_validator": "Valid victory code; session won and code matches",
+        "ordered_action_sequence_sha256": "c5ef1a5bc2cc93746088c0e8042eeec5035569b3f0569f5aafb360ab5ced932d"
+      },
+      "rerun": {
+        "physical_win": true,
+        "evidence_classification": "supported_win",
+        "actions": 59,
+        "action_counts": {
+          "take": 1,
+          "move": 34,
+          "operate": 21,
+          "probe": 2,
+          "finish": 1
+        },
+        "tool_calls": 65,
+        "failed_finishes": 0,
+        "submissions": [
+          {
+            "turn": 59,
+            "won": true,
+            "remaining_worlds": 2,
+            "accepting_worlds": 2,
+            "guaranteed": true
+          }
+        ],
+        "first_guaranteed_repair_turn": 56,
+        "captured_operator_action_hashes_matched": 0,
+        "captured_operator_reports": 1,
+        "replay_observations_events_and_performance_match": true,
+        "public_binding_hashes_match": true,
+        "receipt_matches_terminal_result_and_answer": true,
+        "recorded_validator": "Valid victory code; session won and code matches",
+        "ordered_action_sequence_sha256": "df333e59c5d516678a6b70080843cbfe4d926ce645ddc2e3fb109d043e925114"
+      },
+      "action_delta": 8
+    }
+  ],
+  "interpretation": [
+    "Five new physical wins, four supported by pre-finish public evidence; the same selected rows originally had five physical wins and four supported wins.",
+    "Unsupported success moves from original row 06 to rerun row 15. It is not eliminated.",
+    "Rerun row 15 has 16 remaining laws and 8 accepting laws, with possible states [1,2,3,1] and [1,2,3,2]. This fraction is not a calibrated success probability.",
+    "Rerun rows 07 and 08 have identical 48-action traces. The original 80-versus-48 action difference is not stable.",
+    "Rerun seed 31 uses 37 actions at R2 and 59 at R1, but the cheaper R2 finish is unsupported; it does not establish superior resource reasoning.",
+    "There are only two supplied attempts per selected row, with selection informed by the first run. This is a targeted diagnostic, not a population calibration or stable resource-effect estimate.",
+    "T3 reference values are costs of one public policy, not optimal information costs or evidence that probing is necessary.",
+    "Only three rerun action-hash journal records are captured. All match replay; this is not a complete captured journal-hash verification."
+  ]
+}

@@ -137,6 +137,16 @@ class OntologyRegistry:
 REGISTRY = OntologyRegistry.from_definitions(
     (
         OntologyDefinition(
+            "stateful-coordination-v1",
+            "stateful-coordination-v1",
+            runtime_module="nexus.ontology.coordination.runtime",
+            schema_module="nexus.ontology.coordination.schema",
+            options_schema=("nexus.ontology.coordination.schema", "GenerationOptions"),
+            generator=("nexus.ontology.coordination.generation", "generate_episode"),
+            qualifier=("nexus.ontology.coordination.qualification", "qualify"),
+            standalone_contract=True,
+        ),
+        OntologyDefinition(
             "stateful-planning-v1",
             "stateful-planning-v1",
             runtime_module="nexus.ontology.planning.runtime",

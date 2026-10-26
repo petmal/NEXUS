@@ -1,0 +1,408 @@
+{
+  "version": "coordination-pilot-v1",
+  "family": "stateful-coordination-v1",
+  "recommended_tool_call_limit": 600,
+  "max_turns": 650,
+  "runs": [
+    {
+      "id": "01",
+      "suite": "core",
+      "seed": 41,
+      "banks": 2,
+      "registers_per_bank": 2,
+      "coupling": "independent",
+      "planning": 0,
+      "resource": 2
+    },
+    {
+      "id": "02",
+      "suite": "core",
+      "seed": 41,
+      "banks": 2,
+      "registers_per_bank": 2,
+      "coupling": "coupled",
+      "planning": 0,
+      "resource": 2
+    },
+    {
+      "id": "03",
+      "suite": "core",
+      "seed": 53,
+      "banks": 2,
+      "registers_per_bank": 2,
+      "coupling": "coupled",
+      "planning": 0,
+      "resource": 2
+    },
+    {
+      "id": "04",
+      "suite": "core",
+      "seed": 53,
+      "banks": 2,
+      "registers_per_bank": 2,
+      "coupling": "independent",
+      "planning": 0,
+      "resource": 2
+    },
+    {
+      "id": "05",
+      "suite": "core",
+      "seed": 41,
+      "banks": 2,
+      "registers_per_bank": 3,
+      "coupling": "independent",
+      "planning": 0,
+      "resource": 2
+    },
+    {
+      "id": "06",
+      "suite": "core",
+      "seed": 41,
+      "banks": 2,
+      "registers_per_bank": 3,
+      "coupling": "coupled",
+      "planning": 0,
+      "resource": 2
+    },
+    {
+      "id": "07",
+      "suite": "core",
+      "seed": 53,
+      "banks": 2,
+      "registers_per_bank": 3,
+      "coupling": "coupled",
+      "planning": 0,
+      "resource": 2
+    },
+    {
+      "id": "08",
+      "suite": "core",
+      "seed": 53,
+      "banks": 2,
+      "registers_per_bank": 3,
+      "coupling": "independent",
+      "planning": 0,
+      "resource": 2
+    },
+    {
+      "id": "09",
+      "suite": "core",
+      "seed": 41,
+      "banks": 3,
+      "registers_per_bank": 2,
+      "coupling": "independent",
+      "planning": 0,
+      "resource": 2
+    },
+    {
+      "id": "10",
+      "suite": "core",
+      "seed": 41,
+      "banks": 3,
+      "registers_per_bank": 2,
+      "coupling": "coupled",
+      "planning": 0,
+      "resource": 2
+    },
+    {
+      "id": "11",
+      "suite": "core",
+      "seed": 53,
+      "banks": 3,
+      "registers_per_bank": 2,
+      "coupling": "coupled",
+      "planning": 0,
+      "resource": 2
+    },
+    {
+      "id": "12",
+      "suite": "core",
+      "seed": 53,
+      "banks": 3,
+      "registers_per_bank": 2,
+      "coupling": "independent",
+      "planning": 0,
+      "resource": 2
+    },
+    {
+      "id": "13",
+      "suite": "core",
+      "seed": 41,
+      "banks": 3,
+      "registers_per_bank": 3,
+      "coupling": "independent",
+      "planning": 0,
+      "resource": 2
+    },
+    {
+      "id": "14",
+      "suite": "core",
+      "seed": 41,
+      "banks": 3,
+      "registers_per_bank": 3,
+      "coupling": "coupled",
+      "planning": 0,
+      "resource": 2
+    },
+    {
+      "id": "15",
+      "suite": "core",
+      "seed": 53,
+      "banks": 3,
+      "registers_per_bank": 3,
+      "coupling": "coupled",
+      "planning": 0,
+      "resource": 2
+    },
+    {
+      "id": "16",
+      "suite": "core",
+      "seed": 53,
+      "banks": 3,
+      "registers_per_bank": 3,
+      "coupling": "independent",
+      "planning": 0,
+      "resource": 2
+    },
+    {
+      "id": "17",
+      "suite": "spatial",
+      "seed": 41,
+      "banks": 3,
+      "registers_per_bank": 3,
+      "coupling": "independent",
+      "planning": 3,
+      "resource": 2
+    },
+    {
+      "id": "18",
+      "suite": "spatial",
+      "seed": 41,
+      "banks": 3,
+      "registers_per_bank": 3,
+      "coupling": "coupled",
+      "planning": 3,
+      "resource": 2
+    },
+    {
+      "id": "19",
+      "suite": "spatial",
+      "seed": 41,
+      "banks": 3,
+      "registers_per_bank": 3,
+      "coupling": "coupled",
+      "planning": 3,
+      "resource": 1
+    },
+    {
+      "id": "20",
+      "suite": "spatial",
+      "seed": 41,
+      "banks": 3,
+      "registers_per_bank": 3,
+      "coupling": "independent",
+      "planning": 3,
+      "resource": 1
+    },
+    {
+      "id": "21",
+      "suite": "spatial",
+      "seed": 53,
+      "banks": 3,
+      "registers_per_bank": 3,
+      "coupling": "independent",
+      "planning": 3,
+      "resource": 2
+    },
+    {
+      "id": "22",
+      "suite": "spatial",
+      "seed": 53,
+      "banks": 3,
+      "registers_per_bank": 3,
+      "coupling": "coupled",
+      "planning": 3,
+      "resource": 2
+    },
+    {
+      "id": "23",
+      "suite": "spatial",
+      "seed": 53,
+      "banks": 3,
+      "registers_per_bank": 3,
+      "coupling": "coupled",
+      "planning": 3,
+      "resource": 1
+    },
+    {
+      "id": "24",
+      "suite": "spatial",
+      "seed": 53,
+      "banks": 3,
+      "registers_per_bank": 3,
+      "coupling": "independent",
+      "planning": 3,
+      "resource": 1
+    },
+    {
+      "id": "25",
+      "suite": "slack",
+      "seed": 41,
+      "banks": 2,
+      "registers_per_bank": 2,
+      "coupling": "independent",
+      "planning": 0,
+      "resource": 1
+    },
+    {
+      "id": "26",
+      "suite": "slack",
+      "seed": 41,
+      "banks": 2,
+      "registers_per_bank": 2,
+      "coupling": "coupled",
+      "planning": 0,
+      "resource": 1
+    },
+    {
+      "id": "27",
+      "suite": "slack",
+      "seed": 53,
+      "banks": 2,
+      "registers_per_bank": 2,
+      "coupling": "coupled",
+      "planning": 0,
+      "resource": 1
+    },
+    {
+      "id": "28",
+      "suite": "slack",
+      "seed": 53,
+      "banks": 2,
+      "registers_per_bank": 2,
+      "coupling": "independent",
+      "planning": 0,
+      "resource": 1
+    },
+    {
+      "id": "29",
+      "suite": "slack",
+      "seed": 41,
+      "banks": 2,
+      "registers_per_bank": 3,
+      "coupling": "independent",
+      "planning": 0,
+      "resource": 1
+    },
+    {
+      "id": "30",
+      "suite": "slack",
+      "seed": 41,
+      "banks": 2,
+      "registers_per_bank": 3,
+      "coupling": "coupled",
+      "planning": 0,
+      "resource": 1
+    },
+    {
+      "id": "31",
+      "suite": "slack",
+      "seed": 53,
+      "banks": 2,
+      "registers_per_bank": 3,
+      "coupling": "coupled",
+      "planning": 0,
+      "resource": 1
+    },
+    {
+      "id": "32",
+      "suite": "slack",
+      "seed": 53,
+      "banks": 2,
+      "registers_per_bank": 3,
+      "coupling": "independent",
+      "planning": 0,
+      "resource": 1
+    },
+    {
+      "id": "33",
+      "suite": "slack",
+      "seed": 41,
+      "banks": 3,
+      "registers_per_bank": 2,
+      "coupling": "independent",
+      "planning": 0,
+      "resource": 1
+    },
+    {
+      "id": "34",
+      "suite": "slack",
+      "seed": 41,
+      "banks": 3,
+      "registers_per_bank": 2,
+      "coupling": "coupled",
+      "planning": 0,
+      "resource": 1
+    },
+    {
+      "id": "35",
+      "suite": "slack",
+      "seed": 53,
+      "banks": 3,
+      "registers_per_bank": 2,
+      "coupling": "coupled",
+      "planning": 0,
+      "resource": 1
+    },
+    {
+      "id": "36",
+      "suite": "slack",
+      "seed": 53,
+      "banks": 3,
+      "registers_per_bank": 2,
+      "coupling": "independent",
+      "planning": 0,
+      "resource": 1
+    },
+    {
+      "id": "37",
+      "suite": "slack",
+      "seed": 41,
+      "banks": 3,
+      "registers_per_bank": 3,
+      "coupling": "independent",
+      "planning": 0,
+      "resource": 1
+    },
+    {
+      "id": "38",
+      "suite": "slack",
+      "seed": 41,
+      "banks": 3,
+      "registers_per_bank": 3,
+      "coupling": "coupled",
+      "planning": 0,
+      "resource": 1
+    },
+    {
+      "id": "39",
+      "suite": "slack",
+      "seed": 53,
+      "banks": 3,
+      "registers_per_bank": 3,
+      "coupling": "coupled",
+      "planning": 0,
+      "resource": 1
+    },
+    {
+      "id": "40",
+      "suite": "slack",
+      "seed": 53,
+      "banks": 3,
+      "registers_per_bank": 3,
+      "coupling": "independent",
+      "planning": 0,
+      "resource": 1
+    }
+  ]
+}
