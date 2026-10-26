@@ -282,7 +282,9 @@ def inspect_image(release):
         raise RunnerError(
             "NEXUS image revision differs from release.json; rebuild without --skip-build."
         )
-    if not re.fullmatch(r"sha256:[0-9a-f]{64}", str(image_id)):
+    # Docker prefixes the digest; Podman's compatible CLI can return bare hex.
+    # Preserve the engine's immutable reference for execution and audit records.
+    if not isinstance(image_id, str) or not re.fullmatch(r"(?:sha256:)?[0-9a-f]{64}", image_id):
         raise RunnerError("Docker returned an invalid image ID.")
     return {"tag": release["image"], "id": image_id, "revision": revision}
 

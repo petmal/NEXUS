@@ -20,6 +20,7 @@ assert SPEC is not None and SPEC.loader is not None
 runner = importlib.util.module_from_spec(SPEC)
 SPEC.loader.exec_module(runner)
 IMAGE_ID = "sha256:" + "b" * 64
+BARE_IMAGE_ID = "3ec5418c338244066307c55c3e76c494315edc95733a8ccfc4644717b9ffdd3d"
 RUNTIME = "c" * 64
 REAL_RUN = subprocess.run
 
@@ -102,6 +103,7 @@ def setup(tmp_path, monkeypatch):
         "payload": payload,
         "calls": [],
         "revision": commit,
+        "image_id": IMAGE_ID,
         "live_status": 0,
         "git_failure": False,
     }
@@ -122,7 +124,7 @@ def setup(tmp_path, monkeypatch):
             return subprocess.CompletedProcess(command, 0, "built", "")
         if command[:3] == ["docker", "image", "inspect"]:
             info = {
-                "Id": IMAGE_ID,
+                "Id": state["image_id"],
                 "Config": {
                     "Labels": {
                         "org.opencontainers.image.revision": state["revision"],
@@ -133,7 +135,7 @@ def setup(tmp_path, monkeypatch):
         if command[:2] == ["docker", "run"]:
             assert "--rm" in command and "--entrypoint" in command
             assert not {"-v", "--volume", "--mount", "-e", "--env"} & set(command)
-            assert IMAGE_ID in command
+            assert state["image_id"] in command
             assert kwargs["capture_output"] is True
             return subprocess.CompletedProcess(command, 0, json.dumps(state["payload"]), "")
         if command[0] == "./mindtrial":
@@ -152,8 +154,12 @@ def manifests(state):
     ]
 
 
-def test_default_paths_spaces_distinct_cwd_and_pinned_build_leave_checkout_untouched(setup):
+@pytest.mark.parametrize("image_id", [IMAGE_ID, BARE_IMAGE_ID])
+def test_default_paths_spaces_distinct_cwd_and_pinned_build_leave_checkout_untouched(
+    setup, image_id
+):
     state = setup
+    state["image_id"] = image_id
     index = (state["repository"] / ".git/index").read_bytes()
     assert runner.main([], package_dir=state["package"]) == 0
     (record,) = manifests(state)
@@ -168,7 +174,7 @@ def test_default_paths_spaces_distinct_cwd_and_pinned_build_leave_checkout_untou
         record["input_config_contract_sha256"]
         == state["release"]["config_contract_sha256"][runner.CONFIG]
     )
-    assert record["image"] == {"tag": runner.IMAGE, "id": IMAGE_ID, "revision": state["revision"]}
+    assert record["image"] == {"tag": runner.IMAGE, "id": image_id, "revision": state["revision"]}
     assert record["mindtrial_sha256"] == runner.sha256(
         (state["mindtrial"] / "mindtrial").read_bytes()
     )
@@ -187,7 +193,7 @@ def test_default_paths_spaces_distinct_cwd_and_pinned_build_leave_checkout_untou
     assert effective["log-file"] == str(output / "mindtrial.log")
     assert effective["task-source"] == str(output / "tasks.yaml")
     assert all(
-        effective[key][0]["image"] == IMAGE_ID for key in ("tools", "services", "validators")
+        effective[key][0]["image"] == image_id for key in ("tools", "services", "validators")
     )
     assert (state["repository"] / "marker").read_text() == "uncommitted user work\n"
     assert (state["repository"] / "untracked").read_text() == "untracked user work\n"
@@ -208,7 +214,9 @@ def test_preflight_only_needs_neither_api_key_nor_mindtrial_and_never_launches_i
 
 
 @pytest.mark.parametrize("failure", ["revision", "digest", "tasks", "report"])
-def test_skip_build_still_blocks_wrong_image_or_stale_qualification(setup, failure):
+@pytest.mark.parametrize("image_id", [IMAGE_ID, BARE_IMAGE_ID])
+def test_skip_build_still_blocks_wrong_image_or_stale_qualification(setup, failure, image_id):
+    setup["image_id"] = image_id
     if failure == "revision":
         setup["revision"] = "0" * 40
     elif failure == "digest":
@@ -221,6 +229,32 @@ def test_skip_build_still_blocks_wrong_image_or_stale_qualification(setup, failu
     assert any(command[:3] == ["docker", "image", "inspect"] for command, _ in setup["calls"])
     assert not any(command[0] in ("git", "./mindtrial") for command, _ in setup["calls"])
     assert not (setup["package"] / "results").exists()
+
+
+@pytest.mark.parametrize(
+    "image_id",
+    [
+        "",
+        "nexus:coordination-v1",
+        "b" * 12,
+        "b" * 63,
+        "b" * 65,
+        "g" * 64,
+        "sha256:" + "b" * 63,
+        "sha512:" + "b" * 64,
+        None,
+        1,
+        int("1" * 64),
+    ],
+)
+def test_malformed_image_id_blocks_before_qualification_or_model_run(setup, image_id, capsys):
+    setup["image_id"] = image_id
+    assert runner.main(["--skip-build"], package_dir=setup["package"]) == 1
+    assert "invalid image ID" in capsys.readouterr().err
+    assert not any(
+        command[:2] == ["docker", "run"] or command[0] == "./mindtrial"
+        for command, _ in setup["calls"]
+    )
 
 
 @pytest.mark.parametrize(
