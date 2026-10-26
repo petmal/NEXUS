@@ -1,0 +1,503 @@
+#!/usr/bin/env python3
+"""Build, qualify and run the pinned pilot with the user's existing MindTrial.
+
+Only Python 3.12+ and its standard library are needed on the host. Config and task
+files use JSON, which is also valid YAML. No live model call occurs in preflight.
+"""
+
+import argparse
+import copy
+import hashlib
+import json
+import os
+import re
+import subprocess
+import sys
+import tarfile
+import tempfile
+from datetime import UTC, datetime
+from pathlib import Path
+
+CONFIG = "nexus-coordination-config.yaml"
+REPEAT_CONFIG = "nexus-coordination-repeat-config.yaml"
+CONFIGS = (CONFIG, REPEAT_CONFIG)
+EDITABLE_RUN_FIELDS = ("name", "model", "model-parameters", "max-requests-per-minute")
+SUITES = ("core", "slack", "spatial", "repeat")
+BRANCH = "feat/planning-resource-axes"
+IMAGE = "nexus:coordination-v1"
+
+# All generated files stay inside the container's temporary directory. Only JSON
+# crosses stdout; there are no host mounts or container-owned result files.
+PREFLIGHT_SCRIPT = r"""
+import contextlib
+import json
+from pathlib import Path
+import sys
+import tempfile
+from nexus.evaluation.coordination import Pilot, export_tasks, preflight
+from nexus.provenance import source_digest
+
+with contextlib.redirect_stdout(sys.stderr), tempfile.TemporaryDirectory() as temporary:
+    directory = Path(temporary)
+    pilot = Pilot.model_validate_json(Path("/app/docs/coordination-matrix.json").read_text())
+    report = preflight(pilot, directory / "coordination-preflight.json")
+    export_tasks(pilot, report, directory)
+    reports = {"coordination": report}
+    suites = ["core", "slack", "spatial"]
+    if "--repeat" in sys.argv[1:]:
+        from nexus.evaluation.coordination import export_repeat_tasks
+        export_repeat_tasks(directory)
+        reports["planning_repeat"] = json.loads(
+            (directory / "planning-repeat-preflight.json").read_text()
+        )
+        suites.append("repeat")
+    result = {
+        "runtime_source_sha256": source_digest(),
+        "reports": reports,
+        "tasks": {
+            suite: json.loads((directory / f"nexus-coordination-{suite}-tasks.yaml").read_text())
+            for suite in suites
+        },
+    }
+print(json.dumps(result, separators=(",", ":")))
+"""
+
+
+class RunnerError(Exception):
+    """An actionable failure safe to print without subprocess output or secrets."""
+
+
+def timestamp():
+    return datetime.now(UTC).isoformat()
+
+
+def sha256(data):
+    return hashlib.sha256(data).hexdigest()
+
+
+def read_json(path):
+    try:
+        return json.loads(path.read_bytes())
+    except (OSError, ValueError) as exc:
+        raise RunnerError(f"Cannot read valid JSON from {path.name}.") from exc
+
+
+def write_json(path, value):
+    temporary = path.with_suffix(path.suffix + ".tmp")
+    temporary.write_text(json.dumps(value, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    temporary.replace(path)
+
+
+def config_contract_sha256(config):
+    """Hash the integration contract, excluding only documented provider-run choices.
+
+    Release packaging uses this same function. Provider/run list structure,
+    enabled flags, retry policies, task settings and the entire NEXUS integration
+    remain in the digest. A tool's name or description is never an editable field.
+    """
+    contract = copy.deepcopy(config)
+    settings = contract.get("config", {}) if isinstance(contract, dict) else {}
+    providers = settings.get("providers", ()) if isinstance(settings, dict) else ()
+    if isinstance(providers, list):
+        for provider in providers:
+            runs = provider.get("runs", ()) if isinstance(provider, dict) else ()
+            if isinstance(runs, list):
+                for run in runs:
+                    if isinstance(run, dict):
+                        for field in EDITABLE_RUN_FIELDS:
+                            run.pop(field, None)
+    return sha256(json.dumps(contract, sort_keys=True, separators=(",", ":")).encode())
+
+
+def config_for_suite(suite):
+    return REPEAT_CONFIG if suite == "repeat" else CONFIG
+
+
+def checked(command, *, label, **kwargs):
+    """Capture administrative commands; never echo stderr that might hold a secret."""
+    try:
+        result = subprocess.run(command, capture_output=True, text=True, check=False, **kwargs)
+    except OSError as exc:
+        raise RunnerError(f"{label} could not start ({type(exc).__name__}).") from exc
+    if result.returncode:
+        raise RunnerError(f"{label} failed (exit {result.returncode}).")
+    return result.stdout
+
+
+def load_release(package):
+    release = read_json(package / "release.json")
+    if not isinstance(release, dict):
+        raise RunnerError("release.json must contain an object.")
+    if not re.fullmatch(r"[0-9a-f]{40}", str(release.get("source_commit", ""))):
+        raise RunnerError("release.json must pin a full 40-character source commit.")
+    if release.get("branch") != BRANCH or release.get("image") != IMAGE:
+        raise RunnerError("release.json names an unexpected branch or image.")
+    if not re.fullmatch(r"[0-9a-f]{64}", str(release.get("runtime_source_sha256", ""))):
+        raise RunnerError("release.json must pin the runtime source digest.")
+    hashes = release.get("files_sha256")
+    required = {*CONFIGS, *(f"nexus-coordination-{suite}-tasks.yaml" for suite in SUITES)}
+    if not isinstance(hashes, dict) or not required <= hashes.keys():
+        raise RunnerError("release.json must list both configs and every suite's task checksum.")
+    contracts = release.get("config_contract_sha256")
+    if (
+        not isinstance(contracts, dict)
+        or set(contracts) != set(CONFIGS)
+        or any(not re.fullmatch(r"[0-9a-f]{64}", str(value)) for value in contracts.values())
+    ):
+        raise RunnerError("release.json must pin a config contract checksum for each config.")
+    for name, digest in hashes.items():
+        if (
+            not isinstance(name, str)
+            or Path(name).is_absolute()
+            or ".." in Path(name).parts
+            or not re.fullmatch(r"[0-9a-f]{64}", str(digest))
+        ):
+            raise RunnerError("release.json contains an invalid file checksum entry.")
+        path = (package / name).resolve()
+        if not path.is_relative_to(package) or not path.is_file():
+            raise RunnerError("A release file is missing or outside the package.")
+        # Model and reasoning-effort edits are deliberate and recorded per run.
+        if name not in CONFIGS and sha256(path.read_bytes()) != digest:
+            raise RunnerError(f"Release checksum mismatch: {name}.")
+    return release
+
+
+def load_config(package, release, filename=CONFIG):
+    raw = (package / filename).read_bytes()
+    config = read_json(package / filename)
+
+    def reject_keys(value):
+        if isinstance(value, dict):
+            for key, item in value.items():
+                if key == "api-key" and item is not None and str(item).strip():
+                    raise RunnerError("Remove the embedded api-key; use OPENAI_API_KEY instead.")
+                reject_keys(item)
+        elif isinstance(value, list):
+            for item in value:
+                reject_keys(item)
+
+    reject_keys(config)
+    secret = os.environ.get("OPENAI_API_KEY", "")
+    if secret and secret.encode() in raw:
+        raise RunnerError("The config contains OPENAI_API_KEY; remove it before running.")
+    if not isinstance(config, dict) or not isinstance(config.get("config"), dict):
+        raise RunnerError("The config file must contain a config object.")
+    if config_contract_sha256(config) != release["config_contract_sha256"][filename]:
+        raise RunnerError(
+            f"Config contract mismatch: {filename}; only provider-run model, name, "
+            "model-parameters and max-requests-per-minute may be edited."
+        )
+    for provider in config["config"]["providers"]:
+        for run in provider["runs"]:
+            if not isinstance(run.get("model"), str) or not run["model"].strip():
+                raise RunnerError("Every provider run must name a nonblank model.")
+            if "name" in run and not isinstance(run["name"], str):
+                raise RunnerError("Provider run names must be strings.")
+            if "model-parameters" in run and not isinstance(run["model-parameters"], dict):
+                raise RunnerError("Provider run model-parameters must be an object.")
+            if "max-requests-per-minute" in run and (
+                type(run["max-requests-per-minute"]) is not int
+                or run["max-requests-per-minute"] < 1
+            ):
+                raise RunnerError(
+                    "Provider run max-requests-per-minute must be a positive integer."
+                )
+    for section in ("tools", "services", "validators"):
+        entries = config["config"].get(section)
+        if (
+            not isinstance(entries, list)
+            or not entries
+            or any(
+                not isinstance(item, dict) or item.get("image") != release["image"]
+                for item in entries
+            )
+        ):
+            raise RunnerError(f"Every {section} image must match the pinned release image.")
+    return config, raw
+
+
+def build_image(repository, release):
+    if not repository.is_dir():
+        raise RunnerError(f"NEXUS_REPO does not exist: {repository}")
+    git = ["git", "-C", str(repository)]
+    checked([*git, "rev-parse", "--show-toplevel"], label="Opening NEXUS_REPO")
+    commit = release["source_commit"]
+
+    def has_commit():
+        output = checked(
+            [*git, "cat-file", "--batch-check"],
+            label="Checking release commit",
+            input=commit + "\n",
+        ).strip()
+        if output == f"{commit} missing":
+            return False
+        if not re.fullmatch(re.escape(commit) + r" commit [0-9]+", output):
+            raise RunnerError("The pinned source object is not a commit.")
+        return True
+
+    if not has_commit():
+        checked(
+            [*git, "fetch", "--no-tags", "origin", release["branch"]],
+            label="Fetching the release branch",
+        )
+        if not has_commit():
+            raise RunnerError("The exact release commit is unavailable after fetching its branch.")
+    with tempfile.TemporaryDirectory(prefix="nexus-coordination-build-") as temporary:
+        directory = Path(temporary)
+        archive = directory / "source.tar"
+        checked(
+            [*git, "archive", "--format=tar", f"--output={archive}", commit],
+            label="Archiving the release commit",
+        )
+        source = directory / "source"
+        source.mkdir()
+        with tarfile.open(archive) as contents:
+            contents.extractall(source, filter="data")
+        checked(
+            [
+                "docker",
+                "build",
+                "--build-arg",
+                f"VCS_REF={commit}",
+                "-t",
+                release["image"],
+                str(source),
+            ],
+            label="Building the pinned NEXUS image",
+        )
+
+
+def inspect_image(release):
+    output = checked(
+        ["docker", "image", "inspect", release["image"], "--format", "{{json .}}"],
+        label="Inspecting the NEXUS image",
+    )
+    try:
+        info = json.loads(output)
+        revision = info["Config"]["Labels"]["org.opencontainers.image.revision"]
+        image_id = info["Id"]
+    except (ValueError, KeyError, TypeError) as exc:
+        raise RunnerError("The NEXUS image lacks an OCI revision or image ID.") from exc
+    if revision != release["source_commit"]:
+        raise RunnerError(
+            "NEXUS image revision differs from release.json; rebuild without --skip-build."
+        )
+    if not re.fullmatch(r"sha256:[0-9a-f]{64}", str(image_id)):
+        raise RunnerError("Docker returned an invalid image ID.")
+    return {"tag": release["image"], "id": image_id, "revision": revision}
+
+
+def qualify(package, release, image, include_repeat):
+    command = [
+        "docker",
+        "run",
+        "--rm",
+        "--network",
+        "none",
+        "--entrypoint",
+        "python",
+        image["id"],
+        "-c",
+        PREFLIGHT_SCRIPT,
+    ]
+    if include_repeat:
+        command.append("--repeat")
+    output = checked(command, label="Container qualification")
+    try:
+        result = json.loads(output)
+    except ValueError as exc:
+        raise RunnerError("Container qualification did not return valid JSON.") from exc
+    if (
+        not isinstance(result, dict)
+        or result.get("runtime_source_sha256") != release["runtime_source_sha256"]
+    ):
+        raise RunnerError("Installed runtime source digest differs from release.json.")
+    required_reports = ("coordination", "planning_repeat") if include_repeat else ("coordination",)
+    reports = result.get("reports")
+    if not isinstance(reports, dict) or any(
+        not isinstance(reports.get(name), dict) or reports[name].get("status") != "passed"
+        for name in required_reports
+    ):
+        raise RunnerError("The container did not pass all required qualification reports.")
+    tasks = result.get("tasks")
+    for suite in SUITES if include_repeat else SUITES[:-1]:
+        shipped = read_json(package / f"nexus-coordination-{suite}-tasks.yaml")
+        if not isinstance(tasks, dict) or tasks.get(suite) != shipped:
+            raise RunnerError(f"Shipped {suite} tasks differ from freshly qualified exports.")
+    return result
+
+
+def result_directory(package, suite):
+    results = package / "results"
+    results.mkdir(exist_ok=True)
+    if results.resolve() != results:
+        raise RunnerError("The package results directory must not be a symlink.")
+    stamp = datetime.now(UTC).strftime("%Y%m%dT%H%M%SZ")
+    return Path(tempfile.mkdtemp(prefix=f"{suite}-{stamp}-", dir=results))
+
+
+def run_suite(package, suite, config, config_raw, release, image, preflight, mindtrial, invoked):
+    binary = mindtrial / "mindtrial"
+    binary_hash = sha256(binary.read_bytes())
+    directory = result_directory(package, suite)
+    tasks_path = directory / "tasks.yaml"
+    config_path = directory / "config.yaml"
+    # Use the exact compared export even if someone edits the package mid-run.
+    write_json(tasks_path, preflight["tasks"][suite])
+    (directory / "input-config.yaml").write_bytes(config_raw)
+    effective = copy.deepcopy(config)
+    effective["config"].update(
+        {
+            "output-dir": str(directory),
+            "log-file": str(directory / "mindtrial.log"),
+            "task-source": str(tasks_path),
+            "output-basename": "mindtrial",
+        }
+    )
+    for section in ("tools", "services", "validators"):
+        for entry in effective["config"][section]:
+            entry["image"] = image["id"]
+    write_json(config_path, effective)
+    write_json(directory / "preflight.json", preflight)
+    write_json(directory / "release.json", release)
+    seed = "nexus-pr-pilot-v1" if suite == "repeat" else "nexus-coordination-pilot-v1"
+    input_config_file = config_for_suite(suite)
+    command = [
+        "./mindtrial",
+        f"-config={config_path}",
+        f"-tasks={tasks_path}",
+        "--debug",
+        "--interactive=true",
+        "--json",
+        f"--evaluation-seed={seed}",
+        "run",
+    ]
+    manifest = {
+        "version": "coordination-run-v1",
+        "suite": suite,
+        "status": "running",
+        "invocation_timestamp": invoked,
+        "started_at": timestamp(),
+        "source_commit": release["source_commit"],
+        "source_branch": release["branch"],
+        "runtime_source_sha256": preflight["runtime_source_sha256"],
+        "image": image,
+        "mindtrial_binary": str(binary.resolve()),
+        "mindtrial_sha256": binary_hash,
+        "cwd": str(mindtrial),
+        "command": command,
+        "evaluation_seed": seed,
+        "input_config_file": input_config_file,
+        "input_config_sha256": sha256(config_raw),
+        "input_config_contract_sha256": config_contract_sha256(config),
+        "input_config_matches_release": sha256(config_raw)
+        == release["files_sha256"][input_config_file],
+        "effective_config_sha256": sha256(config_path.read_bytes()),
+        "tasks_sha256": sha256(tasks_path.read_bytes()),
+        "output_dir": str(directory),
+    }
+    manifest_path = directory / "manifest.json"
+    write_json(manifest_path, manifest)
+    print(f"Running {suite}; results: {directory}", flush=True)
+    try:
+        # Inherit stdin/stdout/stderr and the terminal; no pipes, tee or capture.
+        completed = subprocess.run(command, cwd=mindtrial, check=False)
+        code = completed.returncode
+        manifest.update(status="completed" if code == 0 else "failed", exit_code=code)
+    except KeyboardInterrupt:
+        code = 130
+        manifest.update(status="interrupted", exit_code=code)
+    except OSError as exc:
+        code = 1
+        manifest.update(status="failed_to_start", exit_code=code, error=type(exc).__name__)
+    manifest["finished_at"] = timestamp()
+    write_json(manifest_path, manifest)
+    return code if code >= 0 else 128 - code
+
+
+def main(argv=None, *, package_dir=None):
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--suite", choices=(*SUITES, "all"), default="core")
+    parser.add_argument("--preflight-only", action="store_true", help="Qualify without model calls")
+    parser.add_argument(
+        "--skip-build", action="store_true", help="Verify and qualify an existing image"
+    )
+    args = parser.parse_args(argv)
+    package = Path(package_dir or __file__).resolve()
+    if package_dir is None:
+        package = package.parent
+    invoked = timestamp()
+    try:
+        if sys.version_info < (3, 12):  # noqa: UP036 -- standalone launcher runs outside the 3.14 image
+            raise RunnerError("Python 3.12 or newer is required; set PYTHON to its executable.")
+        release = load_release(package)
+        suites = SUITES if args.suite == "all" else (args.suite,)
+        config_names = {config_for_suite(suite) for suite in suites}
+        configs = {
+            name: load_config(package, release, name) for name in CONFIGS if name in config_names
+        }
+        repository = Path(os.environ.get("NEXUS_REPO", str(Path.home() / "Go-Projects/NEXUS")))
+        mindtrial = Path(os.environ.get("MINDTRIAL_DIR", str(Path.home() / "MindTrial")))
+        repository, mindtrial = repository.expanduser().resolve(), mindtrial.expanduser().resolve()
+        if not args.preflight_only:
+            if not os.environ.get("OPENAI_API_KEY", "").strip():
+                raise RunnerError(
+                    "Set OPENAI_API_KEY before a model run; --preflight-only needs no key."
+                )
+            binary = mindtrial / "mindtrial"
+            if not binary.is_file() or not os.access(binary, os.X_OK):
+                raise RunnerError(f"No executable mindtrial in MINDTRIAL_DIR: {mindtrial}")
+        if not args.skip_build:
+            print("Building the exact release commit from a temporary git archive...", flush=True)
+            build_image(repository, release)
+        image = inspect_image(release)
+        print(
+            "Qualifying the installed runtime and checking task exports; no model calls...",
+            flush=True,
+        )
+        preflight = qualify(package, release, image, args.suite in ("repeat", "all"))
+        if args.preflight_only:
+            directory = result_directory(package, args.suite + "-preflight")
+            write_json(directory / "preflight.json", preflight)
+            write_json(directory / "release.json", release)
+            write_json(
+                directory / "manifest.json",
+                {
+                    "version": "coordination-run-v1",
+                    "status": "preflight-passed",
+                    "suite": args.suite,
+                    "invocation_timestamp": invoked,
+                    "finished_at": timestamp(),
+                    "image": image,
+                    "source_commit": release["source_commit"],
+                    "runtime_source_sha256": preflight["runtime_source_sha256"],
+                    "input_configs": {
+                        name: {
+                            "sha256": sha256(raw),
+                            "contract_sha256": config_contract_sha256(config),
+                            "matches_release": sha256(raw) == release["files_sha256"][name],
+                        }
+                        for name, (config, raw) in configs.items()
+                    },
+                    "command": None,
+                },
+            )
+            print(f"Preflight passed; no model calls. Report: {directory}", flush=True)
+            return 0
+        for suite in suites:
+            config, config_raw = configs[config_for_suite(suite)]
+            code = run_suite(
+                package, suite, config, config_raw, release, image, preflight, mindtrial, invoked
+            )
+            if code:
+                return code
+        return 0
+    except (RunnerError, OSError, tarfile.TarError) as exc:
+        # Do not print raw subprocess output, configuration values or environment.
+        message = str(exc) if isinstance(exc, RunnerError) else type(exc).__name__
+        print(f"Pilot blocked: {message}", file=sys.stderr)
+        return 1
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
