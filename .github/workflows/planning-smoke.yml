@@ -1,4 +1,4 @@
-name: Planning and coordination runner smoke
+name: Planning, coordination and interference runner smoke
 
 on:
   pull_request:
@@ -7,12 +7,17 @@ on:
       - "scripts/smoke_planning_service.py"
       - "scripts/preflight_planning.py"
       - "scripts/preflight_coordination.py"
+      - "scripts/preflight_interference.py"
       - "scripts/package_coordination.py"
+      - "scripts/package_interference.py"
       - "examples/mindtrial/coordination-*"
+      - "examples/mindtrial/interference-*"
       - "examples/mindtrial/nexus-planning-resource-*.yaml"
       - "examples/mindtrial/nexus-coordination-*.yaml"
+      - "examples/mindtrial/nexus-interference-*.yaml"
       - "docs/planning-resource-matrix.json"
       - "docs/coordination-matrix.json"
+      - "docs/interference-matrix.json"
       - "Dockerfile"
       - ".dockerignore"
       - "pyproject.toml"
@@ -39,17 +44,21 @@ jobs:
       - name: Build the exact feature revision
         run: |
           revision=$(git rev-parse HEAD)
-          docker build --build-arg VCS_REF="$revision" -t nexus:planning-resource-v1 -t nexus:coordination-v1 .
+          docker build --build-arg VCS_REF="$revision" -t nexus:planning-resource-v1 -t nexus:coordination-v1 -t nexus:interference-v1 .
           test "$(docker image inspect nexus:planning-resource-v1 --format '{{ index .Config.Labels "org.opencontainers.image.revision" }}')" = "$revision"
       - name: Qualify all 16 cases inside the image
         run: docker run --rm --entrypoint python nexus:planning-resource-v1 scripts/preflight_planning.py
       - name: Qualify all 40 coordination cases inside the image
         run: docker run --rm --entrypoint python nexus:coordination-v1 scripts/preflight_coordination.py
+      - name: Qualify all 32 interference cases inside the image
+        run: docker run --rm --entrypoint python nexus:interference-v1 scripts/preflight_interference.py
       - name: Verify the packaged launcher against the actual image without model calls
         run: |
           runtime_digest=$(docker run --rm --entrypoint python nexus:coordination-v1 -c 'from nexus.provenance import source_digest; print(source_digest())')
           python3 scripts/package_coordination.py --output-dir "$RUNNER_TEMP/coordination-package" --runtime-source-sha256 "$runtime_digest"
           bash "$RUNNER_TEMP/coordination-package/run.sh" --skip-build --preflight-only --suite all
+          python3 scripts/package_interference.py --output-dir "$RUNNER_TEMP/interference-package" --runtime-source-sha256 "$runtime_digest"
+          bash "$RUNNER_TEMP/interference-package/run.sh" --skip-build --preflight-only --suite all
       - name: Exercise real service, tool client, validator and shutdown telemetry
         run: |
           docker run --rm --entrypoint python \
@@ -65,4 +74,13 @@ jobs:
               nexus:coordination-v1 scripts/smoke_planning_service.py \
               --config /run-config/nexus-coordination-config.yaml \
               --tasks "/run-config/nexus-coordination-$suite-tasks.yaml" --rows all
+          done
+      - name: Exercise interference services and receipts at both budgets
+        run: |
+          for suite in core slack; do
+            docker run --rm --entrypoint python \
+              --mount "type=bind,source=$PWD/examples/mindtrial,target=/run-config,readonly" \
+              nexus:interference-v1 scripts/smoke_planning_service.py \
+              --config /run-config/nexus-interference-config.yaml \
+              --tasks "/run-config/nexus-interference-$suite-tasks.yaml" --rows all
           done

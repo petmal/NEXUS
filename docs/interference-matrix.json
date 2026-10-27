@@ -1,0 +1,264 @@
+{
+  "version": "interference-pilot-v1",
+  "family": "stateful-interference-v1",
+  "recommended_tool_call_limit": 600,
+  "max_turns": 650,
+  "runs": [
+    {
+      "id": "01",
+      "suite": "core",
+      "seed": 67,
+      "horizon": "short",
+      "coupling": "independent",
+      "resource": 2
+    },
+    {
+      "id": "02",
+      "suite": "core",
+      "seed": 67,
+      "horizon": "short",
+      "coupling": "coupled",
+      "resource": 2
+    },
+    {
+      "id": "03",
+      "suite": "core",
+      "seed": 67,
+      "horizon": "long",
+      "coupling": "coupled",
+      "resource": 2
+    },
+    {
+      "id": "04",
+      "suite": "core",
+      "seed": 67,
+      "horizon": "long",
+      "coupling": "independent",
+      "resource": 2
+    },
+    {
+      "id": "05",
+      "suite": "core",
+      "seed": 79,
+      "horizon": "short",
+      "coupling": "coupled",
+      "resource": 2
+    },
+    {
+      "id": "06",
+      "suite": "core",
+      "seed": 79,
+      "horizon": "short",
+      "coupling": "independent",
+      "resource": 2
+    },
+    {
+      "id": "07",
+      "suite": "core",
+      "seed": 79,
+      "horizon": "long",
+      "coupling": "independent",
+      "resource": 2
+    },
+    {
+      "id": "08",
+      "suite": "core",
+      "seed": 79,
+      "horizon": "long",
+      "coupling": "coupled",
+      "resource": 2
+    },
+    {
+      "id": "09",
+      "suite": "core",
+      "seed": 101,
+      "horizon": "short",
+      "coupling": "independent",
+      "resource": 2
+    },
+    {
+      "id": "10",
+      "suite": "core",
+      "seed": 101,
+      "horizon": "short",
+      "coupling": "coupled",
+      "resource": 2
+    },
+    {
+      "id": "11",
+      "suite": "core",
+      "seed": 101,
+      "horizon": "long",
+      "coupling": "coupled",
+      "resource": 2
+    },
+    {
+      "id": "12",
+      "suite": "core",
+      "seed": 101,
+      "horizon": "long",
+      "coupling": "independent",
+      "resource": 2
+    },
+    {
+      "id": "13",
+      "suite": "core",
+      "seed": 103,
+      "horizon": "short",
+      "coupling": "coupled",
+      "resource": 2
+    },
+    {
+      "id": "14",
+      "suite": "core",
+      "seed": 103,
+      "horizon": "short",
+      "coupling": "independent",
+      "resource": 2
+    },
+    {
+      "id": "15",
+      "suite": "core",
+      "seed": 103,
+      "horizon": "long",
+      "coupling": "independent",
+      "resource": 2
+    },
+    {
+      "id": "16",
+      "suite": "core",
+      "seed": 103,
+      "horizon": "long",
+      "coupling": "coupled",
+      "resource": 2
+    },
+    {
+      "id": "17",
+      "suite": "slack",
+      "seed": 67,
+      "horizon": "short",
+      "coupling": "independent",
+      "resource": 1
+    },
+    {
+      "id": "18",
+      "suite": "slack",
+      "seed": 67,
+      "horizon": "short",
+      "coupling": "coupled",
+      "resource": 1
+    },
+    {
+      "id": "19",
+      "suite": "slack",
+      "seed": 67,
+      "horizon": "long",
+      "coupling": "coupled",
+      "resource": 1
+    },
+    {
+      "id": "20",
+      "suite": "slack",
+      "seed": 67,
+      "horizon": "long",
+      "coupling": "independent",
+      "resource": 1
+    },
+    {
+      "id": "21",
+      "suite": "slack",
+      "seed": 79,
+      "horizon": "short",
+      "coupling": "coupled",
+      "resource": 1
+    },
+    {
+      "id": "22",
+      "suite": "slack",
+      "seed": 79,
+      "horizon": "short",
+      "coupling": "independent",
+      "resource": 1
+    },
+    {
+      "id": "23",
+      "suite": "slack",
+      "seed": 79,
+      "horizon": "long",
+      "coupling": "independent",
+      "resource": 1
+    },
+    {
+      "id": "24",
+      "suite": "slack",
+      "seed": 79,
+      "horizon": "long",
+      "coupling": "coupled",
+      "resource": 1
+    },
+    {
+      "id": "25",
+      "suite": "slack",
+      "seed": 101,
+      "horizon": "short",
+      "coupling": "independent",
+      "resource": 1
+    },
+    {
+      "id": "26",
+      "suite": "slack",
+      "seed": 101,
+      "horizon": "short",
+      "coupling": "coupled",
+      "resource": 1
+    },
+    {
+      "id": "27",
+      "suite": "slack",
+      "seed": 101,
+      "horizon": "long",
+      "coupling": "coupled",
+      "resource": 1
+    },
+    {
+      "id": "28",
+      "suite": "slack",
+      "seed": 101,
+      "horizon": "long",
+      "coupling": "independent",
+      "resource": 1
+    },
+    {
+      "id": "29",
+      "suite": "slack",
+      "seed": 103,
+      "horizon": "short",
+      "coupling": "coupled",
+      "resource": 1
+    },
+    {
+      "id": "30",
+      "suite": "slack",
+      "seed": 103,
+      "horizon": "short",
+      "coupling": "independent",
+      "resource": 1
+    },
+    {
+      "id": "31",
+      "suite": "slack",
+      "seed": 103,
+      "horizon": "long",
+      "coupling": "independent",
+      "resource": 1
+    },
+    {
+      "id": "32",
+      "suite": "slack",
+      "seed": 103,
+      "horizon": "long",
+      "coupling": "coupled",
+      "resource": 1
+    }
+  ]
+}

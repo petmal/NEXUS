@@ -25,3 +25,4 @@ docs/*
 !docs/td-cycle-matrix.json
 !docs/planning-resource-matrix.json
 !docs/coordination-matrix.json
+!docs/interference-matrix.json

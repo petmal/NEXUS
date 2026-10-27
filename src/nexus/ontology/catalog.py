@@ -137,6 +137,16 @@ class OntologyRegistry:
 REGISTRY = OntologyRegistry.from_definitions(
     (
         OntologyDefinition(
+            "stateful-interference-v1",
+            "stateful-interference-v1",
+            runtime_module="nexus.ontology.interference.runtime",
+            schema_module="nexus.ontology.interference.schema",
+            options_schema=("nexus.ontology.interference.schema", "GenerationOptions"),
+            generator=("nexus.ontology.interference.generation", "generate_episode"),
+            qualifier=("nexus.ontology.interference.qualification", "qualify"),
+            standalone_contract=True,
+        ),
+        OntologyDefinition(
             "stateful-coordination-v1",
             "stateful-coordination-v1",
             runtime_module="nexus.ontology.coordination.runtime",
