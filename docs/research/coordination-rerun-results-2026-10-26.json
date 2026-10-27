@@ -1,0 +1,2753 @@
+{
+  "version": "coordination-rerun-audit-v1",
+  "source_commit": "60536d54e6575470366195dfccb8b0d96572ae4c",
+  "runtime_source_sha256": "86a8d4568b747e17d39e0aaaff42b7f347c72ef347b32232dfb8ddee73f48a83",
+  "archive_sha256": "463a66b2b79cec3db5e8032b8b76baad3c0106e75a7128e6f5c3e351f6102a6b",
+  "suites": {
+    "core": {
+      "directory": "core-20261026T225358Z-u524i2kw",
+      "tasks": 2,
+      "result_kind_counts": {
+        "Passed": 2
+      },
+      "manifest": {
+        "command": [
+          "./mindtrial",
+          "-config=/home/petmal/Downloads/NEXUS-coordination-test-run-2026-10-25/results/core-20261026T225358Z-u524i2kw/config.yaml",
+          "-tasks=/home/petmal/Downloads/NEXUS-coordination-test-run-2026-10-25/results/core-20261026T225358Z-u524i2kw/tasks.yaml",
+          "--debug",
+          "--interactive=true",
+          "--json",
+          "--evaluation-seed=nexus-coordination-pilot-v1",
+          "run"
+        ],
+        "cwd": "/home/petmal/MindTrial",
+        "effective_config_sha256": "85f8127f5116e1056326d1442019280f997cf6d217a78da13c58e72aaf5fb263",
+        "evaluation_seed": "nexus-coordination-pilot-v1",
+        "exit_code": 0,
+        "finished_at": "2026-10-26T22:56:37.530402+00:00",
+        "image": {
+          "id": "3ec5418c338244066307c55c3e76c494315edc95733a8ccfc4644717b9ffdd3d",
+          "revision": "60536d54e6575470366195dfccb8b0d96572ae4c",
+          "tag": "nexus:coordination-v1"
+        },
+        "input_config_contract_sha256": "15d4f81289e7c9ecc073f9e30a8066c0d4c19930dfe3b87901a52f58116dcb6e",
+        "input_config_file": "nexus-coordination-config.yaml",
+        "input_config_matches_release": true,
+        "input_config_sha256": "a310d87b2cb363831995e5c2413c2e212ac37b442a4170bfa8b1163b50d0d24e",
+        "invocation_timestamp": "2026-10-26T22:53:18.823140+00:00",
+        "mindtrial_binary": "/home/petmal/MindTrial/mindtrial",
+        "mindtrial_sha256": "ae1a39c9a1aba55e0d0301ecfa8667a3d7d0794e093c9784634e813251f98a5b",
+        "output_dir": "/home/petmal/Downloads/NEXUS-coordination-test-run-2026-10-25/results/core-20261026T225358Z-u524i2kw",
+        "runtime_source_sha256": "86a8d4568b747e17d39e0aaaff42b7f347c72ef347b32232dfb8ddee73f48a83",
+        "source_branch": "feat/planning-resource-axes",
+        "source_commit": "60536d54e6575470366195dfccb8b0d96572ae4c",
+        "started_at": "2026-10-26T22:53:58.975487+00:00",
+        "status": "completed",
+        "suite": "core",
+        "tasks_sha256": "b797d1374ec1021120ce67cd75acbde03ab07b0ad2d835d046ee343605bfd206",
+        "version": "coordination-run-v1"
+      },
+      "app_version": "v0.25.3-0.20261017164258-00dada61a962",
+      "file_sha256": {
+        "manifest.json": "ebb73839949ed4e79770a8a531889fc6c5a4ccf21a21446f2efd34cec0bd8f70",
+        "mindtrial.html": "65c0c3a0046d05e8effee5fab0c18969c2d2fa5cf678eede15f5402077136bd6",
+        "mindtrial.json": "ba68176da3416a057caea8781560512d52d703d937e47614640f896fcd88f5eb",
+        "preflight.json": "609452ddabc51d09727b4578128e0d03839e93df63ee2f9aeedbd68df1fac44b",
+        "mindtrial.log": "98ef2acbf6fb44a78abbf7a9261dfa6ab2df4ec873b41289810dfe111b733c0a",
+        "config.yaml": "85f8127f5116e1056326d1442019280f997cf6d217a78da13c58e72aaf5fb263",
+        "input-config.yaml": "a310d87b2cb363831995e5c2413c2e212ac37b442a4170bfa8b1163b50d0d24e",
+        "tasks.yaml": "b797d1374ec1021120ce67cd75acbde03ab07b0ad2d835d046ee343605bfd206",
+        "release.json": "ad93ab33568837bb4d1df7cffb3d00f1514546e24a50e67d63e762c1623a90e6"
+      },
+      "wall_seconds": 158.554915,
+      "input_bindings_verified": true,
+      "actions": 22,
+      "calls": 34,
+      "supported_wins": 2,
+      "request_seconds": 106.429285053,
+      "tool_seconds": 21.575025568,
+      "usage": {
+        "InputTokens": 164176,
+        "OutputTokens": 2560,
+        "ReasoningTokens": 1395,
+        "InputCacheReadTokens": 146000,
+        "InputCacheWriteTokens": 16480
+      }
+    },
+    "slack": {
+      "directory": "slack-20261026T225720Z-itcq0hu5",
+      "tasks": 2,
+      "result_kind_counts": {
+        "Passed": 2
+      },
+      "manifest": {
+        "command": [
+          "./mindtrial",
+          "-config=/home/petmal/Downloads/NEXUS-coordination-test-run-2026-10-25/results/slack-20261026T225720Z-itcq0hu5/config.yaml",
+          "-tasks=/home/petmal/Downloads/NEXUS-coordination-test-run-2026-10-25/results/slack-20261026T225720Z-itcq0hu5/tasks.yaml",
+          "--debug",
+          "--interactive=true",
+          "--json",
+          "--evaluation-seed=nexus-coordination-pilot-v1",
+          "run"
+        ],
+        "cwd": "/home/petmal/MindTrial",
+        "effective_config_sha256": "1fc9dc3d146da3cadd8ec5ff006001d347d18d1868fde2db312783dda844a624",
+        "evaluation_seed": "nexus-coordination-pilot-v1",
+        "exit_code": 0,
+        "finished_at": "2026-10-26T22:59:42.314937+00:00",
+        "image": {
+          "id": "3ec5418c338244066307c55c3e76c494315edc95733a8ccfc4644717b9ffdd3d",
+          "revision": "60536d54e6575470366195dfccb8b0d96572ae4c",
+          "tag": "nexus:coordination-v1"
+        },
+        "input_config_contract_sha256": "15d4f81289e7c9ecc073f9e30a8066c0d4c19930dfe3b87901a52f58116dcb6e",
+        "input_config_file": "nexus-coordination-config.yaml",
+        "input_config_matches_release": true,
+        "input_config_sha256": "a310d87b2cb363831995e5c2413c2e212ac37b442a4170bfa8b1163b50d0d24e",
+        "invocation_timestamp": "2026-10-26T22:56:45.843413+00:00",
+        "mindtrial_binary": "/home/petmal/MindTrial/mindtrial",
+        "mindtrial_sha256": "ae1a39c9a1aba55e0d0301ecfa8667a3d7d0794e093c9784634e813251f98a5b",
+        "output_dir": "/home/petmal/Downloads/NEXUS-coordination-test-run-2026-10-25/results/slack-20261026T225720Z-itcq0hu5",
+        "runtime_source_sha256": "86a8d4568b747e17d39e0aaaff42b7f347c72ef347b32232dfb8ddee73f48a83",
+        "source_branch": "feat/planning-resource-axes",
+        "source_commit": "60536d54e6575470366195dfccb8b0d96572ae4c",
+        "started_at": "2026-10-26T22:57:20.041907+00:00",
+        "status": "completed",
+        "suite": "slack",
+        "tasks_sha256": "1535961cb516d6ce8adf93aab99e35a092ed9322830ddd2f50c2532417fea9a1",
+        "version": "coordination-run-v1"
+      },
+      "app_version": "v0.25.3-0.20261017164258-00dada61a962",
+      "file_sha256": {
+        "manifest.json": "2b1b57ec3eed886a48744525093015ceab12a5bfd0240de1838bf542a6e4497e",
+        "mindtrial.html": "9c255904acd54b1e2e7bf3b3c5b96c7bcee5712e9bd0d9f7b41ed64da4ed3483",
+        "mindtrial.json": "9cabe7a9cdc2f60ca4e3289b6bb766f00432656f844942c5cdd40931c5709acc",
+        "preflight.json": "1a6562a689f86e5f0c23e0c19dd4d40d67e5b5ad86ce78508e2ed9b212aee9f1",
+        "mindtrial.log": "498ceddc6a795628b711cba323b776ea546dd6232e29ee6b451c7519b11809f5",
+        "config.yaml": "1fc9dc3d146da3cadd8ec5ff006001d347d18d1868fde2db312783dda844a624",
+        "input-config.yaml": "a310d87b2cb363831995e5c2413c2e212ac37b442a4170bfa8b1163b50d0d24e",
+        "tasks.yaml": "1535961cb516d6ce8adf93aab99e35a092ed9322830ddd2f50c2532417fea9a1",
+        "release.json": "ad93ab33568837bb4d1df7cffb3d00f1514546e24a50e67d63e762c1623a90e6"
+      },
+      "wall_seconds": 142.27303,
+      "input_bindings_verified": true,
+      "actions": 25,
+      "calls": 37,
+      "supported_wins": 2,
+      "request_seconds": 94.861198741,
+      "tool_seconds": 22.561664554,
+      "usage": {
+        "InputTokens": 184366,
+        "OutputTokens": 2313,
+        "ReasoningTokens": 1033,
+        "InputCacheReadTokens": 165501,
+        "InputCacheWriteTokens": 17160
+      }
+    }
+  },
+  "rows": [
+    {
+      "suite": "core",
+      "task": "NEXUS coordination-09",
+      "row_id": "09",
+      "seed": 41,
+      "family": "stateful-coordination-v1",
+      "theory": 0,
+      "planning": 0,
+      "resource": 2,
+      "options": {
+        "banks": 3,
+        "registers_per_bank": 2,
+        "coupling": "independent"
+      },
+      "kind": "Passed",
+      "trace_id": "01M5X6QMD37JJ7KF1RZQE1V1QT",
+      "calls": 18,
+      "actions": 12,
+      "budget": 12,
+      "minimum": 12,
+      "baseline": 12,
+      "excess_actions": 0,
+      "classification": "supported_win",
+      "submissions": [
+        {
+          "turn": 12,
+          "won": true,
+          "accepting_worlds": 1,
+          "remaining_worlds": 1,
+          "supported": true,
+          "candidate_states": [
+            [
+              1,
+              1,
+              1,
+              1,
+              1,
+              2
+            ]
+          ]
+        }
+      ],
+      "performance": {
+        "version": "mission-performance-v3",
+        "ontology": "stateful-coordination-v1",
+        "experimental": true,
+        "terminal_status": "won",
+        "termination_reason": "victory",
+        "actions_used": 12,
+        "initial_action_budget": 12,
+        "budget_remaining": 0,
+        "action_counts": {
+          "take": 1,
+          "operate": 10,
+          "finish": 1
+        },
+        "measurements_used": 10,
+        "informative_measurements": 0,
+        "target_reducing_measurements": 0,
+        "redundant_measurements": 10,
+        "target_classes_before_first_submission": 1,
+        "first_submission_correct": true,
+        "mission_submissions": 1,
+        "failed_finishes": 0,
+        "final_submission_correct": true,
+        "invalid_actions": 0,
+        "duplicate_requests": 0,
+        "protocol_conflicts": 0,
+        "certificate": {
+          "family": "stateful-coordination-v1",
+          "status": "experimental-public-reference-qualified",
+          "empirical_difficulty_calibrated": false,
+          "map_visibility": "complete",
+          "law_visibility": "complete",
+          "state_visibility": "complete",
+          "reference_kind": "exact-known-law-optimum",
+          "reference_action_upper": 12,
+          "action_budget": 12,
+          "resource_allowance": 0,
+          "scope": "Exact joint state/location minimum including take, travel, operations and finish. R2 allows exactly that minimum; R1 adds max(6,ceil(minimum/2)); R0 is uncapped. Both paired targets are reachable and the coupled P0 optimum strictly beats every bank-contiguous solution. Structural sizes are not calibrated difficulty."
+        },
+        "target_count_meaning": "distinct winning-set signatures; not exclusive target classes",
+        "measurements_establishing_guaranteed_repair": 1,
+        "common_repairs_before_first_submission": 1,
+        "first_submission_supported_by_evidence": true,
+        "measurements_after_guaranteed_repair": 0,
+        "decision_diagnostics": {
+          "version": "decision-diagnostics-v1",
+          "escape_classification": "supported_win",
+          "physical_goal_satisfied": true,
+          "correct_state_without_successful_finish": false,
+          "final_evidence": {
+            "remaining_worlds": 1,
+            "winning_set_signatures": 1,
+            "common_repairs": 1,
+            "accepting_worlds": 1,
+            "classification": "guaranteed"
+          },
+          "submissions": [
+            {
+              "turn": 12,
+              "won": true,
+              "evidence": {
+                "remaining_worlds": 1,
+                "winning_set_signatures": 1,
+                "common_repairs": 1,
+                "accepting_worlds": 1,
+                "classification": "guaranteed"
+              }
+            }
+          ],
+          "measured_contexts": [
+            0,
+            1,
+            3,
+            4,
+            6,
+            7
+          ],
+          "passive_measurements": 0,
+          "intervention_measurements": 10,
+          "no_signal_measurements": 0,
+          "first_intervention_turn": 2,
+          "first_intervention_measurement": 1,
+          "first_guaranteed_repair_turn": 11,
+          "readings": null
+        }
+      },
+      "state_trace": [
+        {
+          "turn": 1,
+          "action": {
+            "artifact": "seal",
+            "type": "take"
+          },
+          "state": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "room": "array",
+          "no_change": false,
+          "line": 156
+        },
+        {
+          "turn": 2,
+          "action": {
+            "artifact": "seal",
+            "machine": "bank0_r0",
+            "type": "operate"
+          },
+          "state": [
+            2,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "room": "array",
+          "no_change": false,
+          "line": 175
+        },
+        {
+          "turn": 3,
+          "action": {
+            "artifact": "seal",
+            "machine": "bank0_r0",
+            "type": "operate"
+          },
+          "state": [
+            1,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "room": "array",
+          "no_change": false,
+          "line": 194
+        },
+        {
+          "turn": 4,
+          "action": {
+            "artifact": "seal",
+            "machine": "bank0_r1",
+            "type": "operate"
+          },
+          "state": [
+            1,
+            1,
+            0,
+            0,
+            0,
+            0
+          ],
+          "room": "array",
+          "no_change": false,
+          "line": 213
+        },
+        {
+          "turn": 5,
+          "action": {
+            "artifact": "seal",
+            "machine": "bank1_r0",
+            "type": "operate"
+          },
+          "state": [
+            1,
+            1,
+            1,
+            0,
+            0,
+            0
+          ],
+          "room": "array",
+          "no_change": false,
+          "line": 232
+        },
+        {
+          "turn": 6,
+          "action": {
+            "artifact": "seal",
+            "machine": "bank1_r1",
+            "type": "operate"
+          },
+          "state": [
+            1,
+            1,
+            1,
+            2,
+            0,
+            0
+          ],
+          "room": "array",
+          "no_change": false,
+          "line": 251
+        },
+        {
+          "turn": 7,
+          "action": {
+            "artifact": "seal",
+            "machine": "bank1_r1",
+            "type": "operate"
+          },
+          "state": [
+            1,
+            1,
+            1,
+            1,
+            0,
+            0
+          ],
+          "room": "array",
+          "no_change": false,
+          "line": 270
+        },
+        {
+          "turn": 8,
+          "action": {
+            "artifact": "seal",
+            "machine": "bank2_r1",
+            "type": "operate"
+          },
+          "state": [
+            1,
+            1,
+            1,
+            1,
+            0,
+            2
+          ],
+          "room": "array",
+          "no_change": false,
+          "line": 289
+        },
+        {
+          "turn": 9,
+          "action": {
+            "artifact": "seal",
+            "machine": "bank2_r1",
+            "type": "operate"
+          },
+          "state": [
+            1,
+            1,
+            1,
+            1,
+            0,
+            1
+          ],
+          "room": "array",
+          "no_change": false,
+          "line": 308
+        },
+        {
+          "turn": 10,
+          "action": {
+            "artifact": "seal",
+            "machine": "bank2_r0",
+            "type": "operate"
+          },
+          "state": [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          "room": "array",
+          "no_change": false,
+          "line": 327
+        },
+        {
+          "turn": 11,
+          "action": {
+            "artifact": "seal",
+            "machine": "bank2_r1",
+            "type": "operate"
+          },
+          "state": [
+            1,
+            1,
+            1,
+            1,
+            1,
+            2
+          ],
+          "room": "array",
+          "no_change": false,
+          "line": 346
+        },
+        {
+          "turn": 12,
+          "action": {
+            "type": "finish"
+          },
+          "state": [
+            1,
+            1,
+            1,
+            1,
+            1,
+            2
+          ],
+          "room": "array",
+          "no_change": false,
+          "line": 365
+        }
+      ],
+      "request_sequence": [
+        {
+          "operation": "manifest"
+        },
+        {
+          "operation": "observe"
+        },
+        {
+          "filename": "apparatus.txt",
+          "operation": "evidence"
+        },
+        {
+          "filename": "facility.txt",
+          "operation": "evidence"
+        },
+        {
+          "filename": "layout.json",
+          "operation": "evidence"
+        },
+        {
+          "filename": "theory.json",
+          "operation": "evidence"
+        },
+        {
+          "operation": "action",
+          "action": {
+            "artifact": "seal",
+            "type": "take"
+          }
+        },
+        {
+          "operation": "action",
+          "action": {
+            "artifact": "seal",
+            "machine": "bank0_r0",
+            "type": "operate"
+          }
+        },
+        {
+          "operation": "action",
+          "action": {
+            "artifact": "seal",
+            "machine": "bank0_r0",
+            "type": "operate"
+          }
+        },
+        {
+          "operation": "action",
+          "action": {
+            "artifact": "seal",
+            "machine": "bank0_r1",
+            "type": "operate"
+          }
+        },
+        {
+          "operation": "action",
+          "action": {
+            "artifact": "seal",
+            "machine": "bank1_r0",
+            "type": "operate"
+          }
+        },
+        {
+          "operation": "action",
+          "action": {
+            "artifact": "seal",
+            "machine": "bank1_r1",
+            "type": "operate"
+          }
+        },
+        {
+          "operation": "action",
+          "action": {
+            "artifact": "seal",
+            "machine": "bank1_r1",
+            "type": "operate"
+          }
+        },
+        {
+          "operation": "action",
+          "action": {
+            "artifact": "seal",
+            "machine": "bank2_r1",
+            "type": "operate"
+          }
+        },
+        {
+          "operation": "action",
+          "action": {
+            "artifact": "seal",
+            "machine": "bank2_r1",
+            "type": "operate"
+          }
+        },
+        {
+          "operation": "action",
+          "action": {
+            "artifact": "seal",
+            "machine": "bank2_r0",
+            "type": "operate"
+          }
+        },
+        {
+          "operation": "action",
+          "action": {
+            "artifact": "seal",
+            "machine": "bank2_r1",
+            "type": "operate"
+          }
+        },
+        {
+          "operation": "action",
+          "action": {
+            "type": "finish"
+          }
+        }
+      ],
+      "action_sha256": "62fe9d142ac45e085903a73b77d4da3890242cfc182c2cf06101b027e8913b3c",
+      "bank_word": [
+        0,
+        0,
+        0,
+        1,
+        1,
+        1,
+        2,
+        2,
+        2,
+        2
+      ],
+      "bank_blocks": [
+        0,
+        1,
+        2
+      ],
+      "bank_revisits": 0,
+      "no_change_operations": 0,
+      "independent_belief_trace": [],
+      "available_hash_records_matched": 3,
+      "operator_reports": 1,
+      "public_replay_verified": true,
+      "public_response_count": 18,
+      "same_run_config_as_original": true,
+      "usage": {
+        "InputTokens": 85311,
+        "OutputTokens": 889,
+        "ReasoningTokens": 269,
+        "InputCacheWriteTokens": 8168,
+        "InputCacheReadTokens": 76292,
+        "InputTokenAccounting": "cache_tokens_included",
+        "OutputTokenAccounting": "reasoning_tokens_included"
+      },
+      "request_seconds": 42.840821594,
+      "tool_seconds": 11.770055243,
+      "tool_wall_seconds": 14.406910489,
+      "first_tool_start": "2026-10-26T18:54:18.845971488-04:00",
+      "last_tool_end": "2026-10-26T18:55:11.099560747-04:00",
+      "independent_operation_efficiency": [
+        {
+          "turn": 2,
+          "machine": "bank0_r0",
+          "distance_before": 10,
+          "distance_after": 9,
+          "excess_operations_introduced": 0
+        },
+        {
+          "turn": 3,
+          "machine": "bank0_r0",
+          "distance_before": 9,
+          "distance_after": 8,
+          "excess_operations_introduced": 0
+        },
+        {
+          "turn": 4,
+          "machine": "bank0_r1",
+          "distance_before": 8,
+          "distance_after": 7,
+          "excess_operations_introduced": 0
+        },
+        {
+          "turn": 5,
+          "machine": "bank1_r0",
+          "distance_before": 7,
+          "distance_after": 6,
+          "excess_operations_introduced": 0
+        },
+        {
+          "turn": 6,
+          "machine": "bank1_r1",
+          "distance_before": 6,
+          "distance_after": 5,
+          "excess_operations_introduced": 0
+        },
+        {
+          "turn": 7,
+          "machine": "bank1_r1",
+          "distance_before": 5,
+          "distance_after": 4,
+          "excess_operations_introduced": 0
+        },
+        {
+          "turn": 8,
+          "machine": "bank2_r1",
+          "distance_before": 4,
+          "distance_after": 3,
+          "excess_operations_introduced": 0
+        },
+        {
+          "turn": 9,
+          "machine": "bank2_r1",
+          "distance_before": 3,
+          "distance_after": 2,
+          "excess_operations_introduced": 0
+        },
+        {
+          "turn": 10,
+          "machine": "bank2_r0",
+          "distance_before": 2,
+          "distance_after": 1,
+          "excess_operations_introduced": 0
+        },
+        {
+          "turn": 11,
+          "machine": "bank2_r1",
+          "distance_before": 1,
+          "distance_after": 0,
+          "excess_operations_introduced": 0
+        }
+      ],
+      "independent_minimum_verified": true,
+      "original_comparison": {
+        "original_kind": "Passed",
+        "original_classification": "supported_win",
+        "original_actions": 12,
+        "original_calls": 18,
+        "original_action_sha256": "c926a3d646e03f4ab487665d9ad498aa93780d889e0fe611ce63b94e576dd99d",
+        "same_action_sequence": false,
+        "same_request_sequence": false,
+        "first_action_divergence": 8,
+        "original_reasoning_tokens": 279,
+        "reasoning_token_delta": -10,
+        "original_action_sequence": [
+          {
+            "artifact": "seal",
+            "type": "take"
+          },
+          {
+            "artifact": "seal",
+            "machine": "bank0_r0",
+            "type": "operate"
+          },
+          {
+            "artifact": "seal",
+            "machine": "bank0_r0",
+            "type": "operate"
+          },
+          {
+            "artifact": "seal",
+            "machine": "bank0_r1",
+            "type": "operate"
+          },
+          {
+            "artifact": "seal",
+            "machine": "bank1_r0",
+            "type": "operate"
+          },
+          {
+            "artifact": "seal",
+            "machine": "bank1_r1",
+            "type": "operate"
+          },
+          {
+            "artifact": "seal",
+            "machine": "bank1_r1",
+            "type": "operate"
+          },
+          {
+            "artifact": "seal",
+            "machine": "bank2_r0",
+            "type": "operate"
+          },
+          {
+            "artifact": "seal",
+            "machine": "bank2_r0",
+            "type": "operate"
+          },
+          {
+            "artifact": "seal",
+            "machine": "bank2_r1",
+            "type": "operate"
+          },
+          {
+            "artifact": "seal",
+            "machine": "bank2_r1",
+            "type": "operate"
+          },
+          {
+            "type": "finish"
+          }
+        ]
+      }
+    },
+    {
+      "suite": "core",
+      "task": "NEXUS coordination-10",
+      "row_id": "10",
+      "seed": 41,
+      "family": "stateful-coordination-v1",
+      "theory": 0,
+      "planning": 0,
+      "resource": 2,
+      "options": {
+        "banks": 3,
+        "registers_per_bank": 2,
+        "coupling": "coupled"
+      },
+      "kind": "Passed",
+      "trace_id": "01M5X6SMFSMPAMJFGZ22ES4QJF",
+      "calls": 16,
+      "actions": 10,
+      "budget": 10,
+      "minimum": 10,
+      "baseline": 11,
+      "excess_actions": 0,
+      "classification": "supported_win",
+      "submissions": [
+        {
+          "turn": 10,
+          "won": true,
+          "accepting_worlds": 1,
+          "remaining_worlds": 1,
+          "supported": true,
+          "candidate_states": [
+            [
+              1,
+              1,
+              1,
+              1,
+              1,
+              2
+            ]
+          ]
+        }
+      ],
+      "performance": {
+        "version": "mission-performance-v3",
+        "ontology": "stateful-coordination-v1",
+        "experimental": true,
+        "terminal_status": "won",
+        "termination_reason": "victory",
+        "actions_used": 10,
+        "initial_action_budget": 10,
+        "budget_remaining": 0,
+        "action_counts": {
+          "take": 1,
+          "operate": 8,
+          "finish": 1
+        },
+        "measurements_used": 8,
+        "informative_measurements": 0,
+        "target_reducing_measurements": 0,
+        "redundant_measurements": 8,
+        "target_classes_before_first_submission": 1,
+        "first_submission_correct": true,
+        "mission_submissions": 1,
+        "failed_finishes": 0,
+        "final_submission_correct": true,
+        "invalid_actions": 0,
+        "duplicate_requests": 0,
+        "protocol_conflicts": 0,
+        "certificate": {
+          "family": "stateful-coordination-v1",
+          "status": "experimental-public-reference-qualified",
+          "empirical_difficulty_calibrated": false,
+          "map_visibility": "complete",
+          "law_visibility": "complete",
+          "state_visibility": "complete",
+          "reference_kind": "exact-known-law-optimum",
+          "reference_action_upper": 10,
+          "action_budget": 10,
+          "resource_allowance": 0,
+          "scope": "Exact joint state/location minimum including take, travel, operations and finish. R2 allows exactly that minimum; R1 adds max(6,ceil(minimum/2)); R0 is uncapped. Both paired targets are reachable and the coupled P0 optimum strictly beats every bank-contiguous solution. Structural sizes are not calibrated difficulty."
+        },
+        "target_count_meaning": "distinct winning-set signatures; not exclusive target classes",
+        "measurements_establishing_guaranteed_repair": 1,
+        "common_repairs_before_first_submission": 1,
+        "first_submission_supported_by_evidence": true,
+        "measurements_after_guaranteed_repair": 0,
+        "decision_diagnostics": {
+          "version": "decision-diagnostics-v1",
+          "escape_classification": "supported_win",
+          "physical_goal_satisfied": true,
+          "correct_state_without_successful_finish": false,
+          "final_evidence": {
+            "remaining_worlds": 1,
+            "winning_set_signatures": 1,
+            "common_repairs": 1,
+            "accepting_worlds": 1,
+            "classification": "guaranteed"
+          },
+          "submissions": [
+            {
+              "turn": 10,
+              "won": true,
+              "evidence": {
+                "remaining_worlds": 1,
+                "winning_set_signatures": 1,
+                "common_repairs": 1,
+                "accepting_worlds": 1,
+                "classification": "guaranteed"
+              }
+            }
+          ],
+          "measured_contexts": [
+            0,
+            1,
+            3,
+            4,
+            6,
+            7
+          ],
+          "passive_measurements": 0,
+          "intervention_measurements": 8,
+          "no_signal_measurements": 0,
+          "first_intervention_turn": 2,
+          "first_intervention_measurement": 1,
+          "first_guaranteed_repair_turn": 9,
+          "readings": null
+        }
+      },
+      "state_trace": [
+        {
+          "turn": 1,
+          "action": {
+            "artifact": "seal",
+            "type": "take"
+          },
+          "state": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "room": "array",
+          "no_change": false,
+          "line": 632
+        },
+        {
+          "turn": 2,
+          "action": {
+            "artifact": "seal",
+            "machine": "bank2_r0",
+            "type": "operate"
+          },
+          "state": [
+            0,
+            0,
+            0,
+            0,
+            2,
+            0
+          ],
+          "room": "array",
+          "no_change": false,
+          "line": 651
+        },
+        {
+          "turn": 3,
+          "action": {
+            "artifact": "seal",
+            "machine": "bank1_r0",
+            "type": "operate"
+          },
+          "state": [
+            0,
+            0,
+            1,
+            0,
+            2,
+            0
+          ],
+          "room": "array",
+          "no_change": false,
+          "line": 670
+        },
+        {
+          "turn": 4,
+          "action": {
+            "artifact": "seal",
+            "machine": "bank1_r1",
+            "type": "operate"
+          },
+          "state": [
+            0,
+            0,
+            1,
+            1,
+            2,
+            0
+          ],
+          "room": "array",
+          "no_change": false,
+          "line": 689
+        },
+        {
+          "turn": 5,
+          "action": {
+            "artifact": "seal",
+            "machine": "bank2_r0",
+            "type": "operate"
+          },
+          "state": [
+            0,
+            0,
+            1,
+            1,
+            1,
+            0
+          ],
+          "room": "array",
+          "no_change": false,
+          "line": 708
+        },
+        {
+          "turn": 6,
+          "action": {
+            "artifact": "seal",
+            "machine": "bank2_r1",
+            "type": "operate"
+          },
+          "state": [
+            0,
+            0,
+            1,
+            1,
+            1,
+            1
+          ],
+          "room": "array",
+          "no_change": false,
+          "line": 727
+        },
+        {
+          "turn": 7,
+          "action": {
+            "artifact": "seal",
+            "machine": "bank2_r1",
+            "type": "operate"
+          },
+          "state": [
+            0,
+            0,
+            1,
+            1,
+            1,
+            2
+          ],
+          "room": "array",
+          "no_change": false,
+          "line": 746
+        },
+        {
+          "turn": 8,
+          "action": {
+            "artifact": "seal",
+            "machine": "bank0_r1",
+            "type": "operate"
+          },
+          "state": [
+            0,
+            1,
+            1,
+            1,
+            1,
+            2
+          ],
+          "room": "array",
+          "no_change": false,
+          "line": 765
+        },
+        {
+          "turn": 9,
+          "action": {
+            "artifact": "seal",
+            "machine": "bank0_r0",
+            "type": "operate"
+          },
+          "state": [
+            1,
+            1,
+            1,
+            1,
+            1,
+            2
+          ],
+          "room": "array",
+          "no_change": false,
+          "line": 784
+        },
+        {
+          "turn": 10,
+          "action": {
+            "type": "finish"
+          },
+          "state": [
+            1,
+            1,
+            1,
+            1,
+            1,
+            2
+          ],
+          "room": "array",
+          "no_change": false,
+          "line": 803
+        }
+      ],
+      "request_sequence": [
+        {
+          "operation": "manifest"
+        },
+        {
+          "operation": "observe"
+        },
+        {
+          "filename": "apparatus.txt",
+          "operation": "evidence"
+        },
+        {
+          "filename": "facility.txt",
+          "operation": "evidence"
+        },
+        {
+          "filename": "layout.json",
+          "operation": "evidence"
+        },
+        {
+          "filename": "theory.json",
+          "operation": "evidence"
+        },
+        {
+          "operation": "action",
+          "action": {
+            "artifact": "seal",
+            "type": "take"
+          }
+        },
+        {
+          "operation": "action",
+          "action": {
+            "artifact": "seal",
+            "machine": "bank2_r0",
+            "type": "operate"
+          }
+        },
+        {
+          "operation": "action",
+          "action": {
+            "artifact": "seal",
+            "machine": "bank1_r0",
+            "type": "operate"
+          }
+        },
+        {
+          "operation": "action",
+          "action": {
+            "artifact": "seal",
+            "machine": "bank1_r1",
+            "type": "operate"
+          }
+        },
+        {
+          "operation": "action",
+          "action": {
+            "artifact": "seal",
+            "machine": "bank2_r0",
+            "type": "operate"
+          }
+        },
+        {
+          "operation": "action",
+          "action": {
+            "artifact": "seal",
+            "machine": "bank2_r1",
+            "type": "operate"
+          }
+        },
+        {
+          "operation": "action",
+          "action": {
+            "artifact": "seal",
+            "machine": "bank2_r1",
+            "type": "operate"
+          }
+        },
+        {
+          "operation": "action",
+          "action": {
+            "artifact": "seal",
+            "machine": "bank0_r1",
+            "type": "operate"
+          }
+        },
+        {
+          "operation": "action",
+          "action": {
+            "artifact": "seal",
+            "machine": "bank0_r0",
+            "type": "operate"
+          }
+        },
+        {
+          "operation": "action",
+          "action": {
+            "type": "finish"
+          }
+        }
+      ],
+      "action_sha256": "467a67934d5f57a89082ee39fc9f734f7d6d8cc70b4dd6698b29c7c5ae266891",
+      "bank_word": [
+        2,
+        1,
+        1,
+        2,
+        2,
+        2,
+        0,
+        0
+      ],
+      "bank_blocks": [
+        2,
+        1,
+        2,
+        0
+      ],
+      "bank_revisits": 1,
+      "no_change_operations": 0,
+      "independent_belief_trace": [],
+      "available_hash_records_matched": 3,
+      "operator_reports": 1,
+      "public_replay_verified": true,
+      "public_response_count": 16,
+      "same_run_config_as_original": true,
+      "usage": {
+        "InputTokens": 78865,
+        "OutputTokens": 1671,
+        "ReasoningTokens": 1126,
+        "InputCacheWriteTokens": 8312,
+        "InputCacheReadTokens": 69708,
+        "InputTokenAccounting": "cache_tokens_included",
+        "OutputTokenAccounting": "reasoning_tokens_included"
+      },
+      "request_seconds": 63.588463459,
+      "tool_seconds": 9.804970325,
+      "tool_wall_seconds": 12.548685141,
+      "first_tool_start": "2026-10-26T18:55:21.52423303-04:00",
+      "last_tool_end": "2026-10-26T18:56:33.409332674-04:00",
+      "independent_operation_efficiency": [
+        {
+          "turn": 2,
+          "machine": "bank2_r0",
+          "distance_before": 8,
+          "distance_after": 7,
+          "excess_operations_introduced": 0
+        },
+        {
+          "turn": 3,
+          "machine": "bank1_r0",
+          "distance_before": 7,
+          "distance_after": 6,
+          "excess_operations_introduced": 0
+        },
+        {
+          "turn": 4,
+          "machine": "bank1_r1",
+          "distance_before": 6,
+          "distance_after": 5,
+          "excess_operations_introduced": 0
+        },
+        {
+          "turn": 5,
+          "machine": "bank2_r0",
+          "distance_before": 5,
+          "distance_after": 4,
+          "excess_operations_introduced": 0
+        },
+        {
+          "turn": 6,
+          "machine": "bank2_r1",
+          "distance_before": 4,
+          "distance_after": 3,
+          "excess_operations_introduced": 0
+        },
+        {
+          "turn": 7,
+          "machine": "bank2_r1",
+          "distance_before": 3,
+          "distance_after": 2,
+          "excess_operations_introduced": 0
+        },
+        {
+          "turn": 8,
+          "machine": "bank0_r1",
+          "distance_before": 2,
+          "distance_after": 1,
+          "excess_operations_introduced": 0
+        },
+        {
+          "turn": 9,
+          "machine": "bank0_r0",
+          "distance_before": 1,
+          "distance_after": 0,
+          "excess_operations_introduced": 0
+        }
+      ],
+      "independent_minimum_verified": true,
+      "original_comparison": {
+        "original_kind": "Failed",
+        "original_classification": "not_won",
+        "original_actions": 10,
+        "original_calls": 18,
+        "original_action_sha256": "4c22401fa0a8aca7b4b59fd064f9ef070adf8e5697aca4795d8c960a0a271acc",
+        "same_action_sequence": false,
+        "same_request_sequence": false,
+        "first_action_divergence": 2,
+        "original_reasoning_tokens": 1982,
+        "reasoning_token_delta": -856,
+        "original_action_sequence": [
+          {
+            "artifact": "seal",
+            "type": "take"
+          },
+          {
+            "artifact": "seal",
+            "machine": "bank1_r1",
+            "type": "operate"
+          },
+          {
+            "artifact": "seal",
+            "machine": "bank1_r0",
+            "type": "operate"
+          },
+          {
+            "artifact": "seal",
+            "machine": "bank1_r0",
+            "type": "operate"
+          },
+          {
+            "artifact": "seal",
+            "machine": "bank0_r1",
+            "type": "operate"
+          },
+          {
+            "artifact": "seal",
+            "machine": "bank2_r1",
+            "type": "operate"
+          },
+          {
+            "artifact": "seal",
+            "machine": "bank2_r1",
+            "type": "operate"
+          },
+          {
+            "artifact": "seal",
+            "machine": "bank2_r0",
+            "type": "operate"
+          },
+          {
+            "artifact": "seal",
+            "machine": "bank2_r1",
+            "type": "operate"
+          },
+          {
+            "artifact": "seal",
+            "machine": "bank0_r0",
+            "type": "operate"
+          }
+        ]
+      }
+    },
+    {
+      "suite": "slack",
+      "task": "NEXUS coordination-33",
+      "row_id": "33",
+      "seed": 41,
+      "family": "stateful-coordination-v1",
+      "theory": 0,
+      "planning": 0,
+      "resource": 1,
+      "options": {
+        "banks": 3,
+        "registers_per_bank": 2,
+        "coupling": "independent"
+      },
+      "kind": "Passed",
+      "trace_id": "01M5X6XP2D48ERWNE0ZXWTJ8B9",
+      "calls": 18,
+      "actions": 12,
+      "budget": 18,
+      "minimum": 12,
+      "baseline": 12,
+      "excess_actions": 0,
+      "classification": "supported_win",
+      "submissions": [
+        {
+          "turn": 12,
+          "won": true,
+          "accepting_worlds": 1,
+          "remaining_worlds": 1,
+          "supported": true,
+          "candidate_states": [
+            [
+              1,
+              1,
+              1,
+              1,
+              1,
+              2
+            ]
+          ]
+        }
+      ],
+      "performance": {
+        "version": "mission-performance-v3",
+        "ontology": "stateful-coordination-v1",
+        "experimental": true,
+        "terminal_status": "won",
+        "termination_reason": "victory",
+        "actions_used": 12,
+        "initial_action_budget": 18,
+        "budget_remaining": 6,
+        "action_counts": {
+          "take": 1,
+          "operate": 10,
+          "finish": 1
+        },
+        "measurements_used": 10,
+        "informative_measurements": 0,
+        "target_reducing_measurements": 0,
+        "redundant_measurements": 10,
+        "target_classes_before_first_submission": 1,
+        "first_submission_correct": true,
+        "mission_submissions": 1,
+        "failed_finishes": 0,
+        "final_submission_correct": true,
+        "invalid_actions": 0,
+        "duplicate_requests": 0,
+        "protocol_conflicts": 0,
+        "certificate": {
+          "family": "stateful-coordination-v1",
+          "status": "experimental-public-reference-qualified",
+          "empirical_difficulty_calibrated": false,
+          "map_visibility": "complete",
+          "law_visibility": "complete",
+          "state_visibility": "complete",
+          "reference_kind": "exact-known-law-optimum",
+          "reference_action_upper": 12,
+          "action_budget": 18,
+          "resource_allowance": 6,
+          "scope": "Exact joint state/location minimum including take, travel, operations and finish. R2 allows exactly that minimum; R1 adds max(6,ceil(minimum/2)); R0 is uncapped. Both paired targets are reachable and the coupled P0 optimum strictly beats every bank-contiguous solution. Structural sizes are not calibrated difficulty."
+        },
+        "target_count_meaning": "distinct winning-set signatures; not exclusive target classes",
+        "measurements_establishing_guaranteed_repair": 1,
+        "common_repairs_before_first_submission": 1,
+        "first_submission_supported_by_evidence": true,
+        "measurements_after_guaranteed_repair": 0,
+        "decision_diagnostics": {
+          "version": "decision-diagnostics-v1",
+          "escape_classification": "supported_win",
+          "physical_goal_satisfied": true,
+          "correct_state_without_successful_finish": false,
+          "final_evidence": {
+            "remaining_worlds": 1,
+            "winning_set_signatures": 1,
+            "common_repairs": 1,
+            "accepting_worlds": 1,
+            "classification": "guaranteed"
+          },
+          "submissions": [
+            {
+              "turn": 12,
+              "won": true,
+              "evidence": {
+                "remaining_worlds": 1,
+                "winning_set_signatures": 1,
+                "common_repairs": 1,
+                "accepting_worlds": 1,
+                "classification": "guaranteed"
+              }
+            }
+          ],
+          "measured_contexts": [
+            0,
+            1,
+            3,
+            4,
+            6,
+            7
+          ],
+          "passive_measurements": 0,
+          "intervention_measurements": 10,
+          "no_signal_measurements": 0,
+          "first_intervention_turn": 2,
+          "first_intervention_measurement": 1,
+          "first_guaranteed_repair_turn": 11,
+          "readings": null
+        }
+      },
+      "state_trace": [
+        {
+          "turn": 1,
+          "action": {
+            "artifact": "seal",
+            "type": "take"
+          },
+          "state": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "room": "array",
+          "no_change": false,
+          "line": 156
+        },
+        {
+          "turn": 2,
+          "action": {
+            "artifact": "seal",
+            "machine": "bank0_r0",
+            "type": "operate"
+          },
+          "state": [
+            2,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "room": "array",
+          "no_change": false,
+          "line": 175
+        },
+        {
+          "turn": 3,
+          "action": {
+            "artifact": "seal",
+            "machine": "bank0_r0",
+            "type": "operate"
+          },
+          "state": [
+            1,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "room": "array",
+          "no_change": false,
+          "line": 194
+        },
+        {
+          "turn": 4,
+          "action": {
+            "artifact": "seal",
+            "machine": "bank0_r1",
+            "type": "operate"
+          },
+          "state": [
+            1,
+            1,
+            0,
+            0,
+            0,
+            0
+          ],
+          "room": "array",
+          "no_change": false,
+          "line": 213
+        },
+        {
+          "turn": 5,
+          "action": {
+            "artifact": "seal",
+            "machine": "bank1_r0",
+            "type": "operate"
+          },
+          "state": [
+            1,
+            1,
+            1,
+            0,
+            0,
+            0
+          ],
+          "room": "array",
+          "no_change": false,
+          "line": 232
+        },
+        {
+          "turn": 6,
+          "action": {
+            "artifact": "seal",
+            "machine": "bank1_r1",
+            "type": "operate"
+          },
+          "state": [
+            1,
+            1,
+            1,
+            2,
+            0,
+            0
+          ],
+          "room": "array",
+          "no_change": false,
+          "line": 251
+        },
+        {
+          "turn": 7,
+          "action": {
+            "artifact": "seal",
+            "machine": "bank1_r1",
+            "type": "operate"
+          },
+          "state": [
+            1,
+            1,
+            1,
+            1,
+            0,
+            0
+          ],
+          "room": "array",
+          "no_change": false,
+          "line": 270
+        },
+        {
+          "turn": 8,
+          "action": {
+            "artifact": "seal",
+            "machine": "bank2_r0",
+            "type": "operate"
+          },
+          "state": [
+            1,
+            1,
+            1,
+            1,
+            2,
+            0
+          ],
+          "room": "array",
+          "no_change": false,
+          "line": 289
+        },
+        {
+          "turn": 9,
+          "action": {
+            "artifact": "seal",
+            "machine": "bank2_r0",
+            "type": "operate"
+          },
+          "state": [
+            1,
+            1,
+            1,
+            1,
+            1,
+            0
+          ],
+          "room": "array",
+          "no_change": false,
+          "line": 308
+        },
+        {
+          "turn": 10,
+          "action": {
+            "artifact": "seal",
+            "machine": "bank2_r1",
+            "type": "operate"
+          },
+          "state": [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          "room": "array",
+          "no_change": false,
+          "line": 327
+        },
+        {
+          "turn": 11,
+          "action": {
+            "artifact": "seal",
+            "machine": "bank2_r1",
+            "type": "operate"
+          },
+          "state": [
+            1,
+            1,
+            1,
+            1,
+            1,
+            2
+          ],
+          "room": "array",
+          "no_change": false,
+          "line": 346
+        },
+        {
+          "turn": 12,
+          "action": {
+            "type": "finish"
+          },
+          "state": [
+            1,
+            1,
+            1,
+            1,
+            1,
+            2
+          ],
+          "room": "array",
+          "no_change": false,
+          "line": 365
+        }
+      ],
+      "request_sequence": [
+        {
+          "operation": "manifest"
+        },
+        {
+          "operation": "observe"
+        },
+        {
+          "filename": "apparatus.txt",
+          "operation": "evidence"
+        },
+        {
+          "filename": "facility.txt",
+          "operation": "evidence"
+        },
+        {
+          "filename": "layout.json",
+          "operation": "evidence"
+        },
+        {
+          "filename": "theory.json",
+          "operation": "evidence"
+        },
+        {
+          "operation": "action",
+          "action": {
+            "artifact": "seal",
+            "type": "take"
+          }
+        },
+        {
+          "operation": "action",
+          "action": {
+            "artifact": "seal",
+            "machine": "bank0_r0",
+            "type": "operate"
+          }
+        },
+        {
+          "operation": "action",
+          "action": {
+            "artifact": "seal",
+            "machine": "bank0_r0",
+            "type": "operate"
+          }
+        },
+        {
+          "operation": "action",
+          "action": {
+            "artifact": "seal",
+            "machine": "bank0_r1",
+            "type": "operate"
+          }
+        },
+        {
+          "operation": "action",
+          "action": {
+            "artifact": "seal",
+            "machine": "bank1_r0",
+            "type": "operate"
+          }
+        },
+        {
+          "operation": "action",
+          "action": {
+            "artifact": "seal",
+            "machine": "bank1_r1",
+            "type": "operate"
+          }
+        },
+        {
+          "operation": "action",
+          "action": {
+            "artifact": "seal",
+            "machine": "bank1_r1",
+            "type": "operate"
+          }
+        },
+        {
+          "operation": "action",
+          "action": {
+            "artifact": "seal",
+            "machine": "bank2_r0",
+            "type": "operate"
+          }
+        },
+        {
+          "operation": "action",
+          "action": {
+            "artifact": "seal",
+            "machine": "bank2_r0",
+            "type": "operate"
+          }
+        },
+        {
+          "operation": "action",
+          "action": {
+            "artifact": "seal",
+            "machine": "bank2_r1",
+            "type": "operate"
+          }
+        },
+        {
+          "operation": "action",
+          "action": {
+            "artifact": "seal",
+            "machine": "bank2_r1",
+            "type": "operate"
+          }
+        },
+        {
+          "operation": "action",
+          "action": {
+            "type": "finish"
+          }
+        }
+      ],
+      "action_sha256": "c926a3d646e03f4ab487665d9ad498aa93780d889e0fe611ce63b94e576dd99d",
+      "bank_word": [
+        0,
+        0,
+        0,
+        1,
+        1,
+        1,
+        2,
+        2,
+        2,
+        2
+      ],
+      "bank_blocks": [
+        0,
+        1,
+        2
+      ],
+      "bank_revisits": 0,
+      "no_change_operations": 0,
+      "independent_belief_trace": [],
+      "available_hash_records_matched": 3,
+      "operator_reports": 1,
+      "public_replay_verified": true,
+      "public_response_count": 18,
+      "same_run_config_as_original": true,
+      "usage": {
+        "InputTokens": 85419,
+        "OutputTokens": 898,
+        "ReasoningTokens": 278,
+        "InputCacheWriteTokens": 8177,
+        "InputCacheReadTokens": 76391,
+        "InputTokenAccounting": "cache_tokens_included",
+        "OutputTokenAccounting": "reasoning_tokens_included"
+      },
+      "request_seconds": 40.127920184,
+      "tool_seconds": 11.110947336,
+      "tool_wall_seconds": 13.670627973,
+      "first_tool_start": "2026-10-26T18:57:33.304767573-04:00",
+      "last_tool_end": "2026-10-26T18:58:23.264270127-04:00",
+      "independent_operation_efficiency": [
+        {
+          "turn": 2,
+          "machine": "bank0_r0",
+          "distance_before": 10,
+          "distance_after": 9,
+          "excess_operations_introduced": 0
+        },
+        {
+          "turn": 3,
+          "machine": "bank0_r0",
+          "distance_before": 9,
+          "distance_after": 8,
+          "excess_operations_introduced": 0
+        },
+        {
+          "turn": 4,
+          "machine": "bank0_r1",
+          "distance_before": 8,
+          "distance_after": 7,
+          "excess_operations_introduced": 0
+        },
+        {
+          "turn": 5,
+          "machine": "bank1_r0",
+          "distance_before": 7,
+          "distance_after": 6,
+          "excess_operations_introduced": 0
+        },
+        {
+          "turn": 6,
+          "machine": "bank1_r1",
+          "distance_before": 6,
+          "distance_after": 5,
+          "excess_operations_introduced": 0
+        },
+        {
+          "turn": 7,
+          "machine": "bank1_r1",
+          "distance_before": 5,
+          "distance_after": 4,
+          "excess_operations_introduced": 0
+        },
+        {
+          "turn": 8,
+          "machine": "bank2_r0",
+          "distance_before": 4,
+          "distance_after": 3,
+          "excess_operations_introduced": 0
+        },
+        {
+          "turn": 9,
+          "machine": "bank2_r0",
+          "distance_before": 3,
+          "distance_after": 2,
+          "excess_operations_introduced": 0
+        },
+        {
+          "turn": 10,
+          "machine": "bank2_r1",
+          "distance_before": 2,
+          "distance_after": 1,
+          "excess_operations_introduced": 0
+        },
+        {
+          "turn": 11,
+          "machine": "bank2_r1",
+          "distance_before": 1,
+          "distance_after": 0,
+          "excess_operations_introduced": 0
+        }
+      ],
+      "independent_minimum_verified": true,
+      "original_comparison": {
+        "original_kind": "Passed",
+        "original_classification": "supported_win",
+        "original_actions": 12,
+        "original_calls": 18,
+        "original_action_sha256": "62fe9d142ac45e085903a73b77d4da3890242cfc182c2cf06101b027e8913b3c",
+        "same_action_sequence": false,
+        "same_request_sequence": false,
+        "first_action_divergence": 8,
+        "original_reasoning_tokens": 373,
+        "reasoning_token_delta": -95,
+        "original_action_sequence": [
+          {
+            "artifact": "seal",
+            "type": "take"
+          },
+          {
+            "artifact": "seal",
+            "machine": "bank0_r0",
+            "type": "operate"
+          },
+          {
+            "artifact": "seal",
+            "machine": "bank0_r0",
+            "type": "operate"
+          },
+          {
+            "artifact": "seal",
+            "machine": "bank0_r1",
+            "type": "operate"
+          },
+          {
+            "artifact": "seal",
+            "machine": "bank1_r0",
+            "type": "operate"
+          },
+          {
+            "artifact": "seal",
+            "machine": "bank1_r1",
+            "type": "operate"
+          },
+          {
+            "artifact": "seal",
+            "machine": "bank1_r1",
+            "type": "operate"
+          },
+          {
+            "artifact": "seal",
+            "machine": "bank2_r1",
+            "type": "operate"
+          },
+          {
+            "artifact": "seal",
+            "machine": "bank2_r1",
+            "type": "operate"
+          },
+          {
+            "artifact": "seal",
+            "machine": "bank2_r0",
+            "type": "operate"
+          },
+          {
+            "artifact": "seal",
+            "machine": "bank2_r1",
+            "type": "operate"
+          },
+          {
+            "type": "finish"
+          }
+        ]
+      }
+    },
+    {
+      "suite": "slack",
+      "task": "NEXUS coordination-34",
+      "row_id": "34",
+      "seed": 41,
+      "family": "stateful-coordination-v1",
+      "theory": 0,
+      "planning": 0,
+      "resource": 1,
+      "options": {
+        "banks": 3,
+        "registers_per_bank": 2,
+        "coupling": "coupled"
+      },
+      "kind": "Passed",
+      "trace_id": "01M5X6ZGCHRKMAFXHQJRDCQWKP",
+      "calls": 19,
+      "actions": 13,
+      "budget": 16,
+      "minimum": 10,
+      "baseline": 11,
+      "excess_actions": 3,
+      "classification": "supported_win",
+      "submissions": [
+        {
+          "turn": 13,
+          "won": true,
+          "accepting_worlds": 1,
+          "remaining_worlds": 1,
+          "supported": true,
+          "candidate_states": [
+            [
+              1,
+              1,
+              1,
+              1,
+              1,
+              2
+            ]
+          ]
+        }
+      ],
+      "performance": {
+        "version": "mission-performance-v3",
+        "ontology": "stateful-coordination-v1",
+        "experimental": true,
+        "terminal_status": "won",
+        "termination_reason": "victory",
+        "actions_used": 13,
+        "initial_action_budget": 16,
+        "budget_remaining": 3,
+        "action_counts": {
+          "take": 1,
+          "operate": 11,
+          "finish": 1
+        },
+        "measurements_used": 11,
+        "informative_measurements": 0,
+        "target_reducing_measurements": 0,
+        "redundant_measurements": 11,
+        "target_classes_before_first_submission": 1,
+        "first_submission_correct": true,
+        "mission_submissions": 1,
+        "failed_finishes": 0,
+        "final_submission_correct": true,
+        "invalid_actions": 0,
+        "duplicate_requests": 0,
+        "protocol_conflicts": 0,
+        "certificate": {
+          "family": "stateful-coordination-v1",
+          "status": "experimental-public-reference-qualified",
+          "empirical_difficulty_calibrated": false,
+          "map_visibility": "complete",
+          "law_visibility": "complete",
+          "state_visibility": "complete",
+          "reference_kind": "exact-known-law-optimum",
+          "reference_action_upper": 10,
+          "action_budget": 16,
+          "resource_allowance": 6,
+          "scope": "Exact joint state/location minimum including take, travel, operations and finish. R2 allows exactly that minimum; R1 adds max(6,ceil(minimum/2)); R0 is uncapped. Both paired targets are reachable and the coupled P0 optimum strictly beats every bank-contiguous solution. Structural sizes are not calibrated difficulty."
+        },
+        "target_count_meaning": "distinct winning-set signatures; not exclusive target classes",
+        "measurements_establishing_guaranteed_repair": 1,
+        "common_repairs_before_first_submission": 1,
+        "first_submission_supported_by_evidence": true,
+        "measurements_after_guaranteed_repair": 0,
+        "decision_diagnostics": {
+          "version": "decision-diagnostics-v1",
+          "escape_classification": "supported_win",
+          "physical_goal_satisfied": true,
+          "correct_state_without_successful_finish": false,
+          "final_evidence": {
+            "remaining_worlds": 1,
+            "winning_set_signatures": 1,
+            "common_repairs": 1,
+            "accepting_worlds": 1,
+            "classification": "guaranteed"
+          },
+          "submissions": [
+            {
+              "turn": 13,
+              "won": true,
+              "evidence": {
+                "remaining_worlds": 1,
+                "winning_set_signatures": 1,
+                "common_repairs": 1,
+                "accepting_worlds": 1,
+                "classification": "guaranteed"
+              }
+            }
+          ],
+          "measured_contexts": [
+            0,
+            1,
+            3,
+            4,
+            6,
+            7
+          ],
+          "passive_measurements": 0,
+          "intervention_measurements": 11,
+          "no_signal_measurements": 0,
+          "first_intervention_turn": 2,
+          "first_intervention_measurement": 1,
+          "first_guaranteed_repair_turn": 12,
+          "readings": null
+        }
+      },
+      "state_trace": [
+        {
+          "turn": 1,
+          "action": {
+            "artifact": "seal",
+            "type": "take"
+          },
+          "state": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "room": "array",
+          "no_change": false,
+          "line": 630
+        },
+        {
+          "turn": 2,
+          "action": {
+            "artifact": "seal",
+            "machine": "bank1_r0",
+            "type": "operate"
+          },
+          "state": [
+            0,
+            0,
+            1,
+            0,
+            0,
+            0
+          ],
+          "room": "array",
+          "no_change": false,
+          "line": 649
+        },
+        {
+          "turn": 3,
+          "action": {
+            "artifact": "seal",
+            "machine": "bank0_r1",
+            "type": "operate"
+          },
+          "state": [
+            0,
+            1,
+            1,
+            0,
+            0,
+            0
+          ],
+          "room": "array",
+          "no_change": false,
+          "line": 668
+        },
+        {
+          "turn": 4,
+          "action": {
+            "artifact": "seal",
+            "machine": "bank0_r0",
+            "type": "operate"
+          },
+          "state": [
+            1,
+            1,
+            1,
+            0,
+            0,
+            0
+          ],
+          "room": "array",
+          "no_change": false,
+          "line": 687
+        },
+        {
+          "turn": 5,
+          "action": {
+            "artifact": "seal",
+            "machine": "bank1_r1",
+            "type": "operate"
+          },
+          "state": [
+            1,
+            1,
+            1,
+            2,
+            0,
+            0
+          ],
+          "room": "array",
+          "no_change": false,
+          "line": 706
+        },
+        {
+          "turn": 6,
+          "action": {
+            "artifact": "seal",
+            "machine": "bank1_r1",
+            "type": "operate"
+          },
+          "state": [
+            1,
+            1,
+            1,
+            1,
+            0,
+            0
+          ],
+          "room": "array",
+          "no_change": false,
+          "line": 725
+        },
+        {
+          "turn": 7,
+          "action": {
+            "artifact": "seal",
+            "machine": "bank2_r1",
+            "type": "operate"
+          },
+          "state": [
+            1,
+            1,
+            1,
+            1,
+            0,
+            1
+          ],
+          "room": "array",
+          "no_change": false,
+          "line": 744
+        },
+        {
+          "turn": 8,
+          "action": {
+            "artifact": "seal",
+            "machine": "bank2_r0",
+            "type": "operate"
+          },
+          "state": [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          "room": "array",
+          "no_change": false,
+          "line": 763
+        },
+        {
+          "turn": 9,
+          "action": {
+            "artifact": "seal",
+            "machine": "bank0_r0",
+            "type": "operate"
+          },
+          "state": [
+            2,
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          "room": "array",
+          "no_change": false,
+          "line": 782
+        },
+        {
+          "turn": 10,
+          "action": {
+            "artifact": "seal",
+            "machine": "bank0_r0",
+            "type": "operate"
+          },
+          "state": [
+            0,
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          "room": "array",
+          "no_change": false,
+          "line": 801
+        },
+        {
+          "turn": 11,
+          "action": {
+            "artifact": "seal",
+            "machine": "bank2_r1",
+            "type": "operate"
+          },
+          "state": [
+            0,
+            1,
+            1,
+            1,
+            1,
+            2
+          ],
+          "room": "array",
+          "no_change": false,
+          "line": 820
+        },
+        {
+          "turn": 12,
+          "action": {
+            "artifact": "seal",
+            "machine": "bank0_r0",
+            "type": "operate"
+          },
+          "state": [
+            1,
+            1,
+            1,
+            1,
+            1,
+            2
+          ],
+          "room": "array",
+          "no_change": false,
+          "line": 839
+        },
+        {
+          "turn": 13,
+          "action": {
+            "type": "finish"
+          },
+          "state": [
+            1,
+            1,
+            1,
+            1,
+            1,
+            2
+          ],
+          "room": "array",
+          "no_change": false,
+          "line": 858
+        }
+      ],
+      "request_sequence": [
+        {
+          "operation": "manifest"
+        },
+        {
+          "operation": "observe"
+        },
+        {
+          "filename": "apparatus.txt",
+          "operation": "evidence"
+        },
+        {
+          "filename": "facility.txt",
+          "operation": "evidence"
+        },
+        {
+          "filename": "layout.json",
+          "operation": "evidence"
+        },
+        {
+          "filename": "theory.json",
+          "operation": "evidence"
+        },
+        {
+          "operation": "action",
+          "action": {
+            "artifact": "seal",
+            "type": "take"
+          }
+        },
+        {
+          "operation": "action",
+          "action": {
+            "artifact": "seal",
+            "machine": "bank1_r0",
+            "type": "operate"
+          }
+        },
+        {
+          "operation": "action",
+          "action": {
+            "artifact": "seal",
+            "machine": "bank0_r1",
+            "type": "operate"
+          }
+        },
+        {
+          "operation": "action",
+          "action": {
+            "artifact": "seal",
+            "machine": "bank0_r0",
+            "type": "operate"
+          }
+        },
+        {
+          "operation": "action",
+          "action": {
+            "artifact": "seal",
+            "machine": "bank1_r1",
+            "type": "operate"
+          }
+        },
+        {
+          "operation": "action",
+          "action": {
+            "artifact": "seal",
+            "machine": "bank1_r1",
+            "type": "operate"
+          }
+        },
+        {
+          "operation": "action",
+          "action": {
+            "artifact": "seal",
+            "machine": "bank2_r1",
+            "type": "operate"
+          }
+        },
+        {
+          "operation": "action",
+          "action": {
+            "artifact": "seal",
+            "machine": "bank2_r0",
+            "type": "operate"
+          }
+        },
+        {
+          "operation": "action",
+          "action": {
+            "artifact": "seal",
+            "machine": "bank0_r0",
+            "type": "operate"
+          }
+        },
+        {
+          "operation": "action",
+          "action": {
+            "artifact": "seal",
+            "machine": "bank0_r0",
+            "type": "operate"
+          }
+        },
+        {
+          "operation": "action",
+          "action": {
+            "artifact": "seal",
+            "machine": "bank2_r1",
+            "type": "operate"
+          }
+        },
+        {
+          "operation": "action",
+          "action": {
+            "artifact": "seal",
+            "machine": "bank0_r0",
+            "type": "operate"
+          }
+        },
+        {
+          "operation": "action",
+          "action": {
+            "type": "finish"
+          }
+        }
+      ],
+      "action_sha256": "e63c3a5c543cead26a04ee24db3ec3c72cbf6ea1f0bb600f6dfcf64bb4103c2e",
+      "bank_word": [
+        1,
+        0,
+        0,
+        1,
+        1,
+        2,
+        2,
+        0,
+        0,
+        2,
+        0
+      ],
+      "bank_blocks": [
+        1,
+        0,
+        1,
+        2,
+        0,
+        2,
+        0
+      ],
+      "bank_revisits": 4,
+      "no_change_operations": 0,
+      "independent_belief_trace": [],
+      "available_hash_records_matched": 2,
+      "operator_reports": 1,
+      "public_replay_verified": true,
+      "public_response_count": 19,
+      "same_run_config_as_original": true,
+      "usage": {
+        "InputTokens": 98947,
+        "OutputTokens": 1415,
+        "ReasoningTokens": 755,
+        "InputCacheWriteTokens": 8983,
+        "InputCacheReadTokens": 89110,
+        "InputTokenAccounting": "cache_tokens_included",
+        "OutputTokenAccounting": "reasoning_tokens_included"
+      },
+      "request_seconds": 54.733278557,
+      "tool_seconds": 11.450717218,
+      "tool_wall_seconds": 14.346649793,
+      "first_tool_start": "2026-10-26T18:58:33.208990637-04:00",
+      "last_tool_end": "2026-10-26T18:59:38.375913612-04:00",
+      "independent_operation_efficiency": [
+        {
+          "turn": 2,
+          "machine": "bank1_r0",
+          "distance_before": 8,
+          "distance_after": 7,
+          "excess_operations_introduced": 0
+        },
+        {
+          "turn": 3,
+          "machine": "bank0_r1",
+          "distance_before": 7,
+          "distance_after": 6,
+          "excess_operations_introduced": 0
+        },
+        {
+          "turn": 4,
+          "machine": "bank0_r0",
+          "distance_before": 6,
+          "distance_after": 7,
+          "excess_operations_introduced": 2
+        },
+        {
+          "turn": 5,
+          "machine": "bank1_r1",
+          "distance_before": 7,
+          "distance_after": 7,
+          "excess_operations_introduced": 1
+        },
+        {
+          "turn": 6,
+          "machine": "bank1_r1",
+          "distance_before": 7,
+          "distance_after": 6,
+          "excess_operations_introduced": 0
+        },
+        {
+          "turn": 7,
+          "machine": "bank2_r1",
+          "distance_before": 6,
+          "distance_after": 5,
+          "excess_operations_introduced": 0
+        },
+        {
+          "turn": 8,
+          "machine": "bank2_r0",
+          "distance_before": 5,
+          "distance_after": 4,
+          "excess_operations_introduced": 0
+        },
+        {
+          "turn": 9,
+          "machine": "bank0_r0",
+          "distance_before": 4,
+          "distance_after": 3,
+          "excess_operations_introduced": 0
+        },
+        {
+          "turn": 10,
+          "machine": "bank0_r0",
+          "distance_before": 3,
+          "distance_after": 2,
+          "excess_operations_introduced": 0
+        },
+        {
+          "turn": 11,
+          "machine": "bank2_r1",
+          "distance_before": 2,
+          "distance_after": 1,
+          "excess_operations_introduced": 0
+        },
+        {
+          "turn": 12,
+          "machine": "bank0_r0",
+          "distance_before": 1,
+          "distance_after": 0,
+          "excess_operations_introduced": 0
+        }
+      ],
+      "independent_minimum_verified": true,
+      "original_comparison": {
+        "original_kind": "Passed",
+        "original_classification": "supported_win",
+        "original_actions": 10,
+        "original_calls": 16,
+        "original_action_sha256": "dfcbdb270e61361ce889daba833c2c382bf70d4c98f7b4908ef0e8d115bf2fe3",
+        "same_action_sequence": false,
+        "same_request_sequence": false,
+        "first_action_divergence": 3,
+        "original_reasoning_tokens": 510,
+        "reasoning_token_delta": 245,
+        "original_action_sequence": [
+          {
+            "artifact": "seal",
+            "type": "take"
+          },
+          {
+            "artifact": "seal",
+            "machine": "bank1_r0",
+            "type": "operate"
+          },
+          {
+            "artifact": "seal",
+            "machine": "bank2_r0",
+            "type": "operate"
+          },
+          {
+            "artifact": "seal",
+            "machine": "bank1_r1",
+            "type": "operate"
+          },
+          {
+            "artifact": "seal",
+            "machine": "bank2_r0",
+            "type": "operate"
+          },
+          {
+            "artifact": "seal",
+            "machine": "bank2_r1",
+            "type": "operate"
+          },
+          {
+            "artifact": "seal",
+            "machine": "bank2_r1",
+            "type": "operate"
+          },
+          {
+            "artifact": "seal",
+            "machine": "bank0_r1",
+            "type": "operate"
+          },
+          {
+            "artifact": "seal",
+            "machine": "bank0_r0",
+            "type": "operate"
+          },
+          {
+            "type": "finish"
+          }
+        ]
+      }
+    }
+  ],
+  "runtime": {
+    "python": "3.14.7",
+    "pydantic": "2.13.5",
+    "networkx": "3.7"
+  },
+  "derived_from_audit_sha256": "965991ac5de6bf940fe97357946a10fad13c5eb18d2d6e47a41388ea07e730fe",
+  "baseline_audit_sha256": "ba0226a71eda189cd079a4aff3b303b59160a2c63ff90446c30321d1544f9e0c",
+  "scope": {
+    "additional_attempts_per_condition": 1,
+    "additional_attempts_total": 4,
+    "prior_recommendation_additional_attempts_per_condition": 4,
+    "supplied_fraction_of_prior_recommendation": "4/16",
+    "conditions": [
+      "core09",
+      "core10",
+      "slack33",
+      "slack34"
+    ],
+    "fresh_seeds": 0,
+    "original_receipt_hmac_recomputed": false
+  }
+}

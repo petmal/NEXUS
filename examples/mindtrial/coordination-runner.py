@@ -17,6 +17,7 @@ import tarfile
 import tempfile
 from datetime import UTC, datetime
 from pathlib import Path
+from typing import NamedTuple
 
 CONFIG = "nexus-coordination-config.yaml"
 REPEAT_CONFIG = "nexus-coordination-repeat-config.yaml"
@@ -32,6 +33,7 @@ PREFLIGHT_SCRIPT = r"""
 import contextlib
 import json
 from pathlib import Path
+from typing import NamedTuple
 import sys
 import tempfile
 from nexus.evaluation.coordination import Pilot, export_tasks, preflight
@@ -61,6 +63,44 @@ with contextlib.redirect_stdout(sys.stderr), tempfile.TemporaryDirectory() as te
     }
 print(json.dumps(result, separators=(",", ":")))
 """
+
+
+class PilotProfile(NamedTuple):
+    name: str
+    image: str
+    suites: tuple[str, ...]
+    configs: tuple[str, ...]
+    preflight_script: str
+
+
+COORDINATION = PilotProfile("coordination", IMAGE, SUITES, CONFIGS, PREFLIGHT_SCRIPT)
+INTERFERENCE = PilotProfile(
+    "interference",
+    "nexus:interference-v1",
+    ("core", "slack"),
+    ("nexus-interference-config.yaml",),
+    r"""
+import contextlib
+import json
+from pathlib import Path
+import sys
+import tempfile
+from nexus.evaluation.interference import Pilot, export_tasks, preflight
+from nexus.provenance import source_digest
+with contextlib.redirect_stdout(sys.stderr), tempfile.TemporaryDirectory() as temporary:
+    directory = Path(temporary)
+    pilot = Pilot.model_validate_json(Path("/app/docs/interference-matrix.json").read_text())
+    report = preflight(pilot, directory / "interference-preflight.json")
+    export_tasks(pilot, report, directory)
+    result = {
+        "runtime_source_sha256": source_digest(),
+        "reports": {"interference": report},
+        "tasks": {suite: json.loads((directory / f"nexus-interference-{suite}-tasks.yaml").read_text())
+                  for suite in ("core", "slack")},
+    }
+print(json.dumps(result, separators=(",", ":")))
+""",
+)
 
 
 class RunnerError(Exception):
@@ -109,8 +149,8 @@ def config_contract_sha256(config):
     return sha256(json.dumps(contract, sort_keys=True, separators=(",", ":")).encode())
 
 
-def config_for_suite(suite):
-    return REPEAT_CONFIG if suite == "repeat" else CONFIG
+def config_for_suite(suite, pilot=COORDINATION):
+    return pilot.configs[-1] if suite == "repeat" else pilot.configs[0]
 
 
 def checked(command, *, label, **kwargs):
@@ -124,24 +164,27 @@ def checked(command, *, label, **kwargs):
     return result.stdout
 
 
-def load_release(package):
+def load_release(package, pilot=COORDINATION):
     release = read_json(package / "release.json")
     if not isinstance(release, dict):
         raise RunnerError("release.json must contain an object.")
     if not re.fullmatch(r"[0-9a-f]{40}", str(release.get("source_commit", ""))):
         raise RunnerError("release.json must pin a full 40-character source commit.")
-    if release.get("branch") != BRANCH or release.get("image") != IMAGE:
+    if release.get("branch") != BRANCH or release.get("image") != pilot.image:
         raise RunnerError("release.json names an unexpected branch or image.")
     if not re.fullmatch(r"[0-9a-f]{64}", str(release.get("runtime_source_sha256", ""))):
         raise RunnerError("release.json must pin the runtime source digest.")
     hashes = release.get("files_sha256")
-    required = {*CONFIGS, *(f"nexus-coordination-{suite}-tasks.yaml" for suite in SUITES)}
+    required = {
+        *pilot.configs,
+        *(f"nexus-{pilot.name}-{suite}-tasks.yaml" for suite in pilot.suites),
+    }
     if not isinstance(hashes, dict) or not required <= hashes.keys():
-        raise RunnerError("release.json must list both configs and every suite's task checksum.")
+        raise RunnerError("release.json must list all configs and every suite's task checksum.")
     contracts = release.get("config_contract_sha256")
     if (
         not isinstance(contracts, dict)
-        or set(contracts) != set(CONFIGS)
+        or set(contracts) != set(pilot.configs)
         or any(not re.fullmatch(r"[0-9a-f]{64}", str(value)) for value in contracts.values())
     ):
         raise RunnerError("release.json must pin a config contract checksum for each config.")
@@ -157,7 +200,7 @@ def load_release(package):
         if not path.is_relative_to(package) or not path.is_file():
             raise RunnerError("A release file is missing or outside the package.")
         # Model and reasoning-effort edits are deliberate and recorded per run.
-        if name not in CONFIGS and sha256(path.read_bytes()) != digest:
+        if name not in pilot.configs and sha256(path.read_bytes()) != digest:
             raise RunnerError(f"Release checksum mismatch: {name}.")
     return release
 
@@ -289,7 +332,7 @@ def inspect_image(release):
     return {"tag": release["image"], "id": image_id, "revision": revision}
 
 
-def qualify(package, release, image, include_repeat):
+def qualify(package, release, image, include_repeat, *, pilot=COORDINATION):
     command = [
         "docker",
         "run",
@@ -300,7 +343,7 @@ def qualify(package, release, image, include_repeat):
         "python",
         image["id"],
         "-c",
-        PREFLIGHT_SCRIPT,
+        pilot.preflight_script,
     ]
     if include_repeat:
         command.append("--repeat")
@@ -314,7 +357,7 @@ def qualify(package, release, image, include_repeat):
         or result.get("runtime_source_sha256") != release["runtime_source_sha256"]
     ):
         raise RunnerError("Installed runtime source digest differs from release.json.")
-    required_reports = ("coordination", "planning_repeat") if include_repeat else ("coordination",)
+    required_reports = (pilot.name, "planning_repeat") if include_repeat else (pilot.name,)
     reports = result.get("reports")
     if not isinstance(reports, dict) or any(
         not isinstance(reports.get(name), dict) or reports[name].get("status") != "passed"
@@ -322,8 +365,8 @@ def qualify(package, release, image, include_repeat):
     ):
         raise RunnerError("The container did not pass all required qualification reports.")
     tasks = result.get("tasks")
-    for suite in SUITES if include_repeat else SUITES[:-1]:
-        shipped = read_json(package / f"nexus-coordination-{suite}-tasks.yaml")
+    for suite in pilot.suites if include_repeat else (s for s in pilot.suites if s != "repeat"):
+        shipped = read_json(package / f"nexus-{pilot.name}-{suite}-tasks.yaml")
         if not isinstance(tasks, dict) or tasks.get(suite) != shipped:
             raise RunnerError(f"Shipped {suite} tasks differ from freshly qualified exports.")
     return result
@@ -338,7 +381,19 @@ def result_directory(package, suite):
     return Path(tempfile.mkdtemp(prefix=f"{suite}-{stamp}-", dir=results))
 
 
-def run_suite(package, suite, config, config_raw, release, image, preflight, mindtrial, invoked):
+def run_suite(
+    package,
+    suite,
+    config,
+    config_raw,
+    release,
+    image,
+    preflight,
+    mindtrial,
+    invoked,
+    *,
+    pilot=COORDINATION,
+):
     binary = mindtrial / "mindtrial"
     binary_hash = sha256(binary.read_bytes())
     directory = result_directory(package, suite)
@@ -362,8 +417,8 @@ def run_suite(package, suite, config, config_raw, release, image, preflight, min
     write_json(config_path, effective)
     write_json(directory / "preflight.json", preflight)
     write_json(directory / "release.json", release)
-    seed = "nexus-pr-pilot-v1" if suite == "repeat" else "nexus-coordination-pilot-v1"
-    input_config_file = config_for_suite(suite)
+    seed = "nexus-pr-pilot-v1" if suite == "repeat" else f"nexus-{pilot.name}-pilot-v1"
+    input_config_file = config_for_suite(suite, pilot)
     command = [
         "./mindtrial",
         f"-config={config_path}",
@@ -375,7 +430,7 @@ def run_suite(package, suite, config, config_raw, release, image, preflight, min
         "run",
     ]
     manifest = {
-        "version": "coordination-run-v1",
+        "version": f"{pilot.name}-run-v1",
         "suite": suite,
         "status": "running",
         "invocation_timestamp": invoked,
@@ -417,9 +472,9 @@ def run_suite(package, suite, config, config_raw, release, image, preflight, min
     return code if code >= 0 else 128 - code
 
 
-def main(argv=None, *, package_dir=None):
+def main(argv=None, *, package_dir=None, pilot=COORDINATION):
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--suite", choices=(*SUITES, "all"), default="core")
+    parser.add_argument("--suite", choices=(*pilot.suites, "all"), default="core")
     parser.add_argument("--preflight-only", action="store_true", help="Qualify without model calls")
     parser.add_argument(
         "--skip-build", action="store_true", help="Verify and qualify an existing image"
@@ -432,11 +487,13 @@ def main(argv=None, *, package_dir=None):
     try:
         if sys.version_info < (3, 12):  # noqa: UP036 -- standalone launcher runs outside the 3.14 image
             raise RunnerError("Python 3.12 or newer is required; set PYTHON to its executable.")
-        release = load_release(package)
-        suites = SUITES if args.suite == "all" else (args.suite,)
-        config_names = {config_for_suite(suite) for suite in suites}
+        release = load_release(package, pilot)
+        suites = pilot.suites if args.suite == "all" else (args.suite,)
+        config_names = {config_for_suite(suite, pilot) for suite in suites}
         configs = {
-            name: load_config(package, release, name) for name in CONFIGS if name in config_names
+            name: load_config(package, release, name)
+            for name in pilot.configs
+            if name in config_names
         }
         repository = Path(os.environ.get("NEXUS_REPO", str(Path.home() / "Go-Projects/NEXUS")))
         mindtrial = Path(os.environ.get("MINDTRIAL_DIR", str(Path.home() / "MindTrial")))
@@ -457,7 +514,7 @@ def main(argv=None, *, package_dir=None):
             "Qualifying the installed runtime and checking task exports; no model calls...",
             flush=True,
         )
-        preflight = qualify(package, release, image, args.suite in ("repeat", "all"))
+        preflight = qualify(package, release, image, "repeat" in suites, pilot=pilot)
         if args.preflight_only:
             directory = result_directory(package, args.suite + "-preflight")
             write_json(directory / "preflight.json", preflight)
@@ -465,7 +522,7 @@ def main(argv=None, *, package_dir=None):
             write_json(
                 directory / "manifest.json",
                 {
-                    "version": "coordination-run-v1",
+                    "version": f"{pilot.name}-run-v1",
                     "status": "preflight-passed",
                     "suite": args.suite,
                     "invocation_timestamp": invoked,
@@ -487,9 +544,18 @@ def main(argv=None, *, package_dir=None):
             print(f"Preflight passed; no model calls. Report: {directory}", flush=True)
             return 0
         for suite in suites:
-            config, config_raw = configs[config_for_suite(suite)]
+            config, config_raw = configs[config_for_suite(suite, pilot)]
             code = run_suite(
-                package, suite, config, config_raw, release, image, preflight, mindtrial, invoked
+                package,
+                suite,
+                config,
+                config_raw,
+                release,
+                image,
+                preflight,
+                mindtrial,
+                invoked,
+                pilot=pilot,
             )
             if code:
                 return code

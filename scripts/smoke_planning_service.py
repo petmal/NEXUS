@@ -43,8 +43,12 @@ def run_case(config, task, folder, *, forged=False):
         from nexus.ontology.planning.policy import public_policy
     elif inputs["science-family"] == "stateful-coordination-v1":
         from nexus.ontology.coordination.policy import public_policy
+    elif inputs["science-family"] == "stateful-interference-v1":
+        from nexus.ontology.interference.policy import public_policy
     else:
-        raise ValueError("this smoke driver supports planning and coordination tasks only")
+        raise ValueError(
+            "this smoke driver supports planning, coordination and interference tasks only"
+        )
     env = {k: v for k, v in os.environ.items() if not k.startswith("NEXUS_")}
     env.update(service["env"])
     env.update(
@@ -78,6 +82,8 @@ def run_case(config, task, folder, *, forged=False):
                 "investigation_truth",
                 "verifier_secret",
                 "reference_action_upper",
+                "horizon_stratum",
+                "kernel_attempt",
             ):
                 if f'"{field}"' in encoded:
                     raise ValueError(f"private field leaked through player request: {field}")

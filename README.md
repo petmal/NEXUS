@@ -27,6 +27,8 @@ that their difficulty is unmeasured refer to their original publication stage.
 
 | Research record | Purpose |
 |---|---|
+| [Disclosed interference](docs/interference-guide.md) | Longer exact plans, matched write-edge controls and unavoidable coordinate-goal regression; 32-cell pilot awaiting live evaluation |
+| [Coordination](docs/coordination-guide.md) and [selected rerun](docs/research/coordination-rerun-results-2026-10-26.md) | Short-horizon planning, joint routing and observed strategy variability |
 | [Planning/resource pilot](docs/planning-resource-guide.md) | Disclosed spatial planning, exact known-law budgets and a qualified 16-cell next evaluation |
 | [Latest evaluation assessment](docs/research/td-evaluation-assessment-2026-10-24.md) | The 40 live runs, independent audit and intervention limits |
 | [Bounded T/D cycle](docs/td-cycle-results.md) | C/L selection, local selective-control and cascade prototypes |

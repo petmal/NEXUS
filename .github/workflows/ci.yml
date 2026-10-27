@@ -21,6 +21,7 @@ on:
       - "docs/model-revision-matrix.json"
       - "docs/planning-resource-matrix.json"
       - "docs/coordination-matrix.json"
+      - "docs/interference-matrix.json"
   pull_request:
     paths:
       - "**"
@@ -40,6 +41,7 @@ on:
       - "docs/model-revision-matrix.json"
       - "docs/planning-resource-matrix.json"
       - "docs/coordination-matrix.json"
+      - "docs/interference-matrix.json"
   workflow_dispatch:
     inputs:
       full:
@@ -142,6 +144,9 @@ jobs:
 
       - name: Coordination independent costs and paired controls
         run: uv run python scripts/preflight_coordination.py --output /tmp/coordination-preflight.json --tasks-output /tmp/coordination-tasks
+
+      - name: Disclosed interference independent costs and subgoal regression
+        run: uv run python scripts/preflight_interference.py --output /tmp/interference-preflight.json --tasks-output /tmp/interference-tasks
 
       - name: Fast tests
         run: |

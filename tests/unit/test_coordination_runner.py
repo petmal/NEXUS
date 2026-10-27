@@ -154,6 +154,90 @@ def manifests(state):
     ]
 
 
+@pytest.fixture
+def interference_setup(setup):
+    state = setup
+    package = state["package"]
+    profile = runner.INTERFERENCE
+    for name in profile.configs:
+        shutil.copyfile(ROOT / "examples/mindtrial" / name, package / name)
+    tasks = {}
+    for suite in profile.suites:
+        name = f"nexus-interference-{suite}-tasks.yaml"
+        shutil.copyfile(ROOT / "examples/mindtrial" / name, package / name)
+        tasks[suite] = json.loads((package / name).read_text())
+    shutil.copyfile(RUNNER, package / "pilot_runner.py")
+    shutil.copyfile(ROOT / "examples/mindtrial/interference-runner.py", package / "runner.py")
+    release = state["release"]
+    release["image"] = profile.image
+    release["config_contract_sha256"] = {
+        name: runner.config_contract_sha256(json.loads((package / name).read_text()))
+        for name in profile.configs
+    }
+    release["files_sha256"] = {
+        path.name: runner.sha256(path.read_bytes())
+        for path in package.iterdir()
+        if path.name != "release.json"
+    }
+    dump(package / "release.json", release)
+    state["payload"] = {
+        "runtime_source_sha256": RUNTIME,
+        "reports": {"interference": {"status": "passed"}},
+        "tasks": tasks,
+    }
+    return state
+
+
+@pytest.mark.parametrize("image_id", [IMAGE_ID, BARE_IMAGE_ID])
+def test_interference_profile_runs_both_paired_suites_with_immutable_images(
+    interference_setup, image_id
+):
+    state = interference_setup
+    state["image_id"] = image_id
+    assert (
+        runner.main(["--suite", "all"], package_dir=state["package"], pilot=runner.INTERFERENCE)
+        == 0
+    )
+    records = manifests(state)
+    assert len(records) == 2
+    assert {r["suite"] for r in records} == {"core", "slack"}
+    for record in records:
+        assert record["version"] == "interference-run-v1"
+        assert record["evaluation_seed"] == "nexus-interference-pilot-v1"
+        assert record["input_config_file"] == "nexus-interference-config.yaml"
+        output = Path(record["output_dir"])
+        config = json.loads((output / "config.yaml").read_text())["config"]
+        assert all(config[k][0]["image"] == image_id for k in ("tools", "services", "validators"))
+        assert len(json.loads((output / "tasks.yaml").read_text())["task-config"]["tasks"]) == 16
+    assert not any("--repeat" in command for command, _ in state["calls"])
+
+
+@pytest.mark.parametrize("tamper", ["report", "tasks", "source"])
+def test_interference_preflight_fails_closed_before_model_calls(interference_setup, tamper):
+    state = interference_setup
+    if tamper == "report":
+        state["payload"]["reports"] = {"coordination": {"status": "passed"}}
+    elif tamper == "tasks":
+        state["payload"]["tasks"]["slack"]["task-config"]["tasks"].pop()
+    else:
+        state["payload"]["runtime_source_sha256"] = "d" * 64
+    assert (
+        runner.main(["--skip-build"], package_dir=state["package"], pilot=runner.INTERFERENCE) == 1
+    )
+    assert not any(command[0] == "./mindtrial" for command, _ in state["calls"])
+
+
+def test_interference_wrapper_exposes_only_its_suites():
+    result = REAL_RUN(
+        [sys.executable, str(ROOT / "examples/mindtrial/interference-runner.py"), "--help"],
+        capture_output=True,
+        text=True,
+        check=True,
+    )
+    assert "{core,slack,all}" in result.stdout
+    assert "spatial" not in result.stdout
+
+
 @pytest.mark.parametrize("image_id", [IMAGE_ID, BARE_IMAGE_ID])
 def test_default_paths_spaces_distinct_cwd_and_pinned_build_leave_checkout_untouched(
     setup, image_id

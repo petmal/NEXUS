@@ -10,7 +10,9 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 
 
-def main():
+def main(pilot_name="coordination"):
+    if pilot_name not in ("coordination", "interference"):
+        raise ValueError("unknown pilot profile")
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--output-dir", type=Path, required=True)
     parser.add_argument("--runtime-source-sha256", required=True)
@@ -29,49 +31,62 @@ def main():
         raise RuntimeError("Cannot load the pilot launcher")
     runner = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(runner)
+    profile = runner.COORDINATION if pilot_name == "coordination" else runner.INTERFERENCE
     destination = args.output_dir.resolve()
     destination.mkdir(parents=True, exist_ok=False)
     copies = {
-        "run.sh": examples / "coordination-run.sh",
-        "runner.py": examples / "coordination-runner.py",
-        "README.md": examples / "coordination-run.md",
-        **{name: examples / name for name in runner.CONFIGS},
+        "run.sh": examples / f"{pilot_name}-run.sh",
+        "runner.py": examples / f"{pilot_name}-runner.py",
+        "README.md": examples / f"{pilot_name}-run.md",
+        **{name: examples / name for name in profile.configs},
         **{
-            f"nexus-coordination-{suite}-tasks.yaml": examples
-            / f"nexus-coordination-{suite}-tasks.yaml"
-            for suite in runner.SUITES
+            f"nexus-{pilot_name}-{suite}-tasks.yaml": examples
+            / f"nexus-{pilot_name}-{suite}-tasks.yaml"
+            for suite in profile.suites
         },
     }
+    if pilot_name == "interference":
+        copies["pilot_runner.py"] = examples / "coordination-runner.py"
     for name, source in copies.items():
         shutil.copy2(source, destination / name)
     reports = destination / "reports"
     reports.mkdir()
-    for name in (
-        "coordination-preflight-2026-10-25.json",
-        "coordination-legacy-preflight-2026-10-25.json",
-        "planning-resource-pilot-results-2026-10-25.md",
-        "planning-resource-pilot-results-2026-10-25.json",
-    ):
+    report_names = (
+        (
+            "coordination-preflight-2026-10-25.json",
+            "coordination-legacy-preflight-2026-10-25.json",
+            "planning-resource-pilot-results-2026-10-25.md",
+            "planning-resource-pilot-results-2026-10-25.json",
+        )
+        if pilot_name == "coordination"
+        else (
+            "interference-preflight-2026-10-26.json",
+            "interference-implementation-validation-2026-10-26.md",
+            "coordination-rerun-results-2026-10-26.md",
+            "coordination-rerun-results-2026-10-26.json",
+        )
+    )
+    for name in report_names:
         shutil.copy2(ROOT / "docs/research" / name, reports / name)
     release = {
         "source_commit": commit,
         "branch": runner.BRANCH,
-        "image": runner.IMAGE,
+        "image": profile.image,
         "runtime_source_sha256": args.runtime_source_sha256,
         "config_contract_sha256": {
             name: runner.config_contract_sha256(runner.read_json(destination / name))
-            for name in runner.CONFIGS
+            for name in profile.configs
         },
         "files_sha256": {
             path.relative_to(destination).as_posix(): runner.sha256(path.read_bytes())
             for path in sorted(destination.rglob("*"))
             if path.is_file()
         },
-        "design_url": f"https://github.com/petmal/NEXUS/blob/{commit}/docs/coordination-guide.md",
+        "design_url": f"https://github.com/petmal/NEXUS/blob/{commit}/docs/{pilot_name}-guide.md",
     }
     runner.write_json(destination / "release.json", release)
-    runner.load_release(destination)
-    for name in runner.CONFIGS:
+    runner.load_release(destination, profile)
+    for name in profile.configs:
         runner.load_config(destination, release, name)
     archive = shutil.make_archive(str(destination), "zip", destination.parent, destination.name)
     print(archive)
