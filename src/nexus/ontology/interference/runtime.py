@@ -1,5 +1,6 @@
 """Canonical-vector adapter; generic engine owns charging, atomicity and receipts."""
 
+import json
 import logging
 from dataclasses import dataclass
 
@@ -226,4 +227,11 @@ def log_terminal_trace(state, trace, posterior):
         breaks,
         unchanged,
         blocks,
+    )
+
+    from nexus.ontology.interference.structure import trajectory
+
+    logging.getLogger("nexus.diagnostics").info(
+        "interference_structure %s",
+        json.dumps(trajectory(posterior.spec, trace), sort_keys=True, separators=(",", ":")),
     )

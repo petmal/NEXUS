@@ -101,6 +101,38 @@ with contextlib.redirect_stdout(sys.stderr), tempfile.TemporaryDirectory() as te
 print(json.dumps(result, separators=(",", ":")))
 """,
 )
+INTERFERENCE_COMPARISON = PilotProfile(
+    "interference-comparison",
+    "nexus:interference-comparison-v1",
+    ("core", "slack"),
+    ("nexus-interference-comparison-config.yaml",),
+    r"""
+import contextlib
+import json
+from pathlib import Path
+import sys
+import tempfile
+from nexus.evaluation.interference import Pilot
+from nexus.evaluation.interference_comparison import export_tasks, preflight
+from nexus.provenance import source_digest
+with contextlib.redirect_stdout(sys.stderr), tempfile.TemporaryDirectory() as temporary:
+    directory = Path(temporary)
+    pilot = Pilot.model_validate_json(Path("/app/docs/interference-matrix.json").read_text())
+    report = preflight(pilot, directory / "interference-comparison-preflight.json")
+    export_tasks(pilot, report, directory)
+    result = {
+        "runtime_source_sha256": source_digest(),
+        "reports": {"interference-comparison": report},
+        "tasks": {
+            suite: json.loads(
+                (directory / f"nexus-interference-comparison-{suite}-tasks.yaml").read_text()
+            )
+            for suite in ("core", "slack")
+        },
+    }
+print(json.dumps(result, separators=(",", ":")))
+""",
+)
 
 
 class RunnerError(Exception):

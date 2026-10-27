@@ -1,0 +1,514 @@
+{
+  "task-config": {
+    "max-turns": 650,
+    "tool-selector": {
+      "tools": [
+        {
+          "name": "nexus",
+          "max-calls": 600
+        }
+      ]
+    },
+    "validation-rules": {
+      "custom-validator": "nexus-victory"
+    },
+    "tasks": [
+      {
+        "name": "NEXUS interference-01",
+        "disabled": false,
+        "suite": "nexus",
+        "category": "interference-pilot",
+        "difficulty": "experimental",
+        "tags": [
+          "interference-pilot-v1",
+          "stateful-interference-v1",
+          "core"
+        ],
+        "prompt": "Complete the live NEXUS mission and return its actual victory receipt. Begin with manifest and observe, then read every listed evidence file. Use only the NEXUS tool; no external Python, source access or solver is available. The laws, prerequisites, map and current register values are public. Track the original carried seal, committed changes and remaining action allowance. A probe previews one operation without committing it. Put every register at its specified target simultaneously and finish in the stated room.",
+        "response-result-format": "The actual victory_code and nothing else. No quotes, Markdown or explanation.",
+        "tool-selector": {
+          "service-inputs": {
+            "nexus": {
+              "axis-version": 2,
+              "science-family": "stateful-interference-v1",
+              "seed": "67",
+              "theory-level": 0,
+              "discovery-level": 0,
+              "planning-level": 0,
+              "resource-pressure": 2,
+              "budget-profile": "standard",
+              "ontology-options": "{\"coupling\":\"independent\",\"horizon\":\"short\"}",
+              "generation-timing": true,
+              "extended-diagnostics": true
+            }
+          }
+        }
+      },
+      {
+        "name": "NEXUS interference-02",
+        "disabled": false,
+        "suite": "nexus",
+        "category": "interference-pilot",
+        "difficulty": "experimental",
+        "tags": [
+          "interference-pilot-v1",
+          "stateful-interference-v1",
+          "core"
+        ],
+        "prompt": "Complete the live NEXUS mission and return its actual victory receipt. Begin with manifest and observe, then read every listed evidence file. Use only the NEXUS tool; no external Python, source access or solver is available. The laws, prerequisites, map and current register values are public. Track the original carried seal, committed changes and remaining action allowance. A probe previews one operation without committing it. Put every register at its specified target simultaneously and finish in the stated room.",
+        "response-result-format": "The actual victory_code and nothing else. No quotes, Markdown or explanation.",
+        "tool-selector": {
+          "service-inputs": {
+            "nexus": {
+              "axis-version": 2,
+              "science-family": "stateful-interference-v1",
+              "seed": "67",
+              "theory-level": 0,
+              "discovery-level": 0,
+              "planning-level": 0,
+              "resource-pressure": 2,
+              "budget-profile": "standard",
+              "ontology-options": "{\"coupling\":\"coupled\",\"horizon\":\"short\"}",
+              "generation-timing": true,
+              "extended-diagnostics": true
+            }
+          }
+        }
+      },
+      {
+        "name": "NEXUS interference-03",
+        "disabled": false,
+        "suite": "nexus",
+        "category": "interference-pilot",
+        "difficulty": "experimental",
+        "tags": [
+          "interference-pilot-v1",
+          "stateful-interference-v1",
+          "core"
+        ],
+        "prompt": "Complete the live NEXUS mission and return its actual victory receipt. Begin with manifest and observe, then read every listed evidence file. Use only the NEXUS tool; no external Python, source access or solver is available. The laws, prerequisites, map and current register values are public. Track the original carried seal, committed changes and remaining action allowance. A probe previews one operation without committing it. Put every register at its specified target simultaneously and finish in the stated room.",
+        "response-result-format": "The actual victory_code and nothing else. No quotes, Markdown or explanation.",
+        "tool-selector": {
+          "service-inputs": {
+            "nexus": {
+              "axis-version": 2,
+              "science-family": "stateful-interference-v1",
+              "seed": "67",
+              "theory-level": 0,
+              "discovery-level": 0,
+              "planning-level": 0,
+              "resource-pressure": 2,
+              "budget-profile": "standard",
+              "ontology-options": "{\"coupling\":\"coupled\",\"horizon\":\"long\"}",
+              "generation-timing": true,
+              "extended-diagnostics": true
+            }
+          }
+        }
+      },
+      {
+        "name": "NEXUS interference-04",
+        "disabled": false,
+        "suite": "nexus",
+        "category": "interference-pilot",
+        "difficulty": "experimental",
+        "tags": [
+          "interference-pilot-v1",
+          "stateful-interference-v1",
+          "core"
+        ],
+        "prompt": "Complete the live NEXUS mission and return its actual victory receipt. Begin with manifest and observe, then read every listed evidence file. Use only the NEXUS tool; no external Python, source access or solver is available. The laws, prerequisites, map and current register values are public. Track the original carried seal, committed changes and remaining action allowance. A probe previews one operation without committing it. Put every register at its specified target simultaneously and finish in the stated room.",
+        "response-result-format": "The actual victory_code and nothing else. No quotes, Markdown or explanation.",
+        "tool-selector": {
+          "service-inputs": {
+            "nexus": {
+              "axis-version": 2,
+              "science-family": "stateful-interference-v1",
+              "seed": "67",
+              "theory-level": 0,
+              "discovery-level": 0,
+              "planning-level": 0,
+              "resource-pressure": 2,
+              "budget-profile": "standard",
+              "ontology-options": "{\"coupling\":\"independent\",\"horizon\":\"long\"}",
+              "generation-timing": true,
+              "extended-diagnostics": true
+            }
+          }
+        }
+      },
+      {
+        "name": "NEXUS interference-05",
+        "disabled": false,
+        "suite": "nexus",
+        "category": "interference-pilot",
+        "difficulty": "experimental",
+        "tags": [
+          "interference-pilot-v1",
+          "stateful-interference-v1",
+          "core"
+        ],
+        "prompt": "Complete the live NEXUS mission and return its actual victory receipt. Begin with manifest and observe, then read every listed evidence file. Use only the NEXUS tool; no external Python, source access or solver is available. The laws, prerequisites, map and current register values are public. Track the original carried seal, committed changes and remaining action allowance. A probe previews one operation without committing it. Put every register at its specified target simultaneously and finish in the stated room.",
+        "response-result-format": "The actual victory_code and nothing else. No quotes, Markdown or explanation.",
+        "tool-selector": {
+          "service-inputs": {
+            "nexus": {
+              "axis-version": 2,
+              "science-family": "stateful-interference-v1",
+              "seed": "79",
+              "theory-level": 0,
+              "discovery-level": 0,
+              "planning-level": 0,
+              "resource-pressure": 2,
+              "budget-profile": "standard",
+              "ontology-options": "{\"coupling\":\"coupled\",\"horizon\":\"short\"}",
+              "generation-timing": true,
+              "extended-diagnostics": true
+            }
+          }
+        }
+      },
+      {
+        "name": "NEXUS interference-06",
+        "disabled": false,
+        "suite": "nexus",
+        "category": "interference-pilot",
+        "difficulty": "experimental",
+        "tags": [
+          "interference-pilot-v1",
+          "stateful-interference-v1",
+          "core"
+        ],
+        "prompt": "Complete the live NEXUS mission and return its actual victory receipt. Begin with manifest and observe, then read every listed evidence file. Use only the NEXUS tool; no external Python, source access or solver is available. The laws, prerequisites, map and current register values are public. Track the original carried seal, committed changes and remaining action allowance. A probe previews one operation without committing it. Put every register at its specified target simultaneously and finish in the stated room.",
+        "response-result-format": "The actual victory_code and nothing else. No quotes, Markdown or explanation.",
+        "tool-selector": {
+          "service-inputs": {
+            "nexus": {
+              "axis-version": 2,
+              "science-family": "stateful-interference-v1",
+              "seed": "79",
+              "theory-level": 0,
+              "discovery-level": 0,
+              "planning-level": 0,
+              "resource-pressure": 2,
+              "budget-profile": "standard",
+              "ontology-options": "{\"coupling\":\"independent\",\"horizon\":\"short\"}",
+              "generation-timing": true,
+              "extended-diagnostics": true
+            }
+          }
+        }
+      },
+      {
+        "name": "NEXUS interference-07",
+        "disabled": false,
+        "suite": "nexus",
+        "category": "interference-pilot",
+        "difficulty": "experimental",
+        "tags": [
+          "interference-pilot-v1",
+          "stateful-interference-v1",
+          "core"
+        ],
+        "prompt": "Complete the live NEXUS mission and return its actual victory receipt. Begin with manifest and observe, then read every listed evidence file. Use only the NEXUS tool; no external Python, source access or solver is available. The laws, prerequisites, map and current register values are public. Track the original carried seal, committed changes and remaining action allowance. A probe previews one operation without committing it. Put every register at its specified target simultaneously and finish in the stated room.",
+        "response-result-format": "The actual victory_code and nothing else. No quotes, Markdown or explanation.",
+        "tool-selector": {
+          "service-inputs": {
+            "nexus": {
+              "axis-version": 2,
+              "science-family": "stateful-interference-v1",
+              "seed": "79",
+              "theory-level": 0,
+              "discovery-level": 0,
+              "planning-level": 0,
+              "resource-pressure": 2,
+              "budget-profile": "standard",
+              "ontology-options": "{\"coupling\":\"independent\",\"horizon\":\"long\"}",
+              "generation-timing": true,
+              "extended-diagnostics": true
+            }
+          }
+        }
+      },
+      {
+        "name": "NEXUS interference-08",
+        "disabled": false,
+        "suite": "nexus",
+        "category": "interference-pilot",
+        "difficulty": "experimental",
+        "tags": [
+          "interference-pilot-v1",
+          "stateful-interference-v1",
+          "core"
+        ],
+        "prompt": "Complete the live NEXUS mission and return its actual victory receipt. Begin with manifest and observe, then read every listed evidence file. Use only the NEXUS tool; no external Python, source access or solver is available. The laws, prerequisites, map and current register values are public. Track the original carried seal, committed changes and remaining action allowance. A probe previews one operation without committing it. Put every register at its specified target simultaneously and finish in the stated room.",
+        "response-result-format": "The actual victory_code and nothing else. No quotes, Markdown or explanation.",
+        "tool-selector": {
+          "service-inputs": {
+            "nexus": {
+              "axis-version": 2,
+              "science-family": "stateful-interference-v1",
+              "seed": "79",
+              "theory-level": 0,
+              "discovery-level": 0,
+              "planning-level": 0,
+              "resource-pressure": 2,
+              "budget-profile": "standard",
+              "ontology-options": "{\"coupling\":\"coupled\",\"horizon\":\"long\"}",
+              "generation-timing": true,
+              "extended-diagnostics": true
+            }
+          }
+        }
+      },
+      {
+        "name": "NEXUS interference-09",
+        "disabled": false,
+        "suite": "nexus",
+        "category": "interference-pilot",
+        "difficulty": "experimental",
+        "tags": [
+          "interference-pilot-v1",
+          "stateful-interference-v1",
+          "core"
+        ],
+        "prompt": "Complete the live NEXUS mission and return its actual victory receipt. Begin with manifest and observe, then read every listed evidence file. Use only the NEXUS tool; no external Python, source access or solver is available. The laws, prerequisites, map and current register values are public. Track the original carried seal, committed changes and remaining action allowance. A probe previews one operation without committing it. Put every register at its specified target simultaneously and finish in the stated room.",
+        "response-result-format": "The actual victory_code and nothing else. No quotes, Markdown or explanation.",
+        "tool-selector": {
+          "service-inputs": {
+            "nexus": {
+              "axis-version": 2,
+              "science-family": "stateful-interference-v1",
+              "seed": "101",
+              "theory-level": 0,
+              "discovery-level": 0,
+              "planning-level": 0,
+              "resource-pressure": 2,
+              "budget-profile": "standard",
+              "ontology-options": "{\"coupling\":\"independent\",\"horizon\":\"short\"}",
+              "generation-timing": true,
+              "extended-diagnostics": true
+            }
+          }
+        }
+      },
+      {
+        "name": "NEXUS interference-10",
+        "disabled": false,
+        "suite": "nexus",
+        "category": "interference-pilot",
+        "difficulty": "experimental",
+        "tags": [
+          "interference-pilot-v1",
+          "stateful-interference-v1",
+          "core"
+        ],
+        "prompt": "Complete the live NEXUS mission and return its actual victory receipt. Begin with manifest and observe, then read every listed evidence file. Use only the NEXUS tool; no external Python, source access or solver is available. The laws, prerequisites, map and current register values are public. Track the original carried seal, committed changes and remaining action allowance. A probe previews one operation without committing it. Put every register at its specified target simultaneously and finish in the stated room.",
+        "response-result-format": "The actual victory_code and nothing else. No quotes, Markdown or explanation.",
+        "tool-selector": {
+          "service-inputs": {
+            "nexus": {
+              "axis-version": 2,
+              "science-family": "stateful-interference-v1",
+              "seed": "101",
+              "theory-level": 0,
+              "discovery-level": 0,
+              "planning-level": 0,
+              "resource-pressure": 2,
+              "budget-profile": "standard",
+              "ontology-options": "{\"coupling\":\"coupled\",\"horizon\":\"short\"}",
+              "generation-timing": true,
+              "extended-diagnostics": true
+            }
+          }
+        }
+      },
+      {
+        "name": "NEXUS interference-11",
+        "disabled": false,
+        "suite": "nexus",
+        "category": "interference-pilot",
+        "difficulty": "experimental",
+        "tags": [
+          "interference-pilot-v1",
+          "stateful-interference-v1",
+          "core"
+        ],
+        "prompt": "Complete the live NEXUS mission and return its actual victory receipt. Begin with manifest and observe, then read every listed evidence file. Use only the NEXUS tool; no external Python, source access or solver is available. The laws, prerequisites, map and current register values are public. Track the original carried seal, committed changes and remaining action allowance. A probe previews one operation without committing it. Put every register at its specified target simultaneously and finish in the stated room.",
+        "response-result-format": "The actual victory_code and nothing else. No quotes, Markdown or explanation.",
+        "tool-selector": {
+          "service-inputs": {
+            "nexus": {
+              "axis-version": 2,
+              "science-family": "stateful-interference-v1",
+              "seed": "101",
+              "theory-level": 0,
+              "discovery-level": 0,
+              "planning-level": 0,
+              "resource-pressure": 2,
+              "budget-profile": "standard",
+              "ontology-options": "{\"coupling\":\"coupled\",\"horizon\":\"long\"}",
+              "generation-timing": true,
+              "extended-diagnostics": true
+            }
+          }
+        }
+      },
+      {
+        "name": "NEXUS interference-12",
+        "disabled": false,
+        "suite": "nexus",
+        "category": "interference-pilot",
+        "difficulty": "experimental",
+        "tags": [
+          "interference-pilot-v1",
+          "stateful-interference-v1",
+          "core"
+        ],
+        "prompt": "Complete the live NEXUS mission and return its actual victory receipt. Begin with manifest and observe, then read every listed evidence file. Use only the NEXUS tool; no external Python, source access or solver is available. The laws, prerequisites, map and current register values are public. Track the original carried seal, committed changes and remaining action allowance. A probe previews one operation without committing it. Put every register at its specified target simultaneously and finish in the stated room.",
+        "response-result-format": "The actual victory_code and nothing else. No quotes, Markdown or explanation.",
+        "tool-selector": {
+          "service-inputs": {
+            "nexus": {
+              "axis-version": 2,
+              "science-family": "stateful-interference-v1",
+              "seed": "101",
+              "theory-level": 0,
+              "discovery-level": 0,
+              "planning-level": 0,
+              "resource-pressure": 2,
+              "budget-profile": "standard",
+              "ontology-options": "{\"coupling\":\"independent\",\"horizon\":\"long\"}",
+              "generation-timing": true,
+              "extended-diagnostics": true
+            }
+          }
+        }
+      },
+      {
+        "name": "NEXUS interference-13",
+        "disabled": false,
+        "suite": "nexus",
+        "category": "interference-pilot",
+        "difficulty": "experimental",
+        "tags": [
+          "interference-pilot-v1",
+          "stateful-interference-v1",
+          "core"
+        ],
+        "prompt": "Complete the live NEXUS mission and return its actual victory receipt. Begin with manifest and observe, then read every listed evidence file. Use only the NEXUS tool; no external Python, source access or solver is available. The laws, prerequisites, map and current register values are public. Track the original carried seal, committed changes and remaining action allowance. A probe previews one operation without committing it. Put every register at its specified target simultaneously and finish in the stated room.",
+        "response-result-format": "The actual victory_code and nothing else. No quotes, Markdown or explanation.",
+        "tool-selector": {
+          "service-inputs": {
+            "nexus": {
+              "axis-version": 2,
+              "science-family": "stateful-interference-v1",
+              "seed": "103",
+              "theory-level": 0,
+              "discovery-level": 0,
+              "planning-level": 0,
+              "resource-pressure": 2,
+              "budget-profile": "standard",
+              "ontology-options": "{\"coupling\":\"coupled\",\"horizon\":\"short\"}",
+              "generation-timing": true,
+              "extended-diagnostics": true
+            }
+          }
+        }
+      },
+      {
+        "name": "NEXUS interference-14",
+        "disabled": false,
+        "suite": "nexus",
+        "category": "interference-pilot",
+        "difficulty": "experimental",
+        "tags": [
+          "interference-pilot-v1",
+          "stateful-interference-v1",
+          "core"
+        ],
+        "prompt": "Complete the live NEXUS mission and return its actual victory receipt. Begin with manifest and observe, then read every listed evidence file. Use only the NEXUS tool; no external Python, source access or solver is available. The laws, prerequisites, map and current register values are public. Track the original carried seal, committed changes and remaining action allowance. A probe previews one operation without committing it. Put every register at its specified target simultaneously and finish in the stated room.",
+        "response-result-format": "The actual victory_code and nothing else. No quotes, Markdown or explanation.",
+        "tool-selector": {
+          "service-inputs": {
+            "nexus": {
+              "axis-version": 2,
+              "science-family": "stateful-interference-v1",
+              "seed": "103",
+              "theory-level": 0,
+              "discovery-level": 0,
+              "planning-level": 0,
+              "resource-pressure": 2,
+              "budget-profile": "standard",
+              "ontology-options": "{\"coupling\":\"independent\",\"horizon\":\"short\"}",
+              "generation-timing": true,
+              "extended-diagnostics": true
+            }
+          }
+        }
+      },
+      {
+        "name": "NEXUS interference-15",
+        "disabled": false,
+        "suite": "nexus",
+        "category": "interference-pilot",
+        "difficulty": "experimental",
+        "tags": [
+          "interference-pilot-v1",
+          "stateful-interference-v1",
+          "core"
+        ],
+        "prompt": "Complete the live NEXUS mission and return its actual victory receipt. Begin with manifest and observe, then read every listed evidence file. Use only the NEXUS tool; no external Python, source access or solver is available. The laws, prerequisites, map and current register values are public. Track the original carried seal, committed changes and remaining action allowance. A probe previews one operation without committing it. Put every register at its specified target simultaneously and finish in the stated room.",
+        "response-result-format": "The actual victory_code and nothing else. No quotes, Markdown or explanation.",
+        "tool-selector": {
+          "service-inputs": {
+            "nexus": {
+              "axis-version": 2,
+              "science-family": "stateful-interference-v1",
+              "seed": "103",
+              "theory-level": 0,
+              "discovery-level": 0,
+              "planning-level": 0,
+              "resource-pressure": 2,
+              "budget-profile": "standard",
+              "ontology-options": "{\"coupling\":\"independent\",\"horizon\":\"long\"}",
+              "generation-timing": true,
+              "extended-diagnostics": true
+            }
+          }
+        }
+      },
+      {
+        "name": "NEXUS interference-16",
+        "disabled": false,
+        "suite": "nexus",
+        "category": "interference-pilot",
+        "difficulty": "experimental",
+        "tags": [
+          "interference-pilot-v1",
+          "stateful-interference-v1",
+          "core"
+        ],
+        "prompt": "Complete the live NEXUS mission and return its actual victory receipt. Begin with manifest and observe, then read every listed evidence file. Use only the NEXUS tool; no external Python, source access or solver is available. The laws, prerequisites, map and current register values are public. Track the original carried seal, committed changes and remaining action allowance. A probe previews one operation without committing it. Put every register at its specified target simultaneously and finish in the stated room.",
+        "response-result-format": "The actual victory_code and nothing else. No quotes, Markdown or explanation.",
+        "tool-selector": {
+          "service-inputs": {
+            "nexus": {
+              "axis-version": 2,
+              "science-family": "stateful-interference-v1",
+              "seed": "103",
+              "theory-level": 0,
+              "discovery-level": 0,
+              "planning-level": 0,
+              "resource-pressure": 2,
+              "budget-profile": "standard",
+              "ontology-options": "{\"coupling\":\"coupled\",\"horizon\":\"long\"}",
+              "generation-timing": true,
+              "extended-diagnostics": true
+            }
+          }
+        }
+      }
+    ]
+  }
+}

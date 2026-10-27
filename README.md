@@ -575,3 +575,10 @@ history, delayed effects and exact joint-state inference while preserving prior
 families. Its ten-row diagnostic includes known-law and budget controls. It is
 experimental: qualification records legal shortcuts and does not admit a certified
 deep-reasoning tier.
+
+### Structural P/R metrics and model comparison
+
+The [interference comparison guide](docs/interference-comparison-guide.md) adds
+exact machine-block and whole-bank reopening measurements, documents the failed
+bounded three-bank admission probe, and provides a matched32-task Astra/Luna
+MindTrial comparison. Existing interference worlds remain the qualified base.

@@ -148,6 +148,9 @@ jobs:
       - name: Disclosed interference independent costs and subgoal regression
         run: uv run python scripts/preflight_interference.py --output /tmp/interference-preflight.json --tasks-output /tmp/interference-tasks
 
+      - name: Two-model interference comparison structural qualification
+        run: uv run python scripts/preflight_interference_comparison.py --output /tmp/interference-comparison-preflight.json --tasks-output /tmp/interference-comparison-tasks
+
       - name: Fast tests
         run: |
           uv run pytest -q -m "not slow and not stress" tests/unit tests/integration \
