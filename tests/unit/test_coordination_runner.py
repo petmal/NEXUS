@@ -7,6 +7,7 @@ import os
 import shutil
 import subprocess
 import sys
+import zipfile
 from pathlib import Path
 from typing import Any
 
@@ -154,20 +155,18 @@ def manifests(state):
     ]
 
 
-@pytest.fixture
-def interference_setup(setup):
+def profile_setup(setup, profile):
     state = setup
     package = state["package"]
-    profile = runner.INTERFERENCE
     for name in profile.configs:
         shutil.copyfile(ROOT / "examples/mindtrial" / name, package / name)
     tasks = {}
     for suite in profile.suites:
-        name = f"nexus-interference-{suite}-tasks.yaml"
+        name = f"nexus-{profile.name}-{suite}-tasks.yaml"
         shutil.copyfile(ROOT / "examples/mindtrial" / name, package / name)
         tasks[suite] = json.loads((package / name).read_text())
     shutil.copyfile(RUNNER, package / "pilot_runner.py")
-    shutil.copyfile(ROOT / "examples/mindtrial/interference-runner.py", package / "runner.py")
+    shutil.copyfile(ROOT / f"examples/mindtrial/{profile.name}-runner.py", package / "runner.py")
     release = state["release"]
     release["image"] = profile.image
     release["config_contract_sha256"] = {
@@ -182,10 +181,117 @@ def interference_setup(setup):
     dump(package / "release.json", release)
     state["payload"] = {
         "runtime_source_sha256": RUNTIME,
-        "reports": {"interference": {"status": "passed"}},
+        "reports": {profile.name: {"status": "passed"}},
         "tasks": tasks,
     }
     return state
+
+
+@pytest.fixture
+def interference_setup(setup):
+    return profile_setup(setup, runner.INTERFERENCE)
+
+
+@pytest.fixture
+def comparison_setup(setup):
+    return profile_setup(setup, runner.INTERFERENCE_COMPARISON)
+
+
+@pytest.mark.parametrize("image_id", [IMAGE_ID, BARE_IMAGE_ID])
+def test_comparison_preserves_both_model_runs_for_both_suites(comparison_setup, image_id):
+    state = comparison_setup
+    state["image_id"] = image_id
+    profile = runner.INTERFERENCE_COMPARISON
+    assert runner.main(["--suite", "all"], package_dir=state["package"], pilot=profile) == 0
+    records = manifests(state)
+    assert {record["suite"] for record in records} == {"core", "slack"}
+    assert len(records) == 2
+    for record in records:
+        assert record["version"] == "interference-comparison-run-v1"
+        assert record["evaluation_seed"] == "nexus-interference-comparison-pilot-v1"
+        assert record["input_config_file"] == profile.configs[0]
+        output = Path(record["output_dir"])
+        effective = json.loads((output / "config.yaml").read_text())["config"]
+        provider = effective["providers"][0]
+        assert provider["name"] == "openai"
+        assert provider["retry-policy"]["max-retry-attempts"] == 0
+        assert [run["model"] for run in provider["runs"]] == ["gpt-6-astra", "gpt-6-luna"]
+        assert all(
+            run["disabled"] is False
+            and run["max-requests-per-minute"] == 20
+            and run["model-parameters"] == {"reasoning-effort": "medium"}
+            for run in provider["runs"]
+        )
+        assert all(
+            item["image"] == image_id
+            for section in ("tools", "services", "validators")
+            for item in effective[section]
+        )
+        assert len(json.loads((output / "tasks.yaml").read_text())["task-config"]["tasks"]) == 16
+    (qualifier,) = [command for command, _ in state["calls"] if command[:2] == ["docker", "run"]]
+    assert qualifier[-1] == profile.preflight_script
+    assert (
+        "from nexus.evaluation.interference_comparison import export_tasks, preflight"
+        in qualifier[-1]
+    )
+    assert "--repeat" not in qualifier
+
+
+def test_comparison_keeps_original_neutral_integration_and_task_limits():
+    examples = ROOT / "examples/mindtrial"
+    original = json.loads((examples / "nexus-interference-config.yaml").read_text())["config"]
+    comparison = json.loads((examples / "nexus-interference-comparison-config.yaml").read_text())[
+        "config"
+    ]
+    for section in ("tools", "services", "validators"):
+        for item in comparison[section]:
+            item["image"] = runner.INTERFERENCE.image
+        assert comparison[section] == original[section]
+    for suite in ("core", "slack"):
+        original_tasks = json.loads(
+            (examples / f"nexus-interference-{suite}-tasks.yaml").read_text()
+        )
+        compared_tasks = json.loads(
+            (examples / f"nexus-interference-comparison-{suite}-tasks.yaml").read_text()
+        )
+        assert compared_tasks == original_tasks
+
+
+@pytest.mark.parametrize("drift", ["disable", "remove", "append", "retry"])
+def test_comparison_contract_rejects_run_set_or_retry_drift_before_build(comparison_setup, drift):
+    profile = runner.INTERFERENCE_COMPARISON
+    path = comparison_setup["package"] / profile.configs[0]
+    config = json.loads(path.read_text())
+    provider = config["config"]["providers"][0]
+    if drift == "disable":
+        provider["runs"][1]["disabled"] = True
+    elif drift == "remove":
+        provider["runs"].pop()
+    elif drift == "append":
+        provider["runs"].append(copy.deepcopy(provider["runs"][0]))
+    else:
+        provider["retry-policy"]["max-retry-attempts"] = 1
+    dump(path, config)
+    assert runner.main([], package_dir=comparison_setup["package"], pilot=profile) == 1
+    assert comparison_setup["calls"] == []
+
+
+@pytest.mark.parametrize("tamper", ["old-report", "failed-report", "tasks"])
+def test_comparison_requires_its_structural_report_before_model_calls(comparison_setup, tamper):
+    state = comparison_setup
+    if tamper == "old-report":
+        state["payload"]["reports"] = {"interference": {"status": "passed"}}
+    elif tamper == "failed-report":
+        state["payload"]["reports"]["interference-comparison"]["status"] = "blocked"
+    else:
+        state["payload"]["tasks"]["slack"]["task-config"]["tasks"].pop()
+    assert (
+        runner.main(
+            ["--skip-build"], package_dir=state["package"], pilot=runner.INTERFERENCE_COMPARISON
+        )
+        == 1
+    )
+    assert not any(command[0] == "./mindtrial" for command, _ in state["calls"])
 
 
 @pytest.mark.parametrize("image_id", [IMAGE_ID, BARE_IMAGE_ID])
@@ -227,9 +333,10 @@ def test_interference_preflight_fails_closed_before_model_calls(interference_set
     assert not any(command[0] == "./mindtrial" for command, _ in state["calls"])
 
 
-def test_interference_wrapper_exposes_only_its_suites():
+@pytest.mark.parametrize("profile", ["interference", "interference-comparison"])
+def test_interference_wrapper_exposes_only_its_suites(profile):
     result = REAL_RUN(
-        [sys.executable, str(ROOT / "examples/mindtrial/interference-runner.py"), "--help"],
+        [sys.executable, str(ROOT / f"examples/mindtrial/{profile}-runner.py"), "--help"],
         capture_output=True,
         text=True,
         check=True,
@@ -609,12 +716,13 @@ def test_repeat_exports_are_compared_after_planning_preflight(setup):
 
 
 @pytest.mark.parametrize("packaged", [True, False])
-def test_bash_entrypoint_self_locates_and_preserves_arguments(tmp_path, packaged):
+@pytest.mark.parametrize("profile", ["coordination", "interference", "interference-comparison"])
+def test_bash_entrypoint_self_locates_and_preserves_arguments(tmp_path, packaged, profile):
     package = tmp_path / "package with spaces"
     package.mkdir()
-    script = package / ("run.sh" if packaged else "coordination-run.sh")
-    shutil.copyfile(LAUNCHER, script)
-    helper = package / ("runner.py" if packaged else "coordination-runner.py")
+    script = package / ("run.sh" if packaged else f"{profile}-run.sh")
+    shutil.copyfile(ROOT / f"examples/mindtrial/{profile}-run.sh", script)
+    helper = package / ("runner.py" if packaged else f"{profile}-runner.py")
     helper.write_text("import json, sys\nprint(json.dumps(sys.argv))\n")
     completed = REAL_RUN(
         ["bash", str(script), "--suite", "spatial", "argument with spaces"],
@@ -630,3 +738,326 @@ def test_bash_entrypoint_self_locates_and_preserves_arguments(tmp_path, packaged
         "spatial",
         "argument with spaces",
     ]
+
+
+@pytest.fixture
+def comparison_package_setup(tmp_path, monkeypatch):
+    spec = importlib.util.spec_from_file_location(
+        "package_coordination", ROOT / "scripts/package_coordination.py"
+    )
+    assert spec is not None and spec.loader is not None
+    packager = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(packager)
+    source = tmp_path / "source"
+    examples = source / "examples/mindtrial"
+    examples.mkdir(parents=True)
+    profile = runner.INTERFERENCE_COMPARISON
+    source_names = {
+        "coordination-runner.py",
+        "interference-comparison-runner.py",
+        "interference-comparison-run.sh",
+        "interference-comparison-run.md",
+        "summarize-pilot-results.py",
+        *profile.configs,
+        *(f"nexus-{profile.name}-{suite}-tasks.yaml" for suite in profile.suites),
+    }
+    for name in source_names:
+        shutil.copyfile(ROOT / "examples/mindtrial" / name, examples / name)
+    reports = source / "docs/research"
+    reports.mkdir(parents=True)
+    report_names = {
+        "interference-comparison-preflight-2026-10-27.json",
+        "ternary-feasibility-2026-10-27.json",
+        "interference-comparison-validation-2026-10-27.md",
+    }
+    for name in report_names:
+        (reports / name).write_text(f"fixture for {name}\n")
+    shutil.copyfile(
+        ROOT / "docs/interference-matrix.json", source / "docs/interference-matrix.json"
+    )
+    source_file = source / "src/nexus/fixture.py"
+    source_file.parent.mkdir(parents=True)
+    source_file.write_text('"""Isolated Python source fixture."""\n')
+    sources = {"fixture.py": runner.sha256(source_file.read_bytes())}
+    matrix = json.loads((source / "docs/interference-matrix.json").read_text())
+    checks = {
+        name: True
+        for name in (
+            "compiled_contract",
+            "public_policy_supported_win",
+            "exact_reference_actions",
+            "exact_replay",
+            "independent_optimum",
+            "independent_restricted_baseline",
+            "independent_coordinate_break_minimum",
+            "paired_seed_kernel_and_target",
+            "complete_transition_checks",
+            "tool_limit_covers_allowance",
+            "horizon_stratum_bound",
+            "factorization_or_optimal_interleaving",
+            "coupled_coordinate_regression_required",
+        )
+    }
+    structural_checks = {
+        name: True
+        for name in (
+            "independent_structural_costs",
+            "coordinate_metric_matches_original",
+            "block_cost_ordering",
+            "live_structural_diagnostics",
+        )
+    }
+    preflight = {
+        "version": "interference-comparison-preflight-v1",
+        "status": "passed",
+        "sources": sources,
+        "matrix_sha256": runner.sha256(
+            json.dumps(matrix, sort_keys=True, separators=(",", ":")).encode()
+        ),
+        "cells": [
+            {**row, "checks": checks, "structural_checks": structural_checks}
+            for row in matrix["runs"]
+        ],
+    }
+    feasibility = {
+        "version": "ternary-feasibility-v1",
+        "status": "completed",
+        "sources": sources,
+        "seeds": [67, 79, 101, 103],
+        "kernel_attempt_limit_per_seed": 32,
+        "state_bound": 19683,
+        "variants": ["spill-ring", "boundary-crossguard", "all-crossguard", "self-guard"],
+        "first_admission_gate": {"minimum_machine_blocks": 16},
+        "second_admission_gate": {"minimum_whole_bank_reopening_operations": 2},
+        "live_tasks_exported": 0,
+        "first_gate_candidate_count": 1,
+        "second_gate_candidate_count": 0,
+        "admission": "no-target-passes-tested-gates",
+        "kernels": [
+            {
+                "seed": seed,
+                "attempt": attempt,
+                "variant": variant,
+                "independent_transition_checks": 177147,
+                "coupled_transition_checks": 177147,
+                "independent_block_oracle_agrees": True,
+                "targets_passing_first_gate": [],
+                "candidate_proofs": [],
+            }
+            for seed in (67, 79, 101, 103)
+            for attempt in range(1, 33)
+            for variant in ("spill-ring", "boundary-crossguard", "all-crossguard", "self-guard")
+        ],
+    }
+    feasibility["kernels"][0].update(
+        targets_passing_first_gate=[9841],
+        candidate_proofs=[
+            {
+                "target": [1] * 9,
+                "state": 9841,
+                "minimum_operations": 17,
+                "minimum_machine_blocks": 16,
+                "minimum_whole_bank_reopening_operations": 1,
+                "second_gate_passed": False,
+            }
+        ],
+    )
+    dump(reports / "interference-comparison-preflight-2026-10-27.json", preflight)
+    dump(reports / "ternary-feasibility-2026-10-27.json", feasibility)
+    (source / "docs/interference-comparison-guide.md").write_text("Comparison guide fixture\n")
+    monkeypatch.setattr(packager, "ROOT", source)
+    commit = "a" * 40
+
+    def git_output(command, **kwargs):
+        assert command[:3] == ["git", "-C", str(source)]
+        assert kwargs == {"text": True}
+        if command[3:] == ["status", "--porcelain"]:
+            return ""
+        assert command[3:] == ["rev-parse", "HEAD"]
+        return commit + "\n"
+
+    monkeypatch.setattr(packager.subprocess, "check_output", git_output)
+    destination = tmp_path / "comparison package"
+    monkeypatch.setattr(
+        sys,
+        "argv",
+        [
+            "package_interference_comparison.py",
+            "--output-dir",
+            str(destination),
+            "--runtime-source-sha256",
+            RUNTIME,
+        ],
+    )
+    return {
+        "packager": packager,
+        "source": source,
+        "destination": destination,
+        "report_names": report_names,
+        "profile": profile,
+        "commit": commit,
+    }
+
+
+def test_comparison_package_binds_launcher_config_guide_and_qualification_reports(
+    comparison_package_setup,
+):
+    state = comparison_package_setup
+    packager, destination = state["packager"], state["destination"]
+    profile, commit, report_names = state["profile"], state["commit"], state["report_names"]
+    packager.main(pilot_name=profile.name)
+    release = runner.load_release(destination, profile)
+    assert release["source_commit"] == commit
+    assert release["image"] == profile.image
+    assert release["runtime_source_sha256"] == RUNTIME
+    assert release["design_url"].endswith(f"/{commit}/docs/interference-comparison-guide.md")
+    assert set(release["files_sha256"]) == {
+        "run.sh",
+        "runner.py",
+        "pilot_runner.py",
+        "README.md",
+        "guide.md",
+        "summarize_results.py",
+        *profile.configs,
+        *(f"nexus-{profile.name}-{suite}-tasks.yaml" for suite in profile.suites),
+        *(f"reports/{name}" for name in report_names),
+    }
+    config, _ = runner.load_config(destination, release, profile.configs[0])
+    assert len(config["config"]["providers"][0]["runs"]) == 2
+    with zipfile.ZipFile(destination.with_suffix(".zip")) as archive:
+        assert f"{destination.name}/guide.md" in archive.namelist()
+        assert f"{destination.name}/pilot_runner.py" in archive.namelist()
+        assert f"{destination.name}/summarize_results.py" in archive.namelist()
+    (destination / "guide.md").write_text("changed operator guidance\n")
+    with pytest.raises(runner.RunnerError, match="Release checksum mismatch: guide.md"):
+        runner.load_release(destination, profile)
+
+
+@pytest.mark.parametrize("report", ["interference-comparison-preflight", "ternary-feasibility"])
+@pytest.mark.parametrize("failure", ["empty", "running", "stale", "partial", "duplicate"])
+def test_comparison_package_rejects_incomplete_or_stale_reports_before_copy(
+    comparison_package_setup, report, failure
+):
+    state = comparison_package_setup
+    path = state["source"] / f"docs/research/{report}-2026-10-27.json"
+    document = json.loads(path.read_text())
+    if failure == "empty":
+        document = {}
+    elif failure == "running":
+        document["status"] = "running"
+    elif failure == "stale":
+        document["sources"]["fixture.py"] = "d" * 64
+    else:
+        records = document["cells" if report == "interference-comparison-preflight" else "kernels"]
+        if failure == "partial":
+            records.pop()
+        else:
+            records[-1] = copy.deepcopy(records[0])
+    dump(path, document)
+    with pytest.raises(SystemExit) as blocked:
+        state["packager"].main(pilot_name="interference-comparison")
+    assert blocked.value.code == 2
+    assert not state["destination"].exists()
+
+
+@pytest.mark.parametrize("field", ["checks", "structural_checks"])
+@pytest.mark.parametrize("failure", ["missing", "false", "truthy-integer"])
+def test_comparison_package_requires_every_named_preflight_check(
+    comparison_package_setup, field, failure
+):
+    state = comparison_package_setup
+    path = state["source"] / "docs/research/interference-comparison-preflight-2026-10-27.json"
+    document = json.loads(path.read_text())
+    checks = document["cells"][0][field]
+    name = next(iter(checks))
+    if failure == "missing":
+        del checks[name]
+    else:
+        checks[name] = False if failure == "false" else 1
+    dump(path, document)
+    with pytest.raises(ValueError, match="missing or failed"):
+        state["packager"].validate_comparison_reports(state["source"])
+
+
+@pytest.mark.parametrize("failure", ["source-changed", "source-added", "matrix-changed"])
+def test_comparison_package_binds_reports_to_current_source_and_matrix(
+    comparison_package_setup, failure
+):
+    state = comparison_package_setup
+    if failure == "source-changed":
+        (state["source"] / "src/nexus/fixture.py").write_text("changed = True\n")
+    elif failure == "source-added":
+        (state["source"] / "src/nexus/added.py").write_text("added = True\n")
+    else:
+        path = state["source"] / "docs/interference-matrix.json"
+        document = json.loads(path.read_text())
+        document["runs"][0]["seed"] = 999
+        dump(path, document)
+    with pytest.raises(ValueError, match="source map is stale|matrix digest differs"):
+        state["packager"].validate_comparison_reports(state["source"])
+
+
+@pytest.mark.parametrize(
+    "failure",
+    [
+        "seeds",
+        "variants",
+        "attempt-limit",
+        "state-bound",
+        "first-gate",
+        "second-gate",
+        "live-tasks",
+        "pending-kernel",
+        "independent-transitions",
+        "coupled-transitions",
+        "block-oracle",
+        "missing-proof",
+        "pending-proof",
+        "wrong-proof-state",
+        "wrong-second-gate-result",
+        "first-total",
+        "second-total",
+        "admission",
+        "passed-gates",
+    ],
+)
+def test_comparison_package_rejects_inconsistent_feasibility_proofs(
+    comparison_package_setup, failure
+):
+    state = comparison_package_setup
+    path = state["source"] / "docs/research/ternary-feasibility-2026-10-27.json"
+    document = json.loads(path.read_text())
+    kernel = document["kernels"][0]
+    proof = kernel["candidate_proofs"][0]
+    mutations = {
+        "seeds": lambda: document["seeds"].pop(),
+        "variants": lambda: document["variants"].pop(),
+        "attempt-limit": lambda: document.update(kernel_attempt_limit_per_seed=31),
+        "state-bound": lambda: document.update(state_bound=19682),
+        "first-gate": lambda: document["first_admission_gate"].update(minimum_machine_blocks=15),
+        "second-gate": lambda: document["second_admission_gate"].update(
+            minimum_whole_bank_reopening_operations=1
+        ),
+        "live-tasks": lambda: document.update(live_tasks_exported=1),
+        "pending-kernel": lambda: kernel.update(status="running"),
+        "independent-transitions": lambda: kernel.update(independent_transition_checks=177146),
+        "coupled-transitions": lambda: kernel.update(coupled_transition_checks=177146),
+        "block-oracle": lambda: kernel.update(independent_block_oracle_agrees=False),
+        "missing-proof": lambda: kernel["candidate_proofs"].clear(),
+        "pending-proof": lambda: proof.update(status="running"),
+        "wrong-proof-state": lambda: proof.update(state=9842),
+        "wrong-second-gate-result": lambda: proof.update(second_gate_passed=True),
+        "first-total": lambda: document.update(first_gate_candidate_count=0),
+        "second-total": lambda: document.update(second_gate_candidate_count=1),
+        "admission": lambda: document.update(admission="admitted"),
+    }
+    if failure == "passed-gates":
+        proof.update(minimum_whole_bank_reopening_operations=2, second_gate_passed=True)
+        document.update(
+            second_gate_candidate_count=1, admission="later-gates-required-no-admission"
+        )
+    else:
+        mutations[failure]()
+    dump(path, document)
+    with pytest.raises(ValueError, match="comparison reports:"):
+        state["packager"].validate_comparison_reports(state["source"])

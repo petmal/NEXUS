@@ -13,6 +13,7 @@ COPY src ./src
 COPY scripts/preflight_planning.py ./scripts/
 COPY scripts/preflight_coordination.py ./scripts/
 COPY scripts/preflight_interference.py ./scripts/
+COPY scripts/preflight_interference_comparison.py ./scripts/
 COPY scripts/smoke_planning_service.py ./scripts/
 COPY docs/planning-resource-matrix.json ./docs/
 COPY docs/coordination-matrix.json ./docs/
