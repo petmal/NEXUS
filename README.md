@@ -582,3 +582,7 @@ The [interference comparison guide](docs/interference-comparison-guide.md) adds
 exact machine-block and whole-bank reopening measurements, documents the failed
 bounded three-bank admission probe, and provides a matched32-task Astra/Luna
 MindTrial comparison. Existing interference worlds remain the qualified base.
+
+### Cross-axis smaller-model pilot
+
+The [cross-axis guide](docs/cross-axis-guide.md) defines a staged 56-condition matrix: the 32 interference reruns plus 24 qualified T/D and P/R smoke conditions. Start with the [canary launcher](examples/mindtrial/cross-axis-run.md); Astra, Luna and native Gemini Flash have explicit allocations, and the full optional sequence is 120 attempts.

@@ -1,4 +1,7 @@
-"""Package the clean checkout's pinned pilot; stdlib only, no model calls."""
+"""Package the clean checkout's pinned pilot; no model calls.
+
+Cross-axis packaging also uses the repository's installed mechanical qualifier.
+"""
 
 import argparse
 import hashlib
@@ -10,6 +13,36 @@ import subprocess
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
+
+
+def validate_cross_axis_reports(root, runtime_source_sha256):
+    """Revalidate the complete proof report before creating a release directory."""
+    try:
+        from nexus.evaluation.cross_axis import Pilot, validate_report
+    except ImportError as exc:
+        raise ValueError(
+            "cross-axis packaging requires the repository's Python environment"
+        ) from exc
+    try:
+        pilot = Pilot.model_validate_json((root / "docs/cross-axis-matrix.json").read_bytes())
+        report = json.loads(
+            (root / "docs/research/cross-axis-preflight-2026-10-29.json").read_bytes()
+        )
+    except (OSError, ValueError) as exc:
+        raise ValueError("cross-axis matrix or preflight report cannot be read") from exc
+    source_root = root / "src/nexus"
+    sources = {
+        path.relative_to(source_root).as_posix(): hashlib.sha256(path.read_bytes()).hexdigest()
+        for path in sorted(source_root.rglob("*.py"))
+    }
+    if (
+        not isinstance(report, dict)
+        or not sources
+        or report.get("sources") != sources
+        or report.get("source_sha256") != runtime_source_sha256
+    ):
+        raise ValueError("cross-axis report source binding differs from the checkout or runtime")
+    validate_report(pilot, report)
 
 
 def validate_comparison_reports(root):
@@ -198,7 +231,7 @@ def validate_comparison_reports(root):
 
 
 def main(pilot_name="coordination"):
-    if pilot_name not in ("coordination", "interference", "interference-comparison"):
+    if pilot_name not in ("coordination", "interference", "interference-comparison", "cross-axis"):
         raise ValueError("unknown pilot profile")
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--output-dir", type=Path, required=True)
@@ -215,6 +248,11 @@ def main(pilot_name="coordination"):
             validate_comparison_reports(ROOT)
         except ValueError as exc:
             parser.error(str(exc))
+    if pilot_name == "cross-axis":
+        try:
+            validate_cross_axis_reports(ROOT, args.runtime_source_sha256)
+        except ValueError as exc:
+            parser.error(str(exc))
     examples = ROOT / "examples/mindtrial"
     spec = importlib.util.spec_from_file_location(
         "coordination_runner", examples / "coordination-runner.py"
@@ -227,6 +265,7 @@ def main(pilot_name="coordination"):
         "coordination": runner.COORDINATION,
         "interference": runner.INTERFERENCE,
         "interference-comparison": runner.INTERFERENCE_COMPARISON,
+        "cross-axis": runner.CROSS_AXIS,
     }[pilot_name]
     destination = args.output_dir.resolve()
     destination.mkdir(parents=True, exist_ok=False)
@@ -243,8 +282,8 @@ def main(pilot_name="coordination"):
     }
     if pilot_name != "coordination":
         copies["pilot_runner.py"] = examples / "coordination-runner.py"
-    if pilot_name == "interference-comparison":
-        copies["guide.md"] = ROOT / "docs/interference-comparison-guide.md"
+    if pilot_name in ("interference-comparison", "cross-axis"):
+        copies["guide.md"] = ROOT / f"docs/{pilot_name}-guide.md"
         copies["summarize_results.py"] = examples / "summarize-pilot-results.py"
     for name, source in copies.items():
         shutil.copy2(source, destination / name)
@@ -268,6 +307,10 @@ def main(pilot_name="coordination"):
             "ternary-feasibility-2026-10-27.json",
             "interference-comparison-validation-2026-10-27.md",
         ),
+        "cross-axis": (
+            "cross-axis-preflight-2026-10-29.json",
+            "cross-axis-validation-2026-10-29.md",
+        ),
     }[pilot_name]
     for name in report_names:
         shutil.copy2(ROOT / "docs/research" / name, reports / name)
@@ -287,6 +330,13 @@ def main(pilot_name="coordination"):
         },
         "design_url": f"https://github.com/petmal/NEXUS/blob/{commit}/docs/{pilot_name}-guide.md",
     }
+    if profile.tool_contract_version:
+        release["tool_contracts"] = {
+            name: runner.tool_contract(
+                runner.read_json(destination / name), profile.tool_contract_version
+            )
+            for name in profile.configs
+        }
     runner.write_json(destination / "release.json", release)
     runner.load_release(destination, profile)
     for name in profile.configs:

@@ -3,14 +3,14 @@ from __future__ import annotations
 import argparse
 import json
 import sys
+from collections.abc import Sequence
 from pathlib import Path
-from typing import Sequence
 
 from nexus.protocol.transport import (
     ClientError,
     check_health,
-    request_service_payload,
     receipt_classification,
+    request_service_payload,
     validate_candidate_payload_with_performance,
 )
 
@@ -43,14 +43,40 @@ def _request(argv: Sequence[str]) -> int:
         description="Send one player-safe request to a single-session service.",
     )
     parser.add_argument("--request-file", required=True)
+    parser.add_argument(
+        "--tool-argument",
+        help="Optional outer tool argument whose value is mapped to the request file.",
+    )
     parser.add_argument("--url")
     args = parser.parse_args(argv)
 
     try:
         request = json.loads(Path(args.request_file).read_text(encoding="utf-8"))
+        if not isinstance(request, dict) or not isinstance(request.get("operation"), str):
+            raise ClientError("request file must contain an object with a string 'operation' field")
         response = request_service_payload(request, url=args.url)
     except (json.JSONDecodeError, OSError, ClientError) as exc:
         print(f"request failed: {exc}", file=sys.stderr)
+        if args.tool_argument:
+            example = json.dumps(
+                {args.tool_argument: {"operation": "manifest"}}, separators=(",", ":")
+            )
+            if isinstance(exc, FileNotFoundError):
+                print(
+                    "The request file is unavailable. Check the tool argument and its file mapping. "
+                    f"Tool arguments must include the outer {args.tool_argument!r} object, for example "
+                    f"{example}. Its value becomes the request-file contents. "
+                    "A missing file alone does not identify whether the argument or mapping is wrong.",
+                    file=sys.stderr,
+                )
+            elif isinstance(exc, json.JSONDecodeError) or (
+                isinstance(exc, ClientError) and "request file must contain" in str(exc)
+            ):
+                print(
+                    f"Use complete tool arguments such as {example}. The mapped file must contain "
+                    'the inner request object, such as {"operation":"manifest"}.',
+                    file=sys.stderr,
+                )
         return 2
 
     _write_json(response)
@@ -85,9 +111,13 @@ def _validate(argv: Sequence[str]) -> int:
         file=sys.stderr,
     )
     _write_json(result)
-    print("NEXUS receipt classification: " + json.dumps(
-        receipt_classification(result, performance), sort_keys=True, separators=(",", ":")
-    ), file=sys.stderr)
+    print(
+        "NEXUS receipt classification: "
+        + json.dumps(
+            receipt_classification(result, performance), sort_keys=True, separators=(",", ":")
+        ),
+        file=sys.stderr,
+    )
     return 0
 
 

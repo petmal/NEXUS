@@ -45,10 +45,14 @@ def run_case(config, task, folder, *, forged=False):
         from nexus.ontology.coordination.policy import public_policy
     elif inputs["science-family"] == "stateful-interference-v1":
         from nexus.ontology.interference.policy import public_policy
+    elif inputs["science-family"] == "stateful-discovery-v1":
+        from nexus.ontology.stateful.policy import public_policy
+    elif inputs["science-family"] == "model-revision-v1":
+        from nexus.ontology.discovery.policy import public_policy
+    elif inputs["science-family"] == "compositional-repair-v1":
+        from nexus.ontology.compositional.policy import public_policy
     else:
-        raise ValueError(
-            "this smoke driver supports planning, coordination and interference tasks only"
-        )
+        raise ValueError(f"unsupported public-policy family: {inputs['science-family']}")
     env = {k: v for k, v in os.environ.items() if not k.startswith("NEXUS_")}
     env.update(service["env"])
     env.update(
@@ -194,7 +198,7 @@ def main():
         "--tasks", type=Path, default=Path("examples/mindtrial/nexus-planning-resource-tasks.yaml")
     )
     parser.add_argument(
-        "--rows", default="04,07", help="Stable row IDs, comma-separated; all for 16 cells"
+        "--rows", default="04,07", help="Stable row IDs, comma-separated; all for every input row"
     )
     parser.add_argument("--output", type=Path, default=Path("/tmp/planning-service-smoke.json"))
     args = parser.parse_args()

@@ -1,4 +1,4 @@
-name: Planning, coordination and interference runner smoke
+name: NEXUS runner and container smoke
 
 on:
   pull_request:
@@ -9,6 +9,13 @@ on:
       - "scripts/preflight_coordination.py"
       - "scripts/preflight_interference.py"
       - "scripts/preflight_interference_comparison.py"
+      - "scripts/preflight_cross_axis.py"
+      - "scripts/package_cross_axis.py"
+      - "scripts/export_cross_axis_configs.py"
+      - "examples/mindtrial/cross-axis-*"
+      - "examples/mindtrial/nexus-cross-axis-*.yaml"
+      - "docs/cross-axis-*"
+      - "docs/research/cross-axis-*"
       - "scripts/package_coordination.py"
       - "scripts/package_interference.py"
       - "scripts/package_interference_comparison.py"
@@ -42,16 +49,23 @@ concurrency:
 jobs:
   planning-container:
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 60
     steps:
       - uses: actions/checkout@v7
         with:
           ref: ${{ github.event.pull_request.head.sha || github.sha }}
           persist-credentials: false
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.14.7"
+      - name: Install the frozen operator environment
+        run: |
+          python -m pip install --no-deps uv==0.12.21
+          uv sync --frozen --all-extras
       - name: Build the exact feature revision
         run: |
           revision=$(git rev-parse HEAD)
-          docker build --build-arg VCS_REF="$revision" -t nexus:planning-resource-v1 -t nexus:coordination-v1 -t nexus:interference-v1 -t nexus:interference-comparison-v1 .
+          docker build --build-arg VCS_REF="$revision" -t nexus:planning-resource-v1 -t nexus:coordination-v1 -t nexus:interference-v1 -t nexus:interference-comparison-v1 -t nexus:cross-axis-v1 .
           test "$(docker image inspect nexus:planning-resource-v1 --format '{{ index .Config.Labels "org.opencontainers.image.revision" }}')" = "$revision"
       - name: Qualify all 16 cases inside the image
         run: docker run --rm --entrypoint python nexus:planning-resource-v1 scripts/preflight_planning.py
@@ -61,6 +75,8 @@ jobs:
         run: docker run --rm --entrypoint python nexus:interference-v1 scripts/preflight_interference.py
       - name: Qualify all 32 comparison rows and structural metrics inside the image
         run: docker run --rm --entrypoint python nexus:interference-comparison-v1 scripts/preflight_interference_comparison.py
+      - name: Qualify all 56 cross-axis conditions inside the image
+        run: docker run --rm --entrypoint python nexus:cross-axis-v1 scripts/preflight_cross_axis.py
       - name: Verify the packaged launcher against the actual image without model calls
         run: |
           runtime_digest=$(docker run --rm --entrypoint python nexus:coordination-v1 -c 'from nexus.provenance import source_digest; print(source_digest())')
@@ -68,8 +84,11 @@ jobs:
           bash "$RUNNER_TEMP/coordination-package/run.sh" --skip-build --preflight-only --suite all
           python3 scripts/package_interference.py --output-dir "$RUNNER_TEMP/interference-package" --runtime-source-sha256 "$runtime_digest"
           bash "$RUNNER_TEMP/interference-package/run.sh" --skip-build --preflight-only --suite all
-          python3 scripts/package_interference_comparison.py --output-dir "$RUNNER_TEMP/interference-comparison-package" --runtime-source-sha256 "$runtime_digest"
-          bash "$RUNNER_TEMP/interference-comparison-package/run.sh" --skip-build --preflight-only --suite all
+          # The dated comparison release remains pinned to its original source/probe.
+          # Its current mechanics/services and package unit tests remain checked;
+          # cross-axis is the current release's full launcher integration gate.
+          uv run python scripts/package_cross_axis.py --output-dir "$RUNNER_TEMP/cross-axis-package" --runtime-source-sha256 "$runtime_digest"
+          bash "$RUNNER_TEMP/cross-axis-package/run.sh" --skip-build --preflight-only --suite all
       - name: Exercise real service, tool client, validator and shutdown telemetry
         run: |
           docker run --rm --entrypoint python \
@@ -102,3 +121,17 @@ jobs:
             nexus:interference-v1 scripts/smoke_planning_service.py \
             --config /run-config/nexus-interference-config.yaml \
             --tasks /run-config/nexus-interference-core-tasks.yaml --rows 01
+      - name: Exercise every cross-axis condition through the family-neutral contract
+        run: |
+          for suite in canary-core canary-slack rerun-core rerun-slack smoke-td smoke-pr; do
+            case "$suite" in
+              canary-*) config=canary ;;
+              rerun-*) config=rerun ;;
+              smoke-*) config=smoke ;;
+            esac
+            docker run --rm --entrypoint python \
+              --mount "type=bind,source=$PWD/examples/mindtrial,target=/run-config,readonly" \
+              nexus:cross-axis-v1 scripts/smoke_planning_service.py \
+              --config "/run-config/nexus-cross-axis-$config-config.yaml" \
+              --tasks "/run-config/nexus-cross-axis-$suite-tasks.yaml" --rows all
+          done
