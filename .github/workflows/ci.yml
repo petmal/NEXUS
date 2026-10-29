@@ -22,6 +22,7 @@ on:
       - "docs/planning-resource-matrix.json"
       - "docs/coordination-matrix.json"
       - "docs/interference-matrix.json"
+      - "docs/cross-axis-matrix.json"
   pull_request:
     paths:
       - "**"
@@ -42,6 +43,7 @@ on:
       - "docs/planning-resource-matrix.json"
       - "docs/coordination-matrix.json"
       - "docs/interference-matrix.json"
+      - "docs/cross-axis-matrix.json"
   workflow_dispatch:
     inputs:
       full:
@@ -150,6 +152,9 @@ jobs:
 
       - name: Two-model interference comparison structural qualification
         run: uv run python scripts/preflight_interference_comparison.py --output /tmp/interference-comparison-preflight.json --tasks-output /tmp/interference-comparison-tasks
+
+      - name: Cross-axis current-source qualification and task export
+        run: uv run python scripts/preflight_cross_axis.py --output /tmp/cross-axis-preflight.json --tasks-output /tmp/cross-axis-tasks
 
       - name: Fast tests
         run: |

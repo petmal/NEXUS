@@ -1,0 +1,258 @@
+{
+  "task-config": {
+    "max-turns": 650,
+    "tool-selector": {
+      "tools": [
+        {
+          "name": "nexus",
+          "max-calls": 600
+        }
+      ]
+    },
+    "validation-rules": {
+      "custom-validator": "nexus-victory"
+    },
+    "tasks": [
+      {
+        "name": "NEXUS smoke-S13",
+        "disabled": false,
+        "suite": "nexus",
+        "category": "cross-axis-smoke",
+        "difficulty": "experimental",
+        "tags": [
+          "cross-axis-pilot-v1",
+          "stateful-planning-v1",
+          "smoke-pr"
+        ],
+        "prompt": "Complete the live NEXUS mission and return its actual victory receipt. Begin with manifest and observe, then read every listed evidence file. Use the disclosed action contract and the episode's own instructions to learn the controls, available evidence, mission and remaining action allowance. Use only the NEXUS tool; no external Python, source access or solver is available. Track observations, committed changes and resources. Satisfy the full mission, call finish successfully, and return exactly the actual victory_code.",
+        "response-result-format": "The actual victory_code and nothing else. No quotes, Markdown or explanation.",
+        "tool-selector": {
+          "service-inputs": {
+            "nexus": {
+              "axis-version": 2,
+              "science-family": "stateful-planning-v1",
+              "seed": "21",
+              "theory-level": 0,
+              "discovery-level": 5,
+              "planning-level": 0,
+              "resource-pressure": 2,
+              "budget-profile": "standard",
+              "generation-timing": true,
+              "extended-diagnostics": true
+            }
+          }
+        }
+      },
+      {
+        "name": "NEXUS smoke-S14",
+        "disabled": false,
+        "suite": "nexus",
+        "category": "cross-axis-smoke",
+        "difficulty": "experimental",
+        "tags": [
+          "cross-axis-pilot-v1",
+          "stateful-planning-v1",
+          "smoke-pr"
+        ],
+        "prompt": "Complete the live NEXUS mission and return its actual victory receipt. Begin with manifest and observe, then read every listed evidence file. Use the disclosed action contract and the episode's own instructions to learn the controls, available evidence, mission and remaining action allowance. Use only the NEXUS tool; no external Python, source access or solver is available. Track observations, committed changes and resources. Satisfy the full mission, call finish successfully, and return exactly the actual victory_code.",
+        "response-result-format": "The actual victory_code and nothing else. No quotes, Markdown or explanation.",
+        "tool-selector": {
+          "service-inputs": {
+            "nexus": {
+              "axis-version": 2,
+              "science-family": "stateful-planning-v1",
+              "seed": "21",
+              "theory-level": 0,
+              "discovery-level": 5,
+              "planning-level": 1,
+              "resource-pressure": 2,
+              "budget-profile": "standard",
+              "generation-timing": true,
+              "extended-diagnostics": true
+            }
+          }
+        }
+      },
+      {
+        "name": "NEXUS smoke-S15",
+        "disabled": false,
+        "suite": "nexus",
+        "category": "cross-axis-smoke",
+        "difficulty": "experimental",
+        "tags": [
+          "cross-axis-pilot-v1",
+          "stateful-planning-v1",
+          "smoke-pr"
+        ],
+        "prompt": "Complete the live NEXUS mission and return its actual victory receipt. Begin with manifest and observe, then read every listed evidence file. Use the disclosed action contract and the episode's own instructions to learn the controls, available evidence, mission and remaining action allowance. Use only the NEXUS tool; no external Python, source access or solver is available. Track observations, committed changes and resources. Satisfy the full mission, call finish successfully, and return exactly the actual victory_code.",
+        "response-result-format": "The actual victory_code and nothing else. No quotes, Markdown or explanation.",
+        "tool-selector": {
+          "service-inputs": {
+            "nexus": {
+              "axis-version": 2,
+              "science-family": "stateful-planning-v1",
+              "seed": "21",
+              "theory-level": 0,
+              "discovery-level": 5,
+              "planning-level": 2,
+              "resource-pressure": 2,
+              "budget-profile": "standard",
+              "generation-timing": true,
+              "extended-diagnostics": true
+            }
+          }
+        }
+      },
+      {
+        "name": "NEXUS smoke-S16",
+        "disabled": false,
+        "suite": "nexus",
+        "category": "cross-axis-smoke",
+        "difficulty": "experimental",
+        "tags": [
+          "cross-axis-pilot-v1",
+          "stateful-planning-v1",
+          "smoke-pr"
+        ],
+        "prompt": "Complete the live NEXUS mission and return its actual victory receipt. Begin with manifest and observe, then read every listed evidence file. Use the disclosed action contract and the episode's own instructions to learn the controls, available evidence, mission and remaining action allowance. Use only the NEXUS tool; no external Python, source access or solver is available. Track observations, committed changes and resources. Satisfy the full mission, call finish successfully, and return exactly the actual victory_code.",
+        "response-result-format": "The actual victory_code and nothing else. No quotes, Markdown or explanation.",
+        "tool-selector": {
+          "service-inputs": {
+            "nexus": {
+              "axis-version": 2,
+              "science-family": "stateful-planning-v1",
+              "seed": "21",
+              "theory-level": 0,
+              "discovery-level": 5,
+              "planning-level": 3,
+              "resource-pressure": 2,
+              "budget-profile": "standard",
+              "generation-timing": true,
+              "extended-diagnostics": true
+            }
+          }
+        }
+      },
+      {
+        "name": "NEXUS smoke-S17",
+        "disabled": false,
+        "suite": "nexus",
+        "category": "cross-axis-smoke",
+        "difficulty": "experimental",
+        "tags": [
+          "cross-axis-pilot-v1",
+          "stateful-planning-v1",
+          "smoke-pr"
+        ],
+        "prompt": "Complete the live NEXUS mission and return its actual victory receipt. Begin with manifest and observe, then read every listed evidence file. Use the disclosed action contract and the episode's own instructions to learn the controls, available evidence, mission and remaining action allowance. Use only the NEXUS tool; no external Python, source access or solver is available. Track observations, committed changes and resources. Satisfy the full mission, call finish successfully, and return exactly the actual victory_code.",
+        "response-result-format": "The actual victory_code and nothing else. No quotes, Markdown or explanation.",
+        "tool-selector": {
+          "service-inputs": {
+            "nexus": {
+              "axis-version": 2,
+              "science-family": "stateful-planning-v1",
+              "seed": "21",
+              "theory-level": 0,
+              "discovery-level": 5,
+              "planning-level": 3,
+              "resource-pressure": 1,
+              "budget-profile": "standard",
+              "generation-timing": true,
+              "extended-diagnostics": true
+            }
+          }
+        }
+      },
+      {
+        "name": "NEXUS smoke-S18",
+        "disabled": false,
+        "suite": "nexus",
+        "category": "cross-axis-smoke",
+        "difficulty": "experimental",
+        "tags": [
+          "cross-axis-pilot-v1",
+          "stateful-planning-v1",
+          "smoke-pr"
+        ],
+        "prompt": "Complete the live NEXUS mission and return its actual victory receipt. Begin with manifest and observe, then read every listed evidence file. Use the disclosed action contract and the episode's own instructions to learn the controls, available evidence, mission and remaining action allowance. Use only the NEXUS tool; no external Python, source access or solver is available. Track observations, committed changes and resources. Satisfy the full mission, call finish successfully, and return exactly the actual victory_code.",
+        "response-result-format": "The actual victory_code and nothing else. No quotes, Markdown or explanation.",
+        "tool-selector": {
+          "service-inputs": {
+            "nexus": {
+              "axis-version": 2,
+              "science-family": "stateful-planning-v1",
+              "seed": "31",
+              "theory-level": 0,
+              "discovery-level": 5,
+              "planning-level": 0,
+              "resource-pressure": 2,
+              "budget-profile": "standard",
+              "generation-timing": true,
+              "extended-diagnostics": true
+            }
+          }
+        }
+      },
+      {
+        "name": "NEXUS smoke-S19",
+        "disabled": false,
+        "suite": "nexus",
+        "category": "cross-axis-smoke",
+        "difficulty": "experimental",
+        "tags": [
+          "cross-axis-pilot-v1",
+          "stateful-planning-v1",
+          "smoke-pr"
+        ],
+        "prompt": "Complete the live NEXUS mission and return its actual victory receipt. Begin with manifest and observe, then read every listed evidence file. Use the disclosed action contract and the episode's own instructions to learn the controls, available evidence, mission and remaining action allowance. Use only the NEXUS tool; no external Python, source access or solver is available. Track observations, committed changes and resources. Satisfy the full mission, call finish successfully, and return exactly the actual victory_code.",
+        "response-result-format": "The actual victory_code and nothing else. No quotes, Markdown or explanation.",
+        "tool-selector": {
+          "service-inputs": {
+            "nexus": {
+              "axis-version": 2,
+              "science-family": "stateful-planning-v1",
+              "seed": "31",
+              "theory-level": 0,
+              "discovery-level": 5,
+              "planning-level": 3,
+              "resource-pressure": 2,
+              "budget-profile": "standard",
+              "generation-timing": true,
+              "extended-diagnostics": true
+            }
+          }
+        }
+      },
+      {
+        "name": "NEXUS smoke-S20",
+        "disabled": false,
+        "suite": "nexus",
+        "category": "cross-axis-smoke",
+        "difficulty": "experimental",
+        "tags": [
+          "cross-axis-pilot-v1",
+          "stateful-planning-v1",
+          "smoke-pr"
+        ],
+        "prompt": "Complete the live NEXUS mission and return its actual victory receipt. Begin with manifest and observe, then read every listed evidence file. Use the disclosed action contract and the episode's own instructions to learn the controls, available evidence, mission and remaining action allowance. Use only the NEXUS tool; no external Python, source access or solver is available. Track observations, committed changes and resources. Satisfy the full mission, call finish successfully, and return exactly the actual victory_code.",
+        "response-result-format": "The actual victory_code and nothing else. No quotes, Markdown or explanation.",
+        "tool-selector": {
+          "service-inputs": {
+            "nexus": {
+              "axis-version": 2,
+              "science-family": "stateful-planning-v1",
+              "seed": "31",
+              "theory-level": 0,
+              "discovery-level": 5,
+              "planning-level": 3,
+              "resource-pressure": 1,
+              "budget-profile": "standard",
+              "generation-timing": true,
+              "extended-diagnostics": true
+            }
+          }
+        }
+      }
+    ]
+  }
+}

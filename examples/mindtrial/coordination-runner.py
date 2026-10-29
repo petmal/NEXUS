@@ -26,6 +26,7 @@ EDITABLE_RUN_FIELDS = ("name", "model", "model-parameters", "max-requests-per-mi
 SUITES = ("core", "slack", "spatial", "repeat")
 BRANCH = "feat/planning-resource-axes"
 IMAGE = "nexus:coordination-v1"
+PROVIDER_KEYS = {"openai": "OPENAI_API_KEY", "google": "GOOGLE_API_KEY"}
 
 # All generated files stay inside the container's temporary directory. Only JSON
 # crosses stdout; there are no host mounts or container-owned result files.
@@ -71,6 +72,10 @@ class PilotProfile(NamedTuple):
     suites: tuple[str, ...]
     configs: tuple[str, ...]
     preflight_script: str
+    suite_configs: tuple[tuple[str, str], ...] = ()
+    suite_groups: tuple[tuple[str, tuple[str, ...]], ...] = ()
+    default_suite: str = "core"
+    tool_contract_version: str | None = None
 
 
 COORDINATION = PilotProfile("coordination", IMAGE, SUITES, CONFIGS, PREFLIGHT_SCRIPT)
@@ -133,6 +138,59 @@ with contextlib.redirect_stdout(sys.stderr), tempfile.TemporaryDirectory() as te
 print(json.dumps(result, separators=(",", ":")))
 """,
 )
+CROSS_AXIS_SUITES = (
+    "canary-core",
+    "canary-slack",
+    "rerun-core",
+    "rerun-slack",
+    "smoke-td",
+    "smoke-pr",
+)
+CROSS_AXIS_CONFIGS = (
+    "nexus-cross-axis-canary-config.yaml",
+    "nexus-cross-axis-rerun-config.yaml",
+    "nexus-cross-axis-smoke-config.yaml",
+)
+CROSS_AXIS = PilotProfile(
+    "cross-axis",
+    "nexus:cross-axis-v1",
+    CROSS_AXIS_SUITES,
+    CROSS_AXIS_CONFIGS,
+    r"""
+import contextlib
+import json
+from pathlib import Path
+import sys
+import tempfile
+from nexus.evaluation.cross_axis import Pilot, export_tasks, preflight
+from nexus.provenance import source_digest
+with contextlib.redirect_stdout(sys.stderr), tempfile.TemporaryDirectory() as temporary:
+    directory = Path(temporary)
+    pilot = Pilot.model_validate_json(Path("/app/docs/cross-axis-matrix.json").read_text())
+    report = preflight(pilot, directory / "cross-axis-preflight.json")
+    export_tasks(pilot, report, directory)
+    result = {
+        "runtime_source_sha256": source_digest(),
+        "reports": {"cross-axis": report},
+        "tasks": {
+            suite: json.loads((directory / f"nexus-cross-axis-{suite}-tasks.yaml").read_text())
+            for suite in (
+                "canary-core", "canary-slack", "rerun-core", "rerun-slack", "smoke-td", "smoke-pr"
+            )
+        },
+    }
+print(json.dumps(result, separators=(",", ":")))
+""",
+    tuple((suite, CROSS_AXIS_CONFIGS[index // 2]) for index, suite in enumerate(CROSS_AXIS_SUITES)),
+    (
+        ("canary", CROSS_AXIS_SUITES[:2]),
+        ("rerun", CROSS_AXIS_SUITES[2:4]),
+        ("smoke", CROSS_AXIS_SUITES[4:]),
+        ("followup", CROSS_AXIS_SUITES[2:]),
+    ),
+    "canary",
+    "cross-axis-tools-v1",
+)
 
 
 class RunnerError(Exception):
@@ -182,7 +240,47 @@ def config_contract_sha256(config):
 
 
 def config_for_suite(suite, pilot=COORDINATION):
+    if pilot.suite_configs:
+        return dict(pilot.suite_configs)[suite]
     return pilot.configs[-1] if suite == "repeat" else pilot.configs[0]
+
+
+def selected_suites(selection, pilot=COORDINATION):
+    if selection == "all":
+        return pilot.suites
+    return dict(pilot.suite_groups).get(selection, (selection,))
+
+
+def tool_contract(config, version):
+    """Identify the configured tool interface, not an observed provider wire schema."""
+    fields = ("name", "description", "parameters", "parameter-files", "command")
+    contract = [
+        {key: tool[key] for key in fields if key in tool} for tool in config["config"]["tools"]
+    ]
+    return {
+        "version": version,
+        "scope": "configuration",
+        "provider_wire_captured": False,
+        "sha256": sha256(json.dumps(contract, sort_keys=True, separators=(",", ":")).encode()),
+    }
+
+
+def require_credentials(configs):
+    """Check only providers selected for this invocation, without exposing values."""
+    required = set()
+    for config, _ in configs.values():
+        for provider in config["config"]["providers"]:
+            if provider.get("disabled") is True or not any(
+                run.get("disabled") is not True for run in provider["runs"]
+            ):
+                continue
+            name = provider["name"]
+            if name not in PROVIDER_KEYS:
+                raise RunnerError("No environment-key mapping for a selected provider.")
+            required.add(PROVIDER_KEYS[name])
+    for variable in sorted(required):
+        if not os.environ.get(variable, "").strip():
+            raise RunnerError(f"Set {variable} before a model run; --preflight-only needs no key.")
 
 
 def checked(command, *, label, **kwargs):
@@ -220,6 +318,21 @@ def load_release(package, pilot=COORDINATION):
         or any(not re.fullmatch(r"[0-9a-f]{64}", str(value)) for value in contracts.values())
     ):
         raise RunnerError("release.json must pin a config contract checksum for each config.")
+    if pilot.tool_contract_version:
+        tools = release.get("tool_contracts")
+        if (
+            not isinstance(tools, dict)
+            or set(tools) != set(pilot.configs)
+            or any(
+                not isinstance(value, dict)
+                or value.get("version") != pilot.tool_contract_version
+                or value.get("scope") != "configuration"
+                or value.get("provider_wire_captured") is not False
+                or not re.fullmatch(r"[0-9a-f]{64}", str(value.get("sha256", "")))
+                for value in tools.values()
+            )
+        ):
+            raise RunnerError("release.json must pin every configuration-level tool contract.")
     for name, digest in hashes.items():
         if (
             not isinstance(name, str)
@@ -245,16 +358,17 @@ def load_config(package, release, filename=CONFIG):
         if isinstance(value, dict):
             for key, item in value.items():
                 if key == "api-key" and item is not None and str(item).strip():
-                    raise RunnerError("Remove the embedded api-key; use OPENAI_API_KEY instead.")
+                    raise RunnerError("Remove the embedded api-key; use provider environment keys.")
                 reject_keys(item)
         elif isinstance(value, list):
             for item in value:
                 reject_keys(item)
 
     reject_keys(config)
-    secret = os.environ.get("OPENAI_API_KEY", "")
-    if secret and secret.encode() in raw:
-        raise RunnerError("The config contains OPENAI_API_KEY; remove it before running.")
+    for variable in PROVIDER_KEYS.values():
+        secret = os.environ.get(variable, "")
+        if secret and secret.encode() in raw:
+            raise RunnerError(f"The config contains {variable}; remove it before running.")
     if not isinstance(config, dict) or not isinstance(config.get("config"), dict):
         raise RunnerError("The config file must contain a config object.")
     if config_contract_sha256(config) != release["config_contract_sha256"][filename]:
@@ -288,6 +402,12 @@ def load_config(package, release, filename=CONFIG):
             )
         ):
             raise RunnerError(f"Every {section} image must match the pinned release image.")
+    expected_tool = release.get("tool_contracts", {}).get(filename)
+    if (
+        expected_tool is not None
+        and tool_contract(config, expected_tool["version"]) != expected_tool
+    ):
+        raise RunnerError(f"Configuration-level tool contract mismatch: {filename}.")
     return config, raw
 
 
@@ -485,6 +605,8 @@ def run_suite(
         "tasks_sha256": sha256(tasks_path.read_bytes()),
         "output_dir": str(directory),
     }
+    if pilot.tool_contract_version:
+        manifest["tool_contract"] = tool_contract(config, pilot.tool_contract_version)
     manifest_path = directory / "manifest.json"
     write_json(manifest_path, manifest)
     print(f"Running {suite}; results: {directory}", flush=True)
@@ -506,7 +628,11 @@ def run_suite(
 
 def main(argv=None, *, package_dir=None, pilot=COORDINATION):
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--suite", choices=(*pilot.suites, "all"), default="core")
+    parser.add_argument(
+        "--suite",
+        choices=(*pilot.suites, *(name for name, _ in pilot.suite_groups), "all"),
+        default=pilot.default_suite,
+    )
     parser.add_argument("--preflight-only", action="store_true", help="Qualify without model calls")
     parser.add_argument(
         "--skip-build", action="store_true", help="Verify and qualify an existing image"
@@ -520,7 +646,7 @@ def main(argv=None, *, package_dir=None, pilot=COORDINATION):
         if sys.version_info < (3, 12):  # noqa: UP036 -- standalone launcher runs outside the 3.14 image
             raise RunnerError("Python 3.12 or newer is required; set PYTHON to its executable.")
         release = load_release(package, pilot)
-        suites = pilot.suites if args.suite == "all" else (args.suite,)
+        suites = selected_suites(args.suite, pilot)
         config_names = {config_for_suite(suite, pilot) for suite in suites}
         configs = {
             name: load_config(package, release, name)
@@ -531,10 +657,7 @@ def main(argv=None, *, package_dir=None, pilot=COORDINATION):
         mindtrial = Path(os.environ.get("MINDTRIAL_DIR", str(Path.home() / "MindTrial")))
         repository, mindtrial = repository.expanduser().resolve(), mindtrial.expanduser().resolve()
         if not args.preflight_only:
-            if not os.environ.get("OPENAI_API_KEY", "").strip():
-                raise RunnerError(
-                    "Set OPENAI_API_KEY before a model run; --preflight-only needs no key."
-                )
+            require_credentials(configs)
             binary = mindtrial / "mindtrial"
             if not binary.is_file() or not os.access(binary, os.X_OK):
                 raise RunnerError(f"No executable mindtrial in MINDTRIAL_DIR: {mindtrial}")
@@ -567,6 +690,15 @@ def main(argv=None, *, package_dir=None, pilot=COORDINATION):
                             "sha256": sha256(raw),
                             "contract_sha256": config_contract_sha256(config),
                             "matches_release": sha256(raw) == release["files_sha256"][name],
+                            **(
+                                {
+                                    "tool_contract": tool_contract(
+                                        config, pilot.tool_contract_version
+                                    )
+                                }
+                                if pilot.tool_contract_version
+                                else {}
+                            ),
                         }
                         for name, (config, raw) in configs.items()
                     },
