@@ -1,0 +1,1451 @@
+{
+  "version": "smoke-findings-v1",
+  "as_of": "2026-10-31",
+  "baseline": {
+    "provenance": {
+      "source_commit": "fe2d58f770f9e12aa6570ac30f3bd962849429b5",
+      "runtime_source_sha256": "ba22502788acf7ce1684e1e527e5aa332cd1746b37423fececabc90d71b8ee83",
+      "archive_sha256": "8b88d1a9aee74f3bd84dc865e4398696487fa57658a954aeae07eb106c2a778d"
+    },
+    "selection": "All original attempts except the entire original Google smoke panel; use the complete Google smoke rerun, including duplicates of S01-S03.",
+    "all_recorded": {
+      "attempts": 144,
+      "outcomes": {
+        "Passed": 92,
+        "Failed": 31,
+        "Error": 21
+      },
+      "evidence_classification": {
+        "supported_win": 89,
+        "not_won": 31,
+        "compatible_win": 3
+      },
+      "actions": 3084,
+      "protocol_errors": 35
+    },
+    "primary": {
+      "attempts": 120,
+      "outcomes": {
+        "Passed": 89,
+        "Failed": 31
+      },
+      "evidence_classification": {
+        "supported_win": 86,
+        "not_won": 31,
+        "compatible_win": 3
+      },
+      "actions": 3028,
+      "protocol_errors": 35
+    },
+    "audit_totals": {
+      "attempts": 144,
+      "primary_attempts": 120,
+      "calls": 3858,
+      "public_responses_replayed": 3823,
+      "accepted_actions": 3084,
+      "hash_records_matched": 127
+    },
+    "models": {
+      "gemini-3.8-flash": {
+        "attempts": 32,
+        "outcomes": {
+          "Passed": 28,
+          "Failed": 4
+        },
+        "evidence_classification": {
+          "supported_win": 27,
+          "not_won": 4,
+          "compatible_win": 1
+        },
+        "actions": 858,
+        "protocol_errors": 0,
+        "common_interference": {
+          "attempts": 8,
+          "outcomes": {
+            "Passed": 7,
+            "Failed": 1
+          },
+          "evidence_classification": {
+            "supported_win": 7,
+            "not_won": 1
+          },
+          "actions": 198,
+          "protocol_errors": 0,
+          "output_including_reasoning": 544821,
+          "task_duration_seconds": 4482.394159825
+        }
+      },
+      "gpt-6-astra": {
+        "attempts": 32,
+        "outcomes": {
+          "Passed": 32
+        },
+        "evidence_classification": {
+          "supported_win": 32
+        },
+        "actions": 780,
+        "protocol_errors": 0,
+        "common_interference": {
+          "attempts": 8,
+          "outcomes": {
+            "Passed": 8
+          },
+          "evidence_classification": {
+            "supported_win": 8
+          },
+          "actions": 192,
+          "protocol_errors": 0,
+          "output_including_reasoning": 31016,
+          "task_duration_seconds": 921.671944165
+        }
+      },
+      "gpt-6-luna": {
+        "attempts": 56,
+        "outcomes": {
+          "Failed": 27,
+          "Passed": 29
+        },
+        "evidence_classification": {
+          "not_won": 27,
+          "supported_win": 27,
+          "compatible_win": 2
+        },
+        "actions": 1390,
+        "protocol_errors": 35,
+        "common_interference": {
+          "attempts": 8,
+          "outcomes": {
+            "Failed": 6,
+            "Passed": 2
+          },
+          "evidence_classification": {
+            "not_won": 6,
+            "supported_win": 2
+          },
+          "actions": 176,
+          "protocol_errors": 5,
+          "output_including_reasoning": 281893,
+          "task_duration_seconds": 3540.511892889
+        }
+      }
+    },
+    "families": {
+      "gemini-3.8-flash/compositional-repair-v1": {
+        "attempts": 4,
+        "outcomes": {
+          "Passed": 3,
+          "Failed": 1
+        },
+        "evidence_classification": {
+          "supported_win": 3,
+          "not_won": 1
+        },
+        "actions": 98,
+        "protocol_errors": 0
+      },
+      "gemini-3.8-flash/model-revision-v1": {
+        "attempts": 8,
+        "outcomes": {
+          "Passed": 6,
+          "Failed": 2
+        },
+        "evidence_classification": {
+          "supported_win": 5,
+          "not_won": 2,
+          "compatible_win": 1
+        },
+        "actions": 326,
+        "protocol_errors": 0
+      },
+      "gemini-3.8-flash/stateful-discovery-v1": {
+        "attempts": 4,
+        "outcomes": {
+          "Passed": 4
+        },
+        "evidence_classification": {
+          "supported_win": 4
+        },
+        "actions": 97,
+        "protocol_errors": 0
+      },
+      "gemini-3.8-flash/stateful-interference-v1": {
+        "attempts": 8,
+        "outcomes": {
+          "Passed": 7,
+          "Failed": 1
+        },
+        "evidence_classification": {
+          "supported_win": 7,
+          "not_won": 1
+        },
+        "actions": 198,
+        "protocol_errors": 0
+      },
+      "gemini-3.8-flash/stateful-planning-v1": {
+        "attempts": 8,
+        "outcomes": {
+          "Passed": 8
+        },
+        "evidence_classification": {
+          "supported_win": 8
+        },
+        "actions": 139,
+        "protocol_errors": 0
+      },
+      "gpt-6-astra/stateful-interference-v1": {
+        "attempts": 32,
+        "outcomes": {
+          "Passed": 32
+        },
+        "evidence_classification": {
+          "supported_win": 32
+        },
+        "actions": 780,
+        "protocol_errors": 0
+      },
+      "gpt-6-luna/compositional-repair-v1": {
+        "attempts": 4,
+        "outcomes": {
+          "Passed": 1,
+          "Failed": 3
+        },
+        "evidence_classification": {
+          "supported_win": 1,
+          "not_won": 3
+        },
+        "actions": 107,
+        "protocol_errors": 0
+      },
+      "gpt-6-luna/model-revision-v1": {
+        "attempts": 8,
+        "outcomes": {
+          "Passed": 6,
+          "Failed": 2
+        },
+        "evidence_classification": {
+          "supported_win": 4,
+          "not_won": 2,
+          "compatible_win": 2
+        },
+        "actions": 303,
+        "protocol_errors": 12
+      },
+      "gpt-6-luna/stateful-discovery-v1": {
+        "attempts": 4,
+        "outcomes": {
+          "Passed": 4
+        },
+        "evidence_classification": {
+          "supported_win": 4
+        },
+        "actions": 93,
+        "protocol_errors": 3
+      },
+      "gpt-6-luna/stateful-interference-v1": {
+        "attempts": 32,
+        "outcomes": {
+          "Failed": 18,
+          "Passed": 14
+        },
+        "evidence_classification": {
+          "not_won": 18,
+          "supported_win": 14
+        },
+        "actions": 735,
+        "protocol_errors": 13
+      },
+      "gpt-6-luna/stateful-planning-v1": {
+        "attempts": 8,
+        "outcomes": {
+          "Failed": 4,
+          "Passed": 4
+        },
+        "evidence_classification": {
+          "not_won": 4,
+          "supported_win": 4
+        },
+        "actions": 152,
+        "protocol_errors": 7
+      }
+    },
+    "protocol_error_categories": {
+      "missing_request_wrapper": 30,
+      "unsupported_operation": 3,
+      "missing_action": 2
+    },
+    "all_primary_attempts_read_all_evidence": true,
+    "disclosed_physics_audit": {
+      "trajectories": 88,
+      "actions": 2004
+    }
+  },
+  "repeat_panel": {
+    "source_commit": "fe2d58f770f9e12aa6570ac30f3bd962849429b5",
+    "runtime_source_sha256": "ba22502788acf7ce1684e1e527e5aa332cd1746b37423fececabc90d71b8ee83",
+    "repeat_archive_sha256": "80cfc5494bce9b07485facb575968ea91fa974b0ddffddd6973eb792c449ccda",
+    "baseline_archive_sha256": "8b88d1a9aee74f3bd84dc865e4398696487fa57658a954aeae07eb106c2a778d",
+    "baseline_audit_sha256": "3699118fb4f7c1e2c4665fdbcf70f50926f9a76ae515906f1a32a96da2f1baa9",
+    "selection": "Original primary attempts for S05/S07/S08/S10/S11/S12/S21-S24 plus all 40 additions; each model/row has three attempts.",
+    "new_audit_totals": {
+      "attempts": 40,
+      "primary_attempts": 40,
+      "calls": 1602,
+      "public_responses_replayed": 1577,
+      "accepted_actions": 1359,
+      "hash_records_matched": 85
+    },
+    "new_attempts": {
+      "attempts": 40,
+      "outcomes": {
+        "Passed": 31,
+        "Failed": 9
+      },
+      "evidence_classification": {
+        "supported_win": 25,
+        "compatible_win": 6,
+        "not_won": 9
+      },
+      "accepted_actions": 1359,
+      "protocol_errors": 25
+    },
+    "combined": {
+      "attempts": 60,
+      "outcomes": {
+        "Passed": 43,
+        "Failed": 17
+      },
+      "evidence_classification": {
+        "supported_win": 34,
+        "not_won": 17,
+        "compatible_win": 9
+      },
+      "accepted_actions": 2044,
+      "protocol_errors": 31
+    },
+    "models": {
+      "gemini-3.8-flash": {
+        "attempts": 30,
+        "outcomes": {
+          "Passed": 24,
+          "Failed": 6
+        },
+        "evidence_classification": {
+          "supported_win": 20,
+          "not_won": 6,
+          "compatible_win": 4
+        },
+        "accepted_actions": 1042,
+        "protocol_errors": 0
+      },
+      "gpt-6-luna": {
+        "attempts": 30,
+        "outcomes": {
+          "Passed": 19,
+          "Failed": 11
+        },
+        "evidence_classification": {
+          "supported_win": 14,
+          "not_won": 11,
+          "compatible_win": 5
+        },
+        "accepted_actions": 1002,
+        "protocol_errors": 31
+      }
+    },
+    "cells": [
+      {
+        "model": "gemini-3.8-flash",
+        "id": "S05",
+        "attempts": 3,
+        "outcomes": {
+          "Passed": 3
+        },
+        "evidence_classification": {
+          "supported_win": 3
+        },
+        "accepted_actions": 12,
+        "protocol_errors": 0,
+        "attempts_detail": [
+          {
+            "cohort": "pilot",
+            "trace_id": "01M66M000RY5PQ4X0S556DF0Y1",
+            "directory": "smoke-td-20261030T142342Z-s3a86sg0",
+            "kind": "Passed",
+            "classification": "supported_win",
+            "actions": 4,
+            "remaining": 60,
+            "protocol_errors": 0
+          },
+          {
+            "cohort": "repeat-1",
+            "trace_id": "01M674TX1BK7CG2XQ04YAJ13Z5",
+            "directory": "smoke-td-20261030T193128Z-rivw3jcf",
+            "kind": "Passed",
+            "classification": "supported_win",
+            "actions": 4,
+            "remaining": 60,
+            "protocol_errors": 0
+          },
+          {
+            "cohort": "repeat-2",
+            "trace_id": "01M67HW5DXG2YFVS9FQ6Q7ANBX",
+            "directory": "smoke-td-20261030T231958Z-jmtixafm",
+            "kind": "Passed",
+            "classification": "supported_win",
+            "actions": 4,
+            "remaining": 60,
+            "protocol_errors": 0
+          }
+        ]
+      },
+      {
+        "model": "gemini-3.8-flash",
+        "id": "S07",
+        "attempts": 3,
+        "outcomes": {
+          "Passed": 3
+        },
+        "evidence_classification": {
+          "supported_win": 3
+        },
+        "accepted_actions": 151,
+        "protocol_errors": 0,
+        "attempts_detail": [
+          {
+            "cohort": "pilot",
+            "trace_id": "01M66M97Y2JD73BXDRS1Q32G07",
+            "directory": "smoke-td-20261030T142342Z-s3a86sg0",
+            "kind": "Passed",
+            "classification": "supported_win",
+            "actions": 54,
+            "remaining": 10,
+            "protocol_errors": 0
+          },
+          {
+            "cohort": "repeat-1",
+            "trace_id": "01M674X31EZ5V0K9REBSA8Q2W5",
+            "directory": "smoke-td-20261030T193128Z-rivw3jcf",
+            "kind": "Passed",
+            "classification": "supported_win",
+            "actions": 50,
+            "remaining": 14,
+            "protocol_errors": 0
+          },
+          {
+            "cohort": "repeat-2",
+            "trace_id": "01M67HYNE3YQJ9GCMJ0EGKEDQR",
+            "directory": "smoke-td-20261030T231958Z-jmtixafm",
+            "kind": "Passed",
+            "classification": "supported_win",
+            "actions": 47,
+            "remaining": 17,
+            "protocol_errors": 0
+          }
+        ]
+      },
+      {
+        "model": "gemini-3.8-flash",
+        "id": "S08",
+        "attempts": 3,
+        "outcomes": {
+          "Failed": 2,
+          "Passed": 1
+        },
+        "evidence_classification": {
+          "not_won": 2,
+          "supported_win": 1
+        },
+        "accepted_actions": 178,
+        "protocol_errors": 0,
+        "attempts_detail": [
+          {
+            "cohort": "pilot",
+            "trace_id": "01M66N1PTNMK33F5MCQB2SWYTJ",
+            "directory": "smoke-td-20261030T142342Z-s3a86sg0",
+            "kind": "Failed",
+            "classification": "not_won",
+            "actions": 64,
+            "remaining": 0,
+            "protocol_errors": 0
+          },
+          {
+            "cohort": "repeat-1",
+            "trace_id": "01M675GZN634JW6SCH62RAKN30",
+            "directory": "smoke-td-20261030T193128Z-rivw3jcf",
+            "kind": "Passed",
+            "classification": "supported_win",
+            "actions": 50,
+            "remaining": 14,
+            "protocol_errors": 0
+          },
+          {
+            "cohort": "repeat-2",
+            "trace_id": "01M67JJ5PA00C8K0ABMJ7WRJT1",
+            "directory": "smoke-td-20261030T231958Z-jmtixafm",
+            "kind": "Failed",
+            "classification": "not_won",
+            "actions": 64,
+            "remaining": 0,
+            "protocol_errors": 0
+          }
+        ]
+      },
+      {
+        "model": "gemini-3.8-flash",
+        "id": "S10",
+        "attempts": 3,
+        "outcomes": {
+          "Passed": 3
+        },
+        "evidence_classification": {
+          "compatible_win": 3
+        },
+        "accepted_actions": 105,
+        "protocol_errors": 0,
+        "attempts_detail": [
+          {
+            "cohort": "pilot",
+            "trace_id": "01M66PY3XVACGNYRJ0HGDPVWAZ",
+            "directory": "smoke-td-20261030T142342Z-s3a86sg0",
+            "kind": "Passed",
+            "classification": "compatible_win",
+            "actions": 39,
+            "remaining": 25,
+            "protocol_errors": 0
+          },
+          {
+            "cohort": "repeat-1",
+            "trace_id": "01M67684QP7GNRY5VZWYM4SP02",
+            "directory": "smoke-td-20261030T193128Z-rivw3jcf",
+            "kind": "Passed",
+            "classification": "compatible_win",
+            "actions": 35,
+            "remaining": 29,
+            "protocol_errors": 0
+          },
+          {
+            "cohort": "repeat-2",
+            "trace_id": "01M67KM65E54BQZWWZ5ATTBPKV",
+            "directory": "smoke-td-20261030T231958Z-jmtixafm",
+            "kind": "Passed",
+            "classification": "compatible_win",
+            "actions": 31,
+            "remaining": 33,
+            "protocol_errors": 0
+          }
+        ]
+      },
+      {
+        "model": "gemini-3.8-flash",
+        "id": "S11",
+        "attempts": 3,
+        "outcomes": {
+          "Passed": 3
+        },
+        "evidence_classification": {
+          "supported_win": 2,
+          "compatible_win": 1
+        },
+        "accepted_actions": 108,
+        "protocol_errors": 0,
+        "attempts_detail": [
+          {
+            "cohort": "pilot",
+            "trace_id": "01M66QBPBSGFNVY43FC0G3MWV7",
+            "directory": "smoke-td-20261030T142342Z-s3a86sg0",
+            "kind": "Passed",
+            "classification": "supported_win",
+            "actions": 37,
+            "remaining": 27,
+            "protocol_errors": 0
+          },
+          {
+            "cohort": "repeat-1",
+            "trace_id": "01M676KNBXHZ4DQWA6DKJ66HSR",
+            "directory": "smoke-td-20261030T193128Z-rivw3jcf",
+            "kind": "Passed",
+            "classification": "supported_win",
+            "actions": 36,
+            "remaining": 28,
+            "protocol_errors": 0
+          },
+          {
+            "cohort": "repeat-2",
+            "trace_id": "01M67KY39SBG1DFP81PXJ1VBPH",
+            "directory": "smoke-td-20261030T231958Z-jmtixafm",
+            "kind": "Passed",
+            "classification": "compatible_win",
+            "actions": 35,
+            "remaining": 29,
+            "protocol_errors": 0
+          }
+        ]
+      },
+      {
+        "model": "gemini-3.8-flash",
+        "id": "S12",
+        "attempts": 3,
+        "outcomes": {
+          "Failed": 1,
+          "Passed": 2
+        },
+        "evidence_classification": {
+          "not_won": 1,
+          "supported_win": 2
+        },
+        "accepted_actions": 181,
+        "protocol_errors": 0,
+        "attempts_detail": [
+          {
+            "cohort": "pilot",
+            "trace_id": "01M66QPHQM8WNGRYPZ2ARVQHR2",
+            "directory": "smoke-td-20261030T142342Z-s3a86sg0",
+            "kind": "Failed",
+            "classification": "not_won",
+            "actions": 64,
+            "remaining": 0,
+            "protocol_errors": 0
+          },
+          {
+            "cohort": "repeat-1",
+            "trace_id": "01M676ZWET5F9DMJJ6V9C6CZKK",
+            "directory": "smoke-td-20261030T193128Z-rivw3jcf",
+            "kind": "Passed",
+            "classification": "supported_win",
+            "actions": 60,
+            "remaining": 4,
+            "protocol_errors": 0
+          },
+          {
+            "cohort": "repeat-2",
+            "trace_id": "01M67M8D1MC2M2ZSTY1AAQKFPY",
+            "directory": "smoke-td-20261030T231958Z-jmtixafm",
+            "kind": "Passed",
+            "classification": "supported_win",
+            "actions": 57,
+            "remaining": 7,
+            "protocol_errors": 0
+          }
+        ]
+      },
+      {
+        "model": "gemini-3.8-flash",
+        "id": "S21",
+        "attempts": 3,
+        "outcomes": {
+          "Passed": 3
+        },
+        "evidence_classification": {
+          "supported_win": 3
+        },
+        "accepted_actions": 15,
+        "protocol_errors": 0,
+        "attempts_detail": [
+          {
+            "cohort": "pilot",
+            "trace_id": "01M66RQGFFZQRJ5QZV6ZX9AP5Y",
+            "directory": "smoke-td-20261030T142342Z-s3a86sg0",
+            "kind": "Passed",
+            "classification": "supported_win",
+            "actions": 5,
+            "remaining": 3,
+            "protocol_errors": 0
+          },
+          {
+            "cohort": "repeat-1",
+            "trace_id": "01M677QPGVAPDCBZK8AYSXGV5V",
+            "directory": "smoke-td-20261030T193128Z-rivw3jcf",
+            "kind": "Passed",
+            "classification": "supported_win",
+            "actions": 5,
+            "remaining": 3,
+            "protocol_errors": 0
+          },
+          {
+            "cohort": "repeat-2",
+            "trace_id": "01M67MT64QRNG2FZDF62HE4WG1",
+            "directory": "smoke-td-20261030T231958Z-jmtixafm",
+            "kind": "Passed",
+            "classification": "supported_win",
+            "actions": 5,
+            "remaining": 3,
+            "protocol_errors": 0
+          }
+        ]
+      },
+      {
+        "model": "gemini-3.8-flash",
+        "id": "S22",
+        "attempts": 3,
+        "outcomes": {
+          "Failed": 2,
+          "Passed": 1
+        },
+        "evidence_classification": {
+          "not_won": 2,
+          "supported_win": 1
+        },
+        "accepted_actions": 90,
+        "protocol_errors": 0,
+        "attempts_detail": [
+          {
+            "cohort": "pilot",
+            "trace_id": "01M66RT1D9Z574KNJMA7CM4AVT",
+            "directory": "smoke-td-20261030T142342Z-s3a86sg0",
+            "kind": "Failed",
+            "classification": "not_won",
+            "actions": 30,
+            "remaining": 0,
+            "protocol_errors": 0
+          },
+          {
+            "cohort": "repeat-1",
+            "trace_id": "01M677TPF2YKT9YX4JVB99JG83",
+            "directory": "smoke-td-20261030T193128Z-rivw3jcf",
+            "kind": "Passed",
+            "classification": "supported_win",
+            "actions": 30,
+            "remaining": 0,
+            "protocol_errors": 0
+          },
+          {
+            "cohort": "repeat-2",
+            "trace_id": "01M67MXE07WPYH6X2W12FKY483",
+            "directory": "smoke-td-20261030T231958Z-jmtixafm",
+            "kind": "Failed",
+            "classification": "not_won",
+            "actions": 30,
+            "remaining": 0,
+            "protocol_errors": 0
+          }
+        ]
+      },
+      {
+        "model": "gemini-3.8-flash",
+        "id": "S23",
+        "attempts": 3,
+        "outcomes": {
+          "Passed": 3
+        },
+        "evidence_classification": {
+          "supported_win": 3
+        },
+        "accepted_actions": 102,
+        "protocol_errors": 0,
+        "attempts_detail": [
+          {
+            "cohort": "pilot",
+            "trace_id": "01M66SC17K6N886JFGNZ7EXFN5",
+            "directory": "smoke-td-20261030T142342Z-s3a86sg0",
+            "kind": "Passed",
+            "classification": "supported_win",
+            "actions": 33,
+            "remaining": 3,
+            "protocol_errors": 0
+          },
+          {
+            "cohort": "repeat-1",
+            "trace_id": "01M678CX07Y5VEGT03H81AAZMC",
+            "directory": "smoke-td-20261030T193128Z-rivw3jcf",
+            "kind": "Passed",
+            "classification": "supported_win",
+            "actions": 33,
+            "remaining": 3,
+            "protocol_errors": 0
+          },
+          {
+            "cohort": "repeat-2",
+            "trace_id": "01M67NNQEP57Y4A495FBWJR7DZ",
+            "directory": "smoke-td-20261030T231958Z-jmtixafm",
+            "kind": "Passed",
+            "classification": "supported_win",
+            "actions": 36,
+            "remaining": 0,
+            "protocol_errors": 0
+          }
+        ]
+      },
+      {
+        "model": "gemini-3.8-flash",
+        "id": "S24",
+        "attempts": 3,
+        "outcomes": {
+          "Passed": 2,
+          "Failed": 1
+        },
+        "evidence_classification": {
+          "supported_win": 2,
+          "not_won": 1
+        },
+        "accepted_actions": 100,
+        "protocol_errors": 0,
+        "attempts_detail": [
+          {
+            "cohort": "pilot",
+            "trace_id": "01M66SS9M4CG550SE1AYV1T1DA",
+            "directory": "smoke-td-20261030T142342Z-s3a86sg0",
+            "kind": "Passed",
+            "classification": "supported_win",
+            "actions": 30,
+            "remaining": 6,
+            "protocol_errors": 0
+          },
+          {
+            "cohort": "repeat-1",
+            "trace_id": "01M678S9NNFET2TGHMDDD8V0HC",
+            "directory": "smoke-td-20261030T193128Z-rivw3jcf",
+            "kind": "Failed",
+            "classification": "not_won",
+            "actions": 36,
+            "remaining": 0,
+            "protocol_errors": 0
+          },
+          {
+            "cohort": "repeat-2",
+            "trace_id": "01M67P1QW53AQWBKGPT6EAFFA7",
+            "directory": "smoke-td-20261030T231958Z-jmtixafm",
+            "kind": "Passed",
+            "classification": "supported_win",
+            "actions": 34,
+            "remaining": 2,
+            "protocol_errors": 0
+          }
+        ]
+      },
+      {
+        "model": "gpt-6-luna",
+        "id": "S05",
+        "attempts": 3,
+        "outcomes": {
+          "Passed": 3
+        },
+        "evidence_classification": {
+          "supported_win": 3
+        },
+        "accepted_actions": 12,
+        "protocol_errors": 1,
+        "attempts_detail": [
+          {
+            "cohort": "pilot",
+            "trace_id": "01M651340Z5VEHPMGH0QCPN5Z3",
+            "directory": "smoke-td-20261029T231402Z-g8_t_rvy",
+            "kind": "Passed",
+            "classification": "supported_win",
+            "actions": 4,
+            "remaining": 60,
+            "protocol_errors": 1
+          },
+          {
+            "cohort": "repeat-1",
+            "trace_id": "01M674TX1EW0JVFE7QCWF1X93C",
+            "directory": "smoke-td-20261030T193128Z-rivw3jcf",
+            "kind": "Passed",
+            "classification": "supported_win",
+            "actions": 4,
+            "remaining": 60,
+            "protocol_errors": 0
+          },
+          {
+            "cohort": "repeat-2",
+            "trace_id": "01M67HW5DZ0X4CHX0JNWFE83QC",
+            "directory": "smoke-td-20261030T231958Z-jmtixafm",
+            "kind": "Passed",
+            "classification": "supported_win",
+            "actions": 4,
+            "remaining": 60,
+            "protocol_errors": 0
+          }
+        ]
+      },
+      {
+        "model": "gpt-6-luna",
+        "id": "S07",
+        "attempts": 3,
+        "outcomes": {
+          "Failed": 1,
+          "Passed": 2
+        },
+        "evidence_classification": {
+          "not_won": 1,
+          "supported_win": 2
+        },
+        "accepted_actions": 143,
+        "protocol_errors": 6,
+        "attempts_detail": [
+          {
+            "cohort": "pilot",
+            "trace_id": "01M6519M126ND7GNDV1ZXXQZ34",
+            "directory": "smoke-td-20261029T231402Z-g8_t_rvy",
+            "kind": "Failed",
+            "classification": "not_won",
+            "actions": 55,
+            "remaining": 9,
+            "protocol_errors": 1
+          },
+          {
+            "cohort": "repeat-1",
+            "trace_id": "01M674VY6BGJC1R66V8E9HT5YN",
+            "directory": "smoke-td-20261030T193128Z-rivw3jcf",
+            "kind": "Passed",
+            "classification": "supported_win",
+            "actions": 41,
+            "remaining": 23,
+            "protocol_errors": 2
+          },
+          {
+            "cohort": "repeat-2",
+            "trace_id": "01M67HXMR6S6E0XRJ2M2EC7VG1",
+            "directory": "smoke-td-20261030T231958Z-jmtixafm",
+            "kind": "Passed",
+            "classification": "supported_win",
+            "actions": 47,
+            "remaining": 17,
+            "protocol_errors": 3
+          }
+        ]
+      },
+      {
+        "model": "gpt-6-luna",
+        "id": "S08",
+        "attempts": 3,
+        "outcomes": {
+          "Failed": 2,
+          "Passed": 1
+        },
+        "evidence_classification": {
+          "not_won": 2,
+          "compatible_win": 1
+        },
+        "accepted_actions": 188,
+        "protocol_errors": 7,
+        "attempts_detail": [
+          {
+            "cohort": "pilot",
+            "trace_id": "01M6522HSQVDD8DGAYTK73YVHV",
+            "directory": "smoke-td-20261029T231402Z-g8_t_rvy",
+            "kind": "Failed",
+            "classification": "not_won",
+            "actions": 63,
+            "remaining": 1,
+            "protocol_errors": 0
+          },
+          {
+            "cohort": "repeat-1",
+            "trace_id": "01M6753ZK6BXQRM7YN6B7C1TBH",
+            "directory": "smoke-td-20261030T193128Z-rivw3jcf",
+            "kind": "Failed",
+            "classification": "not_won",
+            "actions": 64,
+            "remaining": 0,
+            "protocol_errors": 3
+          },
+          {
+            "cohort": "repeat-2",
+            "trace_id": "01M67J9PWGRBWHBX1T0B6TSYRE",
+            "directory": "smoke-td-20261030T231958Z-jmtixafm",
+            "kind": "Passed",
+            "classification": "compatible_win",
+            "actions": 61,
+            "remaining": 3,
+            "protocol_errors": 4
+          }
+        ]
+      },
+      {
+        "model": "gpt-6-luna",
+        "id": "S10",
+        "attempts": 3,
+        "outcomes": {
+          "Passed": 3
+        },
+        "evidence_classification": {
+          "compatible_win": 2,
+          "supported_win": 1
+        },
+        "accepted_actions": 106,
+        "protocol_errors": 2,
+        "attempts_detail": [
+          {
+            "cohort": "pilot",
+            "trace_id": "01M65385V7YVT8G33JNKJ3KF9Y",
+            "directory": "smoke-td-20261029T231402Z-g8_t_rvy",
+            "kind": "Passed",
+            "classification": "compatible_win",
+            "actions": 23,
+            "remaining": 41,
+            "protocol_errors": 2
+          },
+          {
+            "cohort": "repeat-1",
+            "trace_id": "01M675E78BWMVWS4RVEPWC9W6F",
+            "directory": "smoke-td-20261030T193128Z-rivw3jcf",
+            "kind": "Passed",
+            "classification": "supported_win",
+            "actions": 44,
+            "remaining": 20,
+            "protocol_errors": 0
+          },
+          {
+            "cohort": "repeat-2",
+            "trace_id": "01M67JTQ5F2DBDE1E3QV1KAY33",
+            "directory": "smoke-td-20261030T231958Z-jmtixafm",
+            "kind": "Passed",
+            "classification": "compatible_win",
+            "actions": 39,
+            "remaining": 25,
+            "protocol_errors": 0
+          }
+        ]
+      },
+      {
+        "model": "gpt-6-luna",
+        "id": "S11",
+        "attempts": 3,
+        "outcomes": {
+          "Passed": 3
+        },
+        "evidence_classification": {
+          "compatible_win": 2,
+          "supported_win": 1
+        },
+        "accepted_actions": 88,
+        "protocol_errors": 3,
+        "attempts_detail": [
+          {
+            "cohort": "pilot",
+            "trace_id": "01M653D5XGE143G80BXHJ3MEVC",
+            "directory": "smoke-td-20261029T231402Z-g8_t_rvy",
+            "kind": "Passed",
+            "classification": "compatible_win",
+            "actions": 22,
+            "remaining": 42,
+            "protocol_errors": 1
+          },
+          {
+            "cohort": "repeat-1",
+            "trace_id": "01M675YSH735WQF3X89R1P6P54",
+            "directory": "smoke-td-20261030T193128Z-rivw3jcf",
+            "kind": "Passed",
+            "classification": "supported_win",
+            "actions": 45,
+            "remaining": 19,
+            "protocol_errors": 0
+          },
+          {
+            "cohort": "repeat-2",
+            "trace_id": "01M67K2QWAQJZY4SRCNKJCYWNT",
+            "directory": "smoke-td-20261030T231958Z-jmtixafm",
+            "kind": "Passed",
+            "classification": "compatible_win",
+            "actions": 21,
+            "remaining": 43,
+            "protocol_errors": 2
+          }
+        ]
+      },
+      {
+        "model": "gpt-6-luna",
+        "id": "S12",
+        "attempts": 3,
+        "outcomes": {
+          "Passed": 2,
+          "Failed": 1
+        },
+        "evidence_classification": {
+          "supported_win": 2,
+          "not_won": 1
+        },
+        "accepted_actions": 150,
+        "protocol_errors": 6,
+        "attempts_detail": [
+          {
+            "cohort": "pilot",
+            "trace_id": "01M653KAZ8EZDTPW6DFHEP6PNR",
+            "directory": "smoke-td-20261029T231402Z-g8_t_rvy",
+            "kind": "Passed",
+            "classification": "supported_win",
+            "actions": 51,
+            "remaining": 13,
+            "protocol_errors": 1
+          },
+          {
+            "cohort": "repeat-1",
+            "trace_id": "01M676577V1534QRTNH7PMGGET",
+            "directory": "smoke-td-20261030T193128Z-rivw3jcf",
+            "kind": "Failed",
+            "classification": "not_won",
+            "actions": 50,
+            "remaining": 14,
+            "protocol_errors": 4
+          },
+          {
+            "cohort": "repeat-2",
+            "trace_id": "01M67K7QFGXDXSC62T458FFR2A",
+            "directory": "smoke-td-20261030T231958Z-jmtixafm",
+            "kind": "Passed",
+            "classification": "supported_win",
+            "actions": 49,
+            "remaining": 15,
+            "protocol_errors": 1
+          }
+        ]
+      },
+      {
+        "model": "gpt-6-luna",
+        "id": "S21",
+        "attempts": 3,
+        "outcomes": {
+          "Passed": 3
+        },
+        "evidence_classification": {
+          "supported_win": 3
+        },
+        "accepted_actions": 15,
+        "protocol_errors": 0,
+        "attempts_detail": [
+          {
+            "cohort": "pilot",
+            "trace_id": "01M65416J8QE4ZJP1HY1EHBQS6",
+            "directory": "smoke-td-20261029T231402Z-g8_t_rvy",
+            "kind": "Passed",
+            "classification": "supported_win",
+            "actions": 5,
+            "remaining": 3,
+            "protocol_errors": 0
+          },
+          {
+            "cohort": "repeat-1",
+            "trace_id": "01M676WX01PFKGCV16MB58J7KS",
+            "directory": "smoke-td-20261030T193128Z-rivw3jcf",
+            "kind": "Passed",
+            "classification": "supported_win",
+            "actions": 5,
+            "remaining": 3,
+            "protocol_errors": 0
+          },
+          {
+            "cohort": "repeat-2",
+            "trace_id": "01M67KPT3G549158G9NYN6JFWH",
+            "directory": "smoke-td-20261030T231958Z-jmtixafm",
+            "kind": "Passed",
+            "classification": "supported_win",
+            "actions": 5,
+            "remaining": 3,
+            "protocol_errors": 0
+          }
+        ]
+      },
+      {
+        "model": "gpt-6-luna",
+        "id": "S22",
+        "attempts": 3,
+        "outcomes": {
+          "Failed": 2,
+          "Passed": 1
+        },
+        "evidence_classification": {
+          "not_won": 2,
+          "supported_win": 1
+        },
+        "accepted_actions": 90,
+        "protocol_errors": 3,
+        "attempts_detail": [
+          {
+            "cohort": "pilot",
+            "trace_id": "01M65429C7ZKX4KY14ZXPSNX3P",
+            "directory": "smoke-td-20261029T231402Z-g8_t_rvy",
+            "kind": "Failed",
+            "classification": "not_won",
+            "actions": 30,
+            "remaining": 0,
+            "protocol_errors": 0
+          },
+          {
+            "cohort": "repeat-1",
+            "trace_id": "01M676Y1BQ1RJQKAANK0M295MS",
+            "directory": "smoke-td-20261030T193128Z-rivw3jcf",
+            "kind": "Passed",
+            "classification": "supported_win",
+            "actions": 30,
+            "remaining": 0,
+            "protocol_errors": 1
+          },
+          {
+            "cohort": "repeat-2",
+            "trace_id": "01M67KR445HFZHETFWXBSN1KNS",
+            "directory": "smoke-td-20261030T231958Z-jmtixafm",
+            "kind": "Failed",
+            "classification": "not_won",
+            "actions": 30,
+            "remaining": 0,
+            "protocol_errors": 2
+          }
+        ]
+      },
+      {
+        "model": "gpt-6-luna",
+        "id": "S23",
+        "attempts": 3,
+        "outcomes": {
+          "Failed": 2,
+          "Passed": 1
+        },
+        "evidence_classification": {
+          "not_won": 2,
+          "supported_win": 1
+        },
+        "accepted_actions": 102,
+        "protocol_errors": 2,
+        "attempts_detail": [
+          {
+            "cohort": "pilot",
+            "trace_id": "01M6546WDMKSP55YYR6Y76AWH2",
+            "directory": "smoke-td-20261029T231402Z-g8_t_rvy",
+            "kind": "Failed",
+            "classification": "not_won",
+            "actions": 36,
+            "remaining": 0,
+            "protocol_errors": 0
+          },
+          {
+            "cohort": "repeat-1",
+            "trace_id": "01M6771H9NZN9765DF4A2JNSQZ",
+            "directory": "smoke-td-20261030T193128Z-rivw3jcf",
+            "kind": "Failed",
+            "classification": "not_won",
+            "actions": 36,
+            "remaining": 0,
+            "protocol_errors": 1
+          },
+          {
+            "cohort": "repeat-2",
+            "trace_id": "01M67KXXPGM6TRSEJ40GRTNK7H",
+            "directory": "smoke-td-20261030T231958Z-jmtixafm",
+            "kind": "Passed",
+            "classification": "supported_win",
+            "actions": 30,
+            "remaining": 6,
+            "protocol_errors": 1
+          }
+        ]
+      },
+      {
+        "model": "gpt-6-luna",
+        "id": "S24",
+        "attempts": 3,
+        "outcomes": {
+          "Failed": 3
+        },
+        "evidence_classification": {
+          "not_won": 3
+        },
+        "accepted_actions": 108,
+        "protocol_errors": 1,
+        "attempts_detail": [
+          {
+            "cohort": "pilot",
+            "trace_id": "01M654DJJVZHKZP04132WSKP1D",
+            "directory": "smoke-td-20261029T231402Z-g8_t_rvy",
+            "kind": "Failed",
+            "classification": "not_won",
+            "actions": 36,
+            "remaining": 0,
+            "protocol_errors": 0
+          },
+          {
+            "cohort": "repeat-1",
+            "trace_id": "01M6775WZ2M5X4TMWHCYKVKCK7",
+            "directory": "smoke-td-20261030T193128Z-rivw3jcf",
+            "kind": "Failed",
+            "classification": "not_won",
+            "actions": 36,
+            "remaining": 0,
+            "protocol_errors": 0
+          },
+          {
+            "cohort": "repeat-2",
+            "trace_id": "01M67M2GP7X95W4Z28VHCV0W2N",
+            "directory": "smoke-td-20261030T231958Z-jmtixafm",
+            "kind": "Failed",
+            "classification": "not_won",
+            "actions": 36,
+            "remaining": 0,
+            "protocol_errors": 1
+          }
+        ]
+      }
+    ]
+  },
+  "leaderboard": {
+    "sha256": "e482c97b7ca390663f6f3fe621275380e395d061e98244de668ddbe8120779b7",
+    "text_tasks": [
+      "quiz - analogies",
+      "quiz - multiple choice questions - v1",
+      "reasoning - bridge crossing - v1",
+      "reasoning - section, color and number - v1",
+      "reasoning - section, color and number - v2",
+      "riddle - anagram - v1",
+      "riddle - anagram - v2",
+      "riddle - anagram - v3",
+      "riddle - anagram - v4",
+      "riddle - deduction - v1",
+      "riddle - first letter - v1",
+      "riddle - first letter - v2",
+      "riddle - first letter - v3",
+      "riddle - letter cross - v1",
+      "riddle - letter cross - v2",
+      "riddle - letter cross - v3",
+      "riddle - letter cross - v4",
+      "riddle - missing alphabet - v1",
+      "riddle - number pattern - v1",
+      "riddle - split words - v1",
+      "riddle - split words - v2",
+      "riddle - split words - v3",
+      "riddle - split words - v4",
+      "riddle - symbols to numbers - v1",
+      "riddle - trace words - v1",
+      "riddle - trace words - v2",
+      "riddle - trace words - v3",
+      "riddle - trace words - v4",
+      "riddle - transformation pattern - v1",
+      "riddle - web words - v1",
+      "riddle - web words - v2",
+      "riddle - word columns - v1",
+      "riddle - word columns - v2",
+      "riddle - word columns - v3",
+      "riddle - word columns - v4",
+      "riddle - x words - v1",
+      "riddle - x words - v2",
+      "riddle - x words - v3",
+      "riddle - x words - v4"
+    ],
+    "models": [
+      {
+        "provider": "mistralai",
+        "run": "Mistral Large 4 - latest",
+        "text39": {
+          "Passed": 35,
+          "Failed": 3,
+          "Error": 1
+        },
+        "recorded_run_config": {
+          "Model": "mistral-large-4",
+          "MaxRequestsPerMinute": 5,
+          "ModelParameters": {
+            "frequency-penalty": null,
+            "max-tokens": null,
+            "presence-penalty": null,
+            "prompt-mode": null,
+            "random-seed": null,
+            "reasoning-effort": "high",
+            "safe-prompt": null,
+            "temperature": null,
+            "top-p": null
+          },
+          "RetryPolicy": {
+            "MaxRetryAttempts": 3,
+            "InitialDelaySeconds": 30
+          },
+          "Pricing": {
+            "Currency": "USD",
+            "InputPerMillion": 0.68,
+            "OutputPerMillion": 2.09,
+            "CacheReadPerMillion": 0.07
+          }
+        }
+      },
+      {
+        "provider": "openrouter",
+        "run": "Z.AI GLM 5.2 (text-only, xhigh [max] reasoning)",
+        "text39": {
+          "Passed": 30,
+          "Failed": 7,
+          "Error": 2
+        },
+        "recorded_run_config": null
+      },
+      {
+        "provider": "openrouter",
+        "run": "MiniMax M3",
+        "text39": {
+          "Passed": 30,
+          "Failed": 5,
+          "Error": 4
+        },
+        "recorded_run_config": null
+      },
+      {
+        "provider": "openrouter",
+        "run": "Meta Muse Spark 1.2 (xhigh reasoning)",
+        "text39": {
+          "Passed": 36,
+          "Failed": 1,
+          "Error": 2
+        },
+        "recorded_run_config": {
+          "Model": "meta/muse-spark-1.2-contributor",
+          "MaxRequestsPerMinute": 10,
+          "ModelParameters": {
+            "frequency-penalty": null,
+            "max-completion-tokens": 65536,
+            "max-tokens": null,
+            "min-p": null,
+            "parallel-tool-calls": null,
+            "presence-penalty": null,
+            "reasoning-effort": "xhigh",
+            "repetition-penalty": null,
+            "response-format": null,
+            "seed": null,
+            "server-tools": [],
+            "temperature": null,
+            "top-a": null,
+            "top-k": null,
+            "top-p": null,
+            "verbosity": null
+          },
+          "RetryPolicy": {
+            "MaxRetryAttempts": 2,
+            "InitialDelaySeconds": 30
+          },
+          "Pricing": {
+            "Currency": "USD",
+            "InputPerMillion": 0.1,
+            "OutputPerMillion": 0.2,
+            "CacheReadPerMillion": 0.002
+          }
+        }
+      },
+      {
+        "provider": "xai",
+        "run": "Grok 4.7 - latest (xhigh reasoning)",
+        "text39": {
+          "Passed": 39
+        },
+        "recorded_run_config": {
+          "Model": "grok-4.7",
+          "MaxRequestsPerMinute": 30,
+          "ModelParameters": {
+            "frequency-penalty": null,
+            "max-completion-tokens": 65536,
+            "presence-penalty": null,
+            "reasoning-effort": "xhigh",
+            "seed": null,
+            "temperature": null,
+            "top-p": null
+          },
+          "RetryPolicy": {
+            "MaxRetryAttempts": 3,
+            "InitialDelaySeconds": 30
+          },
+          "Pricing": {
+            "Currency": "USD",
+            "InputPerMillion": 2,
+            "OutputPerMillion": 6,
+            "CacheReadPerMillion": 0.5
+          }
+        }
+      }
+    ]
+  },
+  "warning": "Baseline and combined repeat panel overlap. Do not add their counts or compare their aggregates as a trend."
+}

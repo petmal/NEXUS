@@ -1,0 +1,196 @@
+{
+  "config": {
+    "log-file": "./results/{{.Year}}-{{.Month}}-{{.Day}}/{{.Hour}}-{{.Minute}}-{{.Second}}.log",
+    "output-dir": "./results/{{.Year}}-{{.Month}}-{{.Day}}/",
+    "output-basename": "{{.Hour}}-{{.Minute}}-{{.Second}}",
+    "task-source": "./nexus-capability-smoke-controls-tasks.yaml",
+    "providers": [
+      {
+        "name": "mistralai",
+        "retry-policy": {
+          "max-retry-attempts": 0,
+          "initial-delay-seconds": 30
+        },
+        "client-config": {
+          "api-key": ""
+        },
+        "runs": [
+          {
+            "name": "Mistral Large 4 (high reasoning) - capability smoke",
+            "disabled": false,
+            "model": "mistral-large-4",
+            "max-requests-per-minute": 5,
+            "model-parameters": {
+              "max-tokens": 65536,
+              "reasoning-effort": "high"
+            }
+          }
+        ]
+      }
+    ],
+    "tools": [
+      {
+        "name": "nexus",
+        "image": "nexus:capability-smoke-v1",
+        "description": "Interact with one persistent NEXUS world. State persists across calls; there is no reset.\nThe current manifest and listed evidence define the mission, laws, apparatus, observations,\nvalid identifiers, settings and action costs. Read them before acting.\n\nCALL FORMAT: every tool call has one outer argument named request. Keep that wrapper.\nComplete syntax examples (replace placeholder identifiers with values disclosed by this world):\n{\"request\":{\"operation\":\"manifest\"}}\n{\"request\":{\"operation\":\"observe\"}}\n{\"request\":{\"operation\":\"evidence\",\"filename\":\"<listed-file>\"}}\n{\"request\":{\"operation\":\"action\",\"action\":{\"type\":\"take\",\"artifact\":\"<listed-artifact-or-stock>\"}}}\n{\"request\":{\"operation\":\"action\",\"action\":{\"type\":\"operate\",\"machine\":\"<listed-machine>\",\"artifact\":\"<carried-artifact>\"}}}\n{\"request\":{\"operation\":\"action\",\"action\":{\"type\":\"configure\",\"machine\":\"<configurable-machine>\",\"settings\":[0]}}}\nThe configure example illustrates JSON syntax only. Use the exact setting count, order and\nallowed values disclosed for that apparatus; some worlds have no configurable apparatus.\n\nREQUESTS: manifest, observe and status need only operation. evidence also needs filename;\naction also needs an action object. Public reads do not spend world actions, but every tool\ninvocation counts toward the harness call allowance.\n\nACTION FIELDS: observe/wait/finish need type only; move also needs target (an adjacent room ID);\ntake/drop also need artifact; operate/probe also need machine and artifact; configure also\nneeds machine and settings (an ordered integer array). Use only capabilities disclosed for\nthe current world. Taking from a designated stock creates a specimen and returns its ID;\nuse that returned ID later. Taking an individual artifact retrieves it. Configure changes\napparatus settings without applying them. Operate commits the disclosed preparation,\nmeasurement or transformation on a carried artifact. Probe previews the disclosed apparatus\nwithout committing the specimen change; it still spends an environment action.\n\nTrack artifact history, apparatus settings, location and remaining allowance. A null world\nbudget means unlimited within NEXUS, subject to the harness limits. Finite hypothesis\nenumeration is allowed. Only this NEXUS tool is available; no external computation or source\naccess is available. Follow the public evidence status and complete acceptance rule.\nSatisfy the entire goal simultaneously, return to the disclosed finish location if required,\nand call finish. A successful finish returns victory_code; return exactly that actual receipt\nwithout explanation, quotes or Markdown. A rejected finish is not success; inspect the\nresulting state and remaining budget. Terminal worlds cannot be reset.\n",
+        "parameters": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "request": {
+              "type": "object",
+              "additionalProperties": false,
+              "description": "Required outer request argument. Example complete tool call: {\"request\":{\"operation\":\"manifest\"}}. Set filename only for evidence; set action only for action. Use the current public contract for identifiers and settings.",
+              "properties": {
+                "operation": {
+                  "type": "string",
+                  "enum": [
+                    "manifest",
+                    "evidence",
+                    "observe",
+                    "status",
+                    "action"
+                  ],
+                  "description": "Operation to perform. Begin with manifest, then observe and read\nevery listed evidence file.\n"
+                },
+                "filename": {
+                  "type": "string",
+                  "description": "Required only for operation evidence. Use a filename returned\nby the manifest.\n"
+                },
+                "action": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "description": "Required only for operation action. Include the fields required\nby the selected action type and omit unrelated fields.\n",
+                  "properties": {
+                    "type": {
+                      "type": "string",
+                      "enum": [
+                        "observe",
+                        "move",
+                        "take",
+                        "drop",
+                        "operate",
+                        "probe",
+                        "configure",
+                        "wait",
+                        "finish"
+                      ],
+                      "description": "NEXUS action type."
+                    },
+                    "target": {
+                      "type": "string",
+                      "description": "Adjacent destination room ID for move."
+                    },
+                    "artifact": {
+                      "type": "string",
+                      "description": "Stock or individual artifact ID for take; individual artifact\nID for drop, operate, or probe. Use IDs returned by NEXUS.\n"
+                    },
+                    "machine": {
+                      "type": "string",
+                      "description": "Apparatus ID for operate, probe, or configure. Use an ID\ndisclosed by the current world.\n"
+                    },
+                    "settings": {
+                      "type": "array",
+                      "items": {
+                        "type": "integer"
+                      },
+                      "description": "Complete ordered settings for the named apparatus.\nFollow the manifest and evidence for the exact vector length,\nconfiguration order, and allowed values.\n"
+                    }
+                  },
+                  "required": [
+                    "type"
+                  ]
+                }
+              },
+              "required": [
+                "operation"
+              ]
+            }
+          },
+          "required": [
+            "request"
+          ]
+        },
+        "parameter-files": {
+          "request": "/input/request.json"
+        },
+        "command": [
+          "request",
+          "--request-file",
+          "/input/request.json",
+          "--tool-argument",
+          "request"
+        ],
+        "dependencies": [
+          {
+            "service": "nexus",
+            "env": {
+              "NEXUS_URL": "{{ .Endpoint }}"
+            }
+          }
+        ]
+      }
+    ],
+    "services": [
+      {
+        "name": "nexus",
+        "image": "nexus:capability-smoke-v1",
+        "command": [
+          "serve-session"
+        ],
+        "env": {
+          "NEXUS_HOST": "0.0.0.0",
+          "NEXUS_PORT": "8000"
+        },
+        "endpoint": {
+          "scheme": "http",
+          "port": 8000
+        },
+        "input-env": {
+          "axis-version": "NEXUS_AXIS_VERSION",
+          "science-family": "NEXUS_SCIENCE_FAMILY",
+          "seed": "NEXUS_SEED",
+          "discovery-level": "NEXUS_DISCOVERY_LEVEL",
+          "planning-level": "NEXUS_PLANNING_LEVEL",
+          "resource-pressure": "NEXUS_RESOURCE_PRESSURE",
+          "theory-level": "NEXUS_THEORY_LEVEL",
+          "generation-timing": "NEXUS_GENERATION_TIMING",
+          "budget-profile": "NEXUS_BUDGET_PROFILE",
+          "extended-diagnostics": "NEXUS_EXTENDED_DIAGNOSTICS",
+          "ontology-options": "NEXUS_ONTOLOGY_OPTIONS"
+        },
+        "healthcheck": [
+          "nexus",
+          "health"
+        ],
+        "startup-timeout": "120s"
+      }
+    ],
+    "validators": [
+      {
+        "name": "nexus-victory",
+        "image": "nexus:capability-smoke-v1",
+        "command": [
+          "validate",
+          "--candidate-file",
+          "/input/candidate"
+        ],
+        "template-files": [
+          {
+            "path": "/input/candidate",
+            "template": "{{ .Candidate.Response }}"
+          }
+        ],
+        "dependencies": [
+          {
+            "service": "nexus",
+            "env": {
+              "NEXUS_URL": "{{ .Endpoint }}"
+            }
+          }
+        ],
+        "timeout": "30s"
+      }
+    ]
+  }
+}
