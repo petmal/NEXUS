@@ -8,6 +8,7 @@ files use JSON, which is also valid YAML. No live model call occurs in preflight
 import argparse
 import copy
 import hashlib
+import inspect
 import json
 import os
 import re
@@ -26,7 +27,13 @@ EDITABLE_RUN_FIELDS = ("name", "model", "model-parameters", "max-requests-per-mi
 SUITES = ("core", "slack", "spatial", "repeat")
 BRANCH = "feat/planning-resource-axes"
 IMAGE = "nexus:coordination-v1"
-PROVIDER_KEYS = {"openai": "OPENAI_API_KEY", "google": "GOOGLE_API_KEY"}
+PROVIDER_KEYS = {
+    "openai": "OPENAI_API_KEY",
+    "google": "GOOGLE_API_KEY",
+    "openrouter": "OPENROUTER_API_KEY",
+    "mistralai": "MISTRAL_API_KEY",
+    "xai": "XAI_API_KEY",
+}
 
 # All generated files stay inside the container's temporary directory. Only JSON
 # crosses stdout; there are no host mounts or container-owned result files.
@@ -76,6 +83,8 @@ class PilotProfile(NamedTuple):
     suite_groups: tuple[tuple[str, tuple[str, ...]], ...] = ()
     default_suite: str = "core"
     tool_contract_version: str | None = None
+    model_configs: tuple[tuple[str, str], ...] = ()
+    evaluation_seed: str | None = None
 
 
 COORDINATION = PilotProfile("coordination", IMAGE, SUITES, CONFIGS, PREFLIGHT_SCRIPT)
@@ -190,6 +199,69 @@ print(json.dumps(result, separators=(",", ":")))
     ),
     "canary",
     "cross-axis-tools-v1",
+)
+
+
+# Reuse the full source-bound qualifier; select unchanged task objects only after
+# export. Selection occurs inside the network-disabled container as well as on host.
+CAPABILITY_SELECTION = {
+    "controls": {"smoke-td": ("S05", "S21")},
+    "screen": {
+        "canary-core": ("09", "11"),
+        "canary-slack": ("25", "27"),
+        "smoke-td": ("S01", "S02", "S03", "S08", "S22", "S23", "S24"),
+        "smoke-pr": ("S13", "S16", "S17"),
+    },
+}
+CAPABILITY_MODELS = ("glm", "muse", "minimax", "mistral", "grok")
+CAPABILITY_CONFIGS = tuple(
+    f"nexus-capability-smoke-{model}-config.yaml" for model in CAPABILITY_MODELS
+)
+
+
+def select_capability_tasks(exports):
+    """Keep task names, player text, inputs and harness limits exactly unchanged."""
+    selected = {}
+    for suite, sources in CAPABILITY_SELECTION.items():
+        selected[suite] = copy.deepcopy(exports["smoke-td"])
+        target = selected[suite]["task-config"]
+        target["tasks"] = []
+        for source, ids in sources.items():
+            config = exports[source]["task-config"]
+            if {k: v for k, v in config.items() if k != "tasks"} != {
+                k: v for k, v in target.items() if k != "tasks"
+            }:
+                raise ValueError("Selected suites must have identical harness contracts")
+            for row_id in ids:
+                matches = [task for task in config["tasks"] if task["name"].endswith("-" + row_id)]
+                if len(matches) != 1:
+                    raise ValueError(f"Expected exactly one source task for {source}/{row_id}")
+                target["tasks"].append(copy.deepcopy(matches[0]))
+    return selected
+
+
+# The small pure selector is also embedded in the container command. No new
+# runtime package or Docker file is needed; all player-world source stays fixed.
+_CAPABILITY_SELECTOR_SOURCE = inspect.getsource(select_capability_tasks)
+CAPABILITY_SMOKE = PilotProfile(
+    "capability-smoke",
+    "nexus:capability-smoke-v1",
+    ("controls", "screen"),
+    CAPABILITY_CONFIGS,
+    CROSS_AXIS.preflight_script.replace(
+        'print(json.dumps(result, separators=(",", ":")))',
+        "import copy\nCAPABILITY_SELECTION = "
+        + repr(CAPABILITY_SELECTION)
+        + "\n"
+        + _CAPABILITY_SELECTOR_SOURCE
+        + '\nresult["tasks"] = select_capability_tasks(result["tasks"])'
+        + '\nresult["reports"]["capability-smoke"] = result["reports"].pop("cross-axis")'
+        + '\nprint(json.dumps(result, separators=(",", ":")))',
+    ),
+    default_suite="controls",
+    tool_contract_version="cross-axis-tools-v1",
+    model_configs=tuple(zip(CAPABILITY_MODELS, CAPABILITY_CONFIGS)),
+    evaluation_seed="nexus-cross-axis-pilot-v1",
 )
 
 
@@ -545,6 +617,7 @@ def run_suite(
     invoked,
     *,
     pilot=COORDINATION,
+    input_config_file=None,
 ):
     binary = mindtrial / "mindtrial"
     binary_hash = sha256(binary.read_bytes())
@@ -569,8 +642,10 @@ def run_suite(
     write_json(config_path, effective)
     write_json(directory / "preflight.json", preflight)
     write_json(directory / "release.json", release)
-    seed = "nexus-pr-pilot-v1" if suite == "repeat" else f"nexus-{pilot.name}-pilot-v1"
-    input_config_file = config_for_suite(suite, pilot)
+    seed = pilot.evaluation_seed or (
+        "nexus-pr-pilot-v1" if suite == "repeat" else f"nexus-{pilot.name}-pilot-v1"
+    )
+    input_config_file = input_config_file or config_for_suite(suite, pilot)
     command = [
         "./mindtrial",
         f"-config={config_path}",
@@ -633,6 +708,13 @@ def main(argv=None, *, package_dir=None, pilot=COORDINATION):
         choices=(*pilot.suites, *(name for name, _ in pilot.suite_groups), "all"),
         default=pilot.default_suite,
     )
+    if pilot.model_configs:
+        parser.add_argument(
+            "--model",
+            choices=("all", *(m for m, _ in pilot.model_configs)),
+            default="all",
+            help="Run each selected model separately",
+        )
     parser.add_argument("--preflight-only", action="store_true", help="Qualify without model calls")
     parser.add_argument(
         "--skip-build", action="store_true", help="Verify and qualify an existing image"
@@ -647,7 +729,17 @@ def main(argv=None, *, package_dir=None, pilot=COORDINATION):
             raise RunnerError("Python 3.12 or newer is required; set PYTHON to its executable.")
         release = load_release(package, pilot)
         suites = selected_suites(args.suite, pilot)
-        config_names = {config_for_suite(suite, pilot) for suite in suites}
+        if pilot.model_configs:
+            model_configs = dict(pilot.model_configs)
+            config_names = (
+                set(model_configs.values()) if args.model == "all" else {model_configs[args.model]}
+            )
+            jobs = [
+                (suite, name) for name in pilot.configs if name in config_names for suite in suites
+            ]
+        else:
+            jobs = [(suite, config_for_suite(suite, pilot)) for suite in suites]
+            config_names = {name for _, name in jobs}
         configs = {
             name: load_config(package, release, name)
             for name in pilot.configs
@@ -707,8 +799,8 @@ def main(argv=None, *, package_dir=None, pilot=COORDINATION):
             )
             print(f"Preflight passed; no model calls. Report: {directory}", flush=True)
             return 0
-        for suite in suites:
-            config, config_raw = configs[config_for_suite(suite, pilot)]
+        for suite, config_name in jobs:
+            config, config_raw = configs[config_name]
             code = run_suite(
                 package,
                 suite,
@@ -720,6 +812,7 @@ def main(argv=None, *, package_dir=None, pilot=COORDINATION):
                 mindtrial,
                 invoked,
                 pilot=pilot,
+                input_config_file=config_name,
             )
             if code:
                 return code

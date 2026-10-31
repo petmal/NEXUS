@@ -11,6 +11,14 @@ on:
       - "scripts/preflight_interference_comparison.py"
       - "scripts/preflight_cross_axis.py"
       - "scripts/package_cross_axis.py"
+      - "scripts/package_capability_smoke.py"
+      - "scripts/export_capability_smoke.py"
+      - "examples/mindtrial/capability-smoke-*"
+      - "examples/mindtrial/nexus-capability-smoke-*.yaml"
+      - "docs/capability-smoke-*"
+      - "docs/research/capability-smoke-*"
+      - "docs/research/smoke-findings-*"
+      - "tests/unit/test_capability_smoke.py"
       - "scripts/export_cross_axis_configs.py"
       - "examples/mindtrial/cross-axis-*"
       - "examples/mindtrial/nexus-cross-axis-*.yaml"
@@ -65,7 +73,7 @@ jobs:
       - name: Build the exact feature revision
         run: |
           revision=$(git rev-parse HEAD)
-          docker build --build-arg VCS_REF="$revision" -t nexus:planning-resource-v1 -t nexus:coordination-v1 -t nexus:interference-v1 -t nexus:interference-comparison-v1 -t nexus:cross-axis-v1 .
+          docker build --build-arg VCS_REF="$revision" -t nexus:planning-resource-v1 -t nexus:coordination-v1 -t nexus:interference-v1 -t nexus:interference-comparison-v1 -t nexus:cross-axis-v1 -t nexus:capability-smoke-v1 .
           test "$(docker image inspect nexus:planning-resource-v1 --format '{{ index .Config.Labels "org.opencontainers.image.revision" }}')" = "$revision"
       - name: Qualify all 16 cases inside the image
         run: docker run --rm --entrypoint python nexus:planning-resource-v1 scripts/preflight_planning.py
@@ -89,6 +97,8 @@ jobs:
           # cross-axis is the current release's full launcher integration gate.
           uv run python scripts/package_cross_axis.py --output-dir "$RUNNER_TEMP/cross-axis-package" --runtime-source-sha256 "$runtime_digest"
           bash "$RUNNER_TEMP/cross-axis-package/run.sh" --skip-build --preflight-only --suite all
+          uv run python scripts/package_capability_smoke.py --output-dir "$RUNNER_TEMP/capability-smoke-package" --runtime-source-sha256 "$runtime_digest"
+          bash "$RUNNER_TEMP/capability-smoke-package/run.sh" --skip-build --preflight-only --suite all
       - name: Exercise real service, tool client, validator and shutdown telemetry
         run: |
           docker run --rm --entrypoint python \

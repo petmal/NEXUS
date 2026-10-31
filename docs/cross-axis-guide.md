@@ -1,5 +1,9 @@
 # Cross-axis smaller-model pilot
 
+Followup: [consolidated observed findings](research/smoke-findings-2026-10-31.md) and
+[the five-model subset](capability-smoke-guide.md). This document preserves the
+original 56-condition release.
+
 29 October 2026. This is a screening experiment, not a model ranking or a claim that one numerical axis has a universal difficulty scale. It reuses qualified worlds and separates world reasoning from interface access. No new world mechanics are introduced.
 
 ## What to run

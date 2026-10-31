@@ -231,7 +231,13 @@ def validate_comparison_reports(root):
 
 
 def main(pilot_name="coordination"):
-    if pilot_name not in ("coordination", "interference", "interference-comparison", "cross-axis"):
+    if pilot_name not in (
+        "coordination",
+        "interference",
+        "interference-comparison",
+        "cross-axis",
+        "capability-smoke",
+    ):
         raise ValueError("unknown pilot profile")
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--output-dir", type=Path, required=True)
@@ -248,7 +254,7 @@ def main(pilot_name="coordination"):
             validate_comparison_reports(ROOT)
         except ValueError as exc:
             parser.error(str(exc))
-    if pilot_name == "cross-axis":
+    if pilot_name in ("cross-axis", "capability-smoke"):
         try:
             validate_cross_axis_reports(ROOT, args.runtime_source_sha256)
         except ValueError as exc:
@@ -266,6 +272,7 @@ def main(pilot_name="coordination"):
         "interference": runner.INTERFERENCE,
         "interference-comparison": runner.INTERFERENCE_COMPARISON,
         "cross-axis": runner.CROSS_AXIS,
+        "capability-smoke": runner.CAPABILITY_SMOKE,
     }[pilot_name]
     destination = args.output_dir.resolve()
     destination.mkdir(parents=True, exist_ok=False)
@@ -282,9 +289,11 @@ def main(pilot_name="coordination"):
     }
     if pilot_name != "coordination":
         copies["pilot_runner.py"] = examples / "coordination-runner.py"
-    if pilot_name in ("interference-comparison", "cross-axis"):
+    if pilot_name in ("interference-comparison", "cross-axis", "capability-smoke"):
         copies["guide.md"] = ROOT / f"docs/{pilot_name}-guide.md"
         copies["summarize_results.py"] = examples / "summarize-pilot-results.py"
+    if pilot_name == "capability-smoke":
+        copies["matrix.json"] = ROOT / "docs/capability-smoke-matrix.json"
     for name, source in copies.items():
         shutil.copy2(source, destination / name)
     reports = destination / "reports"
@@ -307,6 +316,12 @@ def main(pilot_name="coordination"):
             "ternary-feasibility-2026-10-27.json",
             "interference-comparison-validation-2026-10-27.md",
         ),
+        "capability-smoke": (
+            "cross-axis-preflight-2026-10-29.json",
+            "capability-smoke-validation-2026-10-31.md",
+            "smoke-findings-2026-10-31.md",
+            "smoke-findings-2026-10-31.json",
+        ),
         "cross-axis": (
             "cross-axis-preflight-2026-10-29.json",
             "cross-axis-validation-2026-10-29.md",
@@ -314,6 +329,19 @@ def main(pilot_name="coordination"):
     }[pilot_name]
     for name in report_names:
         shutil.copy2(ROOT / "docs/research" / name, reports / name)
+    if pilot_name == "capability-smoke":
+        guide = destination / "guide.md"
+        guide.write_text(
+            guide.read_text()
+            .replace(
+                "research/smoke-findings-2026-10-31.md", "reports/smoke-findings-2026-10-31.md"
+            )
+            .replace("capability-smoke-matrix.json", "matrix.json")
+        )
+        findings = reports / "smoke-findings-2026-10-31.md"
+        findings.write_text(
+            findings.read_text().replace("../capability-smoke-guide.md", "../guide.md")
+        )
     release = {
         "source_commit": commit,
         "branch": runner.BRANCH,
