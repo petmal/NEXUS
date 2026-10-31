@@ -5,6 +5,66 @@ Start with ten control attempts; then run seventy challenge attempts. See
 `guide.md` for the exact row mapping, settings and analysis rules, and
 `reports/smoke-findings-2026-10-31.md` for the consolidated earlier findings.
 
+## Current recommendation after the control run
+
+Read `reports/capability-controls-results-2026-10-31.md`. Grok passed both
+controls; Muse solved both worlds but added prose to one final receipt. GLM,
+MiniMax and Mistral need interface/response diagnostics before challenge runs.
+This v2 package preserves all model settings, tasks, world mechanics and seeds.
+It adds unattended execution and checks for missing result records.
+
+After extracting this **new v2 package**, run Grok's fourteen remaining rows:
+
+```bash
+cd ~/Downloads/NEXUS-capability-smoke-test-run-2026-10-31-v2
+bash run.sh --model grok --suite screen --non-interactive
+```
+
+This builds the new pinned source using `~/Go-Projects/NEXUS`, then runs your
+`~/MindTrial/mindtrial` without confirmation prompts. Set `XAI_API_KEY` first.
+Do not use `--skip-build` on this first v2 launch: the required source revision
+changed even though the world runtime is identical.
+
+For Muse, repeat **S21 only** using the interactive picker, retaining both attempts:
+
+```bash
+bash run.sh --model muse --suite controls --interactive --skip-build
+```
+
+Set `OPENROUTER_API_KEY`, then select S21 only. If exact receipt delivery works,
+run its remaining fourteen rows with `--model muse --suite screen
+--non-interactive --skip-build`. Do not repeat Grok's controls or launch the three
+held challenge panels as part of this followup.
+
+## Choosing interactive or unattended execution
+
+Interactive selection remains the default; `--interactive` makes it explicit.
+Use `--non-interactive` to run every enabled model/task in the selected config
+and suite without prompts. Progress output remains visible. The two flags are
+mutually exclusive. They also work when several model groups are selected.
+
+For a **deliberate future full panel**, after resolving integration issues:
+
+```bash
+bash run.sh --model all --suite all --non-interactive --skip-build
+```
+
+This repeats controls and runs all seventy screen attempts. It is **not** the
+recommended continuation of the attached controls. There is no automatic
+scientific admission gate between controls and screen. Failed, Error and Skipped
+records count as recorded outcomes and do not halt a complete batch.
+
+Non-interactive runs check that exactly one result exists for every enabled
+provider/run/task. A zero MindTrial exit with missing, empty, malformed,
+duplicated or unexpected records stops the batch with launcher exit code 2.
+The manifest retains the actual child `exit_code`, `launcher_exit_code`, mode
+and result coverage. Any nonzero child exit also stops the batch. Existing
+results remain intact; resume remaining groups explicitly to avoid repeats.
+Interactive subsets do not require full-matrix coverage. Their zero process
+exit alone still does not certify a complete evaluation.
+
+The remaining instructions describe the original panel and general operation.
+
 ## Run from Downloads
 
 Extract this package under `~/Downloads`. Set the three credential environment
@@ -14,7 +74,7 @@ clone at `~/Go-Projects/NEXUS`, then invokes your locally built
 `~/MindTrial/mindtrial` with `--debug --interactive=true --json`.
 
 ```bash
-cd ~/Downloads/NEXUS-capability-smoke-test-run-2026-10-31
+cd ~/Downloads/NEXUS-capability-smoke-test-run-2026-10-31-v2
 bash run.sh --suite controls
 ```
 
@@ -102,6 +162,7 @@ zip -r NEXUS-capability-smoke-results.zip results/
 
 Send the complete results ZIP. Choose explicit folders if globs would mix
 unintended repeats or preflight-only folders. The helper is an outcome readout,
-not an independent replay/receipt audit; concurrent logs may have unknown access
+not an independent replay/receipt audit; missing or empty JSON is reported as
+zero completed records with missing expected slots; concurrent logs may have unknown access
 classification. It does not turn a failed mission into a provider failure or
 certify evidence-supported wins.

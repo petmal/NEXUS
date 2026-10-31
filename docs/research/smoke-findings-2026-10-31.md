@@ -5,6 +5,19 @@ project's current evidence record for choosing subsequent model smoke tests.
 It supersedes the earlier suggestion to start with GLM 5.1: the next panel uses
 GLM 5.2 at the user's request. Historical results and task definitions remain intact.
 
+## Five-model controls: latest update
+
+The [control audit](capability-controls-results-2026-10-31.md) adds nine started
+attempts from ten planned slots, eight complete result records, five supported
+world wins and three accepted final answers. Grok passed both controls. Muse
+solved both worlds but failed exact receipt delivery on S21. Mistral solved S21
+but failed final-response parsing; S05 ended early with a parsing error. GLM
+made no tool calls. MiniMax's interrupted S05 loop made zero world actions;
+S21 never started. These are predominantly interface/delivery findings and do
+not establish new T/D or P/R effects. Advance Grok's fourteen-row screen,
+repeat Muse S21 once, and diagnose the other three integrations before spending
+on their challenge panels. Historical evidence below remains unchanged.
+
 ## What the experiments establish
 
 NEXUS already supplies meaningful challenges for some tested configurations.

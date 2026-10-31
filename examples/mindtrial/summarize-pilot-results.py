@@ -212,7 +212,15 @@ def attempt_diagnostics(record, telemetry, block, *, log_exists):
 
 def summarize(directory):
     manifest = read(directory / "manifest.json")
-    result = read(directory / "mindtrial.json")
+    result_path = directory / "mindtrial.json"
+    result_file_status = "present"
+    if not result_path.is_file() or not result_path.stat().st_size:
+        # Cancellation can leave zero bytes even when the process exits zero.
+        # Keep every expected slot missing; logs are not invented result records.
+        result_file_status = "missing_or_empty"
+        result = {"FormatVersion": 1, "AppName": "MindTrial", "Results": {}}
+    else:
+        result = read(result_path)
     if result.get("FormatVersion") != 1 or result.get("AppName") != "MindTrial":
         raise ValueError("requires MindTrial results format1")
     for name, field in (("config.yaml", "effective_config_sha256"), ("tasks.yaml", "tasks_sha256")):
@@ -331,6 +339,7 @@ def summarize(directory):
     return {
         "version": "nexus-pilot-readout-v2",
         "app_version": result.get("AppVersion"),
+        "result_file_status": result_file_status,
         "source_commit": manifest["source_commit"],
         "runtime_source_sha256": manifest["runtime_source_sha256"],
         "mindtrial_sha256": manifest["mindtrial_sha256"],

@@ -50,3 +50,29 @@ The final delivered ZIP pins the clean release commit, runtime, all files, each
 config contract and the configured tool contract. Source/API inspection supports
 the proposed model IDs/settings; the user's live controls remain necessary for
 provider routing, credentials, billing, multi-turn behavior and actual difficulty.
+
+
+## Control audit and unattended launcher revision
+
+The supplied five-model control archive was independently replayed: nine started
+attempts, eight complete result records, 146 valid public responses, 30 accepted
+actions and all 28 captured action hashes matched. Five supported world victories
+produced three accepted final answers. The exact archive, source and binary
+identities are retained in `capability-controls-results-2026-10-31.json`.
+
+The launcher now supports explicit interactive/default and non-interactive modes.
+Unattended execution closes stdin, inherits progress output, and stops on missing,
+empty, malformed, duplicate or unexpected result coverage after a zero child
+exit. Complete Failed/Error records remain recorded outcomes. Interactive subset
+selection is preserved. The readout handles missing/empty JSON without inventing
+records. Neither model settings, exported tasks, budgets, seeds nor runtime code
+changed. Ruff now records the shipped host scripts' Python 3.12 target separately
+from the Python 3.14 engine, and a syntax regression test protects that boundary.
+
+The revised focused suite passed **188 tests**, covering both modes, sequential
+suite execution, result coverage failures, corrupt/duplicate identities, preserved
+process/launcher exit codes, partial summaries and prior release boundaries.
+Scoped Ruff checks pass. Historical full-suite and live-service checks above were
+not repeated for this launcher-only revision. The release packager recomputes
+the full parent qualification before producing the updated ZIP. Docker remains
+unavailable in this editing environment. No paid model evaluation was run.

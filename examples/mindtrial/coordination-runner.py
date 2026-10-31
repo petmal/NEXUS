@@ -16,6 +16,7 @@ import subprocess
 import sys
 import tarfile
 import tempfile
+from collections import Counter
 from datetime import UTC, datetime
 from pathlib import Path
 from typing import NamedTuple
@@ -605,6 +606,60 @@ def result_directory(package, suite):
     return Path(tempfile.mkdtemp(prefix=f"{suite}-{stamp}-", dir=results))
 
 
+def result_coverage(directory, config, tasks):
+    """Check completed result slots, not mission success or receipt correctness.
+
+    MindTrial can exit zero after cancellation with an empty JSON file. An
+    unattended batch must not treat that as complete or continue silently.
+    """
+    expected = {
+        (provider["name"], run.get("name") or run["model"], task["name"])
+        for provider in config["config"]["providers"]
+        if provider.get("disabled") is not True
+        for run in provider["runs"]
+        if run.get("disabled") is not True
+        for task in tasks["task-config"]["tasks"]
+        if task.get("disabled") is not True
+    }
+    result = {"expected": len(expected), "recorded": 0, "complete": False}
+    path = directory / "mindtrial.json"
+    if not path.is_file() or not path.stat().st_size:
+        return {**result, "reason": "missing_or_empty_results"}
+    try:
+        payload = json.loads(path.read_bytes())
+        providers = payload["Results"]
+        if not isinstance(providers, dict):
+            raise TypeError("Results must be an object")
+        seen = Counter()
+        traces = set()
+        for provider, records in providers.items():
+            if not isinstance(records, list):
+                raise TypeError("Provider results must be a list")
+            for record in records:
+                if record["Kind"] not in ("Passed", "Failed", "Error", "Skipped"):
+                    raise ValueError("Unknown result kind")
+                key = (provider, record["Run"], record["Task"])
+                if not all(isinstance(value, str) and value for value in key):
+                    raise TypeError("Result identities must be nonempty strings")
+                trace = record["TraceID"]
+                if not isinstance(trace, str) or not trace or trace in traces:
+                    raise ValueError("Missing or duplicate trace identity")
+                traces.add(trace)
+                seen[key] += 1
+    except (OSError, ValueError, KeyError, TypeError):
+        return {**result, "reason": "invalid_results"}
+    complete = set(seen) == expected and all(count == 1 for count in seen.values())
+    return {
+        **result,
+        "recorded": sum(seen.values()),
+        "complete": complete,
+        "reason": "complete" if complete else "incomplete_or_unexpected_selection",
+        "missing": [list(key) for key in sorted(expected - seen.keys())],
+        "unexpected": [list(key) for key in sorted(seen.keys() - expected)],
+        "duplicate_conditions": [list(key) for key, count in sorted(seen.items()) if count > 1],
+    }
+
+
 def run_suite(
     package,
     suite,
@@ -618,6 +673,7 @@ def run_suite(
     *,
     pilot=COORDINATION,
     input_config_file=None,
+    interactive=True,
 ):
     binary = mindtrial / "mindtrial"
     binary_hash = sha256(binary.read_bytes())
@@ -651,7 +707,7 @@ def run_suite(
         f"-config={config_path}",
         f"-tasks={tasks_path}",
         "--debug",
-        "--interactive=true",
+        f"--interactive={str(interactive).lower()}",
         "--json",
         f"--evaluation-seed={seed}",
         "run",
@@ -670,6 +726,7 @@ def run_suite(
         "mindtrial_sha256": binary_hash,
         "cwd": str(mindtrial),
         "command": command,
+        "interactive": interactive,
         "evaluation_seed": seed,
         "input_config_file": input_config_file,
         "input_config_sha256": sha256(config_raw),
@@ -686,8 +743,9 @@ def run_suite(
     write_json(manifest_path, manifest)
     print(f"Running {suite}; results: {directory}", flush=True)
     try:
-        # Inherit stdin/stdout/stderr and the terminal; no pipes, tee or capture.
-        completed = subprocess.run(command, cwd=mindtrial, check=False)
+        # Keep output visible. Unattended mode cannot block on terminal input.
+        options = {} if interactive else {"stdin": subprocess.DEVNULL}
+        completed = subprocess.run(command, cwd=mindtrial, check=False, **options)
         code = completed.returncode
         manifest.update(status="completed" if code == 0 else "failed", exit_code=code)
     except KeyboardInterrupt:
@@ -696,9 +754,21 @@ def run_suite(
     except OSError as exc:
         code = 1
         manifest.update(status="failed_to_start", exit_code=code, error=type(exc).__name__)
+    if code == 0 and not interactive:
+        coverage = result_coverage(directory, effective, preflight["tasks"][suite])
+        manifest["result_coverage"] = coverage
+        if not coverage["complete"]:
+            manifest["status"] = "incomplete_results"
+            code = 2
+            print(
+                "Unattended run did not produce the complete selected result set; "
+                "stopping the batch. Preserve this results folder.",
+                file=sys.stderr,
+            )
+    manifest["launcher_exit_code"] = code if code >= 0 else 128 - code
     manifest["finished_at"] = timestamp()
     write_json(manifest_path, manifest)
-    return code if code >= 0 else 128 - code
+    return manifest["launcher_exit_code"]
 
 
 def main(argv=None, *, package_dir=None, pilot=COORDINATION):
@@ -715,6 +785,20 @@ def main(argv=None, *, package_dir=None, pilot=COORDINATION):
             default="all",
             help="Run each selected model separately",
         )
+    mode = parser.add_mutually_exclusive_group()
+    mode.add_argument(
+        "--interactive",
+        dest="interactive",
+        action="store_true",
+        default=True,
+        help="Select models/tasks in MindTrial (default)",
+    )
+    mode.add_argument(
+        "--non-interactive",
+        dest="interactive",
+        action="store_false",
+        help="Run configured models/tasks without prompts; require complete results",
+    )
     parser.add_argument("--preflight-only", action="store_true", help="Qualify without model calls")
     parser.add_argument(
         "--skip-build", action="store_true", help="Verify and qualify an existing image"
@@ -772,6 +856,7 @@ def main(argv=None, *, package_dir=None, pilot=COORDINATION):
                     "version": f"{pilot.name}-run-v1",
                     "status": "preflight-passed",
                     "suite": args.suite,
+                    "interactive": args.interactive,
                     "invocation_timestamp": invoked,
                     "finished_at": timestamp(),
                     "image": image,
@@ -813,6 +898,7 @@ def main(argv=None, *, package_dir=None, pilot=COORDINATION):
                 invoked,
                 pilot=pilot,
                 input_config_file=config_name,
+                interactive=args.interactive,
             )
             if code:
                 return code

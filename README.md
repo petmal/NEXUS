@@ -5,8 +5,10 @@ NEXUS is a standalone, deterministic interactive environment for evaluating whet
 The central design goal is to evaluate **adaptation and reasoning rather than recalled domain knowledge**. NEXUS does not model an existing human game, real-world physics, or a known scientific experiment. Episodes are compiled from a small compositional grammar that can vary the world topology, entities, latent causal laws, evidence, and objective.
 
 Current smoke evidence and next run: [consolidated findings](docs/research/smoke-findings-2026-10-31.md)
-and [five-model capability smoke guide](docs/capability-smoke-guide.md). The next
-panel retains qualified worlds and matched controls; it requires live evaluation.
+and [five-model capability smoke guide](docs/capability-smoke-guide.md). The
+[latest control audit](docs/research/capability-controls-results-2026-10-31.md)
+advances Grok to the challenge screen, requests one Muse answer-delivery repeat,
+and holds three integrations for diagnosis. The launcher supports unattended runs.
 
 ## Research checkpoint and next experiments
 
