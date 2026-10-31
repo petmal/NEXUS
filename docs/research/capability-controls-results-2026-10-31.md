@@ -6,6 +6,10 @@ These are integration controls, not measurements of T/D or P/R difficulty.
 
 ## Main finding
 
+**Followup:** the [text-output control rerun](capability-text-output-controls-2026-10-31.md)
+now passes all four GLM/MiniMax attempts. Both advance to their screens. The
+original archive and interpretation below remain as a historical record.
+
 **Configuration correction, 31 October:** The user reports that GLM and MiniMax
 required `disable-structured-output: true` in their prior MindTrial evaluations.
 The presets used in this archive omitted that run-level flag, leaving structured
