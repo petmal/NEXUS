@@ -1,0 +1,438 @@
+{
+  "version": "text-output-controls-audit-v1",
+  "source_commit": "92fa0888546498373f4c011a79778b7caf614f12",
+  "runtime_source_sha256": "ba22502788acf7ce1684e1e527e5aa332cd1746b37423fececabc90d71b8ee83",
+  "archive_sha256": "a9d07d654dba161af15fed702f39ca2f0c5b5ff28d2d22b4a06580ad07b5a07e",
+  "python": "3.14.7",
+  "scope": {
+    "original_hmac_recomputed": false,
+    "fresh_replay_secret": true,
+    "live_model_calls": 0
+  },
+  "totals": {
+    "planned": 4,
+    "started": 4,
+    "complete_result_records": 4,
+    "unstarted": 0,
+    "world_wins": 4,
+    "supported_world_wins": 4,
+    "tool_calls_started": 42,
+    "tool_calls_completed": 42,
+    "public_responses_replayed": 42,
+    "accepted_actions": 22,
+    "hash_records_matched": 19
+  },
+  "rows": [
+    {
+      "trace_id": "01M69EX307QVATB304Z1PPKTNQ",
+      "directory": "controls-20261031T170749Z-njmzphw7",
+      "id": "S05",
+      "model": "z-ai/glm-5.2",
+      "provider": "openrouter",
+      "kind": "Passed",
+      "record_present": true,
+      "run_name": "GLM 5.2 (xhigh reasoning) - capability smoke (text output)",
+      "disable_structured_output": true,
+      "model_parameters": {
+        "max-completion-tokens": 65536,
+        "reasoning-effort": "xhigh",
+        "provider": {
+          "require_parameters": true,
+          "allow_fallbacks": false
+        }
+      },
+      "budget": 64,
+      "tool_calls_started": 9,
+      "tool_calls_completed": 9,
+      "conversation_turns": 6,
+      "protocol_errors": {},
+      "accepted_actions": 4,
+      "actions": [
+        {
+          "type": "take",
+          "artifact": "carrier"
+        },
+        {
+          "type": "configure",
+          "machine": "assembler",
+          "settings": [
+            3,
+            4,
+            8,
+            10
+          ]
+        },
+        {
+          "type": "operate",
+          "machine": "assembler",
+          "artifact": "carrier"
+        },
+        {
+          "type": "finish"
+        }
+      ],
+      "rejected_actions": [],
+      "all_evidence_read": true,
+      "world_win": true,
+      "supported_world_win": true,
+      "public_responses_replayed": 9,
+      "hash_records_matched": 3,
+      "usage": {
+        "InputTokens": 29474,
+        "OutputTokens": 2501,
+        "ReasoningTokens": 2235,
+        "InputCacheWriteTokens": 0,
+        "InputCacheReadTokens": 22588,
+        "InputTokenAccounting": "cache_tokens_included",
+        "OutputTokenAccounting": "reasoning_tokens_included"
+      },
+      "request_seconds": 22.556543483,
+      "reference_actions": 4,
+      "extra_actions": 0,
+      "actions_remaining": 60,
+      "tool_seconds": 5.633693652,
+      "logged_wall_seconds": 37.0
+    },
+    {
+      "trace_id": "01M69EY76DNW4ZWP1VAJ5MCV5V",
+      "directory": "controls-20261031T170749Z-njmzphw7",
+      "id": "S21",
+      "model": "z-ai/glm-5.2",
+      "provider": "openrouter",
+      "kind": "Passed",
+      "record_present": true,
+      "run_name": "GLM 5.2 (xhigh reasoning) - capability smoke (text output)",
+      "disable_structured_output": true,
+      "model_parameters": {
+        "max-completion-tokens": 65536,
+        "reasoning-effort": "xhigh",
+        "provider": {
+          "require_parameters": true,
+          "allow_fallbacks": false
+        }
+      },
+      "budget": 8,
+      "tool_calls_started": 11,
+      "tool_calls_completed": 11,
+      "conversation_turns": 8,
+      "protocol_errors": {},
+      "accepted_actions": 6,
+      "actions": [
+        {
+          "type": "take",
+          "artifact": "seal"
+        },
+        {
+          "type": "take",
+          "artifact": "stock"
+        },
+        {
+          "type": "move",
+          "target": "array"
+        },
+        {
+          "type": "configure",
+          "machine": "doser",
+          "settings": [
+            1,
+            1,
+            0,
+            2
+          ]
+        },
+        {
+          "type": "operate",
+          "machine": "doser",
+          "artifact": "seal"
+        },
+        {
+          "type": "finish"
+        }
+      ],
+      "rejected_actions": [],
+      "all_evidence_read": true,
+      "world_win": true,
+      "supported_world_win": true,
+      "public_responses_replayed": 11,
+      "hash_records_matched": 6,
+      "usage": {
+        "InputTokens": 50333,
+        "OutputTokens": 4343,
+        "ReasoningTokens": 4327,
+        "InputCacheWriteTokens": 0,
+        "InputCacheReadTokens": 45496,
+        "InputTokenAccounting": "cache_tokens_included",
+        "OutputTokenAccounting": "reasoning_tokens_included"
+      },
+      "request_seconds": 30.648599854,
+      "reference_actions": 5,
+      "extra_actions": 1,
+      "actions_remaining": 2,
+      "tool_seconds": 7.603550187,
+      "logged_wall_seconds": 49.0
+    },
+    {
+      "trace_id": "01M69FBTQ96GSBAZNHDSZG2MXB",
+      "directory": "controls-20261031T171552Z-_hcwq9z0",
+      "id": "S05",
+      "model": "minimax/minimax-m3",
+      "provider": "openrouter",
+      "kind": "Passed",
+      "record_present": true,
+      "run_name": "MiniMax M3 (provider default reasoning) - capability smoke (text output)",
+      "disable_structured_output": true,
+      "model_parameters": {
+        "max-completion-tokens": 65536,
+        "provider": {
+          "require_parameters": true,
+          "allow_fallbacks": false
+        }
+      },
+      "budget": 64,
+      "tool_calls_started": 9,
+      "tool_calls_completed": 9,
+      "conversation_turns": 7,
+      "protocol_errors": {},
+      "accepted_actions": 4,
+      "actions": [
+        {
+          "type": "take",
+          "artifact": "carrier"
+        },
+        {
+          "type": "configure",
+          "machine": "assembler",
+          "settings": [
+            3,
+            4,
+            8,
+            10
+          ]
+        },
+        {
+          "type": "operate",
+          "machine": "assembler",
+          "artifact": "carrier"
+        },
+        {
+          "type": "finish"
+        }
+      ],
+      "rejected_actions": [],
+      "all_evidence_read": true,
+      "world_win": true,
+      "supported_world_win": true,
+      "public_responses_replayed": 9,
+      "hash_records_matched": 3,
+      "usage": {
+        "InputTokens": 34669,
+        "OutputTokens": 1534,
+        "ReasoningTokens": 1046,
+        "InputCacheWriteTokens": 0,
+        "InputCacheReadTokens": 20352,
+        "InputTokenAccounting": "cache_tokens_included",
+        "OutputTokenAccounting": "reasoning_tokens_included"
+      },
+      "request_seconds": 11.823129406,
+      "reference_actions": 4,
+      "extra_actions": 0,
+      "actions_remaining": 60,
+      "tool_seconds": 5.950507775,
+      "logged_wall_seconds": 30.0
+    },
+    {
+      "trace_id": "01M69FCQPRGWRT22SVAG14BYR6",
+      "directory": "controls-20261031T171552Z-_hcwq9z0",
+      "id": "S21",
+      "model": "minimax/minimax-m3",
+      "provider": "openrouter",
+      "kind": "Passed",
+      "record_present": true,
+      "run_name": "MiniMax M3 (provider default reasoning) - capability smoke (text output)",
+      "disable_structured_output": true,
+      "model_parameters": {
+        "max-completion-tokens": 65536,
+        "provider": {
+          "require_parameters": true,
+          "allow_fallbacks": false
+        }
+      },
+      "budget": 8,
+      "tool_calls_started": 13,
+      "tool_calls_completed": 13,
+      "conversation_turns": 10,
+      "protocol_errors": {},
+      "accepted_actions": 8,
+      "actions": [
+        {
+          "type": "move",
+          "target": "array"
+        },
+        {
+          "type": "move",
+          "target": "stores"
+        },
+        {
+          "type": "take",
+          "artifact": "seal"
+        },
+        {
+          "type": "take",
+          "artifact": "stock"
+        },
+        {
+          "type": "move",
+          "target": "array"
+        },
+        {
+          "type": "configure",
+          "machine": "doser",
+          "settings": [
+            1,
+            1,
+            0,
+            2
+          ]
+        },
+        {
+          "type": "operate",
+          "machine": "doser",
+          "artifact": "seal"
+        },
+        {
+          "type": "finish"
+        }
+      ],
+      "rejected_actions": [],
+      "all_evidence_read": true,
+      "world_win": true,
+      "supported_world_win": true,
+      "public_responses_replayed": 13,
+      "hash_records_matched": 7,
+      "usage": {
+        "InputTokens": 64144,
+        "OutputTokens": 4949,
+        "ReasoningTokens": 4229,
+        "InputCacheWriteTokens": 0,
+        "InputCacheReadTokens": 47232,
+        "InputTokenAccounting": "cache_tokens_included",
+        "OutputTokenAccounting": "reasoning_tokens_included"
+      },
+      "request_seconds": 24.460923518,
+      "reference_actions": 5,
+      "extra_actions": 3,
+      "actions_remaining": 0,
+      "tool_seconds": 8.757675878,
+      "logged_wall_seconds": 43.0
+    }
+  ],
+  "folders": {
+    "controls-20261031T170749Z-njmzphw7": {
+      "model": "z-ai/glm-5.2",
+      "bindings_verified": true,
+      "results_empty": false,
+      "started_tasks": [
+        "NEXUS smoke-S05",
+        "NEXUS smoke-S21"
+      ],
+      "unstarted_tasks": [],
+      "file_sha256": {
+        "release.json": "dc3fd21a6f7bf57be3dfeb24c12f8acf4fedbd5832188a113a16307857ab0a0c",
+        "mindtrial.json": "67d07ff3554d680b1c5d903ae9b383b41327c91ebc7a6e549a5d42721f839b56",
+        "config.yaml": "8a02a4bb95fd16b9ce7b7e22acebf9041299eb0ce7c80d97ea10a8de387c8a35",
+        "mindtrial.log": "d7695b0efe85e726be84b7748817267226c6dafc91e93585c9bde767f320c585",
+        "tasks.yaml": "4ca73462951851c640998e8826f89edb0a2ebce2c2f2d7edeb1ce4ef4a824c89",
+        "preflight.json": "cd4836ab76e8da2c4a4fd854cc7fc37f46da90866955809522d6de86c80f0375",
+        "manifest.json": "52a722c6e607c6133649fcd249d5af61d035cabeb19d8cc44dc9c9c89dfa4515",
+        "mindtrial.html": "43f39909053244495e70028b66ab9fe4732845a0f13daf894fff16191fdc648a",
+        "input-config.yaml": "c1feea22c19f2697bb52bbdfa09d105447d2411778f6b2ac951d417baeaca575"
+      },
+      "only_config_changes_from_structured_baseline": [
+        "disable-structured-output",
+        "name"
+      ],
+      "timing": {
+        "startup_seconds": 312.829274,
+        "execution_wall_seconds": 85.792702,
+        "preflight_qualification_seconds": 280.3385023449955
+      }
+    },
+    "controls-20261031T171552Z-_hcwq9z0": {
+      "model": "minimax/minimax-m3",
+      "bindings_verified": true,
+      "results_empty": false,
+      "started_tasks": [
+        "NEXUS smoke-S05",
+        "NEXUS smoke-S21"
+      ],
+      "unstarted_tasks": [],
+      "file_sha256": {
+        "release.json": "dc3fd21a6f7bf57be3dfeb24c12f8acf4fedbd5832188a113a16307857ab0a0c",
+        "mindtrial.json": "3432e8310b7779ecb0c0bd1ad192aa46e57c080422208587b70d908a4013c750",
+        "config.yaml": "545f10aac12b63106e8a4e5fc038cec54ebc1f653479d2db81ece56620c03e35",
+        "mindtrial.log": "63465d9fc3dbaa9deed9b6a4a6821a5598d6475e7b68440086bff71784b1c9be",
+        "tasks.yaml": "4ca73462951851c640998e8826f89edb0a2ebce2c2f2d7edeb1ce4ef4a824c89",
+        "preflight.json": "3fcf42fcf69a822d2c556d8ef0450c676be4fe7a04991711faee7ce8a2ea658a",
+        "manifest.json": "2b48b5a90707bea26cf4776e593806ae4d35efea485e296f1264f83a4e0d0c94",
+        "mindtrial.html": "bef41bc8d74abbad5890e4c83347fc013cac014596655b58bb4fee9441733f17",
+        "input-config.yaml": "e610f7f34b2ea06632bc64733e7ea5ac09ca6f56bfabd75282fe4728db0bcb9c"
+      },
+      "only_config_changes_from_structured_baseline": [
+        "disable-structured-output",
+        "name"
+      ],
+      "timing": {
+        "startup_seconds": 277.264938,
+        "execution_wall_seconds": 73.05791,
+        "preflight_qualification_seconds": 272.1120261199976
+      }
+    }
+  },
+  "baseline": {
+    "source_commit": "ad5b9d2f4fec2fb4626672a9d01cad97d540b3d4",
+    "report": "capability-controls-results-2026-10-31.json",
+    "GLM": {
+      "completed": 2,
+      "passed": 0,
+      "tool_calls": 0
+    },
+    "MiniMax": {
+      "S05": "interrupted",
+      "S21": "not_started",
+      "tool_calls_started": 194,
+      "tool_calls_completed": 193,
+      "malformed_calls_completed": 110,
+      "accepted_actions": 0
+    }
+  },
+  "model_totals": {
+    "minimax/minimax-m3": {
+      "request_seconds": 36.284052924,
+      "tool_seconds": 14.708183653,
+      "logged_wall_seconds": 73.0,
+      "accepted_actions": 12,
+      "extra_actions": 3,
+      "tool_calls_completed": 22,
+      "usage": {
+        "InputTokens": 98813,
+        "OutputTokens": 6483,
+        "ReasoningTokens": 5275,
+        "InputCacheReadTokens": 67584
+      }
+    },
+    "z-ai/glm-5.2": {
+      "request_seconds": 53.205143336999996,
+      "tool_seconds": 13.237243839,
+      "logged_wall_seconds": 86.0,
+      "accepted_actions": 10,
+      "extra_actions": 1,
+      "tool_calls_completed": 20,
+      "usage": {
+        "InputTokens": 79807,
+        "OutputTokens": 6844,
+        "ReasoningTokens": 6562,
+        "InputCacheReadTokens": 68084
+      }
+    }
+  }
+}

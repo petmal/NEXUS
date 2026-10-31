@@ -7,6 +7,14 @@ Start with ten control attempts; then run seventy challenge attempts. See
 
 ## Current recommendation after the control run
 
+**Latest result:** GLM and MiniMax passed both text-output controls. Run their
+remaining screens with `--model glm --suite screen --non-interactive --skip-build`
+and `--model minimax --suite screen --non-interactive --skip-build` from the
+already built v3 package, 28 attempts total. Do not repeat their controls.
+See `reports/capability-text-output-controls-2026-10-31.md`. The setup and
+control-rerun instructions below describe how that evaluated cohort was created.
+
+
 Read `reports/capability-controls-results-2026-10-31.md`. Grok passed both
 controls; Muse solved both worlds but added prose to one final receipt. GLM and
 MiniMax now have corrected text-output presets; Mistral still needs response

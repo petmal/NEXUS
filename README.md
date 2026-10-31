@@ -8,8 +8,9 @@ Current smoke evidence and next run: [consolidated findings](docs/research/smoke
 and [five-model capability smoke guide](docs/capability-smoke-guide.md). The
 [latest control audit](docs/research/capability-controls-results-2026-10-31.md)
 advances Grok to the challenge screen, requests one Muse answer-delivery repeat,
-and repeats GLM/MiniMax controls with corrected text-output settings. Mistral
-remains held for response diagnosis. The launcher supports unattended runs.
+and now advances GLM/MiniMax after their
+[four passing text-output controls](docs/research/capability-text-output-controls-2026-10-31.md).
+Mistral remains held for response diagnosis. The launcher supports unattended runs.
 
 ## Research checkpoint and next experiments
 

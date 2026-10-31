@@ -1,32 +1,40 @@
 # NEXUS smoke findings and decisions
 
-Consolidated 31 October 2026 UTC (30 October in the user's timezone). This is the
+Updated 31 October 2026 (America/Toronto). This is the
 project's current evidence record for choosing subsequent model smoke tests.
 It supersedes the earlier suggestion to start with GLM 5.1: the next panel uses
 GLM 5.2 at the user's request. Historical results and task definitions remain intact.
 
 ## Five-model controls: latest update
 
-Configuration correction: the user confirms that GLM and MiniMax required
-`disable-structured-output: true` in prior MindTrial testing. The initial NEXUS
-presets omitted it. The v3 package now pins this run-level setting for those two
-models, with separately named “text output” runs. Repeat S05 and S21 for each
-before further interface investigation or challenge runs. Preserve the initial
-structured-output attempts as a distinct configuration cohort; neither their
-failures nor a possible recovery establish a T/D or P/R effect. Mistral's setting
-is unchanged because the reported compatibility requirement concerns GLM and
-MiniMax. No live rerun result is available yet.
+The [GLM/MiniMax text-output rerun](capability-text-output-controls-2026-10-31.md)
+passed all four S05/S21 controls: four supported world victories and four accepted
+receipts, with no malformed calls or rejected actions. Both used four actions
+on S05; on S21 GLM used six and MiniMax eight against the five-action reference.
+MiniMax spent all available slack on two unnecessary moves and unused stock.
+Both now advance to the existing fourteen-row screen using v3 text-output
+presets, with no further control repeats. Keep output mode fixed when comparing
+screen results with these controls. The action inefficiency is a useful planning
+observation, not yet an established P/R failure boundary.
 
-The [control audit](capability-controls-results-2026-10-31.md) adds nine started
-attempts from ten planned slots, eight complete result records, five supported
-world wins and three accepted final answers. Grok passed both controls. Muse
-solved both worlds but failed exact receipt delivery on S21. Mistral solved S21
-but failed final-response parsing; S05 ended early with a parsing error. GLM
-made no tool calls. MiniMax's interrupted S05 loop made zero world actions;
-S21 never started. These are predominantly interface/delivery findings and do
-not establish new T/D or P/R effects. Advance Grok's fourteen-row screen,
-repeat Muse S21 once, and diagnose the other three integrations before spending
-on their challenge panels. Historical evidence below remains unchanged.
+This strongly supports the user's output-mode compatibility diagnosis. The
+initial presets omitted `disable-structured-output: true`; the new configs
+change only that flag and run labels, with identical runtime, task definitions
+and MindTrial binary. Output mode changes final-answer instructions/parsing as
+well as request format. Time, routing and stochastic generation remain possible
+confounds. Preserve the old and new configurations as separate cohorts; recovery
+is an integration result, not a T/D or P/R effect.
+
+The [initial control audit](capability-controls-results-2026-10-31.md) retains
+nine started attempts from ten planned slots, eight complete records, five
+supported world wins and three accepted final answers. Grok passed both; Muse
+solved both worlds but failed exact receipt delivery on S21; Mistral solved S21
+but failed final-response parsing and ended S05 early with another parsing error.
+GLM made no tool calls and MiniMax's interrupted S05 made zero world actions;
+MiniMax S21 never started. Those GLM/MiniMax failures belong to the old structured
+configuration. Grok's screen, Muse's one-row delivery repeat and Mistral's
+response diagnostic remain as previously recommended. No results for those
+followups are present in `smoke-test-v1.zip`. Historical evidence below is intact.
 
 ## What the experiments establish
 

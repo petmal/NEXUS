@@ -7,8 +7,9 @@ The machine-readable specification is [capability-smoke-matrix.json](capability-
 
 See [the control audit](research/capability-controls-results-2026-10-31.md):
 Grok can proceed to `screen`; repeat Muse S21 for answer-delivery reliability.
-Repeat GLM and MiniMax S05/S21 using the corrected text-output presets before
-their challenge panels; hold Mistral for response diagnostics.
+The [text-output rerun](research/capability-text-output-controls-2026-10-31.md)
+passed all four GLM/MiniMax controls: both now advance to their fourteen-row
+screens with v3 presets. Hold Mistral for response diagnostics.
 The revised launcher supports `--non-interactive` for configured unattended
 runs and `--interactive` (the default) for manual rerun selection. Unattended
 runs stop on incomplete result coverage even when MindTrial exits zero.
@@ -39,8 +40,9 @@ structured final-answer wrapper; the NEXUS tool JSON schema and exact receipt
 validation remain in force. The original control archive used the structured
 default, so keep the corrected “text output” attempts separate. Output mode is
 pinned by the package contract; use the revised release rather than editing an
-older package. Other models retain their original output settings. This does not
-claim the mode change has already fixed the observed failures.
+older package. Other models retain their original output settings. All four
+corrected controls passed; keep their results separate from the initial
+structured-output attempts when estimating axis effects.
 
 Each completion is capped at 65,536 output tokens (Mistral `max-tokens`; others
 `max-completion-tokens`). This is a ceiling per request, **not a total token or
