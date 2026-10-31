@@ -1,8 +1,17 @@
 # Five-model capability smoke panel
 
-31 October 2026 UTC. This is a prepared experiment, not a claim of live results.
+31 October 2026 UTC. The control stage now has live results; the challenge
+stage remains pending for this cohort.
 Read [the consolidated findings](research/smoke-findings-2026-10-31.md) first.
 The machine-readable specification is [capability-smoke-matrix.json](capability-smoke-matrix.json).
+
+See [the control audit](research/capability-controls-results-2026-10-31.md):
+Grok can proceed to `screen`; repeat Muse S21 for answer-delivery reliability;
+hold GLM, MiniMax and Mistral challenge panels for interface diagnostics.
+The revised launcher supports `--non-interactive` for configured unattended
+runs and `--interactive` (the default) for manual rerun selection. Unattended
+runs stop on incomplete result coverage even when MindTrial exits zero.
+This does not change tasks, model settings, scientific budgets or the validator.
 
 ## Models and purpose
 

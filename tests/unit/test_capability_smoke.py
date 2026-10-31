@@ -275,3 +275,132 @@ def test_package_contains_verified_files_and_working_local_links(tmp_path, monke
     assert "(../guide.md)" in (destination / "reports/smoke-findings-2026-10-31.md").read_text()
     assert set(PROFILE.configs) <= release["files_sha256"].keys()
     assert read(destination / "matrix.json")["attempts"]["total"] == 80
+
+
+def write_mock_results(command, *, partial=False, kind="Passed"):
+    config_path = Path(next(v.split("=", 1)[1] for v in command if v.startswith("-config=")))
+    task_path = Path(next(v.split("=", 1)[1] for v in command if v.startswith("-tasks=")))
+    config = read(config_path)["config"]
+    tasks = read(task_path)["task-config"]["tasks"]
+    result = {}
+    for p in config["providers"]:
+        result[p["name"]] = [
+            {
+                "Run": run["name"],
+                "Task": task["name"],
+                "Kind": kind,
+                "TraceID": f"{p['name']}-{i}-{j}",
+            }
+            for i, run in enumerate(p["runs"])
+            for j, task in enumerate(tasks[:1] if partial else tasks)
+        ]
+    runner.write_json(config_path.parent / "mindtrial.json", {"Results": result})
+
+
+@pytest.mark.parametrize("kind", ["Passed", "Failed", "Error"])
+def test_unattended_mode_runs_both_groups_and_checks_coverage(setup_package, monkeypatch, kind):
+    package, _, _, calls = setup_package
+    monkeypatch.setenv("XAI_API_KEY", "fixture-grok-key")
+
+    def execute(command, **kwargs):
+        calls.append((command, kwargs))
+        assert "--interactive=false" in command
+        assert kwargs["stdin"] == subprocess.DEVNULL
+        assert "stdout" not in kwargs and "stderr" not in kwargs
+        write_mock_results(command, kind=kind)
+        return SimpleNamespace(returncode=0)
+
+    monkeypatch.setattr(runner.subprocess, "run", execute)
+    assert (
+        runner.main(
+            ["--model", "grok", "--suite", "all", "--non-interactive", "--skip-build"],
+            package_dir=package,
+            pilot=PROFILE,
+        )
+        == 0
+    )
+    assert len(calls) == 2
+    manifests = [read(p) for p in (package / "results").glob("*/manifest.json")]
+    assert {m["suite"] for m in manifests} == {"controls", "screen"}
+    for m in manifests:
+        assert m["interactive"] is False
+        assert m["result_coverage"]["complete"]
+        assert m["status"] == "completed"
+        assert m["exit_code"] == m["launcher_exit_code"] == 0
+
+
+@pytest.mark.parametrize("mode", ["missing", "empty", "partial", "invalid"])
+def test_zero_exit_without_complete_results_stops_unattended_batch(
+    setup_package, monkeypatch, mode
+):
+    package, _, _, calls = setup_package
+    monkeypatch.setenv("XAI_API_KEY", "fixture-grok-key")
+
+    def execute(command, **kwargs):
+        calls.append((command, kwargs))
+        config_path = Path(next(v.split("=", 1)[1] for v in command if v.startswith("-config=")))
+        if mode == "partial":
+            write_mock_results(command, partial=True)
+        elif mode != "missing":
+            (config_path.parent / "mindtrial.json").write_text("" if mode == "empty" else "{")
+        return SimpleNamespace(returncode=0)
+
+    monkeypatch.setattr(runner.subprocess, "run", execute)
+    assert (
+        runner.main(
+            ["--model", "grok", "--suite", "all", "--non-interactive", "--skip-build"],
+            package_dir=package,
+            pilot=PROFILE,
+        )
+        == 2
+    )
+    assert len(calls) == 1
+    m = read(next((package / "results").glob("*/manifest.json")))
+    assert m["status"] == "incomplete_results" and not m["result_coverage"]["complete"]
+    assert m["exit_code"] == 0 and m["launcher_exit_code"] == 2
+
+
+def test_interactive_mode_preserves_manual_selection_and_terminal_input(setup_package, monkeypatch):
+    package, _, _, calls = setup_package
+    monkeypatch.setenv("XAI_API_KEY", "fixture-grok-key")
+    assert (
+        runner.main(
+            ["--model", "grok", "--interactive", "--skip-build"], package_dir=package, pilot=PROFILE
+        )
+        == 0
+    )
+    assert len(calls) == 1
+    command, kwargs = calls[0]
+    assert "--interactive=true" in command and "stdin" not in kwargs
+    m = read(next((package / "results").glob("*/manifest.json")))
+    assert m["interactive"] is True and "result_coverage" not in m
+
+
+def test_modes_are_mutually_exclusive():
+    with pytest.raises(SystemExit):
+        runner.main(["--interactive", "--non-interactive"], pilot=PROFILE)
+
+
+def test_packaged_host_scripts_support_python_312():
+    for name in (
+        "coordination-runner.py",
+        "capability-smoke-runner.py",
+        "summarize-pilot-results.py",
+    ):
+        ast.parse((EXAMPLES / name).read_text(), feature_version=(3, 12))
+
+
+@pytest.mark.parametrize("mode", ["duplicate", "unexpected", "invalid_identity", "duplicate_trace"])
+def test_result_coverage_rejects_ambiguous_records(tmp_path, mode):
+    config = {"config": {"providers": [{"name": "p", "runs": [{"name": "r"}]}]}}
+    tasks = {"task-config": {"tasks": [{"name": "t"}]}}
+    record = {"Run": "r", "Task": "t", "Kind": "Passed", "TraceID": "one"}
+    records = [record]
+    if mode in ("duplicate", "duplicate_trace"):
+        records.append({**record, "TraceID": "two" if mode == "duplicate" else "one"})
+    elif mode == "unexpected":
+        record["Task"] = "other"
+    else:
+        record["Run"] = 42
+    runner.write_json(tmp_path / "mindtrial.json", {"Results": {"p": records}})
+    assert not runner.result_coverage(tmp_path, config, tasks)["complete"]

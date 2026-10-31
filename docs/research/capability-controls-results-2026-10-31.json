@@ -1,0 +1,495 @@
+{
+  "version": "capability-controls-audit-v1",
+  "source_commit": "ad5b9d2f4fec2fb4626672a9d01cad97d540b3d4",
+  "runtime_source_sha256": "ba22502788acf7ce1684e1e527e5aa332cd1746b37423fececabc90d71b8ee83",
+  "archive_sha256": "ea72e5a6e1273aa3384e744a2663927d09f78a4acdf22ce848c3fc550e4e71bc",
+  "python": "3.14.7",
+  "scope": {
+    "original_hmac_recomputed": false,
+    "fresh_replay_secret": true,
+    "live_model_calls": 0
+  },
+  "totals": {
+    "planned": 10,
+    "started": 9,
+    "complete_result_records": 8,
+    "unstarted": 1,
+    "world_wins": 5,
+    "supported_world_wins": 5,
+    "tool_calls_started": 257,
+    "tool_calls_completed": 256,
+    "public_responses_replayed": 146,
+    "accepted_actions": 30,
+    "hash_records_matched": 28
+  },
+  "result_kinds": {
+    "Passed": 3,
+    "Failed": 3,
+    "Error": 2,
+    "Interrupted": 1,
+    "Not started": 1
+  },
+  "rows": [
+    {
+      "trace_id": "01M67TKQ4M9K67QMPCH4DYXDSV",
+      "directory": "controls-20261031T015334Z-1xmqyy2m",
+      "id": "S05",
+      "model": "z-ai/glm-5.2",
+      "provider": "openrouter",
+      "kind": "Failed",
+      "record_present": true,
+      "model_parameters": {
+        "max-completion-tokens": 65536,
+        "reasoning-effort": "xhigh",
+        "provider": {
+          "require_parameters": true,
+          "allow_fallbacks": false
+        }
+      },
+      "budget": 64,
+      "tool_calls_started": 0,
+      "tool_calls_completed": 0,
+      "conversation_turns": 1,
+      "protocol_errors": {},
+      "inflight": [],
+      "accepted_actions": 0,
+      "all_evidence_read": false,
+      "world_win": false,
+      "supported_world_win": false,
+      "pre_finalization_status": "active",
+      "public_responses_replayed": 0,
+      "hash_records_matched": 0,
+      "usage": {
+        "InputTokens": 1238,
+        "OutputTokens": 98,
+        "ReasoningTokens": 33,
+        "InputCacheWriteTokens": 0,
+        "InputCacheReadTokens": 0,
+        "InputTokenAccounting": "cache_tokens_included",
+        "OutputTokenAccounting": "reasoning_tokens_included"
+      },
+      "request_seconds": 2.196396374,
+      "failure_message": null
+    },
+    {
+      "trace_id": "01M67TM3P8MKN01E283YRS31VG",
+      "directory": "controls-20261031T015334Z-1xmqyy2m",
+      "id": "S21",
+      "model": "z-ai/glm-5.2",
+      "provider": "openrouter",
+      "kind": "Failed",
+      "record_present": true,
+      "model_parameters": {
+        "max-completion-tokens": 65536,
+        "reasoning-effort": "xhigh",
+        "provider": {
+          "require_parameters": true,
+          "allow_fallbacks": false
+        }
+      },
+      "budget": 8,
+      "tool_calls_started": 0,
+      "tool_calls_completed": 0,
+      "conversation_turns": 1,
+      "protocol_errors": {},
+      "inflight": [],
+      "accepted_actions": 0,
+      "all_evidence_read": false,
+      "world_win": false,
+      "supported_world_win": false,
+      "pre_finalization_status": "active",
+      "public_responses_replayed": 0,
+      "hash_records_matched": 0,
+      "usage": {
+        "InputTokens": 1238,
+        "OutputTokens": 66,
+        "ReasoningTokens": 21,
+        "InputCacheWriteTokens": 0,
+        "InputCacheReadTokens": 1215,
+        "InputTokenAccounting": "cache_tokens_included",
+        "OutputTokenAccounting": "reasoning_tokens_included"
+      },
+      "request_seconds": 1.054738556,
+      "failure_message": null
+    },
+    {
+      "trace_id": "01M67TMJ39AC623N2HH3JGZCZV",
+      "directory": "controls-20261031T015419Z-v0b8aqlp",
+      "id": "S05",
+      "model": "meta/muse-spark-1.2-contributor",
+      "provider": "openrouter",
+      "kind": "Passed",
+      "record_present": true,
+      "model_parameters": {
+        "max-completion-tokens": 65536,
+        "reasoning-effort": "xhigh",
+        "provider": {
+          "require_parameters": true,
+          "allow_fallbacks": false
+        }
+      },
+      "budget": 64,
+      "tool_calls_started": 9,
+      "tool_calls_completed": 9,
+      "conversation_turns": 10,
+      "protocol_errors": {},
+      "inflight": [],
+      "accepted_actions": 4,
+      "all_evidence_read": true,
+      "world_win": true,
+      "supported_world_win": true,
+      "pre_finalization_status": "won",
+      "public_responses_replayed": 9,
+      "hash_records_matched": 3,
+      "usage": {
+        "InputTokens": 45562,
+        "OutputTokens": 1668,
+        "ReasoningTokens": 949,
+        "InputCacheWriteTokens": 0,
+        "InputCacheReadTokens": 27671,
+        "InputTokenAccounting": "cache_tokens_included",
+        "OutputTokenAccounting": "reasoning_tokens_included"
+      },
+      "request_seconds": 22.435779913,
+      "failure_message": null
+    },
+    {
+      "trace_id": "01M67TNR669WTX1CZ5W7PB9A6A",
+      "directory": "controls-20261031T015419Z-v0b8aqlp",
+      "id": "S21",
+      "model": "meta/muse-spark-1.2-contributor",
+      "provider": "openrouter",
+      "kind": "Failed",
+      "record_present": true,
+      "model_parameters": {
+        "max-completion-tokens": 65536,
+        "reasoning-effort": "xhigh",
+        "provider": {
+          "require_parameters": true,
+          "allow_fallbacks": false
+        }
+      },
+      "budget": 8,
+      "tool_calls_started": 13,
+      "tool_calls_completed": 13,
+      "conversation_turns": 14,
+      "protocol_errors": {},
+      "inflight": [],
+      "accepted_actions": 6,
+      "all_evidence_read": true,
+      "world_win": true,
+      "supported_world_win": true,
+      "pre_finalization_status": "won",
+      "public_responses_replayed": 13,
+      "hash_records_matched": 6,
+      "usage": {
+        "InputTokens": 80672,
+        "OutputTokens": 3405,
+        "ReasoningTokens": 2399,
+        "InputCacheWriteTokens": 0,
+        "InputCacheReadTokens": 54732,
+        "InputTokenAccounting": "cache_tokens_included",
+        "OutputTokenAccounting": "reasoning_tokens_included"
+      },
+      "request_seconds": 31.263859844,
+      "failure_message": null
+    },
+    {
+      "trace_id": "01M67TQFPGM32C1J9CC23S0MHC",
+      "directory": "controls-20261031T015553Z-glnsk0gm",
+      "id": "S05",
+      "model": "minimax/minimax-m3",
+      "provider": "openrouter",
+      "kind": "Interrupted",
+      "record_present": false,
+      "model_parameters": {
+        "max-completion-tokens": 65536,
+        "provider": {
+          "require_parameters": true,
+          "allow_fallbacks": false
+        }
+      },
+      "budget": 64,
+      "tool_calls_started": 194,
+      "tool_calls_completed": 193,
+      "conversation_turns": 194,
+      "protocol_errors": {
+        "missing_filename": 65,
+        "missing_action": 45
+      },
+      "inflight": [
+        {
+          "call_id": "call_af89d8aaf9d14615a7a99275",
+          "arguments": {
+            "request": {
+              "operation": "evidence"
+            }
+          },
+          "line": 3588
+        }
+      ],
+      "accepted_actions": 0,
+      "all_evidence_read": false,
+      "world_win": false,
+      "supported_world_win": false,
+      "pre_finalization_status": "active",
+      "public_responses_replayed": 83,
+      "hash_records_matched": 0,
+      "usage": null,
+      "request_seconds": null,
+      "failure_message": null
+    },
+    {
+      "trace_id": "01M67V0EK6E11Y71NTVNFHWCB0",
+      "directory": "controls-20261031T020050Z-rb1r695u",
+      "id": "S05",
+      "model": "mistral-large-4",
+      "provider": "mistralai",
+      "kind": "Error",
+      "record_present": true,
+      "model_parameters": {
+        "max-tokens": 65536,
+        "reasoning-effort": "high"
+      },
+      "budget": 64,
+      "tool_calls_started": 10,
+      "tool_calls_completed": 10,
+      "conversation_turns": 7,
+      "protocol_errors": {},
+      "inflight": [],
+      "accepted_actions": 5,
+      "all_evidence_read": true,
+      "world_win": false,
+      "supported_world_win": false,
+      "pre_finalization_status": "active",
+      "public_responses_replayed": 10,
+      "hash_records_matched": 5,
+      "usage": {
+        "InputTokens": 79555,
+        "OutputTokens": 13596,
+        "ReasoningTokens": 13178,
+        "InputCacheReadTokens": 57600,
+        "InputTokenAccounting": "cache_tokens_included",
+        "OutputTokenAccounting": "reasoning_tokens_included"
+      },
+      "request_seconds": 88.756483914,
+      "failure_message": "json: cannot unmarshal array into Go value of type providers.Result"
+    },
+    {
+      "trace_id": "01M67V3PA7PMDR27HV3FW4XKH3",
+      "directory": "controls-20261031T020050Z-rb1r695u",
+      "id": "S21",
+      "model": "mistral-large-4",
+      "provider": "mistralai",
+      "kind": "Error",
+      "record_present": true,
+      "model_parameters": {
+        "max-tokens": 65536,
+        "reasoning-effort": "high"
+      },
+      "budget": 8,
+      "tool_calls_started": 12,
+      "tool_calls_completed": 12,
+      "conversation_turns": 10,
+      "protocol_errors": {},
+      "inflight": [],
+      "accepted_actions": 6,
+      "all_evidence_read": true,
+      "world_win": true,
+      "supported_world_win": true,
+      "pre_finalization_status": "won",
+      "public_responses_replayed": 12,
+      "hash_records_matched": 6,
+      "usage": {
+        "InputTokens": 90284,
+        "OutputTokens": 75910,
+        "ReasoningTokens": 10069,
+        "InputCacheReadTokens": 70912,
+        "InputTokenAccounting": "cache_tokens_included",
+        "OutputTokenAccounting": "reasoning_tokens_included"
+      },
+      "request_seconds": 339.267336008,
+      "failure_message": "invalid character 'N' looking for beginning of value"
+    },
+    {
+      "trace_id": "01M67VER9SSZGGFNE9FP4EWBR3",
+      "directory": "controls-20261031T020837Z-d_hzh1ak",
+      "id": "S05",
+      "model": "grok-4.7",
+      "provider": "xai",
+      "kind": "Passed",
+      "record_present": true,
+      "model_parameters": {
+        "max-completion-tokens": 65536,
+        "reasoning-effort": "medium"
+      },
+      "budget": 64,
+      "tool_calls_started": 9,
+      "tool_calls_completed": 9,
+      "conversation_turns": 7,
+      "protocol_errors": {},
+      "inflight": [],
+      "accepted_actions": 4,
+      "all_evidence_read": true,
+      "world_win": true,
+      "supported_world_win": true,
+      "pre_finalization_status": "won",
+      "public_responses_replayed": 9,
+      "hash_records_matched": 3,
+      "usage": {
+        "InputTokens": 43831,
+        "OutputTokens": 320,
+        "ReasoningTokens": 1221,
+        "InputCacheReadTokens": 35712,
+        "InputTokenAccounting": "cache_tokens_included",
+        "OutputTokenAccounting": "reasoning_tokens_separate"
+      },
+      "request_seconds": 22.035154684,
+      "failure_message": null
+    },
+    {
+      "trace_id": "01M67VFY9B3DCTZ8AQF8PXFHZ6",
+      "directory": "controls-20261031T020837Z-d_hzh1ak",
+      "id": "S21",
+      "model": "grok-4.7",
+      "provider": "xai",
+      "kind": "Passed",
+      "record_present": true,
+      "model_parameters": {
+        "max-completion-tokens": 65536,
+        "reasoning-effort": "medium"
+      },
+      "budget": 8,
+      "tool_calls_started": 10,
+      "tool_calls_completed": 10,
+      "conversation_turns": 8,
+      "protocol_errors": {},
+      "inflight": [],
+      "accepted_actions": 5,
+      "all_evidence_read": true,
+      "world_win": true,
+      "supported_world_win": true,
+      "pre_finalization_status": "won",
+      "public_responses_replayed": 10,
+      "hash_records_matched": 5,
+      "usage": {
+        "InputTokens": 47983,
+        "OutputTokens": 394,
+        "ReasoningTokens": 785,
+        "InputCacheReadTokens": 32896,
+        "InputTokenAccounting": "cache_tokens_included",
+        "OutputTokenAccounting": "reasoning_tokens_separate"
+      },
+      "request_seconds": 16.658130471,
+      "failure_message": null
+    }
+  ],
+  "folders": {
+    "controls-20261031T015334Z-1xmqyy2m": {
+      "model": "z-ai/glm-5.2",
+      "results_empty": false,
+      "bindings_verified": true,
+      "started_tasks": [
+        "NEXUS smoke-S05",
+        "NEXUS smoke-S21"
+      ],
+      "unstarted_tasks": [],
+      "file_sha256": {
+        "mindtrial.html": "4bbe1ba331c54eec63f48251b616d179f394a900ed06d807aead37b9c8f5f314",
+        "release.json": "30ac4c9d67e0d5e4d38b64e18c6212ecbe6cad6a3713ed679b6aad13cd29a957",
+        "config.yaml": "2f6ab3291cab921cda838ff1fa256ff9d480c17134b55285f4888a5a521672f2",
+        "input-config.yaml": "d057a4c50b91b11aa360d526bdbd8bd180eb73cac64f0d623fc67ee5e6626e8a",
+        "tasks.yaml": "4ca73462951851c640998e8826f89edb0a2ebce2c2f2d7edeb1ce4ef4a824c89",
+        "mindtrial.log": "9caba305ef1a6de0ffb28bcdab74a1a169d2fe46447cd6a82546de55ebc123b3",
+        "manifest.json": "5a0f503cb785f1234763f4e926f09751776a9b32c2fb12bb0a230d4a8db1faac",
+        "preflight.json": "63234e6debcb876ed88bb6ef214bb6c5f176a099c3c3a884faee7dce3883e950",
+        "mindtrial.json": "54ccde09c325c5e2216a9e016893abb9bd8a3b1f5d11c8df96125b08b56cc19e"
+      }
+    },
+    "controls-20261031T015419Z-v0b8aqlp": {
+      "model": "meta/muse-spark-1.2-contributor",
+      "results_empty": false,
+      "bindings_verified": true,
+      "started_tasks": [
+        "NEXUS smoke-S05",
+        "NEXUS smoke-S21"
+      ],
+      "unstarted_tasks": [],
+      "file_sha256": {
+        "mindtrial.html": "77ea1a45bcec4626303e78efb1cfff51dddf2b5542d7eb551d252a1175c3e9a3",
+        "release.json": "30ac4c9d67e0d5e4d38b64e18c6212ecbe6cad6a3713ed679b6aad13cd29a957",
+        "config.yaml": "dde6a19fd07f2977c6191cf6e8abf6c15eb5b4ae4a87391f904c564d11ebdfd3",
+        "input-config.yaml": "916296ccdf16986d0ee151b6755be986c8e5f3ddd88a9e8755251eb36771c3e3",
+        "tasks.yaml": "4ca73462951851c640998e8826f89edb0a2ebce2c2f2d7edeb1ce4ef4a824c89",
+        "mindtrial.log": "2702dd311f4db43b6c11e1c3da39b80ef867fcd9ead181d150a1145b402b2704",
+        "manifest.json": "4d960d4f0b273bd62475844763e98764514e8cf46607229aa9abe868c0d992e9",
+        "preflight.json": "63234e6debcb876ed88bb6ef214bb6c5f176a099c3c3a884faee7dce3883e950",
+        "mindtrial.json": "7bebd411827ae4953c46e185ced88c694d636752239d55cf91e63230a5eb5e45"
+      }
+    },
+    "controls-20261031T015553Z-glnsk0gm": {
+      "model": "minimax/minimax-m3",
+      "results_empty": true,
+      "bindings_verified": true,
+      "started_tasks": [
+        "NEXUS smoke-S05"
+      ],
+      "unstarted_tasks": [
+        "NEXUS smoke-S21"
+      ],
+      "file_sha256": {
+        "mindtrial.html": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "release.json": "30ac4c9d67e0d5e4d38b64e18c6212ecbe6cad6a3713ed679b6aad13cd29a957",
+        "config.yaml": "86654817d57e665406c981952903cf2e5ff40bf03a46a9a4668c29e2327b70e2",
+        "input-config.yaml": "dff4076ab55d755df6ce73f383c58f25c4e2dcbd6954ad20448e4496544f0056",
+        "tasks.yaml": "4ca73462951851c640998e8826f89edb0a2ebce2c2f2d7edeb1ce4ef4a824c89",
+        "mindtrial.log": "5bba0a39a6af25a460c4b44c5921ab874ae7505659651b4fac486effa910809e",
+        "manifest.json": "a8c391917b9a4e77bbdeedcbdbca95259cf46a66d253b05d007d50a1645e35c5",
+        "preflight.json": "63234e6debcb876ed88bb6ef214bb6c5f176a099c3c3a884faee7dce3883e950",
+        "mindtrial.json": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "controls-20261031T020050Z-rb1r695u": {
+      "model": "mistral-large-4",
+      "results_empty": false,
+      "bindings_verified": true,
+      "started_tasks": [
+        "NEXUS smoke-S05",
+        "NEXUS smoke-S21"
+      ],
+      "unstarted_tasks": [],
+      "file_sha256": {
+        "mindtrial.html": "3179237b55414cba1fe1b667ebaa1d931a15d08854740aaba5ea89ac0415ecb2",
+        "release.json": "30ac4c9d67e0d5e4d38b64e18c6212ecbe6cad6a3713ed679b6aad13cd29a957",
+        "config.yaml": "22fab4325cf85d644dac22a7e0791a65e0bc6551c10075989cfdf4378710cedf",
+        "input-config.yaml": "90b096c526eaf7298d8a6837d319841dc4e43adcbdde16e6cd3a1e83400d3cd6",
+        "tasks.yaml": "4ca73462951851c640998e8826f89edb0a2ebce2c2f2d7edeb1ce4ef4a824c89",
+        "mindtrial.log": "383ac275f54c5dec62ec70d807428b01418b709a8d5a6d43193afa39951c455f",
+        "manifest.json": "7f645a3465ee8a471f409e1793e7122d89fe93e5db083ff6ce2fcac1238016d2",
+        "preflight.json": "63234e6debcb876ed88bb6ef214bb6c5f176a099c3c3a884faee7dce3883e950",
+        "mindtrial.json": "9fd45c736e643e633d9e660e90e3874477d421e0fd586cd4e2f4c8ccb3d6b422"
+      }
+    },
+    "controls-20261031T020837Z-d_hzh1ak": {
+      "model": "grok-4.7",
+      "results_empty": false,
+      "bindings_verified": true,
+      "started_tasks": [
+        "NEXUS smoke-S05",
+        "NEXUS smoke-S21"
+      ],
+      "unstarted_tasks": [],
+      "file_sha256": {
+        "mindtrial.html": "1b5cb3aede85ac9d0a6dff2186b6ff87aa1c968c26b4375b303ac9880bb1992c",
+        "release.json": "30ac4c9d67e0d5e4d38b64e18c6212ecbe6cad6a3713ed679b6aad13cd29a957",
+        "config.yaml": "22889d7e5e7192d9c864fa4e4fac785468cbac22aa26f28327dcd4db0aed6c1f",
+        "input-config.yaml": "099c0601ab426dbc483475b353a25d5a383309754fb8ae304fb8725e0d2369f0",
+        "tasks.yaml": "4ca73462951851c640998e8826f89edb0a2ebce2c2f2d7edeb1ce4ef4a824c89",
+        "mindtrial.log": "200bbee1d7df8d8268c28c855e95d7c77b29f5e2d0b49ca7de3697fbb4a0db50",
+        "manifest.json": "68d9fd4416c825014cb4559fb2d4e3231ae63c9a5a7d795ba461ba59eaa40a79",
+        "preflight.json": "63234e6debcb876ed88bb6ef214bb6c5f176a099c3c3a884faee7dce3883e950",
+        "mindtrial.json": "e0facf4cae16147f8cf9e79d56304e9efe7d00af9a3c7e6764bde7c8eff89c31"
+      }
+    }
+  }
+}

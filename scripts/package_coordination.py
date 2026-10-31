@@ -319,6 +319,8 @@ def main(pilot_name="coordination"):
         "capability-smoke": (
             "cross-axis-preflight-2026-10-29.json",
             "capability-smoke-validation-2026-10-31.md",
+            "capability-controls-results-2026-10-31.md",
+            "capability-controls-results-2026-10-31.json",
             "smoke-findings-2026-10-31.md",
             "smoke-findings-2026-10-31.json",
         ),
@@ -337,6 +339,10 @@ def main(pilot_name="coordination"):
                 "research/smoke-findings-2026-10-31.md", "reports/smoke-findings-2026-10-31.md"
             )
             .replace("capability-smoke-matrix.json", "matrix.json")
+            .replace(
+                "research/capability-controls-results-2026-10-31.md",
+                "reports/capability-controls-results-2026-10-31.md",
+            )
         )
         findings = reports / "smoke-findings-2026-10-31.md"
         findings.write_text(

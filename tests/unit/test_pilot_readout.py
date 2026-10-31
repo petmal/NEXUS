@@ -334,3 +334,17 @@ def test_explicit_zero_calls_can_establish_no_world_access(tmp_path):
     diagnostics = readout.summarize(tmp_path)["rows"][1]["diagnostics"]
     assert diagnostics["world_access"] is False
     assert diagnostics["outcome"] == "no_successful_world_access"
+
+
+@pytest.mark.parametrize("missing", [False, True])
+def test_cancelled_run_without_json_retains_missing_slots(tmp_path, missing):
+    fixture(tmp_path)
+    result = tmp_path / "mindtrial.json"
+    result.unlink() if missing else result.write_text("")
+    report = readout.summarize(tmp_path)
+    assert report["result_file_status"] == "missing_or_empty"
+    assert report["recorded_attempts"] == 0
+    assert report["expected_attempts"] == len(report["missing"]) == 2
+    assert not report["matrix_complete"]
+    assert report["rows"] == [] and report["models"] == []
+    assert report["timing"]["first_logged_task_to_exit_seconds"] is None
