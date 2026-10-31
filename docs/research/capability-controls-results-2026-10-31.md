@@ -6,6 +6,19 @@ These are integration controls, not measurements of T/D or P/R difficulty.
 
 ## Main finding
 
+**Configuration correction, 31 October:** The user reports that GLM and MiniMax
+required `disable-structured-output: true` in their prior MindTrial evaluations.
+The presets used in this archive omitted that run-level flag, leaving structured
+final output enabled. This makes output-mode compatibility the first hypothesis
+to test before broader interface debugging. The v3 run package sets the flag for
+these two models and labels their runs “text output.” Repeat **S05 and S21 for
+both models** with all other experimental settings unchanged. These four attempts
+supersede the generic interface-diagnostic recommendation below as the immediate
+next step. The original results and provenance remain unchanged; a causal effect
+of output mode is not established until the reruns are observed. Changing the
+mode also changes MindTrial's final-answer instructions/parsing, so it tests that
+integration configuration as a whole, not an isolated decoding mechanism.
+
 Grok is ready for the fourteen-row challenge screen. Muse also demonstrated
 working world interaction, but needs a repeat of S21 to check final-answer
 reliability. Hold GLM, MiniMax and Mistral challenge runs while diagnosing their

@@ -8,22 +8,41 @@ Start with ten control attempts; then run seventy challenge attempts. See
 ## Current recommendation after the control run
 
 Read `reports/capability-controls-results-2026-10-31.md`. Grok passed both
-controls; Muse solved both worlds but added prose to one final receipt. GLM,
-MiniMax and Mistral need interface/response diagnostics before challenge runs.
-This v2 package preserves all model settings, tasks, world mechanics and seeds.
-It adds unattended execution and checks for missing result records.
+controls; Muse solved both worlds but added prose to one final receipt. GLM and
+MiniMax now have corrected text-output presets; Mistral still needs response
+diagnostics before challenge runs. This v3 package sets run-level
+`disable-structured-output: true` for GLM and MiniMax, matching the compatibility
+setting the user reports needing in prior MindTrial evaluation. Their run names
+now include “text output.” Other model settings, tasks, world mechanics, seeds
+and receipt validation remain unchanged. The unattended options from v2 remain.
 
-After extracting this **new v2 package**, run Grok's fourteen remaining rows:
+Repeat **S05 and S21 for both GLM and MiniMax**, four attempts total:
 
 ```bash
-cd ~/Downloads/NEXUS-capability-smoke-test-run-2026-10-31-v2
+cd ~/Downloads/NEXUS-capability-smoke-test-run-2026-10-31-v3
+bash run.sh --model glm --suite controls --non-interactive &&
+bash run.sh --model minimax --suite controls --non-interactive --skip-build
+```
+
+Set `OPENROUTER_API_KEY` first. The first command builds the new pinned source;
+the second reuses it. Keep the original structured-output results separately.
+Do not run these models' challenge rows until their controls demonstrate working
+interaction. These reruns test the output-mode explanation; success is not yet
+known. Do not alter tool/turn limits or reasoning effort for this comparison.
+The flag belongs beside `model` under a provider run, not in `model-parameters`.
+The tool argument schema remains enabled.
+
+Grok can independently run its fourteen remaining rows (omit this if already run):
+
+```bash
+cd ~/Downloads/NEXUS-capability-smoke-test-run-2026-10-31-v3
 bash run.sh --model grok --suite screen --non-interactive
 ```
 
 This builds the new pinned source using `~/Go-Projects/NEXUS`, then runs your
 `~/MindTrial/mindtrial` without confirmation prompts. Set `XAI_API_KEY` first.
-Do not use `--skip-build` on this first v2 launch: the required source revision
-changed even though the world runtime is identical.
+Use `--skip-build` if you already built v3 while running GLM. Otherwise build
+once: the required source revision changed even though the runtime is identical.
 
 For Muse, repeat **S21 only** using the interactive picker, retaining both attempts:
 
@@ -33,8 +52,8 @@ bash run.sh --model muse --suite controls --interactive --skip-build
 
 Set `OPENROUTER_API_KEY`, then select S21 only. If exact receipt delivery works,
 run its remaining fourteen rows with `--model muse --suite screen
---non-interactive --skip-build`. Do not repeat Grok's controls or launch the three
-held challenge panels as part of this followup.
+--non-interactive --skip-build`. Do not repeat Grok's controls. GLM/MiniMax
+challenge panels wait for the new controls; Mistral remains held for response diagnostics.
 
 ## Choosing interactive or unattended execution
 
@@ -74,7 +93,7 @@ clone at `~/Go-Projects/NEXUS`, then invokes your locally built
 `~/MindTrial/mindtrial` with `--debug --interactive=true --json`.
 
 ```bash
-cd ~/Downloads/NEXUS-capability-smoke-test-run-2026-10-31-v2
+cd ~/Downloads/NEXUS-capability-smoke-test-run-2026-10-31-v3
 bash run.sh --suite controls
 ```
 

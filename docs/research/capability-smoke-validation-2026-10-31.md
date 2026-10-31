@@ -76,3 +76,21 @@ Scoped Ruff checks pass. Historical full-suite and live-service checks above wer
 not repeated for this launcher-only revision. The release packager recomputes
 the full parent qualification before producing the updated ZIP. Docker remains
 unavailable in this editing environment. No paid model evaluation was run.
+
+
+## GLM/MiniMax output-mode correction
+
+The v3 package propagates run-level `disable-structured-output` from the model
+matrix to exported configurations. It is true only for GLM and MiniMax, whose
+run names now identify text output. The original control presets omitted this
+known user-reported compatibility setting. All task files and the other three
+model configs remain byte-identical to v2; GLM/MiniMax differ only in that flag
+and their display names. The tool contract and exact receipt validator remain
+unchanged, while the full config contract intentionally binds the new output
+mode. This is a separately identifiable cohort, not a retroactive result fix.
+
+The export/player-contract regression now checks the exact two affected models
+and rejects misplacement of the flag in `model-parameters`. The 188 focused tests and scoped Ruff checks passed; release qualification
+is recomputed by the packager. No provider call or MindTrial
+repository change is part of this correction. The compatibility effect still
+requires the user's four S05/S21 control reruns.

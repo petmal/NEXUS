@@ -16,7 +16,7 @@
         },
         "runs": [
           {
-            "name": "GLM 5.2 (xhigh reasoning) - capability smoke",
+            "name": "GLM 5.2 (xhigh reasoning) - capability smoke (text output)",
             "disabled": false,
             "model": "z-ai/glm-5.2",
             "max-requests-per-minute": 10,
@@ -27,7 +27,8 @@
                 "require_parameters": true,
                 "allow_fallbacks": false
               }
-            }
+            },
+            "disable-structured-output": true
           }
         ]
       }
