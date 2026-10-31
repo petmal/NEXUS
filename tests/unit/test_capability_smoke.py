@@ -96,6 +96,10 @@ def test_configs_reproduce_export_and_preserve_player_contract():
         assert provider["retry-policy"]["max-retry-attempts"] == 0
         assert not run["disabled"]
         assert not run["model-parameters"].get("server-tools")
+        assert run.get("disable-structured-output", False) is (
+            run["model"] in ("z-ai/glm-5.2", "minimax/minimax-m3")
+        )
+        assert "disable-structured-output" not in run["model-parameters"]
         if provider["name"] == "openrouter":
             assert run["model-parameters"]["provider"] == {
                 "require_parameters": True,

@@ -53,6 +53,10 @@ def export():
                 ],
             }
         ]
+        if "disable-structured-output" in model:
+            settings["providers"][0]["runs"][0]["disable-structured-output"] = model[
+                "disable-structured-output"
+            ]
         for section in ("tools", "services", "validators"):
             for item in settings[section]:
                 item["image"] = runner.CAPABILITY_SMOKE.image

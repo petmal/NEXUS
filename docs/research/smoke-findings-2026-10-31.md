@@ -7,6 +7,16 @@ GLM 5.2 at the user's request. Historical results and task definitions remain in
 
 ## Five-model controls: latest update
 
+Configuration correction: the user confirms that GLM and MiniMax required
+`disable-structured-output: true` in prior MindTrial testing. The initial NEXUS
+presets omitted it. The v3 package now pins this run-level setting for those two
+models, with separately named “text output” runs. Repeat S05 and S21 for each
+before further interface investigation or challenge runs. Preserve the initial
+structured-output attempts as a distinct configuration cohort; neither their
+failures nor a possible recovery establish a T/D or P/R effect. Mistral's setting
+is unchanged because the reported compatibility requirement concerns GLM and
+MiniMax. No live rerun result is available yet.
+
 The [control audit](capability-controls-results-2026-10-31.md) adds nine started
 attempts from ten planned slots, eight complete result records, five supported
 world wins and three accepted final answers. Grok passed both controls. Muse

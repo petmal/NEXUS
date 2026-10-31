@@ -1,5 +1,5 @@
 {
-  "version": "capability-smoke-v1",
+  "version": "capability-smoke-v2",
   "source_matrix": "cross-axis-matrix.json",
   "evaluation_seed": "nexus-cross-axis-pilot-v1",
   "selection": {
@@ -39,7 +39,7 @@
       "id": "glm",
       "provider": "openrouter",
       "model": "z-ai/glm-5.2",
-      "name": "GLM 5.2 (xhigh reasoning) - capability smoke",
+      "name": "GLM 5.2 (xhigh reasoning) - capability smoke (text output)",
       "max-requests-per-minute": 10,
       "model-parameters": {
         "max-completion-tokens": 65536,
@@ -48,7 +48,8 @@
           "require_parameters": true,
           "allow_fallbacks": false
         }
-      }
+      },
+      "disable-structured-output": true
     },
     {
       "id": "muse",
@@ -69,7 +70,7 @@
       "id": "minimax",
       "provider": "openrouter",
       "model": "minimax/minimax-m3",
-      "name": "MiniMax M3 (provider default reasoning) - capability smoke",
+      "name": "MiniMax M3 (provider default reasoning) - capability smoke (text output)",
       "max-requests-per-minute": 10,
       "model-parameters": {
         "max-completion-tokens": 65536,
@@ -77,7 +78,8 @@
           "require_parameters": true,
           "allow_fallbacks": false
         }
-      }
+      },
+      "disable-structured-output": true
     },
     {
       "id": "mistral",

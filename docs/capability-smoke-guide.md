@@ -6,12 +6,14 @@ Read [the consolidated findings](research/smoke-findings-2026-10-31.md) first.
 The machine-readable specification is [capability-smoke-matrix.json](capability-smoke-matrix.json).
 
 See [the control audit](research/capability-controls-results-2026-10-31.md):
-Grok can proceed to `screen`; repeat Muse S21 for answer-delivery reliability;
-hold GLM, MiniMax and Mistral challenge panels for interface diagnostics.
+Grok can proceed to `screen`; repeat Muse S21 for answer-delivery reliability.
+Repeat GLM and MiniMax S05/S21 using the corrected text-output presets before
+their challenge panels; hold Mistral for response diagnostics.
 The revised launcher supports `--non-interactive` for configured unattended
 runs and `--interactive` (the default) for manual rerun selection. Unattended
 runs stop on incomplete result coverage even when MindTrial exits zero.
-This does not change tasks, model settings, scientific budgets or the validator.
+The v3 package changes only GLM/MiniMax output mode and run labels. Tasks,
+scientific budgets, model effort and the receipt validator remain unchanged.
 
 ## Models and purpose
 
@@ -29,6 +31,16 @@ Grok need not be weaker than Flash. Grok medium is deliberately different from
 its leaderboard setting; do not label its results a replication of xhigh.
 Effort labels cannot equalize compute across vendors. MiniMax has no invented
 reasoning knob; its service default is a reproducibility limitation.
+
+GLM and MiniMax now have **`disable-structured-output: true` at run level**,
+alongside `model` and `model-parameters`. This restores the compatibility setting
+the user reports needing in prior MindTrial evaluation. It removes MindTrial's
+structured final-answer wrapper; the NEXUS tool JSON schema and exact receipt
+validation remain in force. The original control archive used the structured
+default, so keep the corrected “text output” attempts separate. Output mode is
+pinned by the package contract; use the revised release rather than editing an
+older package. Other models retain their original output settings. This does not
+claim the mode change has already fixed the observed failures.
 
 Each completion is capped at 65,536 output tokens (Mistral `max-tokens`; others
 `max-completion-tokens`). This is a ceiling per request, **not a total token or

@@ -16,7 +16,7 @@
         },
         "runs": [
           {
-            "name": "MiniMax M3 (provider default reasoning) - capability smoke",
+            "name": "MiniMax M3 (provider default reasoning) - capability smoke (text output)",
             "disabled": false,
             "model": "minimax/minimax-m3",
             "max-requests-per-minute": 10,
@@ -26,7 +26,8 @@
                 "require_parameters": true,
                 "allow_fallbacks": false
               }
-            }
+            },
+            "disable-structured-output": true
           }
         ]
       }
