@@ -6,11 +6,11 @@ The central design goal is to evaluate **adaptation and reasoning rather than re
 
 Current smoke evidence and next run: [consolidated findings](docs/research/smoke-findings-2026-10-31.md)
 and [five-model capability smoke guide](docs/capability-smoke-guide.md). The
-[latest control audit](docs/research/capability-controls-results-2026-10-31.md)
-advances Grok to the challenge screen, requests one Muse answer-delivery repeat,
-and now advances GLM/MiniMax after their
-[four passing text-output controls](docs/research/capability-text-output-controls-2026-10-31.md).
-Mistral remains held for response diagnosis. The launcher supports unattended runs.
+[latest screen audit](docs/research/capability-screen-results-2026-10-31.md)
+finds 9/14 wins for both GLM and MiniMax, with 7 and 9 evidence-supported wins.
+It recommends twelve targeted repeats, separating world-action failures from
+response-length stops. Grok's screen, Muse's S21 delivery repeat and Mistral's
+response diagnosis remain unreported. The launcher supports unattended runs.
 
 ## Research checkpoint and next experiments
 

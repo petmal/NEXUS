@@ -5,15 +5,42 @@ project's current evidence record for choosing subsequent model smoke tests.
 It supersedes the earlier suggestion to start with GLM 5.1: the next panel uses
 GLM 5.2 at the user's request. Historical results and task definitions remain intact.
 
-## Five-model controls: latest update
+## GLM/MiniMax challenge screen: latest update
+
+The [new screen audit](capability-screen-results-2026-10-31.md) adds 28 attempts:
+both models pass 9/14, with seven supported wins for GLM and nine for MiniMax.
+GLM's other two wins are compatible repairs. GLM has three world-action-budget
+failures and two response-length errors; MiniMax has five response-length errors.
+All seven report no actionable content with stop reason `length`. All 707 new
+tool calls complete without malformed protocol requests. These are unsuccessful
+runs under the fixed generation budget, not a return of the earlier tool-schema
+problem. Keep errors in denominators and separate from world losses.
+
+GLM's tight interference 09 becomes unrecoverable at an unnecessary turn-2 probe;
+its relaxed 25 wins optimally. GLM S08 has enough evidence for a guaranteed
+repair by turn 44 but later submits contradicted builds. GLM S22 reaches the
+physical goal without an action left to finish; S23 and S24 win without evidence
+support. MiniMax wins tight 09 and S22 but hits the response limit on their
+relaxed counterparts. Both solve spatial tight S13/S16 optimally. Thus the
+resource and disclosure contrasts are informative, but not yet stable boundaries.
+
+Repeat interference 09/11/25/27 and repair S22/S23 once per model (12 attempts),
+with unchanged v3 text-output settings. Keep the two expensive S08 repeats
+secondary. If length stops recur, isolate one provider-supported generation
+setting in a separate diagnostic cohort. Follow with qualified rival worlds for
+compatible repairs and fresh seeds for reproducible contrasts, before expanding
+world mechanics. The new archive repeats the four old controls byte-for-byte;
+those copies add no observations. Grok/Muse/Mistral followups remain unreported.
+
+## Five-model controls: retained comparison cohort
 
 The [GLM/MiniMax text-output rerun](capability-text-output-controls-2026-10-31.md)
 passed all four S05/S21 controls: four supported world victories and four accepted
 receipts, with no malformed calls or rejected actions. Both used four actions
 on S05; on S21 GLM used six and MiniMax eight against the five-action reference.
 MiniMax spent all available slack on two unnecessary moves and unused stock.
-Both now advance to the existing fourteen-row screen using v3 text-output
-presets, with no further control repeats. Keep output mode fixed when comparing
+These controls admitted both models to the now-completed fourteen-row screen
+using v3 text-output presets, with no further control repeats. Keep output mode fixed when comparing
 screen results with these controls. The action inefficiency is a useful planning
 observation, not yet an established P/R failure boundary.
 
@@ -221,13 +248,13 @@ Excluding errors gives GLM 30/37 and MiniMax 30/35; their total scores partly
 reflect reliability. Older records lacking individual ToolCalls still contain
 aggregate ToolUsage, so missing detailed calls must not be interpreted as no tool use.
 
-The next screen includes the first five families. GLM 5.2 replaces the earlier
+The capability panel includes the first five model families. GLM 5.2 replaces the earlier
 5.1 recommendation. Grok uses **medium**, a new effort setting, because its
 xhigh text result gives no reason to expect a weak reasoning baseline. Muse and
 Mistral are cost/diversity probes, not proven weak models. No scores are predicted
 for these NEXUS configurations. See [the frozen next-panel guide](../capability-smoke-guide.md).
 
-## Next decisions after live evaluation
+## Continuing evaluation principles
 
 First distinguish a working multi-turn integration from refusal, malformed calls,
 empty responses, billing or transport failure. Retain controls even when they

@@ -1,5 +1,5 @@
 {
-  "version": "smoke-findings-v1",
+  "version": "smoke-findings-v2",
   "as_of": "2026-10-31",
   "baseline": {
     "provenance": {
@@ -1447,5 +1447,137 @@
       }
     ]
   },
-  "warning": "Baseline and combined repeat panel overlap. Do not add their counts or compare their aggregates as a trend."
+  "warning": "Baseline and combined repeat panel overlap. Do not add their counts or compare their aggregates as a trend.",
+  "capability_screen": {
+    "source_commit": "92fa0888546498373f4c011a79778b7caf614f12",
+    "runtime_source_sha256": "ba22502788acf7ce1684e1e527e5aa332cd1746b37423fececabc90d71b8ee83",
+    "archive_sha256": "5f3718fc2d8570f71787884f9f6ae451e86085b973a0d4f0ece767a4852945ff",
+    "mindtrial_sha256": "95c57d56e3d8739c19c4be1d33ec8de876c6522a003704c4f2d277978baf8660",
+    "evaluation_seed": "nexus-cross-axis-pilot-v1",
+    "new_screen_totals": {
+      "attempts": 28,
+      "outcomes": {
+        "Failed": 3,
+        "Error": 7,
+        "Passed": 18
+      },
+      "classification": {
+        "not_won": 10,
+        "supported_win": 16,
+        "compatible_win": 2
+      },
+      "world_wins": 18,
+      "supported_world_wins": 16,
+      "accepted_actions": 546,
+      "tool_calls_started": 707,
+      "tool_calls_completed": 707,
+      "public_responses_replayed": 707,
+      "hash_records_matched": 102,
+      "rejected_actions": 2,
+      "request_seconds": 10638.025111273,
+      "tool_seconds": 463.712864253,
+      "usage": {
+        "InputTokens": 29478988,
+        "OutputTokens": 2146179,
+        "ReasoningTokens": 2115095,
+        "InputCacheReadTokens": 28188542,
+        "InputCacheWriteTokens": 0
+      }
+    },
+    "model_totals": {
+      "minimax/minimax-m3": {
+        "attempts": 14,
+        "outcomes": {
+          "Passed": 9,
+          "Error": 5
+        },
+        "classification": {
+          "supported_win": 9,
+          "not_won": 5
+        },
+        "world_wins": 9,
+        "supported_world_wins": 9,
+        "accepted_actions": 232,
+        "tool_calls_started": 311,
+        "tool_calls_completed": 311,
+        "public_responses_replayed": 311,
+        "hash_records_matched": 57,
+        "rejected_actions": 0,
+        "request_seconds": 4081.183775803,
+        "tool_seconds": 203.487374574,
+        "usage": {
+          "InputTokens": 9194289,
+          "OutputTokens": 978324,
+          "ReasoningTokens": 954544,
+          "InputCacheReadTokens": 8436674,
+          "InputCacheWriteTokens": 0
+        }
+      },
+      "z-ai/glm-5.2": {
+        "attempts": 14,
+        "outcomes": {
+          "Failed": 3,
+          "Error": 2,
+          "Passed": 9
+        },
+        "classification": {
+          "not_won": 5,
+          "supported_win": 7,
+          "compatible_win": 2
+        },
+        "world_wins": 9,
+        "supported_world_wins": 7,
+        "accepted_actions": 314,
+        "tool_calls_started": 396,
+        "tool_calls_completed": 396,
+        "public_responses_replayed": 396,
+        "hash_records_matched": 45,
+        "rejected_actions": 2,
+        "request_seconds": 6556.841335470001,
+        "tool_seconds": 260.225489679,
+        "usage": {
+          "InputTokens": 20284699,
+          "OutputTokens": 1167855,
+          "ReasoningTokens": 1160551,
+          "InputCacheReadTokens": 19751868,
+          "InputCacheWriteTokens": 0
+        }
+      }
+    },
+    "recommended_repeats": {
+      "core": {
+        "models": [
+          "glm",
+          "minimax"
+        ],
+        "suite": "screen",
+        "rows": [
+          "09",
+          "11",
+          "25",
+          "27",
+          "S22",
+          "S23"
+        ],
+        "attempts": 12,
+        "additional_repetitions_per_row": 1,
+        "preserve_settings": true
+      },
+      "secondary": {
+        "models": [
+          "glm",
+          "minimax"
+        ],
+        "suite": "screen",
+        "rows": [
+          "S08"
+        ],
+        "attempts": 2,
+        "additional_repetitions_per_row": 1,
+        "reason": "Expensive joint T/D contrast; prioritize after core pairs."
+      }
+    },
+    "detail_report": "capability-screen-results-2026-10-31.json",
+    "copied_control_attempts_not_new": 4
+  }
 }

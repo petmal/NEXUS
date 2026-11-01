@@ -1,15 +1,17 @@
 # Five-model capability smoke panel
 
-31 October 2026 UTC. The control stage now has live results; the challenge
-stage remains pending for this cohort.
+31 October 2026. Controls and the GLM/MiniMax challenge screens now have live
+results; other model followups remain unreported.
 Read [the consolidated findings](research/smoke-findings-2026-10-31.md) first.
 The machine-readable specification is [capability-smoke-matrix.json](capability-smoke-matrix.json).
 
 See [the control audit](research/capability-controls-results-2026-10-31.md):
 Grok can proceed to `screen`; repeat Muse S21 for answer-delivery reliability.
 The [text-output rerun](research/capability-text-output-controls-2026-10-31.md)
-passed all four GLM/MiniMax controls: both now advance to their fourteen-row
-screens with v3 presets. Hold Mistral for response diagnostics.
+passed all four GLM/MiniMax controls. Their [completed screens](research/capability-screen-results-2026-10-31.md)
+each pass 9/14, but with different evidence support and stopping causes. Repeat
+interference 09/11/25/27 and S22/S23 once per model using unchanged v3 presets;
+keep S08 repeats secondary. Hold Mistral for response diagnostics.
 The revised launcher supports `--non-interactive` for configured unattended
 runs and `--interactive` (the default) for manual rerun selection. Unattended
 runs stop on incomplete result coverage even when MindTrial exits zero.
