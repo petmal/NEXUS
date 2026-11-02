@@ -5,63 +5,28 @@ Start with ten control attempts; then run seventy challenge attempts. See
 `guide.md` for the exact row mapping, settings and analysis rules, and
 `reports/smoke-findings-2026-10-31.md` for the consolidated earlier findings.
 
-## Current recommendation after the control run
+## Current recommendation after the compiled repetitions
 
-**Latest result:** GLM and MiniMax passed both text-output controls. Run their
-remaining screens with `--model glm --suite screen --non-interactive --skip-build`
-and `--model minimax --suite screen --non-interactive --skip-build` from the
-already built v3 package, 28 attempts total. Do not repeat their controls.
-See `reports/capability-text-output-controls-2026-10-31.md`. The setup and
-control-rerun instructions below describe how that evaluated cohort was created.
+The GLM/MiniMax controls, initial screens and selected repetitions are complete.
+Do not repeat either full screen. Read `followup-matrix.md` for the focused
+MiniMax reliability checks and GLM high/xhigh comparison, and
+`reports/smaller-model-synthesis-2026-11-01.md` for the evidence.
 
+This release improves operator reporting and unattended row selection. World
+mechanics, task objects, seeds, qualification, player instructions and the
+GLM/MiniMax text-output setting are unchanged. Build this release once before
+using `--skip-build`; its source revision differs from the earlier v3 package.
 
-Read `reports/capability-controls-results-2026-10-31.md`. Grok passed both
-controls; Muse solved both worlds but added prose to one final receipt. GLM and
-MiniMax now have corrected text-output presets; Mistral still needs response
-diagnostics before challenge runs. This v3 package sets run-level
-`disable-structured-output: true` for GLM and MiniMax, matching the compatibility
-setting the user reports needing in prior MindTrial evaluation. Their run names
-now include “text output.” Other model settings, tasks, world mechanics, seeds
-and receipt validation remain unchanged. The unattended options from v2 remain.
-
-Repeat **S05 and S21 for both GLM and MiniMax**, four attempts total:
+Grok's fourteen-row screen, Muse's S21 receipt-delivery repeat and Mistral's
+response diagnostic remain unreported. If Muse still needs its repeat:
 
 ```bash
-cd ~/Downloads/NEXUS-capability-smoke-test-run-2026-10-31-v3
-bash run.sh --model glm --suite controls --non-interactive &&
-bash run.sh --model minimax --suite controls --non-interactive --skip-build
+bash run.sh --model muse --suite controls --task-id S21 --non-interactive
 ```
 
-Set `OPENROUTER_API_KEY` first. The first command builds the new pinned source;
-the second reuses it. Keep the original structured-output results separately.
-Do not run these models' challenge rows until their controls demonstrate working
-interaction. These reruns test the output-mode explanation; success is not yet
-known. Do not alter tool/turn limits or reasoning effort for this comparison.
-The flag belongs beside `model` under a provider run, not in `model-parameters`.
-The tool argument schema remains enabled.
-
-Grok can independently run its fourteen remaining rows (omit this if already run):
-
-```bash
-cd ~/Downloads/NEXUS-capability-smoke-test-run-2026-10-31-v3
-bash run.sh --model grok --suite screen --non-interactive
-```
-
-This builds the new pinned source using `~/Go-Projects/NEXUS`, then runs your
-`~/MindTrial/mindtrial` without confirmation prompts. Set `XAI_API_KEY` first.
-Use `--skip-build` if you already built v3 while running GLM. Otherwise build
-once: the required source revision changed even though the runtime is identical.
-
-For Muse, repeat **S21 only** using the interactive picker, retaining both attempts:
-
-```bash
-bash run.sh --model muse --suite controls --interactive --skip-build
-```
-
-Set `OPENROUTER_API_KEY`, then select S21 only. If exact receipt delivery works,
-run its remaining fourteen rows with `--model muse --suite screen
---non-interactive --skip-build`. Do not repeat Grok's controls. GLM/MiniMax
-challenge panels wait for the new controls; Mistral remains held for response diagnostics.
+Only S21 is included in that run's task file. Do not also run the whole control
+suite. Set `OPENROUTER_API_KEY` first. Grok can independently run its remaining
+screen with `--model grok --suite screen --non-interactive`, using `XAI_API_KEY`.
 
 ## Choosing interactive or unattended execution
 
@@ -90,7 +55,20 @@ results remain intact; resume remaining groups explicitly to avoid repeats.
 Interactive subsets do not require full-matrix coverage. Their zero process
 exit alone still does not certify a complete evaluation.
 
-The remaining instructions describe the original panel and general operation.
+For a bounded unattended subset, repeat `--task-id` for each row. A selector
+must be an exact task name or a unique suffix such as `11` or `S23`. Unknown,
+ambiguous and duplicate selections fail before build or model calls. Selection
+keeps complete task objects and their harness settings; full qualification still
+runs. `--repeat 2` runs the selected jobs twice in separate result folders with
+the same world seed. It measures repeatability, not new-world generalization.
+
+```bash
+# Two repetitions of only the long tight/slack pair, current GLM preset:
+bash run.sh --model glm --suite screen --task-id 11 --task-id 27 \
+  --repeat 2 --non-interactive --skip-build
+```
+
+The following full-panel examples are reference usage, not the current recommendation.
 
 ## Run from Downloads
 
@@ -101,7 +79,7 @@ clone at `~/Go-Projects/NEXUS`, then invokes your locally built
 `~/MindTrial/mindtrial` with `--debug --interactive=true --json`.
 
 ```bash
-cd ~/Downloads/NEXUS-capability-smoke-test-run-2026-10-31-v3
+cd ~/Downloads/NEXUS-capability-diagnostics-2026-11-01
 bash run.sh --suite controls
 ```
 
@@ -191,5 +169,9 @@ Send the complete results ZIP. Choose explicit folders if globs would mix
 unintended repeats or preflight-only folders. The helper is an outcome readout,
 not an independent replay/receipt audit; missing or empty JSON is reported as
 zero completed records with missing expected slots; concurrent logs may have unknown access
-classification. It does not turn a failed mission into a provider failure or
-certify evidence-supported wins.
+classification. Raw MindTrial labels remain unchanged. The v3 readout adds terminal response
+stops (including length with text), no-candidate errors, last observed world
+status/actions remaining, detailed malformed-call accounting, effective-setting
+drift and token-accounting totals. World state before validation and terminal
+performance remain separate. Missing or ambiguous evidence stays unknown; the
+readout does not certify supported wins or recover upstream provider metadata.

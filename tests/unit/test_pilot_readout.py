@@ -348,3 +348,156 @@ def test_cancelled_run_without_json_retains_missing_slots(tmp_path, missing):
     assert not report["matrix_complete"]
     assert report["rows"] == [] and report["models"] == []
     assert report["timing"]["first_logged_task_to_exit_seconds"] is None
+
+
+@pytest.mark.parametrize("remaining", [46, 21])
+def test_length_with_text_is_not_a_world_budget_failure(tmp_path, remaining):
+    raw = fixture(tmp_path)
+    record = raw["Results"]["openai"][0]
+    record["Kind"] = "Failed"
+    record["Details"]["Answer"].update(
+        ActualAnswer=["An unfinished plan", ""],
+        ToolCalls=[tool_call("last")],
+        ToolUsage={"nexus": {"CallCount": 1}},
+    )
+    write(tmp_path, "mindtrial.json", raw)
+    log = log_block(
+        record,
+        [
+            (
+                "last",
+                "success",
+                {
+                    "observation": {
+                        "episode_id": "world",
+                        "turn": 7,
+                        "terminal_status": "active",
+                        "actions_remaining": remaining,
+                    },
+                },
+            )
+        ],
+        performance={
+            "terminal_status": "failed",
+            "termination_reason": "harness_finalization",
+            "actions_used": 7,
+            "budget_remaining": remaining,
+        },
+    )
+    marker = "task has finished in 1s."
+    log = log.replace(
+        marker,
+        'stop reason: "length" (terminal: true)\n'
+        + log.splitlines()[0].split("starting task...")[0]
+        + marker,
+    )
+    (tmp_path / "mindtrial.log").write_text(log)
+    row = readout.summarize(tmp_path)["rows"][0]
+    d = row["diagnostics"]
+    assert row["reported_kind"] == "Failed"
+    assert d["outcome"] == "response_length_with_text"
+    assert d["provider_stop_reason"] == "length"
+    assert d["terminal_status"] == "failed"
+    assert d["last_observed_world_state"] == {
+        "turn": 7,
+        "status": "active",
+        "actions_remaining": remaining,
+    }
+
+
+@pytest.mark.parametrize(
+    "message,outcome",
+    [
+        (
+            "failed to generate response: model returned no actionable content (stop reason: length)",
+            "response_length_without_text",
+        ),
+        (
+            "failed to generate response: model response contained no response candidates",
+            "no_response_candidates",
+        ),
+    ],
+)
+def test_error_record_distinguishes_length_and_empty_without_logs(tmp_path, message, outcome):
+    raw = fixture(tmp_path)
+    record = raw["Results"]["openai"][0]
+    record.update(Kind="Error", Details={"Error": {"Message": message}})
+    write(tmp_path, "mindtrial.json", raw)
+    (tmp_path / "mindtrial.log").unlink()
+    d = readout.summarize(tmp_path)["rows"][0]["diagnostics"]
+    assert d["outcome"] == outcome
+    assert d["world_access"] is None
+    assert d["provider_stop_reason"] == (
+        "length" if outcome.startswith("response_length") else None
+    )
+
+
+@pytest.mark.parametrize("count", [0, 1])
+def test_invalid_arguments_are_complete_recorded_calls_without_container_output(tmp_path, count):
+    raw = fixture(tmp_path)
+    record = raw["Results"]["openai"][0]
+    record.update(Kind="Failed")
+    record["Details"]["Answer"].update(
+        ToolCalls=[tool_call("bad", "invalid_arguments")],
+        ToolUsage={"nexus": {"CallCount": count}},
+    )
+    write(tmp_path, "mindtrial.json", raw)
+    prefix = f"2026-10-27 15:10:00 TRC [astra] openai: astra: {record['Task']}: "
+    (tmp_path / "mindtrial.log").write_text(
+        "\n".join(
+            prefix + line
+            for line in [
+                "starting task...",
+                'nexus[bad]: failed to parse input arguments: {"request":',
+                "nexus[bad]: call finished: status=invalid_arguments wall_time=1ms",
+                "task has finished in 1s.",
+            ]
+        )
+    )
+    d = readout.summarize(tmp_path)["rows"][0]["diagnostics"]
+    assert d["tool_log_complete"] and d["world_access"] is False
+    assert d["tool_count_convention"] == (
+        "all_detailed_calls" if count else "excludes_invalid_arguments"
+    )
+
+
+def test_recovered_length_does_not_override_later_success(tmp_path):
+    raw = fixture(tmp_path)
+    record = raw["Results"]["openai"][0]
+    record["Details"]["Answer"].update(ToolCalls=[], ToolUsage={"nexus": {"CallCount": 0}})
+    write(tmp_path, "mindtrial.json", raw)
+    prefix = f"2026-10-27 15:10:00 TRC [astra] openai: astra: {record['Task']}: "
+    (tmp_path / "mindtrial.log").write_text(
+        "\n".join(
+            prefix + line
+            for line in [
+                "starting task...",
+                'stop reason: "length" (terminal: true)',
+                'stop reason: "stop" (terminal: true)',
+                "task has finished in 1s.",
+            ]
+        )
+    )
+    d = readout.summarize(tmp_path)["rows"][0]["diagnostics"]
+    assert d["provider_stop_reason"] == "stop" and d["outcome"] == "reported_win"
+
+
+@pytest.mark.parametrize("change", ["output_mode", "extra_parameter", "retry"])
+def test_readout_detects_additional_effective_configuration_drift(tmp_path, change):
+    raw = fixture(tmp_path)
+    snapshot = raw["Results"]["openai"][0]["RunConfig"]
+    if change == "output_mode":
+        snapshot["DisableStructuredOutput"] = True
+    elif change == "extra_parameter":
+        snapshot["ModelParameters"]["temperature"] = 0.7
+    else:
+        config = readout.read(tmp_path / "config.yaml")
+        config["config"]["providers"][0]["retry-policy"] = {"max-retry-attempts": 0}
+        manifest = readout.read(tmp_path / "manifest.json")
+        manifest["effective_config_sha256"] = write(tmp_path, "config.yaml", config)
+        write(tmp_path, "manifest.json", manifest)
+        snapshot["RetryPolicy"] = {"MaxRetryAttempts": 1}
+    write(tmp_path, "mindtrial.json", raw)
+    result = readout.summarize(tmp_path)
+    assert not result["matrix_complete"]
+    assert result["configuration_mismatch_trace_ids"] == ["astra"]

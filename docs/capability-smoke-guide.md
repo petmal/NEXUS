@@ -9,6 +9,9 @@ The frozen specification is [capability-smoke-matrix.json](capability-smoke-matr
 Do not repeat the entire unchanged GLM/MiniMax screen. The completed repetitions
 recommend a MiniMax response/provenance diagnostic and a bounded GLM generation-
 setting comparison before fresh qualified seeds and broader world changes.
+The [follow-up matrix](inference-diagnostic-matrix.md) specifies an 18-attempt
+first wave with control gates. The revised launcher supports exact `--task-id`
+selection and `--repeat` without interactive confirmations or task-file edits.
 The [initial screen](research/capability-screen-results-2026-10-31.md) and
 [text-output controls](research/capability-text-output-controls-2026-10-31.md)
 remain historical comparison records. See [the initial control audit](research/capability-controls-results-2026-10-31.md)
@@ -130,6 +133,11 @@ Keep all results, including empty launcher folders and partial attempts. The
 convenience readout reports raw outcomes and conservative log access evidence;
 it is not a canonical replay or a supported-win certificate. Concurrent task
 logs can remain unknown in that summary even when a fuller audit resolves them.
+The v3 readout preserves raw labels and separately reports response-length stops,
+no-candidate errors, last observed world state and finalized performance. Detailed
+invalid-argument calls remain accounted for even when aggregate ToolUsage omits
+them. Configuration checks include output mode, extra parameters and retry policy;
+reported token totals retain their accounting labels and partial-telemetry flag.
 
 ## API/source checks and limits
 

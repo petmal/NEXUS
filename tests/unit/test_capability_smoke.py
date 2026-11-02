@@ -276,6 +276,11 @@ def test_package_contains_verified_files_and_working_local_links(tmp_path, monke
     assert (destination.parent / (destination.name + ".zip")).is_file()
     assert "(reports/smoke-findings-2026-10-31.md)" in (destination / "guide.md").read_text()
     assert "(matrix.json)" in (destination / "guide.md").read_text()
+    assert "(followup-matrix.md)" in (destination / "guide.md").read_text()
+    assert (
+        "(reports/smaller-model-synthesis-2026-11-01.md)"
+        in (destination / "followup-matrix.md").read_text()
+    )
     assert "(../guide.md)" in (destination / "reports/smoke-findings-2026-10-31.md").read_text()
     assert set(PROFILE.configs) <= release["files_sha256"].keys()
     assert read(destination / "matrix.json")["attempts"]["total"] == 80
@@ -392,6 +397,82 @@ def test_packaged_host_scripts_support_python_312():
         "summarize-pilot-results.py",
     ):
         ast.parse((EXAMPLES / name).read_text(), feature_version=(3, 12))
+
+
+def test_selected_unattended_repetitions_preserve_tasks_and_complete_only_selected_rows(
+    setup_package, monkeypatch
+):
+    package, _, preflight, calls = setup_package
+    monkeypatch.setenv("OPENROUTER_API_KEY", "fixture-key")
+
+    def execute(command, **kwargs):
+        calls.append((command, kwargs))
+        write_mock_results(command)
+        return SimpleNamespace(returncode=0)
+
+    monkeypatch.setattr(runner.subprocess, "run", execute)
+    assert (
+        runner.main(
+            [
+                "--model",
+                "glm",
+                "--suite",
+                "all",
+                "--task-id",
+                "11",
+                "--task-id",
+                "27",
+                "--repeat",
+                "2",
+                "--non-interactive",
+                "--skip-build",
+            ],
+            package_dir=package,
+            pilot=PROFILE,
+        )
+        == 0
+    )
+    assert len(calls) == 2
+    manifests = [read(p) for p in (package / "results").glob("*/manifest.json")]
+    assert sorted(m["repetition"]["index"] for m in manifests) == [1, 2]
+    expected = [
+        t
+        for t in preflight["tasks"]["screen"]["task-config"]["tasks"]
+        if t["name"].endswith(("-11", "-27"))
+    ]
+    for m in manifests:
+        assert m["suite"] == "screen" and m["repetition"]["count"] == 2
+        assert m["result_coverage"]["expected"] == m["result_coverage"]["recorded"] == 2
+        assert m["result_coverage"]["complete"]
+        output = Path(m["output_dir"])
+        assert read(output / "tasks.yaml")["task-config"]["tasks"] == expected
+        assert read(output / "preflight.json") == preflight
+        assert m["selection"]["task_names"] == [t["name"] for t in expected]
+
+
+@pytest.mark.parametrize("ids", [["missing"], ["11", "11"], ["11", "NEXUS interference-11"]])
+def test_bad_selection_stops_before_any_external_call(setup_package, ids):
+    package, _, _, calls = setup_package
+    args = ["--model", "glm", "--suite", "screen", "--preflight-only"]
+    for row in ids:
+        args.extend(["--task-id", row])
+    assert runner.main(args, package_dir=package, pilot=PROFILE) == 1
+    assert not calls and not (package / "results").exists()
+
+
+def test_selection_rejects_ambiguous_suffix_and_never_changes_source():
+    exports = {"a": {"task-config": {"tasks": [{"name": "world-11"}, {"name": "other-11"}]}}}
+    before = copy.deepcopy(exports)
+    with pytest.raises(runner.RunnerError, match="exactly one"):
+        runner.select_task_ids(exports, ("a",), ["11"])
+    selected = runner.select_task_ids(exports, ("a",), ["world-11"])
+    selected["a"]["task-config"]["tasks"][0]["name"] = "changed"
+    assert exports == before
+
+
+def test_repetition_count_must_be_positive():
+    with pytest.raises(SystemExit):
+        runner.main(["--repeat", "0"], pilot=PROFILE)
 
 
 @pytest.mark.parametrize("mode", ["duplicate", "unexpected", "invalid_identity", "duplicate_trace"])

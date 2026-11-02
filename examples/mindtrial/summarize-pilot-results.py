@@ -18,6 +18,8 @@ LOG_PREFIX = re.compile(r"^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2} \w+ \[([^\]]+)\] 
 CALL_INPUT = re.compile(r": nexus\[([^\]]+)\]: parsed input arguments:")
 CALL_OUTPUT = re.compile(r": nexus\[([^\]]+)\]: tool container .* stdout:$")
 CALL_FINISH = re.compile(r": nexus\[([^\]]+)\]: call finished: status=([^ ]+)")
+CALL_INVALID = re.compile(r": nexus\[([^\]]+)\]: failed to parse input arguments:")
+STOP_REASON = re.compile(r': stop reason: "([^"\n]+)" \(terminal: (true|false)\)$')
 
 
 def read(path):
@@ -75,6 +77,7 @@ def log_evidence(path, records):
                         "calls": {},
                         "performance": None,
                         "structure": None,
+                        "last_stop": None,
                     }
                 if active:
                     for other in active | {trace}:
@@ -89,10 +92,16 @@ def log_evidence(path, records):
             if "task has finished in " in line:
                 block["finished"] = True
                 active.discard(trace)
+            if match := STOP_REASON.search(line):
+                block["last_stop"] = (match[1], match[2] == "true")
             if match := CALL_INPUT.search(line):
                 if match[1] in block["calls"]:
                     block["ambiguous"] = True
                 block["calls"][match[1]] = {}
+            if match := CALL_INVALID.search(line):
+                if match[1] in block["calls"]:
+                    block["ambiguous"] = True
+                block["calls"][match[1]] = {"response": None, "invalid_arguments": True}
             if match := CALL_OUTPUT.search(line):
                 call = block["calls"].setdefault(match[1], {})
                 if "response" in call:
@@ -127,6 +136,33 @@ def public_response(value):
     )
 
 
+def run_config_differences(configured, snapshot, retry_policy):
+    """Compare effective settings, allowing the API's omitted zero/null defaults."""
+
+    def parameters(values):
+        return {k: v for k, v in (values or {}).items() if v is not None and v != []}
+
+    differences = []
+    if parameters(snapshot.get("ModelParameters")) != parameters(
+        configured.get("model-parameters")
+    ):
+        differences.append("model_parameters")
+    if snapshot.get("MaxRequestsPerMinute") != configured.get("max-requests-per-minute"):
+        differences.append("max_requests_per_minute")
+    if snapshot.get("DisableStructuredOutput", False) != configured.get(
+        "disable-structured-output", False
+    ):
+        differences.append("disable_structured_output")
+    actual_retry = snapshot.get("RetryPolicy") or {}
+    for name, key in (
+        ("max-retry-attempts", "MaxRetryAttempts"),
+        ("initial-delay-seconds", "InitialDelaySeconds"),
+    ):
+        if name in retry_policy and actual_retry.get(key, 0) != retry_policy[name]:
+            differences.append("retry_policy." + name)
+    return differences
+
+
 def attempt_diagnostics(record, telemetry, block, *, log_exists):
     tool_calls = telemetry.get("ToolCalls")
     calls = None if tool_calls is None else [c for c in tool_calls if c.get("Tool") == "nexus"]
@@ -139,6 +175,11 @@ def attempt_diagnostics(record, telemetry, block, *, log_exists):
         "termination_reason": None,
         "accepted_world_actions": None,
         "last_observed_turn": None,
+        "last_observed_world_state": None,
+        "provider_stop_reason": None,
+        "provider_stop_source": None,
+        "response_text_present": None,
+        "tool_count_convention": None,
         "structure": None,
         "tool_call_status_counts": None
         if calls is None
@@ -149,10 +190,14 @@ def attempt_diagnostics(record, telemetry, block, *, log_exists):
         result["log_evidence"] = "ambiguous_trace"
     elif block is not None:
         logged = block["calls"]
+        count = ((telemetry.get("ToolUsage") or {}).get("nexus") or {}).get("CallCount")
+        invalid_count = sum(c.get("Status") == "invalid_arguments" for c in calls or [])
+        # MindTrial versions differ on whether pre-execution argument failures
+        # contribute to ToolUsage. Detailed identities must still all match.
+        count_matches = calls is not None and count in (len(calls), len(calls) - invalid_count)
         complete = (
             calls is not None
-            and ((telemetry.get("ToolUsage") or {}).get("nexus") or {}).get("CallCount")
-            == len(calls)
+            and count_matches
             and block["finished"]
             and len({c.get("CallID") for c in calls}) == len(calls)
             and set(logged) == {c.get("CallID") for c in calls}
@@ -181,6 +226,21 @@ def attempt_diagnostics(record, telemetry, block, *, log_exists):
             if type(value) is int
         ]
         performance = block["performance"] or {}
+        states = []
+        for response in responses:
+            state = response.get("observation", response)
+            status = state.get("terminal_status", state.get("status"))
+            if type(state.get("turn")) is int and status in ("active", "won", "failed"):
+                states.append(
+                    {
+                        "turn": state["turn"],
+                        "status": status,
+                        "actions_remaining": state.get("actions_remaining"),
+                    }
+                )
+        last_stop = block.get("last_stop")
+        if block["finished"] and last_stop and last_stop[1]:
+            result.update(provider_stop_reason=last_stop[0], provider_stop_source="trace_log")
         result.update(
             log_evidence="matched" if complete else "incomplete_tool_log",
             world_access=True if responses else False if complete else None,
@@ -190,21 +250,55 @@ def attempt_diagnostics(record, telemetry, block, *, log_exists):
             termination_reason=performance.get("termination_reason"),
             accepted_world_actions=performance.get("actions_used"),
             last_observed_turn=max(turns) if turns else None,
+            last_observed_world_state=states[-1] if states else None,
+            tool_count_convention=(
+                "all_detailed_calls"
+                if count == len(calls or [])
+                else "excludes_invalid_arguments"
+                if count_matches
+                else "unresolved"
+            ),
             structure=block["structure"],
         )
-    if record["Kind"] == "Error":
-        message = record.get("Details", {}).get("Error", {}).get("Message", "")
+    details = record.get("Details") or {}
+    message = (details.get("Error") or {}).get("Message", "")
+    answer = details.get("Answer") or {}
+    # An error message belongs to this exact record, even if logs are unavailable.
+    if record["Kind"] == "Error" and re.search(r'stop reason:?\s*["\']?length\b', message):
+        result.update(provider_stop_reason="length", provider_stop_source="error_record")
+    if isinstance(answer.get("ActualAnswer"), str):
+        result["response_text_present"] = bool(answer["ActualAnswer"].strip())
+    elif isinstance(answer.get("ActualAnswer"), list) and all(
+        isinstance(line, str) for line in answer["ActualAnswer"]
+    ):
+        result["response_text_present"] = any(line.strip() for line in answer["ActualAnswer"])
+    elif "no actionable content" in message or "no response candidates" in message:
+        result["response_text_present"] = False
+    state = result["last_observed_world_state"] or {}
+    if record["Kind"] == "Passed":
+        result["outcome"] = "reported_win"
+    elif result["terminal_status"] == "won" or state.get("status") == "won":
+        result["outcome"] = "world_won_without_accepted_result"
+    elif result["termination_reason"] == "action_budget" or (
+        state.get("status") == "failed" and state.get("actions_remaining") == 0
+    ):
+        result["outcome"] = "action_budget_exhausted"
+    elif result["provider_stop_reason"] == "length":
+        result["outcome"] = (
+            "response_length_with_text"
+            if result["response_text_present"] is True
+            else "response_length_without_text"
+            if result["response_text_present"] is False
+            else "response_length"
+        )
+    elif record["Kind"] == "Error" and "no response candidates" in message:
+        result["outcome"] = "no_response_candidates"
+    elif record["Kind"] == "Error":
         result["outcome"] = (
             "provider_interruption" if "failed to generate response:" in message else "result_error"
         )
-    elif record["Kind"] == "Passed":
-        result["outcome"] = "reported_win"
     elif result["world_access"] is False and result["accepted_world_actions"] == 0:
         result["outcome"] = "no_successful_world_access"
-    elif result["termination_reason"] == "action_budget":
-        result["outcome"] = "action_budget_exhausted"
-    elif result["terminal_status"] == "won":
-        result["outcome"] = "world_won_without_accepted_result"
     elif result["world_access"] is True and result["termination_reason"] == "harness_finalization":
         result["outcome"] = "stopped_after_world_access"
     return result
@@ -242,6 +336,11 @@ def summarize(directory):
         for r in p["runs"]
         if not r.get("disabled", False)
     }
+    retry_policies = {
+        (p["name"], r["name"], r["model"]): r.get("retry-policy", p.get("retry-policy", {}))
+        for p in config["providers"]
+        for r in p["runs"]
+    }
     records_with_provider = [
         (provider, record) for provider, records in result["Results"].items() for record in records
     ]
@@ -260,15 +359,12 @@ def summarize(directory):
             seen[key] += 1
             configured_run = configured.get(key[:3])
             snapshot = record.get("RunConfig") or {}
-            parameters = snapshot.get("ModelParameters") or {}
-            if configured_run is not None and (
-                any(
-                    parameters.get(k) != v
-                    for k, v in configured_run.get("model-parameters", {}).items()
-                )
-                or snapshot.get("MaxRequestsPerMinute")
-                != configured_run.get("max-requests-per-minute")
-            ):
+            differences = (
+                run_config_differences(configured_run, snapshot, retry_policies[key[:3]])
+                if configured_run is not None
+                else ["unconfigured_run"]
+            )
+            if differences:
                 mismatches.append(trace)
             details = record.get("Details") or {}
             telemetry_key = "Error" if record["Kind"] == "Error" else "Answer"
@@ -282,6 +378,11 @@ def summarize(directory):
                     "run": record["Run"],
                     "model": model,
                     "model_parameters": record.get("RunConfig", {}).get("ModelParameters"),
+                    "disable_structured_output": snapshot.get("DisableStructuredOutput", False),
+                    "configuration_differences": differences,
+                    "run_config_sha256": hashlib.sha256(
+                        json.dumps(snapshot, sort_keys=True, separators=(",", ":")).encode()
+                    ).hexdigest(),
                     "task": record["Task"],
                     "reported_kind": record["Kind"],
                     "request_seconds": seconds(record.get("DurationNS")),
@@ -328,6 +429,15 @@ def summarize(directory):
                     )
                 },
                 "partial_telemetry_attempts": sum(r["usage_partial"] for r in selected),
+                "reported_output_tokens": sum(r["usage"]["OutputTokens"] for r in selected)
+                if all(type(r["usage"].get("OutputTokens")) is int for r in selected)
+                else None,
+                "reported_reasoning_tokens": sum(r["usage"]["ReasoningTokens"] for r in selected)
+                if all(type(r["usage"].get("ReasoningTokens")) is int for r in selected)
+                else None,
+                "output_token_accounting": dict(
+                    Counter(r["usage"].get("OutputTokenAccounting", "unknown") for r in selected)
+                ),
                 "request_seconds": sum(r["request_seconds"] for r in selected)
                 if all(r["request_seconds"] is not None for r in selected)
                 else None,
@@ -337,13 +447,17 @@ def summarize(directory):
             }
         )
     return {
-        "version": "nexus-pilot-readout-v2",
+        "version": "nexus-pilot-readout-v3",
         "app_version": result.get("AppVersion"),
         "result_file_status": result_file_status,
         "source_commit": manifest["source_commit"],
         "runtime_source_sha256": manifest["runtime_source_sha256"],
         "mindtrial_sha256": manifest["mindtrial_sha256"],
         "suite": manifest["suite"],
+        "interactive": manifest.get("interactive"),
+        "selection": manifest.get("selection"),
+        "repetition": manifest.get("repetition"),
+        "coverage_scope": "configured_file_crossing; further interactive deselection is unknown",
         "scope": "Reported results and conservative log diagnostics only; not public replay, private HMAC or receipt verification. Missing/ambiguous logs do not establish world access or absence of access. Error-record usage is partial recorded telemetry, not a complete account of an interrupted request. Never count failed/missing telemetry as zero effort. Output tokens may already include reasoning tokens; do not add them together.",
         "expected_attempts": len(expected),
         "recorded_attempts": len(rows),

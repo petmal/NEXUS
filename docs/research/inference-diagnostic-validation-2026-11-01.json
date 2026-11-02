@@ -1,0 +1,138 @@
+{
+  "version": "inference-diagnostic-validation-v1",
+  "date": "2026-11-01",
+  "scope": "Readout regression on previously audited artifacts, not a new model evaluation or fresh canonical replay.",
+  "archive_sha256": "00c861c0247c487c3905d0a1083ed7e05fbd77b00534080d4e1cba464e7cd25c",
+  "readout_sha256": "327c3852c95e0bea7e6771393354bebb931dda6f94a2706da74fe91b7f7bf5d6",
+  "compiled_outcomes": {
+    "reported_win": 25,
+    "action_budget_exhausted": 4,
+    "response_length_without_text": 12,
+    "no_response_candidates": 3,
+    "response_length_with_text": 2
+  },
+  "new_outcomes": {
+    "reported_win": 3,
+    "response_length_without_text": 5,
+    "no_response_candidates": 3,
+    "response_length_with_text": 2,
+    "action_budget_exhausted": 1
+  },
+  "groups": [
+    {
+      "directory": "controls-20261031T170749Z-njmzphw7",
+      "attempts": 2,
+      "outcomes": {
+        "reported_win": 2
+      },
+      "all_tool_logs_complete": true,
+      "configuration_mismatches": 0
+    },
+    {
+      "directory": "controls-20261031T171552Z-_hcwq9z0",
+      "attempts": 2,
+      "outcomes": {
+        "reported_win": 2
+      },
+      "all_tool_logs_complete": true,
+      "configuration_mismatches": 0
+    },
+    {
+      "directory": "screen-20261031T202237Z-j59rij2y",
+      "attempts": 14,
+      "outcomes": {
+        "action_budget_exhausted": 3,
+        "response_length_without_text": 2,
+        "reported_win": 9
+      },
+      "all_tool_logs_complete": true,
+      "configuration_mismatches": 0
+    },
+    {
+      "directory": "screen-20261031T222346Z-wv93r58o",
+      "attempts": 14,
+      "outcomes": {
+        "reported_win": 9,
+        "response_length_without_text": 5
+      },
+      "all_tool_logs_complete": true,
+      "configuration_mismatches": 0
+    },
+    {
+      "directory": "screen-20261101T005919Z-efxhu3xa",
+      "attempts": 6,
+      "outcomes": {
+        "reported_win": 3,
+        "response_length_without_text": 3
+      },
+      "all_tool_logs_complete": true,
+      "configuration_mismatches": 0
+    },
+    {
+      "directory": "screen-20261101T025122Z-t7zhi0ds",
+      "attempts": 6,
+      "outcomes": {
+        "no_response_candidates": 3,
+        "response_length_with_text": 2,
+        "action_budget_exhausted": 1
+      },
+      "all_tool_logs_complete": true,
+      "configuration_mismatches": 0
+    },
+    {
+      "directory": "screen-20261101T140119Z-1231vdm2",
+      "attempts": 1,
+      "outcomes": {
+        "response_length_without_text": 1
+      },
+      "all_tool_logs_complete": true,
+      "configuration_mismatches": 0
+    },
+    {
+      "directory": "screen-20261102T022431Z-uwhvsk8x",
+      "attempts": 1,
+      "outcomes": {
+        "response_length_without_text": 1
+      },
+      "all_tool_logs_complete": true,
+      "configuration_mismatches": 0
+    }
+  ],
+  "length_with_text_regressions": [
+    {
+      "task": "NEXUS interference-27",
+      "raw_kind": "Failed",
+      "last_observed_world_state": {
+        "turn": 7,
+        "status": "active",
+        "actions_remaining": 46
+      },
+      "finalized_status": "failed",
+      "termination_reason": "harness_finalization"
+    },
+    {
+      "task": "NEXUS smoke-S23",
+      "raw_kind": "Failed",
+      "last_observed_world_state": {
+        "turn": 15,
+        "status": "active",
+        "actions_remaining": 21
+      },
+      "finalized_status": "failed",
+      "termination_reason": "harness_finalization"
+    }
+  ],
+  "tests": {
+    "passed": 204,
+    "files": [
+      "tests/unit/test_pilot_readout.py",
+      "tests/unit/test_capability_smoke.py",
+      "tests/unit/test_coordination_runner.py",
+      "tests/unit/test_cross_axis_runner.py"
+    ]
+  },
+  "runtime_source_sha256": "ba22502788acf7ce1684e1e527e5aa332cd1746b37423fececabc90d71b8ee83",
+  "world_changes": false,
+  "live_model_calls": 0,
+  "docker_validation": "unavailable; unchanged runtime and source-bound qualification checked by packaging"
+}
