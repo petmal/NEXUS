@@ -325,6 +325,8 @@ def main(pilot_name="coordination"):
             "capability-text-output-controls-2026-10-31.json",
             "capability-screen-results-2026-10-31.md",
             "capability-screen-results-2026-10-31.json",
+            "smaller-model-synthesis-2026-11-01.md",
+            "capability-repeat-synthesis-2026-11-01.json",
             "smoke-findings-2026-10-31.md",
             "smoke-findings-2026-10-31.json",
         ),
@@ -354,6 +356,10 @@ def main(pilot_name="coordination"):
             .replace(
                 "research/capability-screen-results-2026-10-31.md",
                 "reports/capability-screen-results-2026-10-31.md",
+            )
+            .replace(
+                "research/smaller-model-synthesis-2026-11-01.md",
+                "reports/smaller-model-synthesis-2026-11-01.md",
             )
         )
         findings = reports / "smoke-findings-2026-10-31.md"

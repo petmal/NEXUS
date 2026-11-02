@@ -1,6 +1,6 @@
 {
-  "version": "smoke-findings-v2",
-  "as_of": "2026-10-31",
+  "version": "smoke-findings-v3",
+  "as_of": "2026-11-01",
   "baseline": {
     "provenance": {
       "source_commit": "fe2d58f770f9e12aa6570ac30f3bd962849429b5",
@@ -1579,5 +1579,541 @@
     },
     "detail_report": "capability-screen-results-2026-10-31.json",
     "copied_control_attempts_not_new": 4
+  },
+  "latest_repetitions": {
+    "archive_sha256": "00c861c0247c487c3905d0a1083ed7e05fbd77b00534080d4e1cba464e7cd25c",
+    "source_commit": "92fa0888546498373f4c011a79778b7caf614f12",
+    "runtime_source_sha256": "ba22502788acf7ce1684e1e527e5aa332cd1746b37423fececabc90d71b8ee83",
+    "copied_previous_attempts": 32,
+    "new_totals": {
+      "attempts": 14,
+      "raw_outcomes": {
+        "Passed": 3,
+        "Error": 8,
+        "Failed": 3
+      },
+      "audited_outcomes": {
+        "win": 3,
+        "response_length": 7,
+        "no_response_candidates": 3,
+        "world_action_budget": 1
+      },
+      "evidence_classification": {
+        "supported_win": 3,
+        "not_won": 11
+      },
+      "supported_wins": 3,
+      "protocol_errors": 5,
+      "accepted_actions": 227,
+      "tool_calls_started": 312,
+      "tool_calls_completed": 312,
+      "public_responses_replayed": 307,
+      "hash_records_matched": 89,
+      "rejected_world_actions": 2,
+      "request_seconds": 4587.612698721,
+      "tool_seconds": 206.108975712,
+      "usage": {
+        "InputTokens": 7592534,
+        "OutputTokens": 839507,
+        "ReasoningTokens": 660699,
+        "InputCacheReadTokens": 7298368
+      }
+    },
+    "new_model_totals": {
+      "z-ai/glm-5.2": {
+        "attempts": 7,
+        "raw_outcomes": {
+          "Passed": 3,
+          "Error": 4
+        },
+        "audited_outcomes": {
+          "win": 3,
+          "response_length": 4
+        },
+        "evidence_classification": {
+          "supported_win": 3,
+          "not_won": 4
+        },
+        "supported_wins": 3,
+        "protocol_errors": 0,
+        "accepted_actions": 128,
+        "tool_calls_started": 168,
+        "tool_calls_completed": 168,
+        "public_responses_replayed": 168,
+        "hash_records_matched": 43,
+        "rejected_world_actions": 0,
+        "request_seconds": 3026.237734546,
+        "tool_seconds": 111.741461741,
+        "usage": {
+          "InputTokens": 6150386,
+          "OutputTokens": 572251,
+          "ReasoningTokens": 569200,
+          "InputCacheReadTokens": 6009272
+        }
+      },
+      "minimax/minimax-m3": {
+        "attempts": 7,
+        "raw_outcomes": {
+          "Error": 4,
+          "Failed": 3
+        },
+        "audited_outcomes": {
+          "no_response_candidates": 3,
+          "response_length": 3,
+          "world_action_budget": 1
+        },
+        "evidence_classification": {
+          "not_won": 7
+        },
+        "supported_wins": 0,
+        "protocol_errors": 5,
+        "accepted_actions": 99,
+        "tool_calls_started": 144,
+        "tool_calls_completed": 144,
+        "public_responses_replayed": 139,
+        "hash_records_matched": 46,
+        "rejected_world_actions": 2,
+        "request_seconds": 1561.374964175,
+        "tool_seconds": 94.367513971,
+        "usage": {
+          "InputTokens": 1442148,
+          "OutputTokens": 267256,
+          "ReasoningTokens": 91499,
+          "InputCacheReadTokens": 1289096
+        }
+      }
+    },
+    "same_16_initial_conditions": {
+      "gpt-6-luna": {
+        "attempts": 16,
+        "wins": 6,
+        "supported_wins": 6,
+        "raw_outcomes": {
+          "Failed": 10,
+          "Passed": 6
+        },
+        "traces": [
+          "01M6440S36CJSNMKQ087S37H9R",
+          "01M644R1P7D87ENSH3P1271DRV",
+          "01M64JS5VB98VYDK33PANK32GC",
+          "01M64KA44HSTAJG98H86N5QPQG",
+          "01M65CMXE3PQ898EQF366TVNP6",
+          "01M65D5RSEF0A6HTX1N58B99DQ",
+          "01M65DNXA3V0N3JDCWKB8FCZ1S",
+          "01M650M7F04JD3NFVJJCQF92CX",
+          "01M650NSJMSMKFHF1FR67WENT9",
+          "01M650R6TYMDEBSZA8NYVVWCJD",
+          "01M651340Z5VEHPMGH0QCPN5Z3",
+          "01M6522HSQVDD8DGAYTK73YVHV",
+          "01M65416J8QE4ZJP1HY1EHBQS6",
+          "01M65429C7ZKX4KY14ZXPSNX3P",
+          "01M6546WDMKSP55YYR6Y76AWH2",
+          "01M654DJJVZHKZP04132WSKP1D"
+        ]
+      },
+      "gemini-3.8-flash": {
+        "attempts": 16,
+        "wins": 13,
+        "supported_wins": 13,
+        "raw_outcomes": {
+          "Passed": 13,
+          "Failed": 3
+        },
+        "traces": [
+          "01M643EMD1CV9K01N1F1PFQY71",
+          "01M6443AQQN2FJGBC90VFHQXB9",
+          "01M64J5WEA3Q7CZ78T4HR4CSJX",
+          "01M64JY1AQYSFCH35VP7Q911EC",
+          "01M66WC76W6H3FG01QSYH9S2MZ",
+          "01M66WZ75JZA7W8HQEXS485P6R",
+          "01M66XA2MSQK7S8WYE8FGCVABQ",
+          "01M66K43PZ1NBAP9WZPSTP6B80",
+          "01M66K6Y5MRVJHJQ1R3X9CVPCM",
+          "01M66KAZKWD8PF8497ZNTVPPJA",
+          "01M66M000RY5PQ4X0S556DF0Y1",
+          "01M66N1PTNMK33F5MCQB2SWYTJ",
+          "01M66RQGFFZQRJ5QZV6ZX9AP5Y",
+          "01M66RT1D9Z574KNJMA7CM4AVT",
+          "01M66SC17K6N886JFGNZ7EXFN5",
+          "01M66SS9M4CG550SE1AYV1T1DA"
+        ]
+      },
+      "z-ai/glm-5.2": {
+        "attempts": 16,
+        "wins": 11,
+        "supported_wins": 9,
+        "raw_outcomes": {
+          "Passed": 11,
+          "Failed": 3,
+          "Error": 2
+        },
+        "traces": [
+          "01M69EX307QVATB304Z1PPKTNQ",
+          "01M69EY76DNW4ZWP1VAJ5MCV5V",
+          "01M69T1SY8SKE2VPXKRK26WJVH",
+          "01M69TKMV3BN62M80PSYHAYN1C",
+          "01M69V1FQFM3TKC1PJ3QV4MT1W",
+          "01M69V7H52CPTCX7C2RJADPBXY",
+          "01M69VX90CB0RG8F9T39AJM30B",
+          "01M69VYSPY2VZKS14472WSGHYY",
+          "01M69W2XWKBD5VZFWWJAEP6N86",
+          "01M69WH85V4GM8S4N023WS7WJJ",
+          "01M69YFMTXP9PAZTQ9D81D06SV",
+          "01M69Z4G45DY9C0QZ556N9X6NV",
+          "01M69ZRME9RV3M0PJAYGEWX72D",
+          "01M6A004Y2RFT220S96BNTPM2X",
+          "01M6A05Z8NQ6CTK3Z08GDC104X",
+          "01M6A0G0XRQB7DC4R1171BYBPT"
+        ]
+      },
+      "minimax/minimax-m3": {
+        "attempts": 16,
+        "wins": 11,
+        "supported_wins": 11,
+        "raw_outcomes": {
+          "Passed": 11,
+          "Error": 5
+        },
+        "traces": [
+          "01M69FBTQ96GSBAZNHDSZG2MXB",
+          "01M69FCQPRGWRT22SVAG14BYR6",
+          "01M6A0ZMGWVHB44V3CHRZ25W7G",
+          "01M6A1367ENT95PWSRYRV150GQ",
+          "01M6A1AJ1GTBYTD8WY4QZR225P",
+          "01M6A1JEX28H0GNJD8HXXW383K",
+          "01M6A1SHV9NXQWTQ1NNBQC94FC",
+          "01M6A1VNHZV2TZ4SEVXDH4VE0T",
+          "01M6A1ZFKFJDYYGYEM8AXGMEWV",
+          "01M6A2BGC9B7XSR5KXBDV4JP3K",
+          "01M6A2T5VT1QR40583C3749K55",
+          "01M6A3E1HHZM5G6D1YNQXQ7R5H",
+          "01M6A3YZN5ZT4GDTBAK76H68M5",
+          "01M6A4DCZMWKE954F13ETFZ1XW",
+          "01M6A4MTNN83P8R1P8AT3JP2DD",
+          "01M6A50TQFGGHHGE6T50PWJRZ8"
+        ]
+      }
+    },
+    "selected_repeated_conditions": {
+      "S05": {
+        "gpt-6-luna": {
+          "attempts": 3,
+          "wins": 3,
+          "supported_wins": 3,
+          "raw_outcomes": {
+            "Passed": 3
+          },
+          "traces": [
+            "01M651340Z5VEHPMGH0QCPN5Z3",
+            "01M674TX1EW0JVFE7QCWF1X93C",
+            "01M67HW5DZ0X4CHX0JNWFE83QC"
+          ]
+        },
+        "gemini-3.8-flash": {
+          "attempts": 3,
+          "wins": 3,
+          "supported_wins": 3,
+          "raw_outcomes": {
+            "Passed": 3
+          },
+          "traces": [
+            "01M66M000RY5PQ4X0S556DF0Y1",
+            "01M674TX1BK7CG2XQ04YAJ13Z5",
+            "01M67HW5DXG2YFVS9FQ6Q7ANBX"
+          ]
+        },
+        "z-ai/glm-5.2": {
+          "attempts": 1,
+          "wins": 1,
+          "supported_wins": 1,
+          "raw_outcomes": {
+            "Passed": 1
+          },
+          "traces": [
+            "01M69EX307QVATB304Z1PPKTNQ"
+          ]
+        },
+        "minimax/minimax-m3": {
+          "attempts": 1,
+          "wins": 1,
+          "supported_wins": 1,
+          "raw_outcomes": {
+            "Passed": 1
+          },
+          "traces": [
+            "01M69FBTQ96GSBAZNHDSZG2MXB"
+          ]
+        }
+      },
+      "S08": {
+        "gpt-6-luna": {
+          "attempts": 3,
+          "wins": 1,
+          "supported_wins": 0,
+          "raw_outcomes": {
+            "Failed": 2,
+            "Passed": 1
+          },
+          "traces": [
+            "01M6522HSQVDD8DGAYTK73YVHV",
+            "01M6753ZK6BXQRM7YN6B7C1TBH",
+            "01M67J9PWGRBWHBX1T0B6TSYRE"
+          ]
+        },
+        "gemini-3.8-flash": {
+          "attempts": 3,
+          "wins": 1,
+          "supported_wins": 1,
+          "raw_outcomes": {
+            "Failed": 2,
+            "Passed": 1
+          },
+          "traces": [
+            "01M66N1PTNMK33F5MCQB2SWYTJ",
+            "01M675GZN634JW6SCH62RAKN30",
+            "01M67JJ5PA00C8K0ABMJ7WRJT1"
+          ]
+        },
+        "z-ai/glm-5.2": {
+          "attempts": 2,
+          "wins": 0,
+          "supported_wins": 0,
+          "raw_outcomes": {
+            "Failed": 1,
+            "Error": 1
+          },
+          "traces": [
+            "01M69WH85V4GM8S4N023WS7WJJ",
+            "01M6BPRYD48G1YDBW0NF0MRF1Q"
+          ]
+        },
+        "minimax/minimax-m3": {
+          "attempts": 2,
+          "wins": 0,
+          "supported_wins": 0,
+          "raw_outcomes": {
+            "Error": 2
+          },
+          "traces": [
+            "01M6A2BGC9B7XSR5KXBDV4JP3K",
+            "01M6D16FRSK3S3D0W2SAPND5FH"
+          ]
+        }
+      },
+      "S21": {
+        "gpt-6-luna": {
+          "attempts": 3,
+          "wins": 3,
+          "supported_wins": 3,
+          "raw_outcomes": {
+            "Passed": 3
+          },
+          "traces": [
+            "01M65416J8QE4ZJP1HY1EHBQS6",
+            "01M676WX01PFKGCV16MB58J7KS",
+            "01M67KPT3G549158G9NYN6JFWH"
+          ]
+        },
+        "gemini-3.8-flash": {
+          "attempts": 3,
+          "wins": 3,
+          "supported_wins": 3,
+          "raw_outcomes": {
+            "Passed": 3
+          },
+          "traces": [
+            "01M66RQGFFZQRJ5QZV6ZX9AP5Y",
+            "01M677QPGVAPDCBZK8AYSXGV5V",
+            "01M67MT64QRNG2FZDF62HE4WG1"
+          ]
+        },
+        "z-ai/glm-5.2": {
+          "attempts": 1,
+          "wins": 1,
+          "supported_wins": 1,
+          "raw_outcomes": {
+            "Passed": 1
+          },
+          "traces": [
+            "01M69EY76DNW4ZWP1VAJ5MCV5V"
+          ]
+        },
+        "minimax/minimax-m3": {
+          "attempts": 1,
+          "wins": 1,
+          "supported_wins": 1,
+          "raw_outcomes": {
+            "Passed": 1
+          },
+          "traces": [
+            "01M69FCQPRGWRT22SVAG14BYR6"
+          ]
+        }
+      },
+      "S22": {
+        "gpt-6-luna": {
+          "attempts": 3,
+          "wins": 1,
+          "supported_wins": 1,
+          "raw_outcomes": {
+            "Failed": 2,
+            "Passed": 1
+          },
+          "traces": [
+            "01M65429C7ZKX4KY14ZXPSNX3P",
+            "01M676Y1BQ1RJQKAANK0M295MS",
+            "01M67KR445HFZHETFWXBSN1KNS"
+          ]
+        },
+        "gemini-3.8-flash": {
+          "attempts": 3,
+          "wins": 1,
+          "supported_wins": 1,
+          "raw_outcomes": {
+            "Failed": 2,
+            "Passed": 1
+          },
+          "traces": [
+            "01M66RT1D9Z574KNJMA7CM4AVT",
+            "01M677TPF2YKT9YX4JVB99JG83",
+            "01M67MXE07WPYH6X2W12FKY483"
+          ]
+        },
+        "z-ai/glm-5.2": {
+          "attempts": 2,
+          "wins": 0,
+          "supported_wins": 0,
+          "raw_outcomes": {
+            "Failed": 1,
+            "Error": 1
+          },
+          "traces": [
+            "01M69YFMTXP9PAZTQ9D81D06SV",
+            "01M6AAY90RNHP9A0MSHJDRCZEM"
+          ]
+        },
+        "minimax/minimax-m3": {
+          "attempts": 2,
+          "wins": 1,
+          "supported_wins": 1,
+          "raw_outcomes": {
+            "Passed": 1,
+            "Failed": 1
+          },
+          "traces": [
+            "01M6A2T5VT1QR40583C3749K55",
+            "01M6AGXWG0Z58RFX91NGZM73NK"
+          ]
+        }
+      },
+      "S23": {
+        "gpt-6-luna": {
+          "attempts": 3,
+          "wins": 1,
+          "supported_wins": 1,
+          "raw_outcomes": {
+            "Failed": 2,
+            "Passed": 1
+          },
+          "traces": [
+            "01M6546WDMKSP55YYR6Y76AWH2",
+            "01M6771H9NZN9765DF4A2JNSQZ",
+            "01M67KXXPGM6TRSEJ40GRTNK7H"
+          ]
+        },
+        "gemini-3.8-flash": {
+          "attempts": 3,
+          "wins": 3,
+          "supported_wins": 3,
+          "raw_outcomes": {
+            "Passed": 3
+          },
+          "traces": [
+            "01M66SC17K6N886JFGNZ7EXFN5",
+            "01M678CX07Y5VEGT03H81AAZMC",
+            "01M67NNQEP57Y4A495FBWJR7DZ"
+          ]
+        },
+        "z-ai/glm-5.2": {
+          "attempts": 2,
+          "wins": 2,
+          "supported_wins": 1,
+          "raw_outcomes": {
+            "Passed": 2
+          },
+          "traces": [
+            "01M69Z4G45DY9C0QZ556N9X6NV",
+            "01M6ABCTQ70XMRQYY5RBYP1VVE"
+          ]
+        },
+        "minimax/minimax-m3": {
+          "attempts": 2,
+          "wins": 0,
+          "supported_wins": 0,
+          "raw_outcomes": {
+            "Error": 1,
+            "Failed": 1
+          },
+          "traces": [
+            "01M6A3E1HHZM5G6D1YNQXQ7R5H",
+            "01M6AH28H3JF9H4DDV31S0X5DN"
+          ]
+        }
+      },
+      "S24": {
+        "gpt-6-luna": {
+          "attempts": 3,
+          "wins": 0,
+          "supported_wins": 0,
+          "raw_outcomes": {
+            "Failed": 3
+          },
+          "traces": [
+            "01M654DJJVZHKZP04132WSKP1D",
+            "01M6775WZ2M5X4TMWHCYKVKCK7",
+            "01M67M2GP7X95W4Z28VHCV0W2N"
+          ]
+        },
+        "gemini-3.8-flash": {
+          "attempts": 3,
+          "wins": 2,
+          "supported_wins": 2,
+          "raw_outcomes": {
+            "Passed": 2,
+            "Failed": 1
+          },
+          "traces": [
+            "01M66SS9M4CG550SE1AYV1T1DA",
+            "01M678S9NNFET2TGHMDDD8V0HC",
+            "01M67P1QW53AQWBKGPT6EAFFA7"
+          ]
+        },
+        "z-ai/glm-5.2": {
+          "attempts": 1,
+          "wins": 1,
+          "supported_wins": 0,
+          "raw_outcomes": {
+            "Passed": 1
+          },
+          "traces": [
+            "01M69ZRME9RV3M0PJAYGEWX72D"
+          ]
+        },
+        "minimax/minimax-m3": {
+          "attempts": 1,
+          "wins": 1,
+          "supported_wins": 1,
+          "raw_outcomes": {
+            "Passed": 1
+          },
+          "traces": [
+            "01M6A3YZN5ZT4GDTBAK76H68M5"
+          ]
+        }
+      }
+    },
+    "report": "smaller-model-synthesis-2026-11-01.md",
+    "detail": "capability-repeat-synthesis-2026-11-01.json",
+    "roadmap": "Prioritize outcome classification and provider/inference diagnostics, then fresh qualified worlds and matched breadth/dependency extensions. Requested unchanged repeats are complete."
   }
 }

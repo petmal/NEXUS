@@ -1,0 +1,5435 @@
+{
+  "version": "capability-repeat-synthesis-v1",
+  "as_of": "2026-11-01",
+  "timezone": "America/Toronto",
+  "archive_sha256": "00c861c0247c487c3905d0a1083ed7e05fbd77b00534080d4e1cba464e7cd25c",
+  "source_commit": "92fa0888546498373f4c011a79778b7caf614f12",
+  "runtime_source_sha256": "ba22502788acf7ce1684e1e527e5aa332cd1746b37423fececabc90d71b8ee83",
+  "mindtrial_sha256": "95c57d56e3d8739c19c4be1d33ec8de876c6522a003704c4f2d277978baf8660",
+  "previous_archive_sha256": "5f3718fc2d8570f71787884f9f6ae451e86085b973a0d4f0ece767a4852945ff",
+  "copied_previous_attempts": 32,
+  "scope": {
+    "original_hmac_recomputed": false,
+    "fresh_replay_secret": true,
+    "live_model_calls": 0
+  },
+  "audit_totals": {
+    "planned": 46,
+    "started": 46,
+    "complete_result_records": 46,
+    "unstarted": 0,
+    "world_wins": 25,
+    "supported_world_wins": 23,
+    "tool_calls_started": 1061,
+    "tool_calls_completed": 1061,
+    "public_responses_replayed": 1056,
+    "accepted_actions": 795,
+    "hash_records_matched": 210
+  },
+  "compiled_totals": {
+    "attempts": 46,
+    "raw_outcomes": {
+      "Passed": 25,
+      "Failed": 6,
+      "Error": 15
+    },
+    "audited_outcomes": {
+      "win": 25,
+      "world_action_budget": 4,
+      "response_length": 14,
+      "no_response_candidates": 3
+    },
+    "evidence_classification": {
+      "supported_win": 23,
+      "not_won": 21,
+      "compatible_win": 2
+    },
+    "supported_wins": 23,
+    "protocol_errors": 5,
+    "accepted_actions": 795,
+    "tool_calls_started": 1061,
+    "tool_calls_completed": 1061,
+    "public_responses_replayed": 1056,
+    "hash_records_matched": 210,
+    "rejected_world_actions": 4,
+    "request_seconds": 15315.127006255,
+    "tool_seconds": 697.767267457,
+    "usage": {
+      "InputTokens": 37250142,
+      "OutputTokens": 2999013,
+      "ReasoningTokens": 2787631,
+      "InputCacheReadTokens": 35622578
+    }
+  },
+  "compiled_screen_totals_excluding_controls": {
+    "attempts": 42,
+    "raw_outcomes": {
+      "Failed": 6,
+      "Error": 15,
+      "Passed": 21
+    },
+    "audited_outcomes": {
+      "world_action_budget": 4,
+      "response_length": 14,
+      "win": 21,
+      "no_response_candidates": 3
+    },
+    "evidence_classification": {
+      "not_won": 21,
+      "supported_win": 19,
+      "compatible_win": 2
+    },
+    "supported_wins": 19,
+    "protocol_errors": 5,
+    "accepted_actions": 773,
+    "tool_calls_started": 1019,
+    "tool_calls_completed": 1019,
+    "public_responses_replayed": 1014,
+    "hash_records_matched": 191,
+    "rejected_world_actions": 4,
+    "request_seconds": 15225.637809994,
+    "tool_seconds": 669.821839965,
+    "usage": {
+      "InputTokens": 37071522,
+      "OutputTokens": 2985686,
+      "ReasoningTokens": 2775794,
+      "InputCacheReadTokens": 35486910
+    }
+  },
+  "new_totals": {
+    "attempts": 14,
+    "raw_outcomes": {
+      "Passed": 3,
+      "Error": 8,
+      "Failed": 3
+    },
+    "audited_outcomes": {
+      "win": 3,
+      "response_length": 7,
+      "no_response_candidates": 3,
+      "world_action_budget": 1
+    },
+    "evidence_classification": {
+      "supported_win": 3,
+      "not_won": 11
+    },
+    "supported_wins": 3,
+    "protocol_errors": 5,
+    "accepted_actions": 227,
+    "tool_calls_started": 312,
+    "tool_calls_completed": 312,
+    "public_responses_replayed": 307,
+    "hash_records_matched": 89,
+    "rejected_world_actions": 2,
+    "request_seconds": 4587.612698721,
+    "tool_seconds": 206.108975712,
+    "usage": {
+      "InputTokens": 7592534,
+      "OutputTokens": 839507,
+      "ReasoningTokens": 660699,
+      "InputCacheReadTokens": 7298368
+    }
+  },
+  "new_model_totals": {
+    "z-ai/glm-5.2": {
+      "attempts": 7,
+      "raw_outcomes": {
+        "Passed": 3,
+        "Error": 4
+      },
+      "audited_outcomes": {
+        "win": 3,
+        "response_length": 4
+      },
+      "evidence_classification": {
+        "supported_win": 3,
+        "not_won": 4
+      },
+      "supported_wins": 3,
+      "protocol_errors": 0,
+      "accepted_actions": 128,
+      "tool_calls_started": 168,
+      "tool_calls_completed": 168,
+      "public_responses_replayed": 168,
+      "hash_records_matched": 43,
+      "rejected_world_actions": 0,
+      "request_seconds": 3026.237734546,
+      "tool_seconds": 111.741461741,
+      "usage": {
+        "InputTokens": 6150386,
+        "OutputTokens": 572251,
+        "ReasoningTokens": 569200,
+        "InputCacheReadTokens": 6009272
+      }
+    },
+    "minimax/minimax-m3": {
+      "attempts": 7,
+      "raw_outcomes": {
+        "Error": 4,
+        "Failed": 3
+      },
+      "audited_outcomes": {
+        "no_response_candidates": 3,
+        "response_length": 3,
+        "world_action_budget": 1
+      },
+      "evidence_classification": {
+        "not_won": 7
+      },
+      "supported_wins": 0,
+      "protocol_errors": 5,
+      "accepted_actions": 99,
+      "tool_calls_started": 144,
+      "tool_calls_completed": 144,
+      "public_responses_replayed": 139,
+      "hash_records_matched": 46,
+      "rejected_world_actions": 2,
+      "request_seconds": 1561.374964175,
+      "tool_seconds": 94.367513971,
+      "usage": {
+        "InputTokens": 1442148,
+        "OutputTokens": 267256,
+        "ReasoningTokens": 91499,
+        "InputCacheReadTokens": 1289096
+      }
+    }
+  },
+  "folder_summaries": {
+    "controls-20261031T170749Z-njmzphw7": {
+      "attempts": 2,
+      "raw_outcomes": {
+        "Passed": 2
+      },
+      "audited_outcomes": {
+        "win": 2
+      },
+      "evidence_classification": {
+        "supported_win": 2
+      },
+      "supported_wins": 2,
+      "protocol_errors": 0,
+      "accepted_actions": 10,
+      "tool_calls_started": 20,
+      "tool_calls_completed": 20,
+      "public_responses_replayed": 20,
+      "hash_records_matched": 9,
+      "rejected_world_actions": 0,
+      "request_seconds": 53.205143336999996,
+      "tool_seconds": 13.237243839,
+      "usage": {
+        "InputTokens": 79807,
+        "OutputTokens": 6844,
+        "ReasoningTokens": 6562,
+        "InputCacheReadTokens": 68084
+      }
+    },
+    "controls-20261031T171552Z-_hcwq9z0": {
+      "attempts": 2,
+      "raw_outcomes": {
+        "Passed": 2
+      },
+      "audited_outcomes": {
+        "win": 2
+      },
+      "evidence_classification": {
+        "supported_win": 2
+      },
+      "supported_wins": 2,
+      "protocol_errors": 0,
+      "accepted_actions": 12,
+      "tool_calls_started": 22,
+      "tool_calls_completed": 22,
+      "public_responses_replayed": 22,
+      "hash_records_matched": 10,
+      "rejected_world_actions": 0,
+      "request_seconds": 36.284052924,
+      "tool_seconds": 14.708183653,
+      "usage": {
+        "InputTokens": 98813,
+        "OutputTokens": 6483,
+        "ReasoningTokens": 5275,
+        "InputCacheReadTokens": 67584
+      }
+    },
+    "screen-20261031T202237Z-j59rij2y": {
+      "attempts": 14,
+      "raw_outcomes": {
+        "Failed": 3,
+        "Error": 2,
+        "Passed": 9
+      },
+      "audited_outcomes": {
+        "world_action_budget": 3,
+        "response_length": 2,
+        "win": 9
+      },
+      "evidence_classification": {
+        "not_won": 5,
+        "supported_win": 7,
+        "compatible_win": 2
+      },
+      "supported_wins": 7,
+      "protocol_errors": 0,
+      "accepted_actions": 314,
+      "tool_calls_started": 396,
+      "tool_calls_completed": 396,
+      "public_responses_replayed": 396,
+      "hash_records_matched": 45,
+      "rejected_world_actions": 2,
+      "request_seconds": 6556.841335470001,
+      "tool_seconds": 260.225489679,
+      "usage": {
+        "InputTokens": 20284699,
+        "OutputTokens": 1167855,
+        "ReasoningTokens": 1160551,
+        "InputCacheReadTokens": 19751868
+      }
+    },
+    "screen-20261031T222346Z-wv93r58o": {
+      "attempts": 14,
+      "raw_outcomes": {
+        "Passed": 9,
+        "Error": 5
+      },
+      "audited_outcomes": {
+        "win": 9,
+        "response_length": 5
+      },
+      "evidence_classification": {
+        "supported_win": 9,
+        "not_won": 5
+      },
+      "supported_wins": 9,
+      "protocol_errors": 0,
+      "accepted_actions": 232,
+      "tool_calls_started": 311,
+      "tool_calls_completed": 311,
+      "public_responses_replayed": 311,
+      "hash_records_matched": 57,
+      "rejected_world_actions": 0,
+      "request_seconds": 4081.183775803,
+      "tool_seconds": 203.487374574,
+      "usage": {
+        "InputTokens": 9194289,
+        "OutputTokens": 978324,
+        "ReasoningTokens": 954544,
+        "InputCacheReadTokens": 8436674
+      }
+    },
+    "screen-20261101T005919Z-efxhu3xa": {
+      "attempts": 6,
+      "raw_outcomes": {
+        "Passed": 3,
+        "Error": 3
+      },
+      "audited_outcomes": {
+        "win": 3,
+        "response_length": 3
+      },
+      "evidence_classification": {
+        "supported_win": 3,
+        "not_won": 3
+      },
+      "supported_wins": 3,
+      "protocol_errors": 0,
+      "accepted_actions": 87,
+      "tool_calls_started": 122,
+      "tool_calls_completed": 122,
+      "public_responses_replayed": 122,
+      "hash_records_matched": 23,
+      "rejected_world_actions": 0,
+      "request_seconds": 2140.35709632,
+      "tool_seconds": 80.089388766,
+      "usage": {
+        "InputTokens": 4099428,
+        "OutputTokens": 407504,
+        "ReasoningTokens": 405643,
+        "InputCacheReadTokens": 3998113
+      }
+    },
+    "screen-20261101T025122Z-t7zhi0ds": {
+      "attempts": 6,
+      "raw_outcomes": {
+        "Error": 3,
+        "Failed": 3
+      },
+      "audited_outcomes": {
+        "no_response_candidates": 3,
+        "response_length": 2,
+        "world_action_budget": 1
+      },
+      "evidence_classification": {
+        "not_won": 6
+      },
+      "supported_wins": 0,
+      "protocol_errors": 4,
+      "accepted_actions": 64,
+      "tool_calls_started": 103,
+      "tool_calls_completed": 103,
+      "public_responses_replayed": 99,
+      "hash_records_matched": 26,
+      "rejected_world_actions": 2,
+      "request_seconds": 1172.794283942,
+      "tool_seconds": 66.192795086,
+      "usage": {
+        "InputTokens": 723314,
+        "OutputTokens": 172636,
+        "ReasoningTokens": 8,
+        "InputCacheReadTokens": 661768
+      }
+    },
+    "screen-20261101T140119Z-1231vdm2": {
+      "attempts": 1,
+      "raw_outcomes": {
+        "Error": 1
+      },
+      "audited_outcomes": {
+        "response_length": 1
+      },
+      "evidence_classification": {
+        "not_won": 1
+      },
+      "supported_wins": 0,
+      "protocol_errors": 0,
+      "accepted_actions": 41,
+      "tool_calls_started": 46,
+      "tool_calls_completed": 46,
+      "public_responses_replayed": 46,
+      "hash_records_matched": 20,
+      "rejected_world_actions": 0,
+      "request_seconds": 885.880638226,
+      "tool_seconds": 31.652072975,
+      "usage": {
+        "InputTokens": 2050958,
+        "OutputTokens": 164747,
+        "ReasoningTokens": 163557,
+        "InputCacheReadTokens": 2011159
+      }
+    },
+    "screen-20261102T022431Z-uwhvsk8x": {
+      "attempts": 1,
+      "raw_outcomes": {
+        "Error": 1
+      },
+      "audited_outcomes": {
+        "response_length": 1
+      },
+      "evidence_classification": {
+        "not_won": 1
+      },
+      "supported_wins": 0,
+      "protocol_errors": 1,
+      "accepted_actions": 35,
+      "tool_calls_started": 41,
+      "tool_calls_completed": 41,
+      "public_responses_replayed": 40,
+      "hash_records_matched": 20,
+      "rejected_world_actions": 0,
+      "request_seconds": 388.580680233,
+      "tool_seconds": 28.174718885,
+      "usage": {
+        "InputTokens": 718834,
+        "OutputTokens": 94620,
+        "ReasoningTokens": 91491,
+        "InputCacheReadTokens": 627328
+      }
+    }
+  },
+  "rows": [
+    {
+      "trace_id": "01M69EX307QVATB304Z1PPKTNQ",
+      "directory": "controls-20261031T170749Z-njmzphw7",
+      "cohort": "control",
+      "task": "NEXUS smoke-S05",
+      "id": "S05",
+      "model": "z-ai/glm-5.2",
+      "family": "model-revision-v1",
+      "inputs": {
+        "axis-version": 2,
+        "budget-profile": "standard",
+        "discovery-level": 0,
+        "extended-diagnostics": true,
+        "generation-timing": true,
+        "ontology-options": "{\"consistency_check\":\"off\",\"finish_policy\":\"recoverable\",\"guidance\":\"principles\"}",
+        "planning-level": 0,
+        "resource-pressure": 1,
+        "science-family": "model-revision-v1",
+        "seed": "5866",
+        "theory-level": 0
+      },
+      "kind": "Passed",
+      "model_parameters": {
+        "max-completion-tokens": 65536,
+        "reasoning-effort": "xhigh",
+        "provider": {
+          "require_parameters": true,
+          "allow_fallbacks": false
+        }
+      },
+      "disable_structured_output": true,
+      "budget": 64,
+      "accepted_actions": 4,
+      "tool_calls_started": 9,
+      "tool_calls_completed": 9,
+      "public_responses_replayed": 9,
+      "hash_records_matched": 3,
+      "protocol_errors": {},
+      "all_evidence_read": true,
+      "world_win": true,
+      "supported_world_win": true,
+      "request_seconds": 22.556543483,
+      "tool_seconds": 5.633693652,
+      "usage": {
+        "InputTokens": 29474,
+        "OutputTokens": 2501,
+        "ReasoningTokens": 2235,
+        "InputCacheWriteTokens": 0,
+        "InputCacheReadTokens": 22588,
+        "InputTokenAccounting": "cache_tokens_included",
+        "OutputTokenAccounting": "reasoning_tokens_included"
+      },
+      "failure_message": null,
+      "pre_finalization_status": "won",
+      "new_attempt": false,
+      "outcome_class": "win",
+      "evidence_classification": "supported_win",
+      "world_termination_reason": "victory",
+      "terminal_response_stop_reason": "stop",
+      "actions_remaining": 60,
+      "rejected_world_actions": 0,
+      "final_evidence": {
+        "remaining_worlds": 1,
+        "winning_set_signatures": 1,
+        "common_repairs": 1,
+        "accepting_worlds": 1,
+        "classification": "guaranteed"
+      },
+      "first_guaranteed_repair_turn": 0,
+      "physical_goal_satisfied": true,
+      "submissions": [
+        {
+          "turn": 4,
+          "won": true,
+          "evidence": {
+            "remaining_worlds": 1,
+            "winning_set_signatures": 1,
+            "common_repairs": 1,
+            "accepting_worlds": 1,
+            "classification": "guaranteed"
+          }
+        }
+      ],
+      "measurements_used": 0,
+      "redundant_measurements": 0,
+      "measurements_after_guaranteed_repair": 0
+    },
+    {
+      "trace_id": "01M69EY76DNW4ZWP1VAJ5MCV5V",
+      "directory": "controls-20261031T170749Z-njmzphw7",
+      "cohort": "control",
+      "task": "NEXUS smoke-S21",
+      "id": "S21",
+      "model": "z-ai/glm-5.2",
+      "family": "compositional-repair-v1",
+      "inputs": {
+        "axis-version": 2,
+        "budget-profile": "standard",
+        "discovery-level": 0,
+        "extended-diagnostics": true,
+        "generation-timing": true,
+        "planning-level": 1,
+        "resource-pressure": 1,
+        "science-family": "compositional-repair-v1",
+        "seed": "438",
+        "theory-level": 0
+      },
+      "kind": "Passed",
+      "model_parameters": {
+        "max-completion-tokens": 65536,
+        "reasoning-effort": "xhigh",
+        "provider": {
+          "require_parameters": true,
+          "allow_fallbacks": false
+        }
+      },
+      "disable_structured_output": true,
+      "budget": 8,
+      "accepted_actions": 6,
+      "tool_calls_started": 11,
+      "tool_calls_completed": 11,
+      "public_responses_replayed": 11,
+      "hash_records_matched": 6,
+      "protocol_errors": {},
+      "all_evidence_read": true,
+      "world_win": true,
+      "supported_world_win": true,
+      "request_seconds": 30.648599854,
+      "tool_seconds": 7.603550187,
+      "usage": {
+        "InputTokens": 50333,
+        "OutputTokens": 4343,
+        "ReasoningTokens": 4327,
+        "InputCacheWriteTokens": 0,
+        "InputCacheReadTokens": 45496,
+        "InputTokenAccounting": "cache_tokens_included",
+        "OutputTokenAccounting": "reasoning_tokens_included"
+      },
+      "failure_message": null,
+      "pre_finalization_status": "won",
+      "new_attempt": false,
+      "outcome_class": "win",
+      "evidence_classification": "supported_win",
+      "world_termination_reason": "victory",
+      "terminal_response_stop_reason": "stop",
+      "actions_remaining": 2,
+      "rejected_world_actions": 0,
+      "final_evidence": {
+        "remaining_worlds": 3,
+        "winning_set_signatures": 1,
+        "common_repairs": 1,
+        "accepting_worlds": 3,
+        "classification": "guaranteed"
+      },
+      "first_guaranteed_repair_turn": 0,
+      "physical_goal_satisfied": true,
+      "submissions": [
+        {
+          "turn": 6,
+          "won": true,
+          "evidence": {
+            "remaining_worlds": 3,
+            "winning_set_signatures": 1,
+            "common_repairs": 1,
+            "accepting_worlds": 3,
+            "classification": "guaranteed"
+          }
+        }
+      ],
+      "measurements_used": 0,
+      "redundant_measurements": 0,
+      "measurements_after_guaranteed_repair": 0
+    },
+    {
+      "trace_id": "01M69FBTQ96GSBAZNHDSZG2MXB",
+      "directory": "controls-20261031T171552Z-_hcwq9z0",
+      "cohort": "control",
+      "task": "NEXUS smoke-S05",
+      "id": "S05",
+      "model": "minimax/minimax-m3",
+      "family": "model-revision-v1",
+      "inputs": {
+        "axis-version": 2,
+        "budget-profile": "standard",
+        "discovery-level": 0,
+        "extended-diagnostics": true,
+        "generation-timing": true,
+        "ontology-options": "{\"consistency_check\":\"off\",\"finish_policy\":\"recoverable\",\"guidance\":\"principles\"}",
+        "planning-level": 0,
+        "resource-pressure": 1,
+        "science-family": "model-revision-v1",
+        "seed": "5866",
+        "theory-level": 0
+      },
+      "kind": "Passed",
+      "model_parameters": {
+        "max-completion-tokens": 65536,
+        "provider": {
+          "require_parameters": true,
+          "allow_fallbacks": false
+        }
+      },
+      "disable_structured_output": true,
+      "budget": 64,
+      "accepted_actions": 4,
+      "tool_calls_started": 9,
+      "tool_calls_completed": 9,
+      "public_responses_replayed": 9,
+      "hash_records_matched": 3,
+      "protocol_errors": {},
+      "all_evidence_read": true,
+      "world_win": true,
+      "supported_world_win": true,
+      "request_seconds": 11.823129406,
+      "tool_seconds": 5.950507775,
+      "usage": {
+        "InputTokens": 34669,
+        "OutputTokens": 1534,
+        "ReasoningTokens": 1046,
+        "InputCacheWriteTokens": 0,
+        "InputCacheReadTokens": 20352,
+        "InputTokenAccounting": "cache_tokens_included",
+        "OutputTokenAccounting": "reasoning_tokens_included"
+      },
+      "failure_message": null,
+      "pre_finalization_status": "won",
+      "new_attempt": false,
+      "outcome_class": "win",
+      "evidence_classification": "supported_win",
+      "world_termination_reason": "victory",
+      "terminal_response_stop_reason": "stop",
+      "actions_remaining": 60,
+      "rejected_world_actions": 0,
+      "final_evidence": {
+        "remaining_worlds": 1,
+        "winning_set_signatures": 1,
+        "common_repairs": 1,
+        "accepting_worlds": 1,
+        "classification": "guaranteed"
+      },
+      "first_guaranteed_repair_turn": 0,
+      "physical_goal_satisfied": true,
+      "submissions": [
+        {
+          "turn": 4,
+          "won": true,
+          "evidence": {
+            "remaining_worlds": 1,
+            "winning_set_signatures": 1,
+            "common_repairs": 1,
+            "accepting_worlds": 1,
+            "classification": "guaranteed"
+          }
+        }
+      ],
+      "measurements_used": 0,
+      "redundant_measurements": 0,
+      "measurements_after_guaranteed_repair": 0
+    },
+    {
+      "trace_id": "01M69FCQPRGWRT22SVAG14BYR6",
+      "directory": "controls-20261031T171552Z-_hcwq9z0",
+      "cohort": "control",
+      "task": "NEXUS smoke-S21",
+      "id": "S21",
+      "model": "minimax/minimax-m3",
+      "family": "compositional-repair-v1",
+      "inputs": {
+        "axis-version": 2,
+        "budget-profile": "standard",
+        "discovery-level": 0,
+        "extended-diagnostics": true,
+        "generation-timing": true,
+        "planning-level": 1,
+        "resource-pressure": 1,
+        "science-family": "compositional-repair-v1",
+        "seed": "438",
+        "theory-level": 0
+      },
+      "kind": "Passed",
+      "model_parameters": {
+        "max-completion-tokens": 65536,
+        "provider": {
+          "require_parameters": true,
+          "allow_fallbacks": false
+        }
+      },
+      "disable_structured_output": true,
+      "budget": 8,
+      "accepted_actions": 8,
+      "tool_calls_started": 13,
+      "tool_calls_completed": 13,
+      "public_responses_replayed": 13,
+      "hash_records_matched": 7,
+      "protocol_errors": {},
+      "all_evidence_read": true,
+      "world_win": true,
+      "supported_world_win": true,
+      "request_seconds": 24.460923518,
+      "tool_seconds": 8.757675878,
+      "usage": {
+        "InputTokens": 64144,
+        "OutputTokens": 4949,
+        "ReasoningTokens": 4229,
+        "InputCacheWriteTokens": 0,
+        "InputCacheReadTokens": 47232,
+        "InputTokenAccounting": "cache_tokens_included",
+        "OutputTokenAccounting": "reasoning_tokens_included"
+      },
+      "failure_message": null,
+      "pre_finalization_status": "won",
+      "new_attempt": false,
+      "outcome_class": "win",
+      "evidence_classification": "supported_win",
+      "world_termination_reason": "victory",
+      "terminal_response_stop_reason": "stop",
+      "actions_remaining": 0,
+      "rejected_world_actions": 0,
+      "final_evidence": {
+        "remaining_worlds": 3,
+        "winning_set_signatures": 1,
+        "common_repairs": 1,
+        "accepting_worlds": 3,
+        "classification": "guaranteed"
+      },
+      "first_guaranteed_repair_turn": 0,
+      "physical_goal_satisfied": true,
+      "submissions": [
+        {
+          "turn": 8,
+          "won": true,
+          "evidence": {
+            "remaining_worlds": 3,
+            "winning_set_signatures": 1,
+            "common_repairs": 1,
+            "accepting_worlds": 3,
+            "classification": "guaranteed"
+          }
+        }
+      ],
+      "measurements_used": 0,
+      "redundant_measurements": 0,
+      "measurements_after_guaranteed_repair": 0
+    },
+    {
+      "trace_id": "01M69T1SY8SKE2VPXKRK26WJVH",
+      "directory": "screen-20261031T202237Z-j59rij2y",
+      "cohort": "initial_screen",
+      "task": "NEXUS interference-09",
+      "id": "09",
+      "model": "z-ai/glm-5.2",
+      "family": "stateful-interference-v1",
+      "inputs": {
+        "axis-version": 2,
+        "budget-profile": "standard",
+        "discovery-level": 0,
+        "extended-diagnostics": true,
+        "generation-timing": true,
+        "ontology-options": "{\"coupling\":\"independent\",\"horizon\":\"short\"}",
+        "planning-level": 0,
+        "resource-pressure": 2,
+        "science-family": "stateful-interference-v1",
+        "seed": "101",
+        "theory-level": 0
+      },
+      "kind": "Failed",
+      "model_parameters": {
+        "max-completion-tokens": 65536,
+        "reasoning-effort": "xhigh",
+        "provider": {
+          "require_parameters": true,
+          "allow_fallbacks": false
+        }
+      },
+      "disable_structured_output": true,
+      "budget": 17,
+      "accepted_actions": 17,
+      "tool_calls_started": 25,
+      "tool_calls_completed": 25,
+      "public_responses_replayed": 25,
+      "hash_records_matched": 0,
+      "protocol_errors": {},
+      "all_evidence_read": true,
+      "world_win": false,
+      "supported_world_win": false,
+      "request_seconds": 555.607739732,
+      "tool_seconds": 16.658714567,
+      "usage": {
+        "InputTokens": 2011969,
+        "OutputTokens": 123804,
+        "ReasoningTokens": 123082,
+        "InputCacheWriteTokens": 0,
+        "InputCacheReadTokens": 1940269,
+        "InputTokenAccounting": "cache_tokens_included",
+        "OutputTokenAccounting": "reasoning_tokens_included"
+      },
+      "failure_message": null,
+      "pre_finalization_status": "failed",
+      "new_attempt": false,
+      "outcome_class": "world_action_budget",
+      "evidence_classification": "not_won",
+      "world_termination_reason": "action_budget",
+      "terminal_response_stop_reason": "stop",
+      "actions_remaining": 0,
+      "rejected_world_actions": 1,
+      "final_evidence": {
+        "remaining_worlds": 1,
+        "winning_set_signatures": 1,
+        "common_repairs": 1,
+        "accepting_worlds": 1,
+        "classification": "guaranteed"
+      },
+      "first_guaranteed_repair_turn": 17,
+      "physical_goal_satisfied": true,
+      "submissions": [],
+      "measurements_used": 16,
+      "redundant_measurements": 16,
+      "measurements_after_guaranteed_repair": 0,
+      "physical_cost_audit": {
+        "minimum_actions": 17,
+        "first_budget_infeasible_turn": 2,
+        "minimum_at_stop": 1,
+        "excess_total": 1,
+        "physical_goal_at_stop": true,
+        "operations_noop": 0
+      }
+    },
+    {
+      "trace_id": "01M69TKMV3BN62M80PSYHAYN1C",
+      "directory": "screen-20261031T202237Z-j59rij2y",
+      "cohort": "initial_screen",
+      "task": "NEXUS interference-11",
+      "id": "11",
+      "model": "z-ai/glm-5.2",
+      "family": "stateful-interference-v1",
+      "inputs": {
+        "axis-version": 2,
+        "budget-profile": "standard",
+        "discovery-level": 0,
+        "extended-diagnostics": true,
+        "generation-timing": true,
+        "ontology-options": "{\"coupling\":\"coupled\",\"horizon\":\"long\"}",
+        "planning-level": 0,
+        "resource-pressure": 2,
+        "science-family": "stateful-interference-v1",
+        "seed": "101",
+        "theory-level": 0
+      },
+      "kind": "Error",
+      "model_parameters": {
+        "max-completion-tokens": 65536,
+        "reasoning-effort": "xhigh",
+        "provider": {
+          "require_parameters": true,
+          "allow_fallbacks": false
+        }
+      },
+      "disable_structured_output": true,
+      "budget": 35,
+      "accepted_actions": 0,
+      "tool_calls_started": 6,
+      "tool_calls_completed": 6,
+      "public_responses_replayed": 6,
+      "hash_records_matched": 0,
+      "protocol_errors": {},
+      "all_evidence_read": true,
+      "world_win": false,
+      "supported_world_win": false,
+      "request_seconds": 441.256452662,
+      "tool_seconds": 3.850933316,
+      "usage": {
+        "InputTokens": 7349,
+        "OutputTokens": 65687,
+        "ReasoningTokens": 65687,
+        "InputCacheWriteTokens": 0,
+        "InputCacheReadTokens": 3774,
+        "InputTokenAccounting": "cache_tokens_included",
+        "OutputTokenAccounting": "reasoning_tokens_included"
+      },
+      "failure_message": "failed to generate response: model response contained no actionable content",
+      "pre_finalization_status": "active",
+      "new_attempt": false,
+      "outcome_class": "response_length",
+      "evidence_classification": "not_won",
+      "world_termination_reason": "active_at_snapshot",
+      "terminal_response_stop_reason": "length",
+      "actions_remaining": 35,
+      "rejected_world_actions": 0,
+      "final_evidence": {
+        "remaining_worlds": 1,
+        "winning_set_signatures": 1,
+        "common_repairs": 0,
+        "accepting_worlds": null,
+        "classification": "ineligible"
+      },
+      "first_guaranteed_repair_turn": null,
+      "physical_goal_satisfied": false,
+      "submissions": [],
+      "measurements_used": 0,
+      "redundant_measurements": 0,
+      "measurements_after_guaranteed_repair": 0,
+      "physical_cost_audit": {
+        "minimum_actions": 35,
+        "first_budget_infeasible_turn": null,
+        "minimum_at_stop": 35,
+        "excess_total": 0,
+        "physical_goal_at_stop": false,
+        "operations_noop": 0
+      }
+    },
+    {
+      "trace_id": "01M69V1FQFM3TKC1PJ3QV4MT1W",
+      "directory": "screen-20261031T202237Z-j59rij2y",
+      "cohort": "initial_screen",
+      "task": "NEXUS interference-25",
+      "id": "25",
+      "model": "z-ai/glm-5.2",
+      "family": "stateful-interference-v1",
+      "inputs": {
+        "axis-version": 2,
+        "budget-profile": "standard",
+        "discovery-level": 0,
+        "extended-diagnostics": true,
+        "generation-timing": true,
+        "ontology-options": "{\"coupling\":\"independent\",\"horizon\":\"short\"}",
+        "planning-level": 0,
+        "resource-pressure": 1,
+        "science-family": "stateful-interference-v1",
+        "seed": "101",
+        "theory-level": 0
+      },
+      "kind": "Passed",
+      "model_parameters": {
+        "max-completion-tokens": 65536,
+        "reasoning-effort": "xhigh",
+        "provider": {
+          "require_parameters": true,
+          "allow_fallbacks": false
+        }
+      },
+      "disable_structured_output": true,
+      "budget": 26,
+      "accepted_actions": 17,
+      "tool_calls_started": 23,
+      "tool_calls_completed": 23,
+      "public_responses_replayed": 23,
+      "hash_records_matched": 0,
+      "protocol_errors": {},
+      "all_evidence_read": true,
+      "world_win": true,
+      "supported_world_win": true,
+      "request_seconds": 172.730614449,
+      "tool_seconds": 14.338312222,
+      "usage": {
+        "InputTokens": 567808,
+        "OutputTokens": 28044,
+        "ReasoningTokens": 27537,
+        "InputCacheWriteTokens": 0,
+        "InputCacheReadTokens": 493231,
+        "InputTokenAccounting": "cache_tokens_included",
+        "OutputTokenAccounting": "reasoning_tokens_included"
+      },
+      "failure_message": null,
+      "pre_finalization_status": "won",
+      "new_attempt": false,
+      "outcome_class": "win",
+      "evidence_classification": "supported_win",
+      "world_termination_reason": "victory",
+      "terminal_response_stop_reason": "stop",
+      "actions_remaining": 9,
+      "rejected_world_actions": 0,
+      "final_evidence": {
+        "remaining_worlds": 1,
+        "winning_set_signatures": 1,
+        "common_repairs": 1,
+        "accepting_worlds": 1,
+        "classification": "guaranteed"
+      },
+      "first_guaranteed_repair_turn": 16,
+      "physical_goal_satisfied": true,
+      "submissions": [
+        {
+          "turn": 17,
+          "won": true,
+          "evidence": {
+            "remaining_worlds": 1,
+            "winning_set_signatures": 1,
+            "common_repairs": 1,
+            "accepting_worlds": 1,
+            "classification": "guaranteed"
+          }
+        }
+      ],
+      "measurements_used": 15,
+      "redundant_measurements": 15,
+      "measurements_after_guaranteed_repair": 0,
+      "physical_cost_audit": {
+        "minimum_actions": 17,
+        "first_budget_infeasible_turn": null,
+        "minimum_at_stop": 0,
+        "excess_total": 0,
+        "physical_goal_at_stop": true,
+        "operations_noop": 0
+      }
+    },
+    {
+      "trace_id": "01M69V7H52CPTCX7C2RJADPBXY",
+      "directory": "screen-20261031T202237Z-j59rij2y",
+      "cohort": "initial_screen",
+      "task": "NEXUS interference-27",
+      "id": "27",
+      "model": "z-ai/glm-5.2",
+      "family": "stateful-interference-v1",
+      "inputs": {
+        "axis-version": 2,
+        "budget-profile": "standard",
+        "discovery-level": 0,
+        "extended-diagnostics": true,
+        "generation-timing": true,
+        "ontology-options": "{\"coupling\":\"coupled\",\"horizon\":\"long\"}",
+        "planning-level": 0,
+        "resource-pressure": 1,
+        "science-family": "stateful-interference-v1",
+        "seed": "101",
+        "theory-level": 0
+      },
+      "kind": "Error",
+      "model_parameters": {
+        "max-completion-tokens": 65536,
+        "reasoning-effort": "xhigh",
+        "provider": {
+          "require_parameters": true,
+          "allow_fallbacks": false
+        }
+      },
+      "disable_structured_output": true,
+      "budget": 53,
+      "accepted_actions": 15,
+      "tool_calls_started": 21,
+      "tool_calls_completed": 21,
+      "public_responses_replayed": 21,
+      "hash_records_matched": 15,
+      "protocol_errors": {},
+      "all_evidence_read": true,
+      "world_win": false,
+      "supported_world_win": false,
+      "request_seconds": 686.524811135,
+      "tool_seconds": 13.617116747,
+      "usage": {
+        "InputTokens": 546781,
+        "OutputTokens": 120285,
+        "ReasoningTokens": 120285,
+        "InputCacheWriteTokens": 0,
+        "InputCacheReadTokens": 492341,
+        "InputTokenAccounting": "cache_tokens_included",
+        "OutputTokenAccounting": "reasoning_tokens_included"
+      },
+      "failure_message": "failed to generate response: model response contained no actionable content",
+      "pre_finalization_status": "active",
+      "new_attempt": false,
+      "outcome_class": "response_length",
+      "evidence_classification": "not_won",
+      "world_termination_reason": "active_at_snapshot",
+      "terminal_response_stop_reason": "length",
+      "actions_remaining": 38,
+      "rejected_world_actions": 0,
+      "final_evidence": {
+        "remaining_worlds": 1,
+        "winning_set_signatures": 1,
+        "common_repairs": 0,
+        "accepting_worlds": 0,
+        "classification": "contradicted"
+      },
+      "first_guaranteed_repair_turn": null,
+      "physical_goal_satisfied": false,
+      "submissions": [],
+      "measurements_used": 14,
+      "redundant_measurements": 14,
+      "measurements_after_guaranteed_repair": 0,
+      "physical_cost_audit": {
+        "minimum_actions": 35,
+        "first_budget_infeasible_turn": null,
+        "minimum_at_stop": 28,
+        "excess_total": 8,
+        "physical_goal_at_stop": false,
+        "operations_noop": 1
+      }
+    },
+    {
+      "trace_id": "01M69VX90CB0RG8F9T39AJM30B",
+      "directory": "screen-20261031T202237Z-j59rij2y",
+      "cohort": "initial_screen",
+      "task": "NEXUS smoke-S01",
+      "id": "S01",
+      "model": "z-ai/glm-5.2",
+      "family": "stateful-discovery-v1",
+      "inputs": {
+        "axis-version": 2,
+        "budget-profile": "standard",
+        "discovery-level": 0,
+        "extended-diagnostics": true,
+        "generation-timing": true,
+        "planning-level": 1,
+        "resource-pressure": 1,
+        "science-family": "stateful-discovery-v1",
+        "seed": "229",
+        "theory-level": 0
+      },
+      "kind": "Passed",
+      "model_parameters": {
+        "max-completion-tokens": 65536,
+        "reasoning-effort": "xhigh",
+        "provider": {
+          "require_parameters": true,
+          "allow_fallbacks": false
+        }
+      },
+      "disable_structured_output": true,
+      "budget": 64,
+      "accepted_actions": 10,
+      "tool_calls_started": 15,
+      "tool_calls_completed": 15,
+      "public_responses_replayed": 15,
+      "hash_records_matched": 4,
+      "protocol_errors": {},
+      "all_evidence_read": true,
+      "world_win": true,
+      "supported_world_win": true,
+      "request_seconds": 29.603215475,
+      "tool_seconds": 9.809275046,
+      "usage": {
+        "InputTokens": 87768,
+        "OutputTokens": 3866,
+        "ReasoningTokens": 3849,
+        "InputCacheWriteTokens": 0,
+        "InputCacheReadTokens": 79733,
+        "InputTokenAccounting": "cache_tokens_included",
+        "OutputTokenAccounting": "reasoning_tokens_included"
+      },
+      "failure_message": null,
+      "pre_finalization_status": "won",
+      "new_attempt": false,
+      "outcome_class": "win",
+      "evidence_classification": "supported_win",
+      "world_termination_reason": "victory",
+      "terminal_response_stop_reason": "stop",
+      "actions_remaining": 54,
+      "rejected_world_actions": 0,
+      "final_evidence": {
+        "remaining_worlds": 1,
+        "winning_set_signatures": 1,
+        "common_repairs": 1,
+        "accepting_worlds": 1,
+        "classification": "guaranteed"
+      },
+      "first_guaranteed_repair_turn": 9,
+      "physical_goal_satisfied": true,
+      "submissions": [
+        {
+          "turn": 10,
+          "won": true,
+          "evidence": {
+            "remaining_worlds": 1,
+            "winning_set_signatures": 1,
+            "common_repairs": 1,
+            "accepting_worlds": 1,
+            "classification": "guaranteed"
+          }
+        }
+      ],
+      "measurements_used": 7,
+      "redundant_measurements": 7,
+      "measurements_after_guaranteed_repair": 0
+    },
+    {
+      "trace_id": "01M69VYSPY2VZKS14472WSGHYY",
+      "directory": "screen-20261031T202237Z-j59rij2y",
+      "cohort": "initial_screen",
+      "task": "NEXUS smoke-S02",
+      "id": "S02",
+      "model": "z-ai/glm-5.2",
+      "family": "stateful-discovery-v1",
+      "inputs": {
+        "axis-version": 2,
+        "budget-profile": "standard",
+        "discovery-level": 5,
+        "extended-diagnostics": true,
+        "generation-timing": true,
+        "planning-level": 1,
+        "resource-pressure": 1,
+        "science-family": "stateful-discovery-v1",
+        "seed": "229",
+        "theory-level": 0
+      },
+      "kind": "Passed",
+      "model_parameters": {
+        "max-completion-tokens": 65536,
+        "reasoning-effort": "xhigh",
+        "provider": {
+          "require_parameters": true,
+          "allow_fallbacks": false
+        }
+      },
+      "disable_structured_output": true,
+      "budget": 64,
+      "accepted_actions": 10,
+      "tool_calls_started": 15,
+      "tool_calls_completed": 15,
+      "public_responses_replayed": 15,
+      "hash_records_matched": 4,
+      "protocol_errors": {},
+      "all_evidence_read": true,
+      "world_win": true,
+      "supported_world_win": true,
+      "request_seconds": 114.978851531,
+      "tool_seconds": 9.984468714,
+      "usage": {
+        "InputTokens": 219878,
+        "OutputTokens": 17089,
+        "ReasoningTokens": 16754,
+        "InputCacheWriteTokens": 0,
+        "InputCacheReadTokens": 192374,
+        "InputTokenAccounting": "cache_tokens_included",
+        "OutputTokenAccounting": "reasoning_tokens_included"
+      },
+      "failure_message": null,
+      "pre_finalization_status": "won",
+      "new_attempt": false,
+      "outcome_class": "win",
+      "evidence_classification": "supported_win",
+      "world_termination_reason": "victory",
+      "terminal_response_stop_reason": "stop",
+      "actions_remaining": 54,
+      "rejected_world_actions": 0,
+      "final_evidence": {
+        "remaining_worlds": 1,
+        "winning_set_signatures": 1,
+        "common_repairs": 1,
+        "accepting_worlds": 1,
+        "classification": "guaranteed"
+      },
+      "first_guaranteed_repair_turn": 9,
+      "physical_goal_satisfied": true,
+      "submissions": [
+        {
+          "turn": 10,
+          "won": true,
+          "evidence": {
+            "remaining_worlds": 1,
+            "winning_set_signatures": 1,
+            "common_repairs": 1,
+            "accepting_worlds": 1,
+            "classification": "guaranteed"
+          }
+        }
+      ],
+      "measurements_used": 7,
+      "redundant_measurements": 7,
+      "measurements_after_guaranteed_repair": 0
+    },
+    {
+      "trace_id": "01M69W2XWKBD5VZFWWJAEP6N86",
+      "directory": "screen-20261031T202237Z-j59rij2y",
+      "cohort": "initial_screen",
+      "task": "NEXUS smoke-S03",
+      "id": "S03",
+      "model": "z-ai/glm-5.2",
+      "family": "stateful-discovery-v1",
+      "inputs": {
+        "axis-version": 2,
+        "budget-profile": "standard",
+        "discovery-level": 5,
+        "extended-diagnostics": true,
+        "generation-timing": true,
+        "planning-level": 1,
+        "resource-pressure": 1,
+        "science-family": "stateful-discovery-v1",
+        "seed": "229",
+        "theory-level": 3
+      },
+      "kind": "Passed",
+      "model_parameters": {
+        "max-completion-tokens": 65536,
+        "reasoning-effort": "xhigh",
+        "provider": {
+          "require_parameters": true,
+          "allow_fallbacks": false
+        }
+      },
+      "disable_structured_output": true,
+      "budget": 64,
+      "accepted_actions": 37,
+      "tool_calls_started": 42,
+      "tool_calls_completed": 42,
+      "public_responses_replayed": 42,
+      "hash_records_matched": 0,
+      "protocol_errors": {},
+      "all_evidence_read": true,
+      "world_win": true,
+      "supported_world_win": true,
+      "request_seconds": 423.386617156,
+      "tool_seconds": 28.502602244,
+      "usage": {
+        "InputTokens": 1968647,
+        "OutputTokens": 67841,
+        "ReasoningTokens": 67622,
+        "InputCacheWriteTokens": 0,
+        "InputCacheReadTokens": 1928282,
+        "InputTokenAccounting": "cache_tokens_included",
+        "OutputTokenAccounting": "reasoning_tokens_included"
+      },
+      "failure_message": null,
+      "pre_finalization_status": "won",
+      "new_attempt": false,
+      "outcome_class": "win",
+      "evidence_classification": "supported_win",
+      "world_termination_reason": "victory",
+      "terminal_response_stop_reason": "stop",
+      "actions_remaining": 27,
+      "rejected_world_actions": 0,
+      "final_evidence": {
+        "remaining_worlds": 1,
+        "winning_set_signatures": 1,
+        "common_repairs": 1,
+        "accepting_worlds": 1,
+        "classification": "guaranteed"
+      },
+      "first_guaranteed_repair_turn": 36,
+      "physical_goal_satisfied": true,
+      "submissions": [
+        {
+          "turn": 37,
+          "won": true,
+          "evidence": {
+            "remaining_worlds": 1,
+            "winning_set_signatures": 1,
+            "common_repairs": 1,
+            "accepting_worlds": 1,
+            "classification": "guaranteed"
+          }
+        }
+      ],
+      "measurements_used": 34,
+      "redundant_measurements": 27,
+      "measurements_after_guaranteed_repair": 0
+    },
+    {
+      "trace_id": "01M69WH85V4GM8S4N023WS7WJJ",
+      "directory": "screen-20261031T202237Z-j59rij2y",
+      "cohort": "initial_screen",
+      "task": "NEXUS smoke-S08",
+      "id": "S08",
+      "model": "z-ai/glm-5.2",
+      "family": "model-revision-v1",
+      "inputs": {
+        "axis-version": 2,
+        "budget-profile": "standard",
+        "discovery-level": 5,
+        "extended-diagnostics": true,
+        "generation-timing": true,
+        "ontology-options": "{\"consistency_check\":\"off\",\"finish_policy\":\"recoverable\",\"guidance\":\"principles\"}",
+        "planning-level": 0,
+        "resource-pressure": 1,
+        "science-family": "model-revision-v1",
+        "seed": "5866",
+        "theory-level": 3
+      },
+      "kind": "Failed",
+      "model_parameters": {
+        "max-completion-tokens": 65536,
+        "reasoning-effort": "xhigh",
+        "provider": {
+          "require_parameters": true,
+          "allow_fallbacks": false
+        }
+      },
+      "disable_structured_output": true,
+      "budget": 64,
+      "accepted_actions": 64,
+      "tool_calls_started": 70,
+      "tool_calls_completed": 70,
+      "public_responses_replayed": 70,
+      "hash_records_matched": 0,
+      "protocol_errors": {},
+      "all_evidence_read": true,
+      "world_win": false,
+      "supported_world_win": false,
+      "request_seconds": 1975.611191709,
+      "tool_seconds": 46.79621546,
+      "usage": {
+        "InputTokens": 8197681,
+        "OutputTokens": 340138,
+        "ReasoningTokens": 337859,
+        "InputCacheWriteTokens": 0,
+        "InputCacheReadTokens": 8155264,
+        "InputTokenAccounting": "cache_tokens_included",
+        "OutputTokenAccounting": "reasoning_tokens_included"
+      },
+      "failure_message": null,
+      "pre_finalization_status": "failed",
+      "new_attempt": false,
+      "outcome_class": "world_action_budget",
+      "evidence_classification": "not_won",
+      "world_termination_reason": "action_budget",
+      "terminal_response_stop_reason": "stop",
+      "actions_remaining": 0,
+      "rejected_world_actions": 0,
+      "final_evidence": {
+        "remaining_worlds": 1,
+        "winning_set_signatures": 1,
+        "common_repairs": 1,
+        "accepting_worlds": 0,
+        "classification": "contradicted"
+      },
+      "first_guaranteed_repair_turn": 44,
+      "physical_goal_satisfied": false,
+      "submissions": [
+        {
+          "turn": 30,
+          "won": false,
+          "evidence": {
+            "remaining_worlds": 14,
+            "winning_set_signatures": 14,
+            "common_repairs": 0,
+            "accepting_worlds": 1,
+            "classification": "compatible"
+          }
+        },
+        {
+          "turn": 53,
+          "won": false,
+          "evidence": {
+            "remaining_worlds": 1,
+            "winning_set_signatures": 1,
+            "common_repairs": 1,
+            "accepting_worlds": 0,
+            "classification": "contradicted"
+          }
+        },
+        {
+          "turn": 60,
+          "won": false,
+          "evidence": {
+            "remaining_worlds": 1,
+            "winning_set_signatures": 1,
+            "common_repairs": 1,
+            "accepting_worlds": 0,
+            "classification": "contradicted"
+          }
+        },
+        {
+          "turn": 63,
+          "won": false,
+          "evidence": {
+            "remaining_worlds": 1,
+            "winning_set_signatures": 1,
+            "common_repairs": 1,
+            "accepting_worlds": 0,
+            "classification": "contradicted"
+          }
+        },
+        {
+          "turn": 64,
+          "won": false,
+          "evidence": {
+            "remaining_worlds": 1,
+            "winning_set_signatures": 1,
+            "common_repairs": 1,
+            "accepting_worlds": 0,
+            "classification": "contradicted"
+          }
+        }
+      ],
+      "measurements_used": 25,
+      "redundant_measurements": 17,
+      "measurements_after_guaranteed_repair": 5
+    },
+    {
+      "trace_id": "01M69YFMTXP9PAZTQ9D81D06SV",
+      "directory": "screen-20261031T202237Z-j59rij2y",
+      "cohort": "initial_screen",
+      "task": "NEXUS smoke-S22",
+      "id": "S22",
+      "model": "z-ai/glm-5.2",
+      "family": "compositional-repair-v1",
+      "inputs": {
+        "axis-version": 2,
+        "budget-profile": "standard",
+        "discovery-level": 5,
+        "extended-diagnostics": true,
+        "generation-timing": true,
+        "planning-level": 1,
+        "resource-pressure": 1,
+        "science-family": "compositional-repair-v1",
+        "seed": "438",
+        "theory-level": 3
+      },
+      "kind": "Failed",
+      "model_parameters": {
+        "max-completion-tokens": 65536,
+        "reasoning-effort": "xhigh",
+        "provider": {
+          "require_parameters": true,
+          "allow_fallbacks": false
+        }
+      },
+      "disable_structured_output": true,
+      "budget": 30,
+      "accepted_actions": 30,
+      "tool_calls_started": 36,
+      "tool_calls_completed": 36,
+      "public_responses_replayed": 36,
+      "hash_records_matched": 4,
+      "protocol_errors": {},
+      "all_evidence_read": true,
+      "world_win": false,
+      "supported_world_win": false,
+      "request_seconds": 646.006557731,
+      "tool_seconds": 23.404265843,
+      "usage": {
+        "InputTokens": 1824516,
+        "OutputTokens": 125617,
+        "ReasoningTokens": 124544,
+        "InputCacheWriteTokens": 0,
+        "InputCacheReadTokens": 1807073,
+        "InputTokenAccounting": "cache_tokens_included",
+        "OutputTokenAccounting": "reasoning_tokens_included"
+      },
+      "failure_message": null,
+      "pre_finalization_status": "failed",
+      "new_attempt": false,
+      "outcome_class": "world_action_budget",
+      "evidence_classification": "not_won",
+      "world_termination_reason": "action_budget",
+      "terminal_response_stop_reason": "stop",
+      "actions_remaining": 0,
+      "rejected_world_actions": 1,
+      "final_evidence": {
+        "remaining_worlds": 3,
+        "winning_set_signatures": 3,
+        "common_repairs": 0,
+        "accepting_worlds": 1,
+        "classification": "compatible"
+      },
+      "first_guaranteed_repair_turn": null,
+      "physical_goal_satisfied": true,
+      "submissions": [
+        {
+          "turn": 25,
+          "won": false,
+          "evidence": {
+            "remaining_worlds": 5,
+            "winning_set_signatures": 5,
+            "common_repairs": 0,
+            "accepting_worlds": 1,
+            "classification": "compatible"
+          }
+        },
+        {
+          "turn": 28,
+          "won": false,
+          "evidence": {
+            "remaining_worlds": 4,
+            "winning_set_signatures": 4,
+            "common_repairs": 0,
+            "accepting_worlds": 1,
+            "classification": "compatible"
+          }
+        }
+      ],
+      "measurements_used": 6,
+      "redundant_measurements": 0,
+      "measurements_after_guaranteed_repair": 0
+    },
+    {
+      "trace_id": "01M69Z4G45DY9C0QZ556N9X6NV",
+      "directory": "screen-20261031T202237Z-j59rij2y",
+      "cohort": "initial_screen",
+      "task": "NEXUS smoke-S23",
+      "id": "S23",
+      "model": "z-ai/glm-5.2",
+      "family": "compositional-repair-v1",
+      "inputs": {
+        "axis-version": 2,
+        "budget-profile": "diagnostic-plus6",
+        "discovery-level": 5,
+        "extended-diagnostics": true,
+        "generation-timing": true,
+        "planning-level": 1,
+        "resource-pressure": 1,
+        "science-family": "compositional-repair-v1",
+        "seed": "438",
+        "theory-level": 3
+      },
+      "kind": "Passed",
+      "model_parameters": {
+        "max-completion-tokens": 65536,
+        "reasoning-effort": "xhigh",
+        "provider": {
+          "require_parameters": true,
+          "allow_fallbacks": false
+        }
+      },
+      "disable_structured_output": true,
+      "budget": 36,
+      "accepted_actions": 31,
+      "tool_calls_started": 36,
+      "tool_calls_completed": 36,
+      "public_responses_replayed": 36,
+      "hash_records_matched": 4,
+      "protocol_errors": {},
+      "all_evidence_read": true,
+      "world_win": true,
+      "supported_world_win": false,
+      "request_seconds": 623.005465598,
+      "tool_seconds": 23.256984143,
+      "usage": {
+        "InputTokens": 1445964,
+        "OutputTokens": 108977,
+        "ReasoningTokens": 108051,
+        "InputCacheWriteTokens": 0,
+        "InputCacheReadTokens": 1420768,
+        "InputTokenAccounting": "cache_tokens_included",
+        "OutputTokenAccounting": "reasoning_tokens_included"
+      },
+      "failure_message": null,
+      "pre_finalization_status": "won",
+      "new_attempt": false,
+      "outcome_class": "win",
+      "evidence_classification": "compatible_win",
+      "world_termination_reason": "victory",
+      "terminal_response_stop_reason": "stop",
+      "actions_remaining": 5,
+      "rejected_world_actions": 0,
+      "final_evidence": {
+        "remaining_worlds": 2,
+        "winning_set_signatures": 2,
+        "common_repairs": 0,
+        "accepting_worlds": 1,
+        "classification": "compatible"
+      },
+      "first_guaranteed_repair_turn": null,
+      "physical_goal_satisfied": true,
+      "submissions": [
+        {
+          "turn": 31,
+          "won": true,
+          "evidence": {
+            "remaining_worlds": 2,
+            "winning_set_signatures": 2,
+            "common_repairs": 0,
+            "accepting_worlds": 1,
+            "classification": "compatible"
+          }
+        }
+      ],
+      "measurements_used": 8,
+      "redundant_measurements": 2,
+      "measurements_after_guaranteed_repair": 0
+    },
+    {
+      "trace_id": "01M69ZRME9RV3M0PJAYGEWX72D",
+      "directory": "screen-20261031T202237Z-j59rij2y",
+      "cohort": "initial_screen",
+      "task": "NEXUS smoke-S24",
+      "id": "S24",
+      "model": "z-ai/glm-5.2",
+      "family": "compositional-repair-v1",
+      "inputs": {
+        "axis-version": 2,
+        "budget-profile": "diagnostic-plus6",
+        "discovery-level": 5,
+        "extended-diagnostics": true,
+        "generation-timing": true,
+        "planning-level": 1,
+        "resource-pressure": 1,
+        "science-family": "compositional-repair-v1",
+        "seed": "493",
+        "theory-level": 3
+      },
+      "kind": "Passed",
+      "model_parameters": {
+        "max-completion-tokens": 65536,
+        "reasoning-effort": "xhigh",
+        "provider": {
+          "require_parameters": true,
+          "allow_fallbacks": false
+        }
+      },
+      "disable_structured_output": true,
+      "budget": 36,
+      "accepted_actions": 25,
+      "tool_calls_started": 30,
+      "tool_calls_completed": 30,
+      "public_responses_replayed": 30,
+      "hash_records_matched": 5,
+      "protocol_errors": {},
+      "all_evidence_read": true,
+      "world_win": true,
+      "supported_world_win": false,
+      "request_seconds": 213.592537241,
+      "tool_seconds": 19.673441682,
+      "usage": {
+        "InputTokens": 673613,
+        "OutputTokens": 44986,
+        "ReasoningTokens": 44586,
+        "InputCacheWriteTokens": 0,
+        "InputCacheReadTokens": 658983,
+        "InputTokenAccounting": "cache_tokens_included",
+        "OutputTokenAccounting": "reasoning_tokens_included"
+      },
+      "failure_message": null,
+      "pre_finalization_status": "won",
+      "new_attempt": false,
+      "outcome_class": "win",
+      "evidence_classification": "compatible_win",
+      "world_termination_reason": "victory",
+      "terminal_response_stop_reason": "stop",
+      "actions_remaining": 11,
+      "rejected_world_actions": 0,
+      "final_evidence": {
+        "remaining_worlds": 2,
+        "winning_set_signatures": 2,
+        "common_repairs": 0,
+        "accepting_worlds": 1,
+        "classification": "compatible"
+      },
+      "first_guaranteed_repair_turn": null,
+      "physical_goal_satisfied": true,
+      "submissions": [
+        {
+          "turn": 25,
+          "won": true,
+          "evidence": {
+            "remaining_worlds": 2,
+            "winning_set_signatures": 2,
+            "common_repairs": 0,
+            "accepting_worlds": 1,
+            "classification": "compatible"
+          }
+        }
+      ],
+      "measurements_used": 6,
+      "redundant_measurements": 1,
+      "measurements_after_guaranteed_repair": 0
+    },
+    {
+      "trace_id": "01M6A004Y2RFT220S96BNTPM2X",
+      "directory": "screen-20261031T202237Z-j59rij2y",
+      "cohort": "initial_screen",
+      "task": "NEXUS smoke-S13",
+      "id": "S13",
+      "model": "z-ai/glm-5.2",
+      "family": "stateful-planning-v1",
+      "inputs": {
+        "axis-version": 2,
+        "budget-profile": "standard",
+        "discovery-level": 5,
+        "extended-diagnostics": true,
+        "generation-timing": true,
+        "planning-level": 0,
+        "resource-pressure": 2,
+        "science-family": "stateful-planning-v1",
+        "seed": "21",
+        "theory-level": 0
+      },
+      "kind": "Passed",
+      "model_parameters": {
+        "max-completion-tokens": 65536,
+        "reasoning-effort": "xhigh",
+        "provider": {
+          "require_parameters": true,
+          "allow_fallbacks": false
+        }
+      },
+      "disable_structured_output": true,
+      "budget": 11,
+      "accepted_actions": 11,
+      "tool_calls_started": 18,
+      "tool_calls_completed": 18,
+      "public_responses_replayed": 18,
+      "hash_records_matched": 3,
+      "protocol_errors": {},
+      "all_evidence_read": true,
+      "world_win": true,
+      "supported_world_win": true,
+      "request_seconds": 168.091173274,
+      "tool_seconds": 11.706361454,
+      "usage": {
+        "InputTokens": 444400,
+        "OutputTokens": 32140,
+        "ReasoningTokens": 32033,
+        "InputCacheWriteTokens": 0,
+        "InputCacheReadTokens": 404210,
+        "InputTokenAccounting": "cache_tokens_included",
+        "OutputTokenAccounting": "reasoning_tokens_included"
+      },
+      "failure_message": null,
+      "pre_finalization_status": "won",
+      "new_attempt": false,
+      "outcome_class": "win",
+      "evidence_classification": "supported_win",
+      "world_termination_reason": "victory",
+      "terminal_response_stop_reason": "stop",
+      "actions_remaining": 0,
+      "rejected_world_actions": 0,
+      "final_evidence": {
+        "remaining_worlds": 1,
+        "winning_set_signatures": 1,
+        "common_repairs": 1,
+        "accepting_worlds": 1,
+        "classification": "guaranteed"
+      },
+      "first_guaranteed_repair_turn": 10,
+      "physical_goal_satisfied": true,
+      "submissions": [
+        {
+          "turn": 11,
+          "won": true,
+          "evidence": {
+            "remaining_worlds": 1,
+            "winning_set_signatures": 1,
+            "common_repairs": 1,
+            "accepting_worlds": 1,
+            "classification": "guaranteed"
+          }
+        }
+      ],
+      "measurements_used": 9,
+      "redundant_measurements": 9,
+      "measurements_after_guaranteed_repair": 0,
+      "physical_cost_audit": {
+        "minimum_actions": 11,
+        "first_budget_infeasible_turn": null,
+        "minimum_at_stop": 0,
+        "excess_total": 0,
+        "physical_goal_at_stop": true,
+        "operations_noop": 0
+      }
+    },
+    {
+      "trace_id": "01M6A05Z8NQ6CTK3Z08GDC104X",
+      "directory": "screen-20261031T202237Z-j59rij2y",
+      "cohort": "initial_screen",
+      "task": "NEXUS smoke-S16",
+      "id": "S16",
+      "model": "z-ai/glm-5.2",
+      "family": "stateful-planning-v1",
+      "inputs": {
+        "axis-version": 2,
+        "budget-profile": "standard",
+        "discovery-level": 5,
+        "extended-diagnostics": true,
+        "generation-timing": true,
+        "planning-level": 3,
+        "resource-pressure": 2,
+        "science-family": "stateful-planning-v1",
+        "seed": "21",
+        "theory-level": 0
+      },
+      "kind": "Passed",
+      "model_parameters": {
+        "max-completion-tokens": 65536,
+        "reasoning-effort": "xhigh",
+        "provider": {
+          "require_parameters": true,
+          "allow_fallbacks": false
+        }
+      },
+      "disable_structured_output": true,
+      "budget": 22,
+      "accepted_actions": 22,
+      "tool_calls_started": 28,
+      "tool_calls_completed": 28,
+      "public_responses_replayed": 28,
+      "hash_records_matched": 3,
+      "protocol_errors": {},
+      "all_evidence_read": true,
+      "world_win": true,
+      "supported_world_win": true,
+      "request_seconds": 298.89466112,
+      "tool_seconds": 18.548137631,
+      "usage": {
+        "InputTokens": 1282500,
+        "OutputTokens": 53679,
+        "ReasoningTokens": 53538,
+        "InputCacheWriteTokens": 0,
+        "InputCacheReadTokens": 1216040,
+        "InputTokenAccounting": "cache_tokens_included",
+        "OutputTokenAccounting": "reasoning_tokens_included"
+      },
+      "failure_message": null,
+      "pre_finalization_status": "won",
+      "new_attempt": false,
+      "outcome_class": "win",
+      "evidence_classification": "supported_win",
+      "world_termination_reason": "victory",
+      "terminal_response_stop_reason": "stop",
+      "actions_remaining": 0,
+      "rejected_world_actions": 0,
+      "final_evidence": {
+        "remaining_worlds": 1,
+        "winning_set_signatures": 1,
+        "common_repairs": 1,
+        "accepting_worlds": 1,
+        "classification": "guaranteed"
+      },
+      "first_guaranteed_repair_turn": 18,
+      "physical_goal_satisfied": true,
+      "submissions": [
+        {
+          "turn": 22,
+          "won": true,
+          "evidence": {
+            "remaining_worlds": 1,
+            "winning_set_signatures": 1,
+            "common_repairs": 1,
+            "accepting_worlds": 1,
+            "classification": "guaranteed"
+          }
+        }
+      ],
+      "measurements_used": 10,
+      "redundant_measurements": 10,
+      "measurements_after_guaranteed_repair": 0,
+      "physical_cost_audit": {
+        "minimum_actions": 22,
+        "first_budget_infeasible_turn": null,
+        "minimum_at_stop": 0,
+        "excess_total": 0,
+        "physical_goal_at_stop": true,
+        "operations_noop": 0
+      }
+    },
+    {
+      "trace_id": "01M6A0G0XRQB7DC4R1171BYBPT",
+      "directory": "screen-20261031T202237Z-j59rij2y",
+      "cohort": "initial_screen",
+      "task": "NEXUS smoke-S17",
+      "id": "S17",
+      "model": "z-ai/glm-5.2",
+      "family": "stateful-planning-v1",
+      "inputs": {
+        "axis-version": 2,
+        "budget-profile": "standard",
+        "discovery-level": 5,
+        "extended-diagnostics": true,
+        "generation-timing": true,
+        "planning-level": 3,
+        "resource-pressure": 1,
+        "science-family": "stateful-planning-v1",
+        "seed": "21",
+        "theory-level": 0
+      },
+      "kind": "Passed",
+      "model_parameters": {
+        "max-completion-tokens": 65536,
+        "reasoning-effort": "xhigh",
+        "provider": {
+          "require_parameters": true,
+          "allow_fallbacks": false
+        }
+      },
+      "disable_structured_output": true,
+      "budget": 33,
+      "accepted_actions": 25,
+      "tool_calls_started": 31,
+      "tool_calls_completed": 31,
+      "public_responses_replayed": 31,
+      "hash_records_matched": 3,
+      "protocol_errors": {},
+      "all_evidence_read": true,
+      "world_win": true,
+      "supported_world_win": true,
+      "request_seconds": 207.551446657,
+      "tool_seconds": 20.07866061,
+      "usage": {
+        "InputTokens": 1005825,
+        "OutputTokens": 35702,
+        "ReasoningTokens": 35124,
+        "InputCacheWriteTokens": 0,
+        "InputCacheReadTokens": 959526,
+        "InputTokenAccounting": "cache_tokens_included",
+        "OutputTokenAccounting": "reasoning_tokens_included"
+      },
+      "failure_message": null,
+      "pre_finalization_status": "won",
+      "new_attempt": false,
+      "outcome_class": "win",
+      "evidence_classification": "supported_win",
+      "world_termination_reason": "victory",
+      "terminal_response_stop_reason": "stop",
+      "actions_remaining": 8,
+      "rejected_world_actions": 0,
+      "final_evidence": {
+        "remaining_worlds": 1,
+        "winning_set_signatures": 1,
+        "common_repairs": 1,
+        "accepting_worlds": 1,
+        "classification": "guaranteed"
+      },
+      "first_guaranteed_repair_turn": 21,
+      "physical_goal_satisfied": true,
+      "submissions": [
+        {
+          "turn": 25,
+          "won": true,
+          "evidence": {
+            "remaining_worlds": 1,
+            "winning_set_signatures": 1,
+            "common_repairs": 1,
+            "accepting_worlds": 1,
+            "classification": "guaranteed"
+          }
+        }
+      ],
+      "measurements_used": 9,
+      "redundant_measurements": 9,
+      "measurements_after_guaranteed_repair": 0,
+      "physical_cost_audit": {
+        "minimum_actions": 22,
+        "first_budget_infeasible_turn": null,
+        "minimum_at_stop": 0,
+        "excess_total": 3,
+        "physical_goal_at_stop": true,
+        "operations_noop": 0
+      }
+    },
+    {
+      "trace_id": "01M6A0ZMGWVHB44V3CHRZ25W7G",
+      "directory": "screen-20261031T222346Z-wv93r58o",
+      "cohort": "initial_screen",
+      "task": "NEXUS interference-09",
+      "id": "09",
+      "model": "minimax/minimax-m3",
+      "family": "stateful-interference-v1",
+      "inputs": {
+        "axis-version": 2,
+        "budget-profile": "standard",
+        "discovery-level": 0,
+        "extended-diagnostics": true,
+        "generation-timing": true,
+        "ontology-options": "{\"coupling\":\"independent\",\"horizon\":\"short\"}",
+        "planning-level": 0,
+        "resource-pressure": 2,
+        "science-family": "stateful-interference-v1",
+        "seed": "101",
+        "theory-level": 0
+      },
+      "kind": "Passed",
+      "model_parameters": {
+        "max-completion-tokens": 65536,
+        "provider": {
+          "require_parameters": true,
+          "allow_fallbacks": false
+        }
+      },
+      "disable_structured_output": true,
+      "budget": 17,
+      "accepted_actions": 17,
+      "tool_calls_started": 24,
+      "tool_calls_completed": 24,
+      "public_responses_replayed": 24,
+      "hash_records_matched": 0,
+      "protocol_errors": {},
+      "all_evidence_read": true,
+      "world_win": true,
+      "supported_world_win": true,
+      "request_seconds": 88.776351651,
+      "tool_seconds": 15.377188055,
+      "usage": {
+        "InputTokens": 341620,
+        "OutputTokens": 13430,
+        "ReasoningTokens": 11916,
+        "InputCacheWriteTokens": 0,
+        "InputCacheReadTokens": 318370,
+        "InputTokenAccounting": "cache_tokens_included",
+        "OutputTokenAccounting": "reasoning_tokens_included"
+      },
+      "failure_message": null,
+      "pre_finalization_status": "won",
+      "new_attempt": false,
+      "outcome_class": "win",
+      "evidence_classification": "supported_win",
+      "world_termination_reason": "victory",
+      "terminal_response_stop_reason": "stop",
+      "actions_remaining": 0,
+      "rejected_world_actions": 0,
+      "final_evidence": {
+        "remaining_worlds": 1,
+        "winning_set_signatures": 1,
+        "common_repairs": 1,
+        "accepting_worlds": 1,
+        "classification": "guaranteed"
+      },
+      "first_guaranteed_repair_turn": 16,
+      "physical_goal_satisfied": true,
+      "submissions": [
+        {
+          "turn": 17,
+          "won": true,
+          "evidence": {
+            "remaining_worlds": 1,
+            "winning_set_signatures": 1,
+            "common_repairs": 1,
+            "accepting_worlds": 1,
+            "classification": "guaranteed"
+          }
+        }
+      ],
+      "measurements_used": 15,
+      "redundant_measurements": 15,
+      "measurements_after_guaranteed_repair": 0,
+      "physical_cost_audit": {
+        "minimum_actions": 17,
+        "first_budget_infeasible_turn": null,
+        "minimum_at_stop": 0,
+        "excess_total": 0,
+        "physical_goal_at_stop": true,
+        "operations_noop": 0
+      }
+    },
+    {
+      "trace_id": "01M6A1367ENT95PWSRYRV150GQ",
+      "directory": "screen-20261031T222346Z-wv93r58o",
+      "cohort": "initial_screen",
+      "task": "NEXUS interference-11",
+      "id": "11",
+      "model": "minimax/minimax-m3",
+      "family": "stateful-interference-v1",
+      "inputs": {
+        "axis-version": 2,
+        "budget-profile": "standard",
+        "discovery-level": 0,
+        "extended-diagnostics": true,
+        "generation-timing": true,
+        "ontology-options": "{\"coupling\":\"coupled\",\"horizon\":\"long\"}",
+        "planning-level": 0,
+        "resource-pressure": 2,
+        "science-family": "stateful-interference-v1",
+        "seed": "101",
+        "theory-level": 0
+      },
+      "kind": "Error",
+      "model_parameters": {
+        "max-completion-tokens": 65536,
+        "provider": {
+          "require_parameters": true,
+          "allow_fallbacks": false
+        }
+      },
+      "disable_structured_output": true,
+      "budget": 35,
+      "accepted_actions": 0,
+      "tool_calls_started": 6,
+      "tool_calls_completed": 6,
+      "public_responses_replayed": 6,
+      "hash_records_matched": 0,
+      "protocol_errors": {},
+      "all_evidence_read": true,
+      "world_win": false,
+      "supported_world_win": false,
+      "request_seconds": 230.046840266,
+      "tool_seconds": 3.612927755,
+      "usage": {
+        "InputTokens": 8667,
+        "OutputTokens": 65771,
+        "ReasoningTokens": 65542,
+        "InputCacheWriteTokens": 0,
+        "InputCacheReadTokens": 6205,
+        "InputTokenAccounting": "cache_tokens_included",
+        "OutputTokenAccounting": "reasoning_tokens_included"
+      },
+      "failure_message": "failed to generate response: model response contained no actionable content",
+      "pre_finalization_status": "active",
+      "new_attempt": false,
+      "outcome_class": "response_length",
+      "evidence_classification": "not_won",
+      "world_termination_reason": "active_at_snapshot",
+      "terminal_response_stop_reason": "length",
+      "actions_remaining": 35,
+      "rejected_world_actions": 0,
+      "final_evidence": {
+        "remaining_worlds": 1,
+        "winning_set_signatures": 1,
+        "common_repairs": 0,
+        "accepting_worlds": null,
+        "classification": "ineligible"
+      },
+      "first_guaranteed_repair_turn": null,
+      "physical_goal_satisfied": false,
+      "submissions": [],
+      "measurements_used": 0,
+      "redundant_measurements": 0,
+      "measurements_after_guaranteed_repair": 0,
+      "physical_cost_audit": {
+        "minimum_actions": 35,
+        "first_budget_infeasible_turn": null,
+        "minimum_at_stop": 35,
+        "excess_total": 0,
+        "physical_goal_at_stop": false,
+        "operations_noop": 0
+      }
+    },
+    {
+      "trace_id": "01M6A1AJ1GTBYTD8WY4QZR225P",
+      "directory": "screen-20261031T222346Z-wv93r58o",
+      "cohort": "initial_screen",
+      "task": "NEXUS interference-25",
+      "id": "25",
+      "model": "minimax/minimax-m3",
+      "family": "stateful-interference-v1",
+      "inputs": {
+        "axis-version": 2,
+        "budget-profile": "standard",
+        "discovery-level": 0,
+        "extended-diagnostics": true,
+        "generation-timing": true,
+        "ontology-options": "{\"coupling\":\"independent\",\"horizon\":\"short\"}",
+        "planning-level": 0,
+        "resource-pressure": 1,
+        "science-family": "stateful-interference-v1",
+        "seed": "101",
+        "theory-level": 0
+      },
+      "kind": "Error",
+      "model_parameters": {
+        "max-completion-tokens": 65536,
+        "provider": {
+          "require_parameters": true,
+          "allow_fallbacks": false
+        }
+      },
+      "disable_structured_output": true,
+      "budget": 26,
+      "accepted_actions": 0,
+      "tool_calls_started": 6,
+      "tool_calls_completed": 6,
+      "public_responses_replayed": 6,
+      "hash_records_matched": 0,
+      "protocol_errors": {},
+      "all_evidence_read": true,
+      "world_win": false,
+      "supported_world_win": false,
+      "request_seconds": 247.105937261,
+      "tool_seconds": 3.748327238,
+      "usage": {
+        "InputTokens": 12119,
+        "OutputTokens": 65774,
+        "ReasoningTokens": 65542,
+        "InputCacheWriteTokens": 0,
+        "InputCacheReadTokens": 9734,
+        "InputTokenAccounting": "cache_tokens_included",
+        "OutputTokenAccounting": "reasoning_tokens_included"
+      },
+      "failure_message": "failed to generate response: model response contained no actionable content",
+      "pre_finalization_status": "active",
+      "new_attempt": false,
+      "outcome_class": "response_length",
+      "evidence_classification": "not_won",
+      "world_termination_reason": "active_at_snapshot",
+      "terminal_response_stop_reason": "length",
+      "actions_remaining": 26,
+      "rejected_world_actions": 0,
+      "final_evidence": {
+        "remaining_worlds": 1,
+        "winning_set_signatures": 1,
+        "common_repairs": 0,
+        "accepting_worlds": null,
+        "classification": "ineligible"
+      },
+      "first_guaranteed_repair_turn": null,
+      "physical_goal_satisfied": false,
+      "submissions": [],
+      "measurements_used": 0,
+      "redundant_measurements": 0,
+      "measurements_after_guaranteed_repair": 0,
+      "physical_cost_audit": {
+        "minimum_actions": 17,
+        "first_budget_infeasible_turn": null,
+        "minimum_at_stop": 17,
+        "excess_total": 0,
+        "physical_goal_at_stop": false,
+        "operations_noop": 0
+      }
+    },
+    {
+      "trace_id": "01M6A1JEX28H0GNJD8HXXW383K",
+      "directory": "screen-20261031T222346Z-wv93r58o",
+      "cohort": "initial_screen",
+      "task": "NEXUS interference-27",
+      "id": "27",
+      "model": "minimax/minimax-m3",
+      "family": "stateful-interference-v1",
+      "inputs": {
+        "axis-version": 2,
+        "budget-profile": "standard",
+        "discovery-level": 0,
+        "extended-diagnostics": true,
+        "generation-timing": true,
+        "ontology-options": "{\"coupling\":\"coupled\",\"horizon\":\"long\"}",
+        "planning-level": 0,
+        "resource-pressure": 1,
+        "science-family": "stateful-interference-v1",
+        "seed": "101",
+        "theory-level": 0
+      },
+      "kind": "Error",
+      "model_parameters": {
+        "max-completion-tokens": 65536,
+        "provider": {
+          "require_parameters": true,
+          "allow_fallbacks": false
+        }
+      },
+      "disable_structured_output": true,
+      "budget": 53,
+      "accepted_actions": 0,
+      "tool_calls_started": 6,
+      "tool_calls_completed": 6,
+      "public_responses_replayed": 6,
+      "hash_records_matched": 0,
+      "protocol_errors": {},
+      "all_evidence_read": true,
+      "world_win": false,
+      "supported_world_win": false,
+      "request_seconds": 219.997542501,
+      "tool_seconds": 3.871510461,
+      "usage": {
+        "InputTokens": 8638,
+        "OutputTokens": 65770,
+        "ReasoningTokens": 65535,
+        "InputCacheWriteTokens": 0,
+        "InputCacheReadTokens": 6198,
+        "InputTokenAccounting": "cache_tokens_included",
+        "OutputTokenAccounting": "reasoning_tokens_included"
+      },
+      "failure_message": "failed to generate response: model response contained no actionable content",
+      "pre_finalization_status": "active",
+      "new_attempt": false,
+      "outcome_class": "response_length",
+      "evidence_classification": "not_won",
+      "world_termination_reason": "active_at_snapshot",
+      "terminal_response_stop_reason": "length",
+      "actions_remaining": 53,
+      "rejected_world_actions": 0,
+      "final_evidence": {
+        "remaining_worlds": 1,
+        "winning_set_signatures": 1,
+        "common_repairs": 0,
+        "accepting_worlds": null,
+        "classification": "ineligible"
+      },
+      "first_guaranteed_repair_turn": null,
+      "physical_goal_satisfied": false,
+      "submissions": [],
+      "measurements_used": 0,
+      "redundant_measurements": 0,
+      "measurements_after_guaranteed_repair": 0,
+      "physical_cost_audit": {
+        "minimum_actions": 35,
+        "first_budget_infeasible_turn": null,
+        "minimum_at_stop": 35,
+        "excess_total": 0,
+        "physical_goal_at_stop": false,
+        "operations_noop": 0
+      }
+    },
+    {
+      "trace_id": "01M6A1SHV9NXQWTQ1NNBQC94FC",
+      "directory": "screen-20261031T222346Z-wv93r58o",
+      "cohort": "initial_screen",
+      "task": "NEXUS smoke-S01",
+      "id": "S01",
+      "model": "minimax/minimax-m3",
+      "family": "stateful-discovery-v1",
+      "inputs": {
+        "axis-version": 2,
+        "budget-profile": "standard",
+        "discovery-level": 0,
+        "extended-diagnostics": true,
+        "generation-timing": true,
+        "planning-level": 1,
+        "resource-pressure": 1,
+        "science-family": "stateful-discovery-v1",
+        "seed": "229",
+        "theory-level": 0
+      },
+      "kind": "Passed",
+      "model_parameters": {
+        "max-completion-tokens": 65536,
+        "provider": {
+          "require_parameters": true,
+          "allow_fallbacks": false
+        }
+      },
+      "disable_structured_output": true,
+      "budget": 64,
+      "accepted_actions": 11,
+      "tool_calls_started": 16,
+      "tool_calls_completed": 16,
+      "public_responses_replayed": 16,
+      "hash_records_matched": 3,
+      "protocol_errors": {},
+      "all_evidence_read": true,
+      "world_win": true,
+      "supported_world_win": true,
+      "request_seconds": 48.18463156,
+      "tool_seconds": 10.023131852,
+      "usage": {
+        "InputTokens": 115810,
+        "OutputTokens": 6699,
+        "ReasoningTokens": 4977,
+        "InputCacheWriteTokens": 0,
+        "InputCacheReadTokens": 102261,
+        "InputTokenAccounting": "cache_tokens_included",
+        "OutputTokenAccounting": "reasoning_tokens_included"
+      },
+      "failure_message": null,
+      "pre_finalization_status": "won",
+      "new_attempt": false,
+      "outcome_class": "win",
+      "evidence_classification": "supported_win",
+      "world_termination_reason": "victory",
+      "terminal_response_stop_reason": "stop",
+      "actions_remaining": 53,
+      "rejected_world_actions": 0,
+      "final_evidence": {
+        "remaining_worlds": 1,
+        "winning_set_signatures": 1,
+        "common_repairs": 1,
+        "accepting_worlds": 1,
+        "classification": "guaranteed"
+      },
+      "first_guaranteed_repair_turn": 10,
+      "physical_goal_satisfied": true,
+      "submissions": [
+        {
+          "turn": 11,
+          "won": true,
+          "evidence": {
+            "remaining_worlds": 1,
+            "winning_set_signatures": 1,
+            "common_repairs": 1,
+            "accepting_worlds": 1,
+            "classification": "guaranteed"
+          }
+        }
+      ],
+      "measurements_used": 8,
+      "redundant_measurements": 8,
+      "measurements_after_guaranteed_repair": 0
+    },
+    {
+      "trace_id": "01M6A1VNHZV2TZ4SEVXDH4VE0T",
+      "directory": "screen-20261031T222346Z-wv93r58o",
+      "cohort": "initial_screen",
+      "task": "NEXUS smoke-S02",
+      "id": "S02",
+      "model": "minimax/minimax-m3",
+      "family": "stateful-discovery-v1",
+      "inputs": {
+        "axis-version": 2,
+        "budget-profile": "standard",
+        "discovery-level": 5,
+        "extended-diagnostics": true,
+        "generation-timing": true,
+        "planning-level": 1,
+        "resource-pressure": 1,
+        "science-family": "stateful-discovery-v1",
+        "seed": "229",
+        "theory-level": 0
+      },
+      "kind": "Passed",
+      "model_parameters": {
+        "max-completion-tokens": 65536,
+        "provider": {
+          "require_parameters": true,
+          "allow_fallbacks": false
+        }
+      },
+      "disable_structured_output": true,
+      "budget": 64,
+      "accepted_actions": 15,
+      "tool_calls_started": 20,
+      "tool_calls_completed": 20,
+      "public_responses_replayed": 20,
+      "hash_records_matched": 2,
+      "protocol_errors": {},
+      "all_evidence_read": true,
+      "world_win": true,
+      "supported_world_win": true,
+      "request_seconds": 101.012951682,
+      "tool_seconds": 12.677569925,
+      "usage": {
+        "InputTokens": 320115,
+        "OutputTokens": 16234,
+        "ReasoningTokens": 14451,
+        "InputCacheWriteTokens": 0,
+        "InputCacheReadTokens": 297208,
+        "InputTokenAccounting": "cache_tokens_included",
+        "OutputTokenAccounting": "reasoning_tokens_included"
+      },
+      "failure_message": null,
+      "pre_finalization_status": "won",
+      "new_attempt": false,
+      "outcome_class": "win",
+      "evidence_classification": "supported_win",
+      "world_termination_reason": "victory",
+      "terminal_response_stop_reason": "stop",
+      "actions_remaining": 49,
+      "rejected_world_actions": 0,
+      "final_evidence": {
+        "remaining_worlds": 1,
+        "winning_set_signatures": 1,
+        "common_repairs": 1,
+        "accepting_worlds": 1,
+        "classification": "guaranteed"
+      },
+      "first_guaranteed_repair_turn": 13,
+      "physical_goal_satisfied": true,
+      "submissions": [
+        {
+          "turn": 15,
+          "won": true,
+          "evidence": {
+            "remaining_worlds": 1,
+            "winning_set_signatures": 1,
+            "common_repairs": 1,
+            "accepting_worlds": 1,
+            "classification": "guaranteed"
+          }
+        }
+      ],
+      "measurements_used": 12,
+      "redundant_measurements": 12,
+      "measurements_after_guaranteed_repair": 1
+    },
+    {
+      "trace_id": "01M6A1ZFKFJDYYGYEM8AXGMEWV",
+      "directory": "screen-20261031T222346Z-wv93r58o",
+      "cohort": "initial_screen",
+      "task": "NEXUS smoke-S03",
+      "id": "S03",
+      "model": "minimax/minimax-m3",
+      "family": "stateful-discovery-v1",
+      "inputs": {
+        "axis-version": 2,
+        "budget-profile": "standard",
+        "discovery-level": 5,
+        "extended-diagnostics": true,
+        "generation-timing": true,
+        "planning-level": 1,
+        "resource-pressure": 1,
+        "science-family": "stateful-discovery-v1",
+        "seed": "229",
+        "theory-level": 3
+      },
+      "kind": "Passed",
+      "model_parameters": {
+        "max-completion-tokens": 65536,
+        "provider": {
+          "require_parameters": true,
+          "allow_fallbacks": false
+        }
+      },
+      "disable_structured_output": true,
+      "budget": 64,
+      "accepted_actions": 26,
+      "tool_calls_started": 31,
+      "tool_calls_completed": 31,
+      "public_responses_replayed": 31,
+      "hash_records_matched": 0,
+      "protocol_errors": {},
+      "all_evidence_read": true,
+      "world_win": true,
+      "supported_world_win": true,
+      "request_seconds": 358.270890484,
+      "tool_seconds": 20.52543291,
+      "usage": {
+        "InputTokens": 1492184,
+        "OutputTokens": 81198,
+        "ReasoningTokens": 78878,
+        "InputCacheWriteTokens": 0,
+        "InputCacheReadTokens": 1401239,
+        "InputTokenAccounting": "cache_tokens_included",
+        "OutputTokenAccounting": "reasoning_tokens_included"
+      },
+      "failure_message": null,
+      "pre_finalization_status": "won",
+      "new_attempt": false,
+      "outcome_class": "win",
+      "evidence_classification": "supported_win",
+      "world_termination_reason": "victory",
+      "terminal_response_stop_reason": "stop",
+      "actions_remaining": 38,
+      "rejected_world_actions": 0,
+      "final_evidence": {
+        "remaining_worlds": 4,
+        "winning_set_signatures": 1,
+        "common_repairs": 1,
+        "accepting_worlds": 4,
+        "classification": "guaranteed"
+      },
+      "first_guaranteed_repair_turn": 25,
+      "physical_goal_satisfied": true,
+      "submissions": [
+        {
+          "turn": 26,
+          "won": true,
+          "evidence": {
+            "remaining_worlds": 4,
+            "winning_set_signatures": 1,
+            "common_repairs": 1,
+            "accepting_worlds": 4,
+            "classification": "guaranteed"
+          }
+        }
+      ],
+      "measurements_used": 23,
+      "redundant_measurements": 18,
+      "measurements_after_guaranteed_repair": 0
+    },
+    {
+      "trace_id": "01M6A2BGC9B7XSR5KXBDV4JP3K",
+      "directory": "screen-20261031T222346Z-wv93r58o",
+      "cohort": "initial_screen",
+      "task": "NEXUS smoke-S08",
+      "id": "S08",
+      "model": "minimax/minimax-m3",
+      "family": "model-revision-v1",
+      "inputs": {
+        "axis-version": 2,
+        "budget-profile": "standard",
+        "discovery-level": 5,
+        "extended-diagnostics": true,
+        "generation-timing": true,
+        "ontology-options": "{\"consistency_check\":\"off\",\"finish_policy\":\"recoverable\",\"guidance\":\"principles\"}",
+        "planning-level": 0,
+        "resource-pressure": 1,
+        "science-family": "model-revision-v1",
+        "seed": "5866",
+        "theory-level": 3
+      },
+      "kind": "Error",
+      "model_parameters": {
+        "max-completion-tokens": 65536,
+        "provider": {
+          "require_parameters": true,
+          "allow_fallbacks": false
+        }
+      },
+      "disable_structured_output": true,
+      "budget": 64,
+      "accepted_actions": 31,
+      "tool_calls_started": 36,
+      "tool_calls_completed": 36,
+      "public_responses_replayed": 36,
+      "hash_records_matched": 20,
+      "protocol_errors": {},
+      "all_evidence_read": true,
+      "world_win": false,
+      "supported_world_win": false,
+      "request_seconds": 441.585683443,
+      "tool_seconds": 23.883398598,
+      "usage": {
+        "InputTokens": 1330172,
+        "OutputTokens": 108476,
+        "ReasoningTokens": 105694,
+        "InputCacheWriteTokens": 0,
+        "InputCacheReadTokens": 1274759,
+        "InputTokenAccounting": "cache_tokens_included",
+        "OutputTokenAccounting": "reasoning_tokens_included"
+      },
+      "failure_message": "failed to generate response: model response contained no actionable content",
+      "pre_finalization_status": "active",
+      "new_attempt": false,
+      "outcome_class": "response_length",
+      "evidence_classification": "not_won",
+      "world_termination_reason": "active_at_snapshot",
+      "terminal_response_stop_reason": "length",
+      "actions_remaining": 33,
+      "rejected_world_actions": 0,
+      "final_evidence": {
+        "remaining_worlds": 3,
+        "winning_set_signatures": 3,
+        "common_repairs": 0,
+        "accepting_worlds": null,
+        "classification": "ineligible"
+      },
+      "first_guaranteed_repair_turn": null,
+      "physical_goal_satisfied": false,
+      "submissions": [],
+      "measurements_used": 14,
+      "redundant_measurements": 9,
+      "measurements_after_guaranteed_repair": 0
+    },
+    {
+      "trace_id": "01M6A2T5VT1QR40583C3749K55",
+      "directory": "screen-20261031T222346Z-wv93r58o",
+      "cohort": "initial_screen",
+      "task": "NEXUS smoke-S22",
+      "id": "S22",
+      "model": "minimax/minimax-m3",
+      "family": "compositional-repair-v1",
+      "inputs": {
+        "axis-version": 2,
+        "budget-profile": "standard",
+        "discovery-level": 5,
+        "extended-diagnostics": true,
+        "generation-timing": true,
+        "planning-level": 1,
+        "resource-pressure": 1,
+        "science-family": "compositional-repair-v1",
+        "seed": "438",
+        "theory-level": 3
+      },
+      "kind": "Passed",
+      "model_parameters": {
+        "max-completion-tokens": 65536,
+        "provider": {
+          "require_parameters": true,
+          "allow_fallbacks": false
+        }
+      },
+      "disable_structured_output": true,
+      "budget": 30,
+      "accepted_actions": 29,
+      "tool_calls_started": 34,
+      "tool_calls_completed": 34,
+      "public_responses_replayed": 34,
+      "hash_records_matched": 5,
+      "protocol_errors": {},
+      "all_evidence_read": true,
+      "world_win": true,
+      "supported_world_win": true,
+      "request_seconds": 613.752196028,
+      "tool_seconds": 22.358617201,
+      "usage": {
+        "InputTokens": 1320029,
+        "OutputTokens": 165402,
+        "ReasoningTokens": 162620,
+        "InputCacheWriteTokens": 0,
+        "InputCacheReadTokens": 1141602,
+        "InputTokenAccounting": "cache_tokens_included",
+        "OutputTokenAccounting": "reasoning_tokens_included"
+      },
+      "failure_message": null,
+      "pre_finalization_status": "won",
+      "new_attempt": false,
+      "outcome_class": "win",
+      "evidence_classification": "supported_win",
+      "world_termination_reason": "victory",
+      "terminal_response_stop_reason": "stop",
+      "actions_remaining": 1,
+      "rejected_world_actions": 0,
+      "final_evidence": {
+        "remaining_worlds": 1,
+        "winning_set_signatures": 1,
+        "common_repairs": 1,
+        "accepting_worlds": 1,
+        "classification": "guaranteed"
+      },
+      "first_guaranteed_repair_turn": 23,
+      "physical_goal_satisfied": true,
+      "submissions": [
+        {
+          "turn": 29,
+          "won": true,
+          "evidence": {
+            "remaining_worlds": 1,
+            "winning_set_signatures": 1,
+            "common_repairs": 1,
+            "accepting_worlds": 1,
+            "classification": "guaranteed"
+          }
+        }
+      ],
+      "measurements_used": 8,
+      "redundant_measurements": 2,
+      "measurements_after_guaranteed_repair": 1
+    },
+    {
+      "trace_id": "01M6A3E1HHZM5G6D1YNQXQ7R5H",
+      "directory": "screen-20261031T222346Z-wv93r58o",
+      "cohort": "initial_screen",
+      "task": "NEXUS smoke-S23",
+      "id": "S23",
+      "model": "minimax/minimax-m3",
+      "family": "compositional-repair-v1",
+      "inputs": {
+        "axis-version": 2,
+        "budget-profile": "diagnostic-plus6",
+        "discovery-level": 5,
+        "extended-diagnostics": true,
+        "generation-timing": true,
+        "planning-level": 1,
+        "resource-pressure": 1,
+        "science-family": "compositional-repair-v1",
+        "seed": "438",
+        "theory-level": 3
+      },
+      "kind": "Error",
+      "model_parameters": {
+        "max-completion-tokens": 65536,
+        "provider": {
+          "require_parameters": true,
+          "allow_fallbacks": false
+        }
+      },
+      "disable_structured_output": true,
+      "budget": 36,
+      "accepted_actions": 14,
+      "tool_calls_started": 20,
+      "tool_calls_completed": 20,
+      "public_responses_replayed": 20,
+      "hash_records_matched": 14,
+      "protocol_errors": {},
+      "all_evidence_read": true,
+      "world_win": false,
+      "supported_world_win": false,
+      "request_seconds": 531.365315484,
+      "tool_seconds": 13.159669505,
+      "usage": {
+        "InputTokens": 597629,
+        "OutputTokens": 118980,
+        "ReasoningTokens": 117432,
+        "InputCacheWriteTokens": 0,
+        "InputCacheReadTokens": 537026,
+        "InputTokenAccounting": "cache_tokens_included",
+        "OutputTokenAccounting": "reasoning_tokens_included"
+      },
+      "failure_message": "failed to generate response: model response contained no actionable content",
+      "pre_finalization_status": "active",
+      "new_attempt": false,
+      "outcome_class": "response_length",
+      "evidence_classification": "not_won",
+      "world_termination_reason": "active_at_snapshot",
+      "terminal_response_stop_reason": "length",
+      "actions_remaining": 22,
+      "rejected_world_actions": 0,
+      "final_evidence": {
+        "remaining_worlds": 51,
+        "winning_set_signatures": 34,
+        "common_repairs": 0,
+        "accepting_worlds": null,
+        "classification": "ineligible"
+      },
+      "first_guaranteed_repair_turn": null,
+      "physical_goal_satisfied": false,
+      "submissions": [],
+      "measurements_used": 3,
+      "redundant_measurements": 1,
+      "measurements_after_guaranteed_repair": 0
+    },
+    {
+      "trace_id": "01M6A3YZN5ZT4GDTBAK76H68M5",
+      "directory": "screen-20261031T222346Z-wv93r58o",
+      "cohort": "initial_screen",
+      "task": "NEXUS smoke-S24",
+      "id": "S24",
+      "model": "minimax/minimax-m3",
+      "family": "compositional-repair-v1",
+      "inputs": {
+        "axis-version": 2,
+        "budget-profile": "diagnostic-plus6",
+        "discovery-level": 5,
+        "extended-diagnostics": true,
+        "generation-timing": true,
+        "planning-level": 1,
+        "resource-pressure": 1,
+        "science-family": "compositional-repair-v1",
+        "seed": "493",
+        "theory-level": 3
+      },
+      "kind": "Passed",
+      "model_parameters": {
+        "max-completion-tokens": 65536,
+        "provider": {
+          "require_parameters": true,
+          "allow_fallbacks": false
+        }
+      },
+      "disable_structured_output": true,
+      "budget": 36,
+      "accepted_actions": 32,
+      "tool_calls_started": 37,
+      "tool_calls_completed": 37,
+      "public_responses_replayed": 37,
+      "hash_records_matched": 4,
+      "protocol_errors": {},
+      "all_evidence_read": true,
+      "world_win": true,
+      "supported_world_win": true,
+      "request_seconds": 432.697161872,
+      "tool_seconds": 23.933393039,
+      "usage": {
+        "InputTokens": 1022953,
+        "OutputTokens": 118078,
+        "ReasoningTokens": 114731,
+        "InputCacheWriteTokens": 0,
+        "InputCacheReadTokens": 890852,
+        "InputTokenAccounting": "cache_tokens_included",
+        "OutputTokenAccounting": "reasoning_tokens_included"
+      },
+      "failure_message": null,
+      "pre_finalization_status": "won",
+      "new_attempt": false,
+      "outcome_class": "win",
+      "evidence_classification": "supported_win",
+      "world_termination_reason": "victory",
+      "terminal_response_stop_reason": "stop",
+      "actions_remaining": 4,
+      "rejected_world_actions": 0,
+      "final_evidence": {
+        "remaining_worlds": 2,
+        "winning_set_signatures": 1,
+        "common_repairs": 1,
+        "accepting_worlds": 2,
+        "classification": "guaranteed"
+      },
+      "first_guaranteed_repair_turn": 29,
+      "physical_goal_satisfied": true,
+      "submissions": [
+        {
+          "turn": 32,
+          "won": true,
+          "evidence": {
+            "remaining_worlds": 2,
+            "winning_set_signatures": 1,
+            "common_repairs": 1,
+            "accepting_worlds": 2,
+            "classification": "guaranteed"
+          }
+        }
+      ],
+      "measurements_used": 8,
+      "redundant_measurements": 0,
+      "measurements_after_guaranteed_repair": 0
+    },
+    {
+      "trace_id": "01M6A4DCZMWKE954F13ETFZ1XW",
+      "directory": "screen-20261031T222346Z-wv93r58o",
+      "cohort": "initial_screen",
+      "task": "NEXUS smoke-S13",
+      "id": "S13",
+      "model": "minimax/minimax-m3",
+      "family": "stateful-planning-v1",
+      "inputs": {
+        "axis-version": 2,
+        "budget-profile": "standard",
+        "discovery-level": 5,
+        "extended-diagnostics": true,
+        "generation-timing": true,
+        "planning-level": 0,
+        "resource-pressure": 2,
+        "science-family": "stateful-planning-v1",
+        "seed": "21",
+        "theory-level": 0
+      },
+      "kind": "Passed",
+      "model_parameters": {
+        "max-completion-tokens": 65536,
+        "provider": {
+          "require_parameters": true,
+          "allow_fallbacks": false
+        }
+      },
+      "disable_structured_output": true,
+      "budget": 11,
+      "accepted_actions": 11,
+      "tool_calls_started": 17,
+      "tool_calls_completed": 17,
+      "public_responses_replayed": 17,
+      "hash_records_matched": 3,
+      "protocol_errors": {},
+      "all_evidence_read": true,
+      "world_win": true,
+      "supported_world_win": true,
+      "request_seconds": 221.683951156,
+      "tool_seconds": 11.160418624,
+      "usage": {
+        "InputTokens": 400115,
+        "OutputTokens": 50473,
+        "ReasoningTokens": 49079,
+        "InputCacheWriteTokens": 0,
+        "InputCacheReadTokens": 343987,
+        "InputTokenAccounting": "cache_tokens_included",
+        "OutputTokenAccounting": "reasoning_tokens_included"
+      },
+      "failure_message": null,
+      "pre_finalization_status": "won",
+      "new_attempt": false,
+      "outcome_class": "win",
+      "evidence_classification": "supported_win",
+      "world_termination_reason": "victory",
+      "terminal_response_stop_reason": "stop",
+      "actions_remaining": 0,
+      "rejected_world_actions": 0,
+      "final_evidence": {
+        "remaining_worlds": 1,
+        "winning_set_signatures": 1,
+        "common_repairs": 1,
+        "accepting_worlds": 1,
+        "classification": "guaranteed"
+      },
+      "first_guaranteed_repair_turn": 10,
+      "physical_goal_satisfied": true,
+      "submissions": [
+        {
+          "turn": 11,
+          "won": true,
+          "evidence": {
+            "remaining_worlds": 1,
+            "winning_set_signatures": 1,
+            "common_repairs": 1,
+            "accepting_worlds": 1,
+            "classification": "guaranteed"
+          }
+        }
+      ],
+      "measurements_used": 9,
+      "redundant_measurements": 9,
+      "measurements_after_guaranteed_repair": 0,
+      "physical_cost_audit": {
+        "minimum_actions": 11,
+        "first_budget_infeasible_turn": null,
+        "minimum_at_stop": 0,
+        "excess_total": 0,
+        "physical_goal_at_stop": true,
+        "operations_noop": 0
+      }
+    },
+    {
+      "trace_id": "01M6A4MTNN83P8R1P8AT3JP2DD",
+      "directory": "screen-20261031T222346Z-wv93r58o",
+      "cohort": "initial_screen",
+      "task": "NEXUS smoke-S16",
+      "id": "S16",
+      "model": "minimax/minimax-m3",
+      "family": "stateful-planning-v1",
+      "inputs": {
+        "axis-version": 2,
+        "budget-profile": "standard",
+        "discovery-level": 5,
+        "extended-diagnostics": true,
+        "generation-timing": true,
+        "planning-level": 3,
+        "resource-pressure": 2,
+        "science-family": "stateful-planning-v1",
+        "seed": "21",
+        "theory-level": 0
+      },
+      "kind": "Passed",
+      "model_parameters": {
+        "max-completion-tokens": 65536,
+        "provider": {
+          "require_parameters": true,
+          "allow_fallbacks": false
+        }
+      },
+      "disable_structured_output": true,
+      "budget": 22,
+      "accepted_actions": 22,
+      "tool_calls_started": 28,
+      "tool_calls_completed": 28,
+      "public_responses_replayed": 28,
+      "hash_records_matched": 3,
+      "protocol_errors": {},
+      "all_evidence_read": true,
+      "world_win": true,
+      "supported_world_win": true,
+      "request_seconds": 360.858738239,
+      "tool_seconds": 19.230295567,
+      "usage": {
+        "InputTokens": 1624332,
+        "OutputTokens": 68404,
+        "ReasoningTokens": 66437,
+        "InputCacheWriteTokens": 0,
+        "InputCacheReadTokens": 1548673,
+        "InputTokenAccounting": "cache_tokens_included",
+        "OutputTokenAccounting": "reasoning_tokens_included"
+      },
+      "failure_message": null,
+      "pre_finalization_status": "won",
+      "new_attempt": false,
+      "outcome_class": "win",
+      "evidence_classification": "supported_win",
+      "world_termination_reason": "victory",
+      "terminal_response_stop_reason": "stop",
+      "actions_remaining": 0,
+      "rejected_world_actions": 0,
+      "final_evidence": {
+        "remaining_worlds": 1,
+        "winning_set_signatures": 1,
+        "common_repairs": 1,
+        "accepting_worlds": 1,
+        "classification": "guaranteed"
+      },
+      "first_guaranteed_repair_turn": 18,
+      "physical_goal_satisfied": true,
+      "submissions": [
+        {
+          "turn": 22,
+          "won": true,
+          "evidence": {
+            "remaining_worlds": 1,
+            "winning_set_signatures": 1,
+            "common_repairs": 1,
+            "accepting_worlds": 1,
+            "classification": "guaranteed"
+          }
+        }
+      ],
+      "measurements_used": 10,
+      "redundant_measurements": 10,
+      "measurements_after_guaranteed_repair": 0,
+      "physical_cost_audit": {
+        "minimum_actions": 22,
+        "first_budget_infeasible_turn": null,
+        "minimum_at_stop": 0,
+        "excess_total": 0,
+        "physical_goal_at_stop": true,
+        "operations_noop": 0
+      }
+    },
+    {
+      "trace_id": "01M6A50TQFGGHHGE6T50PWJRZ8",
+      "directory": "screen-20261031T222346Z-wv93r58o",
+      "cohort": "initial_screen",
+      "task": "NEXUS smoke-S17",
+      "id": "S17",
+      "model": "minimax/minimax-m3",
+      "family": "stateful-planning-v1",
+      "inputs": {
+        "axis-version": 2,
+        "budget-profile": "standard",
+        "discovery-level": 5,
+        "extended-diagnostics": true,
+        "generation-timing": true,
+        "planning-level": 3,
+        "resource-pressure": 1,
+        "science-family": "stateful-planning-v1",
+        "seed": "21",
+        "theory-level": 0
+      },
+      "kind": "Passed",
+      "model_parameters": {
+        "max-completion-tokens": 65536,
+        "provider": {
+          "require_parameters": true,
+          "allow_fallbacks": false
+        }
+      },
+      "disable_structured_output": true,
+      "budget": 33,
+      "accepted_actions": 24,
+      "tool_calls_started": 30,
+      "tool_calls_completed": 30,
+      "public_responses_replayed": 30,
+      "hash_records_matched": 3,
+      "protocol_errors": {},
+      "all_evidence_read": true,
+      "world_win": true,
+      "supported_world_win": true,
+      "request_seconds": 185.845584176,
+      "tool_seconds": 19.925493844,
+      "usage": {
+        "InputTokens": 599906,
+        "OutputTokens": 33635,
+        "ReasoningTokens": 31710,
+        "InputCacheWriteTokens": 0,
+        "InputCacheReadTokens": 558560,
+        "InputTokenAccounting": "cache_tokens_included",
+        "OutputTokenAccounting": "reasoning_tokens_included"
+      },
+      "failure_message": null,
+      "pre_finalization_status": "won",
+      "new_attempt": false,
+      "outcome_class": "win",
+      "evidence_classification": "supported_win",
+      "world_termination_reason": "victory",
+      "terminal_response_stop_reason": "stop",
+      "actions_remaining": 9,
+      "rejected_world_actions": 0,
+      "final_evidence": {
+        "remaining_worlds": 1,
+        "winning_set_signatures": 1,
+        "common_repairs": 1,
+        "accepting_worlds": 1,
+        "classification": "guaranteed"
+      },
+      "first_guaranteed_repair_turn": 20,
+      "physical_goal_satisfied": true,
+      "submissions": [
+        {
+          "turn": 24,
+          "won": true,
+          "evidence": {
+            "remaining_worlds": 1,
+            "winning_set_signatures": 1,
+            "common_repairs": 1,
+            "accepting_worlds": 1,
+            "classification": "guaranteed"
+          }
+        }
+      ],
+      "measurements_used": 10,
+      "redundant_measurements": 10,
+      "measurements_after_guaranteed_repair": 0,
+      "physical_cost_audit": {
+        "minimum_actions": 22,
+        "first_budget_infeasible_turn": null,
+        "minimum_at_stop": 0,
+        "excess_total": 2,
+        "physical_goal_at_stop": true,
+        "operations_noop": 0
+      }
+    },
+    {
+      "trace_id": "01M6A9YP91FCVCGCX0YRH6MZXV",
+      "directory": "screen-20261101T005919Z-efxhu3xa",
+      "cohort": "repeat",
+      "task": "NEXUS interference-09",
+      "id": "09",
+      "model": "z-ai/glm-5.2",
+      "family": "stateful-interference-v1",
+      "inputs": {
+        "axis-version": 2,
+        "budget-profile": "standard",
+        "discovery-level": 0,
+        "extended-diagnostics": true,
+        "generation-timing": true,
+        "ontology-options": "{\"coupling\":\"independent\",\"horizon\":\"short\"}",
+        "planning-level": 0,
+        "resource-pressure": 2,
+        "science-family": "stateful-interference-v1",
+        "seed": "101",
+        "theory-level": 0
+      },
+      "kind": "Passed",
+      "model_parameters": {
+        "max-completion-tokens": 65536,
+        "reasoning-effort": "xhigh",
+        "provider": {
+          "require_parameters": true,
+          "allow_fallbacks": false
+        }
+      },
+      "disable_structured_output": true,
+      "budget": 17,
+      "accepted_actions": 17,
+      "tool_calls_started": 23,
+      "tool_calls_completed": 23,
+      "public_responses_replayed": 23,
+      "hash_records_matched": 0,
+      "protocol_errors": {},
+      "all_evidence_read": true,
+      "world_win": true,
+      "supported_world_win": true,
+      "request_seconds": 148.592865447,
+      "tool_seconds": 15.178728639,
+      "usage": {
+        "InputTokens": 447120,
+        "OutputTokens": 24485,
+        "ReasoningTokens": 23984,
+        "InputCacheWriteTokens": 0,
+        "InputCacheReadTokens": 416687,
+        "InputTokenAccounting": "cache_tokens_included",
+        "OutputTokenAccounting": "reasoning_tokens_included"
+      },
+      "failure_message": null,
+      "pre_finalization_status": "won",
+      "new_attempt": true,
+      "outcome_class": "win",
+      "evidence_classification": "supported_win",
+      "world_termination_reason": "victory",
+      "terminal_response_stop_reason": "stop",
+      "actions_remaining": 0,
+      "rejected_world_actions": 0,
+      "final_evidence": {
+        "remaining_worlds": 1,
+        "winning_set_signatures": 1,
+        "common_repairs": 1,
+        "accepting_worlds": 1,
+        "classification": "guaranteed"
+      },
+      "first_guaranteed_repair_turn": 16,
+      "physical_goal_satisfied": true,
+      "submissions": [
+        {
+          "turn": 17,
+          "won": true,
+          "evidence": {
+            "remaining_worlds": 1,
+            "winning_set_signatures": 1,
+            "common_repairs": 1,
+            "accepting_worlds": 1,
+            "classification": "guaranteed"
+          }
+        }
+      ],
+      "measurements_used": 15,
+      "redundant_measurements": 15,
+      "measurements_after_guaranteed_repair": 0,
+      "physical_cost_audit": {
+        "minimum_actions": 17,
+        "first_budget_infeasible_turn": null,
+        "minimum_at_stop": 0,
+        "excess_total": 0,
+        "physical_goal_at_stop": true,
+        "operations_noop": 0
+      }
+    },
+    {
+      "trace_id": "01M6AA436KP9WFZWSWQMF5BE28",
+      "directory": "screen-20261101T005919Z-efxhu3xa",
+      "cohort": "repeat",
+      "task": "NEXUS interference-11",
+      "id": "11",
+      "model": "z-ai/glm-5.2",
+      "family": "stateful-interference-v1",
+      "inputs": {
+        "axis-version": 2,
+        "budget-profile": "standard",
+        "discovery-level": 0,
+        "extended-diagnostics": true,
+        "generation-timing": true,
+        "ontology-options": "{\"coupling\":\"coupled\",\"horizon\":\"long\"}",
+        "planning-level": 0,
+        "resource-pressure": 2,
+        "science-family": "stateful-interference-v1",
+        "seed": "101",
+        "theory-level": 0
+      },
+      "kind": "Error",
+      "model_parameters": {
+        "max-completion-tokens": 65536,
+        "reasoning-effort": "xhigh",
+        "provider": {
+          "require_parameters": true,
+          "allow_fallbacks": false
+        }
+      },
+      "disable_structured_output": true,
+      "budget": 35,
+      "accepted_actions": 0,
+      "tool_calls_started": 6,
+      "tool_calls_completed": 6,
+      "public_responses_replayed": 6,
+      "hash_records_matched": 0,
+      "protocol_errors": {},
+      "all_evidence_read": true,
+      "world_win": false,
+      "supported_world_win": false,
+      "request_seconds": 320.911168193,
+      "tool_seconds": 3.898108381,
+      "usage": {
+        "InputTokens": 7586,
+        "OutputTokens": 65690,
+        "ReasoningTokens": 65690,
+        "InputCacheWriteTokens": 0,
+        "InputCacheReadTokens": 3966,
+        "InputTokenAccounting": "cache_tokens_included",
+        "OutputTokenAccounting": "reasoning_tokens_included"
+      },
+      "failure_message": "failed to generate response: model response contained no actionable content",
+      "pre_finalization_status": "active",
+      "new_attempt": true,
+      "outcome_class": "response_length",
+      "evidence_classification": "not_won",
+      "world_termination_reason": "active_at_snapshot",
+      "terminal_response_stop_reason": "length",
+      "actions_remaining": 35,
+      "rejected_world_actions": 0,
+      "final_evidence": {
+        "remaining_worlds": 1,
+        "winning_set_signatures": 1,
+        "common_repairs": 0,
+        "accepting_worlds": null,
+        "classification": "ineligible"
+      },
+      "first_guaranteed_repair_turn": null,
+      "physical_goal_satisfied": false,
+      "submissions": [],
+      "measurements_used": 0,
+      "redundant_measurements": 0,
+      "measurements_after_guaranteed_repair": 0,
+      "physical_cost_audit": {
+        "minimum_actions": 35,
+        "first_budget_infeasible_turn": null,
+        "minimum_at_stop": 35,
+        "excess_total": 0,
+        "physical_goal_at_stop": false,
+        "operations_noop": 0
+      }
+    },
+    {
+      "trace_id": "01M6AAE87P6HH63NN1Q5GQ3HRA",
+      "directory": "screen-20261101T005919Z-efxhu3xa",
+      "cohort": "repeat",
+      "task": "NEXUS interference-25",
+      "id": "25",
+      "model": "z-ai/glm-5.2",
+      "family": "stateful-interference-v1",
+      "inputs": {
+        "axis-version": 2,
+        "budget-profile": "standard",
+        "discovery-level": 0,
+        "extended-diagnostics": true,
+        "generation-timing": true,
+        "ontology-options": "{\"coupling\":\"independent\",\"horizon\":\"short\"}",
+        "planning-level": 0,
+        "resource-pressure": 1,
+        "science-family": "stateful-interference-v1",
+        "seed": "101",
+        "theory-level": 0
+      },
+      "kind": "Passed",
+      "model_parameters": {
+        "max-completion-tokens": 65536,
+        "reasoning-effort": "xhigh",
+        "provider": {
+          "require_parameters": true,
+          "allow_fallbacks": false
+        }
+      },
+      "disable_structured_output": true,
+      "budget": 26,
+      "accepted_actions": 17,
+      "tool_calls_started": 23,
+      "tool_calls_completed": 23,
+      "public_responses_replayed": 23,
+      "hash_records_matched": 0,
+      "protocol_errors": {},
+      "all_evidence_read": true,
+      "world_win": true,
+      "supported_world_win": true,
+      "request_seconds": 165.649746606,
+      "tool_seconds": 14.65738407,
+      "usage": {
+        "InputTokens": 597981,
+        "OutputTokens": 32139,
+        "ReasoningTokens": 32133,
+        "InputCacheWriteTokens": 0,
+        "InputCacheReadTokens": 561774,
+        "InputTokenAccounting": "cache_tokens_included",
+        "OutputTokenAccounting": "reasoning_tokens_included"
+      },
+      "failure_message": null,
+      "pre_finalization_status": "won",
+      "new_attempt": true,
+      "outcome_class": "win",
+      "evidence_classification": "supported_win",
+      "world_termination_reason": "victory",
+      "terminal_response_stop_reason": "stop",
+      "actions_remaining": 9,
+      "rejected_world_actions": 0,
+      "final_evidence": {
+        "remaining_worlds": 1,
+        "winning_set_signatures": 1,
+        "common_repairs": 1,
+        "accepting_worlds": 1,
+        "classification": "guaranteed"
+      },
+      "first_guaranteed_repair_turn": 16,
+      "physical_goal_satisfied": true,
+      "submissions": [
+        {
+          "turn": 17,
+          "won": true,
+          "evidence": {
+            "remaining_worlds": 1,
+            "winning_set_signatures": 1,
+            "common_repairs": 1,
+            "accepting_worlds": 1,
+            "classification": "guaranteed"
+          }
+        }
+      ],
+      "measurements_used": 15,
+      "redundant_measurements": 15,
+      "measurements_after_guaranteed_repair": 0,
+      "physical_cost_audit": {
+        "minimum_actions": 17,
+        "first_budget_infeasible_turn": null,
+        "minimum_at_stop": 0,
+        "excess_total": 0,
+        "physical_goal_at_stop": true,
+        "operations_noop": 0
+      }
+    },
+    {
+      "trace_id": "01M6AAM4MMBAM7T8MXBPPJCV90",
+      "directory": "screen-20261101T005919Z-efxhu3xa",
+      "cohort": "repeat",
+      "task": "NEXUS interference-27",
+      "id": "27",
+      "model": "z-ai/glm-5.2",
+      "family": "stateful-interference-v1",
+      "inputs": {
+        "axis-version": 2,
+        "budget-profile": "standard",
+        "discovery-level": 0,
+        "extended-diagnostics": true,
+        "generation-timing": true,
+        "ontology-options": "{\"coupling\":\"coupled\",\"horizon\":\"long\"}",
+        "planning-level": 0,
+        "resource-pressure": 1,
+        "science-family": "stateful-interference-v1",
+        "seed": "101",
+        "theory-level": 0
+      },
+      "kind": "Error",
+      "model_parameters": {
+        "max-completion-tokens": 65536,
+        "reasoning-effort": "xhigh",
+        "provider": {
+          "require_parameters": true,
+          "allow_fallbacks": false
+        }
+      },
+      "disable_structured_output": true,
+      "budget": 53,
+      "accepted_actions": 0,
+      "tool_calls_started": 6,
+      "tool_calls_completed": 6,
+      "public_responses_replayed": 6,
+      "hash_records_matched": 0,
+      "protocol_errors": {},
+      "all_evidence_read": true,
+      "world_win": false,
+      "supported_world_win": false,
+      "request_seconds": 318.954746173,
+      "tool_seconds": 4.025016877,
+      "usage": {
+        "InputTokens": 7387,
+        "OutputTokens": 65709,
+        "ReasoningTokens": 65709,
+        "InputCacheWriteTokens": 0,
+        "InputCacheReadTokens": 5117,
+        "InputTokenAccounting": "cache_tokens_included",
+        "OutputTokenAccounting": "reasoning_tokens_included"
+      },
+      "failure_message": "failed to generate response: model response contained no actionable content",
+      "pre_finalization_status": "active",
+      "new_attempt": true,
+      "outcome_class": "response_length",
+      "evidence_classification": "not_won",
+      "world_termination_reason": "active_at_snapshot",
+      "terminal_response_stop_reason": "length",
+      "actions_remaining": 53,
+      "rejected_world_actions": 0,
+      "final_evidence": {
+        "remaining_worlds": 1,
+        "winning_set_signatures": 1,
+        "common_repairs": 0,
+        "accepting_worlds": null,
+        "classification": "ineligible"
+      },
+      "first_guaranteed_repair_turn": null,
+      "physical_goal_satisfied": false,
+      "submissions": [],
+      "measurements_used": 0,
+      "redundant_measurements": 0,
+      "measurements_after_guaranteed_repair": 0,
+      "physical_cost_audit": {
+        "minimum_actions": 35,
+        "first_budget_infeasible_turn": null,
+        "minimum_at_stop": 35,
+        "excess_total": 0,
+        "physical_goal_at_stop": false,
+        "operations_noop": 0
+      }
+    },
+    {
+      "trace_id": "01M6AAY90RNHP9A0MSHJDRCZEM",
+      "directory": "screen-20261101T005919Z-efxhu3xa",
+      "cohort": "repeat",
+      "task": "NEXUS smoke-S22",
+      "id": "S22",
+      "model": "z-ai/glm-5.2",
+      "family": "compositional-repair-v1",
+      "inputs": {
+        "axis-version": 2,
+        "budget-profile": "standard",
+        "discovery-level": 5,
+        "extended-diagnostics": true,
+        "generation-timing": true,
+        "planning-level": 1,
+        "resource-pressure": 1,
+        "science-family": "compositional-repair-v1",
+        "seed": "438",
+        "theory-level": 3
+      },
+      "kind": "Error",
+      "model_parameters": {
+        "max-completion-tokens": 65536,
+        "reasoning-effort": "xhigh",
+        "provider": {
+          "require_parameters": true,
+          "allow_fallbacks": false
+        }
+      },
+      "disable_structured_output": true,
+      "budget": 30,
+      "accepted_actions": 19,
+      "tool_calls_started": 24,
+      "tool_calls_completed": 24,
+      "public_responses_replayed": 24,
+      "hash_records_matched": 19,
+      "protocol_errors": {},
+      "all_evidence_read": true,
+      "world_win": false,
+      "supported_world_win": false,
+      "request_seconds": 447.817779698,
+      "tool_seconds": 15.961568235,
+      "usage": {
+        "InputTokens": 460987,
+        "OutputTokens": 91888,
+        "ReasoningTokens": 91688,
+        "InputCacheWriteTokens": 0,
+        "InputCacheReadTokens": 449133,
+        "InputTokenAccounting": "cache_tokens_included",
+        "OutputTokenAccounting": "reasoning_tokens_included"
+      },
+      "failure_message": "failed to generate response: model response contained no actionable content",
+      "pre_finalization_status": "active",
+      "new_attempt": true,
+      "outcome_class": "response_length",
+      "evidence_classification": "not_won",
+      "world_termination_reason": "active_at_snapshot",
+      "terminal_response_stop_reason": "length",
+      "actions_remaining": 11,
+      "rejected_world_actions": 0,
+      "final_evidence": {
+        "remaining_worlds": 12,
+        "winning_set_signatures": 8,
+        "common_repairs": 0,
+        "accepting_worlds": null,
+        "classification": "ineligible"
+      },
+      "first_guaranteed_repair_turn": null,
+      "physical_goal_satisfied": false,
+      "submissions": [],
+      "measurements_used": 5,
+      "redundant_measurements": 0,
+      "measurements_after_guaranteed_repair": 0
+    },
+    {
+      "trace_id": "01M6ABCTQ70XMRQYY5RBYP1VVE",
+      "directory": "screen-20261101T005919Z-efxhu3xa",
+      "cohort": "repeat",
+      "task": "NEXUS smoke-S23",
+      "id": "S23",
+      "model": "z-ai/glm-5.2",
+      "family": "compositional-repair-v1",
+      "inputs": {
+        "axis-version": 2,
+        "budget-profile": "diagnostic-plus6",
+        "discovery-level": 5,
+        "extended-diagnostics": true,
+        "generation-timing": true,
+        "planning-level": 1,
+        "resource-pressure": 1,
+        "science-family": "compositional-repair-v1",
+        "seed": "438",
+        "theory-level": 3
+      },
+      "kind": "Passed",
+      "model_parameters": {
+        "max-completion-tokens": 65536,
+        "reasoning-effort": "xhigh",
+        "provider": {
+          "require_parameters": true,
+          "allow_fallbacks": false
+        }
+      },
+      "disable_structured_output": true,
+      "budget": 36,
+      "accepted_actions": 34,
+      "tool_calls_started": 40,
+      "tool_calls_completed": 40,
+      "public_responses_replayed": 40,
+      "hash_records_matched": 4,
+      "protocol_errors": {},
+      "all_evidence_read": true,
+      "world_win": true,
+      "supported_world_win": true,
+      "request_seconds": 738.430790203,
+      "tool_seconds": 26.368582564,
+      "usage": {
+        "InputTokens": 2578367,
+        "OutputTokens": 127593,
+        "ReasoningTokens": 126439,
+        "InputCacheWriteTokens": 0,
+        "InputCacheReadTokens": 2561436,
+        "InputTokenAccounting": "cache_tokens_included",
+        "OutputTokenAccounting": "reasoning_tokens_included"
+      },
+      "failure_message": null,
+      "pre_finalization_status": "won",
+      "new_attempt": true,
+      "outcome_class": "win",
+      "evidence_classification": "supported_win",
+      "world_termination_reason": "victory",
+      "terminal_response_stop_reason": "stop",
+      "actions_remaining": 2,
+      "rejected_world_actions": 0,
+      "final_evidence": {
+        "remaining_worlds": 1,
+        "winning_set_signatures": 1,
+        "common_repairs": 1,
+        "accepting_worlds": 1,
+        "classification": "guaranteed"
+      },
+      "first_guaranteed_repair_turn": 31,
+      "physical_goal_satisfied": true,
+      "submissions": [
+        {
+          "turn": 34,
+          "won": true,
+          "evidence": {
+            "remaining_worlds": 1,
+            "winning_set_signatures": 1,
+            "common_repairs": 1,
+            "accepting_worlds": 1,
+            "classification": "guaranteed"
+          }
+        }
+      ],
+      "measurements_used": 10,
+      "redundant_measurements": 2,
+      "measurements_after_guaranteed_repair": 0
+    },
+    {
+      "trace_id": "01M6AGA8C3CVN6NG9R5XK8JW81",
+      "directory": "screen-20261101T025122Z-t7zhi0ds",
+      "cohort": "repeat",
+      "task": "NEXUS interference-09",
+      "id": "09",
+      "model": "minimax/minimax-m3",
+      "family": "stateful-interference-v1",
+      "inputs": {
+        "axis-version": 2,
+        "budget-profile": "standard",
+        "discovery-level": 0,
+        "extended-diagnostics": true,
+        "generation-timing": true,
+        "ontology-options": "{\"coupling\":\"independent\",\"horizon\":\"short\"}",
+        "planning-level": 0,
+        "resource-pressure": 2,
+        "science-family": "stateful-interference-v1",
+        "seed": "101",
+        "theory-level": 0
+      },
+      "kind": "Error",
+      "model_parameters": {
+        "max-completion-tokens": 65536,
+        "provider": {
+          "require_parameters": true,
+          "allow_fallbacks": false
+        }
+      },
+      "disable_structured_output": true,
+      "budget": 17,
+      "accepted_actions": 0,
+      "tool_calls_started": 2,
+      "tool_calls_completed": 2,
+      "public_responses_replayed": 2,
+      "hash_records_matched": 0,
+      "protocol_errors": {},
+      "all_evidence_read": false,
+      "world_win": false,
+      "supported_world_win": false,
+      "request_seconds": 8.496828351,
+      "tool_seconds": 1.378744394,
+      "usage": {
+        "InputTokens": 1532,
+        "OutputTokens": 73,
+        "ReasoningTokens": 0,
+        "InputCacheWriteTokens": 0,
+        "InputCacheReadTokens": 162,
+        "InputTokenAccounting": "cache_tokens_included",
+        "OutputTokenAccounting": "reasoning_tokens_included"
+      },
+      "failure_message": "failed to generate response: model response contained no response candidates",
+      "pre_finalization_status": "active",
+      "new_attempt": true,
+      "outcome_class": "no_response_candidates",
+      "evidence_classification": "not_won",
+      "world_termination_reason": "active_at_snapshot",
+      "terminal_response_stop_reason": null,
+      "actions_remaining": 17,
+      "rejected_world_actions": 0,
+      "final_evidence": {
+        "remaining_worlds": 1,
+        "winning_set_signatures": 1,
+        "common_repairs": 0,
+        "accepting_worlds": null,
+        "classification": "ineligible"
+      },
+      "first_guaranteed_repair_turn": null,
+      "physical_goal_satisfied": false,
+      "submissions": [],
+      "measurements_used": 0,
+      "redundant_measurements": 0,
+      "measurements_after_guaranteed_repair": 0,
+      "physical_cost_audit": {
+        "minimum_actions": 17,
+        "first_budget_infeasible_turn": null,
+        "minimum_at_stop": 17,
+        "excess_total": 0,
+        "physical_goal_at_stop": false,
+        "operations_noop": 0
+      }
+    },
+    {
+      "trace_id": "01M6AGASM9TR57BPZ323B9DVWF",
+      "directory": "screen-20261101T025122Z-t7zhi0ds",
+      "cohort": "repeat",
+      "task": "NEXUS interference-11",
+      "id": "11",
+      "model": "minimax/minimax-m3",
+      "family": "stateful-interference-v1",
+      "inputs": {
+        "axis-version": 2,
+        "budget-profile": "standard",
+        "discovery-level": 0,
+        "extended-diagnostics": true,
+        "generation-timing": true,
+        "ontology-options": "{\"coupling\":\"coupled\",\"horizon\":\"long\"}",
+        "planning-level": 0,
+        "resource-pressure": 2,
+        "science-family": "stateful-interference-v1",
+        "seed": "101",
+        "theory-level": 0
+      },
+      "kind": "Error",
+      "model_parameters": {
+        "max-completion-tokens": 65536,
+        "provider": {
+          "require_parameters": true,
+          "allow_fallbacks": false
+        }
+      },
+      "disable_structured_output": true,
+      "budget": 35,
+      "accepted_actions": 0,
+      "tool_calls_started": 4,
+      "tool_calls_completed": 4,
+      "public_responses_replayed": 4,
+      "hash_records_matched": 0,
+      "protocol_errors": {},
+      "all_evidence_read": false,
+      "world_win": false,
+      "supported_world_win": false,
+      "request_seconds": 7.421757294,
+      "tool_seconds": 2.471596074,
+      "usage": {
+        "InputTokens": 4591,
+        "OutputTokens": 142,
+        "ReasoningTokens": 0,
+        "InputCacheWriteTokens": 0,
+        "InputCacheReadTokens": 3063,
+        "InputTokenAccounting": "cache_tokens_included",
+        "OutputTokenAccounting": "reasoning_tokens_included"
+      },
+      "failure_message": "failed to generate response: model response contained no response candidates",
+      "pre_finalization_status": "active",
+      "new_attempt": true,
+      "outcome_class": "no_response_candidates",
+      "evidence_classification": "not_won",
+      "world_termination_reason": "active_at_snapshot",
+      "terminal_response_stop_reason": null,
+      "actions_remaining": 35,
+      "rejected_world_actions": 0,
+      "final_evidence": {
+        "remaining_worlds": 1,
+        "winning_set_signatures": 1,
+        "common_repairs": 0,
+        "accepting_worlds": null,
+        "classification": "ineligible"
+      },
+      "first_guaranteed_repair_turn": null,
+      "physical_goal_satisfied": false,
+      "submissions": [],
+      "measurements_used": 0,
+      "redundant_measurements": 0,
+      "measurements_after_guaranteed_repair": 0,
+      "physical_cost_audit": {
+        "minimum_actions": 35,
+        "first_budget_infeasible_turn": null,
+        "minimum_at_stop": 35,
+        "excess_total": 0,
+        "physical_goal_at_stop": false,
+        "operations_noop": 0
+      }
+    },
+    {
+      "trace_id": "01M6AGBBGTK7M009650YX618YY",
+      "directory": "screen-20261101T025122Z-t7zhi0ds",
+      "cohort": "repeat",
+      "task": "NEXUS interference-25",
+      "id": "25",
+      "model": "minimax/minimax-m3",
+      "family": "stateful-interference-v1",
+      "inputs": {
+        "axis-version": 2,
+        "budget-profile": "standard",
+        "discovery-level": 0,
+        "extended-diagnostics": true,
+        "generation-timing": true,
+        "ontology-options": "{\"coupling\":\"independent\",\"horizon\":\"short\"}",
+        "planning-level": 0,
+        "resource-pressure": 1,
+        "science-family": "stateful-interference-v1",
+        "seed": "101",
+        "theory-level": 0
+      },
+      "kind": "Error",
+      "model_parameters": {
+        "max-completion-tokens": 65536,
+        "provider": {
+          "require_parameters": true,
+          "allow_fallbacks": false
+        }
+      },
+      "disable_structured_output": true,
+      "budget": 26,
+      "accepted_actions": 12,
+      "tool_calls_started": 22,
+      "tool_calls_completed": 22,
+      "public_responses_replayed": 20,
+      "hash_records_matched": 12,
+      "protocol_errors": {
+        "invalid_json_arguments": 2
+      },
+      "all_evidence_read": true,
+      "world_win": false,
+      "supported_world_win": false,
+      "request_seconds": 171.317565574,
+      "tool_seconds": 13.441274375,
+      "usage": {
+        "InputTokens": 112448,
+        "OutputTokens": 21284,
+        "ReasoningTokens": 8,
+        "InputCacheWriteTokens": 0,
+        "InputCacheReadTokens": 86490,
+        "InputTokenAccounting": "cache_tokens_included",
+        "OutputTokenAccounting": "reasoning_tokens_included"
+      },
+      "failure_message": "failed to generate response: model response contained no response candidates",
+      "pre_finalization_status": "active",
+      "new_attempt": true,
+      "outcome_class": "no_response_candidates",
+      "evidence_classification": "not_won",
+      "world_termination_reason": "active_at_snapshot",
+      "terminal_response_stop_reason": null,
+      "actions_remaining": 14,
+      "rejected_world_actions": 0,
+      "final_evidence": {
+        "remaining_worlds": 1,
+        "winning_set_signatures": 1,
+        "common_repairs": 0,
+        "accepting_worlds": 0,
+        "classification": "contradicted"
+      },
+      "first_guaranteed_repair_turn": null,
+      "physical_goal_satisfied": false,
+      "submissions": [],
+      "measurements_used": 11,
+      "redundant_measurements": 11,
+      "measurements_after_guaranteed_repair": 0,
+      "physical_cost_audit": {
+        "minimum_actions": 17,
+        "first_budget_infeasible_turn": null,
+        "minimum_at_stop": 13,
+        "excess_total": 8,
+        "physical_goal_at_stop": false,
+        "operations_noop": 0
+      }
+    },
+    {
+      "trace_id": "01M6AGHARMX2PF0DVF7AE1ND5P",
+      "directory": "screen-20261101T025122Z-t7zhi0ds",
+      "cohort": "repeat",
+      "task": "NEXUS interference-27",
+      "id": "27",
+      "model": "minimax/minimax-m3",
+      "family": "stateful-interference-v1",
+      "inputs": {
+        "axis-version": 2,
+        "budget-profile": "standard",
+        "discovery-level": 0,
+        "extended-diagnostics": true,
+        "generation-timing": true,
+        "ontology-options": "{\"coupling\":\"coupled\",\"horizon\":\"long\"}",
+        "planning-level": 0,
+        "resource-pressure": 1,
+        "science-family": "stateful-interference-v1",
+        "seed": "101",
+        "theory-level": 0
+      },
+      "kind": "Failed",
+      "model_parameters": {
+        "max-completion-tokens": 65536,
+        "provider": {
+          "require_parameters": true,
+          "allow_fallbacks": false
+        }
+      },
+      "disable_structured_output": true,
+      "budget": 53,
+      "accepted_actions": 7,
+      "tool_calls_started": 13,
+      "tool_calls_completed": 13,
+      "public_responses_replayed": 13,
+      "hash_records_matched": 2,
+      "protocol_errors": {},
+      "all_evidence_read": true,
+      "world_win": false,
+      "supported_world_win": false,
+      "request_seconds": 392.227053246,
+      "tool_seconds": 8.439713681,
+      "usage": {
+        "InputTokens": 19481,
+        "OutputTokens": 66208,
+        "ReasoningTokens": 0,
+        "InputCacheWriteTokens": 0,
+        "InputCacheReadTokens": 13013,
+        "InputTokenAccounting": "cache_tokens_included",
+        "OutputTokenAccounting": "reasoning_tokens_included"
+      },
+      "failure_message": null,
+      "pre_finalization_status": "active",
+      "new_attempt": true,
+      "outcome_class": "response_length",
+      "evidence_classification": "not_won",
+      "world_termination_reason": "harness_finalization",
+      "terminal_response_stop_reason": "length",
+      "actions_remaining": 46,
+      "rejected_world_actions": 0,
+      "final_evidence": {
+        "remaining_worlds": 1,
+        "winning_set_signatures": 1,
+        "common_repairs": 0,
+        "accepting_worlds": 0,
+        "classification": "contradicted"
+      },
+      "first_guaranteed_repair_turn": null,
+      "physical_goal_satisfied": false,
+      "submissions": [],
+      "measurements_used": 6,
+      "redundant_measurements": 6,
+      "measurements_after_guaranteed_repair": 0,
+      "physical_cost_audit": {
+        "minimum_actions": 35,
+        "first_budget_infeasible_turn": null,
+        "minimum_at_stop": 34,
+        "excess_total": 6,
+        "physical_goal_at_stop": false,
+        "operations_noop": 0
+      }
+    },
+    {
+      "trace_id": "01M6AGXWG0Z58RFX91NGZM73NK",
+      "directory": "screen-20261101T025122Z-t7zhi0ds",
+      "cohort": "repeat",
+      "task": "NEXUS smoke-S22",
+      "id": "S22",
+      "model": "minimax/minimax-m3",
+      "family": "compositional-repair-v1",
+      "inputs": {
+        "axis-version": 2,
+        "budget-profile": "standard",
+        "discovery-level": 5,
+        "extended-diagnostics": true,
+        "generation-timing": true,
+        "planning-level": 1,
+        "resource-pressure": 1,
+        "science-family": "compositional-repair-v1",
+        "seed": "438",
+        "theory-level": 3
+      },
+      "kind": "Failed",
+      "model_parameters": {
+        "max-completion-tokens": 65536,
+        "provider": {
+          "require_parameters": true,
+          "allow_fallbacks": false
+        }
+      },
+      "disable_structured_output": true,
+      "budget": 30,
+      "accepted_actions": 30,
+      "tool_calls_started": 37,
+      "tool_calls_completed": 37,
+      "public_responses_replayed": 37,
+      "hash_records_matched": 5,
+      "protocol_errors": {},
+      "all_evidence_read": true,
+      "world_win": false,
+      "supported_world_win": false,
+      "request_seconds": 106.296201983,
+      "tool_seconds": 23.854629763,
+      "usage": {
+        "InputTokens": 363455,
+        "OutputTokens": 3106,
+        "ReasoningTokens": 0,
+        "InputCacheWriteTokens": 0,
+        "InputCacheReadTokens": 346496,
+        "InputTokenAccounting": "cache_tokens_included",
+        "OutputTokenAccounting": "reasoning_tokens_included"
+      },
+      "failure_message": null,
+      "pre_finalization_status": "failed",
+      "new_attempt": true,
+      "outcome_class": "world_action_budget",
+      "evidence_classification": "not_won",
+      "world_termination_reason": "action_budget",
+      "terminal_response_stop_reason": "stop",
+      "actions_remaining": 0,
+      "rejected_world_actions": 0,
+      "final_evidence": {
+        "remaining_worlds": 17,
+        "winning_set_signatures": 13,
+        "common_repairs": 0,
+        "accepting_worlds": null,
+        "classification": "ineligible"
+      },
+      "first_guaranteed_repair_turn": null,
+      "physical_goal_satisfied": false,
+      "submissions": [],
+      "measurements_used": 8,
+      "redundant_measurements": 2,
+      "measurements_after_guaranteed_repair": 0
+    },
+    {
+      "trace_id": "01M6AH28H3JF9H4DDV31S0X5DN",
+      "directory": "screen-20261101T025122Z-t7zhi0ds",
+      "cohort": "repeat",
+      "task": "NEXUS smoke-S23",
+      "id": "S23",
+      "model": "minimax/minimax-m3",
+      "family": "compositional-repair-v1",
+      "inputs": {
+        "axis-version": 2,
+        "budget-profile": "diagnostic-plus6",
+        "discovery-level": 5,
+        "extended-diagnostics": true,
+        "generation-timing": true,
+        "planning-level": 1,
+        "resource-pressure": 1,
+        "science-family": "compositional-repair-v1",
+        "seed": "438",
+        "theory-level": 3
+      },
+      "kind": "Failed",
+      "model_parameters": {
+        "max-completion-tokens": 65536,
+        "provider": {
+          "require_parameters": true,
+          "allow_fallbacks": false
+        }
+      },
+      "disable_structured_output": true,
+      "budget": 36,
+      "accepted_actions": 15,
+      "tool_calls_started": 25,
+      "tool_calls_completed": 25,
+      "public_responses_replayed": 23,
+      "hash_records_matched": 7,
+      "protocol_errors": {
+        "missing_operation": 2
+      },
+      "all_evidence_read": true,
+      "world_win": false,
+      "supported_world_win": false,
+      "request_seconds": 487.034877494,
+      "tool_seconds": 16.606836799,
+      "usage": {
+        "InputTokens": 221807,
+        "OutputTokens": 81823,
+        "ReasoningTokens": 0,
+        "InputCacheWriteTokens": 0,
+        "InputCacheReadTokens": 212544,
+        "InputTokenAccounting": "cache_tokens_included",
+        "OutputTokenAccounting": "reasoning_tokens_included"
+      },
+      "failure_message": null,
+      "pre_finalization_status": "active",
+      "new_attempt": true,
+      "outcome_class": "response_length",
+      "evidence_classification": "not_won",
+      "world_termination_reason": "harness_finalization",
+      "terminal_response_stop_reason": "length",
+      "actions_remaining": 21,
+      "rejected_world_actions": 2,
+      "final_evidence": {
+        "remaining_worlds": 51,
+        "winning_set_signatures": 34,
+        "common_repairs": 0,
+        "accepting_worlds": null,
+        "classification": "ineligible"
+      },
+      "first_guaranteed_repair_turn": null,
+      "physical_goal_satisfied": false,
+      "submissions": [],
+      "measurements_used": 4,
+      "redundant_measurements": 2,
+      "measurements_after_guaranteed_repair": 0
+    },
+    {
+      "trace_id": "01M6BPRYD48G1YDBW0NF0MRF1Q",
+      "directory": "screen-20261101T140119Z-1231vdm2",
+      "cohort": "repeat",
+      "task": "NEXUS smoke-S08",
+      "id": "S08",
+      "model": "z-ai/glm-5.2",
+      "family": "model-revision-v1",
+      "inputs": {
+        "axis-version": 2,
+        "budget-profile": "standard",
+        "discovery-level": 5,
+        "extended-diagnostics": true,
+        "generation-timing": true,
+        "ontology-options": "{\"consistency_check\":\"off\",\"finish_policy\":\"recoverable\",\"guidance\":\"principles\"}",
+        "planning-level": 0,
+        "resource-pressure": 1,
+        "science-family": "model-revision-v1",
+        "seed": "5866",
+        "theory-level": 3
+      },
+      "kind": "Error",
+      "model_parameters": {
+        "max-completion-tokens": 65536,
+        "reasoning-effort": "xhigh",
+        "provider": {
+          "require_parameters": true,
+          "allow_fallbacks": false
+        }
+      },
+      "disable_structured_output": true,
+      "budget": 64,
+      "accepted_actions": 41,
+      "tool_calls_started": 46,
+      "tool_calls_completed": 46,
+      "public_responses_replayed": 46,
+      "hash_records_matched": 20,
+      "protocol_errors": {},
+      "all_evidence_read": true,
+      "world_win": false,
+      "supported_world_win": false,
+      "request_seconds": 885.880638226,
+      "tool_seconds": 31.652072975,
+      "usage": {
+        "InputTokens": 2050958,
+        "OutputTokens": 164747,
+        "ReasoningTokens": 163557,
+        "InputCacheWriteTokens": 0,
+        "InputCacheReadTokens": 2011159,
+        "InputTokenAccounting": "cache_tokens_included",
+        "OutputTokenAccounting": "reasoning_tokens_included"
+      },
+      "failure_message": "failed to generate response: model response contained no actionable content",
+      "pre_finalization_status": "active",
+      "new_attempt": true,
+      "outcome_class": "response_length",
+      "evidence_classification": "not_won",
+      "world_termination_reason": "active_at_snapshot",
+      "terminal_response_stop_reason": "length",
+      "actions_remaining": 23,
+      "rejected_world_actions": 0,
+      "final_evidence": {
+        "remaining_worlds": 4,
+        "winning_set_signatures": 4,
+        "common_repairs": 0,
+        "accepting_worlds": null,
+        "classification": "ineligible"
+      },
+      "first_guaranteed_repair_turn": null,
+      "physical_goal_satisfied": false,
+      "submissions": [],
+      "measurements_used": 20,
+      "redundant_measurements": 14,
+      "measurements_after_guaranteed_repair": 0
+    },
+    {
+      "trace_id": "01M6D16FRSK3S3D0W2SAPND5FH",
+      "directory": "screen-20261102T022431Z-uwhvsk8x",
+      "cohort": "repeat",
+      "task": "NEXUS smoke-S08",
+      "id": "S08",
+      "model": "minimax/minimax-m3",
+      "family": "model-revision-v1",
+      "inputs": {
+        "axis-version": 2,
+        "budget-profile": "standard",
+        "discovery-level": 5,
+        "extended-diagnostics": true,
+        "generation-timing": true,
+        "ontology-options": "{\"consistency_check\":\"off\",\"finish_policy\":\"recoverable\",\"guidance\":\"principles\"}",
+        "planning-level": 0,
+        "resource-pressure": 1,
+        "science-family": "model-revision-v1",
+        "seed": "5866",
+        "theory-level": 3
+      },
+      "kind": "Error",
+      "model_parameters": {
+        "max-completion-tokens": 65536,
+        "provider": {
+          "require_parameters": true,
+          "allow_fallbacks": false
+        }
+      },
+      "disable_structured_output": true,
+      "budget": 64,
+      "accepted_actions": 35,
+      "tool_calls_started": 41,
+      "tool_calls_completed": 41,
+      "public_responses_replayed": 40,
+      "hash_records_matched": 20,
+      "protocol_errors": {
+        "missing_operation": 1
+      },
+      "all_evidence_read": true,
+      "world_win": false,
+      "supported_world_win": false,
+      "request_seconds": 388.580680233,
+      "tool_seconds": 28.174718885,
+      "usage": {
+        "InputTokens": 718834,
+        "OutputTokens": 94620,
+        "ReasoningTokens": 91491,
+        "InputCacheWriteTokens": 0,
+        "InputCacheReadTokens": 627328,
+        "InputTokenAccounting": "cache_tokens_included",
+        "OutputTokenAccounting": "reasoning_tokens_included"
+      },
+      "failure_message": "failed to generate response: model response contained no actionable content",
+      "pre_finalization_status": "active",
+      "new_attempt": true,
+      "outcome_class": "response_length",
+      "evidence_classification": "not_won",
+      "world_termination_reason": "active_at_snapshot",
+      "terminal_response_stop_reason": "length",
+      "actions_remaining": 29,
+      "rejected_world_actions": 0,
+      "final_evidence": {
+        "remaining_worlds": 2,
+        "winning_set_signatures": 2,
+        "common_repairs": 0,
+        "accepting_worlds": null,
+        "classification": "ineligible"
+      },
+      "first_guaranteed_repair_turn": null,
+      "physical_goal_satisfied": false,
+      "submissions": [],
+      "measurements_used": 17,
+      "redundant_measurements": 10,
+      "measurements_after_guaranteed_repair": 0
+    }
+  ],
+  "same_16_initial_conditions": {
+    "gpt-6-luna": {
+      "attempts": 16,
+      "wins": 6,
+      "supported_wins": 6,
+      "raw_outcomes": {
+        "Failed": 10,
+        "Passed": 6
+      },
+      "traces": [
+        "01M6440S36CJSNMKQ087S37H9R",
+        "01M644R1P7D87ENSH3P1271DRV",
+        "01M64JS5VB98VYDK33PANK32GC",
+        "01M64KA44HSTAJG98H86N5QPQG",
+        "01M65CMXE3PQ898EQF366TVNP6",
+        "01M65D5RSEF0A6HTX1N58B99DQ",
+        "01M65DNXA3V0N3JDCWKB8FCZ1S",
+        "01M650M7F04JD3NFVJJCQF92CX",
+        "01M650NSJMSMKFHF1FR67WENT9",
+        "01M650R6TYMDEBSZA8NYVVWCJD",
+        "01M651340Z5VEHPMGH0QCPN5Z3",
+        "01M6522HSQVDD8DGAYTK73YVHV",
+        "01M65416J8QE4ZJP1HY1EHBQS6",
+        "01M65429C7ZKX4KY14ZXPSNX3P",
+        "01M6546WDMKSP55YYR6Y76AWH2",
+        "01M654DJJVZHKZP04132WSKP1D"
+      ]
+    },
+    "gemini-3.8-flash": {
+      "attempts": 16,
+      "wins": 13,
+      "supported_wins": 13,
+      "raw_outcomes": {
+        "Passed": 13,
+        "Failed": 3
+      },
+      "traces": [
+        "01M643EMD1CV9K01N1F1PFQY71",
+        "01M6443AQQN2FJGBC90VFHQXB9",
+        "01M64J5WEA3Q7CZ78T4HR4CSJX",
+        "01M64JY1AQYSFCH35VP7Q911EC",
+        "01M66WC76W6H3FG01QSYH9S2MZ",
+        "01M66WZ75JZA7W8HQEXS485P6R",
+        "01M66XA2MSQK7S8WYE8FGCVABQ",
+        "01M66K43PZ1NBAP9WZPSTP6B80",
+        "01M66K6Y5MRVJHJQ1R3X9CVPCM",
+        "01M66KAZKWD8PF8497ZNTVPPJA",
+        "01M66M000RY5PQ4X0S556DF0Y1",
+        "01M66N1PTNMK33F5MCQB2SWYTJ",
+        "01M66RQGFFZQRJ5QZV6ZX9AP5Y",
+        "01M66RT1D9Z574KNJMA7CM4AVT",
+        "01M66SC17K6N886JFGNZ7EXFN5",
+        "01M66SS9M4CG550SE1AYV1T1DA"
+      ]
+    },
+    "z-ai/glm-5.2": {
+      "attempts": 16,
+      "wins": 11,
+      "supported_wins": 9,
+      "raw_outcomes": {
+        "Passed": 11,
+        "Failed": 3,
+        "Error": 2
+      },
+      "traces": [
+        "01M69EX307QVATB304Z1PPKTNQ",
+        "01M69EY76DNW4ZWP1VAJ5MCV5V",
+        "01M69T1SY8SKE2VPXKRK26WJVH",
+        "01M69TKMV3BN62M80PSYHAYN1C",
+        "01M69V1FQFM3TKC1PJ3QV4MT1W",
+        "01M69V7H52CPTCX7C2RJADPBXY",
+        "01M69VX90CB0RG8F9T39AJM30B",
+        "01M69VYSPY2VZKS14472WSGHYY",
+        "01M69W2XWKBD5VZFWWJAEP6N86",
+        "01M69WH85V4GM8S4N023WS7WJJ",
+        "01M69YFMTXP9PAZTQ9D81D06SV",
+        "01M69Z4G45DY9C0QZ556N9X6NV",
+        "01M69ZRME9RV3M0PJAYGEWX72D",
+        "01M6A004Y2RFT220S96BNTPM2X",
+        "01M6A05Z8NQ6CTK3Z08GDC104X",
+        "01M6A0G0XRQB7DC4R1171BYBPT"
+      ]
+    },
+    "minimax/minimax-m3": {
+      "attempts": 16,
+      "wins": 11,
+      "supported_wins": 11,
+      "raw_outcomes": {
+        "Passed": 11,
+        "Error": 5
+      },
+      "traces": [
+        "01M69FBTQ96GSBAZNHDSZG2MXB",
+        "01M69FCQPRGWRT22SVAG14BYR6",
+        "01M6A0ZMGWVHB44V3CHRZ25W7G",
+        "01M6A1367ENT95PWSRYRV150GQ",
+        "01M6A1AJ1GTBYTD8WY4QZR225P",
+        "01M6A1JEX28H0GNJD8HXXW383K",
+        "01M6A1SHV9NXQWTQ1NNBQC94FC",
+        "01M6A1VNHZV2TZ4SEVXDH4VE0T",
+        "01M6A1ZFKFJDYYGYEM8AXGMEWV",
+        "01M6A2BGC9B7XSR5KXBDV4JP3K",
+        "01M6A2T5VT1QR40583C3749K55",
+        "01M6A3E1HHZM5G6D1YNQXQ7R5H",
+        "01M6A3YZN5ZT4GDTBAK76H68M5",
+        "01M6A4DCZMWKE954F13ETFZ1XW",
+        "01M6A4MTNN83P8R1P8AT3JP2DD",
+        "01M6A50TQFGGHHGE6T50PWJRZ8"
+      ]
+    }
+  },
+  "common_initial_rows": [
+    {
+      "model": "gemini-3.8-flash",
+      "task": "NEXUS interference-09",
+      "id": "09",
+      "trace_id": "01M643EMD1CV9K01N1F1PFQY71",
+      "kind": "Passed",
+      "classification": "supported_win",
+      "accepted_actions": 17
+    },
+    {
+      "model": "gemini-3.8-flash",
+      "task": "NEXUS interference-11",
+      "id": "11",
+      "trace_id": "01M6443AQQN2FJGBC90VFHQXB9",
+      "kind": "Failed",
+      "classification": "not_won",
+      "accepted_actions": 35
+    },
+    {
+      "model": "gpt-6-luna",
+      "task": "NEXUS interference-09",
+      "id": "09",
+      "trace_id": "01M6440S36CJSNMKQ087S37H9R",
+      "kind": "Failed",
+      "classification": "not_won",
+      "accepted_actions": 8
+    },
+    {
+      "model": "gpt-6-luna",
+      "task": "NEXUS interference-11",
+      "id": "11",
+      "trace_id": "01M644R1P7D87ENSH3P1271DRV",
+      "kind": "Failed",
+      "classification": "not_won",
+      "accepted_actions": 21
+    },
+    {
+      "model": "gemini-3.8-flash",
+      "task": "NEXUS interference-25",
+      "id": "25",
+      "trace_id": "01M64J5WEA3Q7CZ78T4HR4CSJX",
+      "kind": "Passed",
+      "classification": "supported_win",
+      "accepted_actions": 17
+    },
+    {
+      "model": "gemini-3.8-flash",
+      "task": "NEXUS interference-27",
+      "id": "27",
+      "trace_id": "01M64JY1AQYSFCH35VP7Q911EC",
+      "kind": "Passed",
+      "classification": "supported_win",
+      "accepted_actions": 41
+    },
+    {
+      "model": "gpt-6-luna",
+      "task": "NEXUS interference-25",
+      "id": "25",
+      "trace_id": "01M64JS5VB98VYDK33PANK32GC",
+      "kind": "Passed",
+      "classification": "supported_win",
+      "accepted_actions": 23
+    },
+    {
+      "model": "gpt-6-luna",
+      "task": "NEXUS interference-27",
+      "id": "27",
+      "trace_id": "01M64KA44HSTAJG98H86N5QPQG",
+      "kind": "Failed",
+      "classification": "not_won",
+      "accepted_actions": 37
+    },
+    {
+      "model": "gpt-6-luna",
+      "task": "NEXUS smoke-S13",
+      "id": "S13",
+      "trace_id": "01M65CMXE3PQ898EQF366TVNP6",
+      "kind": "Failed",
+      "classification": "not_won",
+      "accepted_actions": 11
+    },
+    {
+      "model": "gpt-6-luna",
+      "task": "NEXUS smoke-S16",
+      "id": "S16",
+      "trace_id": "01M65D5RSEF0A6HTX1N58B99DQ",
+      "kind": "Failed",
+      "classification": "not_won",
+      "accepted_actions": 22
+    },
+    {
+      "model": "gpt-6-luna",
+      "task": "NEXUS smoke-S17",
+      "id": "S17",
+      "trace_id": "01M65DNXA3V0N3JDCWKB8FCZ1S",
+      "kind": "Failed",
+      "classification": "not_won",
+      "accepted_actions": 33
+    },
+    {
+      "model": "gemini-3.8-flash",
+      "task": "NEXUS smoke-S13",
+      "id": "S13",
+      "trace_id": "01M66WC76W6H3FG01QSYH9S2MZ",
+      "kind": "Passed",
+      "classification": "supported_win",
+      "accepted_actions": 11
+    },
+    {
+      "model": "gemini-3.8-flash",
+      "task": "NEXUS smoke-S16",
+      "id": "S16",
+      "trace_id": "01M66WZ75JZA7W8HQEXS485P6R",
+      "kind": "Passed",
+      "classification": "supported_win",
+      "accepted_actions": 22
+    },
+    {
+      "model": "gemini-3.8-flash",
+      "task": "NEXUS smoke-S17",
+      "id": "S17",
+      "trace_id": "01M66XA2MSQK7S8WYE8FGCVABQ",
+      "kind": "Passed",
+      "classification": "supported_win",
+      "accepted_actions": 22
+    },
+    {
+      "model": "gpt-6-luna",
+      "task": "NEXUS smoke-S01",
+      "id": "S01",
+      "trace_id": "01M650M7F04JD3NFVJJCQF92CX",
+      "kind": "Passed",
+      "classification": "supported_win",
+      "accepted_actions": 10
+    },
+    {
+      "model": "gpt-6-luna",
+      "task": "NEXUS smoke-S02",
+      "id": "S02",
+      "trace_id": "01M650NSJMSMKFHF1FR67WENT9",
+      "kind": "Passed",
+      "classification": "supported_win",
+      "accepted_actions": 17
+    },
+    {
+      "model": "gpt-6-luna",
+      "task": "NEXUS smoke-S03",
+      "id": "S03",
+      "trace_id": "01M650R6TYMDEBSZA8NYVVWCJD",
+      "kind": "Passed",
+      "classification": "supported_win",
+      "accepted_actions": 26
+    },
+    {
+      "model": "gpt-6-luna",
+      "task": "NEXUS smoke-S05",
+      "id": "S05",
+      "trace_id": "01M651340Z5VEHPMGH0QCPN5Z3",
+      "kind": "Passed",
+      "classification": "supported_win",
+      "accepted_actions": 4
+    },
+    {
+      "model": "gpt-6-luna",
+      "task": "NEXUS smoke-S08",
+      "id": "S08",
+      "trace_id": "01M6522HSQVDD8DGAYTK73YVHV",
+      "kind": "Failed",
+      "classification": "not_won",
+      "accepted_actions": 63
+    },
+    {
+      "model": "gpt-6-luna",
+      "task": "NEXUS smoke-S21",
+      "id": "S21",
+      "trace_id": "01M65416J8QE4ZJP1HY1EHBQS6",
+      "kind": "Passed",
+      "classification": "supported_win",
+      "accepted_actions": 5
+    },
+    {
+      "model": "gpt-6-luna",
+      "task": "NEXUS smoke-S22",
+      "id": "S22",
+      "trace_id": "01M65429C7ZKX4KY14ZXPSNX3P",
+      "kind": "Failed",
+      "classification": "not_won",
+      "accepted_actions": 30
+    },
+    {
+      "model": "gpt-6-luna",
+      "task": "NEXUS smoke-S23",
+      "id": "S23",
+      "trace_id": "01M6546WDMKSP55YYR6Y76AWH2",
+      "kind": "Failed",
+      "classification": "not_won",
+      "accepted_actions": 36
+    },
+    {
+      "model": "gpt-6-luna",
+      "task": "NEXUS smoke-S24",
+      "id": "S24",
+      "trace_id": "01M654DJJVZHKZP04132WSKP1D",
+      "kind": "Failed",
+      "classification": "not_won",
+      "accepted_actions": 36
+    },
+    {
+      "model": "gemini-3.8-flash",
+      "task": "NEXUS smoke-S01",
+      "id": "S01",
+      "trace_id": "01M66K43PZ1NBAP9WZPSTP6B80",
+      "kind": "Passed",
+      "classification": "supported_win",
+      "accepted_actions": 10
+    },
+    {
+      "model": "gemini-3.8-flash",
+      "task": "NEXUS smoke-S02",
+      "id": "S02",
+      "trace_id": "01M66K6Y5MRVJHJQ1R3X9CVPCM",
+      "kind": "Passed",
+      "classification": "supported_win",
+      "accepted_actions": 11
+    },
+    {
+      "model": "gemini-3.8-flash",
+      "task": "NEXUS smoke-S03",
+      "id": "S03",
+      "trace_id": "01M66KAZKWD8PF8497ZNTVPPJA",
+      "kind": "Passed",
+      "classification": "supported_win",
+      "accepted_actions": 38
+    },
+    {
+      "model": "gemini-3.8-flash",
+      "task": "NEXUS smoke-S05",
+      "id": "S05",
+      "trace_id": "01M66M000RY5PQ4X0S556DF0Y1",
+      "kind": "Passed",
+      "classification": "supported_win",
+      "accepted_actions": 4
+    },
+    {
+      "model": "gemini-3.8-flash",
+      "task": "NEXUS smoke-S08",
+      "id": "S08",
+      "trace_id": "01M66N1PTNMK33F5MCQB2SWYTJ",
+      "kind": "Failed",
+      "classification": "not_won",
+      "accepted_actions": 64
+    },
+    {
+      "model": "gemini-3.8-flash",
+      "task": "NEXUS smoke-S21",
+      "id": "S21",
+      "trace_id": "01M66RQGFFZQRJ5QZV6ZX9AP5Y",
+      "kind": "Passed",
+      "classification": "supported_win",
+      "accepted_actions": 5
+    },
+    {
+      "model": "gemini-3.8-flash",
+      "task": "NEXUS smoke-S22",
+      "id": "S22",
+      "trace_id": "01M66RT1D9Z574KNJMA7CM4AVT",
+      "kind": "Failed",
+      "classification": "not_won",
+      "accepted_actions": 30
+    },
+    {
+      "model": "gemini-3.8-flash",
+      "task": "NEXUS smoke-S23",
+      "id": "S23",
+      "trace_id": "01M66SC17K6N886JFGNZ7EXFN5",
+      "kind": "Passed",
+      "classification": "supported_win",
+      "accepted_actions": 33
+    },
+    {
+      "model": "gemini-3.8-flash",
+      "task": "NEXUS smoke-S24",
+      "id": "S24",
+      "trace_id": "01M66SS9M4CG550SE1AYV1T1DA",
+      "kind": "Passed",
+      "classification": "supported_win",
+      "accepted_actions": 30
+    },
+    {
+      "model": "z-ai/glm-5.2",
+      "task": "NEXUS smoke-S05",
+      "id": "S05",
+      "trace_id": "01M69EX307QVATB304Z1PPKTNQ",
+      "kind": "Passed",
+      "classification": "supported_win",
+      "accepted_actions": 4
+    },
+    {
+      "model": "z-ai/glm-5.2",
+      "task": "NEXUS smoke-S21",
+      "id": "S21",
+      "trace_id": "01M69EY76DNW4ZWP1VAJ5MCV5V",
+      "kind": "Passed",
+      "classification": "supported_win",
+      "accepted_actions": 6
+    },
+    {
+      "model": "minimax/minimax-m3",
+      "task": "NEXUS smoke-S05",
+      "id": "S05",
+      "trace_id": "01M69FBTQ96GSBAZNHDSZG2MXB",
+      "kind": "Passed",
+      "classification": "supported_win",
+      "accepted_actions": 4
+    },
+    {
+      "model": "minimax/minimax-m3",
+      "task": "NEXUS smoke-S21",
+      "id": "S21",
+      "trace_id": "01M69FCQPRGWRT22SVAG14BYR6",
+      "kind": "Passed",
+      "classification": "supported_win",
+      "accepted_actions": 8
+    },
+    {
+      "model": "z-ai/glm-5.2",
+      "task": "NEXUS interference-09",
+      "id": "09",
+      "trace_id": "01M69T1SY8SKE2VPXKRK26WJVH",
+      "kind": "Failed",
+      "classification": "not_won",
+      "accepted_actions": 17
+    },
+    {
+      "model": "z-ai/glm-5.2",
+      "task": "NEXUS interference-11",
+      "id": "11",
+      "trace_id": "01M69TKMV3BN62M80PSYHAYN1C",
+      "kind": "Error",
+      "classification": "not_won",
+      "accepted_actions": 0
+    },
+    {
+      "model": "z-ai/glm-5.2",
+      "task": "NEXUS interference-25",
+      "id": "25",
+      "trace_id": "01M69V1FQFM3TKC1PJ3QV4MT1W",
+      "kind": "Passed",
+      "classification": "supported_win",
+      "accepted_actions": 17
+    },
+    {
+      "model": "z-ai/glm-5.2",
+      "task": "NEXUS interference-27",
+      "id": "27",
+      "trace_id": "01M69V7H52CPTCX7C2RJADPBXY",
+      "kind": "Error",
+      "classification": "not_won",
+      "accepted_actions": 15
+    },
+    {
+      "model": "z-ai/glm-5.2",
+      "task": "NEXUS smoke-S01",
+      "id": "S01",
+      "trace_id": "01M69VX90CB0RG8F9T39AJM30B",
+      "kind": "Passed",
+      "classification": "supported_win",
+      "accepted_actions": 10
+    },
+    {
+      "model": "z-ai/glm-5.2",
+      "task": "NEXUS smoke-S02",
+      "id": "S02",
+      "trace_id": "01M69VYSPY2VZKS14472WSGHYY",
+      "kind": "Passed",
+      "classification": "supported_win",
+      "accepted_actions": 10
+    },
+    {
+      "model": "z-ai/glm-5.2",
+      "task": "NEXUS smoke-S03",
+      "id": "S03",
+      "trace_id": "01M69W2XWKBD5VZFWWJAEP6N86",
+      "kind": "Passed",
+      "classification": "supported_win",
+      "accepted_actions": 37
+    },
+    {
+      "model": "z-ai/glm-5.2",
+      "task": "NEXUS smoke-S08",
+      "id": "S08",
+      "trace_id": "01M69WH85V4GM8S4N023WS7WJJ",
+      "kind": "Failed",
+      "classification": "not_won",
+      "accepted_actions": 64
+    },
+    {
+      "model": "z-ai/glm-5.2",
+      "task": "NEXUS smoke-S22",
+      "id": "S22",
+      "trace_id": "01M69YFMTXP9PAZTQ9D81D06SV",
+      "kind": "Failed",
+      "classification": "not_won",
+      "accepted_actions": 30
+    },
+    {
+      "model": "z-ai/glm-5.2",
+      "task": "NEXUS smoke-S23",
+      "id": "S23",
+      "trace_id": "01M69Z4G45DY9C0QZ556N9X6NV",
+      "kind": "Passed",
+      "classification": "compatible_win",
+      "accepted_actions": 31
+    },
+    {
+      "model": "z-ai/glm-5.2",
+      "task": "NEXUS smoke-S24",
+      "id": "S24",
+      "trace_id": "01M69ZRME9RV3M0PJAYGEWX72D",
+      "kind": "Passed",
+      "classification": "compatible_win",
+      "accepted_actions": 25
+    },
+    {
+      "model": "z-ai/glm-5.2",
+      "task": "NEXUS smoke-S13",
+      "id": "S13",
+      "trace_id": "01M6A004Y2RFT220S96BNTPM2X",
+      "kind": "Passed",
+      "classification": "supported_win",
+      "accepted_actions": 11
+    },
+    {
+      "model": "z-ai/glm-5.2",
+      "task": "NEXUS smoke-S16",
+      "id": "S16",
+      "trace_id": "01M6A05Z8NQ6CTK3Z08GDC104X",
+      "kind": "Passed",
+      "classification": "supported_win",
+      "accepted_actions": 22
+    },
+    {
+      "model": "z-ai/glm-5.2",
+      "task": "NEXUS smoke-S17",
+      "id": "S17",
+      "trace_id": "01M6A0G0XRQB7DC4R1171BYBPT",
+      "kind": "Passed",
+      "classification": "supported_win",
+      "accepted_actions": 25
+    },
+    {
+      "model": "minimax/minimax-m3",
+      "task": "NEXUS interference-09",
+      "id": "09",
+      "trace_id": "01M6A0ZMGWVHB44V3CHRZ25W7G",
+      "kind": "Passed",
+      "classification": "supported_win",
+      "accepted_actions": 17
+    },
+    {
+      "model": "minimax/minimax-m3",
+      "task": "NEXUS interference-11",
+      "id": "11",
+      "trace_id": "01M6A1367ENT95PWSRYRV150GQ",
+      "kind": "Error",
+      "classification": "not_won",
+      "accepted_actions": 0
+    },
+    {
+      "model": "minimax/minimax-m3",
+      "task": "NEXUS interference-25",
+      "id": "25",
+      "trace_id": "01M6A1AJ1GTBYTD8WY4QZR225P",
+      "kind": "Error",
+      "classification": "not_won",
+      "accepted_actions": 0
+    },
+    {
+      "model": "minimax/minimax-m3",
+      "task": "NEXUS interference-27",
+      "id": "27",
+      "trace_id": "01M6A1JEX28H0GNJD8HXXW383K",
+      "kind": "Error",
+      "classification": "not_won",
+      "accepted_actions": 0
+    },
+    {
+      "model": "minimax/minimax-m3",
+      "task": "NEXUS smoke-S01",
+      "id": "S01",
+      "trace_id": "01M6A1SHV9NXQWTQ1NNBQC94FC",
+      "kind": "Passed",
+      "classification": "supported_win",
+      "accepted_actions": 11
+    },
+    {
+      "model": "minimax/minimax-m3",
+      "task": "NEXUS smoke-S02",
+      "id": "S02",
+      "trace_id": "01M6A1VNHZV2TZ4SEVXDH4VE0T",
+      "kind": "Passed",
+      "classification": "supported_win",
+      "accepted_actions": 15
+    },
+    {
+      "model": "minimax/minimax-m3",
+      "task": "NEXUS smoke-S03",
+      "id": "S03",
+      "trace_id": "01M6A1ZFKFJDYYGYEM8AXGMEWV",
+      "kind": "Passed",
+      "classification": "supported_win",
+      "accepted_actions": 26
+    },
+    {
+      "model": "minimax/minimax-m3",
+      "task": "NEXUS smoke-S08",
+      "id": "S08",
+      "trace_id": "01M6A2BGC9B7XSR5KXBDV4JP3K",
+      "kind": "Error",
+      "classification": "not_won",
+      "accepted_actions": 31
+    },
+    {
+      "model": "minimax/minimax-m3",
+      "task": "NEXUS smoke-S22",
+      "id": "S22",
+      "trace_id": "01M6A2T5VT1QR40583C3749K55",
+      "kind": "Passed",
+      "classification": "supported_win",
+      "accepted_actions": 29
+    },
+    {
+      "model": "minimax/minimax-m3",
+      "task": "NEXUS smoke-S23",
+      "id": "S23",
+      "trace_id": "01M6A3E1HHZM5G6D1YNQXQ7R5H",
+      "kind": "Error",
+      "classification": "not_won",
+      "accepted_actions": 14
+    },
+    {
+      "model": "minimax/minimax-m3",
+      "task": "NEXUS smoke-S24",
+      "id": "S24",
+      "trace_id": "01M6A3YZN5ZT4GDTBAK76H68M5",
+      "kind": "Passed",
+      "classification": "supported_win",
+      "accepted_actions": 32
+    },
+    {
+      "model": "minimax/minimax-m3",
+      "task": "NEXUS smoke-S13",
+      "id": "S13",
+      "trace_id": "01M6A4DCZMWKE954F13ETFZ1XW",
+      "kind": "Passed",
+      "classification": "supported_win",
+      "accepted_actions": 11
+    },
+    {
+      "model": "minimax/minimax-m3",
+      "task": "NEXUS smoke-S16",
+      "id": "S16",
+      "trace_id": "01M6A4MTNN83P8R1P8AT3JP2DD",
+      "kind": "Passed",
+      "classification": "supported_win",
+      "accepted_actions": 22
+    },
+    {
+      "model": "minimax/minimax-m3",
+      "task": "NEXUS smoke-S17",
+      "id": "S17",
+      "trace_id": "01M6A50TQFGGHHGE6T50PWJRZ8",
+      "kind": "Passed",
+      "classification": "supported_win",
+      "accepted_actions": 24
+    }
+  ],
+  "selected_repeated_conditions": {
+    "S05": {
+      "gpt-6-luna": {
+        "attempts": 3,
+        "wins": 3,
+        "supported_wins": 3,
+        "raw_outcomes": {
+          "Passed": 3
+        },
+        "traces": [
+          "01M651340Z5VEHPMGH0QCPN5Z3",
+          "01M674TX1EW0JVFE7QCWF1X93C",
+          "01M67HW5DZ0X4CHX0JNWFE83QC"
+        ]
+      },
+      "gemini-3.8-flash": {
+        "attempts": 3,
+        "wins": 3,
+        "supported_wins": 3,
+        "raw_outcomes": {
+          "Passed": 3
+        },
+        "traces": [
+          "01M66M000RY5PQ4X0S556DF0Y1",
+          "01M674TX1BK7CG2XQ04YAJ13Z5",
+          "01M67HW5DXG2YFVS9FQ6Q7ANBX"
+        ]
+      },
+      "z-ai/glm-5.2": {
+        "attempts": 1,
+        "wins": 1,
+        "supported_wins": 1,
+        "raw_outcomes": {
+          "Passed": 1
+        },
+        "traces": [
+          "01M69EX307QVATB304Z1PPKTNQ"
+        ]
+      },
+      "minimax/minimax-m3": {
+        "attempts": 1,
+        "wins": 1,
+        "supported_wins": 1,
+        "raw_outcomes": {
+          "Passed": 1
+        },
+        "traces": [
+          "01M69FBTQ96GSBAZNHDSZG2MXB"
+        ]
+      }
+    },
+    "S08": {
+      "gpt-6-luna": {
+        "attempts": 3,
+        "wins": 1,
+        "supported_wins": 0,
+        "raw_outcomes": {
+          "Failed": 2,
+          "Passed": 1
+        },
+        "traces": [
+          "01M6522HSQVDD8DGAYTK73YVHV",
+          "01M6753ZK6BXQRM7YN6B7C1TBH",
+          "01M67J9PWGRBWHBX1T0B6TSYRE"
+        ]
+      },
+      "gemini-3.8-flash": {
+        "attempts": 3,
+        "wins": 1,
+        "supported_wins": 1,
+        "raw_outcomes": {
+          "Failed": 2,
+          "Passed": 1
+        },
+        "traces": [
+          "01M66N1PTNMK33F5MCQB2SWYTJ",
+          "01M675GZN634JW6SCH62RAKN30",
+          "01M67JJ5PA00C8K0ABMJ7WRJT1"
+        ]
+      },
+      "z-ai/glm-5.2": {
+        "attempts": 2,
+        "wins": 0,
+        "supported_wins": 0,
+        "raw_outcomes": {
+          "Failed": 1,
+          "Error": 1
+        },
+        "traces": [
+          "01M69WH85V4GM8S4N023WS7WJJ",
+          "01M6BPRYD48G1YDBW0NF0MRF1Q"
+        ]
+      },
+      "minimax/minimax-m3": {
+        "attempts": 2,
+        "wins": 0,
+        "supported_wins": 0,
+        "raw_outcomes": {
+          "Error": 2
+        },
+        "traces": [
+          "01M6A2BGC9B7XSR5KXBDV4JP3K",
+          "01M6D16FRSK3S3D0W2SAPND5FH"
+        ]
+      }
+    },
+    "S21": {
+      "gpt-6-luna": {
+        "attempts": 3,
+        "wins": 3,
+        "supported_wins": 3,
+        "raw_outcomes": {
+          "Passed": 3
+        },
+        "traces": [
+          "01M65416J8QE4ZJP1HY1EHBQS6",
+          "01M676WX01PFKGCV16MB58J7KS",
+          "01M67KPT3G549158G9NYN6JFWH"
+        ]
+      },
+      "gemini-3.8-flash": {
+        "attempts": 3,
+        "wins": 3,
+        "supported_wins": 3,
+        "raw_outcomes": {
+          "Passed": 3
+        },
+        "traces": [
+          "01M66RQGFFZQRJ5QZV6ZX9AP5Y",
+          "01M677QPGVAPDCBZK8AYSXGV5V",
+          "01M67MT64QRNG2FZDF62HE4WG1"
+        ]
+      },
+      "z-ai/glm-5.2": {
+        "attempts": 1,
+        "wins": 1,
+        "supported_wins": 1,
+        "raw_outcomes": {
+          "Passed": 1
+        },
+        "traces": [
+          "01M69EY76DNW4ZWP1VAJ5MCV5V"
+        ]
+      },
+      "minimax/minimax-m3": {
+        "attempts": 1,
+        "wins": 1,
+        "supported_wins": 1,
+        "raw_outcomes": {
+          "Passed": 1
+        },
+        "traces": [
+          "01M69FCQPRGWRT22SVAG14BYR6"
+        ]
+      }
+    },
+    "S22": {
+      "gpt-6-luna": {
+        "attempts": 3,
+        "wins": 1,
+        "supported_wins": 1,
+        "raw_outcomes": {
+          "Failed": 2,
+          "Passed": 1
+        },
+        "traces": [
+          "01M65429C7ZKX4KY14ZXPSNX3P",
+          "01M676Y1BQ1RJQKAANK0M295MS",
+          "01M67KR445HFZHETFWXBSN1KNS"
+        ]
+      },
+      "gemini-3.8-flash": {
+        "attempts": 3,
+        "wins": 1,
+        "supported_wins": 1,
+        "raw_outcomes": {
+          "Failed": 2,
+          "Passed": 1
+        },
+        "traces": [
+          "01M66RT1D9Z574KNJMA7CM4AVT",
+          "01M677TPF2YKT9YX4JVB99JG83",
+          "01M67MXE07WPYH6X2W12FKY483"
+        ]
+      },
+      "z-ai/glm-5.2": {
+        "attempts": 2,
+        "wins": 0,
+        "supported_wins": 0,
+        "raw_outcomes": {
+          "Failed": 1,
+          "Error": 1
+        },
+        "traces": [
+          "01M69YFMTXP9PAZTQ9D81D06SV",
+          "01M6AAY90RNHP9A0MSHJDRCZEM"
+        ]
+      },
+      "minimax/minimax-m3": {
+        "attempts": 2,
+        "wins": 1,
+        "supported_wins": 1,
+        "raw_outcomes": {
+          "Passed": 1,
+          "Failed": 1
+        },
+        "traces": [
+          "01M6A2T5VT1QR40583C3749K55",
+          "01M6AGXWG0Z58RFX91NGZM73NK"
+        ]
+      }
+    },
+    "S23": {
+      "gpt-6-luna": {
+        "attempts": 3,
+        "wins": 1,
+        "supported_wins": 1,
+        "raw_outcomes": {
+          "Failed": 2,
+          "Passed": 1
+        },
+        "traces": [
+          "01M6546WDMKSP55YYR6Y76AWH2",
+          "01M6771H9NZN9765DF4A2JNSQZ",
+          "01M67KXXPGM6TRSEJ40GRTNK7H"
+        ]
+      },
+      "gemini-3.8-flash": {
+        "attempts": 3,
+        "wins": 3,
+        "supported_wins": 3,
+        "raw_outcomes": {
+          "Passed": 3
+        },
+        "traces": [
+          "01M66SC17K6N886JFGNZ7EXFN5",
+          "01M678CX07Y5VEGT03H81AAZMC",
+          "01M67NNQEP57Y4A495FBWJR7DZ"
+        ]
+      },
+      "z-ai/glm-5.2": {
+        "attempts": 2,
+        "wins": 2,
+        "supported_wins": 1,
+        "raw_outcomes": {
+          "Passed": 2
+        },
+        "traces": [
+          "01M69Z4G45DY9C0QZ556N9X6NV",
+          "01M6ABCTQ70XMRQYY5RBYP1VVE"
+        ]
+      },
+      "minimax/minimax-m3": {
+        "attempts": 2,
+        "wins": 0,
+        "supported_wins": 0,
+        "raw_outcomes": {
+          "Error": 1,
+          "Failed": 1
+        },
+        "traces": [
+          "01M6A3E1HHZM5G6D1YNQXQ7R5H",
+          "01M6AH28H3JF9H4DDV31S0X5DN"
+        ]
+      }
+    },
+    "S24": {
+      "gpt-6-luna": {
+        "attempts": 3,
+        "wins": 0,
+        "supported_wins": 0,
+        "raw_outcomes": {
+          "Failed": 3
+        },
+        "traces": [
+          "01M654DJJVZHKZP04132WSKP1D",
+          "01M6775WZ2M5X4TMWHCYKVKCK7",
+          "01M67M2GP7X95W4Z28VHCV0W2N"
+        ]
+      },
+      "gemini-3.8-flash": {
+        "attempts": 3,
+        "wins": 2,
+        "supported_wins": 2,
+        "raw_outcomes": {
+          "Passed": 2,
+          "Failed": 1
+        },
+        "traces": [
+          "01M66SS9M4CG550SE1AYV1T1DA",
+          "01M678S9NNFET2TGHMDDD8V0HC",
+          "01M67P1QW53AQWBKGPT6EAFFA7"
+        ]
+      },
+      "z-ai/glm-5.2": {
+        "attempts": 1,
+        "wins": 1,
+        "supported_wins": 0,
+        "raw_outcomes": {
+          "Passed": 1
+        },
+        "traces": [
+          "01M69ZRME9RV3M0PJAYGEWX72D"
+        ]
+      },
+      "minimax/minimax-m3": {
+        "attempts": 1,
+        "wins": 1,
+        "supported_wins": 1,
+        "raw_outcomes": {
+          "Passed": 1
+        },
+        "traces": [
+          "01M6A3YZN5ZT4GDTBAK76H68M5"
+        ]
+      }
+    }
+  },
+  "historical_sources": [
+    {
+      "audit_file": "cross-axis-results-2026-10-30/audit.json",
+      "audit_sha256": "3699118fb4f7c1e2c4665fdbcf70f50926f9a76ae515906f1a32a96da2f1baa9",
+      "archive_sha256": "8b88d1a9aee74f3bd84dc865e4398696487fa57658a954aeae07eb106c2a778d",
+      "source_commit": "fe2d58f770f9e12aa6570ac30f3bd962849429b5",
+      "runtime_source_sha256": "ba22502788acf7ce1684e1e527e5aa332cd1746b37423fececabc90d71b8ee83"
+    },
+    {
+      "audit_file": "cross-axis-repeat-analysis-2026-10-30/audit.json",
+      "audit_sha256": "f421ab29092c184f78112fcef17f609f7f423cff1f53f6c7b26d0bfeaf8587eb",
+      "archive_sha256": "80cfc5494bce9b07485facb575968ea91fa974b0ddffddd6973eb792c449ccda",
+      "source_commit": "fe2d58f770f9e12aa6570ac30f3bd962849429b5",
+      "runtime_source_sha256": "ba22502788acf7ce1684e1e527e5aa332cd1746b37423fececabc90d71b8ee83"
+    }
+  ],
+  "historical_evidence_sha256": "70b186bd5d89867abffe2da718d79567c96517b3a2add9a63f7a6ef6d6fa85ad",
+  "limits": [
+    "32 previously counted attempts are unchanged copies, not new repetitions.",
+    "First-panel and combined-repeat aggregates overlap; do not add them.",
+    "Model settings, providers and external compute allowances differ.",
+    "MiniMax six-row repetition has eight reported reasoning tokens; reason for the accounting/behavior change is unknown.",
+    "A length stop with visible final text may be raw Failed rather than Error; raw outcomes are retained."
+  ]
+}

@@ -4,13 +4,12 @@ NEXUS is a standalone, deterministic interactive environment for evaluating whet
 
 The central design goal is to evaluate **adaptation and reasoning rather than recalled domain knowledge**. NEXUS does not model an existing human game, real-world physics, or a known scientific experiment. Episodes are compiled from a small compositional grammar that can vary the world topology, entities, latent causal laws, evidence, and objective.
 
-Current smoke evidence and next run: [consolidated findings](docs/research/smoke-findings-2026-10-31.md)
-and [five-model capability smoke guide](docs/capability-smoke-guide.md). The
-[latest screen audit](docs/research/capability-screen-results-2026-10-31.md)
-finds 9/14 wins for both GLM and MiniMax, with 7 and 9 evidence-supported wins.
-It recommends twelve targeted repeats, separating world-action failures from
-response-length stops. Grok's screen, Muse's S21 delivery repeat and Mistral's
-response diagnosis remain unreported. The launcher supports unattended runs.
+Current evidence and roadmap: [smaller-model synthesis](docs/research/smaller-model-synthesis-2026-11-01.md),
+[consolidated findings](docs/research/smoke-findings-2026-10-31.md) and
+[capability smoke guide](docs/capability-smoke-guide.md). The requested GLM/MiniMax
+repetitions are complete. They preserve useful T/D and P/R distinctions while
+prioritizing response-stop classification and inference reproducibility before
+new world complexity. Grok/Muse/Mistral followups remain unreported.
 
 ## Research checkpoint and next experiments
 
