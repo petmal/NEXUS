@@ -1,17 +1,18 @@
 # Five-model capability smoke panel
 
-31 October 2026. Controls and the GLM/MiniMax challenge screens now have live
-results; other model followups remain unreported.
-Read [the consolidated findings](research/smoke-findings-2026-10-31.md) first.
-The machine-readable specification is [capability-smoke-matrix.json](capability-smoke-matrix.json).
+Updated 1 November 2026. Controls, initial GLM/MiniMax screens and the requested
+selected repetitions have been analysed. Other model followups remain unreported.
+Read [the latest synthesis](research/smaller-model-synthesis-2026-11-01.md) and
+[the consolidated findings](research/smoke-findings-2026-10-31.md) first.
+The frozen specification is [capability-smoke-matrix.json](capability-smoke-matrix.json).
 
-See [the control audit](research/capability-controls-results-2026-10-31.md):
-Grok can proceed to `screen`; repeat Muse S21 for answer-delivery reliability.
-The [text-output rerun](research/capability-text-output-controls-2026-10-31.md)
-passed all four GLM/MiniMax controls. Their [completed screens](research/capability-screen-results-2026-10-31.md)
-each pass 9/14, but with different evidence support and stopping causes. Repeat
-interference 09/11/25/27 and S22/S23 once per model using unchanged v3 presets;
-keep S08 repeats secondary. Hold Mistral for response diagnostics.
+Do not repeat the entire unchanged GLM/MiniMax screen. The completed repetitions
+recommend a MiniMax response/provenance diagnostic and a bounded GLM generation-
+setting comparison before fresh qualified seeds and broader world changes.
+The [initial screen](research/capability-screen-results-2026-10-31.md) and
+[text-output controls](research/capability-text-output-controls-2026-10-31.md)
+remain historical comparison records. See [the initial control audit](research/capability-controls-results-2026-10-31.md)
+for pending Grok, Muse and Mistral followups.
 The revised launcher supports `--non-interactive` for configured unattended
 runs and `--interactive` (the default) for manual rerun selection. Unattended
 runs stop on incomplete result coverage even when MindTrial exits zero.

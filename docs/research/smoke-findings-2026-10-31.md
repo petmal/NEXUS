@@ -1,11 +1,44 @@
 # NEXUS smoke findings and decisions
 
-Updated 31 October 2026 (America/Toronto). This is the
+Updated 1 November 2026 (America/Toronto). This is the
 project's current evidence record for choosing subsequent model smoke tests.
 It supersedes the earlier suggestion to start with GLM 5.1: the next panel uses
 GLM 5.2 at the user's request. Historical results and task definitions remain intact.
 
-## GLM/MiniMax challenge screen: latest update
+## Latest repetitions and revised roadmap
+
+The [1 November synthesis](smaller-model-synthesis-2026-11-01.md) combines the
+latest GLM/MiniMax repetitions with Luna/Flash evidence. The new archive contains
+46 attempts; 32 are unchanged copies and 14 are new. The repeats add three
+supported wins, one world-action-budget failure, seven response-length stops
+and three no-response-candidate errors. Two length stops return ordinary text
+and appear as raw Failed, despite 46 and 21 world actions remaining.
+
+GLM now solves tight interference 09 optimally (1/2 combined; relaxed 25 is 2/2).
+Its second S23 repair win is evidence-supported (2/2 wins, one supported).
+Long coupled 11/27 still hit response limits in all four GLM attempts. MiniMax's
+six-row repeat reports only eight reasoning tokens within 172,636 output tokens;
+the later S08 repeat again reports substantial reasoning. Identical recorded
+settings do not explain this response/accounting change. Preserve the batch,
+but resolve the uncertainty before treating it as a capability regression.
+
+Across repeated revision S08, Luna is 1/3 with no supported win, Flash 1/3 with
+one supported win, and GLM/MiniMax both 0/2; all four configurations solve their
+disclosed S05 controls. This strengthens practical T/D discrimination without
+establishing pure T or D effects or revising the original strongest-model claim.
+Luna's earlier 1/16 tight versus 13/16 relaxed interference wins remain the clearest
+P/R result. The four-model repair contrasts remain configuration-dependent.
+
+The recommended repeats are now complete. Prioritize stopping-cause reporting,
+MiniMax response provenance and a bounded GLM inference-allocation diagnostic.
+Then confirm useful contrasts on fresh qualified seeds and rival worlds, with a
+contemporary Astra revision/repair anchor. Preserve the selected architectures
+and extend breadth/dependencies only after these measurement gates. Do not run
+another full unchanged GLM/MiniMax screen. Grok/Muse/Mistral followups remain
+unreported. The [machine-readable synthesis](capability-repeat-synthesis-2026-11-01.json)
+retains new and copied attempts, causes, and the common sixteen-condition table.
+
+## 31 October first screen: retained findings
 
 The [new screen audit](capability-screen-results-2026-10-31.md) adds 28 attempts:
 both models pass 9/14, with seven supported wins for GLM and nine for MiniMax.

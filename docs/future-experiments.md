@@ -7,7 +7,11 @@ not add new axis levels or claim that a multi-module production family exists.
 The first implemented follow-up is the separate
 [planning/resource pilot](planning-resource-guide.md): fully disclosed spatial
 layouts over the stateful laws, exact known-law costs and public unknown-law policy
-bounds. Its live model evaluation is pending.
+bounds. Its live evaluations and subsequent interference/cross-axis work are summarized
+in the [1 November smaller-model report](research/smaller-model-synthesis-2026-11-01.md).
+That report updates the immediate sequence: distinguish response limits and
+provider behavior, then confirm contrasts on fresh worlds before adding broader
+composition. The qualification principles below remain in force.
 
 ## Choose a base by the question
 
