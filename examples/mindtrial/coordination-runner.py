@@ -324,6 +324,42 @@ def selected_suites(selection, pilot=COORDINATION):
     return dict(pilot.suite_groups).get(selection, (selection,))
 
 
+def select_task_ids(exports, suites, task_ids):
+    """Filter whole qualified task objects; reject typos and ambiguous suffixes."""
+    if len(set(task_ids)) != len(task_ids):
+        raise RunnerError("Each --task-id must be unique.")
+    names = set()
+    for task_id in task_ids:
+        matches = [
+            task["name"]
+            for suite in suites
+            for task in exports[suite]["task-config"]["tasks"]
+            if task["name"] == task_id or task["name"].endswith("-" + task_id)
+        ]
+        if len(matches) != 1:
+            raise RunnerError("Each --task-id must match exactly one task in the selected suites.")
+        if matches[0] in names:
+            raise RunnerError("Different --task-id values selected the same task.")
+        names.add(matches[0])
+    chosen = {}
+    for suite in suites:
+        value = copy.deepcopy(exports[suite])
+        if task_ids:
+            value["task-config"]["tasks"] = [
+                task for task in value["task-config"]["tasks"] if task["name"] in names
+            ]
+        if value["task-config"]["tasks"]:
+            chosen[suite] = value
+    return chosen
+
+
+def positive_integer(value):
+    parsed = int(value)
+    if parsed < 1:
+        raise argparse.ArgumentTypeError("must be at least one")
+    return parsed
+
+
 def tool_contract(config, version):
     """Identify the configured tool interface, not an observed provider wire schema."""
     fields = ("name", "description", "parameters", "parameter-files", "command")
@@ -674,6 +710,9 @@ def run_suite(
     pilot=COORDINATION,
     input_config_file=None,
     interactive=True,
+    task_ids=(),
+    repetition=1,
+    repetitions=1,
 ):
     binary = mindtrial / "mindtrial"
     binary_hash = sha256(binary.read_bytes())
@@ -681,7 +720,8 @@ def run_suite(
     tasks_path = directory / "tasks.yaml"
     config_path = directory / "config.yaml"
     # Use the exact compared export even if someone edits the package mid-run.
-    write_json(tasks_path, preflight["tasks"][suite])
+    selected = select_task_ids(preflight["tasks"], (suite,), task_ids)[suite]
+    write_json(tasks_path, selected)
     (directory / "input-config.yaml").write_bytes(config_raw)
     effective = copy.deepcopy(config)
     effective["config"].update(
@@ -727,6 +767,14 @@ def run_suite(
         "cwd": str(mindtrial),
         "command": command,
         "interactive": interactive,
+        "selection": {
+            "requested_task_ids": list(task_ids),
+            "task_names": [t["name"] for t in selected["task-config"]["tasks"]],
+            "qualified_suite_task_names": [
+                t["name"] for t in preflight["tasks"][suite]["task-config"]["tasks"]
+            ],
+        },
+        "repetition": {"index": repetition, "count": repetitions},
         "evaluation_seed": seed,
         "input_config_file": input_config_file,
         "input_config_sha256": sha256(config_raw),
@@ -755,7 +803,7 @@ def run_suite(
         code = 1
         manifest.update(status="failed_to_start", exit_code=code, error=type(exc).__name__)
     if code == 0 and not interactive:
-        coverage = result_coverage(directory, effective, preflight["tasks"][suite])
+        coverage = result_coverage(directory, effective, selected)
         manifest["result_coverage"] = coverage
         if not coverage["complete"]:
             manifest["status"] = "incomplete_results"
@@ -801,6 +849,18 @@ def main(argv=None, *, package_dir=None, pilot=COORDINATION):
     )
     parser.add_argument("--preflight-only", action="store_true", help="Qualify without model calls")
     parser.add_argument(
+        "--task-id",
+        action="append",
+        default=[],
+        help="Select one exact task name or unique row suffix (repeat this flag for several rows)",
+    )
+    parser.add_argument(
+        "--repeat",
+        type=positive_integer,
+        default=1,
+        help="Repeat the selected jobs in separate result folders, preserving the world seed",
+    )
+    parser.add_argument(
         "--skip-build", action="store_true", help="Verify and qualify an existing image"
     )
     args = parser.parse_args(argv)
@@ -813,6 +873,13 @@ def main(argv=None, *, package_dir=None, pilot=COORDINATION):
             raise RunnerError("Python 3.12 or newer is required; set PYTHON to its executable.")
         release = load_release(package, pilot)
         suites = selected_suites(args.suite, pilot)
+        # Reject selection mistakes before a build or provider request. Qualification
+        # still covers the full release; repeat selection on its verified output.
+        packaged_tasks = {
+            suite: read_json(package / f"nexus-{pilot.name}-{suite}-tasks.yaml") for suite in suites
+        }
+        chosen = select_task_ids(packaged_tasks, suites, args.task_id)
+        suites = tuple(chosen)
         if pilot.model_configs:
             model_configs = dict(pilot.model_configs)
             config_names = (
@@ -857,6 +924,12 @@ def main(argv=None, *, package_dir=None, pilot=COORDINATION):
                     "status": "preflight-passed",
                     "suite": args.suite,
                     "interactive": args.interactive,
+                    "requested_task_ids": args.task_id,
+                    "repetitions": args.repeat,
+                    "selected_task_names": {
+                        suite: [task["name"] for task in value["task-config"]["tasks"]]
+                        for suite, value in chosen.items()
+                    },
                     "invocation_timestamp": invoked,
                     "finished_at": timestamp(),
                     "image": image,
@@ -884,24 +957,32 @@ def main(argv=None, *, package_dir=None, pilot=COORDINATION):
             )
             print(f"Preflight passed; no model calls. Report: {directory}", flush=True)
             return 0
-        for suite, config_name in jobs:
-            config, config_raw = configs[config_name]
-            code = run_suite(
-                package,
-                suite,
-                config,
-                config_raw,
-                release,
-                image,
-                preflight,
-                mindtrial,
-                invoked,
-                pilot=pilot,
-                input_config_file=config_name,
-                interactive=args.interactive,
-            )
-            if code:
-                return code
+        for repetition in range(1, args.repeat + 1):
+            for suite, config_name in jobs:
+                config, config_raw = configs[config_name]
+                code = run_suite(
+                    package,
+                    suite,
+                    config,
+                    config_raw,
+                    release,
+                    image,
+                    preflight,
+                    mindtrial,
+                    invoked,
+                    pilot=pilot,
+                    input_config_file=config_name,
+                    interactive=args.interactive,
+                    task_ids=(
+                        [task["name"] for task in chosen[suite]["task-config"]["tasks"]]
+                        if args.task_id
+                        else ()
+                    ),
+                    repetition=repetition,
+                    repetitions=args.repeat,
+                )
+                if code:
+                    return code
         return 0
     except (RunnerError, OSError, tarfile.TarError) as exc:
         # Do not print raw subprocess output, configuration values or environment.

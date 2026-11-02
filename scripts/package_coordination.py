@@ -294,6 +294,7 @@ def main(pilot_name="coordination"):
         copies["summarize_results.py"] = examples / "summarize-pilot-results.py"
     if pilot_name == "capability-smoke":
         copies["matrix.json"] = ROOT / "docs/capability-smoke-matrix.json"
+        copies["followup-matrix.md"] = ROOT / "docs/inference-diagnostic-matrix.md"
     for name, source in copies.items():
         shutil.copy2(source, destination / name)
     reports = destination / "reports"
@@ -327,6 +328,7 @@ def main(pilot_name="coordination"):
             "capability-screen-results-2026-10-31.json",
             "smaller-model-synthesis-2026-11-01.md",
             "capability-repeat-synthesis-2026-11-01.json",
+            "inference-diagnostic-validation-2026-11-01.json",
             "smoke-findings-2026-10-31.md",
             "smoke-findings-2026-10-31.json",
         ),
@@ -338,6 +340,8 @@ def main(pilot_name="coordination"):
     for name in report_names:
         shutil.copy2(ROOT / "docs/research" / name, reports / name)
     if pilot_name == "capability-smoke":
+        followup = destination / "followup-matrix.md"
+        followup.write_text(followup.read_text().replace("(research/", "(reports/"))
         guide = destination / "guide.md"
         guide.write_text(
             guide.read_text()
@@ -345,6 +349,7 @@ def main(pilot_name="coordination"):
                 "research/smoke-findings-2026-10-31.md", "reports/smoke-findings-2026-10-31.md"
             )
             .replace("capability-smoke-matrix.json", "matrix.json")
+            .replace("inference-diagnostic-matrix.md", "followup-matrix.md")
             .replace(
                 "research/capability-controls-results-2026-10-31.md",
                 "reports/capability-controls-results-2026-10-31.md",

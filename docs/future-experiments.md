@@ -12,6 +12,9 @@ in the [1 November smaller-model report](research/smaller-model-synthesis-2026-1
 That report updates the immediate sequence: distinguish response limits and
 provider behavior, then confirm contrasts on fresh worlds before adding broader
 composition. The qualification principles below remain in force.
+The immediate [inference diagnostic matrix](inference-diagnostic-matrix.md)
+defines the control gates and a bounded GLM high/xhigh comparison. Reporting and
+launcher refinements preserve the qualified worlds and historical task objects.
 
 ## Choose a base by the question
 

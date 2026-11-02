@@ -10,6 +10,9 @@ Current evidence and roadmap: [smaller-model synthesis](docs/research/smaller-mo
 repetitions are complete. They preserve useful T/D and P/R distinctions while
 prioritizing response-stop classification and inference reproducibility before
 new world complexity. Grok/Muse/Mistral followups remain unreported.
+The [focused diagnostic matrix](docs/inference-diagnostic-matrix.md) recommends
+up to 18 next attempts. The launcher supports exact unattended task selection
+and indexed repetitions; readout v3 separates response stops from world budgets.
 
 ## Research checkpoint and next experiments
 
