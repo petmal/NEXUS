@@ -178,6 +178,7 @@ def attempt_diagnostics(record, telemetry, block, *, log_exists):
         "last_observed_world_state": None,
         "provider_stop_reason": None,
         "provider_stop_source": None,
+        "provider_http_status": None,
         "response_text_present": None,
         "tool_count_convention": None,
         "structure": None,
@@ -263,6 +264,14 @@ def attempt_diagnostics(record, telemetry, block, *, log_exists):
     details = record.get("Details") or {}
     message = (details.get("Error") or {}).get("Message", "")
     answer = details.get("Answer") or {}
+    if record["Kind"] == "Error":
+        if re.search(r"\b429\s+Too Many Requests\b", message, re.IGNORECASE):
+            result["provider_http_status"] = 429
+        reason = ((details.get("Error") or {}).get("Details") or {}).get("Stop Reason")
+        if isinstance(reason, list) and len(reason) == 1:
+            reason = reason[0]
+        if isinstance(reason, str) and reason:
+            result.update(provider_stop_reason=reason, provider_stop_source="error_record_details")
     # An error message belongs to this exact record, even if logs are unavailable.
     if record["Kind"] == "Error" and re.search(r'stop reason:?\s*["\']?length\b', message):
         result.update(provider_stop_reason="length", provider_stop_source="error_record")
@@ -283,6 +292,8 @@ def attempt_diagnostics(record, telemetry, block, *, log_exists):
         state.get("status") == "failed" and state.get("actions_remaining") == 0
     ):
         result["outcome"] = "action_budget_exhausted"
+    elif result["provider_http_status"] == 429:
+        result["outcome"] = "http_rate_limited"
     elif result["provider_stop_reason"] == "length":
         result["outcome"] = (
             "response_length_with_text"
@@ -293,6 +304,8 @@ def attempt_diagnostics(record, telemetry, block, *, log_exists):
         )
     elif record["Kind"] == "Error" and "no response candidates" in message:
         result["outcome"] = "no_response_candidates"
+    elif record["Kind"] == "Error" and "no actionable content" in message:
+        result["outcome"] = "no_actionable_content"
     elif record["Kind"] == "Error":
         result["outcome"] = (
             "provider_interruption" if "failed to generate response:" in message else "result_error"

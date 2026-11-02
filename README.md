@@ -13,6 +13,8 @@ new world complexity. Grok/Muse/Mistral followups remain unreported.
 The [focused diagnostic matrix](docs/inference-diagnostic-matrix.md) recommends
 up to 18 next attempts. The launcher supports exact unattended task selection
 and indexed repetitions; readout v3 separates response stops from world budgets.
+The [2 November MiniMax control interruption](docs/research/minimax-control-interruption-2026-11-02.md)
+adds an HTTP 429 batch stop and a single-row, lower-rate recovery probe.
 
 ## Research checkpoint and next experiments
 

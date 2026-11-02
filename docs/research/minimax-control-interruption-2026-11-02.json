@@ -1,0 +1,137 @@
+{
+  "version": "minimax-control-interruption-v1",
+  "date": "2026-11-02",
+  "archive_sha256": "3ab5f5564c6666986f691ef2304dc60db07a2a95d3b37dfff525174efc0ebc8e",
+  "evaluated_source": "acea01ab0ddf262673396e2902a12d0e11d37463",
+  "scope": "Transport/response diagnostics from records and explicit log identities; not new canonical replay or a capability score.",
+  "counts": {
+    "attempts": 4,
+    "http_429": 3,
+    "no_actionable_content_stop": 1,
+    "recorded_world_actions": 0
+  },
+  "rows": [
+    {
+      "directory": "controls-20261102T161333Z-h9t5_lg6",
+      "task": "NEXUS smoke-S05",
+      "trace_id": "01M6EGK5ZD2KD89P4S24BF2X6M",
+      "raw_kind": "Error",
+      "error_message": "retryable: failed to generate response: retryable error: OpenAI API error: 429 Too Many Requests",
+      "diagnostics": {
+        "log_evidence": "incomplete_tool_log",
+        "world_access": null,
+        "successful_nexus_responses_observed": 0,
+        "tool_log_complete": false,
+        "terminal_status": null,
+        "termination_reason": null,
+        "accepted_world_actions": null,
+        "last_observed_turn": null,
+        "last_observed_world_state": null,
+        "provider_stop_reason": null,
+        "provider_stop_source": null,
+        "provider_http_status": 429,
+        "response_text_present": null,
+        "tool_count_convention": "unresolved",
+        "structure": null,
+        "tool_call_status_counts": null,
+        "outcome": "http_rate_limited"
+      },
+      "usage": {}
+    },
+    {
+      "directory": "controls-20261102T161333Z-h9t5_lg6",
+      "task": "NEXUS smoke-S21",
+      "trace_id": "01M6EGKG2TT33QMJ23B3SQTQ1D",
+      "raw_kind": "Error",
+      "error_message": "retryable: failed to generate response: retryable error: OpenAI API error: 429 Too Many Requests",
+      "diagnostics": {
+        "log_evidence": "incomplete_tool_log",
+        "world_access": null,
+        "successful_nexus_responses_observed": 0,
+        "tool_log_complete": false,
+        "terminal_status": null,
+        "termination_reason": null,
+        "accepted_world_actions": null,
+        "last_observed_turn": null,
+        "last_observed_world_state": null,
+        "provider_stop_reason": null,
+        "provider_stop_source": null,
+        "provider_http_status": 429,
+        "response_text_present": null,
+        "tool_count_convention": "unresolved",
+        "structure": null,
+        "tool_call_status_counts": null,
+        "outcome": "http_rate_limited"
+      },
+      "usage": {}
+    },
+    {
+      "directory": "controls-20261102T161352Z-58y3zqc7",
+      "task": "NEXUS smoke-S05",
+      "trace_id": "01M6EGKRBEJMT1WF8W81PPBEKK",
+      "raw_kind": "Error",
+      "error_message": "failed to generate response: model response contained no actionable content",
+      "diagnostics": {
+        "log_evidence": "matched",
+        "world_access": true,
+        "successful_nexus_responses_observed": 2,
+        "tool_log_complete": true,
+        "terminal_status": null,
+        "termination_reason": null,
+        "accepted_world_actions": null,
+        "last_observed_turn": 0,
+        "last_observed_world_state": {
+          "turn": 0,
+          "status": "active",
+          "actions_remaining": 64
+        },
+        "provider_stop_reason": "stop",
+        "provider_stop_source": "error_record_details",
+        "provider_http_status": null,
+        "response_text_present": false,
+        "tool_count_convention": "all_detailed_calls",
+        "structure": null,
+        "tool_call_status_counts": {
+          "success": 2
+        },
+        "outcome": "no_actionable_content"
+      },
+      "usage": {
+        "InputTokens": 4659,
+        "OutputTokens": 217,
+        "ReasoningTokens": 42,
+        "InputCacheWriteTokens": 0,
+        "InputCacheReadTokens": 1536,
+        "InputTokenAccounting": "cache_tokens_included",
+        "OutputTokenAccounting": "reasoning_tokens_included"
+      }
+    },
+    {
+      "directory": "controls-20261102T161352Z-58y3zqc7",
+      "task": "NEXUS smoke-S21",
+      "trace_id": "01M6EGN7M676NSYZ7QD54BTTDA",
+      "raw_kind": "Error",
+      "error_message": "retryable: failed to generate response: retryable error: OpenAI API error: 429 Too Many Requests",
+      "diagnostics": {
+        "log_evidence": "incomplete_tool_log",
+        "world_access": null,
+        "successful_nexus_responses_observed": 0,
+        "tool_log_complete": false,
+        "terminal_status": null,
+        "termination_reason": null,
+        "accepted_world_actions": null,
+        "last_observed_turn": null,
+        "last_observed_world_state": null,
+        "provider_stop_reason": null,
+        "provider_stop_source": null,
+        "provider_http_status": 429,
+        "response_text_present": null,
+        "tool_count_convention": "unresolved",
+        "structure": null,
+        "tool_call_status_counts": null,
+        "outcome": "http_rate_limited"
+      },
+      "usage": {}
+    }
+  ]
+}

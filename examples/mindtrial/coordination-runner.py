@@ -696,6 +696,26 @@ def result_coverage(directory, config, tasks):
     }
 
 
+def rate_limited_results(directory):
+    """Recognize recorded HTTP 429 errors without treating world losses as outages."""
+    try:
+        payload = json.loads((directory / "mindtrial.json").read_text())
+        return [
+            {"provider": provider, "task": record["Task"], "trace_id": record["TraceID"]}
+            for provider, records in payload["Results"].items()
+            for record in records
+            if record.get("Kind") == "Error"
+            and re.search(
+                r"\b429\s+Too Many Requests\b",
+                (record.get("Details", {}).get("Error") or {}).get("Message", ""),
+                re.IGNORECASE,
+            )
+        ]
+    except (OSError, ValueError, KeyError, TypeError, AttributeError):
+        # Invalid/missing records are handled by coverage checks, not invented 429s.
+        return []
+
+
 def run_suite(
     package,
     suite,
@@ -813,6 +833,17 @@ def run_suite(
                 "stopping the batch. Preserve this results folder.",
                 file=sys.stderr,
             )
+    rate_limits = rate_limited_results(directory)
+    if rate_limits:
+        manifest["rate_limited_results"] = rate_limits
+        if code == 0:
+            manifest["status"] = "rate_limited"
+            code = 2
+        print(
+            "HTTP 429 recorded; stopping before the next group or repetition. "
+            "Preserve results and resolve the provider limit before a new attempt.",
+            file=sys.stderr,
+        )
     manifest["launcher_exit_code"] = code if code >= 0 else 128 - code
     manifest["finished_at"] = timestamp()
     write_json(manifest_path, manifest)

@@ -475,6 +475,119 @@ def test_repetition_count_must_be_positive():
         runner.main(["--repeat", "0"], pilot=PROFILE)
 
 
+@pytest.mark.parametrize("interactive", [False, True])
+def test_http_429_stops_later_groups_and_repetitions(setup_package, monkeypatch, interactive):
+    package, _, _, calls = setup_package
+    monkeypatch.setenv("OPENROUTER_API_KEY", "fixture-key")
+
+    def execute(command, **kwargs):
+        calls.append((command, kwargs))
+        write_mock_results(command, kind="Error")
+        path = (
+            Path(next(v.split("=", 1)[1] for v in command if v.startswith("-config="))).parent
+            / "mindtrial.json"
+        )
+        data = read(path)
+        for records in data["Results"].values():
+            for record in records:
+                record["Details"] = {
+                    "Error": {
+                        "Message": "retryable: failed to generate response: OpenAI API error: 429 Too Many Requests",
+                        "Transient": True,
+                    }
+                }
+        runner.write_json(path, data)
+        return SimpleNamespace(returncode=0)
+
+    monkeypatch.setattr(runner.subprocess, "run", execute)
+    assert (
+        runner.main(
+            [
+                "--model",
+                "minimax",
+                "--suite",
+                "all",
+                "--repeat",
+                "2",
+                "--skip-build",
+                "--interactive" if interactive else "--non-interactive",
+            ],
+            package_dir=package,
+            pilot=PROFILE,
+        )
+        == 2
+    )
+    assert len(calls) == 1
+    m = read(next((package / "results").glob("*/manifest.json")))
+    assert m["status"] == "rate_limited"
+    assert len(m["rate_limited_results"]) == 2
+    assert m["exit_code"] == 0 and m["launcher_exit_code"] == 2
+    if not interactive:
+        assert m["result_coverage"]["complete"]
+
+
+@pytest.mark.parametrize(
+    "kind,message",
+    [
+        ("Failed", "429 Too Many Requests"),
+        ("Error", "failed to generate response: no actionable content"),
+        ("Error", "failed to generate response: length"),
+    ],
+)
+def test_rate_guard_does_not_relabel_other_failures(tmp_path, kind, message):
+    runner.write_json(
+        tmp_path / "mindtrial.json",
+        {
+            "Results": {
+                "openrouter": [
+                    {
+                        "Kind": kind,
+                        "Task": "case",
+                        "TraceID": "trace",
+                        "Details": {"Error": {"Message": message}},
+                    }
+                ]
+            }
+        },
+    )
+    assert runner.rate_limited_results(tmp_path) == []
+
+
+def test_rate_probe_preserves_config_and_runs_one_control_with_forwarded_exit(tmp_path):
+    package = tmp_path / "rate probe package"
+    package.mkdir()
+    config_name = "nexus-capability-smoke-minimax-config.yaml"
+    shutil.copyfile(EXAMPLES / config_name, package / config_name)
+    shutil.copyfile(EXAMPLES / "probe-minimax-rate.sh", package / "probe-minimax-rate.sh")
+    (package / "run.sh").write_text('#!/usr/bin/env bash\nprintf "%s\\n" "$@"\nexit 7\n')
+    original = read(package / config_name)
+    result = subprocess.run(
+        ["bash", str(package / "probe-minimax-rate.sh"), "--skip-build"],
+        env={**os.environ, "PYTHON": sys.executable},
+        check=False,
+        capture_output=True,
+        text=True,
+    )
+    assert result.returncode == 7
+    assert result.stdout.splitlines() == [
+        "--model",
+        "minimax",
+        "--suite",
+        "controls",
+        "--task-id",
+        "S05",
+        "--non-interactive",
+        "--skip-build",
+    ]
+    assert read(package / (config_name + ".before-rate-probe")) == original
+    changed = read(package / config_name)
+    run = changed["config"]["providers"][0]["runs"][0]
+    assert run["max-requests-per-minute"] == 2 and "rate probe" in run["name"]
+    original_run = original["config"]["providers"][0]["runs"][0]
+    run.update({k: original_run[k] for k in ("name", "max-requests-per-minute")})
+    assert changed == original
+
+
 @pytest.mark.parametrize("mode", ["duplicate", "unexpected", "invalid_identity", "duplicate_trace"])
 def test_result_coverage_rejects_ambiguous_records(tmp_path, mode):
     config = {"config": {"providers": [{"name": "p", "runs": [{"name": "r"}]}]}}

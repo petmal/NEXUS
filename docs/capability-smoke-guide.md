@@ -1,9 +1,12 @@
 # Five-model capability smoke panel
 
-Updated 1 November 2026. Controls, initial GLM/MiniMax screens and the requested
+Updated 2 November 2026. Controls, initial GLM/MiniMax screens and the requested
 selected repetitions have been analysed. Other model followups remain unreported.
 Read [the latest synthesis](research/smaller-model-synthesis-2026-11-01.md) and
 [the consolidated findings](research/smoke-findings-2026-10-31.md) first.
+The [2 November MiniMax controls](research/minimax-control-interruption-2026-11-02.md)
+were blocked by HTTP 429 and empty content. Hold further MiniMax challenge runs;
+the launcher now stops later groups/repetitions on a recorded 429.
 The frozen specification is [capability-smoke-matrix.json](capability-smoke-matrix.json).
 
 Do not repeat the entire unchanged GLM/MiniMax screen. The completed repetitions

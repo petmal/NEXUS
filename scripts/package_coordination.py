@@ -295,6 +295,7 @@ def main(pilot_name="coordination"):
     if pilot_name == "capability-smoke":
         copies["matrix.json"] = ROOT / "docs/capability-smoke-matrix.json"
         copies["followup-matrix.md"] = ROOT / "docs/inference-diagnostic-matrix.md"
+        copies["probe-minimax-rate.sh"] = examples / "probe-minimax-rate.sh"
     for name, source in copies.items():
         shutil.copy2(source, destination / name)
     reports = destination / "reports"
@@ -329,6 +330,8 @@ def main(pilot_name="coordination"):
             "smaller-model-synthesis-2026-11-01.md",
             "capability-repeat-synthesis-2026-11-01.json",
             "inference-diagnostic-validation-2026-11-01.json",
+            "minimax-control-interruption-2026-11-02.md",
+            "minimax-control-interruption-2026-11-02.json",
             "smoke-findings-2026-10-31.md",
             "smoke-findings-2026-10-31.json",
         ),
@@ -367,6 +370,7 @@ def main(pilot_name="coordination"):
                 "reports/smaller-model-synthesis-2026-11-01.md",
             )
         )
+        guide.write_text(guide.read_text().replace("(research/", "(reports/"))
         findings = reports / "smoke-findings-2026-10-31.md"
         findings.write_text(
             findings.read_text().replace("../capability-smoke-guide.md", "../guide.md")
