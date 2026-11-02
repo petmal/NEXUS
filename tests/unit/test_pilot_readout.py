@@ -501,3 +501,44 @@ def test_readout_detects_additional_effective_configuration_drift(tmp_path, chan
     result = readout.summarize(tmp_path)
     assert not result["matrix_complete"]
     assert result["configuration_mismatch_trace_ids"] == ["astra"]
+
+
+@pytest.mark.parametrize(
+    "message,stop,outcome",
+    [
+        (
+            "retryable: failed to generate response: OpenAI API error: 429 Too Many Requests",
+            None,
+            "http_rate_limited",
+        ),
+        (
+            "failed to generate response: model response contained no actionable content",
+            "stop",
+            "no_actionable_content",
+        ),
+        (
+            "failed to generate response: model response contained no actionable content",
+            "length",
+            "response_length_without_text",
+        ),
+    ],
+)
+def test_http_error_and_structured_stop_reason_survive_without_log(
+    tmp_path, message, stop, outcome
+):
+    raw = fixture(tmp_path)
+    raw["Results"]["openai"][0].update(
+        Kind="Error",
+        Details={
+            "Error": {
+                "Message": message,
+                "Details": {"Stop Reason": [stop]} if stop else {},
+            }
+        },
+    )
+    write(tmp_path, "mindtrial.json", raw)
+    (tmp_path / "mindtrial.log").unlink()
+    d = readout.summarize(tmp_path)["rows"][0]["diagnostics"]
+    assert d["outcome"] == outcome and d["provider_stop_reason"] == stop
+    assert d["provider_http_status"] == (429 if outcome == "http_rate_limited" else None)
+    assert d["world_access"] is None

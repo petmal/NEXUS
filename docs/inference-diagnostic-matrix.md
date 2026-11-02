@@ -1,5 +1,11 @@
 # Focused follow-up after the smaller-model repetitions
 
+**2 November update:** MiniMax Stage A produced three HTTP 429 errors and one
+empty-content stop. Hold B and further MiniMax repetitions. See the
+[interruption report](research/minimax-control-interruption-2026-11-02.md).
+The revised package offers one lower-rate S05 probe through
+`bash probe-minimax-rate.sh` after a cooldown. GLM C/D remains independent.
+
 1 November 2026. This is an operator plan; no live evaluation has been run.
 The [latest synthesis](research/smaller-model-synthesis-2026-11-01.md) supplies
 the rationale. The first two questions are whether MiniMax's response behavior
@@ -51,9 +57,9 @@ parent matrix. The new selectors avoid manually deleting tasks or confirming
 each unattended run. Set the applicable API-key environment variable first.
 
 ```bash
-cd ~/Downloads/NEXUS-capability-diagnostics-2026-11-01
+cd ~/Downloads/NEXUS-capability-diagnostics-2026-11-02
 
-# Stage A: build the pinned image once, then run four attempts unattended.
+# Original Stage A plan; currently held pending the lower-rate diagnostic.
 bash run.sh --model minimax --suite controls --repeat 2 --non-interactive
 
 # Stage B: run only after inspecting A.

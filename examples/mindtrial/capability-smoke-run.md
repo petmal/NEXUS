@@ -7,6 +7,13 @@ Start with ten control attempts; then run seventy challenge attempts. See
 
 ## Current recommendation after the compiled repetitions
 
+**2 November update:** MiniMax Stage A encountered three 429 errors and a
+separate empty-content stop. Pause its repeated/challenge runs. After a cooldown,
+run `bash probe-minimax-rate.sh` once: it backs up the MiniMax config, labels a
+2-RPM diagnostic, and runs only S05. It builds this release by default; use
+`--skip-build` only if this exact release is already built. See
+`reports/minimax-control-interruption-2026-11-02.md`. GLM C/D is independent.
+
 The GLM/MiniMax controls, initial screens and selected repetitions are complete.
 Do not repeat either full screen. Read `followup-matrix.md` for the focused
 MiniMax reliability checks and GLM high/xhigh comparison, and
@@ -44,7 +51,11 @@ bash run.sh --model all --suite all --non-interactive --skip-build
 This repeats controls and runs all seventy screen attempts. It is **not** the
 recommended continuation of the attached controls. There is no automatic
 scientific admission gate between controls and screen. Failed, Error and Skipped
-records count as recorded outcomes and do not halt a complete batch.
+records count as recorded outcomes. An HTTP 429 Error is the exception: after
+the current MindTrial group finishes, the launcher stops before any further
+group or repetition, with status `rate_limited` and launcher exit code 2. It
+preserves the child exit code and all results. It cannot stop inside a group or
+infer a retry delay from the status alone.
 
 Non-interactive runs check that exactly one result exists for every enabled
 provider/run/task. A zero MindTrial exit with missing, empty, malformed,
@@ -79,7 +90,7 @@ clone at `~/Go-Projects/NEXUS`, then invokes your locally built
 `~/MindTrial/mindtrial` with `--debug --interactive=true --json`.
 
 ```bash
-cd ~/Downloads/NEXUS-capability-diagnostics-2026-11-01
+cd ~/Downloads/NEXUS-capability-diagnostics-2026-11-02
 bash run.sh --suite controls
 ```
 
