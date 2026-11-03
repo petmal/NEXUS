@@ -1,0 +1,640 @@
+{
+  "version": "glm-high-stage-c-addition-v1",
+  "archive_name": "glm-addition-v1.zip",
+  "archive_sha256": "1cede979e8202de87eb02e9f7439249c0ecbe17567440041d27940b0b23928a7",
+  "recorded_source_commit": "2b843649c6f61272edff05d437689ac9f619038d",
+  "runtime_source_sha256": "ba22502788acf7ce1684e1e527e5aa332cd1746b37423fececabc90d71b8ee83",
+  "mindtrial_sha256": "95c57d56e3d8739c19c4be1d33ec8de876c6522a003704c4f2d277978baf8660",
+  "python": "3.14.7",
+  "scope": {
+    "original_hmac_recomputed": false,
+    "fresh_replay_secret": true,
+    "live_model_calls": 0
+  },
+  "config": {
+    "model": "z-ai/glm-5.2",
+    "reasoning_effort": "high",
+    "disable_structured_output": true,
+    "max_completion_tokens": 65536,
+    "rpm": 10,
+    "input_and_full_run_config_identical_to_evening_high_D": true
+  },
+  "stage_c_coverage": {
+    "intended": [
+      "S05",
+      "S21",
+      "09",
+      "25"
+    ],
+    "supplied": [
+      "09",
+      "25"
+    ],
+    "not_supplied": [
+      "S05",
+      "S21"
+    ],
+    "complete_for_configured_selection": true
+  },
+  "new_traces_against_prior_archives": 2,
+  "totals": {
+    "planned": 2,
+    "started": 2,
+    "complete_result_records": 2,
+    "unstarted": 0,
+    "world_wins": 1,
+    "supported_world_wins": 1,
+    "tool_calls_started": 34,
+    "tool_calls_completed": 34,
+    "public_responses_replayed": 34,
+    "accepted_actions": 22,
+    "hash_records_matched": 5
+  },
+  "rows": [
+    {
+      "trace_id": "01M6FRQK3TQ8KP46V0KBKNV9DS",
+      "directory": "screen-20261103T035501Z-asqjg6pa",
+      "id": "09",
+      "model": "z-ai/glm-5.2",
+      "kind": "Passed",
+      "inputs": {
+        "axis-version": 2,
+        "budget-profile": "standard",
+        "discovery-level": 0,
+        "extended-diagnostics": true,
+        "generation-timing": true,
+        "ontology-options": "{\"coupling\":\"independent\",\"horizon\":\"short\"}",
+        "planning-level": 0,
+        "resource-pressure": 2,
+        "science-family": "stateful-interference-v1",
+        "seed": "101",
+        "theory-level": 0
+      },
+      "accepted_actions": 17,
+      "world_win": true,
+      "supported_world_win": true,
+      "pre_finalization_status": "won",
+      "usage": {
+        "InputTokens": 426919,
+        "OutputTokens": 20013,
+        "ReasoningTokens": 19601,
+        "InputCacheWriteTokens": 0,
+        "InputCacheReadTokens": 377088,
+        "InputTokenAccounting": "cache_tokens_included",
+        "OutputTokenAccounting": "reasoning_tokens_included"
+      },
+      "request_seconds": 186.376185501,
+      "protocol_errors": {},
+      "rejected_actions": [],
+      "reasoning_effort": "high",
+      "receipt_accepted": true,
+      "action_budget": 17,
+      "cost_audit": {
+        "minimum_actions": 17,
+        "first_budget_infeasible_turn": null,
+        "minimum_at_stop": 0,
+        "excess_total": 0,
+        "physical_goal_at_stop": true,
+        "operations_noop": 0,
+        "trace": [
+          {
+            "turn": 1,
+            "action": {
+              "type": "take",
+              "artifact": "seal"
+            },
+            "line": 161,
+            "state": [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            "room": "array",
+            "remaining_minimum": 16,
+            "excess_introduced": 0,
+            "excess_total": 0,
+            "operation_noop": false
+          },
+          {
+            "turn": 2,
+            "action": {
+              "type": "operate",
+              "machine": "bank0_r0",
+              "artifact": "seal"
+            },
+            "line": 182,
+            "state": [
+              3,
+              0,
+              2,
+              0,
+              0,
+              0
+            ],
+            "room": "array",
+            "remaining_minimum": 15,
+            "excess_introduced": 0,
+            "excess_total": 0,
+            "operation_noop": false
+          },
+          {
+            "turn": 3,
+            "action": {
+              "type": "operate",
+              "machine": "bank0_r2",
+              "artifact": "seal"
+            },
+            "line": 203,
+            "state": [
+              3,
+              2,
+              0,
+              0,
+              0,
+              0
+            ],
+            "room": "array",
+            "remaining_minimum": 14,
+            "excess_introduced": 0,
+            "excess_total": 0,
+            "operation_noop": false
+          },
+          {
+            "turn": 4,
+            "action": {
+              "type": "operate",
+              "machine": "bank0_r2",
+              "artifact": "seal"
+            },
+            "line": 224,
+            "state": [
+              3,
+              4,
+              3,
+              0,
+              0,
+              0
+            ],
+            "room": "array",
+            "remaining_minimum": 13,
+            "excess_introduced": 0,
+            "excess_total": 0,
+            "operation_noop": false
+          },
+          {
+            "turn": 5,
+            "action": {
+              "type": "operate",
+              "machine": "bank0_r2",
+              "artifact": "seal"
+            },
+            "line": 245,
+            "state": [
+              3,
+              1,
+              1,
+              0,
+              0,
+              0
+            ],
+            "room": "array",
+            "remaining_minimum": 12,
+            "excess_introduced": 0,
+            "excess_total": 0,
+            "operation_noop": false
+          },
+          {
+            "turn": 6,
+            "action": {
+              "type": "operate",
+              "machine": "bank1_r0",
+              "artifact": "seal"
+            },
+            "line": 266,
+            "state": [
+              3,
+              1,
+              1,
+              1,
+              0,
+              2
+            ],
+            "room": "array",
+            "remaining_minimum": 11,
+            "excess_introduced": 0,
+            "excess_total": 0,
+            "operation_noop": false
+          },
+          {
+            "turn": 7,
+            "action": {
+              "type": "operate",
+              "machine": "bank1_r0",
+              "artifact": "seal"
+            },
+            "line": 287,
+            "state": [
+              3,
+              1,
+              1,
+              2,
+              0,
+              4
+            ],
+            "room": "array",
+            "remaining_minimum": 10,
+            "excess_introduced": 0,
+            "excess_total": 0,
+            "operation_noop": false
+          },
+          {
+            "turn": 8,
+            "action": {
+              "type": "operate",
+              "machine": "bank1_r0",
+              "artifact": "seal"
+            },
+            "line": 308,
+            "state": [
+              3,
+              1,
+              1,
+              3,
+              0,
+              1
+            ],
+            "room": "array",
+            "remaining_minimum": 9,
+            "excess_introduced": 0,
+            "excess_total": 0,
+            "operation_noop": false
+          },
+          {
+            "turn": 9,
+            "action": {
+              "type": "operate",
+              "machine": "bank1_r0",
+              "artifact": "seal"
+            },
+            "line": 329,
+            "state": [
+              3,
+              1,
+              1,
+              4,
+              0,
+              3
+            ],
+            "room": "array",
+            "remaining_minimum": 8,
+            "excess_introduced": 0,
+            "excess_total": 0,
+            "operation_noop": false
+          },
+          {
+            "turn": 10,
+            "action": {
+              "type": "operate",
+              "machine": "bank1_r2",
+              "artifact": "seal"
+            },
+            "line": 350,
+            "state": [
+              3,
+              1,
+              1,
+              4,
+              2,
+              1
+            ],
+            "room": "array",
+            "remaining_minimum": 7,
+            "excess_introduced": 0,
+            "excess_total": 0,
+            "operation_noop": false
+          },
+          {
+            "turn": 11,
+            "action": {
+              "type": "operate",
+              "machine": "bank1_r2",
+              "artifact": "seal"
+            },
+            "line": 371,
+            "state": [
+              3,
+              1,
+              1,
+              4,
+              4,
+              4
+            ],
+            "room": "array",
+            "remaining_minimum": 6,
+            "excess_introduced": 0,
+            "excess_total": 0,
+            "operation_noop": false
+          },
+          {
+            "turn": 12,
+            "action": {
+              "type": "operate",
+              "machine": "bank1_r2",
+              "artifact": "seal"
+            },
+            "line": 392,
+            "state": [
+              3,
+              1,
+              1,
+              4,
+              1,
+              2
+            ],
+            "room": "array",
+            "remaining_minimum": 5,
+            "excess_introduced": 0,
+            "excess_total": 0,
+            "operation_noop": false
+          },
+          {
+            "turn": 13,
+            "action": {
+              "type": "operate",
+              "machine": "bank1_r1",
+              "artifact": "seal"
+            },
+            "line": 413,
+            "state": [
+              3,
+              1,
+              1,
+              3,
+              0,
+              2
+            ],
+            "room": "array",
+            "remaining_minimum": 4,
+            "excess_introduced": 0,
+            "excess_total": 0,
+            "operation_noop": false
+          },
+          {
+            "turn": 14,
+            "action": {
+              "type": "operate",
+              "machine": "bank1_r0",
+              "artifact": "seal"
+            },
+            "line": 434,
+            "state": [
+              3,
+              1,
+              1,
+              4,
+              0,
+              4
+            ],
+            "room": "array",
+            "remaining_minimum": 3,
+            "excess_introduced": 0,
+            "excess_total": 0,
+            "operation_noop": false
+          },
+          {
+            "turn": 15,
+            "action": {
+              "type": "operate",
+              "machine": "bank1_r2",
+              "artifact": "seal"
+            },
+            "line": 455,
+            "state": [
+              3,
+              1,
+              1,
+              4,
+              2,
+              2
+            ],
+            "room": "array",
+            "remaining_minimum": 2,
+            "excess_introduced": 0,
+            "excess_total": 0,
+            "operation_noop": false
+          },
+          {
+            "turn": 16,
+            "action": {
+              "type": "operate",
+              "machine": "bank1_r1",
+              "artifact": "seal"
+            },
+            "line": 476,
+            "state": [
+              3,
+              1,
+              1,
+              3,
+              1,
+              2
+            ],
+            "room": "array",
+            "remaining_minimum": 1,
+            "excess_introduced": 0,
+            "excess_total": 0,
+            "operation_noop": false
+          },
+          {
+            "turn": 17,
+            "action": {
+              "type": "finish"
+            },
+            "line": 497,
+            "state": [
+              3,
+              1,
+              1,
+              3,
+              1,
+              2
+            ],
+            "room": "array",
+            "remaining_minimum": 0,
+            "excess_introduced": 0,
+            "excess_total": 0,
+            "operation_noop": false
+          }
+        ]
+      }
+    },
+    {
+      "trace_id": "01M6FRY3DPT1TC3GV705T7WSMG",
+      "directory": "screen-20261103T035501Z-asqjg6pa",
+      "id": "25",
+      "model": "z-ai/glm-5.2",
+      "kind": "Error",
+      "inputs": {
+        "axis-version": 2,
+        "budget-profile": "standard",
+        "discovery-level": 0,
+        "extended-diagnostics": true,
+        "generation-timing": true,
+        "ontology-options": "{\"coupling\":\"independent\",\"horizon\":\"short\"}",
+        "planning-level": 0,
+        "resource-pressure": 1,
+        "science-family": "stateful-interference-v1",
+        "seed": "101",
+        "theory-level": 0
+      },
+      "accepted_actions": 5,
+      "world_win": false,
+      "supported_world_win": false,
+      "pre_finalization_status": "active",
+      "usage": {
+        "InputTokens": 106708,
+        "OutputTokens": 81405,
+        "ReasoningTokens": 81249,
+        "InputCacheWriteTokens": 0,
+        "InputCacheReadTokens": 61184,
+        "InputTokenAccounting": "cache_tokens_included",
+        "OutputTokenAccounting": "reasoning_tokens_included"
+      },
+      "request_seconds": 485.04994241,
+      "protocol_errors": {},
+      "rejected_actions": [],
+      "reasoning_effort": "high",
+      "receipt_accepted": false,
+      "action_budget": 26,
+      "cost_audit": {
+        "minimum_actions": 17,
+        "first_budget_infeasible_turn": 5,
+        "minimum_at_stop": 22,
+        "excess_total": 10,
+        "physical_goal_at_stop": false,
+        "operations_noop": 0,
+        "trace": [
+          {
+            "turn": 1,
+            "action": {
+              "type": "take",
+              "artifact": "seal"
+            },
+            "line": 839,
+            "state": [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            "room": "array",
+            "remaining_minimum": 16,
+            "excess_introduced": 0,
+            "excess_total": 0,
+            "operation_noop": false
+          },
+          {
+            "turn": 2,
+            "action": {
+              "type": "operate",
+              "machine": "bank0_r1",
+              "artifact": "seal"
+            },
+            "line": 860,
+            "state": [
+              1,
+              3,
+              0,
+              0,
+              0,
+              0
+            ],
+            "room": "array",
+            "remaining_minimum": 20,
+            "excess_introduced": 5,
+            "excess_total": 5,
+            "operation_noop": false
+          },
+          {
+            "turn": 3,
+            "action": {
+              "type": "operate",
+              "machine": "bank0_r1",
+              "artifact": "seal"
+            },
+            "line": 881,
+            "state": [
+              2,
+              1,
+              0,
+              0,
+              0,
+              0
+            ],
+            "room": "array",
+            "remaining_minimum": 19,
+            "excess_introduced": 0,
+            "excess_total": 5,
+            "operation_noop": false
+          },
+          {
+            "turn": 4,
+            "action": {
+              "type": "operate",
+              "machine": "bank0_r1",
+              "artifact": "seal"
+            },
+            "line": 902,
+            "state": [
+              3,
+              4,
+              0,
+              0,
+              0,
+              0
+            ],
+            "room": "array",
+            "remaining_minimum": 18,
+            "excess_introduced": 0,
+            "excess_total": 5,
+            "operation_noop": false
+          },
+          {
+            "turn": 5,
+            "action": {
+              "type": "operate",
+              "machine": "bank0_r2",
+              "artifact": "seal"
+            },
+            "line": 923,
+            "state": [
+              3,
+              1,
+              3,
+              0,
+              0,
+              0
+            ],
+            "room": "array",
+            "remaining_minimum": 22,
+            "excess_introduced": 5,
+            "excess_total": 10,
+            "operation_noop": false
+          }
+        ]
+      }
+    }
+  ],
+  "high_planning_summary_including_D": {
+    "attempts": 4,
+    "supported_wins": 1,
+    "length_stops": 3,
+    "length_stops_after_budget_became_infeasible": 1,
+    "caution": "One attempt per row; not a general model accuracy estimate or isolated effort effect."
+  }
+}

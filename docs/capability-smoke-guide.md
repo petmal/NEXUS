@@ -8,8 +8,10 @@ The [2 November evening diagnostics](research/inference-diagnostic-results-2026-
 add four supported MiniMax control wins (three accepted receipts), two MiniMax
 world-budget losses and four GLM high/xhigh length stops. No 429 occurs at the
 unchanged rate; the earlier [interruption](research/minimax-control-interruption-2026-11-02.md)
-remains separate. Recover/run the missing GLM high Stage C rows next, and pause
-unchanged long-case repetitions. The launcher still stops subsequent groups on a
+remains separate. The [later Stage C pair](research/glm-high-stage-c-2026-11-02.md)
+adds a GLM high optimal 09 win and a 25 length stop after a fatal detour. Only
+high S05/S21 controls remain absent; do not repeat the supplied planning rows.
+Keep unchanged challenge repetitions paused. The launcher still stops subsequent groups on a
 recorded 429; no lower-rate recovery claim follows from this batch.
 The frozen specification is [capability-smoke-matrix.json](capability-smoke-matrix.json).
 

@@ -1,5 +1,10 @@
 # MiniMax and GLM inference diagnostics: 2 November results
 
+**Later addition:** [GLM high Stage C planning results](glm-high-stage-c-2026-11-02.md)
+supply rows 09/25 after this ten-attempt archive. Only S05/S21 controls remain
+unreported. The later report supersedes the missing-four-row recommendation
+below; the original results and archive scope are retained.
+
 The evening run removes the immediate HTTP 429 interruption, but it does not
 establish a stable MiniMax evaluation path or rescue GLM's long-plan trials.
 MiniMax solves all four disclosed controls in the world; one final answer fails
