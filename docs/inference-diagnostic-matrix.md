@@ -1,13 +1,16 @@
 # Focused follow-up after the smaller-model repetitions
 
-**2 November evening results:** [Ten new attempts](research/inference-diagnostic-results-2026-11-02.md)
-complete A/B and one D block. MiniMax has four supported control wins (three
-accepted receipts) and two world-budget losses. No 429 occurs at the unchanged
-10 RPM. GLM high/xhigh stops at length on all four long cases; xhigh 11 was
-already physically infeasible before stopping. Stage C is absent. Recover/run
-C's four high-setting rows next; pause unchanged D repetitions. The earlier
+**2 November late update:** [The Stage C addition](research/glm-high-stage-c-2026-11-02.md)
+supplies GLM high 09/25. Row 09 wins optimally; row 25 reaches a length stop
+only after turn 5 has made victory impossible within its remaining world budget.
+Only high S05/S21 controls remain absent; recover/run those two once if completing
+the admission record is useful. Do not repeat 09/25 or the unchanged D challenge
+block by default. The optimal 09 win already demonstrates working planning tools
+and receipt delivery, so the wider science sequence need not wait on more GLM
+diagnostics. The [preceding ten-attempt report](research/inference-diagnostic-results-2026-11-02.md)
+retains the MiniMax and D results. The earlier
 [429 interruption](research/minimax-control-interruption-2026-11-02.md) remains
-in the record, but its proposed lower-rate probe is no longer the immediate step.
+separate; no lower-rate fix was demonstrated or is currently needed as a probe.
 
 Original plan: 1 November 2026. The stages below are retained as the specification;
 the update above and linked results supersede its immediate run recommendations.

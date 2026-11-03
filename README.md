@@ -15,8 +15,11 @@ unattended task selection, indexed repetitions and response-stop readouts.
 The [2 November evening diagnostics](docs/research/inference-diagnostic-results-2026-11-02.md)
 contain ten new attempts: MiniMax solves all four controls but loses one receipt
 submission and both short planning trials; GLM high/xhigh reaches length stops
-in all four long trials, one after an already fatal planning detour. Recover/run
-the missing GLM high admission rows; pause unchanged long-case repetitions.
+in all four long trials, one after an already fatal planning detour. The later
+[GLM high Stage C pair](docs/research/glm-high-stage-c-2026-11-02.md) adds an optimal
+09 win and a 25 length stop after a fatal planning detour. Only high S05/S21
+controls remain absent. Pause unchanged challenge repetitions and continue the
+Astra anchor and fresh-world qualification independently.
 The earlier [HTTP 429 interruption](docs/research/minimax-control-interruption-2026-11-02.md)
 remains separately recorded. The launcher halts subsequent groups on a 429.
 
