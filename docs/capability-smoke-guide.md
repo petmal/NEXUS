@@ -4,16 +4,20 @@ Updated 2 November 2026. Controls, initial GLM/MiniMax screens and the requested
 selected repetitions have been analysed. Other model followups remain unreported.
 Read [the latest synthesis](research/smaller-model-synthesis-2026-11-01.md) and
 [the consolidated findings](research/smoke-findings-2026-10-31.md) first.
-The [2 November MiniMax controls](research/minimax-control-interruption-2026-11-02.md)
-were blocked by HTTP 429 and empty content. Hold further MiniMax challenge runs;
-the launcher now stops later groups/repetitions on a recorded 429.
+The [2 November evening diagnostics](research/inference-diagnostic-results-2026-11-02.md)
+add four supported MiniMax control wins (three accepted receipts), two MiniMax
+world-budget losses and four GLM high/xhigh length stops. No 429 occurs at the
+unchanged rate; the earlier [interruption](research/minimax-control-interruption-2026-11-02.md)
+remains separate. Recover/run the missing GLM high Stage C rows next, and pause
+unchanged long-case repetitions. The launcher still stops subsequent groups on a
+recorded 429; no lower-rate recovery claim follows from this batch.
 The frozen specification is [capability-smoke-matrix.json](capability-smoke-matrix.json).
 
 Do not repeat the entire unchanged GLM/MiniMax screen. The completed repetitions
 recommend a MiniMax response/provenance diagnostic and a bounded GLM generation-
 setting comparison before fresh qualified seeds and broader world changes.
-The [follow-up matrix](inference-diagnostic-matrix.md) specifies an 18-attempt
-first wave with control gates. The revised launcher supports exact `--task-id`
+The [follow-up matrix](inference-diagnostic-matrix.md) retains the original
+18-attempt specification and records which stages are now supplied or paused. The revised launcher supports exact `--task-id`
 selection and `--repeat` without interactive confirmations or task-file edits.
 The [initial screen](research/capability-screen-results-2026-10-31.md) and
 [text-output controls](research/capability-text-output-controls-2026-10-31.md)

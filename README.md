@@ -10,11 +10,15 @@ Current evidence and roadmap: [smaller-model synthesis](docs/research/smaller-mo
 repetitions are complete. They preserve useful T/D and P/R distinctions while
 prioritizing response-stop classification and inference reproducibility before
 new world complexity. Grok/Muse/Mistral followups remain unreported.
-The [focused diagnostic matrix](docs/inference-diagnostic-matrix.md) recommends
-up to 18 next attempts. The launcher supports exact unattended task selection
-and indexed repetitions; readout v3 separates response stops from world budgets.
-The [2 November MiniMax control interruption](docs/research/minimax-control-interruption-2026-11-02.md)
-adds an HTTP 429 batch stop and a single-row, lower-rate recovery probe.
+The [focused diagnostic matrix](docs/inference-diagnostic-matrix.md) adds exact
+unattended task selection, indexed repetitions and response-stop readouts.
+The [2 November evening diagnostics](docs/research/inference-diagnostic-results-2026-11-02.md)
+contain ten new attempts: MiniMax solves all four controls but loses one receipt
+submission and both short planning trials; GLM high/xhigh reaches length stops
+in all four long trials, one after an already fatal planning detour. Recover/run
+the missing GLM high admission rows; pause unchanged long-case repetitions.
+The earlier [HTTP 429 interruption](docs/research/minimax-control-interruption-2026-11-02.md)
+remains separately recorded. The launcher halts subsequent groups on a 429.
 
 ## Research checkpoint and next experiments
 

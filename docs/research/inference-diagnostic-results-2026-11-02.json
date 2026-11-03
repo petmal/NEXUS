@@ -1,0 +1,718 @@
+{
+  "version": "inference-diagnostic-results-v1",
+  "recorded_at": "2026-11-03 UTC / 2026-11-02 America/Toronto",
+  "archive_name": "results-v1(1).zip",
+  "archive_sha256": "bc95ec52c037e29bb1c213098db95112c8733ee9d31a0dd702da52fca14b2cdd",
+  "source_commit": "2b843649c6f61272edff05d437689ac9f619038d",
+  "runtime_source_sha256": "ba22502788acf7ce1684e1e527e5aa332cd1746b37423fececabc90d71b8ee83",
+  "mindtrial_sha256": "95c57d56e3d8739c19c4be1d33ec8de876c6522a003704c4f2d277978baf8660",
+  "python": "3.14.7",
+  "audit_scope": {
+    "original_hmac_recomputed": false,
+    "fresh_replay_secret": true,
+    "live_model_calls": 0
+  },
+  "provenance": {
+    "file_hashes_and_selected_tasks_verified": true,
+    "full_parent_preflight_and_source_bindings_verified": true,
+    "world_inputs_match_prior_trials": true,
+    "new_trace_ids_vs_prior_46_attempt_archive": 10,
+    "run_config_matches_prior_except_declared_glm_effort_change": true,
+    "rpm": 10,
+    "completion_ceiling": 65536,
+    "disable_structured_output": true,
+    "lower_rate_probe_present": false,
+    "provider_wire_captured": false
+  },
+  "stage_coverage": {
+    "A": {
+      "expected": 4,
+      "recorded": 4,
+      "supported_world_wins": 4,
+      "accepted_receipts": 3
+    },
+    "B": {
+      "expected": 2,
+      "recorded": 2,
+      "world_budget_losses": 2
+    },
+    "C": {
+      "expected": 4,
+      "recorded": 0,
+      "status": "not_supplied"
+    },
+    "D": {
+      "expected": 8,
+      "recorded": 4,
+      "length_stops": 4,
+      "already_budget_infeasible_before_stop": 1
+    }
+  },
+  "totals": {
+    "planned": 10,
+    "started": 10,
+    "complete_result_records": 10,
+    "unstarted": 0,
+    "world_wins": 4,
+    "supported_world_wins": 4,
+    "tool_calls_started": 132,
+    "tool_calls_completed": 132,
+    "public_responses_replayed": 131,
+    "accepted_actions": 73,
+    "hash_records_matched": 28
+  },
+  "raw_result_counts": {
+    "Passed": 3,
+    "Failed": 3,
+    "Error": 4
+  },
+  "audited_outcomes": {
+    "reported_win": 3,
+    "world_won_without_accepted_result": 1,
+    "action_budget_exhausted": 2,
+    "response_length_without_text": 4
+  },
+  "rows": [
+    {
+      "trace_id": "01M6FBEY9SX6ZP3YXDHSNPD2YJ",
+      "directory": "controls-20261103T000306Z-auzvenoc",
+      "model": "minimax/minimax-m3",
+      "id": "S05",
+      "family": "model-revision-v1",
+      "inputs": {
+        "axis-version": 2,
+        "budget-profile": "standard",
+        "discovery-level": 0,
+        "extended-diagnostics": true,
+        "generation-timing": true,
+        "ontology-options": "{\"consistency_check\":\"off\",\"finish_policy\":\"recoverable\",\"guidance\":\"principles\"}",
+        "planning-level": 0,
+        "resource-pressure": 1,
+        "science-family": "model-revision-v1",
+        "seed": "5866",
+        "theory-level": 0
+      },
+      "kind": "Passed",
+      "budget": 64,
+      "accepted_actions": 4,
+      "pre_finalization_status": "won",
+      "world_win": true,
+      "supported_world_win": true,
+      "public_responses_replayed": 9,
+      "hash_records_matched": 3,
+      "protocol_errors": {},
+      "usage": {
+        "InputTokens": 42234,
+        "OutputTokens": 3489,
+        "ReasoningTokens": 78,
+        "InputCacheWriteTokens": 0,
+        "InputCacheReadTokens": 26496,
+        "InputTokenAccounting": "cache_tokens_included",
+        "OutputTokenAccounting": "reasoning_tokens_included"
+      },
+      "request_seconds": 13.895416847,
+      "reasoning_effort": null,
+      "receipt_accepted": true,
+      "emitted_receipt_present_in_final_answer": true,
+      "response_stop_reason": "stop",
+      "readout_outcome": "reported_win",
+      "last_observed_world_state": {
+        "turn": 4,
+        "status": "won",
+        "actions_remaining": 60
+      },
+      "validation": {
+        "Title": "Valid victory code",
+        "Explanation": [
+          "The session is won and the submitted victory code matches it."
+        ],
+        "Method": "custom"
+      },
+      "action_counts": {
+        "take": 1,
+        "configure": 1,
+        "operate": 1,
+        "finish": 1
+      },
+      "cost_audit": null
+    },
+    {
+      "trace_id": "01M6FBFW7MXK94AE1FFHCACBFA",
+      "directory": "controls-20261103T000306Z-auzvenoc",
+      "model": "minimax/minimax-m3",
+      "id": "S21",
+      "family": "compositional-repair-v1",
+      "inputs": {
+        "axis-version": 2,
+        "budget-profile": "standard",
+        "discovery-level": 0,
+        "extended-diagnostics": true,
+        "generation-timing": true,
+        "planning-level": 1,
+        "resource-pressure": 1,
+        "science-family": "compositional-repair-v1",
+        "seed": "438",
+        "theory-level": 0
+      },
+      "kind": "Passed",
+      "budget": 8,
+      "accepted_actions": 6,
+      "pre_finalization_status": "won",
+      "world_win": true,
+      "supported_world_win": true,
+      "public_responses_replayed": 11,
+      "hash_records_matched": 6,
+      "protocol_errors": {},
+      "usage": {
+        "InputTokens": 67407,
+        "OutputTokens": 6524,
+        "ReasoningTokens": 5615,
+        "InputCacheWriteTokens": 0,
+        "InputCacheReadTokens": 53248,
+        "InputTokenAccounting": "cache_tokens_included",
+        "OutputTokenAccounting": "reasoning_tokens_included"
+      },
+      "request_seconds": 23.008483093,
+      "reasoning_effort": null,
+      "receipt_accepted": true,
+      "emitted_receipt_present_in_final_answer": true,
+      "response_stop_reason": "stop",
+      "readout_outcome": "reported_win",
+      "last_observed_world_state": {
+        "turn": 6,
+        "status": "won",
+        "actions_remaining": 2
+      },
+      "validation": {
+        "Title": "Valid victory code",
+        "Explanation": [
+          "The session is won and the submitted victory code matches it."
+        ],
+        "Method": "custom"
+      },
+      "action_counts": {
+        "take": 2,
+        "move": 1,
+        "configure": 1,
+        "operate": 1,
+        "finish": 1
+      },
+      "cost_audit": null
+    },
+    {
+      "trace_id": "01M6FBH2Z8WR43BFST5T1Z6A4S",
+      "directory": "controls-20261103T000416Z-bu1h5eis",
+      "model": "minimax/minimax-m3",
+      "id": "S05",
+      "family": "model-revision-v1",
+      "inputs": {
+        "axis-version": 2,
+        "budget-profile": "standard",
+        "discovery-level": 0,
+        "extended-diagnostics": true,
+        "generation-timing": true,
+        "ontology-options": "{\"consistency_check\":\"off\",\"finish_policy\":\"recoverable\",\"guidance\":\"principles\"}",
+        "planning-level": 0,
+        "resource-pressure": 1,
+        "science-family": "model-revision-v1",
+        "seed": "5866",
+        "theory-level": 0
+      },
+      "kind": "Passed",
+      "budget": 64,
+      "accepted_actions": 4,
+      "pre_finalization_status": "won",
+      "world_win": true,
+      "supported_world_win": true,
+      "public_responses_replayed": 9,
+      "hash_records_matched": 3,
+      "protocol_errors": {
+        "missing_operation": 1
+      },
+      "usage": {
+        "InputTokens": 89132,
+        "OutputTokens": 11304,
+        "ReasoningTokens": 10739,
+        "InputCacheWriteTokens": 0,
+        "InputCacheReadTokens": 69248,
+        "InputTokenAccounting": "cache_tokens_included",
+        "OutputTokenAccounting": "reasoning_tokens_included"
+      },
+      "request_seconds": 43.214510568,
+      "reasoning_effort": null,
+      "receipt_accepted": true,
+      "emitted_receipt_present_in_final_answer": true,
+      "response_stop_reason": "stop",
+      "readout_outcome": "reported_win",
+      "last_observed_world_state": {
+        "turn": 4,
+        "status": "won",
+        "actions_remaining": 60
+      },
+      "validation": {
+        "Title": "Valid victory code",
+        "Explanation": [
+          "The session is won and the submitted victory code matches it."
+        ],
+        "Method": "custom"
+      },
+      "action_counts": {
+        "take": 1,
+        "configure": 1,
+        "operate": 1,
+        "finish": 1
+      },
+      "cost_audit": null
+    },
+    {
+      "trace_id": "01M6FBJWZ051WFE39ZVFF6WFZ9",
+      "directory": "controls-20261103T000416Z-bu1h5eis",
+      "model": "minimax/minimax-m3",
+      "id": "S21",
+      "family": "compositional-repair-v1",
+      "inputs": {
+        "axis-version": 2,
+        "budget-profile": "standard",
+        "discovery-level": 0,
+        "extended-diagnostics": true,
+        "generation-timing": true,
+        "planning-level": 1,
+        "resource-pressure": 1,
+        "science-family": "compositional-repair-v1",
+        "seed": "438",
+        "theory-level": 0
+      },
+      "kind": "Failed",
+      "budget": 8,
+      "accepted_actions": 5,
+      "pre_finalization_status": "won",
+      "world_win": true,
+      "supported_world_win": true,
+      "public_responses_replayed": 12,
+      "hash_records_matched": 5,
+      "protocol_errors": {},
+      "usage": {
+        "InputTokens": 60716,
+        "OutputTokens": 3051,
+        "ReasoningTokens": 2312,
+        "InputCacheWriteTokens": 0,
+        "InputCacheReadTokens": 49792,
+        "InputTokenAccounting": "cache_tokens_included",
+        "OutputTokenAccounting": "reasoning_tokens_included"
+      },
+      "request_seconds": 13.11469423,
+      "reasoning_effort": null,
+      "receipt_accepted": false,
+      "emitted_receipt_present_in_final_answer": true,
+      "response_stop_reason": "stop",
+      "readout_outcome": "world_won_without_accepted_result",
+      "last_observed_world_state": {
+        "turn": 5,
+        "status": "won",
+        "actions_remaining": 3
+      },
+      "validation": {
+        "Title": "Invalid victory code",
+        "Explanation": [
+          "The session is won, but the submitted victory code does not match it."
+        ],
+        "Method": "custom"
+      },
+      "action_counts": {
+        "take": 1,
+        "move": 1,
+        "configure": 1,
+        "operate": 1,
+        "finish": 1
+      },
+      "cost_audit": null
+    },
+    {
+      "trace_id": "01M6FCAA1M58CAW5HV6TB79H67",
+      "directory": "screen-20261103T001803Z-pk3ueb8v",
+      "model": "minimax/minimax-m3",
+      "id": "09",
+      "family": "stateful-interference-v1",
+      "inputs": {
+        "axis-version": 2,
+        "budget-profile": "standard",
+        "discovery-level": 0,
+        "extended-diagnostics": true,
+        "generation-timing": true,
+        "ontology-options": "{\"coupling\":\"independent\",\"horizon\":\"short\"}",
+        "planning-level": 0,
+        "resource-pressure": 2,
+        "science-family": "stateful-interference-v1",
+        "seed": "101",
+        "theory-level": 0
+      },
+      "kind": "Failed",
+      "budget": 17,
+      "accepted_actions": 17,
+      "pre_finalization_status": "failed",
+      "world_win": false,
+      "supported_world_win": false,
+      "public_responses_replayed": 23,
+      "hash_records_matched": 0,
+      "protocol_errors": {},
+      "usage": {
+        "InputTokens": 720906,
+        "OutputTokens": 74074,
+        "ReasoningTokens": 71909,
+        "InputCacheWriteTokens": 0,
+        "InputCacheReadTokens": 550400,
+        "InputTokenAccounting": "cache_tokens_included",
+        "OutputTokenAccounting": "reasoning_tokens_included"
+      },
+      "request_seconds": 361.227335177,
+      "reasoning_effort": null,
+      "receipt_accepted": false,
+      "emitted_receipt_present_in_final_answer": false,
+      "response_stop_reason": "stop",
+      "readout_outcome": "action_budget_exhausted",
+      "last_observed_world_state": {
+        "turn": 17,
+        "status": "failed",
+        "actions_remaining": 0
+      },
+      "validation": {
+        "Title": "Mission not complete",
+        "Explanation": [
+          "NEXUS is in terminal state 'failed', not 'won'."
+        ],
+        "Method": "custom"
+      },
+      "action_counts": {
+        "take": 1,
+        "operate": 14,
+        "finish": 2
+      },
+      "cost_audit": {
+        "minimum_actions": 17,
+        "first_budget_infeasible_turn": 7,
+        "minimum_at_stop": 17,
+        "excess_total": 17,
+        "physical_goal_at_stop": false,
+        "operations_noop": 0
+      }
+    },
+    {
+      "trace_id": "01M6FCP6B3JWZ2QKWTS82DSZ7J",
+      "directory": "screen-20261103T001803Z-pk3ueb8v",
+      "model": "minimax/minimax-m3",
+      "id": "25",
+      "family": "stateful-interference-v1",
+      "inputs": {
+        "axis-version": 2,
+        "budget-profile": "standard",
+        "discovery-level": 0,
+        "extended-diagnostics": true,
+        "generation-timing": true,
+        "ontology-options": "{\"coupling\":\"independent\",\"horizon\":\"short\"}",
+        "planning-level": 0,
+        "resource-pressure": 1,
+        "science-family": "stateful-interference-v1",
+        "seed": "101",
+        "theory-level": 0
+      },
+      "kind": "Failed",
+      "budget": 26,
+      "accepted_actions": 26,
+      "pre_finalization_status": "failed",
+      "world_win": false,
+      "supported_world_win": false,
+      "public_responses_replayed": 32,
+      "hash_records_matched": 0,
+      "protocol_errors": {},
+      "usage": {
+        "InputTokens": 224397,
+        "OutputTokens": 2099,
+        "ReasoningTokens": 26,
+        "InputCacheWriteTokens": 0,
+        "InputCacheReadTokens": 196736,
+        "InputTokenAccounting": "cache_tokens_included",
+        "OutputTokenAccounting": "reasoning_tokens_included"
+      },
+      "request_seconds": 28.437294325,
+      "reasoning_effort": null,
+      "receipt_accepted": false,
+      "emitted_receipt_present_in_final_answer": false,
+      "response_stop_reason": "stop",
+      "readout_outcome": "action_budget_exhausted",
+      "last_observed_world_state": {
+        "turn": 26,
+        "status": "failed",
+        "actions_remaining": 0
+      },
+      "validation": {
+        "Title": "Mission not complete",
+        "Explanation": [
+          "NEXUS is in terminal state 'failed', not 'won'."
+        ],
+        "Method": "custom"
+      },
+      "action_counts": {
+        "take": 1,
+        "probe": 6,
+        "operate": 18,
+        "finish": 1
+      },
+      "cost_audit": {
+        "minimum_actions": 17,
+        "first_budget_infeasible_turn": 14,
+        "minimum_at_stop": 10,
+        "excess_total": 19,
+        "physical_goal_at_stop": false,
+        "operations_noop": 7
+      }
+    },
+    {
+      "trace_id": "01M6FEJKQMT5BBY9W47AKH4D4A",
+      "directory": "screen-20261103T005732Z-ap4qozo4",
+      "model": "z-ai/glm-5.2",
+      "id": "11",
+      "family": "stateful-interference-v1",
+      "inputs": {
+        "axis-version": 2,
+        "budget-profile": "standard",
+        "discovery-level": 0,
+        "extended-diagnostics": true,
+        "generation-timing": true,
+        "ontology-options": "{\"coupling\":\"coupled\",\"horizon\":\"long\"}",
+        "planning-level": 0,
+        "resource-pressure": 2,
+        "science-family": "stateful-interference-v1",
+        "seed": "101",
+        "theory-level": 0
+      },
+      "kind": "Error",
+      "budget": 35,
+      "accepted_actions": 0,
+      "pre_finalization_status": "active",
+      "world_win": false,
+      "supported_world_win": false,
+      "public_responses_replayed": 6,
+      "hash_records_matched": 0,
+      "protocol_errors": {},
+      "usage": {
+        "InputTokens": 7350,
+        "OutputTokens": 65685,
+        "ReasoningTokens": 65685,
+        "InputCacheWriteTokens": 0,
+        "InputCacheReadTokens": 2592,
+        "InputTokenAccounting": "cache_tokens_included",
+        "OutputTokenAccounting": "reasoning_tokens_included"
+      },
+      "request_seconds": 574.07970113,
+      "reasoning_effort": "high",
+      "receipt_accepted": false,
+      "emitted_receipt_present_in_final_answer": false,
+      "response_stop_reason": "length",
+      "readout_outcome": "response_length_without_text",
+      "last_observed_world_state": {
+        "turn": 0,
+        "status": "active",
+        "actions_remaining": 35
+      },
+      "validation": null,
+      "action_counts": {},
+      "cost_audit": {
+        "minimum_actions": 35,
+        "first_budget_infeasible_turn": null,
+        "minimum_at_stop": 35,
+        "excess_total": 0,
+        "physical_goal_at_stop": false,
+        "operations_noop": 0
+      }
+    },
+    {
+      "trace_id": "01M6FF4HAHTKGPDJ8EAQANR8E6",
+      "directory": "screen-20261103T005732Z-ap4qozo4",
+      "model": "z-ai/glm-5.2",
+      "id": "27",
+      "family": "stateful-interference-v1",
+      "inputs": {
+        "axis-version": 2,
+        "budget-profile": "standard",
+        "discovery-level": 0,
+        "extended-diagnostics": true,
+        "generation-timing": true,
+        "ontology-options": "{\"coupling\":\"coupled\",\"horizon\":\"long\"}",
+        "planning-level": 0,
+        "resource-pressure": 1,
+        "science-family": "stateful-interference-v1",
+        "seed": "101",
+        "theory-level": 0
+      },
+      "kind": "Error",
+      "budget": 53,
+      "accepted_actions": 0,
+      "pre_finalization_status": "active",
+      "world_win": false,
+      "supported_world_win": false,
+      "public_responses_replayed": 6,
+      "hash_records_matched": 0,
+      "protocol_errors": {},
+      "usage": {
+        "InputTokens": 7601,
+        "OutputTokens": 65699,
+        "ReasoningTokens": 65699,
+        "InputCacheWriteTokens": 0,
+        "InputCacheReadTokens": 4096,
+        "InputTokenAccounting": "cache_tokens_included",
+        "OutputTokenAccounting": "reasoning_tokens_included"
+      },
+      "request_seconds": 432.407695013,
+      "reasoning_effort": "high",
+      "receipt_accepted": false,
+      "emitted_receipt_present_in_final_answer": false,
+      "response_stop_reason": "length",
+      "readout_outcome": "response_length_without_text",
+      "last_observed_world_state": {
+        "turn": 0,
+        "status": "active",
+        "actions_remaining": 53
+      },
+      "validation": null,
+      "action_counts": {},
+      "cost_audit": {
+        "minimum_actions": 35,
+        "first_budget_infeasible_turn": null,
+        "minimum_at_stop": 35,
+        "excess_total": 0,
+        "physical_goal_at_stop": false,
+        "operations_noop": 0
+      }
+    },
+    {
+      "trace_id": "01M6FJWY3CVNAEMBEH2EDR8BFJ",
+      "directory": "screen-20261103T021305Z-zg0ie1gr",
+      "model": "z-ai/glm-5.2",
+      "id": "11",
+      "family": "stateful-interference-v1",
+      "inputs": {
+        "axis-version": 2,
+        "budget-profile": "standard",
+        "discovery-level": 0,
+        "extended-diagnostics": true,
+        "generation-timing": true,
+        "ontology-options": "{\"coupling\":\"coupled\",\"horizon\":\"long\"}",
+        "planning-level": 0,
+        "resource-pressure": 2,
+        "science-family": "stateful-interference-v1",
+        "seed": "101",
+        "theory-level": 0
+      },
+      "kind": "Error",
+      "budget": 35,
+      "accepted_actions": 11,
+      "pre_finalization_status": "active",
+      "world_win": false,
+      "supported_world_win": false,
+      "public_responses_replayed": 17,
+      "hash_records_matched": 11,
+      "protocol_errors": {},
+      "usage": {
+        "InputTokens": 312481,
+        "OutputTokens": 88015,
+        "ReasoningTokens": 43131,
+        "InputCacheWriteTokens": 0,
+        "InputCacheReadTokens": 302592,
+        "InputTokenAccounting": "cache_tokens_included",
+        "OutputTokenAccounting": "reasoning_tokens_included"
+      },
+      "request_seconds": 550.622375435,
+      "reasoning_effort": "xhigh",
+      "receipt_accepted": false,
+      "emitted_receipt_present_in_final_answer": false,
+      "response_stop_reason": "length",
+      "readout_outcome": "response_length_without_text",
+      "last_observed_world_state": {
+        "turn": 11,
+        "status": "active",
+        "actions_remaining": 24
+      },
+      "validation": null,
+      "action_counts": {
+        "take": 1,
+        "operate": 10
+      },
+      "cost_audit": {
+        "minimum_actions": 35,
+        "first_budget_infeasible_turn": 2,
+        "minimum_at_stop": 39,
+        "excess_total": 15,
+        "physical_goal_at_stop": false,
+        "operations_noop": 0
+      }
+    },
+    {
+      "trace_id": "01M6FKEDHEWKCS5NJK2Y028H1E",
+      "directory": "screen-20261103T021305Z-zg0ie1gr",
+      "model": "z-ai/glm-5.2",
+      "id": "27",
+      "family": "stateful-interference-v1",
+      "inputs": {
+        "axis-version": 2,
+        "budget-profile": "standard",
+        "discovery-level": 0,
+        "extended-diagnostics": true,
+        "generation-timing": true,
+        "ontology-options": "{\"coupling\":\"coupled\",\"horizon\":\"long\"}",
+        "planning-level": 0,
+        "resource-pressure": 1,
+        "science-family": "stateful-interference-v1",
+        "seed": "101",
+        "theory-level": 0
+      },
+      "kind": "Error",
+      "budget": 53,
+      "accepted_actions": 0,
+      "pre_finalization_status": "active",
+      "world_win": false,
+      "supported_world_win": false,
+      "public_responses_replayed": 6,
+      "hash_records_matched": 0,
+      "protocol_errors": {},
+      "usage": {
+        "InputTokens": 7383,
+        "OutputTokens": 65710,
+        "ReasoningTokens": 29966,
+        "InputCacheWriteTokens": 0,
+        "InputCacheReadTokens": 4608,
+        "InputTokenAccounting": "cache_tokens_included",
+        "OutputTokenAccounting": "reasoning_tokens_included"
+      },
+      "request_seconds": 334.470013134,
+      "reasoning_effort": "xhigh",
+      "receipt_accepted": false,
+      "emitted_receipt_present_in_final_answer": false,
+      "response_stop_reason": "length",
+      "readout_outcome": "response_length_without_text",
+      "last_observed_world_state": {
+        "turn": 0,
+        "status": "active",
+        "actions_remaining": 53
+      },
+      "validation": null,
+      "action_counts": {},
+      "cost_audit": {
+        "minimum_actions": 35,
+        "first_budget_infeasible_turn": null,
+        "minimum_at_stop": 35,
+        "excess_total": 0,
+        "physical_goal_at_stop": false,
+        "operations_noop": 0
+      }
+    }
+  ],
+  "interpretation_limits": [
+    "One fixed world per matched planning pair; stochastic model repeats are not fresh worlds.",
+    "No new hidden-law result; no update to strongest-model pure T/D boundary.",
+    "MiniMax current pair fails under both budgets; no new slack rescue.",
+    "GLM high admission rows absent; only one new attempt per effort/world cell.",
+    "Length stops and proved pre-stop budget infeasibility are separate observations.",
+    "Short independent versus long coupled changes both horizon and coupling.",
+    "Reported aggregate token counts do not certify upstream identity or reasoning mode."
+  ]
+}
