@@ -431,6 +431,13 @@ def test_main_routes_all_fresh_models_and_records_control_admission(tmp_path, pi
             }
             for i, task in enumerate(selected)
         ]
+        for record in records:
+            parameters = copy.deepcopy(record["RunConfig"]["ModelParameters"])
+            if provider["name"] in ("openai", "google"):
+                parameters["text-response-format"] = False
+            if provider["name"] == "google":
+                parameters["text-response-format-with-tools"] = False
+            record["RunConfig"]["ModelParameters"] = parameters
         runner.write_json(
             config_path.parent / "mindtrial.json", {"Results": {provider["name"]: records}}
         )

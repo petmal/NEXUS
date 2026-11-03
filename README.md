@@ -24,7 +24,11 @@ The [fresh-world pilot](docs/fresh-world-guide.md) now implements that next step
 two new fixtures in each established family, 26 conditions per model, Astra/Luna/
 Flash/Grok presets, a six-row Astra anchor, and an unattended runner with matching
 control admission. All 32 fixtures pass mechanical qualification; live evaluation
-is pending. Start with the [run instructions](examples/mindtrial/fresh-world-run.md).
+of the fresh challenges is pending. The [initial ten Astra attempts](docs/research/fresh-world-initial-results-2026-11-03.md)
+all passed receipt validation; a configuration-default comparison bug then blocked
+continuation. Use the [host-only fix](docs/fresh-world-readout-fix.md) to preserve
+those results and resume, or the [run instructions](examples/mindtrial/fresh-world-run.md)
+for a new evaluation.
 The earlier [HTTP 429 interruption](docs/research/minimax-control-interruption-2026-11-02.md)
 remains separately recorded. The launcher halts subsequent groups on a 429.
 

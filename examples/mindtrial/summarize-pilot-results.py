@@ -140,7 +140,15 @@ def run_config_differences(configured, snapshot, retry_policy):
     """Compare effective settings, allowing the API's omitted zero/null defaults."""
 
     def parameters(values):
-        return {k: v for k, v in (values or {}).items() if v is not None and v != []}
+        # MindTrial serializes these concrete bool fields even when YAML omits
+        # their false default (OpenAI; both fields on Google). Do not drop other
+        # false/zero values: nullable provider parameters can change behavior.
+        false_defaults = {"text-response-format", "text-response-format-with-tools"}
+        return {
+            k: v
+            for k, v in (values or {}).items()
+            if v is not None and v != [] and not (k in false_defaults and v is False)
+        }
 
     differences = []
     if parameters(snapshot.get("ModelParameters")) != parameters(

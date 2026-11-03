@@ -9,6 +9,43 @@ from pathlib import Path
 
 import pytest
 
+
+@pytest.mark.parametrize("key", ["text-response-format", "text-response-format-with-tools"])
+@pytest.mark.parametrize(
+    "configured_value,recorded_value,matches",
+    [
+        (None, False, True),
+        (False, None, True),
+        (False, False, True),
+        (None, True, False),
+        (True, False, False),
+        (True, None, False),
+        (None, 0, False),
+        (None, "false", False),
+    ],
+)
+def test_concrete_false_model_defaults_do_not_mask_enabled_or_invalid_values(
+    key, configured_value, recorded_value, matches
+):
+    configured = {"model-parameters": {}}
+    snapshot = {"ModelParameters": {}}
+    if configured_value is not None:
+        configured["model-parameters"][key] = configured_value
+    if recorded_value is not None:
+        snapshot["ModelParameters"][key] = recorded_value
+    assert (readout.run_config_differences(configured, snapshot, {}) == []) is matches
+
+
+@pytest.mark.parametrize(
+    "key,value",
+    [("parallel-tool-calls", False), ("temperature", 0), ("unknown-flag", False), ("seed", 0)],
+)
+def test_other_false_or_zero_parameters_remain_configuration_differences(key, value):
+    assert readout.run_config_differences(
+        {"model-parameters": {}}, {"ModelParameters": {key: value}}, {}
+    ) == ["model_parameters"]
+
+
 PATH = Path(__file__).parents[2] / "examples/mindtrial/summarize-pilot-results.py"
 loader = importlib.util.spec_from_file_location("pilot_readout", PATH)
 readout = importlib.util.module_from_spec(loader)
@@ -17,6 +54,16 @@ loader.loader.exec_module(readout)
 
 def test_packaged_readout_remains_python312_syntax_compatible():
     ast.parse(PATH.read_text(), feature_version=(3, 12))
+
+
+def test_reported_astra_config_matches_the_uploaded_control_fixture():
+    data = json.loads(
+        (PATH.parents[2] / "tests/fixtures/mindtrial-openai-default-parameters.json").read_text()
+    )
+    assert (
+        readout.run_config_differences(data["configured"], data["recorded"], data["retry_policy"])
+        == []
+    )
 
 
 def write(directory, name, value):
