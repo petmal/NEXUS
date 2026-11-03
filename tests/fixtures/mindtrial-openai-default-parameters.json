@@ -1,0 +1,35 @@
+{
+  "configured": {
+    "name": "gpt-6-astra (medium reasoning) - fresh worlds",
+    "disabled": false,
+    "model": "gpt-6-astra",
+    "max-requests-per-minute": 20,
+    "model-parameters": {
+      "reasoning-effort": "medium"
+    }
+  },
+  "retry_policy": {
+    "max-retry-attempts": 0,
+    "initial-delay-seconds": 30
+  },
+  "recorded": {
+    "Model": "gpt-6-astra",
+    "MaxRequestsPerMinute": 20,
+    "ModelParameters": {
+      "frequency-penalty": null,
+      "max-completion-tokens": null,
+      "presence-penalty": null,
+      "reasoning-context": null,
+      "reasoning-effort": "medium",
+      "reasoning-mode": null,
+      "temperature": null,
+      "text-response-format": false,
+      "top-p": null,
+      "verbosity": null
+    },
+    "RetryPolicy": {
+      "InitialDelaySeconds": 30
+    }
+  },
+  "source": "init-run-v1.zip controls-20261103T173151Z-tgqfplw0 F01"
+}

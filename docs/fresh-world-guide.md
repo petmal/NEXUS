@@ -4,7 +4,10 @@ This pilot checks whether the most useful earlier distinctions survive a change
 of world. It adds **two fresh fixtures in each of three established families**,
 26 conditions per model, and a contemporary six-task Astra anchor against the
 historical worlds. It does not introduce a fourth architecture or new axis levels.
-Mechanical qualification has passed; live model performance is still unknown.
+Mechanical qualification has passed. The [initial Astra results](research/fresh-world-initial-results-2026-11-03.md)
+contain six anchor passes and four fresh-control passes. Fresh challenge performance
+is still unknown. A readout default-comparison bug stopped the batch after those
+ten tasks; the [host-only recovery](fresh-world-readout-fix.md) preserves their results.
 
 The next evaluation uses Astra medium, Luna medium, Flash high and Grok medium.
 Each model receives the same 26 fresh conditions, subject to an integration-control

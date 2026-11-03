@@ -323,6 +323,7 @@ def main(pilot_name="coordination"):
     if pilot_name == "fresh-world":
         copies["matrix.json"] = ROOT / "docs/fresh-world-matrix.json"
         copies["run-all.sh"] = examples / "fresh-world-run-all.sh"
+        copies["fresh-world-readout-fix.md"] = ROOT / "docs/fresh-world-readout-fix.md"
     for name, source in copies.items():
         shutil.copy2(source, destination / name)
     reports = destination / "reports"
@@ -373,6 +374,8 @@ def main(pilot_name="coordination"):
         "fresh-world": (
             "fresh-world-preflight-2026-11-03.json",
             "fresh-world-validation-2026-11-03.md",
+            "fresh-world-initial-results-2026-11-03.md",
+            "fresh-world-initial-results-2026-11-03.json",
         ),
     }[pilot_name]
     for name in report_names:
