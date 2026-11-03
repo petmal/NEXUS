@@ -10,9 +10,26 @@ import json
 import re
 import shutil
 import subprocess
+import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
+
+
+def validate_fresh_world_reports(root, runtime_source_sha256):
+    spec = importlib.util.spec_from_file_location("nexus_fresh_qualifier", root / "scripts/fresh_worlds.py")
+    module = importlib.util.module_from_spec(spec)
+    sys.modules[spec.name] = module
+    spec.loader.exec_module(module)
+    pilot = module.Pilot.model_validate_json((root / "docs/fresh-world-matrix.json").read_text())
+    report = json.loads((root / "docs/research/fresh-world-preflight-2026-11-03.json").read_text())
+    if report.get("source_sha256") != runtime_source_sha256:
+        raise ValueError("fresh-world runtime digest differs")
+    module.validate_report(pilot, report)
+    for suite, expected in module.tasks(pilot).items():
+        path = root / f"examples/mindtrial/nexus-fresh-world-{suite}-tasks.yaml"
+        if json.loads(path.read_text()) != expected:
+            raise ValueError(f"fresh-world {suite} export differs from qualified task objects")
 
 
 def validate_cross_axis_reports(root, runtime_source_sha256):
@@ -237,6 +254,7 @@ def main(pilot_name="coordination"):
         "interference-comparison",
         "cross-axis",
         "capability-smoke",
+        "fresh-world",
     ):
         raise ValueError("unknown pilot profile")
     parser = argparse.ArgumentParser(description=__doc__)
@@ -259,6 +277,11 @@ def main(pilot_name="coordination"):
             validate_cross_axis_reports(ROOT, args.runtime_source_sha256)
         except ValueError as exc:
             parser.error(str(exc))
+    if pilot_name == "fresh-world":
+        try:
+            validate_fresh_world_reports(ROOT, args.runtime_source_sha256)
+        except ValueError as exc:
+            parser.error(str(exc))
     examples = ROOT / "examples/mindtrial"
     spec = importlib.util.spec_from_file_location(
         "coordination_runner", examples / "coordination-runner.py"
@@ -273,6 +296,7 @@ def main(pilot_name="coordination"):
         "interference-comparison": runner.INTERFERENCE_COMPARISON,
         "cross-axis": runner.CROSS_AXIS,
         "capability-smoke": runner.CAPABILITY_SMOKE,
+        "fresh-world": runner.FRESH_WORLD,
     }[pilot_name]
     destination = args.output_dir.resolve()
     destination.mkdir(parents=True, exist_ok=False)
@@ -289,13 +313,16 @@ def main(pilot_name="coordination"):
     }
     if pilot_name != "coordination":
         copies["pilot_runner.py"] = examples / "coordination-runner.py"
-    if pilot_name in ("interference-comparison", "cross-axis", "capability-smoke"):
+    if pilot_name in ("interference-comparison", "cross-axis", "capability-smoke", "fresh-world"):
         copies["guide.md"] = ROOT / f"docs/{pilot_name}-guide.md"
         copies["summarize_results.py"] = examples / "summarize-pilot-results.py"
     if pilot_name == "capability-smoke":
         copies["matrix.json"] = ROOT / "docs/capability-smoke-matrix.json"
         copies["followup-matrix.md"] = ROOT / "docs/inference-diagnostic-matrix.md"
         copies["probe-minimax-rate.sh"] = examples / "probe-minimax-rate.sh"
+    if pilot_name == "fresh-world":
+        copies["matrix.json"] = ROOT / "docs/fresh-world-matrix.json"
+        copies["run-all.sh"] = examples / "fresh-world-run-all.sh"
     for name, source in copies.items():
         shutil.copy2(source, destination / name)
     reports = destination / "reports"
@@ -332,12 +359,20 @@ def main(pilot_name="coordination"):
             "inference-diagnostic-validation-2026-11-01.json",
             "minimax-control-interruption-2026-11-02.md",
             "minimax-control-interruption-2026-11-02.json",
+            "inference-diagnostic-results-2026-11-02.md",
+            "inference-diagnostic-results-2026-11-02.json",
+            "glm-high-stage-c-2026-11-02.md",
+            "glm-high-stage-c-2026-11-02.json",
             "smoke-findings-2026-10-31.md",
             "smoke-findings-2026-10-31.json",
         ),
         "cross-axis": (
             "cross-axis-preflight-2026-10-29.json",
             "cross-axis-validation-2026-10-29.md",
+        ),
+        "fresh-world": (
+            "fresh-world-preflight-2026-11-03.json",
+            "fresh-world-validation-2026-11-03.md",
         ),
     }[pilot_name]
     for name in report_names:
@@ -375,6 +410,13 @@ def main(pilot_name="coordination"):
         findings.write_text(
             findings.read_text().replace("../capability-smoke-guide.md", "../guide.md")
         )
+    if pilot_name == "fresh-world":
+        guide = destination / "guide.md"
+        guide.write_text(guide.read_text().replace("(research/", "(reports/")
+                         .replace("(fresh-world-matrix.json)", "(matrix.json)"))
+        readme = destination / "README.md"
+        readme.write_text(readme.read_text().replace("(../../docs/fresh-world-guide.md)",
+                                                   "(guide.md)"))
     release = {
         "source_commit": commit,
         "branch": runner.BRANCH,

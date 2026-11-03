@@ -1,0 +1,3710 @@
+{
+  "cells": [
+    {
+      "action_budget": 64,
+      "budget_profile": "standard",
+      "certificate": {
+        "action_budget": 64,
+        "budget_profile": "standard",
+        "deep_tier_admitted": false,
+        "empirical_difficulty_calibrated": false,
+        "family": "model-revision-v1",
+        "prior_behavior_classes": 1,
+        "qualification_scope": "Exact behavior and complete-build acceptance; offline shortcut/source/matrix preflight required. No cognitive-depth or model-failure claim.",
+        "reference_action_upper": 4,
+        "schedule_multiplicity": 1,
+        "status": "experimental-discovery-pilot"
+      },
+      "checks": {
+        "compiled_contract": true,
+        "exact_replay": true,
+        "expected_action_budget": true,
+        "public_policy_supported_win": true,
+        "tool_limit_covers_reference": true,
+        "within_reference_bound": true
+      },
+      "discovery": 0,
+      "expected_budget": 64,
+      "family": "model-revision-v1",
+      "id": "S05",
+      "ontology_options": {
+        "consistency_check": "off",
+        "finish_policy": "recoverable",
+        "guidance": "principles"
+      },
+      "planning": 0,
+      "public_evidence_sha256": "9aff342d1a0d4fb6b4134cdbadf9281016597fb1467fc7b5745609665941571a",
+      "public_investigation_sha256": "b6738c1548023f0b07cd5c5da1a80bb4e8c0c5df927a7dd05bc25a7850ec7660",
+      "qualification": {
+        "behavior_class": 324,
+        "identifying_query_horizon": 0,
+        "independent_no_three_reading_certificate": null,
+        "minimum_reading_certificate": 0,
+        "minimum_supported_actions": 4,
+        "scope": "Actual-outcome reading certificate, not a worst-case cognitive depth bound."
+      },
+      "reference_action_upper": 4,
+      "reference_actions": 4,
+      "resource": 1,
+      "seed": 5866,
+      "source_id": "12",
+      "source_matrix": "revision",
+      "source_variant": "baseline",
+      "suite": "smoke-td",
+      "theory": 0
+    },
+    {
+      "action_budget": 64,
+      "budget_profile": "standard",
+      "certificate": {
+        "action_budget": 64,
+        "budget_profile": "standard",
+        "deep_tier_admitted": false,
+        "empirical_difficulty_calibrated": false,
+        "family": "model-revision-v1",
+        "prior_behavior_classes": 69,
+        "qualification_scope": "Exact behavior and complete-build acceptance; offline shortcut/source/matrix preflight required. No cognitive-depth or model-failure claim.",
+        "reference_action_upper": 18,
+        "schedule_multiplicity": 1,
+        "status": "experimental-discovery-pilot"
+      },
+      "checks": {
+        "compiled_contract": true,
+        "exact_replay": true,
+        "expected_action_budget": true,
+        "public_policy_supported_win": true,
+        "tool_limit_covers_reference": true,
+        "within_reference_bound": true
+      },
+      "discovery": 5,
+      "expected_budget": 64,
+      "family": "model-revision-v1",
+      "id": "S08",
+      "ontology_options": {
+        "consistency_check": "off",
+        "finish_policy": "recoverable",
+        "guidance": "principles"
+      },
+      "planning": 0,
+      "public_evidence_sha256": "2ba1e7eb9e3b798a5c3f3c55923a1bbb481323af1ff74e82e688767b3b1c55e9",
+      "public_investigation_sha256": "dcda80d9e10e7ca6b0d964d5d9bb9638b27053e753e6b82e5a36b08ab832407e",
+      "qualification": {
+        "behavior_class": 324,
+        "identifying_query_horizon": 4,
+        "independent_no_three_reading_certificate": {
+          "distinct_outcome_masks": 155,
+          "passed": true,
+          "scope": "reading-only; no finish feedback",
+          "triples_checked": 608685
+        },
+        "minimum_reading_certificate": 4,
+        "minimum_supported_actions": 12,
+        "scope": "Actual-outcome reading certificate, not a worst-case cognitive depth bound."
+      },
+      "reference_action_upper": 18,
+      "reference_actions": 16,
+      "resource": 1,
+      "seed": 5866,
+      "source_id": "01",
+      "source_matrix": "revision",
+      "source_variant": "baseline",
+      "suite": "smoke-td",
+      "theory": 3
+    },
+    {
+      "action_budget": 8,
+      "budget_profile": "standard",
+      "certificate": {
+        "empirical_difficulty_calibrated": false,
+        "family": "compositional-repair-v1",
+        "prior_worlds": 3,
+        "reference_action_upper": 5,
+        "reference_reading_upper": 0,
+        "scope": "complete disclosed solvable grammar; common accepted repair witness; no cognitive-depth, round or model-failure claim; targeted fixtures are not a uniform sample",
+        "status": "experimental-reference-qualified",
+        "winning_set_signatures": 1
+      },
+      "checks": {
+        "compiled_contract": true,
+        "exact_replay": true,
+        "expected_action_budget": true,
+        "public_policy_supported_win": true,
+        "tool_limit_covers_reference": true,
+        "within_reference_bound": true
+      },
+      "discovery": 0,
+      "expected_budget": 8,
+      "family": "compositional-repair-v1",
+      "id": "S21",
+      "ontology_options": {},
+      "planning": 1,
+      "public_evidence_sha256": "904468df8819dc4975424141af6568e366ca3ba2ddb2a36c342ed01badfd70cb",
+      "public_investigation_sha256": "0cbad4edde33deb35975f614e908263a6567ded373ff19aa198c9656349bbe4e",
+      "qualification": {
+        "changed_module": 1,
+        "checks": {
+          "all_live_repairs_match": true,
+          "both_contexts_required": true,
+          "intervention_obstruction": true,
+          "three_reading_lower_bound": true
+        },
+        "live_acceptance_checks": 81,
+        "positive_reading_lower_bound": 3,
+        "scope": "Reading-only intervention/context obstructions concern the undisclosed prior; the disclosed supplied-repair condition is an execution control.",
+        "single_context_common_repairs": [
+          0,
+          0
+        ],
+        "topology": 2,
+        "untrimmed_closure_worlds": 2,
+        "untrimmed_common_repairs": 0,
+        "world_index": 438
+      },
+      "reference_action_upper": 5,
+      "reference_actions": 5,
+      "resource": 1,
+      "seed": 438,
+      "source_id": "structural-05",
+      "source_matrix": "structural",
+      "source_variant": "known-control",
+      "suite": "smoke-td",
+      "theory": 0
+    },
+    {
+      "action_budget": 30,
+      "budget_profile": "standard",
+      "certificate": {
+        "empirical_difficulty_calibrated": false,
+        "family": "compositional-repair-v1",
+        "prior_worlds": 615,
+        "reference_action_upper": 27,
+        "reference_reading_upper": 7,
+        "scope": "complete disclosed solvable grammar; common accepted repair witness; no cognitive-depth, round or model-failure claim; targeted fixtures are not a uniform sample",
+        "status": "experimental-reference-qualified",
+        "winning_set_signatures": 216
+      },
+      "checks": {
+        "compiled_contract": true,
+        "exact_replay": true,
+        "expected_action_budget": true,
+        "public_policy_supported_win": true,
+        "tool_limit_covers_reference": true,
+        "within_reference_bound": true
+      },
+      "discovery": 5,
+      "expected_budget": 30,
+      "family": "compositional-repair-v1",
+      "id": "S22",
+      "ontology_options": {},
+      "planning": 1,
+      "public_evidence_sha256": "a210325490628e24edf682885bef1b948bfba9b799d36dfd392b311dd45d7169",
+      "public_investigation_sha256": "2f7f7e2ebf9f0abace8d842c365b1d135da32f97671a15d3e013e4343bd9364e",
+      "qualification": {
+        "changed_module": 1,
+        "checks": {
+          "all_live_repairs_match": true,
+          "both_contexts_required": true,
+          "intervention_obstruction": true,
+          "three_reading_lower_bound": true
+        },
+        "live_acceptance_checks": 81,
+        "positive_reading_lower_bound": 3,
+        "scope": "Reading-only intervention/context obstructions concern the undisclosed prior; the disclosed supplied-repair condition is an execution control.",
+        "single_context_common_repairs": [
+          0,
+          0
+        ],
+        "topology": 2,
+        "untrimmed_closure_worlds": 2,
+        "untrimmed_common_repairs": 0,
+        "world_index": 438
+      },
+      "reference_action_upper": 27,
+      "reference_actions": 24,
+      "resource": 1,
+      "seed": 438,
+      "source_id": "structural-05",
+      "source_matrix": "structural",
+      "source_variant": "original",
+      "suite": "smoke-td",
+      "theory": 3
+    },
+    {
+      "action_budget": 36,
+      "budget_profile": "diagnostic-plus6",
+      "certificate": {
+        "actual_action_budget": 36,
+        "budget_profile": "diagnostic-plus6",
+        "budget_scope": "paired budget diagnostic, not the standard R1 score",
+        "diagnostic_additional_actions": 6,
+        "empirical_difficulty_calibrated": false,
+        "family": "compositional-repair-v1",
+        "prior_worlds": 615,
+        "reference_action_upper": 27,
+        "reference_reading_upper": 7,
+        "scope": "complete disclosed solvable grammar; common accepted repair witness; no cognitive-depth, round or model-failure claim; targeted fixtures are not a uniform sample",
+        "status": "experimental-reference-qualified",
+        "winning_set_signatures": 216
+      },
+      "checks": {
+        "compiled_contract": true,
+        "exact_replay": true,
+        "expected_action_budget": true,
+        "public_policy_supported_win": true,
+        "tool_limit_covers_reference": true,
+        "within_reference_bound": true
+      },
+      "discovery": 5,
+      "expected_budget": 36,
+      "family": "compositional-repair-v1",
+      "id": "S23",
+      "ontology_options": {},
+      "planning": 1,
+      "public_evidence_sha256": "a210325490628e24edf682885bef1b948bfba9b799d36dfd392b311dd45d7169",
+      "public_investigation_sha256": "2f7f7e2ebf9f0abace8d842c365b1d135da32f97671a15d3e013e4343bd9364e",
+      "qualification": {
+        "changed_module": 1,
+        "checks": {
+          "all_live_repairs_match": true,
+          "both_contexts_required": true,
+          "intervention_obstruction": true,
+          "three_reading_lower_bound": true
+        },
+        "live_acceptance_checks": 81,
+        "positive_reading_lower_bound": 3,
+        "scope": "Reading-only intervention/context obstructions concern the undisclosed prior; the disclosed supplied-repair condition is an execution control.",
+        "single_context_common_repairs": [
+          0,
+          0
+        ],
+        "topology": 2,
+        "untrimmed_closure_worlds": 2,
+        "untrimmed_common_repairs": 0,
+        "world_index": 438
+      },
+      "reference_action_upper": 27,
+      "reference_actions": 24,
+      "resource": 1,
+      "seed": 438,
+      "source_id": "budget-02",
+      "source_matrix": "budget",
+      "source_variant": "original",
+      "suite": "smoke-td",
+      "theory": 3
+    },
+    {
+      "action_budget": 36,
+      "budget_profile": "diagnostic-plus6",
+      "certificate": {
+        "actual_action_budget": 36,
+        "budget_profile": "diagnostic-plus6",
+        "budget_scope": "paired budget diagnostic, not the standard R1 score",
+        "diagnostic_additional_actions": 6,
+        "empirical_difficulty_calibrated": false,
+        "family": "compositional-repair-v1",
+        "prior_worlds": 615,
+        "reference_action_upper": 27,
+        "reference_reading_upper": 7,
+        "scope": "complete disclosed solvable grammar; common accepted repair witness; no cognitive-depth, round or model-failure claim; targeted fixtures are not a uniform sample",
+        "status": "experimental-reference-qualified",
+        "winning_set_signatures": 216
+      },
+      "checks": {
+        "compiled_contract": true,
+        "exact_replay": true,
+        "expected_action_budget": true,
+        "public_policy_supported_win": true,
+        "tool_limit_covers_reference": true,
+        "within_reference_bound": true
+      },
+      "discovery": 5,
+      "expected_budget": 36,
+      "family": "compositional-repair-v1",
+      "id": "S24",
+      "ontology_options": {},
+      "planning": 1,
+      "public_evidence_sha256": "a210325490628e24edf682885bef1b948bfba9b799d36dfd392b311dd45d7169",
+      "public_investigation_sha256": "2f7f7e2ebf9f0abace8d842c365b1d135da32f97671a15d3e013e4343bd9364e",
+      "qualification": {
+        "changed_module": 1,
+        "checks": {
+          "all_live_repairs_match": true,
+          "both_contexts_required": true,
+          "intervention_obstruction": true,
+          "three_reading_lower_bound": true
+        },
+        "live_acceptance_checks": 81,
+        "positive_reading_lower_bound": 3,
+        "scope": "Reading-only intervention/context obstructions concern the undisclosed prior; the disclosed supplied-repair condition is an execution control.",
+        "single_context_common_repairs": [
+          0,
+          0
+        ],
+        "topology": 2,
+        "untrimmed_closure_worlds": 2,
+        "untrimmed_common_repairs": 0,
+        "world_index": 493
+      },
+      "reference_action_upper": 27,
+      "reference_actions": 24,
+      "resource": 1,
+      "seed": 493,
+      "source_id": "budget-03",
+      "source_matrix": "budget",
+      "source_variant": "original",
+      "suite": "smoke-td",
+      "theory": 3
+    },
+    {
+      "action_budget": 64,
+      "budget_profile": "standard",
+      "certificate": {
+        "action_budget": 64,
+        "budget_profile": "standard",
+        "deep_tier_admitted": false,
+        "empirical_difficulty_calibrated": false,
+        "family": "model-revision-v1",
+        "prior_behavior_classes": 1,
+        "qualification_scope": "Exact behavior and complete-build acceptance; offline shortcut/source/matrix preflight required. No cognitive-depth or model-failure claim.",
+        "reference_action_upper": 4,
+        "schedule_multiplicity": 1,
+        "status": "experimental-discovery-pilot"
+      },
+      "checks": {
+        "compiled_contract": true,
+        "exact_replay": true,
+        "expected_action_budget": true,
+        "public_policy_supported_win": true,
+        "tool_limit_covers_reference": true,
+        "within_reference_bound": true
+      },
+      "discovery": 0,
+      "expected_budget": 64,
+      "family": "model-revision-v1",
+      "id": "F01",
+      "ontology_options": {
+        "consistency_check": "off",
+        "finish_policy": "recoverable",
+        "guidance": "principles"
+      },
+      "planning": 0,
+      "public_evidence_sha256": "f006b2198fa0512e0ea542faa6835dedeaf4a234a72e4818c9bb42e71791fbbf",
+      "public_investigation_sha256": "cdd61b25b2cedd289c8fced65ef8406a20e1f6e5abd41706a3f0a4133cecc0e1",
+      "qualification": {
+        "behavior_class": 32,
+        "identifying_query_horizon": 0,
+        "independent_no_three_reading_certificate": null,
+        "minimum_reading_certificate": 0,
+        "minimum_supported_actions": 4,
+        "scope": "Actual-outcome reading certificate, not a worst-case cognitive depth bound."
+      },
+      "reference_action_upper": 4,
+      "reference_actions": 4,
+      "resource": 1,
+      "seed": 2073,
+      "suite": "controls",
+      "theory": 0
+    },
+    {
+      "action_budget": 64,
+      "budget_profile": "standard",
+      "certificate": {
+        "action_budget": 64,
+        "budget_profile": "standard",
+        "deep_tier_admitted": false,
+        "empirical_difficulty_calibrated": false,
+        "family": "model-revision-v1",
+        "prior_behavior_classes": 192,
+        "qualification_scope": "Exact behavior and complete-build acceptance; offline shortcut/source/matrix preflight required. No cognitive-depth or model-failure claim.",
+        "reference_action_upper": 18,
+        "schedule_multiplicity": 1,
+        "status": "experimental-discovery-pilot"
+      },
+      "checks": {
+        "compiled_contract": true,
+        "exact_replay": true,
+        "expected_action_budget": true,
+        "public_policy_supported_win": true,
+        "tool_limit_covers_reference": true,
+        "within_reference_bound": true
+      },
+      "discovery": 5,
+      "expected_budget": 64,
+      "family": "model-revision-v1",
+      "id": "F02",
+      "ontology_options": {
+        "consistency_check": "off",
+        "finish_policy": "recoverable",
+        "guidance": "principles"
+      },
+      "planning": 0,
+      "public_evidence_sha256": "1933094282e29d351fb6f16c1bc86495f93bf66a0ff67eacc269bb8d0b26c730",
+      "public_investigation_sha256": "34fe8f75a2bf6ae3029a915b94601ea8f3c09eadaf07c4e962a329ecbcc144c0",
+      "qualification": {
+        "behavior_class": 32,
+        "identifying_query_horizon": 5,
+        "independent_no_three_reading_certificate": {
+          "distinct_outcome_masks": 356,
+          "passed": true,
+          "scope": "reading-only; no finish feedback",
+          "triples_checked": 7456420
+        },
+        "minimum_reading_certificate": 5,
+        "minimum_supported_actions": 14,
+        "scope": "Actual-outcome reading certificate, not a worst-case cognitive depth bound."
+      },
+      "reference_action_upper": 18,
+      "reference_actions": 16,
+      "resource": 1,
+      "seed": 2073,
+      "suite": "td",
+      "theory": 3
+    },
+    {
+      "action_budget": 64,
+      "budget_profile": "standard",
+      "certificate": {
+        "action_budget": 64,
+        "budget_profile": "standard",
+        "deep_tier_admitted": false,
+        "empirical_difficulty_calibrated": false,
+        "family": "model-revision-v1",
+        "prior_behavior_classes": 1,
+        "qualification_scope": "Exact behavior and complete-build acceptance; offline shortcut/source/matrix preflight required. No cognitive-depth or model-failure claim.",
+        "reference_action_upper": 4,
+        "schedule_multiplicity": 1,
+        "status": "experimental-discovery-pilot"
+      },
+      "checks": {
+        "compiled_contract": true,
+        "exact_replay": true,
+        "expected_action_budget": true,
+        "public_policy_supported_win": true,
+        "tool_limit_covers_reference": true,
+        "within_reference_bound": true
+      },
+      "discovery": 0,
+      "expected_budget": 64,
+      "family": "model-revision-v1",
+      "id": "F03",
+      "ontology_options": {
+        "consistency_check": "off",
+        "finish_policy": "recoverable",
+        "guidance": "principles"
+      },
+      "planning": 0,
+      "public_evidence_sha256": "5f22ba56c8c6e2f2c368476272286e57fe32f56a05b46ad3042bcd567f178ef1",
+      "public_investigation_sha256": "89752a5d725587af07e2b1312099fbe4ef78992aad718941c44f27c728ed6caf",
+      "qualification": {
+        "behavior_class": 99,
+        "identifying_query_horizon": 0,
+        "independent_no_three_reading_certificate": null,
+        "minimum_reading_certificate": 0,
+        "minimum_supported_actions": 4,
+        "scope": "Actual-outcome reading certificate, not a worst-case cognitive depth bound."
+      },
+      "reference_action_upper": 4,
+      "reference_actions": 4,
+      "resource": 1,
+      "seed": 2178,
+      "suite": "controls",
+      "theory": 0
+    },
+    {
+      "action_budget": 64,
+      "budget_profile": "standard",
+      "certificate": {
+        "action_budget": 64,
+        "budget_profile": "standard",
+        "deep_tier_admitted": false,
+        "empirical_difficulty_calibrated": false,
+        "family": "model-revision-v1",
+        "prior_behavior_classes": 72,
+        "qualification_scope": "Exact behavior and complete-build acceptance; offline shortcut/source/matrix preflight required. No cognitive-depth or model-failure claim.",
+        "reference_action_upper": 18,
+        "schedule_multiplicity": 1,
+        "status": "experimental-discovery-pilot"
+      },
+      "checks": {
+        "compiled_contract": true,
+        "exact_replay": true,
+        "expected_action_budget": true,
+        "public_policy_supported_win": true,
+        "tool_limit_covers_reference": true,
+        "within_reference_bound": true
+      },
+      "discovery": 5,
+      "expected_budget": 64,
+      "family": "model-revision-v1",
+      "id": "F04",
+      "ontology_options": {
+        "consistency_check": "off",
+        "finish_policy": "recoverable",
+        "guidance": "principles"
+      },
+      "planning": 0,
+      "public_evidence_sha256": "49fe60a48e70c76de145292f6cdd801d5be624dca507081325f9b16fd683cfdd",
+      "public_investigation_sha256": "caed9a79e323925444289d3ce484ab9846bfe0863f349a8b52a20f64220caff8",
+      "qualification": {
+        "behavior_class": 99,
+        "identifying_query_horizon": 5,
+        "independent_no_three_reading_certificate": {
+          "distinct_outcome_masks": 347,
+          "passed": true,
+          "scope": "reading-only; no finish feedback",
+          "triples_checked": 6903565
+        },
+        "minimum_reading_certificate": 4,
+        "minimum_supported_actions": 12,
+        "scope": "Actual-outcome reading certificate, not a worst-case cognitive depth bound."
+      },
+      "reference_action_upper": 18,
+      "reference_actions": 16,
+      "resource": 1,
+      "seed": 2178,
+      "suite": "td",
+      "theory": 3
+    },
+    {
+      "action_budget": 8,
+      "budget_profile": "standard",
+      "certificate": {
+        "empirical_difficulty_calibrated": false,
+        "family": "compositional-repair-v1",
+        "prior_worlds": 8,
+        "reference_action_upper": 5,
+        "reference_reading_upper": 0,
+        "scope": "complete disclosed solvable grammar; common accepted repair witness; no cognitive-depth, round or model-failure claim; targeted fixtures are not a uniform sample",
+        "status": "experimental-reference-qualified",
+        "winning_set_signatures": 4
+      },
+      "checks": {
+        "compiled_contract": true,
+        "exact_replay": true,
+        "expected_action_budget": true,
+        "public_policy_supported_win": true,
+        "tool_limit_covers_reference": true,
+        "within_reference_bound": true
+      },
+      "discovery": 0,
+      "expected_budget": 8,
+      "family": "compositional-repair-v1",
+      "id": "F05",
+      "ontology_options": {},
+      "planning": 1,
+      "public_evidence_sha256": "1ef328b810aa01cbdc614333fb3aff8b7fd93abb9304fe311e7b4a62b7e45302",
+      "public_investigation_sha256": "474582ef1811968334ee88700eeb4ea70c8b402982fdf379123c0df946028f1a",
+      "qualification": {
+        "changed_module": 1,
+        "checks": {
+          "all_live_repairs_match": true,
+          "both_contexts_required": true,
+          "intervention_obstruction": true,
+          "three_reading_lower_bound": true
+        },
+        "live_acceptance_checks": 81,
+        "positive_reading_lower_bound": 3,
+        "scope": "Reading-only intervention/context obstructions concern the undisclosed prior; the disclosed supplied-repair condition is an execution control.",
+        "single_context_common_repairs": [
+          0,
+          0
+        ],
+        "topology": 2,
+        "untrimmed_closure_worlds": 2,
+        "untrimmed_common_repairs": 0,
+        "world_index": 541
+      },
+      "reference_action_upper": 5,
+      "reference_actions": 5,
+      "resource": 1,
+      "seed": 541,
+      "suite": "controls",
+      "theory": 0
+    },
+    {
+      "action_budget": 30,
+      "budget_profile": "standard",
+      "certificate": {
+        "empirical_difficulty_calibrated": false,
+        "family": "compositional-repair-v1",
+        "prior_worlds": 615,
+        "reference_action_upper": 27,
+        "reference_reading_upper": 7,
+        "scope": "complete disclosed solvable grammar; common accepted repair witness; no cognitive-depth, round or model-failure claim; targeted fixtures are not a uniform sample",
+        "status": "experimental-reference-qualified",
+        "winning_set_signatures": 216
+      },
+      "checks": {
+        "compiled_contract": true,
+        "exact_replay": true,
+        "expected_action_budget": true,
+        "public_policy_supported_win": true,
+        "tool_limit_covers_reference": true,
+        "within_reference_bound": true
+      },
+      "discovery": 5,
+      "expected_budget": 30,
+      "family": "compositional-repair-v1",
+      "id": "F06",
+      "ontology_options": {},
+      "planning": 1,
+      "public_evidence_sha256": "a210325490628e24edf682885bef1b948bfba9b799d36dfd392b311dd45d7169",
+      "public_investigation_sha256": "2f7f7e2ebf9f0abace8d842c365b1d135da32f97671a15d3e013e4343bd9364e",
+      "qualification": {
+        "changed_module": 1,
+        "checks": {
+          "all_live_repairs_match": true,
+          "both_contexts_required": true,
+          "intervention_obstruction": true,
+          "three_reading_lower_bound": true
+        },
+        "live_acceptance_checks": 81,
+        "positive_reading_lower_bound": 3,
+        "scope": "Reading-only intervention/context obstructions concern the undisclosed prior; the disclosed supplied-repair condition is an execution control.",
+        "single_context_common_repairs": [
+          0,
+          0
+        ],
+        "topology": 2,
+        "untrimmed_closure_worlds": 2,
+        "untrimmed_common_repairs": 0,
+        "world_index": 541
+      },
+      "reference_action_upper": 27,
+      "reference_actions": 24,
+      "resource": 1,
+      "seed": 541,
+      "suite": "td",
+      "theory": 3
+    },
+    {
+      "action_budget": 36,
+      "budget_profile": "diagnostic-plus6",
+      "certificate": {
+        "actual_action_budget": 36,
+        "budget_profile": "diagnostic-plus6",
+        "budget_scope": "paired budget diagnostic, not the standard R1 score",
+        "diagnostic_additional_actions": 6,
+        "empirical_difficulty_calibrated": false,
+        "family": "compositional-repair-v1",
+        "prior_worlds": 615,
+        "reference_action_upper": 27,
+        "reference_reading_upper": 7,
+        "scope": "complete disclosed solvable grammar; common accepted repair witness; no cognitive-depth, round or model-failure claim; targeted fixtures are not a uniform sample",
+        "status": "experimental-reference-qualified",
+        "winning_set_signatures": 216
+      },
+      "checks": {
+        "compiled_contract": true,
+        "exact_replay": true,
+        "expected_action_budget": true,
+        "public_policy_supported_win": true,
+        "tool_limit_covers_reference": true,
+        "within_reference_bound": true
+      },
+      "discovery": 5,
+      "expected_budget": 36,
+      "family": "compositional-repair-v1",
+      "id": "F07",
+      "ontology_options": {},
+      "planning": 1,
+      "public_evidence_sha256": "a210325490628e24edf682885bef1b948bfba9b799d36dfd392b311dd45d7169",
+      "public_investigation_sha256": "2f7f7e2ebf9f0abace8d842c365b1d135da32f97671a15d3e013e4343bd9364e",
+      "qualification": {
+        "changed_module": 1,
+        "checks": {
+          "all_live_repairs_match": true,
+          "both_contexts_required": true,
+          "intervention_obstruction": true,
+          "three_reading_lower_bound": true
+        },
+        "live_acceptance_checks": 81,
+        "positive_reading_lower_bound": 3,
+        "scope": "Reading-only intervention/context obstructions concern the undisclosed prior; the disclosed supplied-repair condition is an execution control.",
+        "single_context_common_repairs": [
+          0,
+          0
+        ],
+        "topology": 2,
+        "untrimmed_closure_worlds": 2,
+        "untrimmed_common_repairs": 0,
+        "world_index": 541
+      },
+      "reference_action_upper": 27,
+      "reference_actions": 24,
+      "resource": 1,
+      "seed": 541,
+      "suite": "td",
+      "theory": 3
+    },
+    {
+      "action_budget": 8,
+      "budget_profile": "standard",
+      "certificate": {
+        "empirical_difficulty_calibrated": false,
+        "family": "compositional-repair-v1",
+        "prior_worlds": 9,
+        "reference_action_upper": 5,
+        "reference_reading_upper": 0,
+        "scope": "complete disclosed solvable grammar; common accepted repair witness; no cognitive-depth, round or model-failure claim; targeted fixtures are not a uniform sample",
+        "status": "experimental-reference-qualified",
+        "winning_set_signatures": 7
+      },
+      "checks": {
+        "compiled_contract": true,
+        "exact_replay": true,
+        "expected_action_budget": true,
+        "public_policy_supported_win": true,
+        "tool_limit_covers_reference": true,
+        "within_reference_bound": true
+      },
+      "discovery": 0,
+      "expected_budget": 8,
+      "family": "compositional-repair-v1",
+      "id": "F08",
+      "ontology_options": {},
+      "planning": 1,
+      "public_evidence_sha256": "a952b602a257d708e3df378d7753165d3656d001ed784d7e5f40d5e31e44238b",
+      "public_investigation_sha256": "0c3834bfe85d5989e6e32b3ab6d38eb6b4c45c04f218fc15581639568d67e153",
+      "qualification": {
+        "changed_module": 2,
+        "checks": {
+          "all_live_repairs_match": true,
+          "both_contexts_required": true,
+          "intervention_obstruction": true,
+          "three_reading_lower_bound": true
+        },
+        "live_acceptance_checks": 81,
+        "positive_reading_lower_bound": 3,
+        "scope": "Reading-only intervention/context obstructions concern the undisclosed prior; the disclosed supplied-repair condition is an execution control.",
+        "single_context_common_repairs": [
+          0,
+          0
+        ],
+        "topology": 2,
+        "untrimmed_closure_worlds": 2,
+        "untrimmed_common_repairs": 0,
+        "world_index": 586
+      },
+      "reference_action_upper": 5,
+      "reference_actions": 5,
+      "resource": 1,
+      "seed": 586,
+      "suite": "controls",
+      "theory": 0
+    },
+    {
+      "action_budget": 30,
+      "budget_profile": "standard",
+      "certificate": {
+        "empirical_difficulty_calibrated": false,
+        "family": "compositional-repair-v1",
+        "prior_worlds": 615,
+        "reference_action_upper": 27,
+        "reference_reading_upper": 7,
+        "scope": "complete disclosed solvable grammar; common accepted repair witness; no cognitive-depth, round or model-failure claim; targeted fixtures are not a uniform sample",
+        "status": "experimental-reference-qualified",
+        "winning_set_signatures": 216
+      },
+      "checks": {
+        "compiled_contract": true,
+        "exact_replay": true,
+        "expected_action_budget": true,
+        "public_policy_supported_win": true,
+        "tool_limit_covers_reference": true,
+        "within_reference_bound": true
+      },
+      "discovery": 5,
+      "expected_budget": 30,
+      "family": "compositional-repair-v1",
+      "id": "F09",
+      "ontology_options": {},
+      "planning": 1,
+      "public_evidence_sha256": "a210325490628e24edf682885bef1b948bfba9b799d36dfd392b311dd45d7169",
+      "public_investigation_sha256": "2f7f7e2ebf9f0abace8d842c365b1d135da32f97671a15d3e013e4343bd9364e",
+      "qualification": {
+        "changed_module": 2,
+        "checks": {
+          "all_live_repairs_match": true,
+          "both_contexts_required": true,
+          "intervention_obstruction": true,
+          "three_reading_lower_bound": true
+        },
+        "live_acceptance_checks": 81,
+        "positive_reading_lower_bound": 3,
+        "scope": "Reading-only intervention/context obstructions concern the undisclosed prior; the disclosed supplied-repair condition is an execution control.",
+        "single_context_common_repairs": [
+          0,
+          0
+        ],
+        "topology": 2,
+        "untrimmed_closure_worlds": 2,
+        "untrimmed_common_repairs": 0,
+        "world_index": 586
+      },
+      "reference_action_upper": 27,
+      "reference_actions": 24,
+      "resource": 1,
+      "seed": 586,
+      "suite": "td",
+      "theory": 3
+    },
+    {
+      "action_budget": 36,
+      "budget_profile": "diagnostic-plus6",
+      "certificate": {
+        "actual_action_budget": 36,
+        "budget_profile": "diagnostic-plus6",
+        "budget_scope": "paired budget diagnostic, not the standard R1 score",
+        "diagnostic_additional_actions": 6,
+        "empirical_difficulty_calibrated": false,
+        "family": "compositional-repair-v1",
+        "prior_worlds": 615,
+        "reference_action_upper": 27,
+        "reference_reading_upper": 7,
+        "scope": "complete disclosed solvable grammar; common accepted repair witness; no cognitive-depth, round or model-failure claim; targeted fixtures are not a uniform sample",
+        "status": "experimental-reference-qualified",
+        "winning_set_signatures": 216
+      },
+      "checks": {
+        "compiled_contract": true,
+        "exact_replay": true,
+        "expected_action_budget": true,
+        "public_policy_supported_win": true,
+        "tool_limit_covers_reference": true,
+        "within_reference_bound": true
+      },
+      "discovery": 5,
+      "expected_budget": 36,
+      "family": "compositional-repair-v1",
+      "id": "F10",
+      "ontology_options": {},
+      "planning": 1,
+      "public_evidence_sha256": "a210325490628e24edf682885bef1b948bfba9b799d36dfd392b311dd45d7169",
+      "public_investigation_sha256": "2f7f7e2ebf9f0abace8d842c365b1d135da32f97671a15d3e013e4343bd9364e",
+      "qualification": {
+        "changed_module": 2,
+        "checks": {
+          "all_live_repairs_match": true,
+          "both_contexts_required": true,
+          "intervention_obstruction": true,
+          "three_reading_lower_bound": true
+        },
+        "live_acceptance_checks": 81,
+        "positive_reading_lower_bound": 3,
+        "scope": "Reading-only intervention/context obstructions concern the undisclosed prior; the disclosed supplied-repair condition is an execution control.",
+        "single_context_common_repairs": [
+          0,
+          0
+        ],
+        "topology": 2,
+        "untrimmed_closure_worlds": 2,
+        "untrimmed_common_repairs": 0,
+        "world_index": 586
+      },
+      "reference_action_upper": 27,
+      "reference_actions": 24,
+      "resource": 1,
+      "seed": 586,
+      "suite": "td",
+      "theory": 3
+    },
+    {
+      "action_budget": 12,
+      "budget_profile": "standard",
+      "discovery": 0,
+      "expected_budget": null,
+      "family": "stateful-interference-v1",
+      "id": "F11",
+      "ontology_options": {
+        "coupling": "independent",
+        "horizon": "short"
+      },
+      "planning": 0,
+      "qualification": {
+        "action_budget": 12,
+        "bank_contiguous_operations": 10,
+        "certificate": {
+          "action_budget": 12,
+          "bank_contiguous_operations": 10,
+          "bank_contiguous_reachable": true,
+          "empirical_difficulty_calibrated": false,
+          "family": "stateful-interference-v1",
+          "horizon_stratum": "short",
+          "kernel_attempt": 7,
+          "kernel_attempt_limit": 32,
+          "law_visibility": "complete",
+          "map_visibility": "complete",
+          "minimum_coordinate_goal_breaks": 2,
+          "minimum_operations": 10,
+          "physical_state_bound": 15625,
+          "reachable_states": 2304,
+          "reference_action_upper": 12,
+          "reference_kind": "exact-known-law-optimum",
+          "resource_allowance": 0,
+          "scope": "Exact P0 known-law minimum including take and finish. R2 equals minimum; R1 adds max(6,ceil(minimum/2)); R0 uncapped. Goal breaks count operations unsetting at least one matched coordinate, minimized over all successful words. Null restricted cost means unreachable under bank-contiguous words. Coupled optimum beats every bank-contiguous word; slack may permit such a word. Sizes and horizon strata are not empirical difficulty calibration.",
+          "state_visibility": "complete",
+          "status": "experimental-public-reference-qualified"
+        },
+        "checks": {
+          "compiled_contract": true,
+          "complete_transition_checks": true,
+          "coupled_coordinate_regression_required": true,
+          "exact_reference_actions": true,
+          "exact_replay": true,
+          "factorization_or_optimal_interleaving": true,
+          "horizon_stratum_bound": true,
+          "independent_coordinate_break_minimum": true,
+          "independent_optimum": true,
+          "independent_restricted_baseline": true,
+          "paired_seed_kernel_and_target": true,
+          "public_policy_supported_win": true,
+          "tool_limit_covers_allowance": true
+        },
+        "coupling": "independent",
+        "horizon": "short",
+        "id": "F11",
+        "interleaving_gap": 0,
+        "kernel_transition_checks": 93750,
+        "minimum_coordinate_goal_breaks": 2,
+        "physical_minimum": 12,
+        "public_evidence_sha256": "abce83b6212bba18bcf09178e04e16554bcb2b70038c8218b5c8436068830685",
+        "reference_operations": 10,
+        "reference_trajectory": {
+          "avoidable_actions_so_far": 0,
+          "coordinate_goal_breaking_operations": 2,
+          "first_loss_of_optimality_turn": null,
+          "machine_blocks": 4,
+          "remaining_minimum_actions": 0,
+          "success_excess_actions": 0,
+          "unchanged_operations": 0,
+          "whole_bank_reopening_operations": 0
+        },
+        "resolved": {
+          "gains": [
+            4,
+            3,
+            3,
+            1,
+            3,
+            4
+          ],
+          "guards": [
+            3,
+            0,
+            2,
+            4,
+            0,
+            3
+          ],
+          "spill_gains": [
+            3,
+            3,
+            2,
+            3,
+            4,
+            3
+          ]
+        },
+        "resource": 2,
+        "seed": 107,
+        "structural": {
+          "minimum_coordinate_goal_breaks": 2,
+          "minimum_machine_blocks": 4,
+          "minimum_machine_blocks_on_optimal_paths": 4,
+          "minimum_whole_bank_reopening_operations": 0
+        },
+        "structural_checks": {
+          "block_cost_ordering": true,
+          "coordinate_metric_matches_original": true,
+          "independent_structural_costs": true,
+          "live_structural_diagnostics": true
+        },
+        "suite": "core",
+        "target": [
+          2,
+          1,
+          1,
+          3,
+          4,
+          3
+        ]
+      },
+      "reference_action_upper": 12,
+      "resource": 2,
+      "seed": 107,
+      "suite": "pr-a",
+      "theory": 0
+    },
+    {
+      "action_budget": 18,
+      "budget_profile": "standard",
+      "discovery": 0,
+      "expected_budget": null,
+      "family": "stateful-interference-v1",
+      "id": "F12",
+      "ontology_options": {
+        "coupling": "independent",
+        "horizon": "short"
+      },
+      "planning": 0,
+      "qualification": {
+        "action_budget": 18,
+        "bank_contiguous_operations": 10,
+        "certificate": {
+          "action_budget": 18,
+          "bank_contiguous_operations": 10,
+          "bank_contiguous_reachable": true,
+          "empirical_difficulty_calibrated": false,
+          "family": "stateful-interference-v1",
+          "horizon_stratum": "short",
+          "kernel_attempt": 7,
+          "kernel_attempt_limit": 32,
+          "law_visibility": "complete",
+          "map_visibility": "complete",
+          "minimum_coordinate_goal_breaks": 2,
+          "minimum_operations": 10,
+          "physical_state_bound": 15625,
+          "reachable_states": 2304,
+          "reference_action_upper": 12,
+          "reference_kind": "exact-known-law-optimum",
+          "resource_allowance": 6,
+          "scope": "Exact P0 known-law minimum including take and finish. R2 equals minimum; R1 adds max(6,ceil(minimum/2)); R0 uncapped. Goal breaks count operations unsetting at least one matched coordinate, minimized over all successful words. Null restricted cost means unreachable under bank-contiguous words. Coupled optimum beats every bank-contiguous word; slack may permit such a word. Sizes and horizon strata are not empirical difficulty calibration.",
+          "state_visibility": "complete",
+          "status": "experimental-public-reference-qualified"
+        },
+        "checks": {
+          "compiled_contract": true,
+          "complete_transition_checks": true,
+          "coupled_coordinate_regression_required": true,
+          "exact_reference_actions": true,
+          "exact_replay": true,
+          "factorization_or_optimal_interleaving": true,
+          "horizon_stratum_bound": true,
+          "independent_coordinate_break_minimum": true,
+          "independent_optimum": true,
+          "independent_restricted_baseline": true,
+          "paired_seed_kernel_and_target": true,
+          "public_policy_supported_win": true,
+          "tool_limit_covers_allowance": true
+        },
+        "coupling": "independent",
+        "horizon": "short",
+        "id": "F12",
+        "interleaving_gap": 0,
+        "kernel_transition_checks": 93750,
+        "minimum_coordinate_goal_breaks": 2,
+        "physical_minimum": 12,
+        "public_evidence_sha256": "abce83b6212bba18bcf09178e04e16554bcb2b70038c8218b5c8436068830685",
+        "reference_operations": 10,
+        "reference_trajectory": {
+          "avoidable_actions_so_far": 0,
+          "coordinate_goal_breaking_operations": 2,
+          "first_loss_of_optimality_turn": null,
+          "machine_blocks": 4,
+          "remaining_minimum_actions": 0,
+          "success_excess_actions": 0,
+          "unchanged_operations": 0,
+          "whole_bank_reopening_operations": 0
+        },
+        "resolved": {
+          "gains": [
+            4,
+            3,
+            3,
+            1,
+            3,
+            4
+          ],
+          "guards": [
+            3,
+            0,
+            2,
+            4,
+            0,
+            3
+          ],
+          "spill_gains": [
+            3,
+            3,
+            2,
+            3,
+            4,
+            3
+          ]
+        },
+        "resource": 1,
+        "seed": 107,
+        "structural": {
+          "minimum_coordinate_goal_breaks": 2,
+          "minimum_machine_blocks": 4,
+          "minimum_machine_blocks_on_optimal_paths": 4,
+          "minimum_whole_bank_reopening_operations": 0
+        },
+        "structural_checks": {
+          "block_cost_ordering": true,
+          "coordinate_metric_matches_original": true,
+          "independent_structural_costs": true,
+          "live_structural_diagnostics": true
+        },
+        "suite": "slack",
+        "target": [
+          2,
+          1,
+          1,
+          3,
+          4,
+          3
+        ]
+      },
+      "reference_action_upper": 12,
+      "resource": 1,
+      "seed": 107,
+      "suite": "pr-a",
+      "theory": 0
+    },
+    {
+      "action_budget": 22,
+      "budget_profile": "standard",
+      "discovery": 0,
+      "expected_budget": null,
+      "family": "stateful-interference-v1",
+      "id": "F13",
+      "ontology_options": {
+        "coupling": "coupled",
+        "horizon": "short"
+      },
+      "planning": 0,
+      "qualification": {
+        "action_budget": 22,
+        "bank_contiguous_operations": 25,
+        "certificate": {
+          "action_budget": 22,
+          "bank_contiguous_operations": 25,
+          "bank_contiguous_reachable": true,
+          "empirical_difficulty_calibrated": false,
+          "family": "stateful-interference-v1",
+          "horizon_stratum": "short",
+          "kernel_attempt": 7,
+          "kernel_attempt_limit": 32,
+          "law_visibility": "complete",
+          "map_visibility": "complete",
+          "minimum_coordinate_goal_breaks": 4,
+          "minimum_operations": 20,
+          "physical_state_bound": 15625,
+          "reachable_states": 11529,
+          "reference_action_upper": 22,
+          "reference_kind": "exact-known-law-optimum",
+          "resource_allowance": 0,
+          "scope": "Exact P0 known-law minimum including take and finish. R2 equals minimum; R1 adds max(6,ceil(minimum/2)); R0 uncapped. Goal breaks count operations unsetting at least one matched coordinate, minimized over all successful words. Null restricted cost means unreachable under bank-contiguous words. Coupled optimum beats every bank-contiguous word; slack may permit such a word. Sizes and horizon strata are not empirical difficulty calibration.",
+          "state_visibility": "complete",
+          "status": "experimental-public-reference-qualified"
+        },
+        "checks": {
+          "compiled_contract": true,
+          "complete_transition_checks": true,
+          "coupled_coordinate_regression_required": true,
+          "exact_reference_actions": true,
+          "exact_replay": true,
+          "factorization_or_optimal_interleaving": true,
+          "horizon_stratum_bound": true,
+          "independent_coordinate_break_minimum": true,
+          "independent_optimum": true,
+          "independent_restricted_baseline": true,
+          "paired_seed_kernel_and_target": true,
+          "public_policy_supported_win": true,
+          "tool_limit_covers_allowance": true
+        },
+        "coupling": "coupled",
+        "horizon": "short",
+        "id": "F13",
+        "interleaving_gap": 5,
+        "kernel_transition_checks": 93750,
+        "minimum_coordinate_goal_breaks": 4,
+        "physical_minimum": 22,
+        "public_evidence_sha256": "fa8ee58cf963e72aaa7da71f0657b88dd5490c8a7e0620167a5a6e0b7559738e",
+        "reference_operations": 20,
+        "reference_trajectory": {
+          "avoidable_actions_so_far": 0,
+          "coordinate_goal_breaking_operations": 6,
+          "first_loss_of_optimality_turn": null,
+          "machine_blocks": 9,
+          "remaining_minimum_actions": 0,
+          "success_excess_actions": 0,
+          "unchanged_operations": 0,
+          "whole_bank_reopening_operations": 1
+        },
+        "resolved": {
+          "gains": [
+            4,
+            3,
+            3,
+            1,
+            3,
+            4
+          ],
+          "guards": [
+            3,
+            0,
+            2,
+            4,
+            0,
+            3
+          ],
+          "spill_gains": [
+            3,
+            3,
+            2,
+            3,
+            4,
+            3
+          ]
+        },
+        "resource": 2,
+        "seed": 107,
+        "structural": {
+          "minimum_coordinate_goal_breaks": 4,
+          "minimum_machine_blocks": 9,
+          "minimum_machine_blocks_on_optimal_paths": 9,
+          "minimum_whole_bank_reopening_operations": 0
+        },
+        "structural_checks": {
+          "block_cost_ordering": true,
+          "coordinate_metric_matches_original": true,
+          "independent_structural_costs": true,
+          "live_structural_diagnostics": true
+        },
+        "suite": "core",
+        "target": [
+          2,
+          1,
+          1,
+          3,
+          4,
+          3
+        ]
+      },
+      "reference_action_upper": 22,
+      "resource": 2,
+      "seed": 107,
+      "suite": "pr-a",
+      "theory": 0
+    },
+    {
+      "action_budget": 33,
+      "budget_profile": "standard",
+      "discovery": 0,
+      "expected_budget": null,
+      "family": "stateful-interference-v1",
+      "id": "F14",
+      "ontology_options": {
+        "coupling": "coupled",
+        "horizon": "short"
+      },
+      "planning": 0,
+      "qualification": {
+        "action_budget": 33,
+        "bank_contiguous_operations": 25,
+        "certificate": {
+          "action_budget": 33,
+          "bank_contiguous_operations": 25,
+          "bank_contiguous_reachable": true,
+          "empirical_difficulty_calibrated": false,
+          "family": "stateful-interference-v1",
+          "horizon_stratum": "short",
+          "kernel_attempt": 7,
+          "kernel_attempt_limit": 32,
+          "law_visibility": "complete",
+          "map_visibility": "complete",
+          "minimum_coordinate_goal_breaks": 4,
+          "minimum_operations": 20,
+          "physical_state_bound": 15625,
+          "reachable_states": 11529,
+          "reference_action_upper": 22,
+          "reference_kind": "exact-known-law-optimum",
+          "resource_allowance": 11,
+          "scope": "Exact P0 known-law minimum including take and finish. R2 equals minimum; R1 adds max(6,ceil(minimum/2)); R0 uncapped. Goal breaks count operations unsetting at least one matched coordinate, minimized over all successful words. Null restricted cost means unreachable under bank-contiguous words. Coupled optimum beats every bank-contiguous word; slack may permit such a word. Sizes and horizon strata are not empirical difficulty calibration.",
+          "state_visibility": "complete",
+          "status": "experimental-public-reference-qualified"
+        },
+        "checks": {
+          "compiled_contract": true,
+          "complete_transition_checks": true,
+          "coupled_coordinate_regression_required": true,
+          "exact_reference_actions": true,
+          "exact_replay": true,
+          "factorization_or_optimal_interleaving": true,
+          "horizon_stratum_bound": true,
+          "independent_coordinate_break_minimum": true,
+          "independent_optimum": true,
+          "independent_restricted_baseline": true,
+          "paired_seed_kernel_and_target": true,
+          "public_policy_supported_win": true,
+          "tool_limit_covers_allowance": true
+        },
+        "coupling": "coupled",
+        "horizon": "short",
+        "id": "F14",
+        "interleaving_gap": 5,
+        "kernel_transition_checks": 93750,
+        "minimum_coordinate_goal_breaks": 4,
+        "physical_minimum": 22,
+        "public_evidence_sha256": "fa8ee58cf963e72aaa7da71f0657b88dd5490c8a7e0620167a5a6e0b7559738e",
+        "reference_operations": 20,
+        "reference_trajectory": {
+          "avoidable_actions_so_far": 0,
+          "coordinate_goal_breaking_operations": 6,
+          "first_loss_of_optimality_turn": null,
+          "machine_blocks": 9,
+          "remaining_minimum_actions": 0,
+          "success_excess_actions": 0,
+          "unchanged_operations": 0,
+          "whole_bank_reopening_operations": 1
+        },
+        "resolved": {
+          "gains": [
+            4,
+            3,
+            3,
+            1,
+            3,
+            4
+          ],
+          "guards": [
+            3,
+            0,
+            2,
+            4,
+            0,
+            3
+          ],
+          "spill_gains": [
+            3,
+            3,
+            2,
+            3,
+            4,
+            3
+          ]
+        },
+        "resource": 1,
+        "seed": 107,
+        "structural": {
+          "minimum_coordinate_goal_breaks": 4,
+          "minimum_machine_blocks": 9,
+          "minimum_machine_blocks_on_optimal_paths": 9,
+          "minimum_whole_bank_reopening_operations": 0
+        },
+        "structural_checks": {
+          "block_cost_ordering": true,
+          "coordinate_metric_matches_original": true,
+          "independent_structural_costs": true,
+          "live_structural_diagnostics": true
+        },
+        "suite": "slack",
+        "target": [
+          2,
+          1,
+          1,
+          3,
+          4,
+          3
+        ]
+      },
+      "reference_action_upper": 22,
+      "resource": 1,
+      "seed": 107,
+      "suite": "pr-a",
+      "theory": 0
+    },
+    {
+      "action_budget": 22,
+      "budget_profile": "standard",
+      "discovery": 0,
+      "expected_budget": null,
+      "family": "stateful-interference-v1",
+      "id": "F15",
+      "ontology_options": {
+        "coupling": "independent",
+        "horizon": "long"
+      },
+      "planning": 0,
+      "qualification": {
+        "action_budget": 22,
+        "bank_contiguous_operations": 20,
+        "certificate": {
+          "action_budget": 22,
+          "bank_contiguous_operations": 20,
+          "bank_contiguous_reachable": true,
+          "empirical_difficulty_calibrated": false,
+          "family": "stateful-interference-v1",
+          "horizon_stratum": "long",
+          "kernel_attempt": 7,
+          "kernel_attempt_limit": 32,
+          "law_visibility": "complete",
+          "map_visibility": "complete",
+          "minimum_coordinate_goal_breaks": 4,
+          "minimum_operations": 20,
+          "physical_state_bound": 15625,
+          "reachable_states": 2304,
+          "reference_action_upper": 22,
+          "reference_kind": "exact-known-law-optimum",
+          "resource_allowance": 0,
+          "scope": "Exact P0 known-law minimum including take and finish. R2 equals minimum; R1 adds max(6,ceil(minimum/2)); R0 uncapped. Goal breaks count operations unsetting at least one matched coordinate, minimized over all successful words. Null restricted cost means unreachable under bank-contiguous words. Coupled optimum beats every bank-contiguous word; slack may permit such a word. Sizes and horizon strata are not empirical difficulty calibration.",
+          "state_visibility": "complete",
+          "status": "experimental-public-reference-qualified"
+        },
+        "checks": {
+          "compiled_contract": true,
+          "complete_transition_checks": true,
+          "coupled_coordinate_regression_required": true,
+          "exact_reference_actions": true,
+          "exact_replay": true,
+          "factorization_or_optimal_interleaving": true,
+          "horizon_stratum_bound": true,
+          "independent_coordinate_break_minimum": true,
+          "independent_optimum": true,
+          "independent_restricted_baseline": true,
+          "paired_seed_kernel_and_target": true,
+          "public_policy_supported_win": true,
+          "tool_limit_covers_allowance": true
+        },
+        "coupling": "independent",
+        "horizon": "long",
+        "id": "F15",
+        "interleaving_gap": 0,
+        "kernel_transition_checks": 93750,
+        "minimum_coordinate_goal_breaks": 4,
+        "physical_minimum": 22,
+        "public_evidence_sha256": "27359d0020e04443300bad34dda529711b6be38a6c69d2fc8168c82832578a69",
+        "reference_operations": 20,
+        "reference_trajectory": {
+          "avoidable_actions_so_far": 0,
+          "coordinate_goal_breaking_operations": 4,
+          "first_loss_of_optimality_turn": null,
+          "machine_blocks": 9,
+          "remaining_minimum_actions": 0,
+          "success_excess_actions": 0,
+          "unchanged_operations": 0,
+          "whole_bank_reopening_operations": 0
+        },
+        "resolved": {
+          "gains": [
+            4,
+            3,
+            3,
+            1,
+            3,
+            4
+          ],
+          "guards": [
+            3,
+            0,
+            2,
+            4,
+            0,
+            3
+          ],
+          "spill_gains": [
+            3,
+            3,
+            2,
+            3,
+            4,
+            3
+          ]
+        },
+        "resource": 2,
+        "seed": 107,
+        "structural": {
+          "minimum_coordinate_goal_breaks": 4,
+          "minimum_machine_blocks": 9,
+          "minimum_machine_blocks_on_optimal_paths": 9,
+          "minimum_whole_bank_reopening_operations": 0
+        },
+        "structural_checks": {
+          "block_cost_ordering": true,
+          "coordinate_metric_matches_original": true,
+          "independent_structural_costs": true,
+          "live_structural_diagnostics": true
+        },
+        "suite": "core",
+        "target": [
+          2,
+          4,
+          2,
+          3,
+          1,
+          2
+        ]
+      },
+      "reference_action_upper": 22,
+      "resource": 2,
+      "seed": 107,
+      "suite": "pr-a",
+      "theory": 0
+    },
+    {
+      "action_budget": 33,
+      "budget_profile": "standard",
+      "discovery": 0,
+      "expected_budget": null,
+      "family": "stateful-interference-v1",
+      "id": "F16",
+      "ontology_options": {
+        "coupling": "independent",
+        "horizon": "long"
+      },
+      "planning": 0,
+      "qualification": {
+        "action_budget": 33,
+        "bank_contiguous_operations": 20,
+        "certificate": {
+          "action_budget": 33,
+          "bank_contiguous_operations": 20,
+          "bank_contiguous_reachable": true,
+          "empirical_difficulty_calibrated": false,
+          "family": "stateful-interference-v1",
+          "horizon_stratum": "long",
+          "kernel_attempt": 7,
+          "kernel_attempt_limit": 32,
+          "law_visibility": "complete",
+          "map_visibility": "complete",
+          "minimum_coordinate_goal_breaks": 4,
+          "minimum_operations": 20,
+          "physical_state_bound": 15625,
+          "reachable_states": 2304,
+          "reference_action_upper": 22,
+          "reference_kind": "exact-known-law-optimum",
+          "resource_allowance": 11,
+          "scope": "Exact P0 known-law minimum including take and finish. R2 equals minimum; R1 adds max(6,ceil(minimum/2)); R0 uncapped. Goal breaks count operations unsetting at least one matched coordinate, minimized over all successful words. Null restricted cost means unreachable under bank-contiguous words. Coupled optimum beats every bank-contiguous word; slack may permit such a word. Sizes and horizon strata are not empirical difficulty calibration.",
+          "state_visibility": "complete",
+          "status": "experimental-public-reference-qualified"
+        },
+        "checks": {
+          "compiled_contract": true,
+          "complete_transition_checks": true,
+          "coupled_coordinate_regression_required": true,
+          "exact_reference_actions": true,
+          "exact_replay": true,
+          "factorization_or_optimal_interleaving": true,
+          "horizon_stratum_bound": true,
+          "independent_coordinate_break_minimum": true,
+          "independent_optimum": true,
+          "independent_restricted_baseline": true,
+          "paired_seed_kernel_and_target": true,
+          "public_policy_supported_win": true,
+          "tool_limit_covers_allowance": true
+        },
+        "coupling": "independent",
+        "horizon": "long",
+        "id": "F16",
+        "interleaving_gap": 0,
+        "kernel_transition_checks": 93750,
+        "minimum_coordinate_goal_breaks": 4,
+        "physical_minimum": 22,
+        "public_evidence_sha256": "27359d0020e04443300bad34dda529711b6be38a6c69d2fc8168c82832578a69",
+        "reference_operations": 20,
+        "reference_trajectory": {
+          "avoidable_actions_so_far": 0,
+          "coordinate_goal_breaking_operations": 4,
+          "first_loss_of_optimality_turn": null,
+          "machine_blocks": 9,
+          "remaining_minimum_actions": 0,
+          "success_excess_actions": 0,
+          "unchanged_operations": 0,
+          "whole_bank_reopening_operations": 0
+        },
+        "resolved": {
+          "gains": [
+            4,
+            3,
+            3,
+            1,
+            3,
+            4
+          ],
+          "guards": [
+            3,
+            0,
+            2,
+            4,
+            0,
+            3
+          ],
+          "spill_gains": [
+            3,
+            3,
+            2,
+            3,
+            4,
+            3
+          ]
+        },
+        "resource": 1,
+        "seed": 107,
+        "structural": {
+          "minimum_coordinate_goal_breaks": 4,
+          "minimum_machine_blocks": 9,
+          "minimum_machine_blocks_on_optimal_paths": 9,
+          "minimum_whole_bank_reopening_operations": 0
+        },
+        "structural_checks": {
+          "block_cost_ordering": true,
+          "coordinate_metric_matches_original": true,
+          "independent_structural_costs": true,
+          "live_structural_diagnostics": true
+        },
+        "suite": "slack",
+        "target": [
+          2,
+          4,
+          2,
+          3,
+          1,
+          2
+        ]
+      },
+      "reference_action_upper": 22,
+      "resource": 1,
+      "seed": 107,
+      "suite": "pr-a",
+      "theory": 0
+    },
+    {
+      "action_budget": 36,
+      "budget_profile": "standard",
+      "discovery": 0,
+      "expected_budget": null,
+      "family": "stateful-interference-v1",
+      "id": "F17",
+      "ontology_options": {
+        "coupling": "coupled",
+        "horizon": "long"
+      },
+      "planning": 0,
+      "qualification": {
+        "action_budget": 36,
+        "bank_contiguous_operations": null,
+        "certificate": {
+          "action_budget": 36,
+          "bank_contiguous_operations": null,
+          "bank_contiguous_reachable": false,
+          "empirical_difficulty_calibrated": false,
+          "family": "stateful-interference-v1",
+          "horizon_stratum": "long",
+          "kernel_attempt": 7,
+          "kernel_attempt_limit": 32,
+          "law_visibility": "complete",
+          "map_visibility": "complete",
+          "minimum_coordinate_goal_breaks": 6,
+          "minimum_operations": 34,
+          "physical_state_bound": 15625,
+          "reachable_states": 11529,
+          "reference_action_upper": 36,
+          "reference_kind": "exact-known-law-optimum",
+          "resource_allowance": 0,
+          "scope": "Exact P0 known-law minimum including take and finish. R2 equals minimum; R1 adds max(6,ceil(minimum/2)); R0 uncapped. Goal breaks count operations unsetting at least one matched coordinate, minimized over all successful words. Null restricted cost means unreachable under bank-contiguous words. Coupled optimum beats every bank-contiguous word; slack may permit such a word. Sizes and horizon strata are not empirical difficulty calibration.",
+          "state_visibility": "complete",
+          "status": "experimental-public-reference-qualified"
+        },
+        "checks": {
+          "compiled_contract": true,
+          "complete_transition_checks": true,
+          "coupled_coordinate_regression_required": true,
+          "exact_reference_actions": true,
+          "exact_replay": true,
+          "factorization_or_optimal_interleaving": true,
+          "horizon_stratum_bound": true,
+          "independent_coordinate_break_minimum": true,
+          "independent_optimum": true,
+          "independent_restricted_baseline": true,
+          "paired_seed_kernel_and_target": true,
+          "public_policy_supported_win": true,
+          "tool_limit_covers_allowance": true
+        },
+        "coupling": "coupled",
+        "horizon": "long",
+        "id": "F17",
+        "interleaving_gap": null,
+        "kernel_transition_checks": 93750,
+        "minimum_coordinate_goal_breaks": 6,
+        "physical_minimum": 36,
+        "public_evidence_sha256": "3e8e67db2af7099065fa98ee38fbca63069e9d2c7af3df95dea7b964a816c78d",
+        "reference_operations": 34,
+        "reference_trajectory": {
+          "avoidable_actions_so_far": 0,
+          "coordinate_goal_breaking_operations": 8,
+          "first_loss_of_optimality_turn": null,
+          "machine_blocks": 14,
+          "remaining_minimum_actions": 0,
+          "success_excess_actions": 0,
+          "unchanged_operations": 0,
+          "whole_bank_reopening_operations": 1
+        },
+        "resolved": {
+          "gains": [
+            4,
+            3,
+            3,
+            1,
+            3,
+            4
+          ],
+          "guards": [
+            3,
+            0,
+            2,
+            4,
+            0,
+            3
+          ],
+          "spill_gains": [
+            3,
+            3,
+            2,
+            3,
+            4,
+            3
+          ]
+        },
+        "resource": 2,
+        "seed": 107,
+        "structural": {
+          "minimum_coordinate_goal_breaks": 6,
+          "minimum_machine_blocks": 14,
+          "minimum_machine_blocks_on_optimal_paths": 14,
+          "minimum_whole_bank_reopening_operations": 1
+        },
+        "structural_checks": {
+          "block_cost_ordering": true,
+          "coordinate_metric_matches_original": true,
+          "independent_structural_costs": true,
+          "live_structural_diagnostics": true
+        },
+        "suite": "core",
+        "target": [
+          2,
+          4,
+          2,
+          3,
+          1,
+          2
+        ]
+      },
+      "reference_action_upper": 36,
+      "resource": 2,
+      "seed": 107,
+      "suite": "pr-a",
+      "theory": 0
+    },
+    {
+      "action_budget": 54,
+      "budget_profile": "standard",
+      "discovery": 0,
+      "expected_budget": null,
+      "family": "stateful-interference-v1",
+      "id": "F18",
+      "ontology_options": {
+        "coupling": "coupled",
+        "horizon": "long"
+      },
+      "planning": 0,
+      "qualification": {
+        "action_budget": 54,
+        "bank_contiguous_operations": null,
+        "certificate": {
+          "action_budget": 54,
+          "bank_contiguous_operations": null,
+          "bank_contiguous_reachable": false,
+          "empirical_difficulty_calibrated": false,
+          "family": "stateful-interference-v1",
+          "horizon_stratum": "long",
+          "kernel_attempt": 7,
+          "kernel_attempt_limit": 32,
+          "law_visibility": "complete",
+          "map_visibility": "complete",
+          "minimum_coordinate_goal_breaks": 6,
+          "minimum_operations": 34,
+          "physical_state_bound": 15625,
+          "reachable_states": 11529,
+          "reference_action_upper": 36,
+          "reference_kind": "exact-known-law-optimum",
+          "resource_allowance": 18,
+          "scope": "Exact P0 known-law minimum including take and finish. R2 equals minimum; R1 adds max(6,ceil(minimum/2)); R0 uncapped. Goal breaks count operations unsetting at least one matched coordinate, minimized over all successful words. Null restricted cost means unreachable under bank-contiguous words. Coupled optimum beats every bank-contiguous word; slack may permit such a word. Sizes and horizon strata are not empirical difficulty calibration.",
+          "state_visibility": "complete",
+          "status": "experimental-public-reference-qualified"
+        },
+        "checks": {
+          "compiled_contract": true,
+          "complete_transition_checks": true,
+          "coupled_coordinate_regression_required": true,
+          "exact_reference_actions": true,
+          "exact_replay": true,
+          "factorization_or_optimal_interleaving": true,
+          "horizon_stratum_bound": true,
+          "independent_coordinate_break_minimum": true,
+          "independent_optimum": true,
+          "independent_restricted_baseline": true,
+          "paired_seed_kernel_and_target": true,
+          "public_policy_supported_win": true,
+          "tool_limit_covers_allowance": true
+        },
+        "coupling": "coupled",
+        "horizon": "long",
+        "id": "F18",
+        "interleaving_gap": null,
+        "kernel_transition_checks": 93750,
+        "minimum_coordinate_goal_breaks": 6,
+        "physical_minimum": 36,
+        "public_evidence_sha256": "3e8e67db2af7099065fa98ee38fbca63069e9d2c7af3df95dea7b964a816c78d",
+        "reference_operations": 34,
+        "reference_trajectory": {
+          "avoidable_actions_so_far": 0,
+          "coordinate_goal_breaking_operations": 8,
+          "first_loss_of_optimality_turn": null,
+          "machine_blocks": 14,
+          "remaining_minimum_actions": 0,
+          "success_excess_actions": 0,
+          "unchanged_operations": 0,
+          "whole_bank_reopening_operations": 1
+        },
+        "resolved": {
+          "gains": [
+            4,
+            3,
+            3,
+            1,
+            3,
+            4
+          ],
+          "guards": [
+            3,
+            0,
+            2,
+            4,
+            0,
+            3
+          ],
+          "spill_gains": [
+            3,
+            3,
+            2,
+            3,
+            4,
+            3
+          ]
+        },
+        "resource": 1,
+        "seed": 107,
+        "structural": {
+          "minimum_coordinate_goal_breaks": 6,
+          "minimum_machine_blocks": 14,
+          "minimum_machine_blocks_on_optimal_paths": 14,
+          "minimum_whole_bank_reopening_operations": 1
+        },
+        "structural_checks": {
+          "block_cost_ordering": true,
+          "coordinate_metric_matches_original": true,
+          "independent_structural_costs": true,
+          "live_structural_diagnostics": true
+        },
+        "suite": "slack",
+        "target": [
+          2,
+          4,
+          2,
+          3,
+          1,
+          2
+        ]
+      },
+      "reference_action_upper": 36,
+      "resource": 1,
+      "seed": 107,
+      "suite": "pr-a",
+      "theory": 0
+    },
+    {
+      "action_budget": 26,
+      "budget_profile": "standard",
+      "discovery": 0,
+      "expected_budget": null,
+      "family": "stateful-interference-v1",
+      "id": "F19",
+      "ontology_options": {
+        "coupling": "independent",
+        "horizon": "short"
+      },
+      "planning": 0,
+      "qualification": {
+        "action_budget": 26,
+        "bank_contiguous_operations": 15,
+        "certificate": {
+          "action_budget": 26,
+          "bank_contiguous_operations": 15,
+          "bank_contiguous_reachable": true,
+          "empirical_difficulty_calibrated": false,
+          "family": "stateful-interference-v1",
+          "horizon_stratum": "short",
+          "kernel_attempt": 2,
+          "kernel_attempt_limit": 32,
+          "law_visibility": "complete",
+          "map_visibility": "complete",
+          "minimum_coordinate_goal_breaks": 3,
+          "minimum_operations": 15,
+          "physical_state_bound": 15625,
+          "reachable_states": 2304,
+          "reference_action_upper": 17,
+          "reference_kind": "exact-known-law-optimum",
+          "resource_allowance": 9,
+          "scope": "Exact P0 known-law minimum including take and finish. R2 equals minimum; R1 adds max(6,ceil(minimum/2)); R0 uncapped. Goal breaks count operations unsetting at least one matched coordinate, minimized over all successful words. Null restricted cost means unreachable under bank-contiguous words. Coupled optimum beats every bank-contiguous word; slack may permit such a word. Sizes and horizon strata are not empirical difficulty calibration.",
+          "state_visibility": "complete",
+          "status": "experimental-public-reference-qualified"
+        },
+        "checks": {
+          "compiled_contract": true,
+          "complete_transition_checks": true,
+          "coupled_coordinate_regression_required": true,
+          "exact_reference_actions": true,
+          "exact_replay": true,
+          "factorization_or_optimal_interleaving": true,
+          "horizon_stratum_bound": true,
+          "independent_coordinate_break_minimum": true,
+          "independent_optimum": true,
+          "independent_restricted_baseline": true,
+          "paired_seed_kernel_and_target": true,
+          "public_policy_supported_win": true,
+          "tool_limit_covers_allowance": true
+        },
+        "coupling": "independent",
+        "horizon": "short",
+        "id": "F19",
+        "interleaving_gap": 0,
+        "kernel_transition_checks": 93750,
+        "minimum_coordinate_goal_breaks": 3,
+        "physical_minimum": 17,
+        "public_evidence_sha256": "30b46e30b3c35dfc63169ef1865005b602f7ffb14486af10e6c41f3b7d2b3fdb",
+        "reference_operations": 15,
+        "reference_trajectory": {
+          "avoidable_actions_so_far": 0,
+          "coordinate_goal_breaking_operations": 3,
+          "first_loss_of_optimality_turn": null,
+          "machine_blocks": 5,
+          "remaining_minimum_actions": 0,
+          "success_excess_actions": 0,
+          "unchanged_operations": 0,
+          "whole_bank_reopening_operations": 0
+        },
+        "resolved": {
+          "gains": [
+            4,
+            4,
+            2,
+            3,
+            2,
+            4
+          ],
+          "guards": [
+            2,
+            0,
+            3,
+            0,
+            4,
+            2
+          ],
+          "spill_gains": [
+            4,
+            4,
+            4,
+            3,
+            2,
+            3
+          ]
+        },
+        "resource": 1,
+        "seed": 109,
+        "structural": {
+          "minimum_coordinate_goal_breaks": 3,
+          "minimum_machine_blocks": 5,
+          "minimum_machine_blocks_on_optimal_paths": 5,
+          "minimum_whole_bank_reopening_operations": 0
+        },
+        "structural_checks": {
+          "block_cost_ordering": true,
+          "coordinate_metric_matches_original": true,
+          "independent_structural_costs": true,
+          "live_structural_diagnostics": true
+        },
+        "suite": "slack",
+        "target": [
+          3,
+          1,
+          3,
+          2,
+          4,
+          4
+        ]
+      },
+      "reference_action_upper": 17,
+      "resource": 1,
+      "seed": 109,
+      "suite": "pr-b",
+      "theory": 0
+    },
+    {
+      "action_budget": 17,
+      "budget_profile": "standard",
+      "discovery": 0,
+      "expected_budget": null,
+      "family": "stateful-interference-v1",
+      "id": "F20",
+      "ontology_options": {
+        "coupling": "independent",
+        "horizon": "short"
+      },
+      "planning": 0,
+      "qualification": {
+        "action_budget": 17,
+        "bank_contiguous_operations": 15,
+        "certificate": {
+          "action_budget": 17,
+          "bank_contiguous_operations": 15,
+          "bank_contiguous_reachable": true,
+          "empirical_difficulty_calibrated": false,
+          "family": "stateful-interference-v1",
+          "horizon_stratum": "short",
+          "kernel_attempt": 2,
+          "kernel_attempt_limit": 32,
+          "law_visibility": "complete",
+          "map_visibility": "complete",
+          "minimum_coordinate_goal_breaks": 3,
+          "minimum_operations": 15,
+          "physical_state_bound": 15625,
+          "reachable_states": 2304,
+          "reference_action_upper": 17,
+          "reference_kind": "exact-known-law-optimum",
+          "resource_allowance": 0,
+          "scope": "Exact P0 known-law minimum including take and finish. R2 equals minimum; R1 adds max(6,ceil(minimum/2)); R0 uncapped. Goal breaks count operations unsetting at least one matched coordinate, minimized over all successful words. Null restricted cost means unreachable under bank-contiguous words. Coupled optimum beats every bank-contiguous word; slack may permit such a word. Sizes and horizon strata are not empirical difficulty calibration.",
+          "state_visibility": "complete",
+          "status": "experimental-public-reference-qualified"
+        },
+        "checks": {
+          "compiled_contract": true,
+          "complete_transition_checks": true,
+          "coupled_coordinate_regression_required": true,
+          "exact_reference_actions": true,
+          "exact_replay": true,
+          "factorization_or_optimal_interleaving": true,
+          "horizon_stratum_bound": true,
+          "independent_coordinate_break_minimum": true,
+          "independent_optimum": true,
+          "independent_restricted_baseline": true,
+          "paired_seed_kernel_and_target": true,
+          "public_policy_supported_win": true,
+          "tool_limit_covers_allowance": true
+        },
+        "coupling": "independent",
+        "horizon": "short",
+        "id": "F20",
+        "interleaving_gap": 0,
+        "kernel_transition_checks": 93750,
+        "minimum_coordinate_goal_breaks": 3,
+        "physical_minimum": 17,
+        "public_evidence_sha256": "30b46e30b3c35dfc63169ef1865005b602f7ffb14486af10e6c41f3b7d2b3fdb",
+        "reference_operations": 15,
+        "reference_trajectory": {
+          "avoidable_actions_so_far": 0,
+          "coordinate_goal_breaking_operations": 3,
+          "first_loss_of_optimality_turn": null,
+          "machine_blocks": 5,
+          "remaining_minimum_actions": 0,
+          "success_excess_actions": 0,
+          "unchanged_operations": 0,
+          "whole_bank_reopening_operations": 0
+        },
+        "resolved": {
+          "gains": [
+            4,
+            4,
+            2,
+            3,
+            2,
+            4
+          ],
+          "guards": [
+            2,
+            0,
+            3,
+            0,
+            4,
+            2
+          ],
+          "spill_gains": [
+            4,
+            4,
+            4,
+            3,
+            2,
+            3
+          ]
+        },
+        "resource": 2,
+        "seed": 109,
+        "structural": {
+          "minimum_coordinate_goal_breaks": 3,
+          "minimum_machine_blocks": 5,
+          "minimum_machine_blocks_on_optimal_paths": 5,
+          "minimum_whole_bank_reopening_operations": 0
+        },
+        "structural_checks": {
+          "block_cost_ordering": true,
+          "coordinate_metric_matches_original": true,
+          "independent_structural_costs": true,
+          "live_structural_diagnostics": true
+        },
+        "suite": "core",
+        "target": [
+          3,
+          1,
+          3,
+          2,
+          4,
+          4
+        ]
+      },
+      "reference_action_upper": 17,
+      "resource": 2,
+      "seed": 109,
+      "suite": "pr-b",
+      "theory": 0
+    },
+    {
+      "action_budget": 33,
+      "budget_profile": "standard",
+      "discovery": 0,
+      "expected_budget": null,
+      "family": "stateful-interference-v1",
+      "id": "F21",
+      "ontology_options": {
+        "coupling": "coupled",
+        "horizon": "short"
+      },
+      "planning": 0,
+      "qualification": {
+        "action_budget": 33,
+        "bank_contiguous_operations": 25,
+        "certificate": {
+          "action_budget": 33,
+          "bank_contiguous_operations": 25,
+          "bank_contiguous_reachable": true,
+          "empirical_difficulty_calibrated": false,
+          "family": "stateful-interference-v1",
+          "horizon_stratum": "short",
+          "kernel_attempt": 2,
+          "kernel_attempt_limit": 32,
+          "law_visibility": "complete",
+          "map_visibility": "complete",
+          "minimum_coordinate_goal_breaks": 4,
+          "minimum_operations": 20,
+          "physical_state_bound": 15625,
+          "reachable_states": 11529,
+          "reference_action_upper": 22,
+          "reference_kind": "exact-known-law-optimum",
+          "resource_allowance": 11,
+          "scope": "Exact P0 known-law minimum including take and finish. R2 equals minimum; R1 adds max(6,ceil(minimum/2)); R0 uncapped. Goal breaks count operations unsetting at least one matched coordinate, minimized over all successful words. Null restricted cost means unreachable under bank-contiguous words. Coupled optimum beats every bank-contiguous word; slack may permit such a word. Sizes and horizon strata are not empirical difficulty calibration.",
+          "state_visibility": "complete",
+          "status": "experimental-public-reference-qualified"
+        },
+        "checks": {
+          "compiled_contract": true,
+          "complete_transition_checks": true,
+          "coupled_coordinate_regression_required": true,
+          "exact_reference_actions": true,
+          "exact_replay": true,
+          "factorization_or_optimal_interleaving": true,
+          "horizon_stratum_bound": true,
+          "independent_coordinate_break_minimum": true,
+          "independent_optimum": true,
+          "independent_restricted_baseline": true,
+          "paired_seed_kernel_and_target": true,
+          "public_policy_supported_win": true,
+          "tool_limit_covers_allowance": true
+        },
+        "coupling": "coupled",
+        "horizon": "short",
+        "id": "F21",
+        "interleaving_gap": 5,
+        "kernel_transition_checks": 93750,
+        "minimum_coordinate_goal_breaks": 4,
+        "physical_minimum": 22,
+        "public_evidence_sha256": "fa87b15ec86e08ca520962a1bdbe953a2962eb29fa9391c8602e6d86b6be47cc",
+        "reference_operations": 20,
+        "reference_trajectory": {
+          "avoidable_actions_so_far": 0,
+          "coordinate_goal_breaking_operations": 5,
+          "first_loss_of_optimality_turn": null,
+          "machine_blocks": 8,
+          "remaining_minimum_actions": 0,
+          "success_excess_actions": 0,
+          "unchanged_operations": 0,
+          "whole_bank_reopening_operations": 0
+        },
+        "resolved": {
+          "gains": [
+            4,
+            4,
+            2,
+            3,
+            2,
+            4
+          ],
+          "guards": [
+            2,
+            0,
+            3,
+            0,
+            4,
+            2
+          ],
+          "spill_gains": [
+            4,
+            4,
+            4,
+            3,
+            2,
+            3
+          ]
+        },
+        "resource": 1,
+        "seed": 109,
+        "structural": {
+          "minimum_coordinate_goal_breaks": 4,
+          "minimum_machine_blocks": 8,
+          "minimum_machine_blocks_on_optimal_paths": 8,
+          "minimum_whole_bank_reopening_operations": 0
+        },
+        "structural_checks": {
+          "block_cost_ordering": true,
+          "coordinate_metric_matches_original": true,
+          "independent_structural_costs": true,
+          "live_structural_diagnostics": true
+        },
+        "suite": "slack",
+        "target": [
+          3,
+          1,
+          3,
+          2,
+          4,
+          4
+        ]
+      },
+      "reference_action_upper": 22,
+      "resource": 1,
+      "seed": 109,
+      "suite": "pr-b",
+      "theory": 0
+    },
+    {
+      "action_budget": 22,
+      "budget_profile": "standard",
+      "discovery": 0,
+      "expected_budget": null,
+      "family": "stateful-interference-v1",
+      "id": "F22",
+      "ontology_options": {
+        "coupling": "coupled",
+        "horizon": "short"
+      },
+      "planning": 0,
+      "qualification": {
+        "action_budget": 22,
+        "bank_contiguous_operations": 25,
+        "certificate": {
+          "action_budget": 22,
+          "bank_contiguous_operations": 25,
+          "bank_contiguous_reachable": true,
+          "empirical_difficulty_calibrated": false,
+          "family": "stateful-interference-v1",
+          "horizon_stratum": "short",
+          "kernel_attempt": 2,
+          "kernel_attempt_limit": 32,
+          "law_visibility": "complete",
+          "map_visibility": "complete",
+          "minimum_coordinate_goal_breaks": 4,
+          "minimum_operations": 20,
+          "physical_state_bound": 15625,
+          "reachable_states": 11529,
+          "reference_action_upper": 22,
+          "reference_kind": "exact-known-law-optimum",
+          "resource_allowance": 0,
+          "scope": "Exact P0 known-law minimum including take and finish. R2 equals minimum; R1 adds max(6,ceil(minimum/2)); R0 uncapped. Goal breaks count operations unsetting at least one matched coordinate, minimized over all successful words. Null restricted cost means unreachable under bank-contiguous words. Coupled optimum beats every bank-contiguous word; slack may permit such a word. Sizes and horizon strata are not empirical difficulty calibration.",
+          "state_visibility": "complete",
+          "status": "experimental-public-reference-qualified"
+        },
+        "checks": {
+          "compiled_contract": true,
+          "complete_transition_checks": true,
+          "coupled_coordinate_regression_required": true,
+          "exact_reference_actions": true,
+          "exact_replay": true,
+          "factorization_or_optimal_interleaving": true,
+          "horizon_stratum_bound": true,
+          "independent_coordinate_break_minimum": true,
+          "independent_optimum": true,
+          "independent_restricted_baseline": true,
+          "paired_seed_kernel_and_target": true,
+          "public_policy_supported_win": true,
+          "tool_limit_covers_allowance": true
+        },
+        "coupling": "coupled",
+        "horizon": "short",
+        "id": "F22",
+        "interleaving_gap": 5,
+        "kernel_transition_checks": 93750,
+        "minimum_coordinate_goal_breaks": 4,
+        "physical_minimum": 22,
+        "public_evidence_sha256": "fa87b15ec86e08ca520962a1bdbe953a2962eb29fa9391c8602e6d86b6be47cc",
+        "reference_operations": 20,
+        "reference_trajectory": {
+          "avoidable_actions_so_far": 0,
+          "coordinate_goal_breaking_operations": 5,
+          "first_loss_of_optimality_turn": null,
+          "machine_blocks": 8,
+          "remaining_minimum_actions": 0,
+          "success_excess_actions": 0,
+          "unchanged_operations": 0,
+          "whole_bank_reopening_operations": 0
+        },
+        "resolved": {
+          "gains": [
+            4,
+            4,
+            2,
+            3,
+            2,
+            4
+          ],
+          "guards": [
+            2,
+            0,
+            3,
+            0,
+            4,
+            2
+          ],
+          "spill_gains": [
+            4,
+            4,
+            4,
+            3,
+            2,
+            3
+          ]
+        },
+        "resource": 2,
+        "seed": 109,
+        "structural": {
+          "minimum_coordinate_goal_breaks": 4,
+          "minimum_machine_blocks": 8,
+          "minimum_machine_blocks_on_optimal_paths": 8,
+          "minimum_whole_bank_reopening_operations": 0
+        },
+        "structural_checks": {
+          "block_cost_ordering": true,
+          "coordinate_metric_matches_original": true,
+          "independent_structural_costs": true,
+          "live_structural_diagnostics": true
+        },
+        "suite": "core",
+        "target": [
+          3,
+          1,
+          3,
+          2,
+          4,
+          4
+        ]
+      },
+      "reference_action_upper": 22,
+      "resource": 2,
+      "seed": 109,
+      "suite": "pr-b",
+      "theory": 0
+    },
+    {
+      "action_budget": 53,
+      "budget_profile": "standard",
+      "discovery": 0,
+      "expected_budget": null,
+      "family": "stateful-interference-v1",
+      "id": "F23",
+      "ontology_options": {
+        "coupling": "independent",
+        "horizon": "long"
+      },
+      "planning": 0,
+      "qualification": {
+        "action_budget": 53,
+        "bank_contiguous_operations": 33,
+        "certificate": {
+          "action_budget": 53,
+          "bank_contiguous_operations": 33,
+          "bank_contiguous_reachable": true,
+          "empirical_difficulty_calibrated": false,
+          "family": "stateful-interference-v1",
+          "horizon_stratum": "long",
+          "kernel_attempt": 2,
+          "kernel_attempt_limit": 32,
+          "law_visibility": "complete",
+          "map_visibility": "complete",
+          "minimum_coordinate_goal_breaks": 9,
+          "minimum_operations": 33,
+          "physical_state_bound": 15625,
+          "reachable_states": 2304,
+          "reference_action_upper": 35,
+          "reference_kind": "exact-known-law-optimum",
+          "resource_allowance": 18,
+          "scope": "Exact P0 known-law minimum including take and finish. R2 equals minimum; R1 adds max(6,ceil(minimum/2)); R0 uncapped. Goal breaks count operations unsetting at least one matched coordinate, minimized over all successful words. Null restricted cost means unreachable under bank-contiguous words. Coupled optimum beats every bank-contiguous word; slack may permit such a word. Sizes and horizon strata are not empirical difficulty calibration.",
+          "state_visibility": "complete",
+          "status": "experimental-public-reference-qualified"
+        },
+        "checks": {
+          "compiled_contract": true,
+          "complete_transition_checks": true,
+          "coupled_coordinate_regression_required": true,
+          "exact_reference_actions": true,
+          "exact_replay": true,
+          "factorization_or_optimal_interleaving": true,
+          "horizon_stratum_bound": true,
+          "independent_coordinate_break_minimum": true,
+          "independent_optimum": true,
+          "independent_restricted_baseline": true,
+          "paired_seed_kernel_and_target": true,
+          "public_policy_supported_win": true,
+          "tool_limit_covers_allowance": true
+        },
+        "coupling": "independent",
+        "horizon": "long",
+        "id": "F23",
+        "interleaving_gap": 0,
+        "kernel_transition_checks": 93750,
+        "minimum_coordinate_goal_breaks": 9,
+        "physical_minimum": 35,
+        "public_evidence_sha256": "bd86efafe817ac41abf1793fea5d3161eb64107ceee91d1496c12357615ed058",
+        "reference_operations": 33,
+        "reference_trajectory": {
+          "avoidable_actions_so_far": 0,
+          "coordinate_goal_breaking_operations": 9,
+          "first_loss_of_optimality_turn": null,
+          "machine_blocks": 11,
+          "remaining_minimum_actions": 0,
+          "success_excess_actions": 0,
+          "unchanged_operations": 0,
+          "whole_bank_reopening_operations": 0
+        },
+        "resolved": {
+          "gains": [
+            4,
+            4,
+            2,
+            3,
+            2,
+            4
+          ],
+          "guards": [
+            2,
+            0,
+            3,
+            0,
+            4,
+            2
+          ],
+          "spill_gains": [
+            4,
+            4,
+            4,
+            3,
+            2,
+            3
+          ]
+        },
+        "resource": 1,
+        "seed": 109,
+        "structural": {
+          "minimum_coordinate_goal_breaks": 9,
+          "minimum_machine_blocks": 11,
+          "minimum_machine_blocks_on_optimal_paths": 11,
+          "minimum_whole_bank_reopening_operations": 0
+        },
+        "structural_checks": {
+          "block_cost_ordering": true,
+          "coordinate_metric_matches_original": true,
+          "independent_structural_costs": true,
+          "live_structural_diagnostics": true
+        },
+        "suite": "slack",
+        "target": [
+          3,
+          3,
+          1,
+          2,
+          1,
+          1
+        ]
+      },
+      "reference_action_upper": 35,
+      "resource": 1,
+      "seed": 109,
+      "suite": "pr-b",
+      "theory": 0
+    },
+    {
+      "action_budget": 35,
+      "budget_profile": "standard",
+      "discovery": 0,
+      "expected_budget": null,
+      "family": "stateful-interference-v1",
+      "id": "F24",
+      "ontology_options": {
+        "coupling": "independent",
+        "horizon": "long"
+      },
+      "planning": 0,
+      "qualification": {
+        "action_budget": 35,
+        "bank_contiguous_operations": 33,
+        "certificate": {
+          "action_budget": 35,
+          "bank_contiguous_operations": 33,
+          "bank_contiguous_reachable": true,
+          "empirical_difficulty_calibrated": false,
+          "family": "stateful-interference-v1",
+          "horizon_stratum": "long",
+          "kernel_attempt": 2,
+          "kernel_attempt_limit": 32,
+          "law_visibility": "complete",
+          "map_visibility": "complete",
+          "minimum_coordinate_goal_breaks": 9,
+          "minimum_operations": 33,
+          "physical_state_bound": 15625,
+          "reachable_states": 2304,
+          "reference_action_upper": 35,
+          "reference_kind": "exact-known-law-optimum",
+          "resource_allowance": 0,
+          "scope": "Exact P0 known-law minimum including take and finish. R2 equals minimum; R1 adds max(6,ceil(minimum/2)); R0 uncapped. Goal breaks count operations unsetting at least one matched coordinate, minimized over all successful words. Null restricted cost means unreachable under bank-contiguous words. Coupled optimum beats every bank-contiguous word; slack may permit such a word. Sizes and horizon strata are not empirical difficulty calibration.",
+          "state_visibility": "complete",
+          "status": "experimental-public-reference-qualified"
+        },
+        "checks": {
+          "compiled_contract": true,
+          "complete_transition_checks": true,
+          "coupled_coordinate_regression_required": true,
+          "exact_reference_actions": true,
+          "exact_replay": true,
+          "factorization_or_optimal_interleaving": true,
+          "horizon_stratum_bound": true,
+          "independent_coordinate_break_minimum": true,
+          "independent_optimum": true,
+          "independent_restricted_baseline": true,
+          "paired_seed_kernel_and_target": true,
+          "public_policy_supported_win": true,
+          "tool_limit_covers_allowance": true
+        },
+        "coupling": "independent",
+        "horizon": "long",
+        "id": "F24",
+        "interleaving_gap": 0,
+        "kernel_transition_checks": 93750,
+        "minimum_coordinate_goal_breaks": 9,
+        "physical_minimum": 35,
+        "public_evidence_sha256": "bd86efafe817ac41abf1793fea5d3161eb64107ceee91d1496c12357615ed058",
+        "reference_operations": 33,
+        "reference_trajectory": {
+          "avoidable_actions_so_far": 0,
+          "coordinate_goal_breaking_operations": 9,
+          "first_loss_of_optimality_turn": null,
+          "machine_blocks": 11,
+          "remaining_minimum_actions": 0,
+          "success_excess_actions": 0,
+          "unchanged_operations": 0,
+          "whole_bank_reopening_operations": 0
+        },
+        "resolved": {
+          "gains": [
+            4,
+            4,
+            2,
+            3,
+            2,
+            4
+          ],
+          "guards": [
+            2,
+            0,
+            3,
+            0,
+            4,
+            2
+          ],
+          "spill_gains": [
+            4,
+            4,
+            4,
+            3,
+            2,
+            3
+          ]
+        },
+        "resource": 2,
+        "seed": 109,
+        "structural": {
+          "minimum_coordinate_goal_breaks": 9,
+          "minimum_machine_blocks": 11,
+          "minimum_machine_blocks_on_optimal_paths": 11,
+          "minimum_whole_bank_reopening_operations": 0
+        },
+        "structural_checks": {
+          "block_cost_ordering": true,
+          "coordinate_metric_matches_original": true,
+          "independent_structural_costs": true,
+          "live_structural_diagnostics": true
+        },
+        "suite": "core",
+        "target": [
+          3,
+          3,
+          1,
+          2,
+          1,
+          1
+        ]
+      },
+      "reference_action_upper": 35,
+      "resource": 2,
+      "seed": 109,
+      "suite": "pr-b",
+      "theory": 0
+    },
+    {
+      "action_budget": 56,
+      "budget_profile": "standard",
+      "discovery": 0,
+      "expected_budget": null,
+      "family": "stateful-interference-v1",
+      "id": "F25",
+      "ontology_options": {
+        "coupling": "coupled",
+        "horizon": "long"
+      },
+      "planning": 0,
+      "qualification": {
+        "action_budget": 56,
+        "bank_contiguous_operations": null,
+        "certificate": {
+          "action_budget": 56,
+          "bank_contiguous_operations": null,
+          "bank_contiguous_reachable": false,
+          "empirical_difficulty_calibrated": false,
+          "family": "stateful-interference-v1",
+          "horizon_stratum": "long",
+          "kernel_attempt": 2,
+          "kernel_attempt_limit": 32,
+          "law_visibility": "complete",
+          "map_visibility": "complete",
+          "minimum_coordinate_goal_breaks": 6,
+          "minimum_operations": 35,
+          "physical_state_bound": 15625,
+          "reachable_states": 11529,
+          "reference_action_upper": 37,
+          "reference_kind": "exact-known-law-optimum",
+          "resource_allowance": 19,
+          "scope": "Exact P0 known-law minimum including take and finish. R2 equals minimum; R1 adds max(6,ceil(minimum/2)); R0 uncapped. Goal breaks count operations unsetting at least one matched coordinate, minimized over all successful words. Null restricted cost means unreachable under bank-contiguous words. Coupled optimum beats every bank-contiguous word; slack may permit such a word. Sizes and horizon strata are not empirical difficulty calibration.",
+          "state_visibility": "complete",
+          "status": "experimental-public-reference-qualified"
+        },
+        "checks": {
+          "compiled_contract": true,
+          "complete_transition_checks": true,
+          "coupled_coordinate_regression_required": true,
+          "exact_reference_actions": true,
+          "exact_replay": true,
+          "factorization_or_optimal_interleaving": true,
+          "horizon_stratum_bound": true,
+          "independent_coordinate_break_minimum": true,
+          "independent_optimum": true,
+          "independent_restricted_baseline": true,
+          "paired_seed_kernel_and_target": true,
+          "public_policy_supported_win": true,
+          "tool_limit_covers_allowance": true
+        },
+        "coupling": "coupled",
+        "horizon": "long",
+        "id": "F25",
+        "interleaving_gap": null,
+        "kernel_transition_checks": 93750,
+        "minimum_coordinate_goal_breaks": 6,
+        "physical_minimum": 37,
+        "public_evidence_sha256": "b04a8988140f7bb052bdd12dbabbe625aca69a9fd95dbf581e70e365f49b8030",
+        "reference_operations": 35,
+        "reference_trajectory": {
+          "avoidable_actions_so_far": 0,
+          "coordinate_goal_breaking_operations": 11,
+          "first_loss_of_optimality_turn": null,
+          "machine_blocks": 13,
+          "remaining_minimum_actions": 0,
+          "success_excess_actions": 0,
+          "unchanged_operations": 0,
+          "whole_bank_reopening_operations": 1
+        },
+        "resolved": {
+          "gains": [
+            4,
+            4,
+            2,
+            3,
+            2,
+            4
+          ],
+          "guards": [
+            2,
+            0,
+            3,
+            0,
+            4,
+            2
+          ],
+          "spill_gains": [
+            4,
+            4,
+            4,
+            3,
+            2,
+            3
+          ]
+        },
+        "resource": 1,
+        "seed": 109,
+        "structural": {
+          "minimum_coordinate_goal_breaks": 6,
+          "minimum_machine_blocks": 13,
+          "minimum_machine_blocks_on_optimal_paths": 13,
+          "minimum_whole_bank_reopening_operations": 1
+        },
+        "structural_checks": {
+          "block_cost_ordering": true,
+          "coordinate_metric_matches_original": true,
+          "independent_structural_costs": true,
+          "live_structural_diagnostics": true
+        },
+        "suite": "slack",
+        "target": [
+          3,
+          3,
+          1,
+          2,
+          1,
+          1
+        ]
+      },
+      "reference_action_upper": 37,
+      "resource": 1,
+      "seed": 109,
+      "suite": "pr-b",
+      "theory": 0
+    },
+    {
+      "action_budget": 37,
+      "budget_profile": "standard",
+      "discovery": 0,
+      "expected_budget": null,
+      "family": "stateful-interference-v1",
+      "id": "F26",
+      "ontology_options": {
+        "coupling": "coupled",
+        "horizon": "long"
+      },
+      "planning": 0,
+      "qualification": {
+        "action_budget": 37,
+        "bank_contiguous_operations": null,
+        "certificate": {
+          "action_budget": 37,
+          "bank_contiguous_operations": null,
+          "bank_contiguous_reachable": false,
+          "empirical_difficulty_calibrated": false,
+          "family": "stateful-interference-v1",
+          "horizon_stratum": "long",
+          "kernel_attempt": 2,
+          "kernel_attempt_limit": 32,
+          "law_visibility": "complete",
+          "map_visibility": "complete",
+          "minimum_coordinate_goal_breaks": 6,
+          "minimum_operations": 35,
+          "physical_state_bound": 15625,
+          "reachable_states": 11529,
+          "reference_action_upper": 37,
+          "reference_kind": "exact-known-law-optimum",
+          "resource_allowance": 0,
+          "scope": "Exact P0 known-law minimum including take and finish. R2 equals minimum; R1 adds max(6,ceil(minimum/2)); R0 uncapped. Goal breaks count operations unsetting at least one matched coordinate, minimized over all successful words. Null restricted cost means unreachable under bank-contiguous words. Coupled optimum beats every bank-contiguous word; slack may permit such a word. Sizes and horizon strata are not empirical difficulty calibration.",
+          "state_visibility": "complete",
+          "status": "experimental-public-reference-qualified"
+        },
+        "checks": {
+          "compiled_contract": true,
+          "complete_transition_checks": true,
+          "coupled_coordinate_regression_required": true,
+          "exact_reference_actions": true,
+          "exact_replay": true,
+          "factorization_or_optimal_interleaving": true,
+          "horizon_stratum_bound": true,
+          "independent_coordinate_break_minimum": true,
+          "independent_optimum": true,
+          "independent_restricted_baseline": true,
+          "paired_seed_kernel_and_target": true,
+          "public_policy_supported_win": true,
+          "tool_limit_covers_allowance": true
+        },
+        "coupling": "coupled",
+        "horizon": "long",
+        "id": "F26",
+        "interleaving_gap": null,
+        "kernel_transition_checks": 93750,
+        "minimum_coordinate_goal_breaks": 6,
+        "physical_minimum": 37,
+        "public_evidence_sha256": "b04a8988140f7bb052bdd12dbabbe625aca69a9fd95dbf581e70e365f49b8030",
+        "reference_operations": 35,
+        "reference_trajectory": {
+          "avoidable_actions_so_far": 0,
+          "coordinate_goal_breaking_operations": 11,
+          "first_loss_of_optimality_turn": null,
+          "machine_blocks": 13,
+          "remaining_minimum_actions": 0,
+          "success_excess_actions": 0,
+          "unchanged_operations": 0,
+          "whole_bank_reopening_operations": 1
+        },
+        "resolved": {
+          "gains": [
+            4,
+            4,
+            2,
+            3,
+            2,
+            4
+          ],
+          "guards": [
+            2,
+            0,
+            3,
+            0,
+            4,
+            2
+          ],
+          "spill_gains": [
+            4,
+            4,
+            4,
+            3,
+            2,
+            3
+          ]
+        },
+        "resource": 2,
+        "seed": 109,
+        "structural": {
+          "minimum_coordinate_goal_breaks": 6,
+          "minimum_machine_blocks": 13,
+          "minimum_machine_blocks_on_optimal_paths": 13,
+          "minimum_whole_bank_reopening_operations": 1
+        },
+        "structural_checks": {
+          "block_cost_ordering": true,
+          "coordinate_metric_matches_original": true,
+          "independent_structural_costs": true,
+          "live_structural_diagnostics": true
+        },
+        "suite": "core",
+        "target": [
+          3,
+          3,
+          1,
+          2,
+          1,
+          1
+        ]
+      },
+      "reference_action_upper": 37,
+      "resource": 2,
+      "seed": 109,
+      "suite": "pr-b",
+      "theory": 0
+    }
+  ],
+  "empirical_difficulty_calibrated": false,
+  "history_sha256": {
+    "budget-diagnostic-matrix.json": "dae4fd22c39effdc59e0a08761664cc03c88a589f11306e636fb5809f474e1ad",
+    "cross-axis-matrix.json": "93fc7a05d0a3760bef307546f9e19631c5cd37d03e85721bcc82c546a71fcb1a",
+    "interference-matrix.json": "d615b2442612ba4465218a5caf2f631f09e8a7e5142e8491b07e60931438fc8f",
+    "model-revision-matrix.json": "458de4ef8374b5baf145b3d8bab9de8f0bc603f4b5a601069a05f70cbfb476dd",
+    "structural-model-matrix.json": "eac45a6d8ede2e677264522c6f64ecdc9054ebd531e3782f8fef0f4d79160255",
+    "td-cycle-matrix.json": "cb130f409d958bc202be2c061cbfe389a616949629bbab0ccbddd191e139cb51"
+  },
+  "independent_conformance": {
+    "compositional": {
+      "admitted_worlds": 615,
+      "independent_acceptance_checks": 49815,
+      "independent_raw_reading_checks": 2690010,
+      "passed": true,
+      "raw_worlds": 1728,
+      "scope": "Complete grammar support, all accepted repairs and raw/normalized arithmetic; selected live witness and acceptance checks below. Factored conformance, not exhaustive runtime histories."
+    },
+    "revision": {
+      "behavior_classes": 748,
+      "independent_all_history_equivalence_checks": 20736,
+      "independent_reading_checks": 381480,
+      "independent_transitions": 2322432,
+      "laboratory_horizon_identifies_all_history_classes": true,
+      "passed": true,
+      "programs": 20736,
+      "states": 56
+    }
+  },
+  "inventory": {
+    "anchor": 6,
+    "controls": 4,
+    "fresh": 26,
+    "pr-a": 8,
+    "pr-b": 8,
+    "td": 6
+  },
+  "matrix_sha256": "6ca7c427815de5b59d0edbbde7a7bc3aedae47e09a406423ad429bbb8f7ee46a",
+  "novelty": {
+    "compositional-repair-v1": {
+      "distinct_from_history_and_each_other": true,
+      "historical_seeds_checked": [
+        0,
+        219,
+        250,
+        438,
+        463,
+        493,
+        542
+      ],
+      "identities": [
+        "9583860d83d7100a9b756c5103f6f88821fff4e69104119f4bffc6b1a424fa42",
+        "38cfa95b74a58d32816d24cccc83cb618e550491b269a650c1a82b45a61bae81"
+      ],
+      "selected_seeds": [
+        541,
+        586
+      ]
+    },
+    "model-revision-v1": {
+      "distinct_from_history_and_each_other": true,
+      "historical_seeds_checked": [
+        3,
+        438,
+        468,
+        516,
+        678,
+        1101,
+        1185,
+        1293,
+        5431,
+        5866,
+        6464,
+        6467
+      ],
+      "identities": [
+        "32",
+        "99"
+      ],
+      "selected_seeds": [
+        2073,
+        2178
+      ]
+    },
+    "stateful-interference-v1": {
+      "distinct_from_history_and_each_other": true,
+      "historical_seeds_checked": [
+        67,
+        79,
+        101,
+        103
+      ],
+      "identities": [
+        "6017a3518a14924c9fcda4406b2f4c7b64d783282af2b23b427ebcf8672973ec",
+        "b52e923281cf556251590b34ee774db2cce194ab5c0b3c5c3e8fd829ea096686"
+      ],
+      "selected_seeds": [
+        107,
+        109
+      ]
+    }
+  },
+  "operator_source_sha256": "dacc68392ddf0e0fc9c82930fa2416c3fc5ecf800906323642b2ea4aca3d648f",
+  "scientific_contrasts": [
+    {
+      "checks": {
+        "same_64_action_allowance": true,
+        "same_physics": true
+      },
+      "ids": [
+        "F01",
+        "F02"
+      ],
+      "interpretation": "Revision changes T/D together at fixed budget; repair supplies a solution and changes 8 to 30 actions. Neither isolates a numeric T or D effect.",
+      "kind": "disclosure-control"
+    },
+    {
+      "checks": {
+        "same_64_action_allowance": true,
+        "same_physics": true
+      },
+      "ids": [
+        "F03",
+        "F04"
+      ],
+      "interpretation": "Revision changes T/D together at fixed budget; repair supplies a solution and changes 8 to 30 actions. Neither isolates a numeric T or D effect.",
+      "kind": "disclosure-control"
+    },
+    {
+      "checks": {
+        "same_physics": true
+      },
+      "ids": [
+        "F05",
+        "F06"
+      ],
+      "interpretation": "Revision changes T/D together at fixed budget; repair supplies a solution and changes 8 to 30 actions. Neither isolates a numeric T or D effect.",
+      "kind": "disclosure-control"
+    },
+    {
+      "checks": {
+        "30_36_allowances": true,
+        "same_reference_actions": true,
+        "same_reference_events": true,
+        "same_science_except_budget": true
+      },
+      "ids": [
+        "F06",
+        "F07"
+      ],
+      "interpretation": "Same repair science and physics; only the action allowance changes.",
+      "kind": "resource"
+    },
+    {
+      "checks": {
+        "same_physics": true
+      },
+      "ids": [
+        "F08",
+        "F09"
+      ],
+      "interpretation": "Revision changes T/D together at fixed budget; repair supplies a solution and changes 8 to 30 actions. Neither isolates a numeric T or D effect.",
+      "kind": "disclosure-control"
+    },
+    {
+      "checks": {
+        "30_36_allowances": true,
+        "same_reference_actions": true,
+        "same_reference_events": true,
+        "same_science_except_budget": true
+      },
+      "ids": [
+        "F09",
+        "F10"
+      ],
+      "interpretation": "Same repair science and physics; only the action allowance changes.",
+      "kind": "resource"
+    },
+    {
+      "checks": {
+        "same_science_except_budget": true
+      },
+      "ids": [
+        "F11",
+        "F12"
+      ],
+      "interpretation": "Only the disclosed action allowance differs: exact minimum versus added slack.",
+      "kind": "resource"
+    },
+    {
+      "checks": {
+        "same_science_except_budget": true
+      },
+      "ids": [
+        "F13",
+        "F14"
+      ],
+      "interpretation": "Only the disclosed action allowance differs: exact minimum versus added slack.",
+      "kind": "resource"
+    },
+    {
+      "checks": {
+        "same_science_except_budget": true
+      },
+      "ids": [
+        "F15",
+        "F16"
+      ],
+      "interpretation": "Only the disclosed action allowance differs: exact minimum versus added slack.",
+      "kind": "resource"
+    },
+    {
+      "checks": {
+        "same_science_except_budget": true
+      },
+      "ids": [
+        "F17",
+        "F18"
+      ],
+      "interpretation": "Only the disclosed action allowance differs: exact minimum versus added slack.",
+      "kind": "resource"
+    },
+    {
+      "checks": {
+        "longer_exact_horizon": true,
+        "same_resolved_law_coefficients": true
+      },
+      "ids": [
+        "F12",
+        "F16"
+      ],
+      "interpretation": "Horizon changes target on one kernel; coupling changes dependency laws at one target. The resource rule is fixed, absolute budgets may differ. These are structural contrasts, not fixed-compute causal effects.",
+      "kind": "horizon"
+    },
+    {
+      "checks": {
+        "longer_exact_horizon": true,
+        "same_resolved_law_coefficients": true
+      },
+      "ids": [
+        "F11",
+        "F15"
+      ],
+      "interpretation": "Horizon changes target on one kernel; coupling changes dependency laws at one target. The resource rule is fixed, absolute budgets may differ. These are structural contrasts, not fixed-compute causal effects.",
+      "kind": "horizon"
+    },
+    {
+      "checks": {
+        "longer_exact_horizon": true,
+        "same_resolved_law_coefficients": true
+      },
+      "ids": [
+        "F14",
+        "F18"
+      ],
+      "interpretation": "Horizon changes target on one kernel; coupling changes dependency laws at one target. The resource rule is fixed, absolute budgets may differ. These are structural contrasts, not fixed-compute causal effects.",
+      "kind": "horizon"
+    },
+    {
+      "checks": {
+        "longer_exact_horizon": true,
+        "same_resolved_law_coefficients": true
+      },
+      "ids": [
+        "F13",
+        "F17"
+      ],
+      "interpretation": "Horizon changes target on one kernel; coupling changes dependency laws at one target. The resource rule is fixed, absolute budgets may differ. These are structural contrasts, not fixed-compute causal effects.",
+      "kind": "horizon"
+    },
+    {
+      "checks": {
+        "same_resolved_law_coefficients": true,
+        "same_target": true
+      },
+      "ids": [
+        "F12",
+        "F14"
+      ],
+      "interpretation": "Horizon changes target on one kernel; coupling changes dependency laws at one target. The resource rule is fixed, absolute budgets may differ. These are structural contrasts, not fixed-compute causal effects.",
+      "kind": "coupling"
+    },
+    {
+      "checks": {
+        "same_resolved_law_coefficients": true,
+        "same_target": true
+      },
+      "ids": [
+        "F11",
+        "F13"
+      ],
+      "interpretation": "Horizon changes target on one kernel; coupling changes dependency laws at one target. The resource rule is fixed, absolute budgets may differ. These are structural contrasts, not fixed-compute causal effects.",
+      "kind": "coupling"
+    },
+    {
+      "checks": {
+        "same_resolved_law_coefficients": true,
+        "same_target": true
+      },
+      "ids": [
+        "F16",
+        "F18"
+      ],
+      "interpretation": "Horizon changes target on one kernel; coupling changes dependency laws at one target. The resource rule is fixed, absolute budgets may differ. These are structural contrasts, not fixed-compute causal effects.",
+      "kind": "coupling"
+    },
+    {
+      "checks": {
+        "same_resolved_law_coefficients": true,
+        "same_target": true
+      },
+      "ids": [
+        "F15",
+        "F17"
+      ],
+      "interpretation": "Horizon changes target on one kernel; coupling changes dependency laws at one target. The resource rule is fixed, absolute budgets may differ. These are structural contrasts, not fixed-compute causal effects.",
+      "kind": "coupling"
+    },
+    {
+      "checks": {
+        "same_science_except_budget": true
+      },
+      "ids": [
+        "F19",
+        "F20"
+      ],
+      "interpretation": "Only the disclosed action allowance differs: exact minimum versus added slack.",
+      "kind": "resource"
+    },
+    {
+      "checks": {
+        "same_science_except_budget": true
+      },
+      "ids": [
+        "F21",
+        "F22"
+      ],
+      "interpretation": "Only the disclosed action allowance differs: exact minimum versus added slack.",
+      "kind": "resource"
+    },
+    {
+      "checks": {
+        "same_science_except_budget": true
+      },
+      "ids": [
+        "F23",
+        "F24"
+      ],
+      "interpretation": "Only the disclosed action allowance differs: exact minimum versus added slack.",
+      "kind": "resource"
+    },
+    {
+      "checks": {
+        "same_science_except_budget": true
+      },
+      "ids": [
+        "F25",
+        "F26"
+      ],
+      "interpretation": "Only the disclosed action allowance differs: exact minimum versus added slack.",
+      "kind": "resource"
+    },
+    {
+      "checks": {
+        "longer_exact_horizon": true,
+        "same_resolved_law_coefficients": true
+      },
+      "ids": [
+        "F19",
+        "F23"
+      ],
+      "interpretation": "Horizon changes target on one kernel; coupling changes dependency laws at one target. The resource rule is fixed, absolute budgets may differ. These are structural contrasts, not fixed-compute causal effects.",
+      "kind": "horizon"
+    },
+    {
+      "checks": {
+        "longer_exact_horizon": true,
+        "same_resolved_law_coefficients": true
+      },
+      "ids": [
+        "F20",
+        "F24"
+      ],
+      "interpretation": "Horizon changes target on one kernel; coupling changes dependency laws at one target. The resource rule is fixed, absolute budgets may differ. These are structural contrasts, not fixed-compute causal effects.",
+      "kind": "horizon"
+    },
+    {
+      "checks": {
+        "longer_exact_horizon": true,
+        "same_resolved_law_coefficients": true
+      },
+      "ids": [
+        "F21",
+        "F25"
+      ],
+      "interpretation": "Horizon changes target on one kernel; coupling changes dependency laws at one target. The resource rule is fixed, absolute budgets may differ. These are structural contrasts, not fixed-compute causal effects.",
+      "kind": "horizon"
+    },
+    {
+      "checks": {
+        "longer_exact_horizon": true,
+        "same_resolved_law_coefficients": true
+      },
+      "ids": [
+        "F22",
+        "F26"
+      ],
+      "interpretation": "Horizon changes target on one kernel; coupling changes dependency laws at one target. The resource rule is fixed, absolute budgets may differ. These are structural contrasts, not fixed-compute causal effects.",
+      "kind": "horizon"
+    },
+    {
+      "checks": {
+        "same_resolved_law_coefficients": true,
+        "same_target": true
+      },
+      "ids": [
+        "F19",
+        "F21"
+      ],
+      "interpretation": "Horizon changes target on one kernel; coupling changes dependency laws at one target. The resource rule is fixed, absolute budgets may differ. These are structural contrasts, not fixed-compute causal effects.",
+      "kind": "coupling"
+    },
+    {
+      "checks": {
+        "same_resolved_law_coefficients": true,
+        "same_target": true
+      },
+      "ids": [
+        "F20",
+        "F22"
+      ],
+      "interpretation": "Horizon changes target on one kernel; coupling changes dependency laws at one target. The resource rule is fixed, absolute budgets may differ. These are structural contrasts, not fixed-compute causal effects.",
+      "kind": "coupling"
+    },
+    {
+      "checks": {
+        "same_resolved_law_coefficients": true,
+        "same_target": true
+      },
+      "ids": [
+        "F23",
+        "F25"
+      ],
+      "interpretation": "Horizon changes target on one kernel; coupling changes dependency laws at one target. The resource rule is fixed, absolute budgets may differ. These are structural contrasts, not fixed-compute causal effects.",
+      "kind": "coupling"
+    },
+    {
+      "checks": {
+        "same_resolved_law_coefficients": true,
+        "same_target": true
+      },
+      "ids": [
+        "F24",
+        "F26"
+      ],
+      "interpretation": "Horizon changes target on one kernel; coupling changes dependency laws at one target. The resource rule is fixed, absolute budgets may differ. These are structural contrasts, not fixed-compute causal effects.",
+      "kind": "coupling"
+    }
+  ],
+  "scope": "Two purpose-selected fresh seeds per family, no live outcomes used for selection. Distinct behavior classes/repair observation and acceptance signatures/PR kernels checked against committed historical matrices; not a random population sample or a proof of nonisomorphism. Reading certificates are not cognitive depth measures.",
+  "source_sha256": "ba22502788acf7ce1684e1e527e5aa332cd1746b37423fececabc90d71b8ee83",
+  "sources": {
+    "__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "cli.py": "1c073b627caec050e4e28609facfac05482793bd06eab08cd24ccbf25b7da447",
+    "diagnostics.py": "a4654237788f022f5db1b1a7bc22c0d0fbfec497203a049940cebcfcdea1ba20",
+    "engine/__init__.py": "75976174fce0ad3d8238137d1f10cf64f4f8303dda1af9ba667ff505f063bdfb",
+    "engine/canonical.py": "8376561fe738e77bfacb1b648805631c1f6270f67c1d872278292bf1fd05e72d",
+    "engine/engine.py": "9935fee807c2ec273fa754499b2910864e765a1b1cbd94a44c6e2cfbe7cf62a6",
+    "engine/goals.py": "e7640e41f25e59fce0727c5ff2d724a0e78020e683657402c720f5bc33521afc",
+    "engine/investigation.py": "26ae2b94a7e4009e1f11e0d76abfd0721f0ce39c9f78beb96f4c99f6139bfa6d",
+    "engine/network.py": "af9b5e080894727ae5826a4efb4e0915b8e71bd8723683c9e10450379b23980b",
+    "engine/replay.py": "f02dbbffcfb0f6fca8fc24d8af5f0ee1343caa3c7b002b8303195b82cfd1f93e",
+    "engine/resonance.py": "c9bfa61ae60acc628c651769c20e0503cab4c63c94e0613e57f3e05e4d847e6a",
+    "engine/rules.py": "1150037cc85bfde695e90032ba930f19da24c7910cc28479ec46cc7437be1778",
+    "entrypoint.py": "ee7dd624ebb36b8b20568583892728274744f5a71e6c2e9ece24557ec753a385",
+    "evaluation/__init__.py": "fdf4cf1fa3c7213f2687aa137774dc54b0b8d2a1d624a85ccf9ec151600426e0",
+    "evaluation/artifacts.py": "6d064539063e9cec376d1966f7362f434b77fd5543a1a426a5ae7570b3772015",
+    "evaluation/assembly.py": "c7765708e75a91c63a4dde5de95c06a2513234295592c1d4d23133fa0bf22d7b",
+    "evaluation/budget_diagnostic.py": "b4a69be2dae5c30ef59d5a646936def9f7b352b7fadd12c2df89d51d1d50fbcc",
+    "evaluation/coordination.py": "2885994939afd75431e2f621f39ad64a01d00c1f2887f671403a309c8ac7307f",
+    "evaluation/coupled_memory.py": "7117dc915f28de7b9c079aae58f679efa0ab681f190af5551edab7c188f1059d",
+    "evaluation/cross_axis.py": "468cb6fbc9a2e47ac86633050563a802325533ad6119178720a0030156539784",
+    "evaluation/difficulty.py": "131b89651dcf9108a4ee66a91e31e321adc88707dced6b8355e30d780cbc9e23",
+    "evaluation/discovery.py": "6bcab069b2a11d40547e724808a87874249cc5c67df1b93618b1983a26aeb4f6",
+    "evaluation/goal_information.py": "242b3f45c0336f979265fe0ea0287d7986cc3942576a24b1f3a1c30fae6f5c63",
+    "evaluation/history.py": "c6e7bc1fcd5f09d0fd2d60bc01de74c37152f569b790c401662c2a69f474b866",
+    "evaluation/interference.py": "85318e9a8fb13221a7b10f89f7adf4afc45a50d399c74560b1d351cb46fbbef1",
+    "evaluation/interference_comparison.py": "1c55501ab6ce7827c3d6f6e3c38508d21f69924758fda93b2a6a1d00f54d4e73",
+    "evaluation/matrix.py": "912a860cc9a8e234b8c5796429a89d3ef259c63019569f8e9e1b1daedce3c078",
+    "evaluation/planning.py": "212fd2c51b5cedc56a78eefd3eb1220cec1a96e7f17cf47bdc2c16e6adc922b9",
+    "evaluation/revision.py": "93989c74da2176790bf5e344f1500637bcd1e8406baa549bb72a0c372a3567b7",
+    "evaluation/staged.py": "f0f5c44dc08120c58576e2a120ab6da708dff19e97f79de9d3e4d340732f5fcb",
+    "evaluation/stateful.py": "f3bbc952b8343d7e76cd0aac2a0e069298d27f06e5fd0e53a5f8db223c4ed330",
+    "evaluation/structural.py": "abd3228204c04a1cbf7346880003dac500782a4753eaabd791d8d38b0b64836f",
+    "evaluation/td_cycle.py": "9bbc3a5711c168d2d121d4fcb2b0ee38fab22a803d9b1f86c5a6a236f66ec11e",
+    "evaluation/td_export.py": "0dffbe21060931d5fd2b6dbef0bfb426524b1be2e649921ef777b8b6956aa686",
+    "evaluation/td_prototypes.py": "be1cb3c09d103a0ccea0f9d62feb4618618af8a01c41b981ef7d9ddf04755631",
+    "evaluation/ternary_feasibility.py": "937f9d458c791ea599c154e5a29b700236d156c72cbf3ade76798bc8a8388ede",
+    "evaluation/transfer.py": "c78b588d0f306ac063178cb238dbba1547e5950536b9a3c326fe018b28e1742b",
+    "generator/__init__.py": "df88f4d83503a2dbfd3ef3c05423a15b41182ec2adf00e1b22cee75240877c50",
+    "generator/constructed.py": "6fd22b43417118a4c4f4a3434ccab2286693734368f2ea1fd938c3c7ee859ca4",
+    "generator/correction.py": "269dc831109135554bf5fc9048d9afe54c77b5ec0830f66c6b09e2ebbd6e398c",
+    "generator/correction_generation.py": "e5972a8742134c8a8d8524ca08a6c49d6e61b4c967d06c71865fca044d4e2fde",
+    "generator/difficulty.py": "efb3c1dd99caf0887f64158ebf68ccee965e16c490b572e588a3286ee8d7134a",
+    "generator/discovery.py": "7ec6dd6e9ce4aab363768ba325e3e9366052740461acf7859145eb3deb70a0ad",
+    "generator/evidence.py": "e00fb5770dc4e8275ca2682da7fc96afc800c8bb2c927ec4000a4acb2a12beef",
+    "generator/generator.py": "61b075dbebc7c774a4df0753ed6c2c307821987cfcddd68b8cc183f6731fee95",
+    "generator/investigation.py": "81f9814f2b0962ca74dde7695c8e33fc1febc84ab31d577ab6e0487dcbb8403f",
+    "generator/investigation_docs.py": "25919e904a7325d03fdb2b77c96ae832a819af00fea0edcae93b5d67cf0692e8",
+    "generator/investigation_qualify.py": "8f3dd06aaa4d0b8e41cf5b54cf9053c8539c46a01d9d725fab61370bd28c36a4",
+    "generator/manual.py": "ee8bfa23d9e0fd1bc169ca778bf6d3bb76135fca1f90f13d036e8512b5c32632",
+    "generator/network.py": "95646e3466abf3ea4f69dff39236005a10ae295a9dafbe0e872abe26a3e3810f",
+    "generator/network_docs.py": "3698aa38b69476115684de7598597921ef570120a97528d06f602ad9ae8ad060",
+    "generator/network_qualify.py": "0fba70b2e7821511b9d90edc3617af4e977594581a36a17584c03466db2a71bb",
+    "generator/network_world.py": "1e8c57684dd96be9aa2a9a4e37039b8853de8fc3dbeec50e3d027ad7c6784e65",
+    "generator/qualify.py": "d495c45ed42e668d2921b1902b8f6dd03f58fa89641acb0e37fe0a233766a749",
+    "generator/randomness.py": "0d7c335477ada6a5fdad85c4a975083bae10bf8c9250d8ff06bd65378f78ba86",
+    "generator/resonance.py": "7f2e453e8f2fc05b22d6afc2b07e6c6d3095a184fd1fafab27d8db64904c01aa",
+    "generator/resonance_docs.py": "118f1c91365a665b861299dd6a21d60a0a82d3b0b7ce1ba4e7cb384976f20f41",
+    "generator/resonance_qualify.py": "ba4ae4235e12017a53fe1345d0f6d23d5eabb913926c5cbc1f46a456fc948abe",
+    "generator/rules.py": "ad0cb14748a6566df1e6804a45017ad6b5c47928ad9574624b269ead60462ee4",
+    "generator/structural.py": "db7d8878307a2aa9cc1b2c153eb24ea002d4fe8c7bc97536b09a7539fd42db49",
+    "generator/structural_generation.py": "52e6b9c8015e70d96cf27052bb6271a67911b8ee5e2857c6a3072f7c6f74c74e",
+    "generator/theory.py": "7235d4e9261cc4c0b10b67ad623e8db28a688fbfcfcc761c2d22e5d2a2d17e57",
+    "generator/theory_generation.py": "06d9741b82c238efe916863f997a4590a749d2f0386a8393d903c1f4e6dca0c2",
+    "io.py": "2a668afc3cef0fbc56e02013290db56373af31d01f1a5acb138adae8684e4e1a",
+    "models/__init__.py": "4bae834eeea9fc03d43fc3f89e2be03d61a8c630e8d7c3ab32f8351cc38b82a4",
+    "models/actions.py": "21fff92178c003eea0f4c3b525cd631274c70b0bcc25d2e1379c0b00f262ca1d",
+    "models/domain.py": "d290d0fff0a3a32b77ef97a70526681d1220871f6e25534fd8596421d684d684",
+    "models/episode.py": "8666156ea5e0766f8fbb74af818e0b45a4abf612247f9060de5fd3d0a9bb17f2",
+    "models/events.py": "497e08876c1ff0f547afcfe5338e59532f0a6e54241fec2e9ecd3a288a5c0191",
+    "models/goals.py": "4ccabe7c8dd0505776bf8c3ea1c31bcabbfabb5b7c9135c58dcba9e2d7f13302",
+    "models/investigation.py": "46f107f3dc21b5f6732787852b8701f704498a5dbaf5a518bb04c576243861a2",
+    "models/network.py": "a72817eee76bcfd39fcf820d2f3f3caab3dabfa6d680c340936eb6aed878879f",
+    "models/observation.py": "a9e2fa72d16a0b50a08c4b4af44bcccf1faf72a9f9dbf690dd76ba9fcea4631f",
+    "models/rules.py": "41946ac917bf339a70e8857a9edf35c714151afd425cdddcfbbccdff77b75cf7",
+    "models/theory.py": "73a7d3a00de8a7874b8e7e22fb449bd5a7ba71abf87f85e6e75cd5bc99e9c8ef",
+    "models/world.py": "4a14d6ad0e4c496ed933fd352a7337acc7fb60e82c76904b48f1f9a05b667626",
+    "ontology/__init__.py": "0ce80e620e805755619a948825f78591e755c347d4f82a7a548cf1ab005a7342",
+    "ontology/assembly/__init__.py": "589a51893d03cf5335f88f0dc767ca8777a03088ff5c30d3eef3f115e8292488",
+    "ontology/assembly/evidence.py": "58334c9cfb76f0ff590d62568c580ebceeccc163d1b4f19681ae2d91e8095eef",
+    "ontology/assembly/generation.py": "980c71ad526958b5bd665b3849901bbe0b248369b66a59254c011daa9dae186b",
+    "ontology/assembly/inference.py": "e40e5c0a2172dbf88aff4c1fa49b2c15306c64026d6e425147f462382cd38baa",
+    "ontology/assembly/laws.py": "7b7e7ed9e026ec320a5b3933d987b14c585052edbf0ecba9d51b0f253f7f70a9",
+    "ontology/assembly/policy.py": "419d9dde3ea915bd10da45799329ffd43e25492ebb2c27b28cd198864453f80f",
+    "ontology/assembly/proof.py": "ee8c85c49a48715337b89ae43a81576d44da52123feed1f37497b7f9d3c10091",
+    "ontology/assembly/qualification.py": "89c242f2436b6fe880ae3833617023de455c59ffde02c47a15eb0e33673d841a",
+    "ontology/assembly/runtime.py": "d5a7bb2564ab649bacca318e6ffbe45eca5502c0eef5845cffc0591d4ae9a2c2",
+    "ontology/assembly/schema.py": "e71540bdf6e47cc7825e074ed11d5427102e2d5546e7a3c4e7885d201fbf13f4",
+    "ontology/assistance.py": "108b4385f210e2bb1c583c66762057020333380ddb5eb72fb697ebb58d86ef81",
+    "ontology/builtin_runtime.py": "d202225154d67b0590a3eea5851409d882cf47a6ac7c4f4e3f252554187bea97",
+    "ontology/catalog.py": "cbc2f503bc9519e878c55cf0441ee95b9614007fabc7c0e42bbe0501f6391c86",
+    "ontology/categorical/__init__.py": "44c73eb1da7efc0b3a4fc470dadc0ff9048b11abf756c0c39198e2b8ab20780e",
+    "ontology/categorical/generation.py": "f2a2002c54b96d408520cb9e1e1188d61cfa9a21255907ce90d0f2ef048dd97e",
+    "ontology/categorical/inference.py": "2c80384f191551fb651e1e78726c7202bc306232ec618433217aa126eb58e8d3",
+    "ontology/categorical/laws.py": "602ac09cdab50e0fb83772a41354f60445c7449f5b491d94404a8e0de599f394",
+    "ontology/categorical/qualification.py": "8e5819237062347bc0ba77b286d2c795f7f72702378770da71e4388c76ed0dcc",
+    "ontology/categorical/runtime.py": "0bf57060e787abd4f0be9b7132d2ea2892ccf13632e7126182cb900fb1f29d1d",
+    "ontology/categorical/schema.py": "782056023fac4d04bc83eed76233f7c8ab83f8c3a71dfd6d7559d39322034dfd",
+    "ontology/causal/__init__.py": "919c56f2ceb47f08cd27b036093ef218a7486e2e3dab5d34d59e224c78545da3",
+    "ontology/causal/evidence.py": "e673e4f844c510ed637798ffe86d433f7360b0ec209102b40cf7b55e94694de6",
+    "ontology/causal/generation.py": "9847a3a5d40930b9c68e0a58082252c1d7a5f3049102955e441532e1cf49161d",
+    "ontology/causal/inference.py": "6145dacb325b1415715b5cdd86a0631231ba58fd6771325f952080f6f6e8eb4d",
+    "ontology/causal/laws.py": "c38935671ba186b0ae242a3142df80a72eadc1f6d7f19b1f1533f73b8ad09a34",
+    "ontology/causal/policy.py": "c71040ef4e5ae0b48166a61be344fbbf9c61139496076461f81d061e893c7e8c",
+    "ontology/causal/qualification.py": "cb2191c0c26d1e575b5755e1f4279765bde435c97e1533e2585c17c1787e3931",
+    "ontology/causal/runtime.py": "8cfa644b292217be40243a224fedad2abcec9178803ec6d6c1855e9aeaba5432",
+    "ontology/causal/schema.py": "591a9347c9d9037aa091b66a556d17312d3a3eb6f1bd5d7e534bb0d045fd67b0",
+    "ontology/compositional/__init__.py": "fbdd40b14b548b5f1cf2f382b55de7e0af2f2e09d83358f6400e0ac023355fe6",
+    "ontology/compositional/budget.py": "b1f25b8a9b43e0d29df6954cde03e36fe5264887b7325d6db51c37c999f3bf39",
+    "ontology/compositional/evidence.py": "140c39f8aa580d6da00763dfb3e60516106384a57c8070e284869730c60a1950",
+    "ontology/compositional/generation.py": "94be2fff00898153a80da5a6fb347977548b16d346e1acebee1f0e6b6194a1a1",
+    "ontology/compositional/inference.py": "36a06d87e6a55588f13e4881051eda894662c81ccf474dd31db1191579ed2d2b",
+    "ontology/compositional/laws.py": "d340f4fccbdf6238586f3114226fa0a826ac5db79ff6dd85255c46b45336ef4d",
+    "ontology/compositional/policy.py": "794e661a51dfcd37d2deafb5b862903dd60b81870ab3293755d1049a59286eb8",
+    "ontology/compositional/qualification.py": "fb4b962ea8da0ed369fee6abc655bbfaccd6207db132388176eb48f319e14d68",
+    "ontology/compositional/runtime.py": "4bf9c8de32bf56eb5dbb59f7b5ca6d96e3a51605da3f2ac8f0fb9586d3602e75",
+    "ontology/compositional/schema.py": "5c7cfbdd45c333420e248e23aa11901d57e0d4dcd2a6cb25d7a63ec4cbb7ff24",
+    "ontology/contracts.py": "43b273ce427929c50a37bc5d8e1dbea06db26ecc71b435d62e822030b3e0b004",
+    "ontology/coordination/__init__.py": "62a85e5e9c3bc217da9c5e341a8de8ebd515895c577e207f4d3b7f0ac069c4e4",
+    "ontology/coordination/evidence.py": "a2ef100858798998be12aa01f9409e9959120dfcb49a66887f718f2d163d764d",
+    "ontology/coordination/generation.py": "a77d725b4babdf0a3194c9e251a6a9f45222ab8c613ce2e139167e8c42a4a6c8",
+    "ontology/coordination/inference.py": "80c70107d2d770057596cc4d4291ad836c92144de12f6a8bfeadc5c94d429a8b",
+    "ontology/coordination/laws.py": "d3a51b6e0d6cb0e443290302620e7a474b9ae7913f531d0cb4ce2855f03c03ff",
+    "ontology/coordination/layout.py": "e085f71303005ac9ea5c8f6da8e1ff7bd2b42fd005af56d53a3011fb91933be8",
+    "ontology/coordination/planner.py": "e2b7a35788191dfe99ba9884ebaa07d968172b5775a554e7b74a2924346af632",
+    "ontology/coordination/policy.py": "469be4d2bb0acc252e5f7a902e5e6ce4d031038ab8eb3b816baafcbe3d0da6ac",
+    "ontology/coordination/proof.py": "c905f3a6c26c463b83f2eff24d37f753ef03013a664357d752be953ff39cac36",
+    "ontology/coordination/qualification.py": "185e30236e80645d435ac33e82fcf91d4aa6ca8b08ad8092e83ad23d3a18f0a4",
+    "ontology/coordination/runtime.py": "ab1477ca2691eaac40c017c1bed9f6f6ecb0c7d1af795e81d6cb91ad681dcfd3",
+    "ontology/coordination/schema.py": "d0566c2a3f9bcae34dad4670fe86e8f32a63dae0fa5fe6b74241f84866532292",
+    "ontology/coupled_memory/__init__.py": "6b704c163d381c0ebdc1171e351f2e6799aaf0e2d6e838d7a21db8e7da5f47c6",
+    "ontology/coupled_memory/evidence.py": "db02c4bfe43de39ef0bdfabb5b99382c65b5221212eb4dffaa2dc1d7dc0c1562",
+    "ontology/coupled_memory/generation.py": "4234d206e90a494b3fbd9a50e0c642f2e641808287589489b154a8fd258aca49",
+    "ontology/coupled_memory/inference.py": "b0f37882a4aa46cc54f9a12e84f91d09f626c57678bfc0d8ed2890044898ac48",
+    "ontology/coupled_memory/laws.py": "7b78453f8acfd0e9b2c592d5afd8f3078c3a4aca5f2bd900cd17bef4fa29831d",
+    "ontology/coupled_memory/proof.py": "3a3396b05721183a05920fe0b56cecaed482b87b73bd728a09762594a7481f89",
+    "ontology/coupled_memory/runtime.py": "b345c16cf998c1aae3cfe4644de36272101490c4bd2f9671c96d719c7adf54a0",
+    "ontology/coupled_memory/schema.py": "cc346c5dbe25403689bf1a6a8bb695b64f881fa266a1fd91af7367756d3cca4d",
+    "ontology/diagnostics.py": "4955e53d6b85f0ed989cbadeb784b5ec2e709b27322016d7d3ce48f6fc40fbf2",
+    "ontology/discovery/__init__.py": "117676035816e258e91d2937af1a68289b7b9b8f4bae0cb16aab3198539cf770",
+    "ontology/discovery/audit.py": "d1c4b58bedcde16c990869176d994a0c4670954d984022c02fd2765c2ac9ae89",
+    "ontology/discovery/domains.py": "089abaa066aa1be840cd7f9571f8d3b5bbbe87b953efda89e167587f121626fc",
+    "ontology/discovery/evidence.py": "7ce5575fb1ddcec15c1ca78101b0c239e65bfaa76953bde5b40b5db34e55cb8f",
+    "ontology/discovery/generation.py": "97c8a6f1ef4e6ed67f924f48ae545e5a74e15ea6778b259558b88200e6636f9a",
+    "ontology/discovery/inference.py": "83f8b767538f0101086ded52baedcafa667fe12d77dce7ded6ebd1e6c9946fbb",
+    "ontology/discovery/policy.py": "1c0f8a4ae0c0a7cf651d990e0ec42cddf31caddca36958c8f5d597a68abc97b9",
+    "ontology/discovery/proof.py": "b3f4109c62ce14c3a98473d0d486790ab7d32bce970dab01a2257778115a981f",
+    "ontology/discovery/qualification.py": "a85017877d96538ea61bd56e2d67570ea5f2d22381c8c98131615f4136117dfa",
+    "ontology/discovery/runtime.py": "bf7edc5d8da3c64401593427daa41b021da93d348a34342382ad526283ec9755",
+    "ontology/discovery/schema.py": "f44f4c66e29ca6cbddf0b5bbe14740f16ec9875b9997bee455e02d933a26726d",
+    "ontology/dynamics/__init__.py": "43e2d62f14eed0443c523425e668930cbe48ab3e5fe444c84bcb268dc51c3f3c",
+    "ontology/dynamics/evidence.py": "69ad5b1c8aa3f8362e1861e93d8ea43dc70aceb479c75117ae4acf936b3253b0",
+    "ontology/dynamics/generation.py": "9bf05486d7e5fa3e9bb47a773593c56435a772060edafe08c4dced5b66d78142",
+    "ontology/dynamics/inference.py": "96b4c8090c00345e097147b470c4afd6d161fea402adeaba34cba17d356e4b2c",
+    "ontology/dynamics/laws.py": "88d1524acc1a42690e311d13bb565403ddd8c65205f1db47be9370d9f3ace816",
+    "ontology/dynamics/policy.py": "3744d5160a5ad5c71b88af8edd5da601f9e2fb98c1aedee7e6002d3083ffe55d",
+    "ontology/dynamics/qualification.py": "a5b2ebe01ac63a08bce6880d03675a1465ed797bad7394bbc29ff87c159a91e1",
+    "ontology/dynamics/reference_cache.py": "28a7508c6c22ddb6892372c028cd74e433d69845699fdaf7fce5694e2c40f0ae",
+    "ontology/dynamics/reference_identity.py": "d59b69b97e155cb4759a46bba3f7cd7874ccf12adba20c71a9c3b9fbde35dc3d",
+    "ontology/dynamics/reference_proof.py": "34e769abc8b6228de49a5c0f802842fb5582572435fff1ba9c72ec71cab818eb",
+    "ontology/dynamics/runtime.py": "6298ca5dea1b77ae2ef7958ea2e2248bf8cb5131b6d1e351199ed7695c186030",
+    "ontology/dynamics/schema.py": "0d718adb94c480ba8d0a56fff1e46468b160247af5ee290580443ae98ba1fbb5",
+    "ontology/graph.py": "cf0e3ccce293f07845f23f603b8934c5ef330a5cd2e83f89cf117ab3ba7bc3b6",
+    "ontology/history/__init__.py": "10c352f45f20464f5eefe132dfb58966e58c21a64482f2083b53d361ddd2f99c",
+    "ontology/history/evidence.py": "051178b0aafc51949adcbf0bc998030986c86874d1480611fa3d81d9c0fd5d78",
+    "ontology/history/generation.py": "2983a72dc0cd58467e9dcd2853ecf8715ac3da899cee61a4f31748ebc2516f27",
+    "ontology/history/inference.py": "8e01f6b4d6e8ac18a622a6d2c60e358d314029349a70914c2e5bb44676d3f23e",
+    "ontology/history/laws.py": "2e68b32560be94eaf8f49e4c3854612a43dd3c732086a012bdebc2b164178763",
+    "ontology/history/policy.py": "ec7bd2855f62fc99d6c77e65f410967d6687223e77bfe9091eccfe0fec15d3ae",
+    "ontology/history/qualification.py": "6c76176884ccbe6823febffe30451291fc4f854a8d9a7c39c75d4e4a327a26d2",
+    "ontology/history/runtime.py": "5508e652d513d34be0ac9b0e72f731c4c5af3c5b320ff35666e814572c4328d9",
+    "ontology/history/schema.py": "afd5d1aa5404e531de3bc568458f3fe851a6ea6bb79caa6a04f3c7b5d3a723bd",
+    "ontology/inference.py": "be14f90dbf8cf20c67c7c23090620edade68c120250ebda36190d6767ebd9e79",
+    "ontology/interference/__init__.py": "161bea5a39e58f76263da3898e99376a12792d900d83f086fc4cf965031941ee",
+    "ontology/interference/evidence.py": "1246a2ba3ff4423e4f71eb8728d4dfefac0bfdde7e7c0efa786bd87c43cb51ea",
+    "ontology/interference/generation.py": "9e287c5bdf76e6b8e590916f2c434519e771635444a7ec65701c41eed517486f",
+    "ontology/interference/inference.py": "f31f3fd35af7b55c1ebeb3209195a48c01ab0e5755eaa76cdaaff6eed9f473ef",
+    "ontology/interference/laws.py": "fb57639f376d3f61b87f0077599bbb5b56b8874445b40a724eb445733833aa6f",
+    "ontology/interference/planner.py": "dfed9bba4f05f1194af6f2c6aed9f97511611476a5e8e8ea7ec8ed05ef92ceea",
+    "ontology/interference/policy.py": "8c436eae6c5685f68d2555e11af573e8eb29fc0458f661ec5df19fefbbba8d58",
+    "ontology/interference/proof.py": "36b0ba024f68fc374dfe5cd4721160b53230480302524d587f754264f8cc38c4",
+    "ontology/interference/qualification.py": "e4a41a5e52897c3c467314da41ad35da69c448a6f139c78fcf6eaf0d6617baff",
+    "ontology/interference/runtime.py": "7cf0bb9d1bc95e4da671e00916559857da2ddbfd510c20ceb457552aa12a9ecd",
+    "ontology/interference/schema.py": "6b37493244a069a191052b7d372b3334a265fb08993caa626eb0d48aa25ca72d",
+    "ontology/interference/structure.py": "99472c3e252bbade4788718e9f74cdda8f651363865600e27c75447e7eb257f9",
+    "ontology/interference/structure_proof.py": "f9c87f098b66238cd87b095a60aee0a63f416514bdc9d371f78e9499d317b60c",
+    "ontology/mission.py": "200f95b997d6c6602d743340dcd3cc84f36f0be01fbe9da807aecff317e6c654",
+    "ontology/network.py": "96c1b44bff91ae12262e12fff08f3c65a4cc2ca1088e06f4c12a39e4e7ea4347",
+    "ontology/payloads.py": "85bbb4b08b2273b95462b45268b288eff7dc136885066ed1641ec124fe3a15bb",
+    "ontology/planning/__init__.py": "486a2393e1490dc5c7030e2f9fcf72ecbe71b45ee5d0f4034c3ba43dd0a83a5f",
+    "ontology/planning/evidence.py": "5008f988a73364028c9405d66cdb817624aee4c6fe066ef5a90fed39ceb71d6e",
+    "ontology/planning/generation.py": "25e794891c06612fb9042e044d8dfaceb5bc4c5dfa4f9482324ac3890705e92b",
+    "ontology/planning/layout.py": "97fba879ffd8cbdf820294fd8aa2542129e91d3362afc36595efe474c4219ef5",
+    "ontology/planning/planner.py": "47f3f8e9b7f5156fe13b4e0b84dcdf5594df1cd1e7a82303c0022b947cd21333",
+    "ontology/planning/policy.py": "48018d0732fbfd5591054093a953fc4b3053c201b21dcb41f81e90eb81c1828c",
+    "ontology/planning/proof.py": "806f00e7aa82c794d5fea31ed3e851c53e926a32e501fbfc61527a3adc41680d",
+    "ontology/planning/qualification.py": "1a53cc38305fbdf3e2b0d76028fc71db66c1b3cf8a90fff0bbd02c6616bbd542",
+    "ontology/planning/runtime.py": "f33ec547540b30a57b47eb692c73c8c0394c76f8d4dd9b901dc2427807112eee",
+    "ontology/planning/schema.py": "6ad43df9d34d09a1dae010a93e3839d653bc0190f917a1a7a08b278106e5187d",
+    "ontology/repair/__init__.py": "728737b963b145edfb0c9b98117a55b117b32a5ea4ad99c9da390179599d1e25",
+    "ontology/repair/evidence.py": "e0263058ba47105a32d7d658629a855d437095ab2467a013a0afc60a71a98d5e",
+    "ontology/repair/generation.py": "d98c9a78766e6f83dea026424a1da7587c6e369eb2f0d77a20a7898700a321b1",
+    "ontology/repair/inference.py": "2d57a35b4143cf4ab798aeacb175edf6d188968e1c9c882c9b6e69c9a54812ad",
+    "ontology/repair/laws.py": "3525c88cdf6e8a631b58fd642188d3b624749c00f81f0f70511133b10f4f3223",
+    "ontology/repair/policy.py": "640bf9b657fcaae2ed86b3c2efb20027a5b061eb00417cfcf44a16168a904d7c",
+    "ontology/repair/proof.py": "34869fae93a920e1698e13e0a0b03b5e5665cc2f3a165f135b79fddd49799c5c",
+    "ontology/repair/qualification.py": "02bedaebef7b09819d83d5971bba0c8c858aecc5da34c9c5acf5607fc9185b86",
+    "ontology/repair/runtime.py": "37cf86747ad40c64aad34266d5576575661dd74da9b022b745b7396409d28cf6",
+    "ontology/repair/schema.py": "f75c31ce6dcacae2ca2a20e91d860ad06d098c76dfe50291a6e2dc33a248fa48",
+    "ontology/representation/__init__.py": "2c8debe4e79e2e28efc6fbe8ade8451635760047bc0b77c24a9d745824482451",
+    "ontology/representation/evidence.py": "96131307ffc4c54e06479932aecbb3fdd213c025c018139e3a528a567ae1508c",
+    "ontology/representation/generation.py": "79229fde20b1025835e230218bdd3c97ca4797920187bfe4605980f7eb8a87b7",
+    "ontology/representation/inference.py": "63a7d89d7dda2a42d62c2f92e46affb758429144da0f41aaab3efbdcbfcaac00",
+    "ontology/representation/laws.py": "f4e0cba35afdb4a49675cbbd3d62287bd051954698e9840bef3c96c00e1a8cd2",
+    "ontology/representation/runtime.py": "29b4f0f80b3f480069f5fb589a90e3b84ee297424a9a690aa8015873df6eab3b",
+    "ontology/representation/schema.py": "a24076b26add9831e3763965b0e5b4b3f3e31f990df22efc82dc93069e42aa36",
+    "ontology/revision/__init__.py": "74204d96902e9bfe245955da38c8584f143404236ff475fd25da72f941111102",
+    "ontology/revision/assistance.py": "4a2ed9e8631705771ba8ca1adda24cc9bf93701cdf44dcd54daea2349a53c79a",
+    "ontology/revision/diagnostics.py": "ec9c39990520e70e4cad5ff469f4039a94911737dc0efa88fb263eaf530c0dfc",
+    "ontology/revision/evidence.py": "1eafa523015d6d4c0e4e1974071cc1a6540cef9a446d5391802c521a3469e7c6",
+    "ontology/revision/generation.py": "8ef673790282879f3a14c09d7b2967a20eed90b7ade2ea1434f1d63f1a2cd722",
+    "ontology/revision/inference.py": "cf03f202936bd9a6457ece75a2fbc96d40d201daac5071d8755bd5a686e3100b",
+    "ontology/revision/laws.py": "587dd7673fe048e70d2e846f1e8a8bc0623bd5a9e3f06fe356cd147600e3958b",
+    "ontology/revision/proof.py": "ba08dff08aa0ee9edae69c5926ec23c53f11bc51014b3bdd1726ddd968597097",
+    "ontology/revision/qualification.py": "8ba8ee038c101b6d7961fb670c478091d2e8683a0b39c14e29381dc39f03b857",
+    "ontology/revision/runtime.py": "cac047cc21905f270d8ccbbefb5391418fd445afb28cf6c834435bd0d9652a46",
+    "ontology/revision/schema.py": "719191687a4b8d6db26d2027b54b1a8ff76dff6625cbbea514d7c6f8e1723212",
+    "ontology/staged/__init__.py": "6f4f161dd09bb9613a77782b4536769da6674d6523d52f72c10096229b9cc6fc",
+    "ontology/staged/evidence.py": "1beaa167f19bfc42b99b04b80aa4fb8d8a0cd1739e874977048485e672a2c8b0",
+    "ontology/staged/generation.py": "950ec637f88c4e63e738c74abf898b24a213f4896ccfafb5aa85dccf2e724890",
+    "ontology/staged/inference.py": "ad3c84315bae8150ce06a810974818c7d3cf1f7949f9f3f092ac6513fa46d0ec",
+    "ontology/staged/laws.py": "5610e9e9d8a0e1a5f30ad08bce533567d93a79a7cda69f9f0b44bc0cf943de8e",
+    "ontology/staged/policy.py": "4d03e6f52826b9d5dfb27626791a732801a0b1f0d207fdfcf43a5ff680b432f4",
+    "ontology/staged/proof.py": "fa4e6510f3f4b6fa8266398d12ebe7aa1eb095090975cb37c6750c43040ceb26",
+    "ontology/staged/qualification.py": "59b8a6855e0fd102bc38d9ece299382cf3af281a87298f7d4b812d88d50d6031",
+    "ontology/staged/runtime.py": "bd39a8d18f6dad9872fc3367c280977b56b2458f61c20ae07ee66568c90d1608",
+    "ontology/staged/schema.py": "53204458e550a4d5773134281360cfd85a94d2d9f7c00411597d598fe3fca00e",
+    "ontology/stateful/__init__.py": "8d2764565406b26f0491446d685d7a670b91607681dea106bc39f7fbe5a87462",
+    "ontology/stateful/evidence.py": "8d8446a144d544ed62ddb34ca052cca4b86a0a165d6a934492e527f34f734705",
+    "ontology/stateful/generation.py": "148d41d1ea7c59fdb7e0e3a9445273a0f41c2d37b0ad93ec5c5a44367aecf1e3",
+    "ontology/stateful/inference.py": "6c335f200f75d0bd2bef6e94112bd584d38a6f4e4cdced2e1c8d41a0b168a235",
+    "ontology/stateful/laws.py": "27a49d2cc20254ad5ae4b8a01c80a2d85bb911349b8d8352571c58d7a7c91c2e",
+    "ontology/stateful/policy.py": "803c0579e644f2dc6523a39b66834b3910bd01d0fd48dcb3f20d613bd522a17d",
+    "ontology/stateful/proof.py": "4f43b9d8b7dfbfa383f2e5134dccd37a6df93c8442d85a22bdc9d7ff365d94e6",
+    "ontology/stateful/qualification.py": "8a0ba8b3122ba9034cdac8df9515685339786ada7d2af3f0114e4998ff9bfae1",
+    "ontology/stateful/runtime.py": "1638a7347a378b2d5247d2b0ebebf19be255cc6162392daf8d58a2954eccd43a",
+    "ontology/stateful/schema.py": "3e5c7fef6b90ed4072416cacd93c687672db4e443232e4747f70c7d5e0de7587",
+    "ontology/stateful/search.py": "6a7795aab739fced5f64c271a8569c74dcafb4b25af39f7c95736228c18f7403",
+    "ontology/structural.py": "0e8c94d9681681a1b8f6dc7fe4192820ca1ff8a8029942bb89dda15e870ae65e",
+    "ontology/transfer/__init__.py": "400cebaf81bc7effe3f541bc04faef31c6f38bd65906465c3190fa44934a6110",
+    "ontology/transfer/evidence.py": "41be639431ea0b8d36131d533ab8981c5ddad6e0a34b5a660cbe44a8e20aac51",
+    "ontology/transfer/generation.py": "b724941543650d73c9db2719fd2af6f935925e09aa1d2601f95cff49128e84c1",
+    "ontology/transfer/inference.py": "9a7451231d93b24a6ab33175300264ee85a1af8e99313a37c5d763444fd1263c",
+    "ontology/transfer/laws.py": "442b827ddb0dd9a77fc7247df12f72b23a67830d207930ffbc6ca3d18e0db349",
+    "ontology/transfer/observations.py": "6f74982ae829c510c12bb19bc5e1c7f7fcf246c1606b3d4fd0dce34f98691555",
+    "ontology/transfer/observations_identity.py": "5cdacba381af30c59d60b44704f64d827cdf79e73965da9ac4f87e64377e105e",
+    "ontology/transfer/policy.py": "e63b672477ad979d2eac58fed2f490a7a513529d27cdcc4794ad3342a9fd4d9b",
+    "ontology/transfer/qualification.py": "da76962e1b9bbe6e16d404e26cdea4a044e843f2e40b212281aaac11e6c5f1be",
+    "ontology/transfer/reference.py": "77e329f5c42e1b976dfea835c8f6b0236cd248374fda9b610303d7cead0a2a5c",
+    "ontology/transfer/reference_identity.py": "eac71594d6e4dd8018a8b2f74ec37417b57038317d7de9c2ddf647b7d612e521",
+    "ontology/transfer/runtime.py": "1232ba45e74d2a2e19f736b224895549323cbd99b7b4173fa40105ad68d5e533",
+    "ontology/transfer/schema.py": "e6919a4472b2df541f5878de0976b536ec52e515b456550a67ebce1da9440555",
+    "ontology/transfer/tables.py": "7c1a4898c7ea159a00f780a92b61f813b4342928a18e8c71496462027fc728ed",
+    "ontology/uncertainty/__init__.py": "db562a73e2211186268b8bf0ef44d3a7b16f3cc6f70ce086f2a1d158be8fb39b",
+    "ontology/uncertainty/evidence.py": "8f69c2601a272c4b5416306cfd13f3d2db894508aec67763da8b528a34046ceb",
+    "ontology/uncertainty/generation.py": "2e30259cea37188eff9ce68387e9f139373e182b90bcc4aa1a96307d012ac2c4",
+    "ontology/uncertainty/inference.py": "11c8cd3403cb5de35973b29f33d2abb3518739c4c5fd99e3279e8646122a198a",
+    "ontology/uncertainty/laws.py": "91e19fc3df991b7f199bdb7f2655e6e377470f162bdc2ab9f883a09b3cab3ed5",
+    "ontology/uncertainty/runtime.py": "662be74da7e2e1fcd6cd3356ca3731f6eca2930b1ba8974d28029c9261b247d9",
+    "ontology/uncertainty/schema.py": "99f2a9ec59c0725731941f42573d4ca9269647ea4bc0885b0c4646736041f976",
+    "presentation/__init__.py": "bb8df829acf758152058c00b31c300c86356802420347437c64b581c1ca0bc25",
+    "protocol/__init__.py": "e3b32fa236602d61f8591e0944c0a1cc6b12cbbc97e147ad9e22b42b5c77d9a6",
+    "protocol/client.py": "f05944cb106061365b13745d94c20fc2f0a587b4be101e46d89746ee43b0c70b",
+    "protocol/decision_metrics.py": "0f22d5ba0143cfcb0b0c21fce78202229e9446e40135b23b7f8cb8fe3222a32a",
+    "protocol/fast_cli.py": "2d5578a1447b1310efa9d0df17653a76a1170379df6ecbebb3a3041610456369",
+    "protocol/http.py": "a8f8605132276b6ff0a82175fcd0b67c08a8cc7f45e0d83080001aefb301aedb",
+    "protocol/investigation_metrics.py": "51dad9706bf4a14034a75e23ebfdfbdf663e67ccd6f566d19963e3749780f6a9",
+    "protocol/operator_diagnostics.py": "e3d1d8a610cad65dc94fd4c972ed159eee89b614bc6adaf5218d930fe363674f",
+    "protocol/operator_summary.py": "38dab514a86e66d98222e4b83f590c8f540abdd9e50a890015e4ddc4021aeaa0",
+    "protocol/operator_witnesses.py": "b485c5778905992151d9b0d5fd2b472c8343476702489f095c06b10243661af0",
+    "protocol/public_transcript.py": "d50344bd1adc868390441a1b138f17c7b5b289d1a07b7057031076a9bf08abcb",
+    "protocol/session.py": "71e61b3f4121dcc405486b441d978b0cd095b3394448dc4432686bd239f48791",
+    "protocol/stdio.py": "c3401f5dfb654786fa9a26b0bf1c6f56727adf7455747a1218753f331eed2b29",
+    "protocol/transport.py": "7cbc5ae31b016dd9030122b81c542f37a1759897c1e65333e93ceb079e37d604",
+    "provenance.py": "03cfa1222eea98679d139b2c7b81839ad64bf1e8412867d8f5f245167f35fb0a",
+    "render/__init__.py": "1e05c362715cc6c241716eb1c0441d6dc80af7118e6a665f60b93213209d5a35",
+    "render/observer.py": "74b910d0ee013bd72418af152c49c9ff1709452fe871e5f4bce93ba039731571",
+    "render/text.py": "928da2ba6175bf23b27215d4415e47ec5336002b11e265164a7251923d7358ef",
+    "solver/__init__.py": "262ee397a4e4a0adcce42babaa4f2424315fc8d7bba423a58f094fbcbd4fdbd4",
+    "solver/belief.py": "cda69643665a91a05631c8eec0a837222e02020ed36aa16231e59d61eb946a50",
+    "solver/budget.py": "f0caf985bb84f477bc306e7be361dd9ddce9cbf7cbbc53521e848a39d70ee270",
+    "solver/decision_audit.py": "0b3b7e40b2bfa7752e4f8ce592f5f7aa4b92f61ec7d6c4731e741f0b9c4e9978",
+    "solver/finite_experiments.py": "0208b9b6735ea01cb64cf6e277b4fa89e8fcdef0adf4accf9b3cb334f8ccec81",
+    "solver/finite_game.py": "1552bbe40968f7aed9f915683684c236bf8c5e16b8c7bd2a335f88c655aaa7f4",
+    "solver/finite_machine.py": "5d543b4cd2a75a2ef56f1b1c6494eb4d5a13b44e0e2cde240913d656eda833f2",
+    "solver/observation_audit.py": "00c1da3e30f7eb97f8ce3c97656b595e0f9986fe42930f1b37e9484abeba2b9b",
+    "solver/policy_check.py": "2dad4f1c49c23a9ea7e7634cd4520027b6cce8e79e09c1eb86b06749018905bc",
+    "solver/search.py": "a190e9fa26dc129df48a386146bbe7333e9af782c2ca5c16736bf0cf32af5b2e",
+    "verification/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "verification/receipt.py": "645386727b368336c6c4114261922aa7c706b487f160cf562c206dae53405ba3"
+  },
+  "status": "passed",
+  "version": "fresh-world-preflight-v1",
+  "seconds": 24.99388232499996
+}

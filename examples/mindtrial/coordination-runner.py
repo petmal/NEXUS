@@ -8,6 +8,7 @@ files use JSON, which is also valid YAML. No live model call occurs in preflight
 import argparse
 import copy
 import hashlib
+import importlib.util
 import inspect
 import json
 import os
@@ -86,6 +87,9 @@ class PilotProfile(NamedTuple):
     tool_contract_version: str | None = None
     model_configs: tuple[tuple[str, str], ...] = ()
     evaluation_seed: str | None = None
+    control_suite: str | None = None
+    ungated_suites: tuple[str, ...] = ()
+    proof_report: str | None = None
 
 
 COORDINATION = PilotProfile("coordination", IMAGE, SUITES, CONFIGS, PREFLIGHT_SCRIPT)
@@ -266,6 +270,43 @@ CAPABILITY_SMOKE = PilotProfile(
 )
 
 
+FRESH_WORLD_MODELS = ("astra", "luna", "flash", "grok")
+FRESH_WORLD_CONFIGS = tuple(f"nexus-fresh-world-{m}-config.yaml" for m in FRESH_WORLD_MODELS)
+FRESH_WORLD = PilotProfile(
+    "fresh-world", "nexus:fresh-world-v1",
+    ("anchor", "controls", "td", "pr-a", "pr-b"), FRESH_WORLD_CONFIGS,
+    r"""
+import contextlib
+import json
+from pathlib import Path
+import sys
+import tempfile
+sys.path.insert(0, "/app/scripts")
+from fresh_worlds import Pilot, preflight, export_tasks, SUITES
+from nexus.provenance import source_digest
+with contextlib.redirect_stdout(sys.stderr), tempfile.TemporaryDirectory() as temporary:
+    directory = Path(temporary)
+    pilot = Pilot.model_validate_json(Path("/app/docs/fresh-world-matrix.json").read_text())
+    report = preflight(pilot, directory / "fresh-world-preflight.json")
+    export_tasks(pilot, report, directory)
+    result = {
+        "runtime_source_sha256": source_digest(),
+        "reports": {"fresh-world": report},
+        "tasks": {suite: json.loads((directory / f"nexus-fresh-world-{suite}-tasks.yaml").read_text())
+                  for suite in SUITES},
+    }
+print(json.dumps(result, separators=(",", ":")))
+""",
+    suite_groups=(("fresh", ("controls", "td", "pr-a", "pr-b")),
+                  ("challenges", ("td", "pr-a", "pr-b"))),
+    default_suite="controls", tool_contract_version="cross-axis-tools-v1",
+    model_configs=tuple(zip(FRESH_WORLD_MODELS, FRESH_WORLD_CONFIGS)),
+    evaluation_seed="nexus-cross-axis-pilot-v1", control_suite="controls",
+    ungated_suites=("anchor",),
+    proof_report="reports/fresh-world-preflight-2026-11-03.json",
+)
+
+
 class RunnerError(Exception):
     """An actionable failure safe to print without subprocess output or secrets."""
 
@@ -418,6 +459,8 @@ def load_release(package, pilot=COORDINATION):
         *pilot.configs,
         *(f"nexus-{pilot.name}-{suite}-tasks.yaml" for suite in pilot.suites),
     }
+    if pilot.proof_report:
+        required.add(pilot.proof_report)
     if not isinstance(hashes, dict) or not required <= hashes.keys():
         raise RunnerError("release.json must list all configs and every suite's task checksum.")
     contracts = release.get("config_contract_sha256")
@@ -625,6 +668,13 @@ def qualify(package, release, image, include_repeat, *, pilot=COORDINATION):
         for name in required_reports
     ):
         raise RunnerError("The container did not pass all required qualification reports.")
+    if pilot.proof_report:
+        expected = read_json(package / pilot.proof_report)
+        actual = copy.deepcopy(reports[pilot.name])
+        expected.pop("seconds", None)
+        actual.pop("seconds", None)
+        if actual != expected:
+            raise RunnerError("Recomputed proof differs from the release-bound report.")
     tasks = result.get("tasks")
     for suite in pilot.suites if include_repeat else (s for s in pilot.suites if s != "repeat"):
         shipped = read_json(package / f"nexus-{pilot.name}-{suite}-tasks.yaml")
@@ -716,6 +766,104 @@ def rate_limited_results(directory):
         return []
 
 
+def control_admission(package, release, config_name, config_raw, binary, tasks, *, pilot):
+    """Latest matching result per control must pass before this model's challenges.
+
+    This is an operational receipt/configuration gate, not an offline replay audit.
+    Partial reruns may fill the record; a newer failure overrides an older pass.
+    Different release, binary or inference settings cannot inherit admission.
+    """
+    expected = {task["name"]: task for task in tasks["task-config"]["tasks"]}
+    filename = package / "summarize_results.py"
+    if not filename.is_file():
+        filename = package / "summarize-pilot-results.py"
+    spec = importlib.util.spec_from_file_location("nexus_gate_readout", filename)
+    if spec is None or spec.loader is None:
+        raise RunnerError("Cannot load the control configuration checker.")
+    readout = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(readout)
+    current = json.loads(config_raw)
+    configured = {
+        (p["name"], r.get("name") or r["model"]): (r, p.get("retry-policy", {}))
+        for p in current["config"]["providers"] for r in p["runs"]
+        if p.get("disabled") is not True and r.get("disabled") is not True
+    }
+    if len(configured) != 1:
+        raise RunnerError("Control admission requires one configured model per file.")
+    binary_hash = sha256(binary.read_bytes())
+    candidates = []
+    for path in (package / "results").glob(f"{pilot.control_suite}-*/manifest.json"):
+        try:
+            manifest = json.loads(path.read_bytes())
+        except (OSError, ValueError):
+            continue
+        if isinstance(manifest, dict) and all(manifest.get(k) == v for k, v in {
+            "suite": pilot.control_suite, "source_commit": release["source_commit"],
+            "runtime_source_sha256": release["runtime_source_sha256"],
+            "input_config_file": config_name, "input_config_sha256": sha256(config_raw),
+            "mindtrial_sha256": binary_hash,
+            "evaluation_seed": pilot.evaluation_seed,
+        }.items()):
+            candidates.append((str(manifest.get("started_at", "")), path, manifest))
+    latest = {}
+    for _, path, manifest in sorted(candidates, key=lambda entry: (entry[0], str(entry[1])), reverse=True):
+        selection = manifest.get("selection")
+        selected = selection.get("task_names") if isinstance(selection, dict) else None
+        if (not isinstance(selected, list) or not selected
+                or any(not isinstance(name, str) for name in selected)
+                or len(set(selected)) != len(selected) or not set(selected) <= expected.keys()):
+            raise RunnerError("A matching control manifest has an invalid task selection; inspect "
+                              "the controls result folders before continuing.")
+        pending = set(selected) - latest.keys()
+        if not pending:
+            continue
+        folder = path.parent
+        accepted = {}
+        try:
+            selected_tasks = read_json(folder / "tasks.yaml")
+            effective = read_json(folder / "config.yaml")
+            records = read_json(folder / "mindtrial.json")["Results"]
+            valid = (
+                manifest.get("status") == "completed"
+                and manifest.get("exit_code") == manifest.get("launcher_exit_code") == 0
+                and sha256((folder / "input-config.yaml").read_bytes()) == sha256(config_raw)
+                and sha256((folder / "config.yaml").read_bytes()) == manifest["effective_config_sha256"]
+                and sha256((folder / "tasks.yaml").read_bytes()) == manifest["tasks_sha256"]
+                and selected_tasks == {"task-config": {
+                    **tasks["task-config"], "tasks": [expected[name] for name in selected]}}
+                and result_coverage(folder, effective, selected_tasks)["complete"]
+            )
+            for provider, values in records.items():
+                for record in values:
+                    run, retries = configured[(provider, record["Run"])]
+                    snapshot = record.get("RunConfig", {})
+                    accepted[record["Task"]] = (
+                        valid and record["Kind"] == "Passed"
+                        and record.get("Evaluation", {}).get("Seed") == pilot.evaluation_seed
+                        and snapshot.get("Model") == run["model"]
+                        and not readout.run_config_differences(run, snapshot, retries)
+                        and record.get("Details", {}).get("Validation", {}).get("Title")
+                        == "Valid victory code"
+                    )
+            result_hash = sha256((folder / "mindtrial.json").read_bytes())
+        except (OSError, ValueError, KeyError, TypeError, AttributeError, RunnerError):
+            accepted, result_hash = {}, None
+        for name in pending:
+            latest[name] = {"task": name, "accepted": accepted.get(name, False),
+                            "manifest": str(path), "manifest_sha256": sha256(path.read_bytes()),
+                            "results_sha256": result_hash}
+        if latest.keys() == expected.keys():
+            break
+    missing = sorted(name for name in expected if not latest.get(name, {}).get("accepted"))
+    if missing:
+        raise RunnerError(
+            "Fresh control admission missing or failed for " + ", ".join(missing)
+            + ". Run --suite controls for this model/settings, then resume --suite challenges."
+        )
+    return {"scope": "accepted receipts and matching recorded configuration; not canonical replay",
+            "controls": [latest[name] for name in expected]}
+
+
 def run_suite(
     package,
     suite,
@@ -733,6 +881,7 @@ def run_suite(
     task_ids=(),
     repetition=1,
     repetitions=1,
+    admission=None,
 ):
     binary = mindtrial / "mindtrial"
     binary_hash = sha256(binary.read_bytes())
@@ -807,6 +956,8 @@ def run_suite(
     }
     if pilot.tool_contract_version:
         manifest["tool_contract"] = tool_contract(config, pilot.tool_contract_version)
+    if admission is not None:
+        manifest["control_admission"] = admission
     manifest_path = directory / "manifest.json"
     write_json(manifest_path, manifest)
     print(f"Running {suite}; results: {directory}", flush=True)
@@ -991,6 +1142,12 @@ def main(argv=None, *, package_dir=None, pilot=COORDINATION):
         for repetition in range(1, args.repeat + 1):
             for suite, config_name in jobs:
                 config, config_raw = configs[config_name]
+                admission = None
+                if pilot.control_suite and suite not in (pilot.control_suite, *pilot.ungated_suites):
+                    admission = control_admission(
+                        package, release, config_name, config_raw, mindtrial / "mindtrial",
+                        preflight["tasks"][pilot.control_suite], pilot=pilot,
+                    )
                 code = run_suite(
                     package,
                     suite,
@@ -1011,6 +1168,7 @@ def main(argv=None, *, package_dir=None, pilot=COORDINATION):
                     ),
                     repetition=repetition,
                     repetitions=args.repeat,
+                    admission=admission,
                 )
                 if code:
                     return code
