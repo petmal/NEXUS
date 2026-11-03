@@ -20,6 +20,11 @@ in all four long trials, one after an already fatal planning detour. The later
 09 win and a 25 length stop after a fatal planning detour. Only high S05/S21
 controls remain absent. Pause unchanged challenge repetitions and continue the
 Astra anchor and fresh-world qualification independently.
+The [fresh-world pilot](docs/fresh-world-guide.md) now implements that next step:
+two new fixtures in each established family, 26 conditions per model, Astra/Luna/
+Flash/Grok presets, a six-row Astra anchor, and an unattended runner with matching
+control admission. All 32 fixtures pass mechanical qualification; live evaluation
+is pending. Start with the [run instructions](examples/mindtrial/fresh-world-run.md).
 The earlier [HTTP 429 interruption](docs/research/minimax-control-interruption-2026-11-02.md)
 remains separately recorded. The launcher halts subsequent groups on a 429.
 
@@ -46,7 +51,8 @@ that their difficulty is unmeasured refer to their original publication stage.
 
 | Research record | Purpose |
 |---|---|
-| [Disclosed interference](docs/interference-guide.md) | Longer exact plans, matched write-edge controls and unavoidable coordinate-goal regression; 32-cell pilot awaiting live evaluation |
+| [Fresh-world pilot](docs/fresh-world-guide.md) | 26 fresh matched conditions, four models and a contemporary Astra anchor; qualified, awaiting live evaluation |
+| [Disclosed interference](docs/interference-guide.md) | Longer exact plans, matched write-edge controls and unavoidable coordinate-goal regression; outcomes in the smaller-model synthesis |
 | [Coordination](docs/coordination-guide.md) and [selected rerun](docs/research/coordination-rerun-results-2026-10-26.md) | Short-horizon planning, joint routing and observed strategy variability |
 | [Planning/resource pilot](docs/planning-resource-guide.md) | Disclosed spatial planning, exact known-law budgets and a qualified 16-cell next evaluation |
 | [Latest evaluation assessment](docs/research/td-evaluation-assessment-2026-10-24.md) | The 40 live runs, independent audit and intervention limits |

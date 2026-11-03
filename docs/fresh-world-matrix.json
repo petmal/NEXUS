@@ -1,0 +1,410 @@
+{
+  "version": "fresh-world-pilot-v1",
+  "recommended_tool_call_limit": 600,
+  "max_turns": 650,
+  "evaluation_seed": "nexus-cross-axis-pilot-v1",
+  "runs": [
+    {
+      "id": "F01",
+      "suite": "controls",
+      "family": "model-revision-v1",
+      "seed": 2073,
+      "theory": 0,
+      "discovery": 0,
+      "planning": 0,
+      "resource": 1,
+      "budget_profile": "standard",
+      "ontology_options": {
+        "guidance": "principles",
+        "finish_policy": "recoverable",
+        "consistency_check": "off"
+      },
+      "expected_budget": 64
+    },
+    {
+      "id": "F02",
+      "suite": "td",
+      "family": "model-revision-v1",
+      "seed": 2073,
+      "theory": 3,
+      "discovery": 5,
+      "planning": 0,
+      "resource": 1,
+      "budget_profile": "standard",
+      "ontology_options": {
+        "guidance": "principles",
+        "finish_policy": "recoverable",
+        "consistency_check": "off"
+      },
+      "expected_budget": 64
+    },
+    {
+      "id": "F03",
+      "suite": "controls",
+      "family": "model-revision-v1",
+      "seed": 2178,
+      "theory": 0,
+      "discovery": 0,
+      "planning": 0,
+      "resource": 1,
+      "budget_profile": "standard",
+      "ontology_options": {
+        "guidance": "principles",
+        "finish_policy": "recoverable",
+        "consistency_check": "off"
+      },
+      "expected_budget": 64
+    },
+    {
+      "id": "F04",
+      "suite": "td",
+      "family": "model-revision-v1",
+      "seed": 2178,
+      "theory": 3,
+      "discovery": 5,
+      "planning": 0,
+      "resource": 1,
+      "budget_profile": "standard",
+      "ontology_options": {
+        "guidance": "principles",
+        "finish_policy": "recoverable",
+        "consistency_check": "off"
+      },
+      "expected_budget": 64
+    },
+    {
+      "id": "F05",
+      "suite": "controls",
+      "family": "compositional-repair-v1",
+      "seed": 541,
+      "theory": 0,
+      "discovery": 0,
+      "planning": 1,
+      "resource": 1,
+      "budget_profile": "standard",
+      "ontology_options": {},
+      "expected_budget": 8
+    },
+    {
+      "id": "F06",
+      "suite": "td",
+      "family": "compositional-repair-v1",
+      "seed": 541,
+      "theory": 3,
+      "discovery": 5,
+      "planning": 1,
+      "resource": 1,
+      "budget_profile": "standard",
+      "ontology_options": {},
+      "expected_budget": 30
+    },
+    {
+      "id": "F07",
+      "suite": "td",
+      "family": "compositional-repair-v1",
+      "seed": 541,
+      "theory": 3,
+      "discovery": 5,
+      "planning": 1,
+      "resource": 1,
+      "budget_profile": "diagnostic-plus6",
+      "ontology_options": {},
+      "expected_budget": 36
+    },
+    {
+      "id": "F08",
+      "suite": "controls",
+      "family": "compositional-repair-v1",
+      "seed": 586,
+      "theory": 0,
+      "discovery": 0,
+      "planning": 1,
+      "resource": 1,
+      "budget_profile": "standard",
+      "ontology_options": {},
+      "expected_budget": 8
+    },
+    {
+      "id": "F09",
+      "suite": "td",
+      "family": "compositional-repair-v1",
+      "seed": 586,
+      "theory": 3,
+      "discovery": 5,
+      "planning": 1,
+      "resource": 1,
+      "budget_profile": "standard",
+      "ontology_options": {},
+      "expected_budget": 30
+    },
+    {
+      "id": "F10",
+      "suite": "td",
+      "family": "compositional-repair-v1",
+      "seed": 586,
+      "theory": 3,
+      "discovery": 5,
+      "planning": 1,
+      "resource": 1,
+      "budget_profile": "diagnostic-plus6",
+      "ontology_options": {},
+      "expected_budget": 36
+    },
+    {
+      "id": "F11",
+      "suite": "pr-a",
+      "family": "stateful-interference-v1",
+      "seed": 107,
+      "theory": 0,
+      "discovery": 0,
+      "planning": 0,
+      "resource": 2,
+      "budget_profile": "standard",
+      "ontology_options": {
+        "horizon": "short",
+        "coupling": "independent"
+      },
+      "expected_budget": null
+    },
+    {
+      "id": "F12",
+      "suite": "pr-a",
+      "family": "stateful-interference-v1",
+      "seed": 107,
+      "theory": 0,
+      "discovery": 0,
+      "planning": 0,
+      "resource": 1,
+      "budget_profile": "standard",
+      "ontology_options": {
+        "horizon": "short",
+        "coupling": "independent"
+      },
+      "expected_budget": null
+    },
+    {
+      "id": "F13",
+      "suite": "pr-a",
+      "family": "stateful-interference-v1",
+      "seed": 107,
+      "theory": 0,
+      "discovery": 0,
+      "planning": 0,
+      "resource": 2,
+      "budget_profile": "standard",
+      "ontology_options": {
+        "horizon": "short",
+        "coupling": "coupled"
+      },
+      "expected_budget": null
+    },
+    {
+      "id": "F14",
+      "suite": "pr-a",
+      "family": "stateful-interference-v1",
+      "seed": 107,
+      "theory": 0,
+      "discovery": 0,
+      "planning": 0,
+      "resource": 1,
+      "budget_profile": "standard",
+      "ontology_options": {
+        "horizon": "short",
+        "coupling": "coupled"
+      },
+      "expected_budget": null
+    },
+    {
+      "id": "F15",
+      "suite": "pr-a",
+      "family": "stateful-interference-v1",
+      "seed": 107,
+      "theory": 0,
+      "discovery": 0,
+      "planning": 0,
+      "resource": 2,
+      "budget_profile": "standard",
+      "ontology_options": {
+        "horizon": "long",
+        "coupling": "independent"
+      },
+      "expected_budget": null
+    },
+    {
+      "id": "F16",
+      "suite": "pr-a",
+      "family": "stateful-interference-v1",
+      "seed": 107,
+      "theory": 0,
+      "discovery": 0,
+      "planning": 0,
+      "resource": 1,
+      "budget_profile": "standard",
+      "ontology_options": {
+        "horizon": "long",
+        "coupling": "independent"
+      },
+      "expected_budget": null
+    },
+    {
+      "id": "F17",
+      "suite": "pr-a",
+      "family": "stateful-interference-v1",
+      "seed": 107,
+      "theory": 0,
+      "discovery": 0,
+      "planning": 0,
+      "resource": 2,
+      "budget_profile": "standard",
+      "ontology_options": {
+        "horizon": "long",
+        "coupling": "coupled"
+      },
+      "expected_budget": null
+    },
+    {
+      "id": "F18",
+      "suite": "pr-a",
+      "family": "stateful-interference-v1",
+      "seed": 107,
+      "theory": 0,
+      "discovery": 0,
+      "planning": 0,
+      "resource": 1,
+      "budget_profile": "standard",
+      "ontology_options": {
+        "horizon": "long",
+        "coupling": "coupled"
+      },
+      "expected_budget": null
+    },
+    {
+      "id": "F19",
+      "suite": "pr-b",
+      "family": "stateful-interference-v1",
+      "seed": 109,
+      "theory": 0,
+      "discovery": 0,
+      "planning": 0,
+      "resource": 1,
+      "budget_profile": "standard",
+      "ontology_options": {
+        "horizon": "short",
+        "coupling": "independent"
+      },
+      "expected_budget": null
+    },
+    {
+      "id": "F20",
+      "suite": "pr-b",
+      "family": "stateful-interference-v1",
+      "seed": 109,
+      "theory": 0,
+      "discovery": 0,
+      "planning": 0,
+      "resource": 2,
+      "budget_profile": "standard",
+      "ontology_options": {
+        "horizon": "short",
+        "coupling": "independent"
+      },
+      "expected_budget": null
+    },
+    {
+      "id": "F21",
+      "suite": "pr-b",
+      "family": "stateful-interference-v1",
+      "seed": 109,
+      "theory": 0,
+      "discovery": 0,
+      "planning": 0,
+      "resource": 1,
+      "budget_profile": "standard",
+      "ontology_options": {
+        "horizon": "short",
+        "coupling": "coupled"
+      },
+      "expected_budget": null
+    },
+    {
+      "id": "F22",
+      "suite": "pr-b",
+      "family": "stateful-interference-v1",
+      "seed": 109,
+      "theory": 0,
+      "discovery": 0,
+      "planning": 0,
+      "resource": 2,
+      "budget_profile": "standard",
+      "ontology_options": {
+        "horizon": "short",
+        "coupling": "coupled"
+      },
+      "expected_budget": null
+    },
+    {
+      "id": "F23",
+      "suite": "pr-b",
+      "family": "stateful-interference-v1",
+      "seed": 109,
+      "theory": 0,
+      "discovery": 0,
+      "planning": 0,
+      "resource": 1,
+      "budget_profile": "standard",
+      "ontology_options": {
+        "horizon": "long",
+        "coupling": "independent"
+      },
+      "expected_budget": null
+    },
+    {
+      "id": "F24",
+      "suite": "pr-b",
+      "family": "stateful-interference-v1",
+      "seed": 109,
+      "theory": 0,
+      "discovery": 0,
+      "planning": 0,
+      "resource": 2,
+      "budget_profile": "standard",
+      "ontology_options": {
+        "horizon": "long",
+        "coupling": "independent"
+      },
+      "expected_budget": null
+    },
+    {
+      "id": "F25",
+      "suite": "pr-b",
+      "family": "stateful-interference-v1",
+      "seed": 109,
+      "theory": 0,
+      "discovery": 0,
+      "planning": 0,
+      "resource": 1,
+      "budget_profile": "standard",
+      "ontology_options": {
+        "horizon": "long",
+        "coupling": "coupled"
+      },
+      "expected_budget": null
+    },
+    {
+      "id": "F26",
+      "suite": "pr-b",
+      "family": "stateful-interference-v1",
+      "seed": 109,
+      "theory": 0,
+      "discovery": 0,
+      "planning": 0,
+      "resource": 2,
+      "budget_profile": "standard",
+      "ontology_options": {
+        "horizon": "long",
+        "coupling": "coupled"
+      },
+      "expected_budget": null
+    }
+  ]
+}

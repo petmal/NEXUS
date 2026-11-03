@@ -22,6 +22,11 @@ short-plan win and a relaxed-world length stop following a fatal detour. Only
 high S05/S21 controls remain absent; unchanged challenge repetitions are paused.
 Do not let these provider/inference diagnostics block the contemporary Astra
 revision/repair anchor or fresh-world qualification for Luna/Flash contrasts.
+The [fresh-world pilot](fresh-world-guide.md) implements this sequence with
+26 fresh conditions per model, Astra/Luna/Flash/Grok presets and the six unchanged
+Astra anchors. All fixtures qualify mechanically. Run this bounded screen before
+selecting broader composition or new dependencies; the guide specifies which
+paired results would justify each next step. No live outcomes are available yet.
 
 ## Choose a base by the question
 
