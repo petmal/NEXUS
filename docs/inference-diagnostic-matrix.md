@@ -1,12 +1,16 @@
 # Focused follow-up after the smaller-model repetitions
 
-**2 November update:** MiniMax Stage A produced three HTTP 429 errors and one
-empty-content stop. Hold B and further MiniMax repetitions. See the
-[interruption report](research/minimax-control-interruption-2026-11-02.md).
-The revised package offers one lower-rate S05 probe through
-`bash probe-minimax-rate.sh` after a cooldown. GLM C/D remains independent.
+**2 November evening results:** [Ten new attempts](research/inference-diagnostic-results-2026-11-02.md)
+complete A/B and one D block. MiniMax has four supported control wins (three
+accepted receipts) and two world-budget losses. No 429 occurs at the unchanged
+10 RPM. GLM high/xhigh stops at length on all four long cases; xhigh 11 was
+already physically infeasible before stopping. Stage C is absent. Recover/run
+C's four high-setting rows next; pause unchanged D repetitions. The earlier
+[429 interruption](research/minimax-control-interruption-2026-11-02.md) remains
+in the record, but its proposed lower-rate probe is no longer the immediate step.
 
-1 November 2026. This is an operator plan; no live evaluation has been run.
+Original plan: 1 November 2026. The stages below are retained as the specification;
+the update above and linked results supersede its immediate run recommendations.
 The [latest synthesis](research/smaller-model-synthesis-2026-11-01.md) supplies
 the rationale. The first two questions are whether MiniMax's response behavior
 is reproducible and whether GLM's long-plan stops depend on its effort setting.
@@ -20,7 +24,7 @@ The world runtime digest is unchanged. Docker is unavailable in the development
 environment; the packaged launcher will recompute qualification locally before
 any model call. Provider-level response changes still need live diagnosis.
 
-## Recommended first wave
+## Original first-wave specification
 
 | Stage | Configuration | Exact rows | Repetitions per row | Attempts | Purpose / admission |
 |---|---|---|---:|---:|---|
@@ -59,7 +63,7 @@ each unattended run. Set the applicable API-key environment variable first.
 ```bash
 cd ~/Downloads/NEXUS-capability-diagnostics-2026-11-02
 
-# Original Stage A plan; currently held pending the lower-rate diagnostic.
+# Original Stage A command; completed in the evening archive, do not repeat by default.
 bash run.sh --model minimax --suite controls --repeat 2 --non-interactive
 
 # Stage B: run only after inspecting A.

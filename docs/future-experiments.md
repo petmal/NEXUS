@@ -15,6 +15,11 @@ composition. The qualification principles below remain in force.
 The immediate [inference diagnostic matrix](inference-diagnostic-matrix.md)
 defines the control gates and a bounded GLM high/xhigh comparison. Reporting and
 launcher refinements preserve the qualified worlds and historical task objects.
+The [2 November evening results](research/inference-diagnostic-results-2026-11-02.md)
+add observable planning errors but no new isolated T/D or R threshold. GLM high
+admission rows remain absent; further unchanged long-case repetitions are paused.
+Do not let these provider/inference diagnostics block the contemporary Astra
+revision/repair anchor or fresh-world qualification for Luna/Flash contrasts.
 
 ## Choose a base by the question
 
