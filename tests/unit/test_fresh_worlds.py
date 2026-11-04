@@ -124,7 +124,7 @@ def test_all_worlds_qualify_and_every_contrast_passes(proof):
 
 
 def test_committed_report_recomputes_without_volatile_nested_timing(proof):
-    committed = read(ROOT / "docs/research/fresh-world-preflight-2026-11-03.json")
+    committed = read(ROOT / "docs/research/fresh-world-preflight-current.json")
     committed.pop("seconds", None)
     assert committed == proof
 
@@ -506,7 +506,7 @@ def test_package_includes_bound_proof_matrix_and_working_links(tmp_path, monkeyp
         "run-all.sh",
         "summarize_results.py",
         "guide.md",
-        "reports/fresh-world-preflight-2026-11-03.json",
+        "reports/fresh-world-preflight-current.json",
         "reports/fresh-world-validation-2026-11-03.md",
     }
     assert required <= release["files_sha256"].keys()

@@ -115,6 +115,17 @@ def physical_plan(episode):
     return actions_for(spec, optimal(spec).modes)
 
 
+def remaining_physical_actions(public_spec, state):
+    """Private diagnostic hook; all apparatus and the seal share one room."""
+    from nexus.ontology.interference.laws import encode
+    from nexus.ontology.interference.planner import continuation_distances
+
+    spec = public_spec.data()
+    artifact = state.artifacts["seal"]
+    distance = continuation_distances(spec)[encode(artifact.data().registers)]
+    return None if distance < 0 else distance + 1 + int(artifact.location != INVENTORY)
+
+
 def measurement(record):
     action = record.action
     if action.type not in ("operate", "probe"):

@@ -19,7 +19,6 @@ from nexus.generator.constructed import (
 )
 from nexus.generator.difficulty import (
     GENERATION_SOLVER_BUDGET,
-    EXECUTION_SLACK,
     MAX_PHYSICAL_OPTIMAL_ACTIONS,
     artifact_projection,
     chain_requires_both_in_order,

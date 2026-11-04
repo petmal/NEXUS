@@ -14,7 +14,6 @@ import platform
 import time
 
 from nexus.engine.canonical import canonical_hash
-from nexus.engine.rules import apply_effect
 from nexus.generator.discovery import analyze_discovery
 from nexus.generator.evidence import Experiment, evidence_csv, candidates_matching_csv
 from nexus.generator.generator import _random_tree, _role_rooms

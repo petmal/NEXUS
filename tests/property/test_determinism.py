@@ -1,6 +1,3 @@
-import pytest
-
-hypothesis = pytest.importorskip("hypothesis")
 from hypothesis import given, settings, strategies as st
 
 from nexus.engine.canonical import canonical_hash

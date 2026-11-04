@@ -18,8 +18,8 @@ from nexus.protocol.http import create_single_session_app
 @pytest.mark.parametrize("d", range(6))
 def test_t0_retains_pre_theory_compiled_episode(d):
     fixture = json.loads((Path(__file__).parents[1] / "fixtures/theory-t0-baseline.json").read_text())
-    # This fixture predates versioned presentation. Preserve its exact bytes;
-    # current/legacy presentation execution parity is covered separately.
+    # This fixture predates versioned presentation and opaque IDs. Preserve all
+    # old compiled bytes after normalizing only the intentionally replaced ID.
     episode = generate_episode(fixture["seed"], discovery_level=d, planning_level=2,
                                verifier_secret=fixture["secret"], presentation_version=None)
     explicit = generate_episode(fixture["seed"], discovery_level=d, planning_level=2,
@@ -28,8 +28,19 @@ def test_t0_retains_pre_theory_compiled_episode(d):
     assert episode == explicit
     payload = episode.model_dump(mode="json")
     assert payload["generation_metadata"].pop("theory_level") == 0
+    import hashlib
+
+    metadata = episode.generation_metadata
+    historical_id = hashlib.sha256(
+        f"nexus-episode|{metadata.scenario_family_id}|d{d}|p2|t{metadata.topology_attempt}".encode()
+    ).hexdigest()[:16]
+    assert episode.public.episode_id != historical_id
+    payload["public"]["episode_id"] = historical_id
     assert canonical_hash(payload) == fixture["hashes"][str(d)]
-    assert PrivateEpisode.model_validate(payload) == episode
+    restored = PrivateEpisode.model_validate(payload)
+    assert restored.public.episode_id == historical_id  # saved historical IDs survive loading
+    restored.public.episode_id = episode.public.episode_id
+    assert restored == episode
 
 
 @pytest.mark.parametrize("d", range(5))

@@ -308,7 +308,7 @@ def test_scientific_human_play_exposes_stocks_and_probe_readings(tmp_path):
     commands='{"type":"take","artifact":"S0-0"}\n{"type":"probe","machine":"meter","artifact":"S0-0.1"}\nexit\n'
     result=CliRunner().invoke(app,["play",str(path)],input=commands)
     assert result.exit_code==0,result.output
-    assert "Specimen stocks" in result.output and '"reading"' in result.output
+    assert "Stocks here" in result.output and '"reading"' in result.output
     assert "Private scientific truth" not in result.output
 
 

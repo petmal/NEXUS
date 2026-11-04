@@ -182,7 +182,7 @@ def uncertainty_proof():
             if uncertainty_oracle(model, build) != law.accepted(model, build):
                 raise ValueError("robust construction disagrees with independent dual-space oracle")
         if any(
-            not tuple(values) in exposures[i] for values in (law.exposure(model, z) for z in points)
+            tuple(values) not in exposures[i] for values in (law.exposure(model, z) for z in points)
         ):
             raise ValueError("observation table misses a possible support point")
     total = Counter()

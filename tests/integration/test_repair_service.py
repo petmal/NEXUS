@@ -64,6 +64,7 @@ def test_save_load_and_interactive_help_support_domain_payloads(tmp_path):
     save_episode(compiled, tmp_path)
     restored = load_private(tmp_path / "private.json")
     assert restored == compiled
-    result = CliRunner().invoke(app, ["play", str(tmp_path / "private.json")], input="help\nquit\n")
+    result = CliRunner().invoke(app, ["play", str(tmp_path / "private.json")], # The initial stores do not reveal apparatus in the separate array room.
+                                input='{"type":"move","target":"array"}\nhelp\nquit\n')
     assert result.exit_code == 0, result.exception
     assert "doser" in result.stdout and "stage" in result.stdout

@@ -348,7 +348,7 @@ def package_setup(cross_axis_setup, tmp_path, monkeypatch):
     code.write_text("# Source binding fixture\n")
     dump(source / "docs/cross-axis-matrix.json", {"runs": []})
     report = {"source_sha256": RUNTIME, "sources": {"example.py": runner.sha256(code.read_bytes())}}
-    report_path = research / "cross-axis-preflight-2026-10-29.json"
+    report_path = research / "cross-axis-preflight-current.json"
     dump(report_path, report)
     validation_calls = []
 
@@ -395,7 +395,7 @@ def test_package_validates_new_report_and_pins_all_routed_configs(package_setup)
     assert (destination / "summarize_results.py").is_file()
     assert len(list(destination.glob("nexus-cross-axis-*-tasks.yaml"))) == 6
     assert {p.name for p in (destination / "reports").iterdir()} == {
-        "cross-axis-preflight-2026-10-29.json",
+        "cross-axis-preflight-current.json",
         "cross-axis-validation-2026-10-29.md",
     }
     assert destination.with_suffix(".zip").is_file()

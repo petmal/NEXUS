@@ -42,7 +42,7 @@ def compact_summary(snapshot: dict, trace) -> dict:
     witness_report = snapshot.get("evidence_witnesses") or {}
     witnesses = witness_report.get("submissions", ())
     return {
-        "version": "operator-summary-v2",
+        "version": "operator-summary-v3",
         "family": str(performance.get("ontology") or "legacy")[:128],
         "status": str(snapshot["status"]["status"])[:80],
         "termination_reason": str(performance.get("termination_reason") or "unknown")[:80],
@@ -65,7 +65,7 @@ def compact_summary(snapshot: dict, trace) -> dict:
             )
         },
         "escape_classification": decision.get("escape_classification"),
-        "physical_goal_satisfied": decision.get("physical_goal_satisfied"),
+        "physical_goal_satisfied": decision.get("physical_goal_satisfied", performance.get("goal_satisfied")),
         "correct_state_without_successful_finish": decision.get(
             "correct_state_without_successful_finish"
         ),
@@ -105,4 +105,5 @@ def compact_summary(snapshot: dict, trace) -> dict:
         "assistance": snapshot.get("assistance", {"construction_check_calls": 0}),
         "receipt_validation": "not_observed_by_service",
         "provider_completion": "not_observed_by_service",
+        "physical_continuation": snapshot.get("physical_continuation"),
     }

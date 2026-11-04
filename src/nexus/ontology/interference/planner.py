@@ -32,6 +32,26 @@ def distances(world, coupling):
     return tuple(distance)
 
 
+@lru_cache(maxsize=16)
+def continuation_distances(spec):
+    """Distance to this target from every vector, not distance from zero."""
+    reverse = [[] for _ in range(SIZE)]
+    for row in tables(spec.resolved, spec.options.coupling):
+        for before, after in enumerate(row):
+            reverse[after].append(before)
+    goal = encode(spec.target)
+    result = [-1] * SIZE
+    result[goal] = 0
+    queue = deque([goal])
+    while queue:
+        after = queue.popleft()
+        for before in reverse[after]:
+            if result[before] < 0:
+                result[before] = result[after] + 1
+                queue.append(before)
+    return tuple(result)
+
+
 @lru_cache(maxsize=32)
 def optimal(spec):
     rows = tables(spec.resolved, spec.options.coupling)

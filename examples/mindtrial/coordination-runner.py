@@ -303,7 +303,7 @@ print(json.dumps(result, separators=(",", ":")))
     model_configs=tuple(zip(FRESH_WORLD_MODELS, FRESH_WORLD_CONFIGS)),
     evaluation_seed="nexus-cross-axis-pilot-v1", control_suite="controls",
     ungated_suites=("anchor",),
-    proof_report="reports/fresh-world-preflight-2026-11-03.json",
+    proof_report="reports/fresh-world-preflight-current.json",
 )
 
 
@@ -746,24 +746,40 @@ def result_coverage(directory, config, tasks):
     }
 
 
-def rate_limited_results(directory):
-    """Recognize recorded HTTP 429 errors without treating world losses as outages."""
+def readout_module(package):
+    filename = package / "summarize_results.py"
+    if not filename.is_file():
+        filename = package / "summarize-pilot-results.py"
+    spec = importlib.util.spec_from_file_location("nexus_pilot_readout", filename)
+    if spec is None or spec.loader is None or not filename.is_file():
+        raise RunnerError("Cannot load the packaged result checker; restore the complete package.")
+    readout = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(readout)
+    return readout
+
+
+def provider_error_results(directory):
+    """Stop later groups on recorded provider failures, not scientific losses."""
+    classify = readout_module(Path(__file__).resolve().parent).classify_provider_error
     try:
         payload = json.loads((directory / "mindtrial.json").read_text())
         return [
-            {"provider": provider, "task": record["Task"], "trace_id": record["TraceID"]}
+            {"provider": provider, "task": record["Task"], "trace_id": record["TraceID"], **error}
             for provider, records in payload["Results"].items()
             for record in records
-            if record.get("Kind") == "Error"
-            and re.search(
-                r"\b429\s+Too Many Requests\b",
-                (record.get("Details", {}).get("Error") or {}).get("Message", ""),
-                re.IGNORECASE,
-            )
+            if (error := classify(record)) is not None
         ]
     except (OSError, ValueError, KeyError, TypeError, AttributeError):
-        # Invalid/missing records are handled by coverage checks, not invented 429s.
+        # Invalid/missing records are handled by coverage checks, not invented outages.
         return []
+
+
+def rate_limited_results(directory):
+    """Compatibility view for operators consuming the old 429-only field."""
+    return [
+        {key: row[key] for key in ("provider", "task", "trace_id")}
+        for row in provider_error_results(directory) if row["http_status"] == 429
+    ]
 
 
 def control_admission(package, release, config_name, config_raw, binary, tasks, *, pilot):
@@ -774,14 +790,7 @@ def control_admission(package, release, config_name, config_raw, binary, tasks, 
     Different release, binary or inference settings cannot inherit admission.
     """
     expected = {task["name"]: task for task in tasks["task-config"]["tasks"]}
-    filename = package / "summarize_results.py"
-    if not filename.is_file():
-        filename = package / "summarize-pilot-results.py"
-    spec = importlib.util.spec_from_file_location("nexus_gate_readout", filename)
-    if spec is None or spec.loader is None:
-        raise RunnerError("Cannot load the control configuration checker.")
-    readout = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(readout)
+    readout = readout_module(package)
     current = json.loads(config_raw)
     configured = {
         (p["name"], r.get("name") or r["model"]): (r, p.get("retry-policy", {}))
@@ -984,15 +993,25 @@ def run_suite(
                 "stopping the batch. Preserve this results folder.",
                 file=sys.stderr,
             )
-    rate_limits = rate_limited_results(directory)
-    if rate_limits:
-        manifest["rate_limited_results"] = rate_limits
+    provider_errors = provider_error_results(directory)
+    if provider_errors:
+        manifest["provider_error_results"] = provider_errors
+        rate_limits = [
+            {key: row[key] for key in ("provider", "task", "trace_id")}
+            for row in provider_errors if row["http_status"] == 429
+        ]
+        if rate_limits:
+            manifest["rate_limited_results"] = rate_limits
         if code == 0:
-            manifest["status"] = "rate_limited"
+            manifest["status"] = (
+                "rate_limited" if len(rate_limits) == len(provider_errors) else "provider_blocked"
+            )
             code = 2
+        statuses = ", ".join(str(s) for s in sorted({e["http_status"] for e in provider_errors}))
         print(
-            "HTTP 429 recorded; stopping before the next group or repetition. "
-            "Preserve results and resolve the provider limit before a new attempt.",
+            f"HTTP {statuses} recorded; stopping before the next group or repetition. "
+            "Preserve results and resolve provider availability, billing or configuration "
+            "before a new attempt. Tasks already submitted in this group cannot be recalled.",
             file=sys.stderr,
         )
     manifest["launcher_exit_code"] = code if code >= 0 else 128 - code

@@ -10,6 +10,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from functools import lru_cache
 from heapq import heappop, heappush
+from collections import defaultdict, deque
 
 from nexus.ontology.planning.layout import LAYOUTS, route
 from nexus.ontology.stateful.laws import DEAD, MODES, WORLD_INDEX, distances, encode, tables
@@ -21,6 +22,33 @@ class Plan:
     actions: int
     modes: tuple[int, ...]
     moves: int
+
+
+@lru_cache(maxsize=16)
+def continuation_distances(world, target, planning):
+    """Exact reverse unit-edge search over vectors and disclosed locations."""
+    layout = LAYOUTS[planning]
+    transitions = tables()[WORLD_INDEX[world]]
+    reverse = defaultdict(list)
+    for state in range(DEAD):
+        for room in layout.rooms:
+            before = state, room
+            for left, right in layout.edges:
+                if room in (left, right):
+                    reverse[state, right if room == left else left].append(before)
+            for mode, location in enumerate(layout.mode_rooms):
+                if room == location and (after := transitions[mode][state]) != DEAD:
+                    reverse[after, room].append(before)
+    goal = encode(target), layout.finish
+    result = {goal: 0}
+    queue = deque([goal])
+    while queue:
+        after = queue.popleft()
+        for before in reverse[after]:
+            if before not in result:
+                result[before] = result[after] + 1
+                queue.append(before)
+    return result
 
 
 @lru_cache(maxsize=1024)

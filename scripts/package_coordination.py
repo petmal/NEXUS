@@ -22,7 +22,7 @@ def validate_fresh_world_reports(root, runtime_source_sha256):
     sys.modules[spec.name] = module
     spec.loader.exec_module(module)
     pilot = module.Pilot.model_validate_json((root / "docs/fresh-world-matrix.json").read_text())
-    report = json.loads((root / "docs/research/fresh-world-preflight-2026-11-03.json").read_text())
+    report = json.loads((root / "docs/research/fresh-world-preflight-current.json").read_text())
     if report.get("source_sha256") != runtime_source_sha256:
         raise ValueError("fresh-world runtime digest differs")
     module.validate_report(pilot, report)
@@ -43,7 +43,7 @@ def validate_cross_axis_reports(root, runtime_source_sha256):
     try:
         pilot = Pilot.model_validate_json((root / "docs/cross-axis-matrix.json").read_bytes())
         report = json.loads(
-            (root / "docs/research/cross-axis-preflight-2026-10-29.json").read_bytes()
+            (root / "docs/research/cross-axis-preflight-current.json").read_bytes()
         )
     except (OSError, ValueError) as exc:
         raise ValueError("cross-axis matrix or preflight report cannot be read") from exc
@@ -304,6 +304,7 @@ def main(pilot_name="coordination"):
         "run.sh": examples / f"{pilot_name}-run.sh",
         "runner.py": examples / f"{pilot_name}-runner.py",
         "README.md": examples / f"{pilot_name}-run.md",
+        "summarize_results.py": examples / "summarize-pilot-results.py",
         **{name: examples / name for name in profile.configs},
         **{
             f"nexus-{pilot_name}-{suite}-tasks.yaml": examples
@@ -347,7 +348,7 @@ def main(pilot_name="coordination"):
             "interference-comparison-validation-2026-10-27.md",
         ),
         "capability-smoke": (
-            "cross-axis-preflight-2026-10-29.json",
+            "cross-axis-preflight-current.json",
             "capability-smoke-validation-2026-10-31.md",
             "capability-controls-results-2026-10-31.md",
             "capability-controls-results-2026-10-31.json",
@@ -368,11 +369,11 @@ def main(pilot_name="coordination"):
             "smoke-findings-2026-10-31.json",
         ),
         "cross-axis": (
-            "cross-axis-preflight-2026-10-29.json",
+            "cross-axis-preflight-current.json",
             "cross-axis-validation-2026-10-29.md",
         ),
         "fresh-world": (
-            "fresh-world-preflight-2026-11-03.json",
+            "fresh-world-preflight-current.json",
             "fresh-world-validation-2026-11-03.md",
             "fresh-world-initial-results-2026-11-03.md",
             "fresh-world-initial-results-2026-11-03.json",
@@ -416,7 +417,9 @@ def main(pilot_name="coordination"):
     if pilot_name == "fresh-world":
         guide = destination / "guide.md"
         guide.write_text(guide.read_text().replace("(research/", "(reports/")
-                         .replace("(fresh-world-matrix.json)", "(matrix.json)"))
+                         .replace("(fresh-world-matrix.json)", "(matrix.json)")
+                         .replace("(evaluation-guide.md)",
+                                  f"(https://github.com/petmal/NEXUS/blob/{commit}/docs/evaluation-guide.md)"))
         readme = destination / "README.md"
         readme.write_text(readme.read_text().replace("(../../docs/fresh-world-guide.md)",
                                                    "(guide.md)"))
