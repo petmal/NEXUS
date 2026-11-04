@@ -77,6 +77,8 @@ class Effect(BaseModel):
         if self.kind == EffectKind.MULTIPLY_MOD:
             if self.field != "value" or self.multiplier is None or self.modulus is None:
                 raise ValueError("multiply_mod requires field='value', multiplier, modulus")
+        if self.kind in {EffectKind.ADD_MOD, EffectKind.MULTIPLY_MOD} and self.modulus > 11:
+            raise ValueError("value arithmetic modulus must not exceed the artifact domain 0..10")
         if self.kind == EffectKind.TOGGLE and self.field != "polarity":
             raise ValueError("toggle currently supports only polarity")
         if self.kind == EffectKind.ROTATE and self.amount is None:

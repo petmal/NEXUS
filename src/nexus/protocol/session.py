@@ -138,6 +138,11 @@ def _goal_deficits(goal: GoalPredicate, state: WorldState) -> tuple[str, ...]:
 
 class Session:
     def __init__(self, episode: PrivateEpisode):
+        if (
+            episode.public.investigation is None
+            and episode.generation_metadata.guaranteed_policy_action_count <= 0
+        ):
+            raise ValueError("legacy sessions require qualified guaranteed-policy metadata")
         self.episode = episode
         self.state: WorldState = episode.public.initial_state.model_copy(deep=True)
         self.trace: list[TraceRecord] = []
@@ -148,6 +153,7 @@ class Session:
         self._duplicate_requests = 0
         self._protocol_conflicts = 0
         self._construction_checks = 0
+        self._evaluator_finalized = False
         self._lock = RLock()
 
     def _public_effect(self):
@@ -252,6 +258,7 @@ class Session:
         """
         with self._lock:
             from nexus.protocol.operator_witnesses import submission_witnesses
+            from nexus.protocol.physical_cost import continuation_report
 
             if self.episode.public.investigation is not None:
                 from nexus.protocol.investigation_metrics import summarize
@@ -279,7 +286,14 @@ class Session:
                 if witnesses is None
                 else witnesses.model_dump(mode="json"),
                 "assistance": {"construction_check_calls": self._construction_checks},
+                "physical_continuation": continuation_report(self.episode, self.trace),
+                "evaluator_finalized": self._evaluator_finalized,
             }
+
+    def audit_snapshot(self):
+        """One coherent private snapshot; never exposed by a player endpoint."""
+        with self._lock:
+            return self.state_snapshot(), self.trace_snapshot(), self.operator_snapshot()
 
     def _status(self) -> SessionStatus:
         with self._lock:
@@ -302,6 +316,7 @@ class Session:
         makes premature access fail closed rather than providing a usable mid-game hint channel.
         """
         with self._lock:
+            self._evaluator_finalized = True
             if self.state.terminal_status == TerminalStatus.ACTIVE:
                 self.state.terminal_status = TerminalStatus.FAILED
             performance = self._performance_summary()
@@ -388,6 +403,8 @@ class Session:
 
     def _act(self, expected_turn: int, action: Action) -> ActionResponse:
         with self._lock:
+            if type(expected_turn) is not int or expected_turn < 0:
+                raise ValueError("expected_turn must be a nonnegative integer")
             cached = self._turn_cache.get(expected_turn)
             if cached is not None:
                 cached_action, cached_response = cached

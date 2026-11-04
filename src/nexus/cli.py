@@ -237,81 +237,114 @@ def solve_episode(
 @app.command()
 def play(
     private: Path = typer.Argument(..., exists=True, readable=True),
-    debug_private: bool = typer.Option(False, help="Show hidden rule/reference plan"),
+    debug_private: bool = typer.Option(False, help="Unscored operator view with hidden rules."),
+    audit_dir: Path | None = typer.Option(None, help="New private audit directory; never share with the player."),
 ) -> None:
-    """Play interactively by entering one JSON action per line.
-
-    Type help, actions, or ? for the action reference. Use evidence <filename> to read a
-    public evidence file without consuming an environment action.
-    """
+    """Play a compiled world. Type help for controls; quit ends the local session."""
     from nexus.io import load_private
+
+    _play(load_private(private), debug_private=debug_private, audit_dir=audit_dir)
+
+
+def _play(episode, *, debug_private=False, audit_dir=None):
+    from nexus.models.actions import ACTION_ADAPTER
+    from nexus.protocol.audit import AuditRecorder
+    from nexus.protocol.session import Session
+    from nexus.render.player import render_player
+
+    session = Session(episode)
+    recorder = AuditRecorder(session, audit_dir) if audit_dir is not None else None
+    try:
+        manifest = session.manifest()
+        console.print(manifest.description, markup=False)
+        console.print("Read the mission and evidence, make a plan, then use finish to claim success.")
+        console.print("Evidence files: " + ", ".join(manifest.evidence_files), markup=False)
+        console.print("Commands: look, mission, evidence <filename>, help, quit. These are free.\n"
+                      'Actions use JSON; for example: {"type":"wait"}. Wait consumes an action.')
+        if debug_private:
+            console.print("[yellow]Unscored operator mode: private information is visible.[/yellow]")
+        while True:
+            render_player(session.observe(), console=console)
+            if debug_private:
+                from nexus.render.observer import render_observer
+                render_observer(episode, session.state_snapshot(), console=console, debug_private=True)
+            if session.state.terminal_status.value != "active":
+                break
+            try:
+                raw = console.input("[bold cyan]nexus>[/bold cyan] ").strip()
+            except (EOFError, KeyboardInterrupt):
+                break
+            parts = raw.split(maxsplit=1)
+            command = parts[0].lower() if parts else ""
+            if command in {"quit", "exit"}:
+                break
+            if command in {"help", "actions", "?"}:
+                _print_play_reference(contract=manifest.action_contract)
+            elif command in {"look", "status", ""}:
+                continue
+            elif command == "mission":
+                console.print(manifest.description, markup=False)
+                console.print_json(data=manifest.goal.model_dump(mode="json"))
+                console.print("Evidence files: " + ", ".join(manifest.evidence_files), markup=False)
+            elif command == "evidence":
+                if len(parts) != 2:
+                    console.print("Usage: evidence <filename>")
+                    continue
+                try:
+                    console.print(session.evidence(parts[1]), markup=False, highlight=False)
+                except KeyError:
+                    console.print("Unknown file. Type mission to list evidence files.")
+            else:
+                try:
+                    action = ACTION_ADAPTER.validate_python(json.loads(raw))
+                except (ValueError, TypeError) as exc:
+                    console.print(f"Invalid action JSON: {exc}", markup=False)
+                    console.print("Type help for valid actions.")
+                    continue
+                response = session.act(session.state.turn, action)
+                console.print(response.message, markup=False)
+                if response.events:
+                    console.print_json(data=list(response.events))
+                if recorder is not None:
+                    recorder.checkpoint_safely()
+                if response.victory_code:
+                    console.print("Victory receipt: " + response.victory_code, markup=False)
+    finally:
+        if recorder is not None:
+            recorder.close()
+
+
+@app.command()
+def demo(interactive: bool = typer.Option(False, "--play", help="Play the introductory world yourself.")) -> None:
+    """Try NEXUS locally. No model account or API key is needed."""
+    from nexus.generator import generate_episode
     from nexus.models.actions import ACTION_ADAPTER
     from nexus.protocol.session import Session
-    from nexus.render.observer import render_observer
+    from nexus.render.player import render_player
 
-    session = Session(load_private(private))
-    render_observer(session.episode, session.state, debug_private=debug_private)
-    from nexus.presentation import description, evidence_files
-    console.print(description(session.episode.public))
-    console.print(
-        "Evidence files: "
-        + ", ".join(sorted(session.episode.public.evidence_files))
-    )
-    console.print(
-        'Enter JSON actions such as {"type":"move","target":"R1"}. '
-        "Type [bold]help[/bold] for all actions; use [bold]evidence <filename>[/bold] "
-        "to read public evidence; Ctrl-D exits."
-    )
-    while session.state.terminal_status.value == "active":
-        try:
-            raw = console.input("[bold cyan]nexus>[/bold cyan] ")
-        except EOFError:
-            break
-
-        stripped = raw.strip()
-        parts = stripped.split(maxsplit=1)
-        command = parts[0].lower() if parts else ""
-
-        if command in {"help", "actions", "?"}:
-            from nexus.ontology.catalog import runtime_for
-            spec = session.episode.public.investigation
-            _print_play_reference(
-                scientific=spec is not None,
-                resonant=getattr(spec, "version", None) == "resonant-network-v1",
-                contract=runtime_for(spec).public_contract(spec) if spec is not None else None,
-            )
-            continue
-        if command in {"quit", "exit"}:
-            break
-        if command == "evidence":
-            if len(parts) != 2 or not parts[1].strip():
-                console.print("[red]usage:[/red] evidence <filename>")
-                continue
-            filename = parts[1].strip()
-            content = evidence_files(session.episode.public).get(filename)
-            if content is None:
-                console.print(f"[red]evidence file not found:[/red] {filename}")
-                continue
-            console.print(content, markup=False, highlight=False, end="")
-            if not content.endswith("\n"):
-                console.print()
-            continue
-
-        try:
-            action = ACTION_ADAPTER.validate_python(json.loads(raw))
-        except Exception as exc:
-            console.print(f"[red]invalid action JSON:[/red] {exc}")
-            console.print("Type [bold]help[/bold] to see valid actions.")
-            continue
+    episode = generate_episode(17, discovery_level=0, planning_level=0, resource_pressure=0)
+    if interactive:
+        _play(episode)
+        return
+    session = Session(episode)
+    manifest = session.manifest()
+    console.print("NEXUS guided demonstration — an unscored reference solution.", markup=False)
+    console.print(manifest.description, markup=False)
+    for name in manifest.evidence_files:
+        console.print(f"Evidence: {name}", markup=False)
+        console.print(session.evidence(name), markup=False, highlight=False)
+    render_player(session.observe(), console=console)
+    for raw in episode.reference_plan:
+        action = ACTION_ADAPTER.validate_python(raw)
+        console.print(action.model_dump_json(), markup=False)
         response = session.act(session.state.turn, action)
         if not response.ok:
-            console.print(f"[red]{response.message}[/red]")
-            continue
-        render_observer(session.episode, session.state, debug_private=debug_private)
-        if session.episode.public.investigation is not None and response.events:
-            console.print_json(data=list(response.events))
-        if response.victory_code:
-            console.print(f"[bold green]{response.victory_code}[/bold green]")
+            raise RuntimeError("demo reference action failed")
+        render_player(response.observation, console=console)
+    if not response.victory_code:
+        raise RuntimeError("demo did not produce a victory receipt")
+    console.print("Success was checked by the engine. Receipt: " + response.victory_code, markup=False)
+    console.print("Try it yourself: nexus demo --play")
 
 
 @app.command("replay")
@@ -333,12 +366,15 @@ def replay_trace(
 
 
 @app.command()
-def stdio(private: Path = typer.Argument(..., exists=True, readable=True)) -> None:
+def stdio(
+    private: Path = typer.Argument(..., exists=True, readable=True),
+    audit_dir: Path | None = typer.Option(None, help="New private audit directory."),
+) -> None:
     """Run the JSONL stdin/stdout machine protocol for an external agent harness."""
     from nexus.io import load_private
     from nexus.protocol.stdio import run_jsonl
 
-    run_jsonl(load_private(private), sys.stdin, sys.stdout)
+    run_jsonl(load_private(private), sys.stdin, sys.stdout, audit_directory=audit_dir)
 
 
 @app.command()
@@ -409,6 +445,9 @@ def serve_session(
         False, envvar="NEXUS_EXTENDED_DIAGNOSTICS",
         help="Private operator action journal and terminal/shutdown evidence diagnostics.",
     ),
+    audit_dir: Path | None = typer.Option(
+        None, envvar="NEXUS_AUDIT_DIR", help="New private audit directory; keep outside the player sandbox.",
+    ),
     generation_timing: bool = typer.Option(
         False, envvar="NEXUS_GENERATION_TIMING",
         help="Log generation stage timings to operator stderr; keep service logs private.",
@@ -460,7 +499,28 @@ def serve_session(
         raise typer.BadParameter("install nexus-benchmark[server]") from exc
     from nexus.protocol.http import create_single_session_app
 
-    uvicorn.run(create_single_session_app(episode, extended_diagnostics=extended_diagnostics), host=host, port=port)
+    uvicorn.run(create_single_session_app(episode, extended_diagnostics=extended_diagnostics, audit_directory=audit_dir), host=host, port=port)
+
+
+@app.command("verify-audit")
+def verify_audit(
+    directory: Path = typer.Argument(..., exists=True, file_okay=False),
+    as_json: bool = typer.Option(False, "--json"),
+) -> None:
+    """Check a private audit bundle with its matching NEXUS source revision."""
+    from nexus.protocol.audit import verify_bundle
+
+    try:
+        result = verify_bundle(directory)
+    except (ValueError, OSError, KeyError, TypeError) as exc:
+        typer.echo(f"Audit verification failed: {exc}", err=True)
+        raise typer.Exit(code=2) from exc
+    if as_json:
+        _write_json(result)
+    else:
+        console.print_json(data=result)
+    if not result["public_capture_complete"]:
+        raise typer.Exit(code=2)
 
 
 @app.command("request")

@@ -85,6 +85,27 @@ def physical_plan(episode):
     return actions_for(plan.modes, spec.planning)
 
 
+def remaining_physical_actions(public_spec, state):
+    """Known-law physical continuation, including retrieving a dropped seal."""
+    from nexus.models.world import INVENTORY
+    from nexus.ontology.planning.layout import route
+    from nexus.ontology.planning.planner import continuation_distances
+    from nexus.ontology.stateful.laws import DEAD
+
+    spec = public_spec.data()
+    artifact = state.artifacts["seal"]
+    vector = history_states(artifact.data().history)[WORLD_INDEX[spec.resolved]]
+    if vector == DEAD:
+        return None
+    room = state.agent_room
+    retrieve = 0
+    if artifact.location != INVENTORY:
+        retrieve = len(route(spec.planning, room, artifact.location)) + 1
+        room = artifact.location
+    distance = continuation_distances(spec.resolved, spec.target, spec.planning).get((vector, room))
+    return None if distance is None else retrieve + distance + 1
+
+
 def public_contract(spec):
     result = stateful.public_contract(spec)
     result["ontology"].update(

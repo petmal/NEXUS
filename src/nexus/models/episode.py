@@ -38,6 +38,15 @@ class PublicEpisode(BaseModel):
 
     @model_validator(mode="after")
     def validate_world(self) -> "PublicEpisode":
+        for filename in self.evidence_files:
+            # Attachments are flat files, not paths or URL fragments. Validate
+            # compiled input before any filesystem write or evidence endpoint.
+            if (
+                not filename or filename in (".", "..")
+                or any(c in filename for c in ("/", "\\", "\x00", ":"))
+                or any(ord(c) < 32 for c in filename)
+            ):
+                raise ValueError("evidence filenames must be safe, nonempty basenames")
         if self.initial_state.agent_room not in self.rooms:
             raise ValueError("agent starts in unknown room")
         for left, right in self.edges:

@@ -20,6 +20,41 @@ CALL_OUTPUT = re.compile(r": nexus\[([^\]]+)\]: tool container .* stdout:$")
 CALL_FINISH = re.compile(r": nexus\[([^\]]+)\]: call finished: status=([^ ]+)")
 CALL_INVALID = re.compile(r": nexus\[([^\]]+)\]: failed to parse input arguments:")
 STOP_REASON = re.compile(r': stop reason: "([^"\n]+)" \(terminal: (true|false)\)$')
+HTTP_ERROR = re.compile(
+    r"\b(?:HTTP(?:/\d(?:\.\d)?)?\s+|(?:API\s+)?(?:error|status)(?:\s+code)?\s*[:=]?\s*)"
+    r"([45]\d{2})\b|\b(401|402|403|408|429|500|502|503|504)\s+"
+    r"(?:Unauthorized|Payment Required|Forbidden|Request Timeout|Too Many Requests|"
+    r"Internal Server Error|Bad Gateway|Service Unavailable|Gateway Timeout)\b",
+    re.IGNORECASE,
+)
+
+
+def classify_provider_error(record):
+    """Classify recorded transport failures, never model answers or bare numbers.
+
+    A stop here is operational: it says nothing about whether earlier world
+    actions already made the task unwinnable. Keep that independent evidence.
+    """
+    if record.get("Kind") != "Error":
+        return None
+    details = record.get("Details") or {}
+    error = details.get("Error") or {}
+    message = error.get("Message", "") if isinstance(error, dict) else ""
+    if not isinstance(message, str):
+        return None
+    match = HTTP_ERROR.search(message)
+    if match is None:
+        return None
+    status = int(match[1] or match[2])
+    category = (
+        "billing_or_quota" if status == 402
+        else "rate_limited" if status == 429
+        else "authentication" if status == 401
+        else "permission_denied" if status == 403
+        else "provider_unavailable" if status >= 500 or status == 408
+        else "request_rejected"
+    )
+    return {"http_status": status, "category": category, "stop_batch": True}
 
 
 def read(path):
@@ -78,6 +113,8 @@ def log_evidence(path, records):
                         "performance": None,
                         "structure": None,
                         "last_stop": None,
+                        "operator_report": None,
+                        "operator_summary": None,
                     }
                 if active:
                     for other in active | {trace}:
@@ -113,6 +150,7 @@ def log_evidence(path, records):
             for marker, key in (
                 ("NEXUS terminal performance: ", "performance"),
                 ("interference_structure ", "structure"),
+                ("NEXUS operator summary: ", "operator_summary"),
             ):
                 if marker in line:
                     try:
@@ -124,6 +162,15 @@ def log_evidence(path, records):
                             blocks[context][key] = value
                         else:
                             blocks[context]["ambiguous"] = True
+            marker = "NEXUS operator diagnostic: "
+            if marker in line:
+                try:
+                    value = json.loads(line.split(marker, 1)[1])
+                except ValueError:
+                    blocks[context]["ambiguous"] = True
+                else:
+                    if isinstance(value, dict) and value.get("kind") == "report":
+                        blocks[context]["operator_report"] = value
     return first_task, blocks
 
 
@@ -187,6 +234,13 @@ def attempt_diagnostics(record, telemetry, block, *, log_exists):
         "provider_stop_reason": None,
         "provider_stop_source": None,
         "provider_http_status": None,
+        "provider_error": None,
+        "world_win_observed": None,
+        "physical_goal_satisfied": None,
+        "evidence_support": None,
+        "first_submission_evidence_support": None,
+        "correct_state_without_successful_finish": None,
+        "physical_continuation": None,
         "response_text_present": None,
         "tool_count_convention": None,
         "structure": None,
@@ -234,7 +288,9 @@ def attempt_diagnostics(record, telemetry, block, *, log_exists):
             )
             if type(value) is int
         ]
-        performance = block["performance"] or {}
+        performance = block["performance"] or (block.get("operator_report") or {}).get("performance") or {}
+        summary = block.get("operator_summary") or {}
+        decision = performance.get("decision_diagnostics") or summary
         states = []
         for response in responses:
             state = response.get("observation", response)
@@ -255,9 +311,9 @@ def attempt_diagnostics(record, telemetry, block, *, log_exists):
             world_access=True if responses else False if complete else None,
             successful_nexus_responses_observed=len(responses),
             tool_log_complete=complete,
-            terminal_status=performance.get("terminal_status"),
-            termination_reason=performance.get("termination_reason"),
-            accepted_world_actions=performance.get("actions_used"),
+            terminal_status=performance.get("terminal_status", summary.get("status")),
+            termination_reason=performance.get("termination_reason", summary.get("termination_reason")),
+            accepted_world_actions=performance.get("actions_used", summary.get("turn")),
             last_observed_turn=max(turns) if turns else None,
             last_observed_world_state=states[-1] if states else None,
             tool_count_convention=(
@@ -268,13 +324,27 @@ def attempt_diagnostics(record, telemetry, block, *, log_exists):
                 else "unresolved"
             ),
             structure=block["structure"],
+            world_win_observed=(performance.get("terminal_status", summary.get("status")) == "won")
+            if performance.get("terminal_status", summary.get("status")) in ("active", "won", "failed") else None,
+            physical_goal_satisfied=(decision["physical_goal_satisfied"]
+                if decision.get("physical_goal_satisfied") is not None else performance.get("goal_satisfied")),
+            evidence_support=decision.get("escape_classification"),
+            first_submission_evidence_support=performance.get(
+                "first_submission_supported_by_evidence", summary.get("first_submission_supported_by_evidence")
+            ),
+            correct_state_without_successful_finish=decision.get(
+                "correct_state_without_successful_finish"
+            ),
+            physical_continuation=summary.get("physical_continuation") or (block.get("operator_report") or {}).get("physical_continuation"),
         )
     details = record.get("Details") or {}
     message = (details.get("Error") or {}).get("Message", "")
     answer = details.get("Answer") or {}
     if record["Kind"] == "Error":
-        if re.search(r"\b429\s+Too Many Requests\b", message, re.IGNORECASE):
-            result["provider_http_status"] = 429
+        provider_error = classify_provider_error(record)
+        result["provider_error"] = provider_error
+        if provider_error is not None:
+            result["provider_http_status"] = provider_error["http_status"]
         reason = ((details.get("Error") or {}).get("Details") or {}).get("Stop Reason")
         if isinstance(reason, list) and len(reason) == 1:
             reason = reason[0]
@@ -292,16 +362,27 @@ def attempt_diagnostics(record, telemetry, block, *, log_exists):
     elif "no actionable content" in message or "no response candidates" in message:
         result["response_text_present"] = False
     state = result["last_observed_world_state"] or {}
+    if result["world_win_observed"] is None and state.get("status") in ("active", "won", "failed"):
+        result["world_win_observed"] = state["status"] == "won"
     if record["Kind"] == "Passed":
         result["outcome"] = "reported_win"
     elif result["terminal_status"] == "won" or state.get("status") == "won":
         result["outcome"] = "world_won_without_accepted_result"
+    elif (
+        type((result["physical_continuation"] or {}).get("first_budget_infeasible_turn")) is int
+    ):
+        result["outcome"] = (
+            "budget_infeasible_before_provider_error"
+            if result["provider_error"] is not None else "budget_infeasible"
+        )
     elif result["termination_reason"] == "action_budget" or (
         state.get("status") == "failed" and state.get("actions_remaining") == 0
     ):
         result["outcome"] = "action_budget_exhausted"
     elif result["provider_http_status"] == 429:
         result["outcome"] = "http_rate_limited"
+    elif result["provider_error"] is not None:
+        result["outcome"] = "http_" + result["provider_error"]["category"]
     elif result["provider_stop_reason"] == "length":
         result["outcome"] = (
             "response_length_with_text"
@@ -346,6 +427,7 @@ def summarize(directory):
     expected = {
         (p["name"], r["name"], r["model"], t["name"])
         for p in config["providers"]
+        if not p.get("disabled", False)
         for r in p["runs"]
         if not r.get("disabled", False)
         for t in tasks
@@ -354,6 +436,7 @@ def summarize(directory):
     configured = {
         (p["name"], r["name"], r["model"]): r
         for p in config["providers"]
+        if not p.get("disabled", False)
         for r in p["runs"]
         if not r.get("disabled", False)
     }
@@ -468,7 +551,7 @@ def summarize(directory):
             }
         )
     return {
-        "version": "nexus-pilot-readout-v3",
+        "version": "nexus-pilot-readout-v4",
         "app_version": result.get("AppVersion"),
         "result_file_status": result_file_status,
         "source_commit": manifest["source_commit"],
@@ -485,6 +568,11 @@ def summarize(directory):
         "matrix_complete": set(seen) == expected
         and all(v == 1 for v in seen.values())
         and not mismatches,
+        "error_attempts": sum(r["reported_kind"] == "Error" for r in rows),
+        "provider_error_attempts": sum(r["diagnostics"]["provider_error"] is not None for r in rows),
+        "completed_without_provider_errors": set(seen) == expected
+        and all(v == 1 for v in seen.values())
+        and not mismatches and all(r["diagnostics"]["provider_error"] is None for r in rows),
         "configuration_mismatch_trace_ids": mismatches,
         "missing": [list(k) for k in sorted(expected - seen.keys())],
         "unexpected": [list(k) for k in sorted(seen.keys() - expected)],

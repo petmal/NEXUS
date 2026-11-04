@@ -66,6 +66,31 @@ def test_reported_astra_config_matches_the_uploaded_control_fixture():
     )
 
 
+@pytest.mark.parametrize("message,status,category", [
+    ("Error 402, Message: Your prepayment credits are depleted.", 402, "billing_or_quota"),
+    ("retryable error: 503 Service Unavailable", 503, "provider_unavailable"),
+    ("HTTP/1.1 429 Too Many Requests", 429, "rate_limited"),
+    ("API error: 401 Unauthorized", 401, "authentication"),
+    ("HTTP status: 403 Forbidden", 403, "permission_denied"),
+    ("status code=400 invalid model", 400, "request_rejected"),
+    ("API error: 408 Request Timeout", 408, "provider_unavailable"),
+])
+def test_provider_status_is_typed_without_inventing_a_scientific_loss(message, status, category):
+    record = {"Kind": "Error", "Details": {"Error": {"Message": message}}}
+    assert readout.classify_provider_error(record) == {
+        "http_status": status, "category": category, "stop_batch": True,
+    }
+    record["Kind"] = "Failed"
+    assert readout.classify_provider_error(record) is None
+
+
+@pytest.mark.parametrize("message", ["used 402 tokens", "stop reason: length", "no actionable content", None])
+def test_provider_status_does_not_guess_from_numbers_or_completion_failures(message):
+    assert readout.classify_provider_error(
+        {"Kind": "Error", "Details": {"Error": {"Message": message}}}
+    ) is None
+
+
 def write(directory, name, value):
     raw = json.dumps(value).encode()
     (directory / name).write_bytes(raw)
@@ -589,3 +614,59 @@ def test_http_error_and_structured_stop_reason_survive_without_log(
     assert d["outcome"] == outcome and d["provider_stop_reason"] == stop
     assert d["provider_http_status"] == (429 if outcome == "http_rate_limited" else None)
     assert d["world_access"] is None
+
+
+def test_compact_summary_survives_truncated_full_report_and_preserves_provider_error(tmp_path):
+    raw = fixture(tmp_path)
+    record = raw['Results']['openai'][0]
+    record.update(Kind='Error', Details={'Error': {'Message': 'API error: 402 credits exhausted',
+                  'ToolCalls': [], 'ToolUsage': {'nexus': {'CallCount': 0}}}})
+    write(tmp_path, 'mindtrial.json', raw)
+    summary = {'version': 'operator-summary-v3', 'status': 'failed', 'turn': 4,
+               'physical_goal_satisfied': False, 'escape_classification': 'no_escape',
+               'first_submission_supported_by_evidence': None,
+               'physical_continuation': {'available': True, 'first_budget_infeasible_turn': 2}}
+    log = log_block(record, [], finish=False) + 'NEXUS operator summary: ' + json.dumps(summary) + '\n'
+    (tmp_path / 'mindtrial.log').write_text(log)
+    result = readout.summarize(tmp_path)
+    row = result['rows'][0]
+    diagnostic = row['diagnostics']
+    assert row['reported_kind'] == 'Error'
+    assert diagnostic['provider_error']['http_status'] == 402
+    assert diagnostic['accepted_world_actions'] == 4
+    assert diagnostic['physical_goal_satisfied'] is False
+    assert diagnostic['world_win_observed'] is False
+    assert diagnostic['outcome'] == 'budget_infeasible_before_provider_error'
+    assert not result['completed_without_provider_errors']
+
+
+def test_disabled_provider_is_not_part_of_expected_denominator(tmp_path):
+    fixture(tmp_path)
+    config = json.loads((tmp_path / 'config.yaml').read_text())
+    config['config']['providers'].append({'name': 'unused', 'disabled': True,
+                                        'runs': [{'name': 'never', 'model': 'never'}]})
+    digest = write(tmp_path, 'config.yaml', config)
+    manifest = json.loads((tmp_path / 'manifest.json').read_text())
+    manifest['effective_config_sha256'] = digest
+    write(tmp_path, 'manifest.json', manifest)
+    assert readout.summarize(tmp_path)['matrix_complete']
+
+
+def test_summary_does_not_call_model_length_a_provider_error(tmp_path):
+    raw = fixture(tmp_path)
+    record = raw['Results']['openai'][0]
+    record.update(Kind='Error', Details={'Error': {'Message': 'model returned no actionable content (stop reason: length)'}})
+    write(tmp_path, 'mindtrial.json', raw)
+    report = readout.summarize(tmp_path)
+    assert report['error_attempts'] == 1
+    assert report['provider_error_attempts'] == 0
+    assert report['completed_without_provider_errors']
+
+
+def test_old_summary_null_does_not_erase_legacy_physical_goal(tmp_path):
+    raw = fixture(tmp_path)
+    record = raw['Results']['openai'][0]
+    log = log_block(record, [], performance={'terminal_status': 'won', 'goal_satisfied': True}, finish=False)
+    log += 'NEXUS operator summary: ' + json.dumps({'status': 'won', 'physical_goal_satisfied': None}) + '\n'
+    (tmp_path / 'mindtrial.log').write_text(log)
+    assert readout.summarize(tmp_path)['rows'][0]['diagnostics']['physical_goal_satisfied'] is True

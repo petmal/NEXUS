@@ -8,7 +8,7 @@ WORKDIR /app
 ENV UV_NO_CACHE=1
 ENV PATH="/app/.venv/bin:$PATH"
 
-COPY pyproject.toml uv.lock README.md ./
+COPY pyproject.toml uv.lock README.md LICENSE ./
 COPY src ./src
 COPY scripts/preflight_planning.py ./scripts/
 COPY scripts/preflight_coordination.py ./scripts/

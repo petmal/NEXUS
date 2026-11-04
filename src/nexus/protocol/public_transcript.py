@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import base64
 import json
+import logging
 from contextvars import ContextVar
 from pathlib import Path
 from threading import Lock
@@ -29,6 +30,7 @@ class PublicTranscript:
         self._seen = 0
         self._incomplete = False
         self._lock = Lock()
+        self.sink = None
 
     def append(self, request, response, *, effects=(), transport="direct", complete=True):
         with self._lock:
@@ -52,6 +54,14 @@ class PublicTranscript:
                 return
             self._records.append(encoded)
             self._bytes += size
+            if self.sink is not None:
+                try:
+                    self.sink(encoded)
+                except OSError:
+                    self._incomplete = True
+                    # A recording failure must not turn a committed action into
+                    # an ambiguous player error. Coverage fails closed instead.
+                    logging.getLogger("nexus.operator").exception("audit exchange write failed")
 
     def snapshot(self):
         with self._lock:

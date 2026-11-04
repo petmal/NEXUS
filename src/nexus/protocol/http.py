@@ -1,19 +1,18 @@
 from __future__ import annotations
 
 from contextlib import asynccontextmanager
+from pathlib import Path
 from threading import Lock
 from uuid import uuid4
 
 from fastapi import FastAPI, HTTPException
 from fastapi.responses import PlainTextResponse
-from pydantic import BaseModel, ConfigDict
-
-from nexus.models.actions import Action
 from nexus.models.episode import PlayerManifest, PrivateEpisode
 from nexus.ontology.assistance import ConstructionCheckRequest
 from nexus.presentation import evidence as public_evidence
 from nexus.protocol.public_transcript import PublicTranscript, PublicTranscriptMiddleware
 from nexus.protocol.session import Session
+from nexus.protocol.requests import ActionRequest
 
 
 class _RecordedApp(FastAPI):
@@ -26,13 +25,6 @@ class _RecordedApp(FastAPI):
 
     async def __call__(self, scope, receive, send):
         await self._capture(scope, receive, send)
-
-
-class ActionRequest(BaseModel):
-    model_config = ConfigDict(extra="forbid")
-
-    expected_turn: int
-    action: Action
 
 
 class SessionStore:
@@ -133,7 +125,8 @@ def create_app(episode: PrivateEpisode) -> FastAPI:
 
 
 def create_single_session_app(
-    episode: PrivateEpisode, *, extended_diagnostics: bool = False
+    episode: PrivateEpisode, *, extended_diagnostics: bool = False,
+    audit_directory: Path | None = None,
 ) -> FastAPI:
     """Create an HTTP application that owns exactly one non-resettable session."""
     session = Session(episode)
@@ -148,11 +141,18 @@ def create_single_session_app(
         try:
             yield
         finally:
-            if diagnostics is not None:
-                diagnostics.checkpoint()
-                diagnostics.report("shutdown")
+            try:
+                if diagnostics is not None:
+                    diagnostics.checkpoint()
+                    diagnostics.report("shutdown")
+            finally:
+                if recorder is not None:
+                    recorder.close()
 
     app = _RecordedApp(title="NEXUS", version=episode.public.protocol_version, lifespan=lifespan)
+    from nexus.protocol.audit import AuditRecorder
+
+    recorder = AuditRecorder(session, audit_directory, app.state.public_transcript) if audit_directory else None
 
     if session.can_check_construction():
 
@@ -182,6 +182,8 @@ def create_single_session_app(
     @app.post("/action")
     def act(request: ActionRequest):
         response = session.act(request.expected_turn, request.action)
+        if recorder is not None:
+            recorder.checkpoint_safely()
         if diagnostics is not None:
             diagnostics.checkpoint()
         return response.model_dump(mode="json", exclude_none=True)

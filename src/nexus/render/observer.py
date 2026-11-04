@@ -31,6 +31,7 @@ def render_observer(
     debug_private: bool = False,
 ) -> None:
     console = console or Console()
+    console.print("Operator observer: shows the whole world. This is not the player view.", markup=False)
     console.rule(f"NEXUS {episode.public.episode_id} · turn {state.turn}")
     console.print(
         f"Agent: [bold]{state.agent_room}[/bold]  Phase: {state.phase}  "

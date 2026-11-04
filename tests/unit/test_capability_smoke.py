@@ -476,7 +476,15 @@ def test_repetition_count_must_be_positive():
 
 
 @pytest.mark.parametrize("interactive", [False, True])
-def test_http_429_stops_later_groups_and_repetitions(setup_package, monkeypatch, interactive):
+@pytest.mark.parametrize("message,status", [
+    ("retryable: failed to generate response: OpenAI API error: 429 Too Many Requests", 429),
+    ("failed to generate response: Error 402, Message: Your prepayment credits are depleted.", 402),
+    ("retryable: failed to generate response: retryable error: 503 Service Unavailable", 503),
+    ("API error: 401 Unauthorized", 401),
+])
+def test_provider_errors_stop_later_groups_and_repetitions(
+    setup_package, monkeypatch, interactive, message, status
+):
     package, _, _, calls = setup_package
     monkeypatch.setenv("OPENROUTER_API_KEY", "fixture-key")
 
@@ -492,7 +500,7 @@ def test_http_429_stops_later_groups_and_repetitions(setup_package, monkeypatch,
             for record in records:
                 record["Details"] = {
                     "Error": {
-                        "Message": "retryable: failed to generate response: OpenAI API error: 429 Too Many Requests",
+                        "Message": message,
                         "Transient": True,
                     }
                 }
@@ -519,8 +527,11 @@ def test_http_429_stops_later_groups_and_repetitions(setup_package, monkeypatch,
     )
     assert len(calls) == 1
     m = read(next((package / "results").glob("*/manifest.json")))
-    assert m["status"] == "rate_limited"
-    assert len(m["rate_limited_results"]) == 2
+    assert m["status"] == ("rate_limited" if status == 429 else "provider_blocked")
+    assert len(m["provider_error_results"]) == 2
+    assert {r["http_status"] for r in m["provider_error_results"]} == {status}
+    if status == 429:
+        assert len(m["rate_limited_results"]) == 2
     assert m["exit_code"] == 0 and m["launcher_exit_code"] == 2
     if not interactive:
         assert m["result_coverage"]["complete"]

@@ -26,7 +26,6 @@ from nexus.generator.difficulty import (
     artifact_projection,
     chain_requires_both_in_order,
     exploration_allowance,
-    machine_count_for_discovery,
     recommended_tool_call_limit,
     required_probe_count,
     resource_allowance,
@@ -1754,4 +1753,15 @@ def generate_episode(
                 "generated episode failed final profile qualification: "
                 + ", ".join(name for name, passed in report.checks.items() if not passed)
             )
+    # Legacy family IDs are deterministic hashes of a small seed space. They
+    # must not serve as public lookup keys for the hidden construction seed.
+    # Loaded historical episodes retain their IDs; new episodes use the same
+    # secret-backed opacity as the scientific generators.
+    import hmac
+
+    episode.public.episode_id = hmac.new(
+        episode.verifier_secret.encode("utf-8"),
+        ("nexus-opaque-id-v1\0" + episode.public.episode_id).encode("utf-8"),
+        hashlib.sha256,
+    ).hexdigest()[:32]
     return attach(episode, presentation_version)

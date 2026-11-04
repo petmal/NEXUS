@@ -72,7 +72,8 @@ def test_public_recovery_uses_one_policy_for_any_rejected_dose(p, seed):
 
 def test_configure_and_probe_do_not_apply_a_key_treatment():
     session = Session(generate_repair(42, planning_level=0))
-    take = lambda a: session.act(session.status().turn, a)
+    def take(action):
+        return session.act(session.status().turn, action)
     take(TakeAction(artifact="seal"))
     from nexus.ontology.repair.runtime import expected
 
