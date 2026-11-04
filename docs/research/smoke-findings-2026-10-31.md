@@ -1,5 +1,12 @@
 # NEXUS smoke findings and decisions
 
+Latest continuation: the [4 November fresh-world report](fresh-world-results-2026-11-04.md)
+adds four-model fresh-world evidence and a contemporary Astra anchor. It supersedes
+statements below that Grok challenge results or fresh Astra outcomes are pending.
+The historical counts in this file are unchanged. The new panel adds an Astra
+medium P/R failure, continued Luna resource sensitivity, Grok repair failures,
+and three compatible Flash wins; nine Flash planning conditions remain unassessed.
+
 Updated 1 November 2026 (America/Toronto). This is the
 project's current evidence record for choosing subsequent model smoke tests.
 It supersedes the earlier suggestion to start with GLM 5.1: the next panel uses

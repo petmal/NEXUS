@@ -4,33 +4,28 @@ NEXUS is a standalone, deterministic interactive environment for evaluating whet
 
 The central design goal is to evaluate **adaptation and reasoning rather than recalled domain knowledge**. NEXUS does not model an existing human game, real-world physics, or a known scientific experiment. Episodes are compiled from a small compositional grammar that can vary the world topology, entities, latent causal laws, evidence, and objective.
 
-Current evidence and roadmap: [smaller-model synthesis](docs/research/smaller-model-synthesis-2026-11-01.md),
-[consolidated findings](docs/research/smoke-findings-2026-10-31.md) and
-[capability smoke guide](docs/capability-smoke-guide.md). The requested GLM/MiniMax
-repetitions are complete. They preserve useful T/D and P/R distinctions while
-prioritizing response-stop classification and inference reproducibility before
-new world complexity. Grok/Muse/Mistral followups remain unreported.
-The [focused diagnostic matrix](docs/inference-diagnostic-matrix.md) adds exact
-unattended task selection, indexed repetitions and response-stop readouts.
-The [2 November evening diagnostics](docs/research/inference-diagnostic-results-2026-11-02.md)
-contain ten new attempts: MiniMax solves all four controls but loses one receipt
-submission and both short planning trials; GLM high/xhigh reaches length stops
-in all four long trials, one after an already fatal planning detour. The later
-[GLM high Stage C pair](docs/research/glm-high-stage-c-2026-11-02.md) adds an optimal
-09 win and a 25 length stop after a fatal planning detour. Only high S05/S21
-controls remain absent. Pause unchanged challenge repetitions and continue the
-Astra anchor and fresh-world qualification independently.
-The [fresh-world pilot](docs/fresh-world-guide.md) now implements that next step:
-two new fixtures in each established family, 26 conditions per model, Astra/Luna/
-Flash/Grok presets, a six-row Astra anchor, and an unattended runner with matching
-control admission. All 32 fixtures pass mechanical qualification; live evaluation
-of the fresh challenges is pending. The [initial ten Astra attempts](docs/research/fresh-world-initial-results-2026-11-03.md)
-all passed receipt validation; a configuration-default comparison bug then blocked
-continuation. Use the [host-only fix](docs/fresh-world-readout-fix.md) to preserve
-those results and resume, or the [run instructions](examples/mindtrial/fresh-world-run.md)
-for a new evaluation.
-The earlier [HTTP 429 interruption](docs/research/minimax-control-interruption-2026-11-02.md)
-remains separately recorded. The launcher halts subsequent groups on a 429.
+Current evidence and roadmap: [fresh-world assessment](docs/research/fresh-world-results-2026-11-04.md)
+and its [per-attempt ledger](docs/research/fresh-world-results-2026-11-04.json).
+The complete four-model archive contains 110 records, including the ten initial
+Astra records already reviewed. All 2,920 public responses replay exactly.
+On fresh conditions Astra wins 25/26, Luna 14/26, Grok 23/26 with one planning
+failure established before a provider error, and Flash has 16 wins, one planning
+failure before a provider error, and nine unassessed conditions. Three Flash wins
+are compatible with the evidence but not guaranteed by it.
+
+The fresh panel demonstrates useful model differences and a real Astra medium
+planning failure, while leaving a pure strongest-model T/D boundary unestablished.
+The next sequence is bounded completion/confirmation, release reporting and
+provider-stop hardening, then breadth and dependency experiments. The report
+separates the experimental public-release requirements from a future calibrated
+leaderboard. Earlier [smaller-model findings](docs/research/smaller-model-synthesis-2026-11-01.md)
+and [GLM diagnostics](docs/research/glm-high-stage-c-2026-11-02.md) remain separate cohorts.
+
+Use the [fresh-world guide](docs/fresh-world-guide.md) and
+[run instructions](examples/mindtrial/fresh-world-run.md) for the frozen matrix.
+The [host-only control-admission fix](docs/fresh-world-readout-fix.md) preserves
+initial results. The launcher currently stops later groups on HTTP 429; handling
+exhausted-credit HTTP 402 is a recommended next improvement, not implemented yet.
 
 ## Research checkpoint and next experiments
 
@@ -55,7 +50,7 @@ that their difficulty is unmeasured refer to their original publication stage.
 
 | Research record | Purpose |
 |---|---|
-| [Fresh-world pilot](docs/fresh-world-guide.md) | 26 fresh matched conditions, four models and a contemporary Astra anchor; qualified, awaiting live evaluation |
+| [Fresh-world pilot](docs/fresh-world-guide.md) | 26 fresh matched conditions per model and a contemporary Astra anchor; results audited, nine Flash conditions remain unassessed |
 | [Disclosed interference](docs/interference-guide.md) | Longer exact plans, matched write-edge controls and unavoidable coordinate-goal regression; outcomes in the smaller-model synthesis |
 | [Coordination](docs/coordination-guide.md) and [selected rerun](docs/research/coordination-rerun-results-2026-10-26.md) | Short-horizon planning, joint routing and observed strategy variability |
 | [Planning/resource pilot](docs/planning-resource-guide.md) | Disclosed spatial planning, exact known-law budgets and a qualified 16-cell next evaluation |

@@ -4,29 +4,26 @@ Read the [T/D synthesis](td-experiments-and-next-directions.md) for the evidence
 behind the architecture choices. This guide is for authors and operators. It does
 not add new axis levels or claim that a multi-module production family exists.
 
-The first implemented follow-up is the separate
-[planning/resource pilot](planning-resource-guide.md): fully disclosed spatial
-layouts over the stateful laws, exact known-law costs and public unknown-law policy
-bounds. Its live evaluations and subsequent interference/cross-axis work are summarized
-in the [1 November smaller-model report](research/smaller-model-synthesis-2026-11-01.md).
-That report updates the immediate sequence: distinguish response limits and
-provider behavior, then confirm contrasts on fresh worlds before adding broader
-composition. The qualification principles below remain in force.
-The immediate [inference diagnostic matrix](inference-diagnostic-matrix.md)
-defines the control gates and a bounded GLM high/xhigh comparison. Reporting and
-launcher refinements preserve the qualified worlds and historical task objects.
-The [2 November evening results](research/inference-diagnostic-results-2026-11-02.md)
-add observable planning errors but no new isolated T/D or R threshold. The later
-[GLM high Stage C pair](research/glm-high-stage-c-2026-11-02.md) adds an optimal
-short-plan win and a relaxed-world length stop following a fatal detour. Only
-high S05/S21 controls remain absent; unchanged challenge repetitions are paused.
-Do not let these provider/inference diagnostics block the contemporary Astra
-revision/repair anchor or fresh-world qualification for Luna/Flash contrasts.
-The [fresh-world pilot](fresh-world-guide.md) implements this sequence with
-26 fresh conditions per model, Astra/Luna/Flash/Grok presets and the six unchanged
-Astra anchors. All fixtures qualify mechanically. Run this bounded screen before
-selecting broader composition or new dependencies; the guide specifies which
-paired results would justify each next step. No live outcomes are available yet.
+The [4 November fresh-world assessment](research/fresh-world-results-2026-11-04.md)
+updates the immediate sequence. Four models have been screened on the same 26
+fresh conditions, with a contemporary Astra anchor. The audit shows useful model
+separation, a genuine Astra medium planning failure, and nine Flash conditions
+still unassessed after credit exhaustion. It distinguishes provider errors from
+already irreversible planning mistakes and separates supported from compatible
+victories.
+
+Complete the bounded missing/confirmation panel, improve release reporting,
+provider-stop handling and fresh-world CI coverage, then vary breadth and
+dependency structure with disclosed laws and generous resources. Preserve a
+resource curve and evidence-support diagnostics. A public experimental framework
+need not wait for a reliable strongest-model T/D failure boundary; a calibrated
+leaderboard needs more seeds and repetitions. See the report for exact follow-up
+rows, priorities, known limitations and the retained GLM/MiniMax findings.
+
+The [fresh-world guide](fresh-world-guide.md) remains the original frozen pilot
+specification. Earlier planning/resource, coordination and interference pilots
+remain reproducible historical experiments. The qualification principles below
+continue to apply.
 
 ## Choose a base by the question
 
