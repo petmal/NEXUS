@@ -1,0 +1,63 @@
+{
+  "scope": "Current runtime continuation costs versus independent scalar/BFS audit of historical fresh-world trajectories. Re-execution with a new private secret; not original HMAC verification or a new model run.",
+  "trajectories": 64,
+  "accepted_actions": 1321,
+  "all_prefix_costs_match": true,
+  "budget_infeasible": [
+    {
+      "model": "gpt-6-luna",
+      "row": "F11",
+      "first_budget_infeasible_turn": 8
+    },
+    {
+      "model": "gpt-6-luna",
+      "row": "F13",
+      "first_budget_infeasible_turn": 2
+    },
+    {
+      "model": "gpt-6-luna",
+      "row": "F15",
+      "first_budget_infeasible_turn": 2
+    },
+    {
+      "model": "gpt-6-luna",
+      "row": "F17",
+      "first_budget_infeasible_turn": 2
+    },
+    {
+      "model": "gemini-3.8-flash",
+      "row": "F17",
+      "first_budget_infeasible_turn": 2
+    },
+    {
+      "model": "gpt-6-astra",
+      "row": "F22",
+      "first_budget_infeasible_turn": 2
+    },
+    {
+      "model": "gpt-6-luna",
+      "row": "F19",
+      "first_budget_infeasible_turn": 5
+    },
+    {
+      "model": "gpt-6-luna",
+      "row": "F21",
+      "first_budget_infeasible_turn": 12
+    },
+    {
+      "model": "gpt-6-luna",
+      "row": "F22",
+      "first_budget_infeasible_turn": 3
+    },
+    {
+      "model": "gpt-6-luna",
+      "row": "F24",
+      "first_budget_infeasible_turn": 3
+    },
+    {
+      "model": "grok-4.7",
+      "row": "F26",
+      "first_budget_infeasible_turn": 2
+    }
+  ]
+}

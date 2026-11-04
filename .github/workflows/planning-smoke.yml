@@ -4,6 +4,17 @@ on:
   pull_request:
     paths:
       - "src/**"
+      - "scripts/fresh_worlds.py"
+      - "scripts/package_fresh_world.py"
+      - "scripts/export_fresh_world_configs.py"
+      - "examples/mindtrial/fresh-world-*"
+      - "examples/mindtrial/nexus-fresh-world-*.yaml"
+      - "docs/fresh-world-*"
+      - "docs/research/fresh-world-*"
+      - "tests/unit/test_fresh_worlds.py"
+      - "tests/unit/test_coordination_runner.py"
+      - "tests/unit/test_cross_axis_runner.py"
+      - "LICENSE"
       - "scripts/smoke_planning_service.py"
       - "scripts/preflight_planning.py"
       - "scripts/preflight_coordination.py"
@@ -73,7 +84,7 @@ jobs:
       - name: Build the exact feature revision
         run: |
           revision=$(git rev-parse HEAD)
-          docker build --build-arg VCS_REF="$revision" -t nexus:planning-resource-v1 -t nexus:coordination-v1 -t nexus:interference-v1 -t nexus:interference-comparison-v1 -t nexus:cross-axis-v1 -t nexus:capability-smoke-v1 .
+          docker build --build-arg VCS_REF="$revision" -t nexus:planning-resource-v1 -t nexus:coordination-v1 -t nexus:interference-v1 -t nexus:interference-comparison-v1 -t nexus:cross-axis-v1 -t nexus:capability-smoke-v1 -t nexus:fresh-world-v1 .
           test "$(docker image inspect nexus:planning-resource-v1 --format '{{ index .Config.Labels "org.opencontainers.image.revision" }}')" = "$revision"
       - name: Qualify all 16 cases inside the image
         run: docker run --rm --entrypoint python nexus:planning-resource-v1 scripts/preflight_planning.py
@@ -85,6 +96,8 @@ jobs:
         run: docker run --rm --entrypoint python nexus:interference-comparison-v1 scripts/preflight_interference_comparison.py
       - name: Qualify all 56 cross-axis conditions inside the image
         run: docker run --rm --entrypoint python nexus:cross-axis-v1 scripts/preflight_cross_axis.py
+      - name: Qualify all fresh-world contrasts inside the image
+        run: docker run --rm --entrypoint python nexus:fresh-world-v1 scripts/fresh_worlds.py --output /tmp/fresh-preflight.json
       - name: Verify the packaged launcher against the actual image without model calls
         run: |
           runtime_digest=$(docker run --rm --entrypoint python nexus:coordination-v1 -c 'from nexus.provenance import source_digest; print(source_digest())')
@@ -99,6 +112,8 @@ jobs:
           bash "$RUNNER_TEMP/cross-axis-package/run.sh" --skip-build --preflight-only --suite all
           uv run python scripts/package_capability_smoke.py --output-dir "$RUNNER_TEMP/capability-smoke-package" --runtime-source-sha256 "$runtime_digest"
           bash "$RUNNER_TEMP/capability-smoke-package/run.sh" --skip-build --preflight-only --suite all
+          uv run python scripts/package_fresh_world.py --output-dir "$RUNNER_TEMP/fresh-world-package" --runtime-source-sha256 "$runtime_digest"
+          bash "$RUNNER_TEMP/fresh-world-package/run.sh" --skip-build --preflight-only --suite all
       - name: Exercise real service, tool client, validator and shutdown telemetry
         run: |
           docker run --rm --entrypoint python \
@@ -144,4 +159,13 @@ jobs:
               nexus:cross-axis-v1 scripts/smoke_planning_service.py \
               --config "/run-config/nexus-cross-axis-$config-config.yaml" \
               --tasks "/run-config/nexus-cross-axis-$suite-tasks.yaml" --rows all
+          done
+      - name: Exercise every fresh-world service and receipt
+        run: |
+          for suite in controls td pr-a pr-b; do
+            docker run --rm --entrypoint python \
+              --mount "type=bind,source=$PWD/examples/mindtrial,target=/run-config,readonly" \
+              nexus:fresh-world-v1 scripts/smoke_planning_service.py \
+              --config /run-config/nexus-fresh-world-astra-config.yaml \
+              --tasks "/run-config/nexus-fresh-world-$suite-tasks.yaml" --rows all
           done

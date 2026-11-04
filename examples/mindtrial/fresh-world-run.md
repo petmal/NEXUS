@@ -5,6 +5,35 @@ Astra anchors: **110 attempts maximum**, with no automatic repetitions. Live
 model calls begin only when you run the launcher. The [design guide](../../docs/fresh-world-guide.md)
 explains the matrix, exact costs, controls and interpretation limits.
 
+## Recommended completion and confirmation panel
+
+For the already completed screen, use a bounded follow-up instead of repeating
+all 110 attempts. On a new runtime, obtain fresh matching controls first. These
+commands run 12 controls and 16 selected challenges, without interactive prompts.
+Run them from the unpacked package directory with credentials already configured.
+They make paid model calls; run preflight alone if you only want to check setup.
+
+```bash
+bash <<'BASH'
+set -euo pipefail
+bash run.sh --model all --suite fresh --preflight-only
+bash run.sh --model astra --suite controls --non-interactive --skip-build
+bash run.sh --model flash --suite controls --non-interactive --skip-build
+bash run.sh --model grok --suite controls --non-interactive --skip-build
+bash run.sh --model flash --suite challenges --non-interactive --skip-build \
+  --task-id F17 --task-id F18 --task-id F19 --task-id F20 --task-id F21 \
+  --task-id F22 --task-id F23 --task-id F24 --task-id F25 --task-id F26
+bash run.sh --model grok --suite pr-b --non-interactive --skip-build \
+  --task-id F25 --task-id F26
+bash run.sh --model astra --suite pr-b --non-interactive --skip-build \
+  --task-id F21 --task-id F22 --repeat 2
+BASH
+```
+
+Stop if a command fails; preserve its output and fix the reported problem before
+continuing. Each challenge invocation checks matching control admission. Keep new
+attempts alongside earlier results and report their new runtime binding separately.
+
 ## Complete unattended run
 
 Unpack the ZIP in ~/Downloads. From a terminal with your provider credentials
@@ -12,7 +41,7 @@ already configured:
 
 ```bash
 git -C "$HOME/Go-Projects/NEXUS" fetch origin
-cd "$HOME/Downloads/NEXUS-fresh-world-test-run-2026-11-03"
+cd "$HOME/Downloads/NEXUS-fresh-world-release-candidate"
 bash run-all.sh
 ```
 
@@ -72,7 +101,8 @@ selection. Use --non-interactive for unattended work.
 
 ## Stops, resumption and selected reruns
 
-The batch halts on HTTP 429, incomplete results, interruption, launcher failure or
+The batch halts on recognized provider HTTP errors (including 402, 429 and 5xx),
+incomplete results, interruption, launcher failure or
 a failed fresh-control gate. It does not automatically retry. Ordinary completed
 challenge losses do not stop later tasks.
 
@@ -140,6 +170,6 @@ uv run --frozen --python 3.14.7 python scripts/fresh_worlds.py \
 uv run --frozen --python 3.14.7 python scripts/export_fresh_world_configs.py
 # Commit the qualified artifacts first; packaging requires a clean checkout.
 uv run --frozen --python 3.14.7 python scripts/package_fresh_world.py \
-  --output-dir /absolute/path/NEXUS-fresh-world-test-run-2026-11-03 \
-  --runtime-source-sha256 ba22502788acf7ce1684e1e527e5aa332cd1746b37423fececabc90d71b8ee83
+  --output-dir /absolute/path/NEXUS-fresh-world-release-candidate \
+  --runtime-source-sha256 "$(uv run --frozen python -c 'from nexus.provenance import source_digest; print(source_digest())')"
 ```

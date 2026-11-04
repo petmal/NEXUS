@@ -5,8 +5,6 @@ on:
     branches: [main]
     paths:
       - "**"
-      - "!docs/**"
-      - "!README.md"
       - "docs/difficulty-model-matrix.json"
       - "docs/structural-model-matrix.json"
       - "docs/budget-diagnostic-matrix.json"
@@ -26,8 +24,6 @@ on:
   pull_request:
     paths:
       - "**"
-      - "!docs/**"
-      - "!README.md"
       - "docs/difficulty-model-matrix.json"
       - "docs/structural-model-matrix.json"
       - "docs/budget-diagnostic-matrix.json"
@@ -155,6 +151,15 @@ jobs:
 
       - name: Cross-axis current-source qualification and task export
         run: uv run python scripts/preflight_cross_axis.py --output /tmp/cross-axis-preflight.json --tasks-output /tmp/cross-axis-tasks
+
+      - name: Fresh-world mechanical qualification
+        run: uv run python scripts/fresh_worlds.py --output /tmp/fresh-world-preflight.json --tasks-output /tmp/fresh-world-tasks
+
+      - name: Lint and current documentation
+        run: make check
+
+      - name: Clean wheel and source-distribution installation
+        run: make package
 
       - name: Fast tests
         run: |

@@ -1,5 +1,13 @@
 # Service integration
 
+For a first run, use the [evaluation guide](evaluation-guide.md). The service is
+local research infrastructure, with no authentication or tenant isolation. Bind
+`0.0.0.0` only inside a harness-isolated network, never on a public interface.
+Keep `/finalize` evaluator-only through the harness tool allowlist.
+
+`serve-session --audit-dir NEW_DIRECTORY` records a private source-bound bundle.
+Use [the research guide](research-guide.md) for verification and disclosure limits.
+
 NEXUS exposes neutral service and client interfaces for external orchestrators. The interfaces
 do not assume a particular evaluation framework, model vendor, or transport beyond HTTP.
 
@@ -27,6 +35,13 @@ Supported startup environment variables are:
 
 ```text
 NEXUS_SEED               private deterministic episode generation seed
+NEXUS_AXIS_VERSION       1=legacy, 2=scientific family semantics
+NEXUS_SCIENCE_FAMILY     registered family name
+NEXUS_THEORY_LEVEL       supplied-theory profile (family-specific)
+NEXUS_BUDGET_PROFILE     standard or a supported diagnostic profile
+NEXUS_ONTOLOGY_OPTIONS   validated JSON family options
+NEXUS_AUDIT_DIR          new private audit export directory
+NEXUS_EXTENDED_DIAGNOSTICS  private operator stderr diagnostics
 NEXUS_DISCOVERY_LEVEL    causal-discovery profile, integer 0..5 (default 0)
 NEXUS_PLANNING_LEVEL     topology/planning profile, integer 0..3 (default 1)
 NEXUS_RESOURCE_PRESSURE  action-budget pressure, integer 0..2 (default 0)
@@ -38,7 +53,7 @@ NEXUS_PORT               server port
 The difficulty variables apply only when the service generates from `NEXUS_SEED`; a mounted
 private episode already contains its compiled world and metadata. When `NEXUS_VERIFIER_SECRET`
 is omitted, each generated service process gets a fresh private secret and therefore a fresh
-victory code even when the public episode seed is the same.
+victory code even when the private construction seed is the same. Public identifiers are opaque.
 
 ## Player-safe single-session API
 
@@ -64,9 +79,11 @@ The action response that first reaches `won` or `failed` includes a terminal-onl
 object. It is absent while the episode is active, so trusted solver information cannot influence
 play.
 
-Every profile D0-D5 now has an exact minimum worst-case total-action policy cost. The terminal
-object is self-describing and includes an immutable `$schema` URL pointing to the versioned
-`schemas/performance-v5.schema.json` contract stored in this repository. In addition to the run
+Legacy profiles report mechanically qualified policy baselines. Scientific families
+use separate mission metrics and certificates; a reference upper bound must not be
+read as an exact optimum. Consult the actual certificate for the tested condition.
+The legacy terminal object includes an immutable `$schema` URL pointing to the versioned
+`schemas/performance-v6.schema.json` contract stored in this repository. In addition to the run
 counters it records the discovery/planning/resource-pressure profile, terminal status, initial
 budget, resource allowance, and P3 dependency cost.
 
