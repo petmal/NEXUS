@@ -12,8 +12,10 @@ still unassessed after credit exhaustion. It distinguishes provider errors from
 already irreversible planning mistakes and separates supported from compatible
 victories.
 
-Complete the bounded missing/confirmation panel, improve release reporting,
-provider-stop handling and fresh-world CI coverage, then vary breadth and
+Release preparation now adds structured audit exports, provider-stop handling,
+physical continuation diagnostics and fresh-world CI coverage. See
+[release readiness](release-readiness.md) for validation and remaining gates.
+Complete the bounded missing/confirmation panel, then vary breadth and
 dependency structure with disclosed laws and generous resources. Preserve a
 resource curve and evidence-support diagnostics. A public experimental framework
 need not wait for a reliable strongest-model T/D failure boundary; a calibrated

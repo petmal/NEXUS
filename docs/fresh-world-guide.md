@@ -1,13 +1,21 @@
 # Fresh-world pilot — 3 November 2026
 
+Current-source packages use `fresh-world-preflight-current.json`. The dated
+3 November report and original results remain historical evidence. New runtime
+source requires newly matched control admission; do not reuse the old package's
+control results. Run `make qualify-release` and `make preflight` after source
+changes, then package from a clean committed checkout. See
+[the evaluation guide](evaluation-guide.md) for the current operator workflow.
+
 This pilot checks whether the most useful earlier distinctions survive a change
 of world. It adds **two fresh fixtures in each of three established families**,
 26 conditions per model, and a contemporary six-task Astra anchor against the
 historical worlds. It does not introduce a fourth architecture or new axis levels.
-Mechanical qualification has passed. The [initial Astra results](research/fresh-world-initial-results-2026-11-03.md)
-contain six anchor passes and four fresh-control passes. Fresh challenge performance
-is still unknown. A readout default-comparison bug stopped the batch after those
-ten tasks; the [host-only recovery](fresh-world-readout-fix.md) preserves their results.
+Mechanical qualification has passed. The [complete result analysis](https://github.com/petmal/NEXUS/blob/8b0a8b80425221ec4f71cc96a8ac152d5082841c/docs/research/fresh-world-results-2026-11-04.md)
+now covers all 110 records, including the initial Astra runs counted once. It
+separates provider interruptions, physical success and evidence-supported success.
+The [initial Astra report](research/fresh-world-initial-results-2026-11-03.md) and
+[host-only recovery](fresh-world-readout-fix.md) remain historical records.
 
 The next evaluation uses Astra medium, Luna medium, Flash high and Grok medium.
 Each model receives the same 26 fresh conditions, subject to an integration-control
@@ -178,7 +186,8 @@ evidence. Retain it and diagnose whether it concerns execution, interface,
 response limits or receipt formatting before resuming challenges.
 
 The unattended launcher stops the batch on a rejected control gate, incomplete
-results, interruption, launcher failure or recorded HTTP 429. There is no automatic
+results, interruption, launcher failure or recognized provider HTTP errors
+(including billing/quota, rate limits, authentication and server failures). There is no automatic
 retry. An ordinary completed challenge failure remains a result and does not halt
 later challenges. Selected interactive reruns remain available.
 
@@ -215,12 +224,15 @@ remains valuable even without strongest-model failures from one axis alone.
 
 The frozen [matrix](fresh-world-matrix.json) is validated against the complete
 inventory. Operator qualification lives in scripts/fresh_worlds.py, outside the
-runtime package. Runtime semantics and its source digest remain unchanged:
-ba22502788acf7ce1684e1e527e5aa332cd1746b37423fececabc90d71b8ee83.
+runtime package. The original 3 November run used runtime digest
+`ba22502788acf7ce1684e1e527e5aa332cd1746b37423fececabc90d71b8ee83`.
+Current packages bind the exact new source digest in their release manifest.
+The original task laws and contrasts remain fixed; source identity must still
+match the current qualification report.
 The report separately binds the qualifier itself and the historical matrices.
 Package creation recomputes the proof and exact task exports; container preflight
 does so again before a paid run. Private witnesses remain in operator reports,
 outside model-visible prompts and observations.
 
-See the [proof](research/fresh-world-preflight-2026-11-03.json) and
-[validation record](research/fresh-world-validation-2026-11-03.md).
+See the [current-source proof](research/fresh-world-preflight-current.json) and
+[original validation record](research/fresh-world-validation-2026-11-03.md).

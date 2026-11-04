@@ -14,7 +14,8 @@ discards the working copy. Probe results do not mutate the carried specimen.
 
 Player manifests and observations contain controls and observable properties.
 Selected laws, seeds, solver witnesses, hidden targets and inference diagnostics
-remain private. Diagnostics become available only after termination. Inference
+remain private. Player-visible diagnostics become available only after termination. Private operator
+reports may inspect an active attempt and must remain outside player access. Inference
 adapters receive the public specification and public measurement results; they do
 not receive selected private truth.
 
@@ -295,3 +296,14 @@ add adapters through the catalog today without editing engine, session or replay
 
 For architecture selection, shared artifact utilities and the optional private
 decision-equivalence hook, see [Preparing future experiments](future-experiments.md).
+
+## Exact continuation diagnostics
+
+A family may implement `remaining_physical_actions(public_spec, state) -> int | None`
+for disclosed-law conditions. Return the exact remaining cost including retrieval,
+travel and finish, or `None` only when physically unreachable. The common private
+report replays accepted actions and identifies the first budget-infeasible state.
+It must not infer hidden laws or supply active-player hints. Test costs against an
+independent search, including dropped objects, irreversible transitions and the
+last finish action. No hook means unavailable, never zero. See the
+[research guide](research-guide.md) for interpretation and audit exports.
