@@ -6,6 +6,10 @@ source requires newly matched control admission; do not reuse the old package's
 control results. Run `make qualify-release` and `make preflight` after source
 changes, then package from a clean committed checkout. See
 [the evaluation guide](evaluation-guide.md) for the current operator workflow.
+The design below records the original 110-attempt screen. For release checking,
+start with the six-attempt canary in the
+[run guide](../examples/mindtrial/fresh-world-run.md#small-release-canary);
+that guide also gives the bounded completion/confirmation panel.
 
 This pilot checks whether the most useful earlier distinctions survive a change
 of world. It adds **two fresh fixtures in each of three established families**,

@@ -49,18 +49,31 @@ its source binding is refreshed. Current cross-axis and fresh-world reports must
 recompute from that final source. A fresh implementation review checks the
 research export and transport boundaries separately from their author's tests.
 
+The release-handoff follow-up adds a packaged six-attempt canary, corrects the
+fresh-world regeneration command to preserve dated reports, extends current-doc
+link checks and adds software citation metadata. Its **193 fresh-world and shared
+runner tests passed**, including preflight-only execution, control-failure stops,
+bounded model selection and packaged links. Lint and all 14 current-doc link checks
+passed. It changes no runtime source or world mechanics; the qualified runtime
+digest remains `bb2dc0dbee12a9cf01633818638fc7b1bac4f4224fd146c441cd1af68912ccf4`.
+
 ## Before publishing
 
-1. Merge the reviewed candidate and require green CI, including the Docker
-   build, source-bound preflights, packaged launcher and actual service/client/
-   validator smoke checks. Docker is unavailable in this local editing environment;
-   remote container checks remain a separate gate.
-2. Confirm the repository's intended public contents and visibility, select the
+1. Review the candidate and require green CI on the final head before merge.
+   Both [CI](https://github.com/petmal/NEXUS/actions/runs/41868199563) and
+   [runner/container smoke](https://github.com/petmal/NEXUS/actions/runs/41868199601)
+   passed for `bee63d3ca3d0038df2deaf2659180e73097a1709`, including the actual Docker
+   image, source-bound preflights, packaged launchers and service/client/validator
+   checks. These are completed checks for that commit, not a promise about later
+   revisions. Require new relevant checks after further changes.
+2. Run a small live harness canary on the exact candidate before new empirical
+   claims. The package's `bash run-canary.sh astra` runs four matching controls
+   and F11/F12 (six paid attempts). See [commands and acceptance checks](../examples/mindtrial/fresh-world-run.md#small-release-canary).
+   Local reference policies cannot validate a provider's current tool or
+   structured-output behavior. No paid calls are part of these code checks.
+3. Confirm the repository's intended public contents and visibility, select the
    release/tag, and publish only after owner approval. No repository visibility,
    package publication, or release tag is changed by this preparation.
-3. Run a small live harness canary on the exact candidate before new empirical
-   claims. Local reference policies cannot validate a provider's current tool or
-   structured-output behavior. No paid calls are part of these code checks.
 
 The outstanding empirical panel remains Flash F17–F26 once, Grok F25/F26 once,
 and Astra F21/F22 twice (16 challenge attempts). On this new runtime, first run

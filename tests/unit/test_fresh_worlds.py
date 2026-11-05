@@ -479,6 +479,52 @@ def test_main_routes_all_fresh_models_and_records_control_admission(tmp_path, pi
     assert len(calls) == 16
 
 
+@pytest.mark.parametrize("mode", ["live", "preflight", "failed-control"])
+@pytest.mark.parametrize("packaged", [False, True])
+def test_canary_preserves_gates_and_never_calls_challenges_after_failure(tmp_path, mode, packaged):
+    package = tmp_path / "canary package with spaces"
+    package.mkdir()
+    script = package / "run-canary.sh"
+    shutil.copyfile(EXAMPLES / "fresh-world-run-canary.sh", script)
+    launcher = package / ("run.sh" if packaged else "fresh-world-run.sh")
+    launcher.write_text(
+        '#!/bin/bash\nprintf "%s\\n" "$*" >> "$RECORD"\n'
+        + ("exit 23\n" if mode == "failed-control" else "exit 0\n")
+    )
+    log = tmp_path / "calls.txt"
+    args = ["bash", str(script), "flash", "--skip-build"]
+    if mode == "preflight":
+        args.append("--preflight-only")
+    result = subprocess.run(
+        args, cwd=ROOT, capture_output=True, check=False,
+        env={**os.environ, "RECORD": str(log)},
+    )
+    assert result.returncode == (23 if mode == "failed-control" else 0)
+    calls = log.read_text().splitlines()
+    if mode == "preflight":
+        assert calls == ["--model flash --suite fresh --preflight-only --skip-build"]
+    else:
+        expected = [
+            "--model flash --suite controls --non-interactive --skip-build",
+            "--model flash --suite pr-a --task-id F11 --task-id F12 --non-interactive --skip-build",
+        ]
+        assert calls == expected[:1 if mode == "failed-control" else 2]
+
+
+@pytest.mark.parametrize("args", [[], ["all"], ["astra", "--repeat", "100"]])
+def test_canary_rejects_ambiguous_or_expanded_paid_scope_before_launch(tmp_path, args):
+    script = tmp_path / "run-canary.sh"
+    shutil.copyfile(EXAMPLES / "fresh-world-run-canary.sh", script)
+    (tmp_path / "run.sh").write_text('touch "$RECORD"\nexit 99\n')
+    log = tmp_path / "calls.txt"
+    result = subprocess.run(
+        ["bash", str(script), *args], capture_output=True, check=False,
+        env={**os.environ, "RECORD": str(log)},
+    )
+    assert result.returncode == 2
+    assert not log.exists()
+
+
 def test_package_includes_bound_proof_matrix_and_working_links(tmp_path, monkeypatch):
     import re
     import zipfile
@@ -504,6 +550,7 @@ def test_package_includes_bound_proof_matrix_and_working_links(tmp_path, monkeyp
     required = {
         "matrix.json",
         "run-all.sh",
+        "run-canary.sh",
         "summarize_results.py",
         "guide.md",
         "reports/fresh-world-preflight-current.json",

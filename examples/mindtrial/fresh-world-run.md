@@ -5,6 +5,32 @@ Astra anchors: **110 attempts maximum**, with no automatic repetitions. Live
 model calls begin only when you run the launcher. The [design guide](../../docs/fresh-world-guide.md)
 explains the matrix, exact costs, controls and interpretation limits.
 
+## Small release canary
+
+Before a larger run, check one model and provider on the candidate package:
+
+```bash
+bash run-canary.sh astra --preflight-only
+bash run-canary.sh astra --skip-build
+```
+
+The first command builds and qualifies the pinned image without model calls or
+API keys. The second makes **six paid attempts**, unattended: controls F01, F03,
+F05 and F08, then the matched planning/resource pair F11/F12. Controls exercise
+model revision and repair; the pair exercises the interference service with
+disclosed laws, a short independent plan, and two action allowances. A failed
+control gate or recognized provider interruption stops the next group.
+
+Use `luna`, `flash` or `grok` instead of `astra` to check that model/provider path.
+One model's canary does not validate another provider. `all` is intentionally not
+accepted here; use the full-panel launcher for a multi-model study.
+
+Keep all six result records and their manifests/logs. Confirm successful control
+admission, complete output, receipt validation, and expected source/model/settings
+bindings. Investigate a challenge loss from its trace: it can be a model outcome
+and does not by itself prove a software defect. This is an integration check,
+not a new estimate of model ability. Existing empirical reports remain separate.
+
 ## Recommended completion and confirmation panel
 
 For the already completed screen, use a bounded follow-up instead of repeating
@@ -165,7 +191,7 @@ portable admission.
 
 ```bash
 uv run --frozen --python 3.14.7 python scripts/fresh_worlds.py \
-  --output docs/research/fresh-world-preflight-2026-11-03.json \
+  --output docs/research/fresh-world-preflight-current.json \
   --tasks-output examples/mindtrial
 uv run --frozen --python 3.14.7 python scripts/export_fresh_world_configs.py
 # Commit the qualified artifacts first; packaging requires a clean checkout.

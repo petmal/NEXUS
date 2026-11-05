@@ -9,6 +9,7 @@ FILES = (
     'docs/play-guide.md', 'docs/evaluation-guide.md', 'docs/research-guide.md',
     'docs/release-readiness.md', 'docs/reference/protocol.md',
     'docs/facility-setting.md', 'docs/future-experiments.md', 'docs/ontology-author-guide.md',
+    'docs/fresh-world-guide.md', 'examples/mindtrial/fresh-world-run.md',
 )
 
 

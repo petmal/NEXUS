@@ -1,0 +1,20 @@
+cff-version: 1.2.0
+message: >-
+  If you use NEXUS in research, cite this software and report the exact commit,
+  runtime source digest, world family, matrix and evaluation settings used.
+type: software
+title: "NEXUS: Artificial micro-worlds for reasoning evaluation"
+authors:
+  - family-names: Malik
+    given-names: Petr
+repository-code: "https://github.com/petmal/NEXUS"
+url: "https://github.com/petmal/NEXUS"
+license: MIT
+abstract: >-
+  An experimental framework for procedural artificial worlds, mechanically
+  verified outcomes, matched difficulty controls and reproducible action replay.
+keywords:
+  - language models
+  - reasoning evaluation
+  - planning
+  - reproducibility

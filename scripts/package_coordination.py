@@ -324,6 +324,7 @@ def main(pilot_name="coordination"):
     if pilot_name == "fresh-world":
         copies["matrix.json"] = ROOT / "docs/fresh-world-matrix.json"
         copies["run-all.sh"] = examples / "fresh-world-run-all.sh"
+        copies["run-canary.sh"] = examples / "fresh-world-run-canary.sh"
         copies["fresh-world-readout-fix.md"] = ROOT / "docs/fresh-world-readout-fix.md"
     for name, source in copies.items():
         shutil.copy2(source, destination / name)
@@ -418,6 +419,8 @@ def main(pilot_name="coordination"):
         guide = destination / "guide.md"
         guide.write_text(guide.read_text().replace("(research/", "(reports/")
                          .replace("(fresh-world-matrix.json)", "(matrix.json)")
+                         .replace("(../examples/mindtrial/fresh-world-run.md#small-release-canary)",
+                                  "(README.md#small-release-canary)")
                          .replace("(evaluation-guide.md)",
                                   f"(https://github.com/petmal/NEXUS/blob/{commit}/docs/evaluation-guide.md)"))
         readme = destination / "README.md"
