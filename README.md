@@ -62,4 +62,4 @@ NEXUS runs independently of model vendors and evaluation harnesses. Python 3.14,
 Typer, Pydantic, and Rich support the local interface; an optional FastAPI service
 supports external tools. The checked-in lockfile pins the tested environment.
 
-[MIT license](LICENSE). [Service and data boundaries](SECURITY.md).
+[MIT license](LICENSE). [Citation](CITATION.cff). [Service and data boundaries](SECURITY.md).

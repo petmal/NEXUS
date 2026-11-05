@@ -1,7 +1,7 @@
 # Public-release preparation: changes and validation
 
-NEXUS is ready for review as an experimental research framework, subject to the
-container/CI and live harness gates below. The work strengthens measurement and
+NEXUS is ready for review as an experimental research framework. The candidate's
+container/CI gates passed; live harness validation remains outstanding. The work strengthens measurement and
 reproducibility; it does not add new empirical model results or claim a calibrated
 leaderboard. No paid model call, repository visibility change, release tag or
 package publication was made.
@@ -90,11 +90,20 @@ model presentation were preserved. New source identity still requires matched
 control admission before live challenge runs; old control receipts do not admit
 a changed runtime.
 
-Docker is unavailable in this environment. CI now covers fresh-world trigger
-paths, image qualification, actual service checks, and the packaged launcher.
-Require its green result before release. Then run a small live harness canary on
-the candidate to check provider/tool behavior, followed by the bounded missing/
-confirmation panel if desired. No local reference policy can replace that check.
+Docker was unavailable locally. Both remote workflows passed on
+`bee63d3ca3d0038df2deaf2659180e73097a1709`:
+[CI](https://github.com/petmal/NEXUS/actions/runs/41868199563) and
+[runner/container smoke](https://github.com/petmal/NEXUS/actions/runs/41868199601).
+They checked the actual image, source-bound qualification, packaged launchers,
+and configured service/client/validator matrices, including all 26 fresh cases.
+The dated interference-comparison package stays pinned to its original source;
+its current mechanics/service checks remain covered, but its historical package
+was not regenerated as a current release.
+
+Require green relevant CI again after further changes. A small live harness
+canary on the final candidate still needs to check provider/tool behavior,
+followed by the bounded missing/confirmation panel if desired. No local
+reference policy can replace that check.
 
 The public service still has no authentication or tenant isolation. Keep the
 operator/private-data boundary in the harness; do not deploy it as an open web

@@ -57,6 +57,11 @@ locked Python environment, image ID/digest, harness version, model provider/ID,
 reasoning setting, temperature, output mode, token/tool/action caps, retries,
 timeout, date, and all task/config hashes. Record provider routing if known.
 
+Use [CITATION.cff](../CITATION.cff) when citing the software. Also identify the
+exact commit and experiment artifacts in the paper or supplementary material;
+a project citation alone does not identify a reproducible experiment. No release
+date or DOI is declared in this citation; use the tested revision explicitly.
+
 The optional `--audit-dir` export produces an operator-only directory:
 
 | File | Contents |
