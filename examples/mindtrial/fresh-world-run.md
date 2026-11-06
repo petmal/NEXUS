@@ -137,6 +137,14 @@ under the same release, binary, exact input config and evaluation seed before
 that model can start challenges. Recorded inference settings and qualified task
 objects must also match. A newer failed control supersedes an older success.
 
+A control folder with a missing, unreadable or invalid manifest blocks admission:
+the launcher cannot safely decide which attempt it represents. Restore the
+original manifest where possible. Otherwise preserve the entire damaged folder
+outside `results/` for inspection, record why it was moved, and rerun the affected
+controls (all four if their identity is unknown). Include that preserved folder
+when sharing results. Do not discard a known failure to restore an older pass.
+Well-formed records for other releases, binaries or configurations are ignored.
+
 After diagnosing a failed control, a selected rerun can fill the control record.
 Then resume the remaining suite without rerunning completed challenges:
 
@@ -186,6 +194,12 @@ Return fresh-world-results.zip, including all attempted runs. Do not delete earl
 failures after a successful rerun. Control admission hashes records from this
 package; moving result folders to another package does not provide automatic
 portable admission.
+
+These example configurations currently collect harness results and bounded
+service logs, not NEXUS private audit bundles. Complete audit retention requires
+the harness to attach operator-only persistent storage and collect each attempt's
+export. This is a harness integration responsibility; see the framework-neutral
+[audit storage contract](../../docs/research-guide.md#reproducibility-record).
 
 ## Regenerate from the repository
 

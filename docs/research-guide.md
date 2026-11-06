@@ -90,6 +90,16 @@ Human-play capture records semantic session calls, not terminal keystrokes or
 rendered pixels. HTTP capture covers application responses, not network timing.
 Provider logs and configuration belong beside, not inside, the game trace.
 
+Audit storage belongs to the calling framework or operator. NEXUS writes portable
+files and verifies them without depending on MindTrial or another harness. For a
+containerized service, mount a persistent operator-only parent directory and set
+`--audit-dir` (or `NEXUS_AUDIT_DIR`) to a new child directory for each attempt;
+NEXUS creates that child itself. The harness records which attempt owns the bundle
+and its episode ID, allows graceful service shutdown, then collects and verifies
+the files. Preserve interrupted exports as partial evidence. Keep this storage
+outside the player's filesystem and tool access. Bounded container logs are not
+a substitute for an audit bundle.
+
 Do not publish private bundles or secrets for held-out test worlds. If you later
 release a world and its solution for replication, retire it from uncontaminated
 evaluation. Scrub provider credentials and unrelated data from external logs.

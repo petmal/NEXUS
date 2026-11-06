@@ -6,7 +6,10 @@ local research infrastructure, with no authentication or tenant isolation. Bind
 Keep `/finalize` evaluator-only through the harness tool allowlist.
 
 `serve-session --audit-dir NEW_DIRECTORY` records a private source-bound bundle.
-Use [the research guide](research-guide.md) for verification and disclosure limits.
+The surrounding framework owns persistent storage, attempt-to-bundle mapping and
+collection after shutdown. Use [the research guide](research-guide.md) for that
+storage contract, verification and disclosure limits. MindTrial is one example
+adapter; the NEXUS runtime and audit format remain independent of it.
 
 NEXUS exposes neutral service and client interfaces for external orchestrators. The interfaces
 do not assume a particular evaluation framework, model vendor, or transport beyond HTTP.
