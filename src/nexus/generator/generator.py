@@ -9,7 +9,7 @@ from itertools import permutations
 import networkx as nx
 
 from nexus.diagnostics import generation_diagnostics, timed_call, timed_stage
-from nexus.presentation import CURRENT, PresentationVersion, attach
+from nexus.presentation import CURRENT, SUPPORTED, PresentationVersion, attach
 from nexus.engine.rules import apply_effect
 from nexus.generator.constructed import (
     CONSTRUCTOR_VALUE,
@@ -1680,7 +1680,7 @@ def generate_episode(
     budget_families = {name for name, definition in BUILTINS.items() if definition.diagnostic_budget}
     if budget_profile != "standard" and science_family not in budget_families:
         raise ValueError("diagnostic budget profile is unsupported by this family")
-    if presentation_version not in (None, CURRENT):
+    if presentation_version not in (None, *SUPPORTED):
         raise ValueError("unsupported presentation version")
     if science_family not in BUILTINS:
         raise ValueError("unknown scientific family")

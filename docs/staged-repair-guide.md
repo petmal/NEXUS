@@ -1,7 +1,7 @@
 # Staged repair pilot
 
 `staged-repair-v1` is an opt-in ontology on axes v2. It preserves all earlier
-families. The player clears nine hidden loads across three actual exit seals,
+families. The player clears nine hidden loads across three portable seal components,
 using the same artificial mechanisms to interpret experiments and apply repairs.
 The exact physical state determines victory; neither a theory essay nor a unique
 description of the law is required.

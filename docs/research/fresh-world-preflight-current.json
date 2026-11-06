@@ -3402,10 +3402,10 @@
     }
   ],
   "scope": "Two purpose-selected fresh seeds per family, no live outcomes used for selection. Distinct behavior classes/repair observation and acceptance signatures/PR kernels checked against committed historical matrices; not a random population sample or a proof of nonisomorphism. Reading certificates are not cognitive depth measures.",
-  "source_sha256": "630d5838e4c7e5964ce7585c655ebde691ed93bf85f2a9f0cd91f975d9e324ac",
+  "source_sha256": "1e064b6fd5d3a7e330e61fa04da529c2e084f05258002f668694157b4c06bb99",
   "sources": {
     "__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-    "cli.py": "4ad25f076fc79bbe2a4a85aa2c699c0bf47b47d8e6b1a8f82b2aeda872fdc8c1",
+    "cli.py": "991dbb25bd1c71d0f5aaed9472c38a1767c0955b3f685c8a5322bd2a8eaa0c96",
     "diagnostics.py": "a4654237788f022f5db1b1a7bc22c0d0fbfec497203a049940cebcfcdea1ba20",
     "engine/__init__.py": "75976174fce0ad3d8238137d1f10cf64f4f8303dda1af9ba667ff505f063bdfb",
     "engine/canonical.py": "8376561fe738e77bfacb1b648805631c1f6270f67c1d872278292bf1fd05e72d",
@@ -3448,7 +3448,7 @@
     "generator/difficulty.py": "efb3c1dd99caf0887f64158ebf68ccee965e16c490b572e588a3286ee8d7134a",
     "generator/discovery.py": "5f4257cc15c98d4538362cc4bc42f0f8f5758d34e08bf5b38ee72a2a76ad91cf",
     "generator/evidence.py": "e00fb5770dc4e8275ca2682da7fc96afc800c8bb2c927ec4000a4acb2a12beef",
-    "generator/generator.py": "9e140057f20d300119ee09655ece96d40d1557e575e3cc0da2f9fd1461909e75",
+    "generator/generator.py": "9ec4be8799837687efbc5ae332a7c44cb298ea24876fd7fea71da86b327c835d",
     "generator/investigation.py": "81f9814f2b0962ca74dde7695c8e33fc1febc84ab31d577ab6e0487dcbb8403f",
     "generator/investigation_docs.py": "25919e904a7325d03fdb2b77c96ae832a819af00fea0edcae93b5d67cf0692e8",
     "generator/investigation_qualify.py": "8f3dd06aaa4d0b8e41cf5b54cf9053c8539c46a01d9d725fab61370bd28c36a4",
@@ -3673,7 +3673,7 @@
     "ontology/uncertainty/laws.py": "91e19fc3df991b7f199bdb7f2655e6e377470f162bdc2ab9f883a09b3cab3ed5",
     "ontology/uncertainty/runtime.py": "662be74da7e2e1fcd6cd3356ca3731f6eca2930b1ba8974d28029c9261b247d9",
     "ontology/uncertainty/schema.py": "99f2a9ec59c0725731941f42573d4ca9269647ea4bc0885b0c4646736041f976",
-    "presentation/__init__.py": "bb8df829acf758152058c00b31c300c86356802420347437c64b581c1ca0bc25",
+    "presentation/__init__.py": "0ff10ca77b0f717eaa5bf149c09a5bb304a72bd07754176360ff5ecea6c8befb",
     "protocol/__init__.py": "e3b32fa236602d61f8591e0944c0a1cc6b12cbbc97e147ad9e22b42b5c77d9a6",
     "protocol/audit.py": "92a7c79502e05543c6e1675cd02809c7c279b201fe8512884efd5fbaf42d2044",
     "protocol/client.py": "f05944cb106061365b13745d94c20fc2f0a587b4be101e46d89746ee43b0c70b",
@@ -3710,5 +3710,5 @@
   },
   "status": "passed",
   "version": "fresh-world-preflight-v1",
-  "seconds": 58.150156925000374
+  "seconds": 17.547418764999748
 }

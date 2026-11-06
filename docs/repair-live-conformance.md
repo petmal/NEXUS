@@ -3,7 +3,7 @@
 Scope: `coupled-repair-v1`, `stationary-three-round-v1`, T3/D5/P0 or P1/R1,
 exactly 17 or 18 actions. One non-resettable attempt, serial application requests,
 no private files/process access, and a uniformly sampled truth index in 0..7202.
-P and presentation (legacy or sealed-facility-v1) are operator-fixed before sampling,
+P and presentation (canonical, sealed-facility-v1 or sealed-facility-v2) are operator-fixed before sampling,
 and the prior is uniform within each such public stratum. The public nonce is sampled independently. This is a bound on policy success over
 that population, not a guarantee for each fixed seed or for model failure rates.
 Application messages are included; timing, operating-system and network side

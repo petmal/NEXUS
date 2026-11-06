@@ -1,0 +1,68 @@
+{
+  "legacy": {
+    "sha256": "32c125d24e1859903088dd57bb4482b3a8617c53b8d6ac331b6441d3eb3d9204"
+  },
+  "stateful-interference-v1": {
+    "sha256": "33c5cc7bb3857195e3516db163fd02225d652a2da9ed43371ac6482660e75237"
+  },
+  "stateful-coordination-v1": {
+    "sha256": "fd68e5973bb160877de71daf0518ef02f736dd6c2fb2590c4a6274a1b459d80c"
+  },
+  "model-revision-v1": {
+    "sha256": "0968cea3b925448be8d4ba9e9f7ca578f74c7643636cb7d7847d47c176e98423"
+  },
+  "stateful-discovery-v1": {
+    "sha256": "ab9694f922658f975f7ffb64734b0387f8c7ae8263722103d84579633e0a532c"
+  },
+  "coupled-memory-v1": {
+    "sha256": "be97dde743e67246a02ff3fe8d3742e56500b9758a4a4710489c6a9c6d059a9d"
+  },
+  "representation-discovery-v1": {
+    "sha256": "a21be80a04594413433d0bb0989db4d987b96e9d2ee0717951281194be5f3e3a"
+  },
+  "uncertainty-construction-v1": {
+    "sha256": "fd962f545f9f7ddf364a3bd9e6cf0cf63f564a238fe2f497da080920b4c810d0"
+  },
+  "joint-assembly-v1": {
+    "sha256": "e6c2981f0b7e70ce865fcdb623c8ede6cd7ac75ab09eb1042f390d7657b85c4a"
+  },
+  "staged-repair-v1": {
+    "sha256": "b12d844072a5b4fa1ffa1eef13b678efdb4ff3a4e56c927a204ede902d5c5367"
+  },
+  "history-coupled-v1": {
+    "sha256": "e32f2562cb46e5cd5b693097d5c61da6647aaa56c926579010a847cae6ee7b32"
+  },
+  "coupled-transfer-v1": {
+    "sha256": "3417bc3012eac16eb6d1e8d57f3132deb47a0cced7435adaf4ce7c8a5425f243"
+  },
+  "coupled-evidence-v1": {
+    "sha256": "e1f67cc8aecdb4b7af25d66ae9b6faa7bc6c2e9c6584a6bd1967086e92c85daa"
+  },
+  "compositional-repair-v1": {
+    "sha256": "c346482001b04eb9e10ee3242279d135992dfe52e536f28bdfd4916544d33930"
+  },
+  "coupled-dynamics-v1": {
+    "sha256": "d27cac42a721e7406a4dc3c7db286ef3702c204c1f8ffe05c86e21a3fa736011"
+  },
+  "coupled-repair-v1": {
+    "sha256": "7c4f2acc70ab34685ac34299a794e16cbeccf8c68a37d41755834ae51e252092"
+  },
+  "categorical-chain-poc-v1": {
+    "sha256": "d1d525a9f61d20781813f71b310b9f6ea59d6d358997db38f9d7cfe5ff53b0cc"
+  },
+  "shared-response-v1": {
+    "sha256": "f133ee138ffdf4cb71c68ca59e595fed9d66b11b0fb866cc7f693b399e94543a"
+  },
+  "coupled-network-v1": {
+    "sha256": "c1820d5ef18a8202897b4d32a72b646972d058a0c17fa36a92eebc421cebd839"
+  },
+  "resonant-network-v1": {
+    "sha256": "08bb7db3ad46d680a3d7fabefb83c46be5344e090bbe25e1bd8af197ba5eb560"
+  },
+  "causal-mechanisms-v1": {
+    "sha256": "2bb67cb40a047b7d2f03d78a664fdfe369e44163d5dd1ee0cc3996b7411c0fed"
+  },
+  "stateful-planning-v1": {
+    "sha256": "a1e4243cbe90b92687b6422487b18d3a9eaaa6235ad8c6db4060be4adb3ce5f7"
+  }
+}

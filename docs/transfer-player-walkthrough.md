@@ -4,6 +4,10 @@ This is a real public-policy run, shown from the player’s information boundary
 
 ## Before acting: what the player receives
 
+The transcript below preserves its original wording. Its carried “exit seal” is
+the portable seal component, not the door. New presentation v2 clarifies these
+names; see the [current setting](facility-setting.md).
+
 You are confined to a counterphase array. An exit seal must cancel a mechanism across two phase contexts and every admissible excitation. Survey stock produces reusable specimens; reference stock produces matched specimens with suppressed physical output. Names carry no outside physical meaning. Read theory.json and apparatus.txt. Experiment in any order, then apply a counterprogram and carry the seal into array to finish.
 
 **field**: All values and arithmetic are modulo 3. Subtract modulo 3 as well.

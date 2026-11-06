@@ -3,7 +3,7 @@
 ## What changed
 
 `stateful-discovery-v1` is an opt-in ontology on `feat/theory-prior-axis`.
-The player must align the original exit seal. It is also the only experimental
+The player must align the original seal component. It is also the only experimental
 subject: an intervention can reveal information, move the seal away from its
 goal, and change which experiment is useful next. Previous families and defaults
 remain available.

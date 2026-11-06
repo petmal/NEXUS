@@ -8,13 +8,16 @@ qualification metadata or hidden state.
 from __future__ import annotations
 
 import json
+from copy import deepcopy
 from typing import TYPE_CHECKING, Literal
 
 if TYPE_CHECKING:
     from nexus.models.episode import PrivateEpisode, PublicEpisode
 
-type PresentationVersion = Literal["sealed-facility-v1"]
-CURRENT: PresentationVersion = "sealed-facility-v1"
+type PresentationVersion = Literal["sealed-facility-v1", "sealed-facility-v2"]
+SUPPORTED: tuple[PresentationVersion, ...] = ("sealed-facility-v1", "sealed-facility-v2")
+CURRENT: PresentationVersion = "sealed-facility-v2"
+# Keep v1 text byte-for-byte stable for saved episodes and historical comparisons.
 PREMISE = (
     "You are confined inside NEXUS, a sealed artificial facility. Its apparatus acts "
     "on artifacts and specimens according to consistent local laws. The exit seal "
@@ -33,12 +36,73 @@ GLOSSARY = (
     "The seal evaluates the stated goal only when you invoke finish. "
     "No narrative term introduces an additional action or hidden requirement.\n\n"
 )
+PREMISE_V2 = (
+    "You are inside NEXUS, a sealed artificial facility of unknown origin. A translated "
+    "console is your link to its machinery. The exit interlock is closed; the console "
+    "offers clearance when you complete the mission below. Use the supplied records "
+    "and apparatus to meet its exact requirements. Some records supply the laws or a "
+    "design; others leave questions to investigate. A successful finish returns a "
+    "victory receipt: clearance is granted and your visit ends. No further escape "
+    "action is needed."
+)
+GLOSSARY_V2 = """CONSOLE ORIENTATION
+The console translates local names into readable labels. They describe this
+world's devices, not familiar physics or a word puzzle. The local records define
+their exact behavior; a name alone is not a clue to an unknown law.
+
+Sector means room; apparatus means machine or instrument. Always copy the exact
+IDs shown by the interface. An artifact is an object you can manipulate; a specimen
+is an object used for experiments. Stock supplies specimens under the stated rules.
+An array is a work area or group of apparatus; a lattice is a system of connected
+elements. Neither name adds a route, device or action beyond those listed.
+
+The exit seal is the interlock that grants clearance. An object named seal or
+seal-i is a portable mission part, not the door itself. A carrier holds a constructed
+device. A cartridge is a programmed component; a compensator supplies the correction
+required by its mission. Use the mission's named objects and acceptance conditions.
+
+A register stores a state value. An excitation is an input setting; a residual is
+the mismatch defined by the local records. Phase, charge, orientation and pulse
+also have their stated local meanings, not assumed real-world effects.
+
+The action allowance is the console's authorization budget, not an oxygen supply
+or a real-time countdown. Reading and thinking do not spend it. Accepted actions
+follow the stated costs; an unchanged result can still cost an action. A null
+allowance means unlimited. Device-use and stock limits are separate. Phase changes
+follow the action contract, not elapsed time. Follow the world's stated finish
+policy: a rejection may leave another attempt possible or end the session.
+Only a successful finish grants clearance. An ended attempt without a receipt
+leaves the exit closed; there is no additional story requirement or penalty.
+
+LOCAL RECORD
+"""
+REVISION_BRIEF_V2 = (
+    "The exit's routing system needs a replacement cartridge. The supplied records "
+    "define the transfer elements and state which construction details are known. "
+    "Install a cartridge that meets the complete behavior requirement in theory.json. "
+    "Read apparatus.txt for its controls."
+)
+# Fixed edits to public prose only: distinguish carried parts from the exit lock.
+# Do not apply these to structured records, IDs, controls or historical wording.
+PORTABLE_SEAL_TERMS_V2 = (
+    ("carried exit seal", "carried seal component"),
+    ("An exit seal must cancel", "A portable seal component must cancel"),
+    ("construct an exit seal", "construct a seal component"),
+    ("three exit seals", "three seal components"),
+    ("Three exit seals", "Three seal components"),
+)
+
+
+def _prose_v2(text: str) -> str:
+    for original, replacement in PORTABLE_SEAL_TERMS_V2:
+        text = text.replace(original, replacement)
+    return text
 
 
 def attach(
     episode: PrivateEpisode, version: PresentationVersion | None = CURRENT
 ) -> PrivateEpisode:
-    if version not in (None, CURRENT):
+    if version not in (None, *SUPPORTED):
         raise ValueError("unsupported presentation version")
     if episode.public.presentation_version == version:
         return episode
@@ -48,6 +112,8 @@ def attach(
 
 
 def description(public: PublicEpisode) -> str:
+    if public.presentation_version == "sealed-facility-v2":
+        return f"{PREMISE_V2}\n\nMISSION\n{_prose_v2(public.description)}"
     return (
         f"{PREMISE}\n\nMISSION\n{public.description}"
         if public.presentation_version
@@ -64,6 +130,14 @@ def evidence(public: PublicEpisode, filename: str) -> str:
     content = public.evidence_files[filename]
     if not public.presentation_version:
         return content
+    if public.presentation_version == "sealed-facility-v2":
+        if filename == "facility.txt":
+            # Family identity is public; never branch on the selected hidden construction.
+            if getattr(public.investigation, "ontology", None) == "model-revision-v1":
+                content = REVISION_BRIEF_V2
+            return GLOSSARY_V2 + _prose_v2(content)
+        if filename in ("manual.txt", "manual.md", "facility_manual.txt"):
+            return GLOSSARY_V2 + _prose_v2(content)
     if filename in ("manual.txt", "manual.md"):
         return GLOSSARY + content
     if filename == "map.json":
@@ -71,7 +145,10 @@ def evidence(public: PublicEpisode, filename: str) -> str:
         data = json.loads(content)
         rooms = data.get("rooms")
         if isinstance(rooms, dict):
-            data["sector_functions"] = dict(rooms)
+            data["sector_functions"] = (
+                deepcopy(rooms) if public.presentation_version == "sealed-facility-v2"
+                else dict(rooms)
+            )
             for room_id, value in rooms.items():
                 if room_id in public.rooms:
                     if isinstance(value, str):

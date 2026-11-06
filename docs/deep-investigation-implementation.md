@@ -76,6 +76,10 @@ The entries below are chronological evidence, not outstanding instructions.
 
 ## Shared presentation evidence
 
+This section records the 14 October implementation. New generation now uses
+presentation v2; saved v1 wording is preserved. See the
+[6 November story review](research/story-review-2026-11-06.md).
+
 - New current generation selects `sealed-facility-v1`; historical episodes default
   to absent presentation and retain their exact original serialization.
 - Public-only renderer covers manifest, evidence, observations, CLI, human observer
