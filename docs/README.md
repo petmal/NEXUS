@@ -14,6 +14,8 @@ checks and remaining release gates. [Future experiments](future-experiments.md)
 contains the research roadmap.
 The [core robustness review](research/core-robustness-review-2026-11-06.md)
 records fixes and independent checks of goals, receipts, solver costs and metrics.
+The [RC2 canary](research/rc2-canary-results-2026-11-06.md) confirms all six selected
+live attempts on the audited runtime and explains the remaining audit limits.
 
 ## Experimental families and history
 
