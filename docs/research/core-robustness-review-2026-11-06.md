@@ -103,6 +103,9 @@ must retain these distinctions.
 | Current-source preflights | All 56 cross-axis conditions and all 32 fresh/anchor rows passed |
 | Clean distributions | Wheel and source archive installed in isolation and passed CLI, qualification and replay checks |
 | Lint and current-document links | Passed |
+| Full unit/integration collection | All 1,719 cases passed across the original run and a 58-case continuation; identical collection and runtime |
+| Main CI on `164cb12` | Passed: immutable references, independent proofs, preflights, fast tests, lint, documentation and clean packaging |
+| Runner/container CI on `164cb12` | Passed: actual Docker build, in-image qualification, packaged launcher preflight, service/client/validator and receipt checks |
 
 The runtime digest after qualification is
 `630d5838e4c7e5964ce7585c655ebde691ed93bf85f2a9f0cd91f975d9e324ac`.
@@ -112,14 +115,30 @@ Both current preflight reports have identical substantive content to their prior
 versions after removing source identities and timing fields. This includes their
 world metrics, qualification results and selected contrasts.
 
-The full unit/integration run was interrupted by loss of the execution environment.
-The last confirmed state was **1,661 of 1,719 tests completed without failure**,
-with the exhaustive transfer-physics test running. The completed portion included
-the 1,944-world comparison of old and optimized dynamics policies and the full
-repair population. The final result and remaining tests could not be recovered,
-so this is **not a complete suite pass**. Run `make test-full` or the CI workflow
-with `full=true` on this candidate before release. The dedicated qualification,
-preflight, focused, property and packaging results above had completed successfully.
+The full unit/integration collection is now complete. The original process
+completed **1,661 cases without failure** before the execution environment
+disconnected. After recovery, the checkout was verified against commit
+`164cb123b092bb0104f6a4de950a105bf28107fe`; the runtime digest and ordered list of
+1,719 collected test IDs were unchanged. All **58 remaining cases passed in
+50.99 seconds**, starting with exhaustive transfer physics and ending with the
+service integration tests. Thus all 1,719 cases passed across two processes;
+this was not one uninterrupted invocation. The earlier portion included the
+1,944-world comparison of old and optimized dynamics policies and the full
+repair population.
+
+Both [main CI](https://github.com/petmal/NEXUS/actions/runs/42150090631) and
+[runner/container smoke](https://github.com/petmal/NEXUS/actions/runs/42150092076)
+passed on `164cb12`. The main workflow skipped its optional extended and property
+jobs; the local full collection and property run above supply those results.
+The separate container workflow built the actual candidate image and checked
+the packaged launcher, service/client/validator path, all fresh-world contrasts
+and accepted victory receipts. These checks made no paid model calls.
+
+The fresh-world package was rebuilt from clean commit `164cb12` as
+`NEXUS-RC2-core-canary-2026-11-06.zip`. Its release manifest pins that commit and
+the runtime digest above. The existing six-attempt canary remains the next live
+integration check: four matching controls, followed by F11/F12 on one model.
+Its result is still pending; the earlier RC1 provider run used older code.
 
 The main new checks are in
 [core certification tests](../../tests/unit/test_core_certification.py),
