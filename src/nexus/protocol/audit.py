@@ -16,7 +16,7 @@ import tempfile
 from pathlib import Path
 from threading import Lock
 
-from nexus.engine.canonical import canonical_hash
+from nexus.engine.canonical import canonical_bytes, canonical_hash
 from nexus.engine.replay import replay
 from nexus.io import load_private, load_trace
 from nexus.models.world import TerminalStatus
@@ -26,6 +26,38 @@ from nexus.protocol.public_transcript import PublicTranscript
 
 VERSION = "nexus-audit-bundle-v1"
 FILES = ("private.json", "binding.json", "exchanges.jsonl", "trace.jsonl", "outcome.json")
+REQUEST_COUNTERS = ("invalid_actions", "duplicate_requests", "protocol_conflicts")
+
+
+def _verify_game_outcome(episode, records, outcome):
+    """Recompute game-derived diagnostics; free requests require a separate audit.
+
+    Accepted actions cannot establish invalid/retry/conflict or construction-check
+    counts. Preserve that boundary even when a transcript claims full coverage.
+    """
+    from nexus.protocol.session import Session
+
+    reconstructed = Session(episode)
+    for record in records:
+        if not reconstructed.act(reconstructed.state.turn, record.action).ok:
+            raise ValueError("audit session reconstruction mismatch")
+    if outcome["evaluator_finalized"]:
+        reconstructed.finalize_attempt()
+    expected = reconstructed.operator_snapshot()
+    for field in ("status", "performance", "evidence_witnesses", "physical_continuation"):
+        if field not in outcome:
+            raise ValueError(f"audit {field} mismatch: missing field")
+        actual, wanted = outcome[field], expected[field]
+        if field == "performance" and isinstance(actual, dict) and isinstance(wanted, dict):
+            actual, wanted = dict(actual), dict(wanted)
+            for name in REQUEST_COUNTERS:
+                value = actual.pop(name, None)
+                if type(value) is not int or value < 0:
+                    raise ValueError(f"audit performance mismatch: invalid {name}")
+                wanted.pop(name)
+        if canonical_bytes(actual) != canonical_bytes(wanted):
+            raise ValueError(f"audit {field} mismatch")
+    return expected
 
 
 def _atomic_json(path: Path, value: object) -> None:
@@ -149,7 +181,7 @@ class AuditRecorder:
 
 
 def verify_bundle(directory: Path) -> dict:
-    """Verify source binding, file integrity, exact trace and lifecycle closure.
+    """Verify source binding, integrity, exact trace, lifecycle and game metrics.
 
     This does not independently replay every public transport response or verify
     the external harness's model settings. Those are separate research checks.
@@ -180,12 +212,15 @@ def verify_bundle(directory: Path) -> dict:
     records = load_trace(directory / "trace.jsonl")
     state = replay(episode, records)
     outcome = json.loads((directory / "outcome.json").read_text(encoding="utf-8"))
+    if type(outcome.get("evaluator_finalized")) is not bool:
+        raise ValueError("audit evaluator_finalized must be boolean")
     if canonical_hash(state) != outcome["trace_state_sha256"]:
         raise ValueError("audit trace state mismatch")
     if outcome["evaluator_finalized"] and state.terminal_status == TerminalStatus.ACTIVE:
         state.terminal_status = TerminalStatus.FAILED
     if canonical_hash(state) != outcome["canonical_state_sha256"]:
         raise ValueError("audit lifecycle state mismatch")
+    verified_outcome = _verify_game_outcome(episode, records, outcome)
     exchanges = [
         json.loads(line)
         for line in (directory / "exchanges.jsonl").read_text(encoding="utf-8").splitlines()
@@ -206,8 +241,14 @@ def verify_bundle(directory: Path) -> dict:
         else "no_receipt_in_trace",
         "public_capture_complete": manifest["complete"],
         "public_responses_semantically_verified": False,
+        "game_metrics_verified": True,
+        "world_qualification_rechecked": False,
+        "unverified_outcome_fields": [
+            *(f"performance.{name}" for name in REQUEST_COUNTERS),
+            "assistance", "provider_stop_reason", "receipt_validation",
+        ],
         "accepted_actions": len(records),
         "exchange_count": len(exchanges),
         "world_status": state.terminal_status.value,
-        "physical_continuation": outcome.get("physical_continuation"),
+        "physical_continuation": verified_outcome["physical_continuation"],
     }

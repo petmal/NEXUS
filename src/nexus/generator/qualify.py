@@ -972,23 +972,7 @@ def qualify_episode(
         checks["difficulty_bounds"] = False
         checks["action_budget_sufficient"] = False
 
-    if solved.solvable:
-        try:
-            final, trace = execute_with_trace(episode, list(solved.plan))
-            checks["reference_plan_wins"] = final.terminal_status == TerminalStatus.WON
-            replayed = replay(episode, trace)
-            checks["replay_exact"] = canonical_hash(replayed) == canonical_hash(final)
-            checks["victory_receipt_present"] = bool(trace and trace[-1].victory_code)
-        except Exception as exc:
-            errors.append(f"reference execution failed: {exc}")
-            checks["reference_plan_wins"] = False
-            checks["replay_exact"] = False
-            checks["victory_receipt_present"] = False
-    else:
-        checks["reference_plan_wins"] = False
-        checks["replay_exact"] = False
-        checks["victory_receipt_present"] = False
-
+    stored = ()
     try:
         stored = tuple(ACTION_ADAPTER.validate_python(item) for item in episode.reference_plan)
         checks["reference_plan_schema"] = bool(stored)
@@ -1010,6 +994,20 @@ def qualify_episode(
         checks["reference_plan_schema"] = False
         checks["stored_plan_length"] = False
         checks["required_machine_order"] = False
+
+    checks["reference_plan_wins"] = False
+    checks["replay_exact"] = False
+    checks["victory_receipt_present"] = False
+    if stored:
+        try:
+            # Certify the witness we ship, not a newly solved replacement. Equal
+            # length alone says nothing about legality or success of this plan.
+            final, trace = execute_with_trace(episode, list(stored))
+            checks["reference_plan_wins"] = final.terminal_status == TerminalStatus.WON
+            checks["replay_exact"] = canonical_hash(replay(episode, trace)) == canonical_hash(final)
+            checks["victory_receipt_present"] = bool(trace and trace[-1].victory_code)
+        except Exception as exc:
+            errors.append(f"stored reference execution failed: {exc}")
 
     try:
         dumped = episode.public.model_dump(mode="json")

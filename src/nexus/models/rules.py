@@ -42,8 +42,9 @@ class Condition(BaseModel):
     def validate_shape(self) -> "Condition":
         if self.kind == ConditionKind.EQUALS and (self.field is None or self.value is None):
             raise ValueError("equals requires field and value")
-        if self.kind == ConditionKind.PHASE_EQUALS and self.value is None:
-            raise ValueError("phase_equals requires value")
+        if self.kind == ConditionKind.PHASE_EQUALS:
+            if type(self.value) is not int or self.value < 0:
+                raise ValueError("phase_equals requires a nonnegative integer")
         if self.kind == ConditionKind.PHASE_PARITY and self.parity not in {"even", "odd"}:
             raise ValueError("phase_parity requires parity even|odd")
         if self.kind == ConditionKind.VALUE_MODULO:

@@ -1,4 +1,4 @@
-# Release readiness — 4 November 2026
+# Release readiness — 6 November 2026
 
 NEXUS is being prepared as an **experimental research framework**, with human
 play and mechanically scored model interaction. The intended release does not
@@ -73,6 +73,24 @@ and collects it. MindTrial is one example adapter, not a NEXUS dependency.
 Its current examples retain bounded logs rather than complete private bundles.
 See the [framework-neutral storage contract](research-guide.md#reproducibility-record).
 
+The [core robustness review](research/core-robustness-review-2026-11-06.md)
+fixes stored-reference certification, negated-goal solver pruning, malformed phase
+and goal values, unlimited legacy resources, and missing semantic checks of audit
+metrics. It adds 135 regression cases, including independent finite-state oracles.
+Audit verification now reconstructs game-derived metrics and explicitly names
+the request/provider fields it does not certify. Whole-world qualification remains
+a separate command. Valid generated laws and historical empirical reports are
+unchanged; runtime source identity changes and current bindings must be refreshed.
+The completed refresh passed all 7,203 live repair worlds, both repair profiles,
+56 cross-axis conditions and 32 fresh/anchor rows. Both current reports retain
+the same substantive results after removing source identity and timing fields.
+The new runtime digest is
+`630d5838e4c7e5964ce7585c655ebde691ed93bf85f2a9f0cd91f975d9e324ac`.
+The 72-world stress sample, clean wheel/source installs, lint and current-doc links
+also passed. The full unit/integration run reached 1,661 of 1,719 tests without
+failure before the execution environment disconnected. Its final result is
+unconfirmed; complete `make test-full` or the CI `full=true` gate before release.
+
 ## Before publishing
 
 1. Review the candidate and require green CI on the final head before merge.
@@ -85,7 +103,9 @@ See the [framework-neutral storage contract](research-guide.md#reproducibility-r
    cross-seed suites were skipped in that run; use the CI workflow's `full=true`
    option for the broader release gate on the final candidate.
 2. Retain the completed RC1 live canary and repeat it after changes to the game
-   runtime or provider/tool integration. Launcher-only admission safeguards are
+   runtime or provider/tool integration. Rebuild the canary package from the new
+   candidate: the previously downloaded RC1 archive is pinned to its earlier head.
+   Launcher-only admission safeguards are
    covered by regression tests. The package's `bash run-canary.sh astra` runs four
    matching controls
    and F11/F12 (six paid attempts). See [commands and acceptance checks](../examples/mindtrial/fresh-world-run.md#small-release-canary).

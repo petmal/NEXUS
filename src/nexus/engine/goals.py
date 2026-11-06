@@ -22,7 +22,7 @@ def evaluate_goal(goal: GoalPredicate, state: WorldState) -> bool:
         artifact = state.artifacts.get(goal.artifact_id or "")
         return artifact is not None and artifact.location == goal.value
     if goal.kind == GoalKind.PHASE_EQUALS:
-        return state.phase == int(goal.value)
+        return state.phase == goal.value
     if goal.kind == GoalKind.AND:
         return all(evaluate_goal(child, state) for child in goal.children)
     if goal.kind == GoalKind.OR:

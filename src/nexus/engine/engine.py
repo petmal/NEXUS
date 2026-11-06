@@ -130,11 +130,12 @@ def step(state: WorldState, action: Action, episode: PrivateEpisode) -> StepResu
             _consume_action(next_state)
             transformed = apply_effect(rule, artifact, next_state.phase)
             if isinstance(action, OperateAction):
-                if machine.uses_remaining <= 0:
+                if machine.uses_remaining == 0:
                     raise ValueError("machine has no uses remaining")
                 transformed.location = INVENTORY
                 next_state.artifacts[artifact.id] = transformed
-                machine.uses_remaining -= 1
+                if machine.uses_remaining is not None:
+                    machine.uses_remaining -= 1
                 events.append(
                     EngineEvent(
                         type="operate",

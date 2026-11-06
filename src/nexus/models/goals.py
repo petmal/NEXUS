@@ -5,6 +5,11 @@ from typing import Any
 
 from pydantic import BaseModel, ConfigDict, model_validator
 
+from nexus.models.world import Orientation, Pattern, Polarity, Shape
+
+ARTIFACT_ENUM_FIELDS = {
+    "shape": Shape, "pattern": Pattern, "orientation": Orientation, "polarity": Polarity,
+}
 
 class GoalKind(StrEnum):
     MISSION_ACCEPTED = "mission_accepted"
@@ -31,11 +36,19 @@ class GoalPredicate(BaseModel):
         if self.kind == GoalKind.ARTIFACT_FIELD:
             if self.artifact_id is None or self.field is None or self.value is None:
                 raise ValueError("artifact_field requires artifact_id, field, value")
+            if self.field == "value":
+                if type(self.value) is not int:
+                    raise ValueError("artifact value goal requires an integer")
+            elif self.field in ARTIFACT_ENUM_FIELDS:
+                ARTIFACT_ENUM_FIELDS[self.field](self.value)
+            else:
+                raise ValueError("artifact_field requires an intrinsic artifact field")
         if self.kind == GoalKind.ARTIFACT_LOCATION:
-            if self.artifact_id is None or self.value is None:
-                raise ValueError("artifact_location requires artifact_id and value")
-        if self.kind == GoalKind.PHASE_EQUALS and self.value is None:
-            raise ValueError("phase_equals requires value")
+            if self.artifact_id is None or not isinstance(self.value, str) or not self.value:
+                raise ValueError("artifact_location requires artifact_id and a nonempty location")
+        if self.kind == GoalKind.PHASE_EQUALS:
+            if type(self.value) is not int or self.value < 0:
+                raise ValueError("phase_equals requires a nonnegative integer")
         if self.kind in {GoalKind.AND, GoalKind.OR} and len(self.children) < 2:
             raise ValueError(f"{self.kind} requires at least two children")
         if self.kind == GoalKind.NOT and len(self.children) != 1:

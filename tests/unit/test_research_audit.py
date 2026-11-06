@@ -1,6 +1,8 @@
 """Research exports must replay exactly without granting the player extra data."""
 
 import stat
+import hashlib
+import json
 from io import StringIO
 
 import pytest
@@ -173,3 +175,77 @@ def test_hidden_laws_do_not_claim_exact_public_continuation():
     report = Session(episode).operator_snapshot()["physical_continuation"]
     assert report["available"] is False
     assert report["reason"] == "laws_are_not_disclosed"
+
+
+def rewrite_outcome(root, outcome):
+    """Keep checksums consistent: semantic verification must catch wrong metrics."""
+    path = root / "outcome.json"
+    path.write_text(json.dumps(outcome))
+    manifest_path = root / "manifest.json"
+    manifest = json.loads(manifest_path.read_text())
+    manifest["files_sha256"]["outcome.json"] = hashlib.sha256(path.read_bytes()).hexdigest()
+    manifest_path.write_text(json.dumps(manifest))
+
+
+@pytest.mark.parametrize("damage", ["status", "actions", "numeric_type", "missing_metric",
+                                    "continuation", "witnesses", "finalized_type"])
+def test_bundle_recomputes_game_metrics_instead_of_trusting_self_consistent_checksums(tmp_path, damage):
+    episode = legacy()
+    session = Session(episode)
+    recorder = AuditRecorder(session, tmp_path / "audit")
+    for action in episode.reference_plan:
+        assert session.act(session.state.turn, ACTION_ADAPTER.validate_python(action)).ok
+    recorder.close()
+    outcome = json.loads((recorder.directory / "outcome.json").read_text())
+    if damage == "status":
+        outcome["status"]["status"] = "failed"
+    elif damage == "actions":
+        outcome["performance"]["actions_used"] += 1
+    elif damage == "numeric_type":
+        outcome["performance"]["actions_used"] = float(outcome["performance"]["actions_used"])
+    elif damage == "missing_metric":
+        del outcome["performance"]["actions_used"]
+    elif damage == "continuation":
+        outcome["physical_continuation"] = {"available": True, "excess_actions": 100}
+    elif damage == "witnesses":
+        outcome["evidence_witnesses"] = {"invented": True}
+    else:
+        outcome["evaluator_finalized"] = 1
+    rewrite_outcome(recorder.directory, outcome)
+    with pytest.raises(ValueError, match="audit .* (mismatch|boolean)"):
+        verify_bundle(recorder.directory)
+
+
+def test_verified_game_metrics_do_not_claim_request_counters_are_verified(tmp_path):
+    session = Session(legacy())
+    recorder = AuditRecorder(session, tmp_path / "audit")
+    session.finalize_attempt()
+    recorder.close()
+    outcome = json.loads((recorder.directory / "outcome.json").read_text())
+    outcome["performance"]["invalid_actions"] = 42
+    rewrite_outcome(recorder.directory, outcome)
+    report = verify_bundle(recorder.directory)
+    assert report["game_metrics_verified"]
+    assert not report["world_qualification_rechecked"]
+    assert "performance.invalid_actions" in report["unverified_outcome_fields"]
+    assert not report["public_responses_semantically_verified"]
+
+
+def test_scientific_bundle_recomputes_continuation_and_evidence_metrics(tmp_path):
+    from nexus.ontology.catalog import runtime_for
+
+    episode = generate_episode(21, axis_version=2, science_family="stateful-planning-v1",
+                               theory_level=0, discovery_level=5, planning_level=3,
+                               resource_pressure=2)
+    session = Session(episode)
+    recorder = AuditRecorder(session, tmp_path / "audit")
+    for action in runtime_for(episode.public.investigation).physical_plan(episode):
+        assert session.act(session.state.turn, action).ok
+    recorder.close()
+    report = verify_bundle(recorder.directory)
+    assert report["game_metrics_verified"] and report["physical_continuation"]["excess_actions"] == 0
+    outcome = json.loads((recorder.directory / "outcome.json").read_text())
+    outcome["performance"]["decision_diagnostics"]["escape_classification"] = "compatible_win"
+    rewrite_outcome(recorder.directory, outcome)
+    with pytest.raises(ValueError, match="audit performance mismatch"):
+        verify_bundle(recorder.directory)
