@@ -299,6 +299,103 @@ def test_corrupted_control_artifact_does_not_fall_back_to_older_success(controls
         controls.admit()
 
 
+@pytest.mark.parametrize(
+    "damage",
+    ["missing", "invalid_json", "not_object", "missing_identity", "invalid_identity",
+     "missing_time", "invalid_time", "naive_time", "unreadable"],
+)
+def test_damaged_control_manifest_cannot_restore_older_admission(controls, monkeypatch, damage):
+    controls.record()
+    folder = controls.record(
+        names=controls.names[:1], mutation=lambda m, r: r[0].update(Kind="Failed")
+    )
+    path = folder / "manifest.json"
+    original = path.read_bytes()
+    manifest = json.loads(original)
+    with monkeypatch.context() as patch:
+        if damage == "missing":
+            path.unlink()
+        elif damage == "invalid_json":
+            path.write_text("{")
+        elif damage == "not_object":
+            runner.write_json(path, [])
+        elif damage == "unreadable":
+            read_bytes = Path.read_bytes
+
+            def unreadable(candidate):
+                if candidate == path:
+                    raise PermissionError("review regression: unreadable manifest")
+                return read_bytes(candidate)
+
+            patch.setattr(Path, "read_bytes", unreadable)
+        else:
+            if damage == "missing_identity":
+                del manifest["mindtrial_sha256"]
+            elif damage == "invalid_identity":
+                manifest["input_config_sha256"] = None
+            elif damage == "missing_time":
+                del manifest["started_at"]
+            elif damage == "invalid_time":
+                manifest["started_at"] = "not a timestamp"
+            else:
+                manifest["started_at"] = "2026-11-03T00:00:02"
+            runner.write_json(path, manifest)
+        with pytest.raises(runner.RunnerError, match="Cannot establish control admission") as error:
+            controls.admit()
+        assert folder.name in str(error.value)
+        assert "Restore" in str(error.value)
+    # Restoring the actual manifest retains its failure until a successful rerun.
+    path.write_bytes(original)
+    with pytest.raises(runner.RunnerError, match="missing or failed"):
+        controls.admit()
+    controls.record(names=controls.names[:1])
+    assert all(row["accepted"] for row in controls.admit()["controls"])
+
+
+def test_orphan_control_directory_requires_explicit_resolution(controls):
+    controls.record()
+    orphan = controls.package / "results/controls-interrupted-before-manifest"
+    orphan.mkdir()
+    with pytest.raises(runner.RunnerError, match="Cannot establish control admission"):
+        controls.admit()
+    archive = controls.package / "unresolved-results"
+    archive.mkdir()
+    orphan.rename(archive / orphan.name)
+    # Preserve the damaged record, then establish new controls explicitly.
+    fresh = controls.record()
+    assert all(row["manifest"] == str(fresh / "manifest.json")
+               for row in controls.admit()["controls"])
+
+
+@pytest.mark.parametrize(
+    "field", ["source_commit", "runtime_source_sha256", "input_config_file",
+              "input_config_sha256", "mindtrial_sha256", "evaluation_seed"]
+)
+def test_well_formed_foreign_control_failure_does_not_block_matching_success(controls, field):
+    matching = controls.record()
+
+    def foreign(manifest, records):
+        manifest[field] = "different"
+        records[0]["Kind"] = "Failed"
+
+    controls.record(mutation=foreign)
+    assert all(row["manifest"] == str(matching / "manifest.json")
+               for row in controls.admit()["controls"])
+
+
+def test_control_recency_compares_instants_across_timezone_offsets(controls):
+    controls.record()
+
+    def newer_failure(manifest, records):
+        # One second later than 2026-11-03T00:00:01Z, despite its earlier date text.
+        manifest["started_at"] = "2026-11-02T20:00:02-04:00"
+        records[0]["Kind"] = "Failed"
+
+    controls.record(mutation=newer_failure)
+    with pytest.raises(runner.RunnerError, match="missing or failed"):
+        controls.admit()
+
+
 @pytest.mark.parametrize("packaged", [False, True])
 def test_wrappers_self_locate_in_paths_with_spaces(tmp_path, packaged):
     package = tmp_path / "package with spaces"

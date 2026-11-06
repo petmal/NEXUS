@@ -425,7 +425,9 @@ def main(pilot_name="coordination"):
                                   f"(https://github.com/petmal/NEXUS/blob/{commit}/docs/evaluation-guide.md)"))
         readme = destination / "README.md"
         readme.write_text(readme.read_text().replace("(../../docs/fresh-world-guide.md)",
-                                                   "(guide.md)"))
+                                                   "(guide.md)")
+                          .replace("(../../docs/research-guide.md#reproducibility-record)",
+                                   f"(https://github.com/petmal/NEXUS/blob/{commit}/docs/research-guide.md#reproducibility-record)"))
     release = {
         "source_commit": commit,
         "branch": runner.BRANCH,

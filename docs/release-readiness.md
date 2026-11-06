@@ -57,17 +57,37 @@ bounded model selection and packaged links. Lint and all 14 current-doc link che
 passed. It changes no runtime source or world mechanics; the qualified runtime
 digest remains `bb2dc0dbee12a9cf01633818638fc7b1bac4f4224fd146c441cd1af68912ccf4`.
 
+The RC1 live canary at `db6d043fd5dbb4a719f96858ef4d052cb5b93271` passed all
+six attempts. Independent reconstruction matched 42 accepted actions and 74
+public responses, excluding regenerated receipt codes. Only 14 action-hash
+journal records survived bounded service-log collection; the original private
+bundles were not retained, so original-secret receipt verification was unavailable.
+The follow-up fixes control admission when a newer manifest is damaged or missing
+and orders timestamps by their actual instants. The runtime digest is unchanged.
+All 212 fresh-world/shared-runner tests passed, including 17 new regression cases;
+lint and the 14 current-document link checks also passed.
+
+Audit retention is an integration responsibility: NEXUS provides a portable
+export and verifier; the calling framework supplies persistent operator storage
+and collects it. MindTrial is one example adapter, not a NEXUS dependency.
+Its current examples retain bounded logs rather than complete private bundles.
+See the [framework-neutral storage contract](research-guide.md#reproducibility-record).
+
 ## Before publishing
 
 1. Review the candidate and require green CI on the final head before merge.
-   Both [CI](https://github.com/petmal/NEXUS/actions/runs/41868199563) and
-   [runner/container smoke](https://github.com/petmal/NEXUS/actions/runs/41868199601)
-   passed for `bee63d3ca3d0038df2deaf2659180e73097a1709`, including the actual Docker
+   Both [CI](https://github.com/petmal/NEXUS/actions/runs/41945265345) and
+   [runner/container smoke](https://github.com/petmal/NEXUS/actions/runs/41945265324)
+   passed for `db6d043fd5dbb4a719f96858ef4d052cb5b93271`, including the actual Docker
    image, source-bound preflights, packaged launchers and service/client/validator
    checks. These are completed checks for that commit, not a promise about later
-   revisions. Require new relevant checks after further changes.
-2. Run a small live harness canary on the exact candidate before new empirical
-   claims. The package's `bash run-canary.sh astra` runs four matching controls
+   revisions. Require new relevant checks after further changes. Extended and
+   cross-seed suites were skipped in that run; use the CI workflow's `full=true`
+   option for the broader release gate on the final candidate.
+2. Retain the completed RC1 live canary and repeat it after changes to the game
+   runtime or provider/tool integration. Launcher-only admission safeguards are
+   covered by regression tests. The package's `bash run-canary.sh astra` runs four
+   matching controls
    and F11/F12 (six paid attempts). See [commands and acceptance checks](../examples/mindtrial/fresh-world-run.md#small-release-canary).
    Local reference policies cannot validate a provider's current tool or
    structured-output behavior. No paid calls are part of these code checks.

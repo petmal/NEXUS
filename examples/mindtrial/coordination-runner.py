@@ -800,20 +800,38 @@ def control_admission(package, release, config_name, config_raw, binary, tasks, 
     if len(configured) != 1:
         raise RunnerError("Control admission requires one configured model per file.")
     binary_hash = sha256(binary.read_bytes())
+    identity = {
+        "suite": pilot.control_suite, "source_commit": release["source_commit"],
+        "runtime_source_sha256": release["runtime_source_sha256"],
+        "input_config_file": config_name, "input_config_sha256": sha256(config_raw),
+        "mindtrial_sha256": binary_hash,
+        "evaluation_seed": pilot.evaluation_seed,
+    }
     candidates = []
-    for path in (package / "results").glob(f"{pilot.control_suite}-*/manifest.json"):
+    # Inspect directories too: a missing or damaged manifest must not erase a
+    # newer failed attempt and silently restore admission from an older pass.
+    for folder in sorted((package / "results").glob(f"{pilot.control_suite}-*")):
+        if not folder.is_dir():
+            continue
+        path = folder / "manifest.json"
         try:
             manifest = json.loads(path.read_bytes())
-        except (OSError, ValueError):
-            continue
-        if isinstance(manifest, dict) and all(manifest.get(k) == v for k, v in {
-            "suite": pilot.control_suite, "source_commit": release["source_commit"],
-            "runtime_source_sha256": release["runtime_source_sha256"],
-            "input_config_file": config_name, "input_config_sha256": sha256(config_raw),
-            "mindtrial_sha256": binary_hash,
-            "evaluation_seed": pilot.evaluation_seed,
-        }.items()):
-            candidates.append((str(manifest.get("started_at", "")), path, manifest))
+            if not isinstance(manifest, dict) or any(
+                not isinstance(manifest.get(key), str) or not manifest[key] for key in identity
+            ):
+                raise ValueError("missing or invalid control identity")
+            if any(manifest[key] != value for key, value in identity.items()):
+                continue  # A well-formed identity proves this is a different condition.
+            started = datetime.fromisoformat(manifest["started_at"])
+            if started.utcoffset() is None:
+                raise ValueError("control timestamp must include a timezone")
+        except (OSError, ValueError, KeyError, TypeError) as exc:
+            raise RunnerError(
+                f"Cannot establish control admission: {path} is missing, unreadable or invalid. "
+                "Restore the original manifest, or preserve the whole damaged folder outside "
+                "results for inspection and rerun the affected controls."
+            ) from exc
+        candidates.append((started, path, manifest))
     latest = {}
     for _, path, manifest in sorted(candidates, key=lambda entry: (entry[0], str(entry[1])), reverse=True):
         selection = manifest.get("selection")
