@@ -138,7 +138,8 @@ The fresh-world package was rebuilt from clean commit `164cb12` as
 `NEXUS-RC2-core-canary-2026-11-06.zip`. Its release manifest pins that commit and
 the runtime digest above. The existing six-attempt canary remains the next live
 integration check: four matching controls, followed by F11/F12 on one model.
-Its result is still pending; the earlier RC1 provider run used older code.
+The subsequent [RC2 review](rc2-canary-results-2026-11-06.md) confirms all six live
+attempts passed on this runtime; the earlier RC1 provider run used older code.
 
 The main new checks are in
 [core certification tests](../../tests/unit/test_core_certification.py),
@@ -176,6 +177,7 @@ Historical reports and model runs are retained. Current proof bindings and
 preflight artifacts must be regenerated for the changed implementation. Original
 audit bundles require their recorded runtime; do not overwrite their source
 identity to make them pass a newer verifier. New runs should record the new
-revision and use matching controls. The planned public release still needs green
-checks on the final head and the documented live-provider canary after runtime
-changes. Repository publication remains a separate owner action.
+revision and use matching controls. The documented live-provider canary has now
+passed; repeat it after further runtime or provider-integration changes. Require
+green relevant checks on the final head. Repository publication remains a separate
+owner action.

@@ -47,6 +47,15 @@ justified by the observed evidence. That is a different result from a supported
 win. Terminal information is unavailable to the player during an active attempt.
 Private operator reports can inspect active attempts and must remain private.
 
+Measurement counters describe information gain, not planning efficiency.
+`redundant_measurements` counts observations that do not narrow the candidate
+worlds; a necessary state-changing operation can contribute to that counter when
+the laws are already disclosed. Use exact physical costs and `excess_actions`
+where available to assess wasted actions. Read bounds from the family's scoped
+certificate: plugin worlds can leave shared legacy generation fields such as
+`optimal_action_count` at zero even when their certified plan cost is positive.
+That default is not a zero-action optimum.
+
 ## Reproducibility record
 
 Save the compiled episode and accepted-action trace. A seed alone is insufficient:
