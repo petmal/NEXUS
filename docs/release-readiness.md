@@ -87,24 +87,28 @@ the same substantive results after removing source identity and timing fields.
 The new runtime digest is
 `630d5838e4c7e5964ce7585c655ebde691ed93bf85f2a9f0cd91f975d9e324ac`.
 The 72-world stress sample, clean wheel/source installs, lint and current-doc links
-also passed. The full unit/integration run reached 1,661 of 1,719 tests without
-failure before the execution environment disconnected. Its final result is
-unconfirmed; complete `make test-full` or the CI `full=true` gate before release.
+also passed. All 1,719 unit/integration cases are now complete: 1,661 passed before
+an environment interruption, then the remaining 58 passed after recovery in
+50.99 seconds. The ordered test collection and runtime digest were identical.
+This is complete coverage across two processes, not one uninterrupted run.
 
 ## Before publishing
 
 1. Review the candidate and require green CI on the final head before merge.
-   Both [CI](https://github.com/petmal/NEXUS/actions/runs/41945265345) and
-   [runner/container smoke](https://github.com/petmal/NEXUS/actions/runs/41945265324)
-   passed for `db6d043fd5dbb4a719f96858ef4d052cb5b93271`, including the actual Docker
+   Both [CI](https://github.com/petmal/NEXUS/actions/runs/42150090631) and
+   [runner/container smoke](https://github.com/petmal/NEXUS/actions/runs/42150092076)
+   passed for `164cb123b092bb0104f6a4de950a105bf28107fe`, including the actual Docker
    image, source-bound preflights, packaged launchers and service/client/validator
    checks. These are completed checks for that commit, not a promise about later
    revisions. Require new relevant checks after further changes. Extended and
-   cross-seed suites were skipped in that run; use the CI workflow's `full=true`
-   option for the broader release gate on the final candidate.
+   cross-seed jobs were skipped in CI; the completed local full collection and
+   property run above supply those results. `make test-full` and `make stress`,
+   or the CI workflow's `full=true` option, reproduce the broader gate.
 2. Retain the completed RC1 live canary and repeat it after changes to the game
-   runtime or provider/tool integration. Rebuild the canary package from the new
-   candidate: the previously downloaded RC1 archive is pinned to its earlier head.
+   runtime or provider/tool integration. The rebuilt
+   `NEXUS-RC2-core-canary-2026-11-06.zip` pins `164cb12` and the runtime digest above;
+   its live result is pending. The previously downloaded RC1 archive is pinned
+   to its earlier head. Rebuild again if the candidate runtime changes.
    Launcher-only admission safeguards are
    covered by regression tests. The package's `bash run-canary.sh astra` runs four
    matching controls
