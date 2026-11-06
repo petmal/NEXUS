@@ -12,6 +12,8 @@ Choose the path that matches your goal.
 [Release readiness](release-readiness.md) describes the current software scope,
 checks and remaining release gates. [Future experiments](future-experiments.md)
 contains the research roadmap.
+The [core robustness review](research/core-robustness-review-2026-11-06.md)
+records fixes and independent checks of goals, receipts, solver costs and metrics.
 
 ## Experimental families and history
 

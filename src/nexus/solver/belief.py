@@ -345,7 +345,7 @@ def _macro_choices(
     if evaluate_goal(episode.public.goal, state):
         choices.append(_MacroChoice(route=(), action=FinishAction()))
 
-    goal_rooms = goal_location_rooms(episode.public.goal)
+    goal_rooms = goal_location_rooms(episode.public.goal, episode.public.rooms)
     for artifact in sorted(state.artifacts.values(), key=lambda item: item.id):
         if artifact.location != INVENTORY:
             route = movement.route(state.agent_room, artifact.location)
@@ -363,7 +363,8 @@ def _macro_choices(
 
     carried = sorted(artifact.id for artifact in state.carried_artifacts())
     goal_artifacts = goal_field_artifact_ids(episode.public.goal)
-    total_machine_uses = sum(machine.uses_remaining for machine in state.machines.values())
+    uses = [machine.uses_remaining for machine in state.machines.values()]
+    can_experiment_by_operating = None in uses or sum(uses) > 1
     for machine in sorted(state.machines.values(), key=lambda item: item.id):
         route = movement.route(state.agent_room, machine.room_id)
         if route is None:
@@ -376,10 +377,10 @@ def _macro_choices(
                         action=ProbeAction(machine=machine.id, artifact=artifact_id),
                     )
                 )
-            if machine.uses_remaining <= 0:
+            if machine.uses_remaining == 0:
                 continue
 
-            if artifact_id in goal_artifacts or (belief_mode and total_machine_uses > 1):
+            if artifact_id in goal_artifacts or (belief_mode and can_experiment_by_operating):
                 choices.append(
                     _MacroChoice(
                         route=route,
@@ -448,7 +449,8 @@ def solve_compressed_physical(
     include_plan: bool = True,
 ) -> CompressedPhysicalResult:
     """Exact Dijkstra solver after quotienting side-effect-free movement into shortest paths."""
-    search_budget = max(512, episode.public.initial_state.resources.actions_remaining + 64)
+    budget = episode.public.initial_state.resources.actions_remaining
+    search_budget = max(512, (budget or 0) + 64)
     initial = _normalize_state(
         initial_state if initial_state is not None else episode.public.initial_state,
         search_budget,

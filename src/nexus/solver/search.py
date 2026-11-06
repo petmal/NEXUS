@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from collections import deque
+from collections.abc import Iterable
 
 from pydantic import BaseModel, ConfigDict
 
@@ -117,38 +118,42 @@ def goal_field_artifact_ids(goal: GoalPredicate) -> set[str]:
     return result
 
 
-def goal_location_rooms(goal: GoalPredicate) -> dict[str, set[str]]:
+def goal_location_rooms(goal: GoalPredicate, rooms: Iterable[str]) -> dict[str, set[str]]:
     """Collect rooms that can satisfy an explicit artifact-location goal.
 
     With unlimited inventory and the current mechanics, dropping an artifact anywhere else is
     dominated: movement has no carrying cost and probe/operate both require the artifact to be
-    carried. Collecting locations even underneath OR/NOT is deliberately conservative; it may
-    retain extra legal drops but never removes one referenced by the goal.
+    carried. A negated location predicate can instead require dropping in an
+    unnamed room (in particular NOT in inventory). Retain all rooms under odd
+    negation, including through AND/OR; double negation restores positive polarity.
     """
     result: dict[str, set[str]] = {}
+    all_rooms = set(rooms)
 
-    def visit(predicate: GoalPredicate) -> None:
+    def visit(predicate: GoalPredicate, negated: bool = False) -> None:
         if (
             predicate.kind == GoalKind.ARTIFACT_LOCATION
             and predicate.artifact_id is not None
             and isinstance(predicate.value, str)
         ):
-            result.setdefault(predicate.artifact_id, set()).add(predicate.value)
+            result.setdefault(predicate.artifact_id, set()).update(
+                all_rooms if negated else {predicate.value} & all_rooms
+            )
         for child in predicate.children:
-            visit(child)
+            visit(child, negated != (predicate.kind == GoalKind.NOT))
 
     visit(goal)
     return result
 
 
 def legal_solver_actions(episode: PrivateEpisode, state: WorldState) -> list[Action]:
-    if state.terminal_status != TerminalStatus.ACTIVE or state.resources.actions_remaining <= 0:
+    if state.terminal_status != TerminalStatus.ACTIVE or state.resources.actions_remaining == 0:
         return []
 
     actions: list[Action] = [FinishAction()]
     actions.extend(MoveAction(target=room) for room in neighbors(episode, state.agent_room))
 
-    goal_rooms = goal_location_rooms(episode.public.goal)
+    goal_rooms = goal_location_rooms(episode.public.goal, episode.public.rooms)
     for artifact in sorted(state.artifacts.values(), key=lambda a: a.id):
         if artifact.location == state.agent_room:
             actions.append(TakeAction(artifact=artifact.id))
@@ -161,7 +166,7 @@ def legal_solver_actions(episode: PrivateEpisode, state: WorldState) -> list[Act
     carried = sorted((a.id for a in state.carried_artifacts()))
     goal_artifacts = goal_field_artifact_ids(episode.public.goal)
     for machine in sorted(state.machines.values(), key=lambda m: m.id):
-        if machine.room_id == state.agent_room and machine.uses_remaining > 0:
+        if machine.room_id == state.agent_room and machine.uses_remaining != 0:
             for artifact_id in carried:
                 if artifact_id in goal_artifacts:
                     actions.append(OperateAction(machine=machine.id, artifact=artifact_id))

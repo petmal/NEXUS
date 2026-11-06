@@ -20,7 +20,7 @@ def evaluate_condition(condition: Condition, artifact: Artifact, phase: int) -> 
             raise ValueError(f"unsupported artifact field {condition.field!r}")
         return _normalized(getattr(artifact, condition.field)) == _normalized(condition.value)
     if kind == ConditionKind.PHASE_EQUALS:
-        return phase == int(condition.value)
+        return phase == condition.value
     if kind == ConditionKind.PHASE_PARITY:
         return (phase % 2 == 0) == (condition.parity == "even")
     if kind == ConditionKind.VALUE_MODULO:

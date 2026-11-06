@@ -82,7 +82,19 @@ power-loss durability guarantee or a resumable session file.
 
 `nexus verify-audit DIR --json` requires matching runtime source. It checks file
 hashes, episode binding, accepted-action replay with the original verifier secret,
-lifecycle closure and exchange counts/order. It fails or returns a nonzero exit
+lifecycle closure and exchange counts/order. It also recomputes game-derived
+performance, evidence witnesses and physical continuation costs from that trace.
+`game_metrics_verified` reports this check. Invalid-action, duplicate-request and
+protocol-conflict counts need the public transcript, so they are explicitly listed
+in `unverified_outcome_fields`, along with assistance and provider/receipt-validation
+metadata. Their presence in a bundle does not certify them.
+Metric reconstruction uses the recorded compiled world and its declared reference
+bounds. It does not rerun the whole world-qualification search:
+`world_qualification_rechecked` remains false. Use
+`nexus qualify DIR/private.json` to recheck episode admission and the family's
+documented proof/preflight command for stronger population-level guarantees.
+
+The command fails or returns a nonzero exit
 for incomplete coverage. It does **not** independently reconstruct every public
 response, authenticate the external provider, or certify inference settings.
 Checksums detect byte changes; they do not make an editable bundle tamper-proof.
