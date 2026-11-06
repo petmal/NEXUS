@@ -16,6 +16,8 @@ The [core robustness review](research/core-robustness-review-2026-11-06.md)
 records fixes and independent checks of goals, receipts, solver costs and metrics.
 The [RC2 canary](research/rc2-canary-results-2026-11-06.md) confirms all six selected
 live attempts on the audited runtime and explains the remaining audit limits.
+The [story review](research/story-review-2026-11-06.md) records the revised setting,
+terminology, player-information checks and presentation-version boundary.
 
 ## Experimental families and history
 

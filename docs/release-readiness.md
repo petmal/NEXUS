@@ -26,10 +26,12 @@ strongest-model failure boundary on the T/D axis.
 - Current entry docs are organized by reader. License/metadata, frozen lint,
   clean-distribution checks and fresh-world CI coverage are included.
 
-The evaluated game laws, targets, action costs, and `sealed-facility-v1` model
-presentation remain unchanged. Diagnostic/schema additions and opaque IDs still
-change runtime identity: use new source bindings and matched controls for new
-runs. Historical empirical reports are preserved. Current preflight artifacts
+The evaluated game laws, targets and action costs remain unchanged. Saved
+`sealed-facility-v1` episodes retain their original wording; the subsequent story
+review introduces `sealed-facility-v2` for newly generated episodes. Wording is
+part of the evaluated input: record its version, use new source bindings and
+matched controls, and do not treat old live runs as validation of the new text.
+Historical empirical reports are preserved. Current preflight artifacts
 have `-current.json` filenames and are not historical result sets.
 
 ## Validation
@@ -99,7 +101,22 @@ reports and all 14 retained original action-hash records. F11/F12 both used the
 exact 12-action optimum. Source/configuration/control-admission bindings matched;
 there were no provider errors or unsuccessful tool calls. Original private bundles
 remain unavailable, as documented above. This completes the planned small live
-check for this model/settings combination; no new runtime fix was identified.
+check for this model/settings combination on presentation v1; no new runtime fix
+was identified from those runs.
+
+The subsequent [story review](research/story-review-2026-11-06.md) clarifies the
+setting, terminology, action allowance and ending in presentation v2. It fixes a
+routing briefing that contradicted disclosed-law controls and preserves existing
+public room functions in nested maps. All changes stay in public presentation;
+canonical laws and technical evidence are unchanged. Historical v1 text is covered
+by golden snapshots. This review changes the runtime and public-input identity;
+the RC2 model runs above do not test v2. The final repair gate, 56 cross-axis
+conditions, 32 fresh/anchor rows and clean package installs passed. The current
+runtime digest is
+`1e064b6fd5d3a7e330e61fa04da529c2e084f05258002f668694157b4c06bb99`.
+All 1,698 fast unit/integration cases passed, with 52 slow cases excluded; 31 new
+regressions cover presentation and player output. Lint and current-document links
+passed. See the review for the complete scope and local validation.
 
 ## Before publishing
 
@@ -116,8 +133,10 @@ check for this model/settings combination; no new runtime fix was identified.
 2. Retain the completed RC1 and RC2 live canaries. Repeat the small check after
    changes to the game runtime or provider/tool integration. The successful
    `NEXUS-RC2-core-canary-2026-11-06.zip` run pins `164cb12` and the runtime digest
-   above, which is unchanged at `78cfdc8`. Documentation-only changes do not require
-   new paid attempts. Rebuild the package if the candidate runtime changes.
+   recorded in its report, which is unchanged at `78cfdc8`. The later story review
+   changes that runtime and the default presentation. Complete the remaining
+   requested reviews, rebuild the canary from the final candidate, then run the
+   small live check once. Documentation-only changes do not require new paid attempts.
    Launcher-only admission safeguards are
    covered by regression tests. The package's `bash run-canary.sh astra` runs four
    matching controls

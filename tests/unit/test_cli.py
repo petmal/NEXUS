@@ -1,3 +1,5 @@
+import json
+
 import pytest
 
 from typer.testing import CliRunner
@@ -78,6 +80,24 @@ def test_play_evidence_meta_command_matches_player_evidence_access(tmp_path):
     assert "measurements.csv" in result.stdout
     assert "phase,shape,input_value,input_polarity,input_orientation" in result.stdout
     assert "invalid action JSON" not in result.stdout
+
+
+def test_story_ending_requires_a_real_successful_finish(tmp_path):
+    episode = generate_episode(2210, discovery_level=0, planning_level=0)
+    save_episode(episode, tmp_path)
+    failed = runner.invoke(
+        app, ["play", str(tmp_path / "private.json")],
+        input='{"type":"finish"}\nquit\n',
+    )
+    assert failed.exit_code == 0
+    assert "Exit clearance granted." not in failed.stdout
+    won = runner.invoke(
+        app, ["play", str(tmp_path / "private.json")],
+        input="\n".join(json.dumps(action) for action in episode.reference_plan) + "\n",
+    )
+    assert won.exit_code == 0, won.stdout
+    assert "Exit clearance granted." in won.stdout
+    assert "Victory receipt: NX-" in won.stdout
 
 
 @pytest.mark.slow

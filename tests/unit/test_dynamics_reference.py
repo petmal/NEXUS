@@ -86,6 +86,7 @@ def test_unchanged_dynamics_episode_contracts():
             discovery_level=row["discovery"],
             resource_pressure=1,
             verifier_secret="compatibility-test",
+            presentation_version="sealed-facility-v1",  # Historical whole-episode snapshots.
         )
         data = episode.model_dump(mode="json")
         data["public"]["episode_id"] = "nonce"

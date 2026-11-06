@@ -2,10 +2,14 @@
 
 **Small artificial worlds. Explicit rules. Verifiable outcomes.**
 
-NEXUS tests how a model investigates, plans, and acts over many steps. A player is
-inside a sealed facility. It reads records, experiments with apparatus, changes
-the world, and tries to meet an exact mission. The engine checks success and
-issues a victory receipt. No model judge is involved.
+NEXUS tests how a model investigates, plans, and acts over many steps. You are
+inside an automated facility of unknown origin. Its translated console offers
+a way out: complete a repair, calibration, or construction mission. Read the
+local records, work with unfamiliar apparatus, and earn exit clearance. The
+names are alien; the controls and mission requirements are explicit.
+
+The engine checks success and issues a victory receipt. No model judge is
+involved. [The facility setting](docs/facility-setting.md) gives the short background.
 
 You can play locally, connect a model through a JSON interface, or build matched
 experiments. Generation produces a compiled world; replay checks every accepted

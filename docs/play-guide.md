@@ -1,8 +1,9 @@
 # Your first visit to NEXUS
 
-You are inside an artificial facility. Its exit seal opens only when you complete
-the mission. The records tell you how to use the apparatus. Some worlds disclose
-all of their laws; others leave questions for you to investigate.
+You are inside NEXUS, an automated facility of unknown origin. A translated console
+offers exit clearance when you complete its mission. The records tell you how to
+use the apparatus. Some worlds disclose all of their laws; others leave questions
+for you to investigate. [Meet the facility](facility-setting.md).
 
 The story is a setting for a precise puzzle. Real-world chemistry or physics
 will not tell you the answer. Use this world's records and observations.
@@ -26,6 +27,9 @@ apparatus, and actions remaining. It does not show unseen objects elsewhere.
 
 These commands do not spend an environment action. File names and object IDs
 vary by world: copy the identifiers displayed in your session.
+The listed manual or `facility.txt` includes the console's terminology. An object
+named `seal` is a portable mission part, not the exit door. You do not need to
+learn an alien language or find a hidden story clue.
 
 ## Take actions
 
@@ -39,7 +43,8 @@ change; `operate` commits it. Both consume an action. Some families use addition
 controls, such as `configure` or `spawn`; read `help` and the evidence first.
 
 A turn is an accepted action, not a line of conversation or elapsed time.
-`wait` also spends an action. A legal operation can consume resources even when
+`wait` also spends an action. Reading and thinking have no real-time cost.
+A legal operation can consume resources even when
 it changes nothing. Invalid requests do not partially change the world. Phase
 is a separate world register, not a real-time clock.
 
@@ -47,6 +52,9 @@ When you believe the exact mission state is ready, enter `{"type":"finish"}`.
 A successful finish produces the victory receipt. Merely reaching the right
 physical state is not enough. A rejected finish still costs an action; whether
 you can recover depends on the remaining resources and the world's rules.
+The receipt marks exit clearance and ends the visit. No further escape action is
+needed. If an attempt ends without it, clearance was not granted; `quit` only
+closes the local program.
 
 ## Read the records, then choose your next step
 

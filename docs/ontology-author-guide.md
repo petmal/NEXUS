@@ -26,6 +26,21 @@ particular difficulty. Equivalent mission predictions count as the same target,
 and unsuccessful eligible submissions are evidence. There are no mandatory
 verbal scientific-method rituals or stage unlocks.
 
+## Writing the player briefing
+
+Use the [facility setting](facility-setting.md): one local mission, exact acceptance
+conditions and exit clearance on successful `finish`. Call the exit lock an
+interlock and a portable part a seal component; keep action IDs explicit. Define
+new artificial terms beside their controls. Give the world a listed `facility.txt`,
+`manual.txt`, `manual.md` or `facility_manual.txt` so it receives the shared orientation.
+
+Keep the brief valid for both disclosed and hidden-law profiles. Story labels must
+not depend on private truth, reference plans or qualification results. Do not add
+an implied time limit, secret object, experiment order or extra escape step. Keep
+formal records complete; prose cannot override an action or goal contract. Use the
+shared presentation layer for player output, preserve historical presentation
+versions, and extend the public-surface tests when adding a family.
+
 ## Extension points
 
 | Component | Responsibility | Existing example |

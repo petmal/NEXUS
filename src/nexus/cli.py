@@ -308,6 +308,8 @@ def _play(episode, *, debug_private=False, audit_dir=None):
                 if recorder is not None:
                     recorder.checkpoint_safely()
                 if response.victory_code:
+                    if manifest.presentation_version == "sealed-facility-v2":
+                        console.print("Exit clearance granted. Your visit to NEXUS is complete.")
                     console.print("Victory receipt: " + response.victory_code, markup=False)
     finally:
         if recorder is not None:
