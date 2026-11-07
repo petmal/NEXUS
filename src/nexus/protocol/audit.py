@@ -20,7 +20,7 @@ from nexus.engine.canonical import canonical_bytes, canonical_hash
 from nexus.engine.replay import replay
 from nexus.io import load_private, load_trace
 from nexus.models.world import TerminalStatus
-from nexus.presentation import evidence_files
+from nexus.presentation import public_input_binding
 from nexus.provenance import source_digest
 from nexus.protocol.public_transcript import VERSION as TRANSCRIPT_VERSION
 from nexus.protocol.public_transcript import PublicTranscript
@@ -36,9 +36,8 @@ def _world_binding(episode) -> dict:
         "version": VERSION,
         "episode_id": episode.public.episode_id,
         "protocol_version": episode.public.protocol_version,
-        "presentation_version": episode.public.presentation_version,
+        **public_input_binding(episode.public),
         "generation_metadata": episode.generation_metadata.model_dump(mode="json"),
-        "public_evidence_sha256": canonical_hash(evidence_files(episode.public)),
         "initial_state_sha256": canonical_hash(episode.public.initial_state),
     }
 
@@ -58,7 +57,7 @@ def _verify_game_outcome(episode, records, outcome):
     if outcome["evaluator_finalized"]:
         reconstructed.finalize_attempt()
     expected = reconstructed.operator_snapshot()
-    for field in ("status", "performance", "evidence_witnesses", "physical_continuation"):
+    for field in ("world", "status", "performance", "evidence_witnesses", "physical_continuation"):
         if field not in outcome:
             raise ValueError(f"audit {field} mismatch: missing field")
         actual, wanted = outcome[field], expected[field]

@@ -170,11 +170,19 @@ def request_service_payload(request: object, *, url: str | None = None) -> objec
         return {"filename": filename, "content": content}
 
     if operation == "action":
-        _exact_keys(payload, {"operation", "action"}, "request")
+        keys = {"operation", "action"}
+        if "expected_turn" in payload:
+            keys.add("expected_turn")
+        _exact_keys(payload, keys, "request")
         action = payload["action"]
         if not isinstance(action, dict):
             raise ClientError("request field 'action' must be a JSON object")
-        turn, _, _, _ = _status(base_url)
+        if "expected_turn" in payload:
+            turn = payload["expected_turn"]
+            if type(turn) is not int or turn < 0:
+                raise ClientError("request field 'expected_turn' must be a nonnegative integer")
+        else:
+            turn, _, _, _ = _status(base_url)
         return _json_request(
             base_url,
             "POST",

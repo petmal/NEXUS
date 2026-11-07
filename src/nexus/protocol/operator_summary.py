@@ -11,9 +11,20 @@ from collections import Counter
 SUMMARY_LIMIT_BYTES = 4096
 
 
+def world_profile(episode) -> dict:
+    from nexus.ontology.catalog import definition_for
+
+    spec = episode.public.investigation
+    return {
+        "family": definition_for(spec).family if spec is not None else "legacy",
+        "initial_action_budget": episode.public.initial_state.resources.actions_remaining,
+    }
+
+
 def compact_summary(snapshot: dict, trace) -> dict:
     """Project a private snapshot without replaying inference or exposing secrets."""
     performance = snapshot.get("performance") or {}
+    world = snapshot.get("world", {})
     decision = performance.get("decision_diagnostics") or {}
     readings = decision.get("readings")
     accounting = None
@@ -42,12 +53,12 @@ def compact_summary(snapshot: dict, trace) -> dict:
     witness_report = snapshot.get("evidence_witnesses") or {}
     witnesses = witness_report.get("submissions", ())
     return {
-        "version": "operator-summary-v3",
-        "family": str(performance.get("ontology") or "legacy")[:128],
+        "version": "operator-summary-v4",
+        "family": str(world.get("family") or performance.get("ontology") or "unknown")[:128],
         "status": str(snapshot["status"]["status"])[:80],
         "termination_reason": str(performance.get("termination_reason") or "unknown")[:80],
         "turn": snapshot["status"]["turn"],
-        "initial_action_budget": performance.get("initial_action_budget"),
+        "initial_action_budget": world.get("initial_action_budget", performance.get("initial_action_budget")),
         "actions_remaining": snapshot["status"]["actions_remaining"],
         "action_counts": {
             key: action_counts[key]
@@ -96,7 +107,9 @@ def compact_summary(snapshot: dict, trace) -> dict:
         "witness_kinds": dict(
             Counter(item["witness"]["kind"] for item in witnesses if item["witness"] is not None)
         ),
-        "repeated_build_submissions": sum(item["repeated_build"] for item in witnesses),
+        "repeated_build_submissions": (
+            sum(item["repeated_build"] for item in witnesses) if witness_report else None
+        ),
         "rejected_equivalent_submissions": (
             sum(item.get("previous_rejected_equivalent_turn") is not None for item in witnesses)
             if witness_report.get("decision_equivalence_available")

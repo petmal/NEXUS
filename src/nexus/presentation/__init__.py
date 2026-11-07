@@ -161,3 +161,26 @@ def evidence(public: PublicEpisode, filename: str) -> str:
 
 def evidence_files(public: PublicEpisode) -> dict[str, str]:
     return {filename: evidence(public, filename) for filename in public.evidence_files}
+
+
+def evidence_binding(public: PublicEpisode) -> dict[str, str | None]:
+    """Identify the compiled source and the exact filename-to-text map delivered to players."""
+    from nexus.engine.canonical import canonical_hash
+
+    return {
+        "evidence_binding_version": "presented-evidence-v1",
+        "presentation_version": public.presentation_version,
+        "compiled_evidence_sha256": canonical_hash(public.evidence_files),
+        "public_evidence_sha256": canonical_hash(evidence_files(public)),
+    }
+
+
+def public_input_binding(public: PublicEpisode) -> dict[str, str | None]:
+    """Instance-specific identity; the player manifest includes its episode ID."""
+    from nexus.engine.canonical import canonical_hash
+    from nexus.models.episode import PlayerManifest
+
+    return {
+        **evidence_binding(public),
+        "player_manifest_sha256": canonical_hash(PlayerManifest.from_episode(public)),
+    }

@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from copy import deepcopy
 from typing import Annotated, Literal
 
 from pydantic import BaseModel, ConfigDict, Field, TypeAdapter
@@ -125,8 +126,10 @@ ACTION_REFERENCE: tuple[dict[str, object], ...] = (
 
 def action_contract(*, scientific: bool = False, resonant: bool = False) -> dict[str, object]:
     """Player-safe description of the stable interaction contract."""
+    # Examples contain nested mutable dictionaries and are handed to Python players.
+    reference = deepcopy(ACTION_REFERENCE)
     if scientific:
-        reference = tuple(dict(item) for item in ACTION_REFERENCE) + ({
+        reference += ({
             "type": "configure", "description": "Store the complete controller settings; no correctness feedback until finish.",
             "example": {"type": "configure", "machine": "controller", "settings": [0, 1, 2, 3, 4]},
         },)
@@ -143,4 +146,4 @@ def action_contract(*, scientific: bool = False, resonant: bool = False) -> dict
     # Keep legacy player contracts byte-compatible, including their action union.
     legacy = Annotated[ObserveAction | MoveAction | TakeAction | DropAction | OperateAction
                        | ProbeAction | WaitAction | FinishAction, Field(discriminator="type")]
-    return {"schema": TypeAdapter(legacy).json_schema(), "reference": ACTION_REFERENCE}
+    return {"schema": TypeAdapter(legacy).json_schema(), "reference": reference}

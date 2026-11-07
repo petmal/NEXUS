@@ -257,6 +257,7 @@ class Session:
         this does not call finalize_attempt or label an active world as failed.
         """
         with self._lock:
+            from nexus.protocol.operator_summary import world_profile
             from nexus.protocol.operator_witnesses import submission_witnesses
             from nexus.protocol.physical_cost import continuation_report
 
@@ -278,6 +279,7 @@ class Session:
             status.pop("victory_code")
             witnesses = submission_witnesses(self.episode.public, self.trace)
             return {
+                "world": world_profile(self.episode),
                 "status": status,
                 "performance": None if performance is None else performance.model_dump(mode="json"),
                 "provider_stop_reason": None,

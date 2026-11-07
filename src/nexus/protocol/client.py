@@ -1,11 +1,18 @@
 from __future__ import annotations
 
-from typing import Annotated, Literal
+from pydantic import BaseModel, ConfigDict
 
-from pydantic import BaseModel, ConfigDict, Field, TypeAdapter
-
-from nexus.models.actions import Action
-from nexus.ontology.assistance import ConstructionCheckRequest
+# Keep the Python client import surface stable; JSONL also uses these envelopes.
+from nexus.protocol.requests import (
+    SERVICE_REQUEST_ADAPTER,
+    ActionClientRequest as ActionClientRequest,
+    CheckClientRequest as CheckClientRequest,
+    EvidenceRequest as EvidenceRequest,
+    ManifestRequest as ManifestRequest,
+    ObserveRequest as ObserveRequest,
+    ServiceRequest,
+    StatusRequest as StatusRequest,
+)
 from nexus.protocol.transport import (
     ClientError,
     check_health,
@@ -26,49 +33,6 @@ __all__ = [
     "validate_candidate",
     "validate_candidate_with_performance",
 ]
-
-
-class ObserveRequest(BaseModel):
-    model_config = ConfigDict(extra="forbid", frozen=True)
-    operation: Literal["observe"]
-
-
-class StatusRequest(BaseModel):
-    model_config = ConfigDict(extra="forbid", frozen=True)
-    operation: Literal["status"]
-
-
-class ManifestRequest(BaseModel):
-    model_config = ConfigDict(extra="forbid", frozen=True)
-    operation: Literal["manifest"]
-
-
-class EvidenceRequest(BaseModel):
-    model_config = ConfigDict(extra="forbid", frozen=True)
-    operation: Literal["evidence"]
-    filename: str
-
-
-class ActionClientRequest(BaseModel):
-    model_config = ConfigDict(extra="forbid", frozen=True)
-    operation: Literal["action"]
-    action: Action
-
-
-class CheckClientRequest(ConstructionCheckRequest):
-    operation: Literal["check"]
-
-
-ServiceRequest = Annotated[
-    ObserveRequest
-    | StatusRequest
-    | ManifestRequest
-    | EvidenceRequest
-    | ActionClientRequest
-    | CheckClientRequest,
-    Field(discriminator="operation"),
-]
-SERVICE_REQUEST_ADAPTER = TypeAdapter(ServiceRequest)
 
 
 class ValidationResult(BaseModel):

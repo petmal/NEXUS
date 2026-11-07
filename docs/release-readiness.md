@@ -149,6 +149,13 @@ replaces the prototype-era [agent instructions](../AGENTS.md). The changes affec
 operator output and source identity; they do not introduce new laws, costs or
 player evidence. Keep the final-source live canary as a separate release gate.
 
+The [second quality review](research/protocol-quality-review-2026-11-07.md)
+separates the evidence compiled by a world family from the text delivered to
+players. It corrects starting allowances and family names in operator summaries,
+isolates action examples between Python players, and documents safe retries and
+public task access over JSONL. These corrections preserve game mechanics and
+the evaluated wording. Use the new source for the final canary.
+
 ## Before publishing
 
 1. Review the candidate and require green CI on the final head before merge.

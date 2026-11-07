@@ -21,6 +21,15 @@ A dated design or experiment report records what was tried; it does not override
 the shipped interface. Use the existing family and protocol boundaries. Prefer a
 small explicit implementation to a new framework or speculative game system.
 
+For a player protocol change, check the shared schema and both transports: the typed
+[request envelopes](src/nexus/protocol/requests.py), the installed
+[lightweight client](src/nexus/protocol/fast_cli.py) and its
+[HTTP transport](src/nexus/protocol/transport.py), and the
+[JSONL service](src/nexus/protocol/stdio.py). The installed `request`, `validate`
+and `health` commands bypass Typer. Test the installed path as well as Python
+calls; keep the lightweight path on the standard library (no Pydantic, Typer or
+FastAPI imports).
+
 ## Invariants to preserve
 
 - A compiled episode, its verifier secret and the same actions reproduce the same
@@ -36,6 +45,11 @@ small explicit implementation to a new framework or speculative game system.
   ontologies; never load modules or execute callbacks named by episode data.
   Vary laws or targets where the experiment calls for it; retain matched
   controls, deterministic replay and a mechanically checked route to victory.
+- For player evidence, use the [presentation projection](src/nexus/presentation).
+  A compiled attachment may differ from the text actually served. Bind and test
+  the delivered text separately from its compiled source. Return independent
+  instruction/observation objects; one Python player must not change another's
+  inputs. A retry is identified by both the original turn and action.
 - Separate a physical win, an issued receipt and a harness-accepted answer.
   Separate a winning witness, a proven minimum and a public-policy upper
   bound. Do not interpret missing diagnostics or an uncapped budget as zero.

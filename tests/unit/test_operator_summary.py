@@ -109,6 +109,6 @@ def test_archived_v1_witness_summary_does_not_invent_zero_behavioral_repeats():
         "submissions": [{"repeated_build": True, "witness": None}],
     }
     summary = compact_summary(snapshot, session.trace_snapshot())
-    assert summary["version"] == "operator-summary-v3"
+    assert summary["version"] == "operator-summary-v4"
     assert summary["repeated_build_submissions"] == 1
     assert summary["rejected_equivalent_submissions"] is None

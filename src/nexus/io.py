@@ -61,7 +61,7 @@ def save_episode(episode: PrivateEpisode, directory: Path) -> None:
             temporary.unlink(missing_ok=True)
 
     for filename, content in evidence_files(episode.public).items():
-        (attachments / filename).write_text(content, encoding="utf-8")
+        (attachments / filename).write_text(content, encoding="utf-8", newline="")
 
 
 def save_trace(records: list[TraceRecord], path: Path) -> None:
