@@ -8,6 +8,7 @@ from typing import Literal
 
 from pydantic import BaseModel, ConfigDict, Field, StrictInt, model_validator
 
+from nexus.presentation import evidence_binding, evidence_files
 from nexus.engine.canonical import canonical_hash
 from nexus.engine.replay import replay
 from nexus.evaluation.artifacts import atomic_json
@@ -249,7 +250,7 @@ def preflight(cycle: Cycle, output):
             reference = {}
             for name, variant in variants:
                 session = Session(variant)
-                result = public_policy(session, variant.public.evidence_files)
+                result = public_policy(session, evidence_files(variant.public))
                 passed = (
                     bool(result.victory_code)
                     and result.performance.decision_diagnostics.escape_classification
@@ -282,7 +283,7 @@ def preflight(cycle: Cycle, output):
                     "program": truth.program,
                     "topology_key": topology_key(truth.program),
                     "public_investigation_sha256": canonical_hash(ep.public.investigation),
-                    "public_evidence_sha256": canonical_hash(ep.public.evidence_files),
+                    **evidence_binding(ep.public),
                     "public_policy": reference,
                     "baseline_policies": baseline_policies,
                 }

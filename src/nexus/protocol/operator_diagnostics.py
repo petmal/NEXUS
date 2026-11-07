@@ -9,7 +9,7 @@ import json
 import logging
 from threading import RLock
 
-from nexus.protocol.operator_summary import SUMMARY_LIMIT_BYTES, compact_summary
+from nexus.protocol.operator_summary import SUMMARY_LIMIT_BYTES, compact_summary, world_profile
 
 LOGGER = logging.getLogger("nexus.operator")
 
@@ -26,7 +26,7 @@ class OperatorDiagnostics:
             "NEXUS operator diagnostic: %s",
             json.dumps(
                 {
-                    "version": "operator-diagnostic-v1",
+                    "version": "operator-diagnostic-v2",
                     "kind": kind,
                     "episode_id": self.session.episode.public.episode_id,
                     **payload,
@@ -38,6 +38,7 @@ class OperatorDiagnostics:
 
     def start(self):
         from nexus.engine.canonical import canonical_hash
+        from nexus.presentation import public_input_binding
         from nexus.provenance import source_digest
 
         episode = self.session.episode
@@ -47,17 +48,17 @@ class OperatorDiagnostics:
             {
                 "source_sha256": source_digest(),
                 "seed": episode.construction_seed,
-                "family": metadata.scenario_family_id,
+                **world_profile(episode),
+                "scenario_family_id": metadata.scenario_family_id,
                 "theory": metadata.theory_level,
                 "discovery": metadata.discovery_level,
                 "planning": metadata.planning_level,
                 "resource_pressure": metadata.resource_pressure,
                 "budget_profile": metadata.budget_profile,
-                "initial_action_budget": metadata.action_budget,
                 "public_investigation_sha256": None
                 if episode.public.investigation is None
                 else canonical_hash(episode.public.investigation),
-                "public_evidence_sha256": canonical_hash(episode.public.evidence_files),
+                **public_input_binding(episode.public),
                 "public_investigation": None
                 if episode.public.investigation is None
                 else episode.public.investigation.model_dump(mode="json"),
@@ -87,10 +88,10 @@ class OperatorDiagnostics:
 
     def report(self, trigger):
         try:
-            snapshot = self.session.operator_snapshot()
+            _, trace, snapshot = self.session.audit_snapshot()
             self.emit("report", {"trigger": trigger, **snapshot})
             summary = {
-                **compact_summary(snapshot, self.session.trace_snapshot()),
+                **compact_summary(snapshot, trace),
                 "episode_id": self.session.episode.public.episode_id[:128],
                 "trigger": trigger[:80],
             }

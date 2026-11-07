@@ -38,6 +38,12 @@ The private `nexus solve` command reports the cost of its returned plan as
 for that world with its laws known. An unproven minimum stays null even if
 the plan wins. Neither field measures the work of discovering a hidden law.
 
+For service logs, `operator-summary-v4` records the world family and starting
+allowance even if the attempt is still active. `repeated_build_submissions: null`
+means witness analysis was unavailable; zero means it ran and found none. Some
+older summaries labeled scientific controller worlds `legacy`. For those records,
+recover the family and allowance from the bound world before pooling runs.
+
 ## Evidence at the moment of a decision
 
 For an eligible submitted build, let **W** be the set of worlds still consistent with public observations **before** feedback on this submission. Let **A** be the subset accepting the build. If A equals W, the build is **guaranteed**; if A is nonempty but smaller than W, it is **compatible**; if A is empty, it is **contradicted**. **Ineligible** means there was no physically eligible decision to assess. These labels say what the evidence permits, not what the model privately believed.

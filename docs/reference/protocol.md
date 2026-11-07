@@ -60,12 +60,20 @@ Execute it with:
 NEXUS_URL=http://nexus:8000 nexus request --request-file /input/request.json
 ```
 
-The client resolves the current turn before posting an action, so callers do not need to manage
-the optimistic-concurrency turn field themselves. For a direct `POST /action`, retry
-an uncertain response using the **same** `expected_turn` and action. A committed
-retry returns its original turn, observation and events with `duplicate: true`;
-terminal performance, when available, reflects current request counters. A different
-action for an already committed turn is rejected.
+For a new action the client normally reads the current turn. If your harness
+may retry after a timeout, put the turn from the last observation in the
+**original** request and send exactly that request again:
+
+```json
+{"operation":"action","expected_turn":0,"action":{"type":"wait"}}
+```
+
+A pinned request goes straight to `POST /action`. A retry with the same turn
+and action returns the committed turn, observation and events with
+`duplicate: true`; terminal performance, if available, reflects current request
+counters. A different action for a committed turn is rejected. Repeating an
+**unpinned** request asks to act on the latest turn and can spend a second action.
+Raw `POST /action` always requires a nonnegative integer `expected_turn`.
 
 Health checks can use:
 
@@ -163,14 +171,24 @@ and the distinction between world status and evaluator closure.
 nexus stdio ./episode/private.json
 ```
 
-The process emits the initial observation, then accepts requests such as:
+The first output line contains `{"observation": ...}`. After that, send one
+JSON object per line. Start with the manifest to learn the mission and which
+evidence filenames this world offers:
 
-```json
-{"expected_turn": 0, "action": {"type": "wait"}}
+```jsonl
+{"operation":"manifest"}
+{"operation":"observe"}
+{"operation":"status"}
+{"operation":"action","expected_turn":0,"action":{"type":"wait"}}
 ```
 
-The example spends one action. Use the observation and action contract to choose
-a useful next action. `expected_turn` must be a nonnegative integer.
+Use `{"operation":"evidence","filename":"..."}` with a listed name; the response
+contains `filename` and the presented `content`. These reads are free. The
+example's `wait` spends one action. A world that explicitly enables construction
+checking also accepts `{"operation":"check","build":[0,0,3,0]}` with an integer list.
+The original action envelope, e.g. `{"expected_turn":0,"action":{"type":"wait"}}`,
+still works. EOF closes the stream without scoring an active world. There is
+no player `finalize` operation.
 
 ## Legacy multi-session HTTP
 

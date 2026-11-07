@@ -7,6 +7,7 @@ from typing import Literal
 
 from pydantic import Field, StrictInt, model_validator
 
+from nexus.presentation import evidence_binding
 from nexus.evaluation.artifacts import StrictModel, atomic_json
 from nexus.evaluation.coordination import task_config
 from nexus.evaluation.discovery import digest
@@ -128,7 +129,7 @@ def cell_report(cell, pilot, kernels):
         "kernel_transition_checks": kernels[key],
         "certificate": proof,
         "action_budget": proof["action_budget"],
-        "public_evidence_sha256": digest(ep.public.evidence_files),
+        **evidence_binding(ep.public),
     }
 
 

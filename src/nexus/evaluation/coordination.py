@@ -8,6 +8,7 @@ from typing import Literal
 
 from pydantic import Field, StrictInt, model_validator
 
+from nexus.presentation import evidence_binding
 from nexus.evaluation.artifacts import StrictModel, atomic_json
 from nexus.evaluation.discovery import digest
 from nexus.generator import generate_episode, qualify_episode
@@ -153,7 +154,7 @@ def preflight(pilot: Pilot, output: Path):
                     "kernel_transition_checks": kernel_checks[kernel_key],
                     "certificate": ep.generation_metadata.investigation_certificate,
                     "action_budget": ep.public.initial_state.resources.actions_remaining,
-                    "public_evidence_sha256": digest(ep.public.evidence_files),
+                    **evidence_binding(ep.public),
                 }
             )
             atomic_json(output, report)

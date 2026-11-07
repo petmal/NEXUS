@@ -6,6 +6,8 @@ from pathlib import Path
 
 import pytest
 
+from nexus.engine.canonical import canonical_hash
+from nexus.evaluation.discovery import digest
 from nexus.evaluation.interference import Pilot
 from nexus.evaluation.interference_comparison import export_tasks, preflight
 from nexus.generator import generate_episode
@@ -92,7 +94,14 @@ def test_source_bound_comparison_exports_unchanged_tasks_and_rejects_forged_metr
         (ROOT / "docs/research/interference-preflight-2026-10-26.json").read_text()
     )
     for cell, previous in zip(report["cells"], original["cells"], strict=True):
-        assert cell["public_evidence_sha256"] == previous["public_evidence_sha256"]
+        # The dated file used the old report encoding and hashed the compiled records.
+        # Verify that invariant as well as the current claim about what the player sees.
+        ep = episode(cell["seed"], cell["coupling"], cell["horizon"], cell["resource"])
+        assert digest(ep.public.evidence_files) == previous["public_evidence_sha256"]
+        assert canonical_hash(ep.public.evidence_files) == cell["compiled_evidence_sha256"]
+        player = Session(ep)
+        served = {name: player.evidence(name) for name in player.manifest().evidence_files}
+        assert canonical_hash(served) == cell["public_evidence_sha256"]
         assert cell["certificate"] == previous["certificate"]
     for suite in ("core", "slack"):
         assert (tmp_path / f"nexus-interference-comparison-{suite}-tasks.yaml").read_bytes() == (

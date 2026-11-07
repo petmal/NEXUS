@@ -18,6 +18,7 @@ from typing import Literal
 
 from pydantic import Field, StrictInt, model_validator
 
+from nexus.presentation import evidence_binding, evidence_files
 from nexus.engine.canonical import canonical_hash
 from nexus.engine.replay import replay
 from nexus.evaluation import interference, interference_comparison, planning, stateful, td_cycle
@@ -373,7 +374,7 @@ def _live_smoke(cell, episode):
 
     session = Session(episode)
     result = import_module(policies[cell.family]).public_policy(
-        session, episode.public.evidence_files
+        session, evidence_files(episode.public)
     )
     qualified = qualify_episode(episode)
     budget = episode.public.initial_state.resources.actions_remaining
@@ -398,7 +399,7 @@ def _live_smoke(cell, episode):
         "reference_actions": result.current_turn,
         "reference_action_upper": episode.generation_metadata.guaranteed_policy_action_count,
         "certificate": episode.generation_metadata.investigation_certificate,
-        "public_evidence_sha256": digest(episode.public.evidence_files),
+        **evidence_binding(episode.public),
         "public_investigation_sha256": digest(episode.public.investigation.model_dump(mode="json")),
     }, session
 

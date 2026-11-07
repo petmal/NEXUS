@@ -111,6 +111,18 @@ The optional `--audit-dir` export produces an operator-only directory:
 | `manifest.json` | File hashes, coverage counts, and whether export closed normally |
 
 The directory is created exclusively, with owner-only permissions on POSIX.
+For current artifacts, `evidence_binding_version: presented-evidence-v1` identifies
+two hashes of the filename-to-text map. `compiled_evidence_sha256` covers the
+underlying family records; `public_evidence_sha256` covers the text served to
+the player, including presentation wording. Both use NEXUS canonical JSON
+(sorted keys, compact separators, UTF-8). The audit and startup log also bind
+`player_manifest_sha256`, including mission, goal, controls and episode ID.
+Compare evidence hashes across matched worlds; compare full manifest hashes
+only for the same instance. Older startup logs and matrix rows used the name
+`public_evidence_sha256` for compiled evidence; older private audit bundles
+already hashed the presented evidence. Interpret archived hashes with their
+generating version.
+
 Public capture is bounded to 10,000 exchanges and 16 MiB retained data; HTTP body
 capture is additionally capped at 2 MiB per request/response. Exceeding a limit
 marks coverage incomplete. Journals are appended during play. A crash can leave
@@ -119,7 +131,7 @@ power-loss durability guarantee or a resumable session file.
 
 `nexus verify-audit DIR --json` requires matching runtime source. It checks file
 hashes, bound episode ID, protocol/presentation versions, generation metadata,
-public evidence and initial state against the compiled world. It replays committed
+player manifest, compiled and presented evidence, and initial state against the compiled world. It replays committed
 actions with the original verifier secret and checks lifecycle closure, exchange
 counts and order. It also recomputes game-derived
 performance, evidence witnesses and physical continuation costs from that trace.

@@ -50,7 +50,9 @@ uv run --frozen nexus verify-audit ./trial-audit --json
 Use a new directory for every attempt. See [research records](research-guide.md)
 for what this verifies. The simpler JSONL transport also supports
 `nexus stdio ./trial-world/private.json --audit-dir ./stdio-audit`; stdout is JSONL,
-starting with the initial observation. See [protocol details](reference/protocol.md).
+starting with the initial observation. A JSONL-only player can request its mission
+and evidence through that stream. For clients that retry actions after timeouts,
+send the original turn with the action. See [protocol details](reference/protocol.md).
 
 ## Use MindTrial
 
