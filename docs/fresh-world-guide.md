@@ -21,13 +21,13 @@ separates provider interruptions, physical success and evidence-supported succes
 The [initial Astra report](research/fresh-world-initial-results-2026-11-03.md) and
 [host-only recovery](fresh-world-readout-fix.md) remain historical records.
 
-The next evaluation uses Astra medium, Luna medium, Flash high and Grok medium.
-Each model receives the same 26 fresh conditions, subject to an integration-control
+The original evaluation used Astra medium, Luna medium, Flash high and Grok medium.
+Each model was assigned the same 26 fresh conditions, subject to an integration-control
 gate. One unchanged Astra anchor adds six attempts: **110 attempts maximum before
 optional reruns**. There is one attempt per condition, no automatic retry and no
 default repetition. These are a screening matrix, not stable failure-rate estimates.
 
-## Why this is the next step
+## Why these fixtures were selected
 
 The latest GLM/MiniMax diagnostics showed mixed response-limit, planning and
 receipt-submission behavior. GLM high solved short row 09 optimally, while row 25

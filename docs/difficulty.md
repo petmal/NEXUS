@@ -1,6 +1,6 @@
 # Difficulty profiles
 
-This page describes the default **axis version1** profiles. Version2 is selected
+This page describes the default **axis version 1** profiles. Version 2 is selected
 explicitly with `NEXUS_AXIS_VERSION=2` or `--axis-version 2` and has revised T/D
 semantics, a true one-room P0 and unlimited/recoverable R0. See the
 [scientific investigation design](scientific-investigation-design.md) and
@@ -12,8 +12,9 @@ support is T3/D4-D5 and D0/T0,T3 controls; T1/T2 remain mathematical PoC compari
 See [rich investigation results](rich-investigation-results.md). Always record the
 family as well as axis version when comparing runs.
 
-NEXUS exposes three orthogonal public generation knobs: causal discovery, planning, and resource
-pressure. Low-level topology, evidence construction, and qualification settings remain internal so
+The original three controls vary discovery, planning and resource pressure. The theory
+setting selects what account of a mechanism is supplied; only supported combinations
+are valid. See the [T/D synthesis](td-experiments-and-next-directions.md) for the differences between axis versions. Low-level topology, evidence construction, and qualification settings remain internal so
 callers do not need to reason about incompatible parameter combinations. Discovery guarantees are evaluated after conditioning on
 both the public evidence and the public goal.
 

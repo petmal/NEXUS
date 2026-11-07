@@ -118,6 +118,28 @@ All 1,698 fast unit/integration cases passed, with 52 slow cases excluded; 31 ne
 regressions cover presentation and player output. Lint and current-document links
 passed. See the review for the complete scope and local validation.
 
+## Documentation review
+
+The [documentation index](README.md) now separates first use, benchmark design
+and research. The [first-model tutorial](first-model.md) uses one disclosed repair
+control and an operator-selected provider/model. The [worked comparison](benchmark-guide.md)
+and [metric dictionary](reference/metrics.md) distinguish physical cost, evidence
+support and harness outcomes. A clean play-only install ran the demo; its nine
+documented commands won. A local service using the tutorial inputs accepted the
+real request client and validator, won F05 in 5/8 actions and passed private audit
+verification. This was an offline control execution, not a run through a paid
+provider or MindTrial. The two documented planning worlds qualified at 12 and 18
+available actions, with identical goals, rooms, law specification and evidence;
+the operator extension example won and replayed in 16 actions. All 111 focused
+fast CLI, presentation, starter and fresh-world tests passed (three slow cases
+excluded). Local file links passed in 175 Markdown documents, with heading
+links checked from 17 maintained entry documents.
+
+The previous story commit passed [CI](https://github.com/petmal/NEXUS/actions/runs/42312181012)
+and [container smoke](https://github.com/petmal/NEXUS/actions/runs/42312181063).
+This documentation pass changes no NEXUS runtime or historical result. At public
+handoff, point the README clone command at the released default branch or tag.
+
 ## Before publishing
 
 1. Review the candidate and require green CI on the final head before merge.

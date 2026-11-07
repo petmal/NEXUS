@@ -2,7 +2,9 @@
 
 NEXUS supplies the world and checks actions. Your harness supplies the model,
 inference settings, tool descriptions, retries, and stopping rules. Keep those
-settings with the result: they are part of the experiment.
+settings with the result: they are part of the experiment. For your first model,
+use the [one-task MindTrial tutorial](first-model.md). For a comparison, start
+with the [worked budget pair](benchmark-guide.md).
 
 ## Start one local service
 
@@ -56,6 +58,25 @@ Older [capability](capability-smoke-guide.md), [cross-axis](cross-axis-guide.md)
 and [P/R](planning-resource-guide.md) panels remain available for replication.
 A source-bound report must match the image's actual runtime digest before a
 launcher admits a run. An image tag alone is not sufficient.
+
+To build the current panel from a **clean, committed** NEXUS checkout (Bash):
+
+```bash
+export NEXUS_REPO="$PWD"
+export MINDTRIAL_DIR="$HOME/MindTrial"  # directory containing the mindtrial executable
+runtime=$(uv run --frozen --all-extras python -c 'from nexus.provenance import source_digest; print(source_digest())')
+uv run --frozen --all-extras python scripts/package_fresh_world.py \
+  --output-dir ../nexus-fresh-panel --runtime-source-sha256 "$runtime"
+cd ../nexus-fresh-panel
+bash run-canary.sh luna --preflight-only
+```
+
+The package command also writes a ZIP for use on a different machine. Use a new
+destination. Preflight requires Docker but makes no model calls. To run the six
+selected attempts with credentials configured, use `bash run-canary.sh luna --skip-build`.
+The canary supports four fixed presets; for other endpoints use the single-model
+tutorial or build a separate matched experiment. The [panel run guide](../examples/mindtrial/fresh-world-run.md)
+lists groups, admission rules and results directories.
 
 Run `bash run.sh --help` in the unpacked package. Use non-interactive mode for an
 unattended full group; choose interactive mode when selecting tasks or models.

@@ -6,6 +6,23 @@ with the evidence available at that time. It does not measure intelligence with
 one universal number. A useful result identifies a model, its settings, a world
 family, the tested condition, and the limits of the evidence.
 
+For a first experiment, start with [the worked comparison](benchmark-guide.md).
+For field-level definitions and schema dispatch, use the [metric reference](reference/metrics.md).
+
+## From a world to a claim
+
+1. **Specify the family and profile.** The ontology defines legal laws, public observations and the acceptance rule. Generation selects one instance. Keep the compiled world on the operator side; the player receives the manifest and listed evidence.
+2. **Check what was proved.** Run `nexus qualify WORLD/private.json`. Read the family certificate and its assumptions: a replayed winning procedure proves a solution exists; a shortest-path proof additionally establishes a physical optimum. A worst-case guarantee over publicly indistinguishable worlds answers a different question. The [repair conformance proof](repair-live-conformance.md) shows what is needed to lift an offline bound into an executable strategy.
+3. **Measure the attempt.** The engine checks the committed state at `finish`. A receipt certifies success for this episode. It does not certify a belief, inference chain or empirical difficulty level. Use terminal evidence diagnostics where supported and preserve the harness verdict separately.
+4. **Check what generalizes.** For training, split by world **before** tuning on traces. Record the generator version, laws/behavior classes, selection procedure and which splits were exposed to the model. A fresh numeric seed can encode the same behavior. For a stronger transfer test, reserve law structures or whole families, and label that as a different evaluation distribution.
+
+For a worked extension, run `uv run --frozen python examples/ontologies/revision_example.py`
+as a trusted operator. It generates a revision world, executes a public reference
+policy and checks replay. The [author guide](ontology-author-guide.md) describes
+schema registration, transition semantics, public evidence, independent checks
+and how to earn a family-specific difficulty claim. This is a built-in extension
+mechanism, not a runtime loader for arbitrary third-party code.
+
 ## Define the question before the run
 
 Choose one primary contrast. To study resource pressure, keep laws, target,
@@ -19,6 +36,14 @@ experiments/inferences needed; planning (**P**) concerns action structure and
 logistics; resource pressure (**R**) concerns the allowance above a reference
 cost. Their numeric settings have family-specific meanings. A minimum number of
 observations is an information bound, not a proof of difficult reasoning.
+
+For exact level definitions start with the family and axis version:
+
+| Setting | Where to look before using a numeric level |
+|---|---|
+| Legacy (v1) | [Legacy difficulty](difficulty.md) gives the D0–D4 probe guarantees, P0–P3 logistics and finite resource rules. For example, the introductory R0 demo starts with 19 actions. |
+| Scientific T/D (v2) | [Design and supported semantics](scientific-investigation-design.md#approved-semantic-contract): T0 resolved control, T1 exact laws, T2 a correction of known form, T3 missing structure. D0–D5 describe investigation structure, from supplied evidence to constructed experiments. Not every family implements every level. |
+| Planning, breadth and resource contrasts | [Fresh matrix](fresh-world-guide.md) gives exact combinations, options and allowances. P0 can have one room and still require a long plan. Coupling and horizon can be ontology options, not numeric P levels. R0 is uncapped where supported in v2; the tight and relaxed formulas are family-specific. |
 
 Qualification means the declared finite-world checks passed. It is separate
 from empirical calibration: a qualified world can still be easy for every model.

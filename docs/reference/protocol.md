@@ -3,63 +3,13 @@
 This reference describes the stable transport and terminal metrics. Start with
 [the operator guide](../evaluation-guide.md) for a first run.
 
-## JSONL agent protocol
-
-```bash
-nexus stdio ./episode/private.json
-```
-
-The process emits the initial observation, then accepts requests such as:
-
-```json
-{"expected_turn": 0, "action": {"type": "wait"}}
-```
-
-The example spends one action. Use the observation and action contract to choose
-a useful next action. `expected_turn` must be a nonnegative integer.
-
-## HTTP runner
-
-```bash
-nexus serve ./episode/private.json --host 127.0.0.1 --port 8000
-```
-
-The multi-session service is for legacy exploration. Scientific families that
-require a non-resettable attempt reject this mode; use `serve-session` below.
-
-Player-safe endpoints include:
-
-```text
-GET  /manifest
-GET  /evidence/{filename}
-POST /sessions
-GET  /sessions/{id}/observe
-POST /sessions/{id}/actions
-GET  /sessions/{id}/status
-GET  /sessions/{id}/events
-```
-
-Canonical state, latent rules, reference plans, and verifier secrets remain server-side. The player-safe manifest also includes the machine-readable action schema and human-readable action reference.
-
-
-
-## Terminal performance telemetry
-
-Terminal `won`/`failed` action responses include a `performance` object. Legacy
-profiles report exact physical and guaranteed-policy baselines, action/probe deltas,
-profile identifiers, and error/retry counters. Scientific families report their
-own certificates and mission/evidence metrics; unavailable fields are not zero. The object includes an immutable `$schema` URL. The published schema is
-[schemas/performance-v6.schema.json](../../schemas/performance-v6.schema.json), whose field descriptions
-are intended to make benchmark logs directly interpretable by downstream tools and LLMs.
-
 ## Single-session service and container integration
 
-For an external orchestrator that already scopes one service process to one evaluation attempt,
-NEXUS can own exactly one non-resettable session:
+Use one service process per model attempt. For local use, bind to loopback:
 
 ```bash
 NEXUS_SEED=17 NEXUS_DISCOVERY_LEVEL=1 NEXUS_PLANNING_LEVEL=1 \
-NEXUS_RESOURCE_PRESSURE=0 NEXUS_HOST=0.0.0.0 nexus serve-session
+NEXUS_RESOURCE_PRESSURE=0 NEXUS_HOST=127.0.0.1 nexus serve-session
 ```
 
 A fixed verifier secret is optional when reproducible victory codes are useful:
@@ -85,6 +35,8 @@ POST /action
 GET  /status
 GET  /events
 ```
+
+When explicitly enabled for a compatible world, `POST /check` also provides the disclosed construction checker. The evaluator-only `POST /finalize` closes the attempt and returns terminal status and performance. Neither access to the evaluator nor arbitrary network access belongs in the model tool.
 
 A short-lived client process can talk to the service using `NEXUS_URL`:
 
@@ -117,11 +69,11 @@ Health checks can use:
 nexus health
 ```
 
-After the world is won, a trusted process can validate a submitted victory code without reading
-the private episode. For a short code, pass it directly:
+After the attempt, a trusted process can validate the submitted receipt without reading
+the private episode. Validation finalizes the session, even if the player never won; do not expose it as a player tool. For a short code, pass it directly:
 
 ```bash
-NEXUS_URL=http://nexus:8000 nexus validate --candidate NX-ABCD-EFGH-IJKL
+NEXUS_URL=http://nexus:8000 nexus validate --candidate NX-ABCD-EFGH-IJKL-MNOP
 ```
 
 For file-based transport:
@@ -134,7 +86,7 @@ Unlike `nexus request --request-file`, the validator file is **not JSON**. It co
 submitted victory code as raw text, for example:
 
 ```text
-NX-ABCD-EFGH-IJKL
+NX-ABCD-EFGH-IJKL-MNOP
 ```
 
 A valid check prints one JSON object with `correct`, `title`, and `explanation`. An incorrect
@@ -145,7 +97,7 @@ Python/Debian base image digest and the locked Python dependency graph:
 
 ```bash
 docker build --build-arg VCS_REF="$(git rev-parse HEAD)" -t nexus:0.1.0 .
-docker run --rm -p 8000:8000 \
+docker run --rm -p 127.0.0.1:8000:8000 \
   -e NEXUS_SEED=17 \
   -e NEXUS_HOST=0.0.0.0 \
   nexus:0.1.0 serve-session
@@ -182,8 +134,55 @@ See [Service integration](../service-integration.md) for trust boundaries and co
 patterns.
 
 
+## Terminal performance
+
+A terminal action or evaluator finalization can return `performance`. Read
+`$schema` for legacy and controller reports, or `version` and `ontology` for
+mission reports. [Metric definitions and schema links](metrics.md) explain how to
+interpret action costs, evidence support, physical success and missing fields.
+The service cannot tell you whether the provider finished normally or whether
+the harness accepted the model's final answer.
+
 ## Private audit export
 
 The single-session HTTP service and JSONL CLI accept `--audit-dir NEW_DIRECTORY`.
 See [the research guide](../research-guide.md) for the bundle, its verification scope,
 and the distinction between world status and evaluator closure.
+
+## JSONL agent protocol
+
+```bash
+nexus stdio ./episode/private.json
+```
+
+The process emits the initial observation, then accepts requests such as:
+
+```json
+{"expected_turn": 0, "action": {"type": "wait"}}
+```
+
+The example spends one action. Use the observation and action contract to choose
+a useful next action. `expected_turn` must be a nonnegative integer.
+
+## Legacy multi-session HTTP
+
+```bash
+nexus serve ./episode/private.json --host 127.0.0.1 --port 8000
+```
+
+The multi-session service is for legacy exploration. Scientific families that
+require a non-resettable attempt reject this mode; use the [single-session service](#single-session-service-and-container-integration).
+
+Player-safe endpoints include:
+
+```text
+GET  /manifest
+GET  /evidence/{filename}
+POST /sessions
+GET  /sessions/{id}/observe
+POST /sessions/{id}/actions
+GET  /sessions/{id}/status
+GET  /sessions/{id}/events
+```
+
+Canonical state, latent rules, reference plans, and verifier secrets remain server-side. The player-safe manifest also includes the machine-readable action schema and human-readable action reference.
