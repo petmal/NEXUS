@@ -1,69 +1,43 @@
 # NEXUS
 
-**Small artificial worlds. Explicit rules. Verifiable outcomes.**
+**Can a model figure out how a machine works, then use it to get out?**
 
-NEXUS tests how a model investigates, plans, and acts over many steps. You are
-inside an automated facility of unknown origin. Its translated console offers
-a way out: complete a repair, calibration, or construction mission. Read the
-local records, work with unfamiliar apparatus, and earn exit clearance. The
-names are alien; the controls and mission requirements are explicit.
+NEXUS is a free, MIT-licensed framework for testing reasoning in small, interactive worlds. Inside a sealed facility, a translated console gives you a mission: calibrate a controller, repair a component or build a working replacement. The controls and goal are public. Some worlds disclose the laws; others give you evidence and apparatus for testing your own explanation.
 
-The engine checks success and issues a victory receipt. No model judge is
-involved. [The facility setting](docs/facility-setting.md) gives the short background.
+You can play, send a model in, or run the same puzzle twice with one condition changed. The engine checks the actual world state when the player calls `finish`. A win earns a verifiable receipt; a replay shows the actions that got there. No model judge is needed.
 
-You can play locally, connect a model through a JSON interface, or build matched
-experiments. Generation produces a compiled world; replay checks every accepted
-action against its recorded state hash.
+## Play your first world
 
-**Status:** experimental research software, preparing for public release. NEXUS
-has shown useful differences between model/settings combinations. It is not yet
-a calibrated general-purpose leaderboard. See the
-[latest results](docs/research/fresh-world-results-2026-11-04.md) and
-[release status](docs/release-readiness.md).
-
-## Try it
-
-From a repository checkout, with [uv](https://docs.astral.sh/uv/) installed:
+With Git and [uv](https://docs.astral.sh/uv/getting-started/installation/) installed:
 
 ```bash
-uv sync --frozen --all-extras --python 3.14.7
-uv run --frozen nexus demo
-uv run --frozen nexus demo --play
+git clone --branch feat/planning-resource-axes https://github.com/petmal/NEXUS.git
+cd NEXUS
+uv sync --frozen --no-dev --python 3.14.7
+uv run --frozen --no-dev nexus demo --play
 ```
 
-The guided demo needs no model account, API key, or Docker. The interactive
-version accepts JSON actions. Type `help`, `mission`, or `evidence <filename>`
-for free information; `quit` exits. [Learn to play](docs/play-guide.md).
+The clone command selects the current release candidate. No Docker, model account or API key is needed for local play. The first install may download Python and dependencies.
 
-To save a world and play it later:
+At the console, type `mission` to read your goal, `look` to see the room, and `help` for the JSON actions. In the introductory world, try `{"type":"move","target":"R4"}`, then `look`. You have spent one world action; reading the display is free. Type `quit` to leave. Prefer to watch first? Run `uv run --frozen --no-dev nexus demo` for a complete unscored playthrough. [See all nine actions](docs/play-guide.md#the-introductory-world-in-nine-actions).
 
-```bash
-uv run --frozen nexus generate ./my-world --seed 17 --planning-level 0
-uv run --frozen nexus play ./my-world/private.json
-```
+## Send in a model
 
-`private.json` belongs to the local engine/operator. Evaluated models receive
-only the player interface and approved public files.
+[Run one model on one control with MindTrial](docs/first-model.md). Pick a tool-capable model and a provider you can access. The example uses Docker for the world and a separate validator for the receipt. You can also [connect your own harness](docs/evaluation-guide.md).
 
-## Use it for research
+Read three things before comparing scores: **did the world issue a receipt**, **did the harness accept the submitted answer**, and **how many world actions did the player spend**? Reading evidence can cost a model tool call without spending a world action. Some families also tell you whether the evidence justified the winning choice.
 
-| Goal | Start here |
-|---|---|
-| Connect a model or run MindTrial | [Evaluation guide](docs/evaluation-guide.md) |
-| Design comparisons, interpret scores, verify runs | [Research guide](docs/research-guide.md) |
-| Export a current matched multi-model panel | [Fresh-world guide](docs/fresh-world-guide.md) |
-| Understand what past experiments established | [T/D synthesis](docs/td-experiments-and-next-directions.md) and [fresh-world results](docs/research/fresh-world-results-2026-11-04.md) |
-| Add a world or contribute code | [Contributing](CONTRIBUTING.md) and [ontology guide](docs/ontology-author-guide.md) |
-| Find technical references and historical reports | [Documentation index](docs/README.md) |
+## Change the question
 
-NEXUS varies the information supplied (**T**), investigation requirements (**D**),
-planning structure (**P**), and resource pressure (**R**). These labels describe
-family-specific experimental conditions, not a universal difficulty scale.
-Disclosed laws, matched controls, mechanically checked solutions, and separate
-physical/evidence outcomes help explain *why* a model succeeds or fails.
+| Dial | What it changes | Example question |
+|---|---|---|
+| T — theory | Information supplied about the mechanism | Can the model still repair it when the law is withheld? |
+| D — discovery | What must be inferred or investigated | Can it design a useful experiment? |
+| P — planning | Layout or dependencies between operations | Can it get all targets right at the same time? |
+| R — resources | Room to spend actions beyond a reference cost | Does the same plan still work without spare moves? |
 
-NEXUS runs independently of model vendors and evaluation harnesses. Python 3.14,
-Typer, Pydantic, and Rich support the local interface; an optional FastAPI service
-supports external tools. The checked-in lockfile pins the tested environment.
+The settings belong to a world family; a “3” is not a universal difficulty score. NEXUS is experimental research software. It has identified differences between tested model configurations, without establishing a general model ranking.
 
-[MIT license](LICENSE). [Citation](CITATION.cff). [Service and data boundaries](SECURITY.md).
+**Where next:** [Design and read a comparison](docs/benchmark-guide.md) · [Research methods and metrics](docs/research-guide.md) · [All documentation](docs/README.md) · [Release status](docs/release-readiness.md)
+
+[License](LICENSE) · [Citation](CITATION.cff) · [Service and data boundaries](SECURITY.md)
