@@ -249,3 +249,104 @@ def test_scientific_bundle_recomputes_continuation_and_evidence_metrics(tmp_path
     rewrite_outcome(recorder.directory, outcome)
     with pytest.raises(ValueError, match="audit performance mismatch"):
         verify_bundle(recorder.directory)
+
+
+def replace_audit_file(root, name, content):
+    path = root / name
+    path.write_text(content)
+    manifest_path = root / "manifest.json"
+    manifest = json.loads(manifest_path.read_text())
+    manifest["files_sha256"][name] = hashlib.sha256(path.read_bytes()).hexdigest()
+    manifest_path.write_text(json.dumps(manifest))
+
+
+@pytest.mark.parametrize("field", ["generation_metadata", "protocol_version", "presentation_version", "version"])
+def test_bundle_rejects_binding_inconsistent_with_compiled_world(tmp_path, field):
+    root = tmp_path / "audit"
+    AuditRecorder(Session(legacy()), root).close()
+    binding = json.loads((root / "binding.json").read_text())
+    if field == "generation_metadata":
+        binding[field]["action_budget"] += 1
+    else:
+        binding[field] = "different-version"
+    replace_audit_file(root, "binding.json", json.dumps(binding))
+    with pytest.raises(ValueError, match="binding mismatch"):
+        verify_bundle(root)
+
+
+@pytest.mark.parametrize(("field", "bad"), [
+    ("complete", "false"), ("accepted_actions", False), ("exchange_count", 0.0),
+    ("exchanges_seen", -1), ("transcript_version", "unknown"),
+])
+def test_bundle_checks_manifest_types_and_capture_version(tmp_path, field, bad):
+    root = tmp_path / "audit"
+    AuditRecorder(Session(legacy()), root).close()
+    path = root / "manifest.json"
+    manifest = json.loads(path.read_text())
+    manifest[field] = bad
+    path.write_text(json.dumps(manifest))
+    with pytest.raises(ValueError):
+        verify_bundle(root)
+
+
+def test_bundle_does_not_count_free_observation_as_committed_action(tmp_path):
+    from nexus.engine.replay import execute_with_trace
+
+    root = tmp_path / "audit"
+    episode = legacy()
+    AuditRecorder(Session(episode), root).close()
+    _, trace = execute_with_trace(episode, [ACTION_ADAPTER.validate_python({"type": "observe"})])
+    replace_audit_file(root, "trace.jsonl", trace[0].model_dump_json() + "\n")
+    path = root / "manifest.json"
+    manifest = json.loads(path.read_text())
+    manifest["accepted_actions"] = 1
+    path.write_text(json.dumps(manifest))
+    with pytest.raises(ValueError, match="committed"):
+        verify_bundle(root)
+
+
+@pytest.mark.parametrize("turn", [True, "1", 1.0, -1])
+def test_trace_turn_requires_nonnegative_json_integer(tmp_path, turn):
+    from nexus.io import load_trace
+    from pydantic import ValidationError
+
+    session = Session(legacy())
+    session.act(0, ACTION_ADAPTER.validate_python({"type": "wait"}))
+    record = session.trace_snapshot()[0].model_dump(mode="json")
+    path = tmp_path / "trace.jsonl"
+    path.write_text(json.dumps({**record, "turn": turn}))
+    with pytest.raises(ValidationError):
+        load_trace(path)
+
+
+def test_overlapping_checkpoints_write_each_committed_turn_once(tmp_path, monkeypatch):
+    from concurrent.futures import ThreadPoolExecutor
+    from threading import Event
+
+    session = Session(legacy())
+    recorder = AuditRecorder(session, tmp_path / "audit")
+    wait = ACTION_ADAPTER.validate_python({"type": "wait"})
+    snapshot = session.trace_snapshot
+    first_ready, release = Event(), Event()
+
+    def delay_first(*, start=0):
+        records = snapshot(start=start)
+        if len(records) == 1 and not first_ready.is_set():
+            first_ready.set()
+            assert release.wait(10)
+        return records
+
+    session.act(0, wait)
+    monkeypatch.setattr(session, "trace_snapshot", delay_first)
+    with ThreadPoolExecutor(max_workers=1) as pool:
+        older = pool.submit(recorder.checkpoint)
+        try:
+            assert first_ready.wait(10)
+            session.act(1, wait)
+            recorder.checkpoint()
+        finally:
+            release.set()
+        older.result()
+    session.act(2, wait)
+    recorder.close()
+    assert verify_bundle(recorder.directory)["accepted_actions"] == 3

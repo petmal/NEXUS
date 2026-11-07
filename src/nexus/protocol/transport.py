@@ -94,19 +94,24 @@ def _parse_status(
     actions_remaining = payload["actions_remaining"]
     victory_code = payload["victory_code"]
 
-    if isinstance(turn, bool) or not isinstance(turn, int):
-        raise ClientError(f"{description} field 'turn' must be an integer")
+    if type(turn) is not int or turn < 0:
+        raise ClientError(f"{description} field 'turn' must be a nonnegative integer")
     if not isinstance(status, str) or status not in {"active", "won", "failed"}:
         raise ClientError(f"{description} field 'status' is invalid")
     if actions_remaining is not None and (
-        isinstance(actions_remaining, bool) or not isinstance(actions_remaining, int)
+        type(actions_remaining) is not int or actions_remaining < 0
     ):
         raise ClientError(
-            f"{description} field 'actions_remaining' must be an integer or null (unlimited)"
+            f"{description} field 'actions_remaining' must be a nonnegative integer or null (unlimited)"
         )
     if victory_code is not None and not isinstance(victory_code, str):
         raise ClientError(f"{description} field 'victory_code' must be a string or null")
 
+    if status == "won":
+        if not victory_code or not victory_code.strip():
+            raise ClientError(f"{description}: won session did not expose a victory code")
+    elif victory_code is not None:
+        raise ClientError(f"{description}: only a won session may expose a victory code")
     return turn, status, actions_remaining, victory_code
 
 
@@ -140,6 +145,8 @@ def _finalize(base_url: str) -> tuple[int, str, int | None, str | None, dict[str
     )
     if status == "active":
         raise ClientError("service finalization left the session active")
+    if performance.get("terminal_status") != status:
+        raise ClientError("service finalization status disagrees with performance.terminal_status")
     return turn, status, actions_remaining, victory_code, performance
 
 

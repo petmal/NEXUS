@@ -411,6 +411,7 @@ class Session:
                 if cached_action == action:
                     self._duplicate_requests += 1
                     return cached_response.model_copy(
+                        deep=True,
                         update={
                             "duplicate": True,
                             "performance": self._performance_summary(),
@@ -487,5 +488,5 @@ class Session:
             )
 
             if self.state.turn != previous_turn:
-                self._turn_cache[expected_turn] = (action, response)
+                self._turn_cache[expected_turn] = (action, response.model_copy(deep=True))
             return response

@@ -1,3 +1,4 @@
+import pytest
 from fastapi.testclient import TestClient
 
 from nexus.generator import generate_episode
@@ -110,7 +111,7 @@ def test_validate_candidate_finalizes_attempt_and_preserves_validator_contract(m
             "status": status_value,
             "actions_remaining": 2,
             "victory_code": victory_code,
-            "performance": performance,
+            "performance": {**performance, "terminal_status": status_value},
         }
 
     monkeypatch.setattr(
@@ -215,3 +216,20 @@ def test_terminal_diagnostics_distinguish_missing_delivery_from_missing_finish()
     assert payload["status"] == "won"
     assert payload["victory_code"] == victory_receipt(episode)
     assert payload == client.post("/finalize").json()
+
+
+@pytest.mark.parametrize("fields", [
+    {"status": "won", "victory_code": "NX-test"},  # performance still says failed
+    {"victory_code": "NX-test"},  # failed world cannot have issued a receipt
+    {"status": "won", "victory_code": "", "performance": {"terminal_status": "won"}},
+    {"turn": -1},
+    {"actions_remaining": -1},
+])
+def test_validator_rejects_contradictory_finalization_without_scoring(monkeypatch, fields):
+    reply = {
+        "turn": 1, "status": "failed", "actions_remaining": 0, "victory_code": None,
+        "performance": {"terminal_status": "failed"}, **fields,
+    }
+    monkeypatch.setattr(service_transport, "_json_request", lambda *_args: reply)
+    with pytest.raises(service_transport.ClientError):
+        validate_candidate_with_performance(reply["victory_code"] or "")

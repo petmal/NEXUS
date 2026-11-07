@@ -61,7 +61,11 @@ NEXUS_URL=http://nexus:8000 nexus request --request-file /input/request.json
 ```
 
 The client resolves the current turn before posting an action, so callers do not need to manage
-the optimistic-concurrency turn field themselves.
+the optimistic-concurrency turn field themselves. For a direct `POST /action`, retry
+an uncertain response using the **same** `expected_turn` and action. A committed
+retry returns its original turn, observation and events with `duplicate: true`;
+terminal performance, when available, reflects current request counters. A different
+action for an already committed turn is rejected.
 
 Health checks can use:
 
@@ -91,6 +95,10 @@ NX-ABCD-EFGH-IJKL-MNOP
 
 A valid check prints one JSON object with `correct`, `title`, and `explanation`. An incorrect
 candidate is a normal `correct:false` result; transport/protocol failures exit non-zero.
+
+The validator also checks that final status agrees with `performance.terminal_status`,
+and that only a won session has a nonempty receipt. A contradictory service
+response is a protocol error, not a model score.
 
 A container image can be built directly from the repository. The Dockerfile pins both the
 Python/Debian base image digest and the locked Python dependency graph:

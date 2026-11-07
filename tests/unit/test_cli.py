@@ -206,3 +206,37 @@ def test_cli_uses_current_family_action_contract(tmp_path):
     assert invalid.exit_code != 0
     invalid = runner.invoke(app, ["actions", "--science-family", "resonant-network-v1"])
     assert invalid.exit_code != 0
+
+
+@pytest.mark.parametrize(("pressure", "budget"), [(0, "unlimited"), (2, "12")])
+def test_generate_reports_certified_cost_and_real_budget(tmp_path, pressure, budget):
+    result = runner.invoke(app, [
+        "generate", str(tmp_path / "world"), "--seed", "107", "--axis-version", "2",
+        "--science-family", "stateful-interference-v1", "--planning-level", "0",
+        "--ontology-options", '{"coupling":"independent","horizon":"short"}',
+        "--resource-pressure", str(pressure),
+    ])
+    assert result.exit_code == 0, result.output
+    assert "physical-optimal=12" in result.stdout
+    assert f"budget={budget} " in " ".join(result.stdout.split())
+    assert "probes=0" not in result.stdout
+
+
+def test_generate_reports_policy_bound_without_calling_it_an_optimum(tmp_path):
+    result = runner.invoke(app, [
+        "generate", str(tmp_path / "world"), "--seed", "21", "--axis-version", "2",
+        "--science-family", "stateful-planning-v1", "--theory-level", "3",
+        "--discovery-level", "5", "--planning-level", "0",
+    ])
+    assert result.exit_code == 0, result.output
+    assert "reference-actions<=" in result.stdout and "optimal=" not in result.stdout
+
+
+def test_generate_batch_leaves_earlier_worlds_unwritten_when_destination_taken(tmp_path):
+    used = tmp_path / "episode-002"
+    used.mkdir()
+    (used / "notes").write_text("keep")
+    result = runner.invoke(app, ["generate", str(tmp_path), "--count", "2"])
+    assert result.exit_code != 0 and "empty directory" in result.output
+    assert not (tmp_path / "episode-001").exists()
+    assert (used / "notes").read_text() == "keep"

@@ -22,18 +22,28 @@ def load_public(path: Path) -> PublicEpisode:
     return PublicEpisode.model_validate_json(path.read_text(encoding="utf-8"))
 
 
+class EpisodeDestinationError(ValueError):
+    """The requested output cannot safely hold a fresh episode."""
+
+
+def check_episode_destination(directory: Path) -> None:
+    if directory.is_symlink() or (
+        directory.exists() and (not directory.is_dir() or any(directory.iterdir()))
+    ):
+        raise EpisodeDestinationError(
+            f"{directory}: choose a new or empty directory; existing files and symlinks are not replaced"
+        )
+
+
 def save_episode(episode: PrivateEpisode, directory: Path) -> None:
     # model_copy/update or direct mutation can bypass model validators.
     episode = PrivateEpisode.model_validate(episode.model_dump(mode="python"))
-    if directory.is_symlink():
-        raise ValueError("episode output directory must not be a symlink")
+    check_episode_destination(directory)
     directory.mkdir(parents=True, exist_ok=True)
     attachments = directory / "attachments"
-    targets = [directory / "manifest.json", directory / "private.json", attachments]
-    targets.extend(attachments / name for name in evidence_files(episode.public))
-    if any(path.is_symlink() for path in targets):
-        raise ValueError("episode output files and attachments must not be symlinks")
-
+    # Claim this export before writing anything. Concurrent NEXUS writers must
+    # never combine one private episode with another world's evidence.
+    attachments.mkdir()
     manifest = PlayerManifest.from_episode(episode.public)
     (directory / "manifest.json").write_text(
         manifest.model_dump_json(indent=2), encoding="utf-8"
@@ -50,7 +60,6 @@ def save_episode(episode: PrivateEpisode, directory: Path) -> None:
         if temporary is not None:
             temporary.unlink(missing_ok=True)
 
-    attachments.mkdir(exist_ok=True)
     for filename, content in evidence_files(episode.public).items():
         (attachments / filename).write_text(content, encoding="utf-8")
 

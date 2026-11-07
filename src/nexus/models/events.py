@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from typing import Any
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict, Field, StrictInt
 
 from nexus.models.actions import Action
 from nexus.models.world import TerminalStatus, WorldState
@@ -28,7 +28,7 @@ class StepResult(BaseModel):
 class TraceRecord(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
-    turn: int
+    turn: StrictInt = Field(ge=0)
     action: Action
     before_hash: str
     after_hash: str

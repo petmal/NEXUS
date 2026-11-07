@@ -212,3 +212,29 @@ def test_public_policy_every_world_all_supported_profiles():
                 and result.current_turn <= ep.generation_metadata.guaranteed_policy_action_count
             )
             assert result.performance.decision_diagnostics.escape_classification == "supported_win"
+
+
+def test_private_solver_distinguishes_a_winning_witness_from_a_proven_minimum():
+    from nexus.engine.replay import execute_with_trace
+    from nexus.solver import solve
+    from nexus.models.actions import MoveAction
+
+    world = episode(seed=0, theory=0, discovery=0, planning=1)
+    result = solve(world)
+    # Supply the cheaper witness independently so the solver is free to improve.
+    cheaper = [
+        *(TakeAction(artifact=name) for name in SEALS),
+        MoveAction(target="array"),
+        OperateAction(machine="trimmer", artifact=SEALS[0]),
+        ConfigureAction(machine="trimmer", settings=(1, 1, 1)),
+        OperateAction(machine="trimmer", artifact=SEALS[1]),
+        ConfigureAction(machine="trimmer", settings=(2, 2, 2)),
+        OperateAction(machine="trimmer", artifact=SEALS[2]),
+        FinishAction(),
+    ]
+    final, _ = execute_with_trace(world, cheaper)
+    assert final.terminal_status.value == "won" and final.turn == 10
+    returned, _ = execute_with_trace(world, list(result.plan))
+    assert result.solvable and returned.terminal_status.value == "won"
+    assert result.plan_action_count == returned.turn
+    assert result.optimal_action_count is None

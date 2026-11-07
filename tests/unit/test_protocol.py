@@ -226,3 +226,17 @@ def test_terminal_performance_uses_exact_policy_cost_for_higher_discovery():
     assert performance.action_delta_from_guaranteed_policy == (
         performance.actions_used - performance.guaranteed_policy_actions
     )
+
+
+def test_retry_returns_an_independent_copy_of_the_committed_observation():
+    session = Session(generate_episode(17))
+    action = ACTION_ADAPTER.validate_python({"type": "wait"})
+    first = session.act(0, action)
+    original = first.model_dump(exclude={"duplicate"})
+    first.current_turn = 99
+    first.observation.room = "other"
+    retry = session.act(0, action)
+    assert retry.duplicate and retry.model_dump(exclude={"duplicate"}) == original
+    retry.observation.room = "other again"
+    assert session.act(0, action).model_dump(exclude={"duplicate"}) == original
+    assert session.state.turn == len(session.trace_snapshot()) == 1
