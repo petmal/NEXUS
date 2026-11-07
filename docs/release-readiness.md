@@ -1,4 +1,4 @@
-# Release readiness — 6 November 2026
+# Release readiness — 7 November 2026
 
 NEXUS is being prepared as an **experimental research framework**, with human
 play and mechanically scored model interaction. The intended release does not
@@ -139,6 +139,15 @@ The previous story commit passed [CI](https://github.com/petmal/NEXUS/actions/ru
 and [container smoke](https://github.com/petmal/NEXUS/actions/runs/42312181063).
 This documentation pass changes no NEXUS runtime or historical result. At public
 handoff, point the README clone command at the released default branch or tag.
+
+## Overall quality review
+
+The [quality review](research/overall-quality-review-2026-11-07.md) corrects
+misleading private solver baselines, rejects inconsistent audit and validator
+records, and prevents accidental mixing of evidence during export. It also
+replaces the prototype-era [agent instructions](../AGENTS.md). The changes affect
+operator output and source identity; they do not introduce new laws, costs or
+player evidence. Keep the final-source live canary as a separate release gate.
 
 ## Before publishing
 

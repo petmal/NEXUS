@@ -31,7 +31,8 @@ source changes the runtime digest. `coupled-repair-v1` additionally binds its
 qualification to Python source and its checked proof/witness. After final source
 edits, run `make qualify-release`; it executes the proof and conformance gates
 before refreshing the binding. Never merely replace a digest to bypass a gate.
-Then run all tests and current matrix preflights.
+Then run `make preflight` for the current cross-axis and fresh-world matrices,
+and validate the resulting candidate with the full and property suites.
 
 Use frozen dependencies. For a dependency update, edit `pyproject.toml`, run
 `uv lock --python 3.14.7`, inspect the lock diff, and run the relevant checks.

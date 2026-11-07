@@ -104,3 +104,14 @@ def test_private_episode_is_created_with_owner_only_permissions(tmp_path):
 
     save_episode(generate_episode(17), tmp_path)
     assert stat.S_IMODE((tmp_path / 'private.json').stat().st_mode) == 0o600
+
+
+def test_export_refuses_to_mix_evidence_with_an_existing_episode(episode, tmp_path):
+    world = tmp_path / "world"
+    save_episode(episode, world)
+    stale = world / "attachments" / "old-reading.csv"
+    stale.write_text("retained by operator")
+    original = {p: p.read_bytes() for p in world.rglob("*") if p.is_file()}
+    with pytest.raises(ValueError, match="empty directory"):
+        save_episode(generate_episode(17), world)
+    assert {p: p.read_bytes() for p in world.rglob("*") if p.is_file()} == original

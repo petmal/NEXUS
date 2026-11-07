@@ -324,3 +324,12 @@ It must not infer hidden laws or supply active-player hints. Test costs against 
 independent search, including dropped objects, irreversible transitions and the
 last finish action. No hook means unavailable, never zero. See the
 [research guide](research-guide.md) for interpretation and audit exports.
+
+## Private plan cost
+
+The runtime's `physical_plan` returns a witness using the hidden truth. The
+solver replays it and reports the actions charged. Registration defaults to
+`exact_physical_plan=False`: leave it there unless an independent argument or
+exhaustive comparison establishes shortest cost for the supported initial worlds.
+A winning replay, or equality with a public reference policy on one seed, is
+insufficient. See the [metric reference](reference/metrics.md).

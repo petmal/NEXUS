@@ -36,6 +36,8 @@ class OntologyDefinition:
     schema_module: str | None = None
     options_schema: tuple[str, str] | None = None
     api_version: int = 1
+    # Opt in only for planners with an independent minimum-cost argument.
+    exact_physical_plan: bool = False
 
     def __post_init__(self):
         if type(self.api_version) is not int or self.api_version != 1:
@@ -142,6 +144,7 @@ REGISTRY = OntologyRegistry.from_definitions(
             runtime_module="nexus.ontology.interference.runtime",
             schema_module="nexus.ontology.interference.schema",
             options_schema=("nexus.ontology.interference.schema", "GenerationOptions"),
+            exact_physical_plan=True,
             generator=("nexus.ontology.interference.generation", "generate_episode"),
             qualifier=("nexus.ontology.interference.qualification", "qualify"),
             standalone_contract=True,
@@ -152,6 +155,7 @@ REGISTRY = OntologyRegistry.from_definitions(
             runtime_module="nexus.ontology.coordination.runtime",
             schema_module="nexus.ontology.coordination.schema",
             options_schema=("nexus.ontology.coordination.schema", "GenerationOptions"),
+            exact_physical_plan=True,
             generator=("nexus.ontology.coordination.generation", "generate_episode"),
             qualifier=("nexus.ontology.coordination.qualification", "qualify"),
             standalone_contract=True,
@@ -161,6 +165,7 @@ REGISTRY = OntologyRegistry.from_definitions(
             "stateful-planning-v1",
             runtime_module="nexus.ontology.planning.runtime",
             schema_module="nexus.ontology.planning.schema",
+            exact_physical_plan=True,
             generator=("nexus.ontology.planning.generation", "generate_episode"),
             qualifier=("nexus.ontology.planning.qualification", "qualify"),
             standalone_contract=True,
@@ -181,6 +186,7 @@ REGISTRY = OntologyRegistry.from_definitions(
             "stateful-discovery-v1",
             runtime_module="nexus.ontology.stateful.runtime",
             schema_module="nexus.ontology.stateful.schema",
+            exact_physical_plan=True,
             generator=("nexus.ontology.stateful.generation", "generate_episode"),
             qualifier=("nexus.ontology.stateful.qualification", "qualify"),
             diagnostic_budget=True,
@@ -221,6 +227,7 @@ REGISTRY = OntologyRegistry.from_definitions(
             "joint-assembly-v1",
             runtime_module="nexus.ontology.assembly.runtime",
             schema_module="nexus.ontology.assembly.schema",
+            exact_physical_plan=True,
             generator=("nexus.ontology.assembly.generation", "generate_assembly"),
             qualifier=("nexus.ontology.assembly.qualification", "qualify_assembly"),
             diagnostic_budget=True,
@@ -241,6 +248,7 @@ REGISTRY = OntologyRegistry.from_definitions(
             "history-coupled-v1",
             runtime_module="nexus.ontology.history.runtime",
             schema_module="nexus.ontology.history.schema",
+            exact_physical_plan=True,
             generator=("nexus.ontology.history.generation", "generate_history"),
             diagnostic_budget=True,
             qualifier=("nexus.ontology.history.qualification", "qualify_history"),
@@ -304,18 +312,21 @@ REGISTRY = OntologyRegistry.from_definitions(
         OntologyDefinition(
             "shared-response-v1",
             "scientific-v2",
+            exact_physical_plan=True,
             generator=("nexus.generator.investigation", "generate_investigation"),
             qualifier=("nexus.generator.investigation_qualify", "qualify_investigation"),
         ),
         OntologyDefinition(
             "coupled-network-v1",
             "coupled-network-v1",
+            exact_physical_plan=True,
             generator=("nexus.generator.network", "generate_network"),
             qualifier=("nexus.generator.network_qualify", "qualify_network"),
         ),
         OntologyDefinition(
             "resonant-network-v1",
             "resonant-network-v1",
+            exact_physical_plan=True,
             generator=("nexus.generator.resonance", "generate_resonant"),
             qualifier=("nexus.generator.resonance_qualify", "qualify_resonant"),
         ),
@@ -324,6 +335,7 @@ REGISTRY = OntologyRegistry.from_definitions(
             "causal-mechanisms-v1",
             runtime_module="nexus.ontology.causal.runtime",
             schema_module="nexus.ontology.causal.schema",
+            exact_physical_plan=True,
             generator=("nexus.ontology.causal.generation", "generate_causal"),
             qualifier=("nexus.ontology.causal.qualification", "qualify_causal"),
             standalone_contract=True,

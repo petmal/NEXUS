@@ -107,9 +107,40 @@ def actions_command(
     )
 
 
+def _generation_costs(episode) -> str:
+    """Show only costs meaningful for this family; the live initial state owns its cap."""
+    metadata = episode.generation_metadata
+    budget = episode.public.initial_state.resources.actions_remaining
+    if episode.public.investigation is None:
+        fields = [
+            f"optimal={metadata.optimal_action_count}", f"probes={metadata.required_probe_count}"
+        ]
+    else:
+        proof = metadata.investigation_certificate or {}
+        fields = []
+        if proof.get("reference_kind") == "exact-known-law-optimum":
+            fields.append(f"physical-optimal={proof['reference_action_upper']}")
+        else:
+            # Several families leave the shared legacy count at its default zero.
+            if metadata.optimal_action_count > 0:
+                fields.append(f"physical-optimal={metadata.optimal_action_count}")
+            for key in (
+                "reference_action_upper", "reference_action_bound", "constructive_policy_action_bound"
+            ):
+                if key in proof:
+                    fields.append(f"reference-actions<={proof[key]}")
+                    break
+        for key in ("reference_reading_upper", "reference_reading_bound", "measurement_policy_bound"):
+            if key in proof:
+                fields.append(f"reference-readings<={proof[key]}")
+                break
+    fields.append(f"budget={budget if budget is not None else 'unlimited'}")
+    return " ".join(fields)
+
+
 @app.command()
 def generate(
-    output: Path = typer.Argument(..., help="Output directory"),
+    output: Path = typer.Argument(..., help="New or empty episode directory (parent for --count > 1)."),
     seed: int = typer.Option(1, help="Private construction seed"),
     count: int = typer.Option(1, min=1, help="Number of episodes"),
     axis_version: int = typer.Option(1, min=1, max=2, envvar="NEXUS_AXIS_VERSION",
@@ -125,15 +156,15 @@ def generate(
         min=0,
         max=5,
         help=(
-            "Discovery level 0-5. In v2: supplied evidence, direct measurement, "
-            "independent combination, dependent calibration, adaptive selection, construction."
+            "Discovery profile 0-5. Evidence and required investigation depend on the family; "
+            "not every level is supported."
         ),
     ),
     planning_level: int = typer.Option(
         1,
         min=0,
         max=3,
-        help="Planning scale 0-3. In v2: P+1 disclosed rooms; P0 is the one-room control.",
+        help="Planning profile 0-3. Room layout, dependencies and supported levels depend on the family.",
     ),
     theory_level: int = typer.Option(
         0, min=0, max=3, envvar="NEXUS_THEORY_LEVEL",
@@ -146,42 +177,43 @@ def generate(
         help="Resource pressure 0-2. Scientific family support and allowances vary; inspect its manifest and profile documentation. Legacy v1 uses finite budgets.",
     ),
 ) -> None:
-    """Generate one or more solver-qualified episodes.
+    """Generate one or more episodes using the selected family and profile.
 
     Writes a player-safe manifest and attachments plus a runner-only private.json.
     """
     from nexus.generator import generate_episode
-    from nexus.io import save_episode
+    from nexus.io import EpisodeDestinationError, check_episode_destination, save_episode
 
+    def destination(offset: int) -> Path:
+        return output if count == 1 else output / f"episode-{offset + 1:03d}"
+
+    try:
+        for offset in range(count):
+            check_episode_destination(destination(offset))
+    except EpisodeDestinationError as exc:
+        raise typer.BadParameter(str(exc), param_hint="output") from exc
+
+    options = _ontology_options(ontology_options)
     for offset in range(count):
         episode = generate_episode(
             seed + offset,
             axis_version=axis_version,
             science_family=science_family,
             budget_profile=budget_profile,
-            ontology_options=_ontology_options(ontology_options),
+            ontology_options=options,
             discovery_level=discovery_level,
             planning_level=planning_level,
             resource_pressure=resource_pressure,
             theory_level=theory_level,
         )
-        target = output if count == 1 else output / f"episode-{offset + 1:03d}"
+        target = destination(offset)
         save_episode(episode, target)
         metadata = episode.generation_metadata
-        policy_summary = f"optimal={metadata.optimal_action_count} probes={metadata.required_probe_count} "
-        certificate = metadata.investigation_certificate or {}
-        if "reference_reading_bound" in certificate:
-            policy_summary = (
-                f"physical-optimal={metadata.optimal_action_count} "
-                f"reference-readings<={certificate['reference_reading_bound']} "
-                f"reference-actions<={certificate['reference_action_bound']} "
-            )
         console.print(
             f"[green]generated[/green] {episode.public.episode_id} -> {target} "
             f"(discovery={metadata.discovery_level} planning={metadata.planning_level} "
             f"resource-pressure={metadata.resource_pressure} theory={metadata.theory_level} "
-            f"{policy_summary}"
-            f"budget={metadata.action_budget} "
+            f"{_generation_costs(episode)} "
             f"recommended-tool-calls={metadata.recommended_tool_call_limit})"
         )
 
@@ -202,10 +234,9 @@ def inspect(private: Path = typer.Argument(..., exists=True, readable=True)) -> 
 
 @app.command()
 def qualify(private: Path = typer.Argument(..., exists=True, readable=True)) -> None:
-    """Validate a compiled episode as benchmark-ready.
+    """Check a compiled episode against its family's qualification rules.
 
-    Checks information-profile guarantees, solver success, replay, victory receipt generation,
-    serialization, metadata consistency, and public/private separation.
+    The report describes mechanical checks, not measured model difficulty.
     """
     from nexus.generator import qualify_episode
     from nexus.io import load_private
@@ -221,7 +252,7 @@ def solve_episode(
     private: Path = typer.Argument(..., exists=True, readable=True),
     trace_out: Path | None = typer.Option(None, help="Optional JSONL trace output"),
 ) -> None:
-    """Find an optimal physical plan with exhaustive BFS and optionally write its replay trace."""
+    """Run the private physical solver (legacy BFS or a scientific family planner) and optionally save its trace."""
     from nexus.engine.replay import execute_with_trace
     from nexus.io import load_private, save_trace
     from nexus.solver import solve

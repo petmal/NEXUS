@@ -9,7 +9,9 @@ with the [worked budget pair](benchmark-guide.md).
 ## Start one local service
 
 From the repository, install with `uv sync --frozen --all-extras --python 3.14.7`.
-Generate a compiled world, then start its non-resettable service:
+Generate a compiled world into a new or empty directory, then start its
+non-resettable service. Use fresh paths for a new attempt; keep the original
+world and audit directory if you want to reproduce the first one:
 
 ```bash
 uv run --frozen nexus generate ./trial-world --seed 17 --planning-level 0

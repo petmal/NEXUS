@@ -8,7 +8,7 @@ from urllib.parse import unquote, urlsplit
 
 ROOT = Path(__file__).resolve().parents[1]
 ENTRY = {
-    'README.md', 'CONTRIBUTING.md', 'SECURITY.md', 'docs/README.md',
+    'README.md', 'AGENTS.md', 'CONTRIBUTING.md', 'SECURITY.md', 'docs/README.md',
     'docs/play-guide.md', 'docs/evaluation-guide.md', 'docs/research-guide.md',
     'docs/release-readiness.md', 'docs/reference/protocol.md', 'docs/reference/metrics.md',
     'docs/facility-setting.md', 'docs/future-experiments.md', 'docs/ontology-author-guide.md',

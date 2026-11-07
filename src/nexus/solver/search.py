@@ -25,6 +25,7 @@ class SolveResult(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
     solvable: bool
+    plan_action_count: int | None = None
     optimal_action_count: int | None = None
     plan: tuple[Action, ...] = ()
     visited_states: int = 0
@@ -178,14 +179,19 @@ def legal_solver_actions(episode: PrivateEpisode, state: WorldState) -> list[Act
 
 def solve(episode: PrivateEpisode, max_states: int = 100_000) -> SolveResult:
     if episode.public.investigation is not None:
-        # Trusted perfect-knowledge physical optimum. Scientific policy is stored separately.
         from nexus.engine.replay import execute_with_trace
-        from nexus.ontology.catalog import runtime_for
-        plan = runtime_for(episode.public.investigation).physical_plan(episode)
+        from nexus.ontology.catalog import definition_for
+
+        definition = definition_for(episode.public.investigation)
+        plan = definition.runtime().physical_plan(episode)
         state, _ = execute_with_trace(episode, list(plan))
-        return SolveResult(solvable=state.terminal_status == TerminalStatus.WON,
-                           optimal_action_count=len(plan), plan=plan,
-                           terminal_state_hash=canonical_hash(state))
+        won = state.terminal_status == TerminalStatus.WON
+        cost = state.turn - episode.public.initial_state.turn
+        return SolveResult(
+            solvable=won, plan=plan, plan_action_count=cost,
+            optimal_action_count=cost if won and definition.exact_physical_plan else None,
+            terminal_state_hash=canonical_hash(state),
+        )
     initial = episode.public.initial_state.model_copy(deep=True)
     frontier: deque[tuple[WorldState, tuple[Action, ...]]] = deque([(initial, ())])
     visited = {search_state_key(initial)}
@@ -209,6 +215,7 @@ def solve(episode: PrivateEpisode, max_states: int = 100_000) -> SolveResult:
             if result.state.terminal_status == TerminalStatus.WON:
                 return SolveResult(
                     solvable=True,
+                    plan_action_count=len(next_plan),
                     optimal_action_count=len(next_plan),
                     plan=next_plan,
                     visited_states=len(visited),

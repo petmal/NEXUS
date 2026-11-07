@@ -22,11 +22,25 @@ from nexus.io import load_private, load_trace
 from nexus.models.world import TerminalStatus
 from nexus.presentation import evidence_files
 from nexus.provenance import source_digest
+from nexus.protocol.public_transcript import VERSION as TRANSCRIPT_VERSION
 from nexus.protocol.public_transcript import PublicTranscript
 
 VERSION = "nexus-audit-bundle-v1"
 FILES = ("private.json", "binding.json", "exchanges.jsonl", "trace.jsonl", "outcome.json")
 REQUEST_COUNTERS = ("invalid_actions", "duplicate_requests", "protocol_conflicts")
+
+
+def _world_binding(episode) -> dict:
+    """Facts derivable from the compiled world, unlike host/provider provenance."""
+    return {
+        "version": VERSION,
+        "episode_id": episode.public.episode_id,
+        "protocol_version": episode.public.protocol_version,
+        "presentation_version": episode.public.presentation_version,
+        "generation_metadata": episode.generation_metadata.model_dump(mode="json"),
+        "public_evidence_sha256": canonical_hash(evidence_files(episode.public)),
+        "initial_state_sha256": canonical_hash(episode.public.initial_state),
+    }
 
 
 def _verify_game_outcome(episode, records, outcome):
@@ -91,15 +105,9 @@ class AuditRecorder:
         self._write_error = False
         episode = session.episode
         binding = {
-            "version": VERSION,
-            "episode_id": episode.public.episode_id,
+            **_world_binding(episode),
             "runtime_source_sha256": source_digest(),
             "python_version": platform.python_version(),
-            "protocol_version": episode.public.protocol_version,
-            "presentation_version": episode.public.presentation_version,
-            "generation_metadata": episode.generation_metadata.model_dump(mode="json"),
-            "public_evidence_sha256": canonical_hash(evidence_files(episode.public)),
-            "initial_state_sha256": canonical_hash(episode.public.initial_state),
             "provider_identity": None,
             "scope": "One local NEXUS session; provider identity, inference settings and billing belong to the external harness.",
         }
@@ -128,14 +136,19 @@ class AuditRecorder:
                 raise
 
     def checkpoint(self) -> None:
-        # Take the session lock before the writer lock, as direct capture does.
-        records = self.session.trace_snapshot()
+        # Session calls can hold the session lock while writing an exchange.
+        # Do not hold the writer lock while requesting a snapshot.
+        with self._lock:
+            if self._closed:
+                return
+            start = self._cursor
+        records = self.session.trace_snapshot(start=start)
         with self._lock:
             if self._closed:
                 return
             try:
                 with (self.directory / "trace.jsonl").open("a", encoding="utf-8") as handle:
-                    for record in records[self._cursor :]:
+                    for record in records[self._cursor - start :]:
                         handle.write(record.model_dump_json() + "\n")
                         self._cursor += 1
             except OSError:
@@ -203,13 +216,21 @@ def verify_bundle(directory: Path) -> dict:
     if binding["runtime_source_sha256"] != source_digest():
         raise ValueError("audit runtime source differs; use the recorded NEXUS revision")
     episode = load_private(directory / "private.json")
-    if binding["episode_id"] != episode.public.episode_id:
-        raise ValueError("audit episode binding mismatch")
-    if binding["initial_state_sha256"] != canonical_hash(episode.public.initial_state) or binding[
-        "public_evidence_sha256"
-    ] != canonical_hash(evidence_files(episode.public)):
-        raise ValueError("audit world binding mismatch")
+    for key, expected in _world_binding(episode).items():
+        if key not in binding or canonical_bytes(binding[key]) != canonical_bytes(expected):
+            raise ValueError(f"audit world binding mismatch: {key}")
+    if (
+        type(manifest.get("complete")) is not bool
+        or manifest.get("transcript_version") != TRANSCRIPT_VERSION
+    ):
+        raise ValueError("audit manifest has invalid capture flag or transcript version")
+    for key in ("accepted_actions", "exchange_count", "exchanges_seen"):
+        if type(manifest.get(key)) is not int or manifest[key] < 0:
+            raise ValueError(f"audit manifest has invalid {key}")
     records = load_trace(directory / "trace.jsonl")
+    first_turn = episode.public.initial_state.turn + 1
+    if any(record.turn != turn for turn, record in enumerate(records, first_turn)):
+        raise ValueError("audit journal must contain only committed actions in turn order")
     state = replay(episode, records)
     outcome = json.loads((directory / "outcome.json").read_text(encoding="utf-8"))
     if type(outcome.get("evaluator_finalized")) is not bool:
@@ -227,10 +248,15 @@ def verify_bundle(directory: Path) -> dict:
     ]
     if len(records) != manifest["accepted_actions"] or len(exchanges) != manifest["exchange_count"]:
         raise ValueError("audit record count mismatch")
-    sequences = [r["sequence"] for r in exchanges]
-    if sequences != sorted(set(sequences)) or any(type(n) is not int or n < 1 for n in sequences):
-        raise ValueError("audit exchange sequence mismatch")
-    if manifest["complete"] and (sequences != list(range(1, manifest["exchanges_seen"] + 1))):
+    seen = manifest["exchanges_seen"]
+    previous = 0
+    for exchange in exchanges:
+        sequence = exchange.get("sequence")
+        if type(sequence) is not int or not previous < sequence <= seen:
+            raise ValueError("audit exchange sequence mismatch")
+        previous = sequence
+    # Strictly increasing integers in [1, seen] cover all exchanges iff counts match.
+    if manifest["complete"] and len(exchanges) != seen:
         raise ValueError("audit complete flag contradicts exchange coverage")
     return {
         "version": VERSION,

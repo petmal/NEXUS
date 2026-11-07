@@ -33,6 +33,11 @@ Earlier legacy contracts remain in [schemas](../../schemas). A missing object, a
 | `common_repairs_before_first_submission`, `first_submission_supported_by_evidence`, `measurements_establishing_guaranteed_repair`, `measurements_after_guaranteed_repair` | Whether a common repair existed, whether the **chosen** repair was supported, and measurements establishing/following resolution. Several surviving worlds can share a repair. |
 | `decision_diagnostics` | Nested decision-by-decision account in v3. See below and the schema definitions for reading, evidence and submission records. |
 
+The private `nexus solve` command reports the cost of its returned plan as
+`plan_action_count`. A non-null `optimal_action_count` denotes a known minimum
+for that world with its laws known. An unproven minimum stays null even if
+the plan wins. Neither field measures the work of discovering a hidden law.
+
 ## Evidence at the moment of a decision
 
 For an eligible submitted build, let **W** be the set of worlds still consistent with public observations **before** feedback on this submission. Let **A** be the subset accepting the build. If A equals W, the build is **guaranteed**; if A is nonempty but smaller than W, it is **compatible**; if A is empty, it is **contradicted**. **Ineligible** means there was no physically eligible decision to assess. These labels say what the evidence permits, not what the model privately believed.

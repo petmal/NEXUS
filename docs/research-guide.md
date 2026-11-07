@@ -79,7 +79,10 @@ the laws are already disclosed. Use exact physical costs and `excess_actions`
 where available to assess wasted actions. Read bounds from the family's scoped
 certificate: plugin worlds can leave shared legacy generation fields such as
 `optimal_action_count` at zero even when their certified plan cost is positive.
-That default is not a zero-action optimum.
+That default is not a zero-action optimum. In `nexus solve` output,
+`plan_action_count` is the cost of the returned private plan. Only use
+`optimal_action_count` as a baseline when it is non-null: a replayed winning
+plan proves it is possible to win at that cost, not that every win costs as much.
 
 ## Reproducibility record
 
@@ -115,8 +118,10 @@ an open manifest or partial tail; retain it as partial evidence. This is not a
 power-loss durability guarantee or a resumable session file.
 
 `nexus verify-audit DIR --json` requires matching runtime source. It checks file
-hashes, episode binding, accepted-action replay with the original verifier secret,
-lifecycle closure and exchange counts/order. It also recomputes game-derived
+hashes, bound episode ID, protocol/presentation versions, generation metadata,
+public evidence and initial state against the compiled world. It replays committed
+actions with the original verifier secret and checks lifecycle closure, exchange
+counts and order. It also recomputes game-derived
 performance, evidence witnesses and physical continuation costs from that trace.
 `game_metrics_verified` reports this check. Invalid-action, duplicate-request and
 protocol-conflict counts need the public transcript, so they are explicitly listed
