@@ -26,7 +26,10 @@ Two fresh-world rows moved from “observed failure” to “unassessed”: Flas
 (billing interruption) and Grok on F26 (provider unavailable). Neither recorded
 a terminal world state. No harness verdict, confirmed win, matrix coverage decision
 or diagnostic outcome category changed. The saved input, image ID and original
-output location reproduced each of the 19 effective configurations.
+output location reproduced each of the 19 effective configurations. The RC2 archive
+also contains a preflight-only folder. Testing the documented multi-folder command
+exposed a crash on that folder; the command now identifies it explicitly and
+continues to the live runs. A damaged run still produces an error.
 
 This correction matters when calculating failure rates: counting these two rows
 as model losses would overstate the evidence. It does not change the T/D or P/R

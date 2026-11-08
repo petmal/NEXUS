@@ -4,6 +4,8 @@ import ast
 import hashlib
 import importlib.util
 import json
+import subprocess
+import sys
 from copy import deepcopy
 from pathlib import Path
 
@@ -815,3 +817,25 @@ def test_unbound_seed_retains_legacy_rows_without_certifying_the_condition(tmp_p
     result = readout.summarize(tmp_path)
     assert not result["matrix_complete"] and result["recorded_attempts"] == 2
     assert all(row["configuration_differences"] == ["unbound_evaluation_seed"] for row in result["rows"])
+
+
+def test_cli_handles_mixed_preflight_and_run_folders_without_hiding_a_damaged_run(tmp_path):
+    preflight, run = tmp_path / "a", tmp_path / "b"
+    preflight.mkdir()
+    run.mkdir()
+    write(preflight, "manifest.json", {"status": "preflight-passed", "command": None})
+    write(preflight, "preflight.json", {"status": "passed"})
+    fixture(run)
+    command = [sys.executable, str(PATH), str(preflight), str(run)]
+    result = subprocess.run(command, capture_output=True, text=True, check=True)
+    assert "preflight only; no model attempts" in result.stdout
+    assert not (preflight / "readout.json").exists()
+    assert readout.read(run / "readout.json")["recorded_attempts"] == 2
+
+    write(preflight, "mindtrial.json", {})
+    result = subprocess.run(command, capture_output=True, text=True)
+    assert result.returncode != 0 and "conflicts with attempt artifacts" in result.stderr
+    (preflight / "mindtrial.json").unlink()
+    write(preflight, "manifest.json", {"status": "interrupted"})
+    result = subprocess.run(command, capture_output=True, text=True)
+    assert result.returncode != 0 and "cannot summarize" in result.stderr
