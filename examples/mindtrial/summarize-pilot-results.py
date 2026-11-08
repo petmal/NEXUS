@@ -62,7 +62,12 @@ def read(path):
 
 
 def seconds(value):
-    return value / 1_000_000_000 if isinstance(value, int) and not isinstance(value, bool) else None
+    return value / 1_000_000_000 if type(value) is int and value >= 0 else None
+
+
+def reported_token_total(rows, key):
+    values = [row["usage"].get(key) for row in rows]
+    return sum(values) if all(type(n) is int and n >= 0 for n in values) else None
 
 
 def log_evidence(path, records):
@@ -75,7 +80,7 @@ def log_evidence(path, records):
         return None, {}
     suffixes = {r["TraceID"]: f"{provider}: {r['Run']}: {r['Task']}: " for provider, r in records}
     names = {r["Task"] for _, r in records}
-    blocks, active = {}, set()
+    blocks, active, foreign_active = {}, set(), set()
     context = pending = first_task = None
     for line in path.read_text(errors="replace").splitlines():
         if line.endswith(": starting task...") and any(
@@ -97,8 +102,11 @@ def log_evidence(path, records):
             context = trace if trace in blocks else None
             if trace not in suffixes:
                 if line.endswith(": starting task..."):
+                    foreign_active.add(trace)
                     for other in active:
                         blocks[other]["ambiguous"] = True
+                elif "task has finished in " in line:
+                    foreign_active.discard(trace)
                 continue
             expected = suffixes[trace]
             matches_context = line[prefix.end() :].startswith(expected)
@@ -107,7 +115,7 @@ def log_evidence(path, records):
                     blocks[trace]["ambiguous"] = True
                 else:
                     blocks[trace] = {
-                        "ambiguous": not matches_context,
+                        "ambiguous": not matches_context or bool(foreign_active),
                         "finished": False,
                         "calls": {},
                         "performance": None,
@@ -174,13 +182,38 @@ def log_evidence(path, records):
     return first_task, blocks
 
 
+def checker_response(value):
+    # This operation reads evidence, costs no action, and reports no world outcome.
+    return (
+        value.get("scope") == "archive_and_observed_reader_outputs_only"
+        and type(value.get("consistent_with_readings")) is bool
+        and all(type(value.get(k)) is int and value[k] >= 0
+                for k in ("distinct_readings_checked", "evidence_turn", "world_action_cost"))
+        and value["world_action_cost"] == 0
+    )
+
+
 def public_response(value):
     return isinstance(value, dict) and (
-        "episode_id" in value
-        or "observation" in value
+        isinstance(value.get("episode_id"), str)
+        or isinstance(value.get("observation"), dict)
+        or checker_response(value)
         or {"filename", "content"} <= value.keys()
         or {"turn", "status", "actions_remaining"} <= value.keys()
     )
+
+
+def json_equal(left, right):
+    """JSON booleans are distinct from numbers, including inside provider settings."""
+    if type(left) in (int, float) and type(right) in (int, float):
+        return left == right
+    if type(left) is not type(right):
+        return False
+    if isinstance(left, dict):
+        return left.keys() == right.keys() and all(json_equal(v, right[k]) for k, v in left.items())
+    if isinstance(left, list):
+        return len(left) == len(right) and all(json_equal(a, b) for a, b in zip(left, right))
+    return left == right
 
 
 def run_config_differences(configured, snapshot, retry_policy):
@@ -198,24 +231,94 @@ def run_config_differences(configured, snapshot, retry_policy):
         }
 
     differences = []
-    if parameters(snapshot.get("ModelParameters")) != parameters(
-        configured.get("model-parameters")
-    ):
+    if not json_equal(parameters(snapshot.get("ModelParameters")),
+                      parameters(configured.get("model-parameters"))):
         differences.append("model_parameters")
-    if snapshot.get("MaxRequestsPerMinute") != configured.get("max-requests-per-minute"):
+    if not json_equal(snapshot.get("MaxRequestsPerMinute"), configured.get("max-requests-per-minute")):
         differences.append("max_requests_per_minute")
-    if snapshot.get("DisableStructuredOutput", False) != configured.get(
-        "disable-structured-output", False
-    ):
+    if not json_equal(snapshot.get("DisableStructuredOutput", False),
+                      configured.get("disable-structured-output", False)):
         differences.append("disable_structured_output")
     actual_retry = snapshot.get("RetryPolicy") or {}
     for name, key in (
         ("max-retry-attempts", "MaxRetryAttempts"),
         ("initial-delay-seconds", "InitialDelaySeconds"),
     ):
-        if name in retry_policy and actual_retry.get(key, 0) != retry_policy[name]:
+        if name in retry_policy and not json_equal(actual_retry.get(key, 0), retry_policy[name]):
             differences.append("retry_policy." + name)
     return differences
+
+
+def selected_conditions(config, tasks):
+    """Run labels select slots; the model ID and settings bind the condition."""
+    configured = {}
+    for provider in config["providers"]:
+        if provider.get("disabled") is True:
+            continue
+        for run in provider["runs"]:
+            if run.get("disabled") is True:
+                continue
+            key = provider["name"], run.get("name") or run["model"]
+            if key in configured:
+                raise ValueError(f"duplicate configured run: {key}")
+            configured[key] = (run, run.get("retry-policy", provider.get("retry-policy", {})))
+    names = [t["name"] for t in tasks if t.get("disabled") is not True]
+    if not configured or not names:
+        raise ValueError("selection must include an enabled run and task")
+    if len(names) != len(set(names)):
+        raise ValueError("duplicate configured task")
+    expected = {(p, label, run["model"], name)
+                for (p, label), (run, _) in configured.items() for name in names}
+    return configured, expected
+
+
+def checked_records(payload, configured, seed):
+    """Validate the result envelope and identify drift without dropping partial records."""
+    if (not isinstance(payload, dict) or type(payload.get("FormatVersion")) is not int
+            or payload["FormatVersion"] != 1 or payload.get("AppName") != "MindTrial"
+            or not isinstance(payload.get("Results"), dict)):
+        raise ValueError("requires MindTrial results format1")
+    seen_traces = set()
+    for provider, records in payload["Results"].items():
+        if not isinstance(records, list):
+            raise ValueError("provider results must be a list")
+        for record in records:
+            if not isinstance(record, dict) or record.get("Kind") not in ("Passed", "Failed", "Error", "Skipped"):
+                raise ValueError("invalid MindTrial result kind")
+            if not all(isinstance(x, str) and x for x in
+                       (provider, record.get("TraceID"), record.get("Run"), record.get("Task"))):
+                raise ValueError("missing or invalid result identity")
+            if record["TraceID"] in seen_traces:
+                raise ValueError("duplicate result TraceID")
+            seen_traces.add(record["TraceID"])
+            snapshot = record.get("RunConfig")
+            if snapshot is None:
+                snapshot = {}
+            if not isinstance(snapshot, dict) or any(
+                snapshot.get(k) is not None and not isinstance(snapshot[k], dict)
+                for k in ("ModelParameters", "RetryPolicy")
+            ):
+                raise ValueError("invalid RunConfig")
+            model = snapshot.get("Model")
+            if model is not None and not isinstance(model, str):
+                raise ValueError("invalid RunConfig.Model")
+            key = provider, record["Run"], model, record["Task"]
+            selected = configured.get(key[:2])
+            if selected is None:
+                differences = ["unconfigured_run"]
+            else:
+                run, retries = selected
+                differences = run_config_differences(run, snapshot, retries)
+                if model != run["model"]:
+                    differences.append("model")
+            if "Provider" in record and record["Provider"] != provider:
+                differences.append("provider")
+            evaluation = record.get("Evaluation")
+            if not isinstance(seed, str) or not seed:
+                differences.append("unbound_evaluation_seed")
+            elif not isinstance(evaluation, dict) or evaluation.get("Seed") != seed:
+                differences.append("evaluation_seed")
+            yield key, record, differences
 
 
 def attempt_diagnostics(record, telemetry, block, *, log_exists):
@@ -236,6 +339,7 @@ def attempt_diagnostics(record, telemetry, block, *, log_exists):
         "provider_http_status": None,
         "provider_error": None,
         "world_win_observed": None,
+        "world_evidence_conflict": False,
         "physical_goal_satisfied": None,
         "evidence_support": None,
         "first_submission_evidence_support": None,
@@ -257,7 +361,8 @@ def attempt_diagnostics(record, telemetry, block, *, log_exists):
         invalid_count = sum(c.get("Status") == "invalid_arguments" for c in calls or [])
         # MindTrial versions differ on whether pre-execution argument failures
         # contribute to ToolUsage. Detailed identities must still all match.
-        count_matches = calls is not None and count in (len(calls), len(calls) - invalid_count)
+        count_matches = (calls is not None and type(count) is int
+                         and count in (len(calls), len(calls) - invalid_count))
         complete = (
             calls is not None
             and count_matches
@@ -284,7 +389,8 @@ def attempt_diagnostics(record, telemetry, block, *, log_exists):
             for value in (
                 response.get("turn"),
                 response.get("current_turn"),
-                (response.get("observation") or {}).get("turn"),
+                response.get("evidence_turn") if checker_response(response) else None,
+                (response["observation"] if isinstance(response.get("observation"), dict) else {}).get("turn"),
             )
             if type(value) is int
         ]
@@ -293,7 +399,9 @@ def attempt_diagnostics(record, telemetry, block, *, log_exists):
         decision = performance.get("decision_diagnostics") or summary
         states = []
         for response in responses:
-            state = response.get("observation", response)
+            state = response.get("observation")
+            if not isinstance(state, dict):
+                state = response
             status = state.get("terminal_status", state.get("status"))
             if type(state.get("turn")) is int and status in ("active", "won", "failed"):
                 states.append(
@@ -303,6 +411,11 @@ def attempt_diagnostics(record, telemetry, block, *, log_exists):
                         "actions_remaining": state.get("actions_remaining"),
                     }
                 )
+        # A retry can return a cached observation from an earlier turn.
+        last_state = max(states, key=lambda s: (s["turn"], s["status"] != "active"), default=None)
+        terminal_states = {status for status in (
+            performance.get("terminal_status"), summary.get("status"), *(s["status"] for s in states)
+        ) if status in ("won", "failed")}
         last_stop = block.get("last_stop")
         if block["finished"] and last_stop and last_stop[1]:
             result.update(provider_stop_reason=last_stop[0], provider_stop_source="trace_log")
@@ -315,17 +428,17 @@ def attempt_diagnostics(record, telemetry, block, *, log_exists):
             termination_reason=performance.get("termination_reason", summary.get("termination_reason")),
             accepted_world_actions=performance.get("actions_used", summary.get("turn")),
             last_observed_turn=max(turns) if turns else None,
-            last_observed_world_state=states[-1] if states else None,
+            last_observed_world_state=last_state,
             tool_count_convention=(
                 "all_detailed_calls"
-                if count == len(calls or [])
+                if count_matches and count == len(calls)
                 else "excludes_invalid_arguments"
                 if count_matches
                 else "unresolved"
             ),
             structure=block["structure"],
-            world_win_observed=(performance.get("terminal_status", summary.get("status")) == "won")
-            if performance.get("terminal_status", summary.get("status")) in ("active", "won", "failed") else None,
+            world_win_observed=("won" in terminal_states) if len(terminal_states) == 1 else None,
+            world_evidence_conflict=len(terminal_states) > 1,
             physical_goal_satisfied=(decision["physical_goal_satisfied"]
                 if decision.get("physical_goal_satisfied") is not None else performance.get("goal_satisfied")),
             evidence_support=decision.get("escape_classification"),
@@ -338,7 +451,8 @@ def attempt_diagnostics(record, telemetry, block, *, log_exists):
             physical_continuation=summary.get("physical_continuation") or (block.get("operator_report") or {}).get("physical_continuation"),
         )
     details = record.get("Details") or {}
-    message = (details.get("Error") or {}).get("Message", "")
+    message = (details.get("Error") or {}).get("Message")
+    message = message if isinstance(message, str) else ""
     answer = details.get("Answer") or {}
     if record["Kind"] == "Error":
         provider_error = classify_provider_error(record)
@@ -362,11 +476,11 @@ def attempt_diagnostics(record, telemetry, block, *, log_exists):
     elif "no actionable content" in message or "no response candidates" in message:
         result["response_text_present"] = False
     state = result["last_observed_world_state"] or {}
-    if result["world_win_observed"] is None and state.get("status") in ("active", "won", "failed"):
-        result["world_win_observed"] = state["status"] == "won"
-    if record["Kind"] == "Passed":
+    if result["world_evidence_conflict"] or (record["Kind"] == "Passed" and result["world_win_observed"] is False):
+        result["outcome"] = "conflicting_result_evidence"
+    elif record["Kind"] == "Passed":
         result["outcome"] = "reported_win"
-    elif result["terminal_status"] == "won" or state.get("status") == "won":
+    elif result["world_win_observed"] is True:
         result["outcome"] = "world_won_without_accepted_result"
     elif (
         type((result["physical_continuation"] or {}).get("first_budget_infeasible_turn")) is int
@@ -417,90 +531,55 @@ def summarize(directory):
         result = {"FormatVersion": 1, "AppName": "MindTrial", "Results": {}}
     else:
         result = read(result_path)
-    if result.get("FormatVersion") != 1 or result.get("AppName") != "MindTrial":
-        raise ValueError("requires MindTrial results format1")
     for name, field in (("config.yaml", "effective_config_sha256"), ("tasks.yaml", "tasks_sha256")):
         if hashlib.sha256((directory / name).read_bytes()).hexdigest() != manifest[field]:
             raise ValueError(f"{name} checksum differs from the run manifest")
     config = read(directory / "config.yaml")["config"]
     tasks = read(directory / "tasks.yaml")["task-config"]["tasks"]
-    expected = {
-        (p["name"], r["name"], r["model"], t["name"])
-        for p in config["providers"]
-        if not p.get("disabled", False)
-        for r in p["runs"]
-        if not r.get("disabled", False)
-        for t in tasks
-        if not t.get("disabled", False)
-    }
-    configured = {
-        (p["name"], r["name"], r["model"]): r
-        for p in config["providers"]
-        if not p.get("disabled", False)
-        for r in p["runs"]
-        if not r.get("disabled", False)
-    }
-    retry_policies = {
-        (p["name"], r["name"], r["model"]): r.get("retry-policy", p.get("retry-policy", {}))
-        for p in config["providers"]
-        for r in p["runs"]
-    }
-    records_with_provider = [
-        (provider, record) for provider, records in result["Results"].items() for record in records
-    ]
+    configured, expected = selected_conditions(config, tasks)
+    checks = list(checked_records(result, configured, manifest.get("evaluation_seed")))
     log = directory / "mindtrial.log"
-    first_task_text, blocks = log_evidence(log, records_with_provider)
-    rows, seen, trace_ids = [], Counter(), set()
+    first_task_text, blocks = log_evidence(log, [(key[0], rec) for key, rec, _ in checks])
+    rows, seen = [], Counter()
     mismatches = []
-    for provider, records in result["Results"].items():
-        for record in records:
-            trace = record["TraceID"]
-            if trace in trace_ids:
-                raise ValueError("duplicate result TraceID")
-            trace_ids.add(trace)
-            model = record.get("RunConfig", {}).get("Model")
-            key = provider, record["Run"], model, record["Task"]
-            seen[key] += 1
-            configured_run = configured.get(key[:3])
-            snapshot = record.get("RunConfig") or {}
-            differences = (
-                run_config_differences(configured_run, snapshot, retry_policies[key[:3]])
-                if configured_run is not None
-                else ["unconfigured_run"]
-            )
-            if differences:
-                mismatches.append(trace)
-            details = record.get("Details") or {}
-            telemetry_key = "Error" if record["Kind"] == "Error" else "Answer"
-            telemetry = details.get(telemetry_key) or {}
-            usage = telemetry.get("Usage") or {}
-            tool_usage = (telemetry.get("ToolUsage") or {}).get("nexus") or {}
-            rows.append(
-                {
-                    "trace_id": trace,
-                    "provider": provider,
-                    "run": record["Run"],
-                    "model": model,
-                    "model_parameters": record.get("RunConfig", {}).get("ModelParameters"),
-                    "disable_structured_output": snapshot.get("DisableStructuredOutput", False),
-                    "configuration_differences": differences,
-                    "run_config_sha256": hashlib.sha256(
-                        json.dumps(snapshot, sort_keys=True, separators=(",", ":")).encode()
-                    ).hexdigest(),
-                    "task": record["Task"],
-                    "reported_kind": record["Kind"],
-                    "request_seconds": seconds(record.get("DurationNS")),
-                    "nexus_container_seconds": seconds(tool_usage.get("TotalDurationNS")),
-                    "tool_calls": tool_usage.get("CallCount"),
-                    "usage": usage,
-                    "usage_source": f"Details.{telemetry_key}" if telemetry else None,
-                    "usage_partial": record["Kind"] == "Error",
-                    "error_message": (details.get("Error") or {}).get("Message"),
-                    "diagnostics": attempt_diagnostics(
-                        record, telemetry, blocks.get(trace), log_exists=log.is_file()
-                    ),
-                }
-            )
+    for key, record, differences in checks:
+        provider, _, model, _ = key
+        seen[key] += 1
+        trace = record["TraceID"]
+        snapshot = record.get("RunConfig") or {}
+        if differences:
+            mismatches.append(trace)
+        details = record.get("Details") or {}
+        telemetry_key = "Error" if record["Kind"] == "Error" else "Answer"
+        telemetry = details.get(telemetry_key) or {}
+        usage = telemetry.get("Usage") or {}
+        tool_usage = (telemetry.get("ToolUsage") or {}).get("nexus") or {}
+        rows.append(
+            {
+                "trace_id": trace,
+                "provider": provider,
+                "run": record["Run"],
+                "model": model,
+                "model_parameters": snapshot.get("ModelParameters"),
+                "disable_structured_output": snapshot.get("DisableStructuredOutput", False),
+                "configuration_differences": differences,
+                "run_config_sha256": hashlib.sha256(
+                    json.dumps(snapshot, sort_keys=True, separators=(",", ":")).encode()
+                ).hexdigest(),
+                "task": record["Task"],
+                "reported_kind": record["Kind"],
+                "request_seconds": seconds(record.get("DurationNS")),
+                "nexus_container_seconds": seconds(tool_usage.get("TotalDurationNS")),
+                "tool_calls": tool_usage.get("CallCount"),
+                "usage": usage,
+                "usage_source": f"Details.{telemetry_key}" if telemetry else None,
+                "usage_partial": record["Kind"] == "Error",
+                "error_message": (details.get("Error") or {}).get("Message"),
+                "diagnostics": attempt_diagnostics(
+                    record, telemetry, blocks.get(trace), log_exists=log.is_file()
+                ),
+            }
+        )
     started, ended = (datetime.fromisoformat(manifest[k]) for k in ("started_at", "finished_at"))
     first_task = None
     if first_task_text is not None:
@@ -510,7 +589,8 @@ def summarize(directory):
             raise ValueError("task timestamp outside run; cannot infer log timezone")
         first_task = max(started, first_task)
     groups = []
-    for provider, run, model in sorted({(r["provider"], r["run"], r["model"]) for r in rows}):
+    for provider, run, model in sorted({(r["provider"], r["run"], r["model"]) for r in rows},
+                                       key=lambda k: (k[0], k[1], k[2] or "")):
         selected = [
             r for r in rows if (r["provider"], r["run"], r["model"]) == (provider, run, model)
         ]
@@ -533,12 +613,8 @@ def summarize(directory):
                     )
                 },
                 "partial_telemetry_attempts": sum(r["usage_partial"] for r in selected),
-                "reported_output_tokens": sum(r["usage"]["OutputTokens"] for r in selected)
-                if all(type(r["usage"].get("OutputTokens")) is int for r in selected)
-                else None,
-                "reported_reasoning_tokens": sum(r["usage"]["ReasoningTokens"] for r in selected)
-                if all(type(r["usage"].get("ReasoningTokens")) is int for r in selected)
-                else None,
+                "reported_output_tokens": reported_token_total(selected, "OutputTokens"),
+                "reported_reasoning_tokens": reported_token_total(selected, "ReasoningTokens"),
                 "output_token_accounting": dict(
                     Counter(r["usage"].get("OutputTokenAccounting", "unknown") for r in selected)
                 ),
@@ -551,7 +627,7 @@ def summarize(directory):
             }
         )
     return {
-        "version": "nexus-pilot-readout-v4",
+        "version": "nexus-pilot-readout-v5",
         "app_version": result.get("AppVersion"),
         "result_file_status": result_file_status,
         "source_commit": manifest["source_commit"],
@@ -562,6 +638,7 @@ def summarize(directory):
         "selection": manifest.get("selection"),
         "repetition": manifest.get("repetition"),
         "coverage_scope": "configured_file_crossing; further interactive deselection is unknown",
+        "evaluation_seed": manifest.get("evaluation_seed"),
         "scope": "Reported results and conservative log diagnostics only; not public replay, private HMAC or receipt verification. Missing/ambiguous logs do not establish world access or absence of access. Error-record usage is partial recorded telemetry, not a complete account of an interrupted request. Never count failed/missing telemetry as zero effort. Output tokens may already include reasoning tokens; do not add them together.",
         "expected_attempts": len(expected),
         "recorded_attempts": len(rows),
@@ -575,7 +652,7 @@ def summarize(directory):
         and not mismatches and all(r["diagnostics"]["provider_error"] is None for r in rows),
         "configuration_mismatch_trace_ids": mismatches,
         "missing": [list(k) for k in sorted(expected - seen.keys())],
-        "unexpected": [list(k) for k in sorted(seen.keys() - expected)],
+        "unexpected": [list(k) for k in sorted(seen.keys() - expected, key=lambda k: (k[0], k[1], k[2] or "", k[3]))],
         "repeated_conditions": [
             {"condition": list(k), "count": v} for k, v in seen.items() if v > 1
         ],

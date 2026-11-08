@@ -692,54 +692,37 @@ def result_directory(package, suite):
     return Path(tempfile.mkdtemp(prefix=f"{suite}-{stamp}-", dir=results))
 
 
-def result_coverage(directory, config, tasks):
-    """Check completed result slots, not mission success or receipt correctness.
+def slot_counts(conditions):
+    # Model identity and settings are checked separately for each recorded row.
+    return Counter((provider, run, task) for provider, run, _, task in conditions)
 
-    MindTrial can exit zero after cancellation with an empty JSON file. An
-    unattended batch must not treat that as complete or continue silently.
-    """
-    expected = {
-        (provider["name"], run.get("name") or run["model"], task["name"])
-        for provider in config["config"]["providers"]
-        if provider.get("disabled") is not True
-        for run in provider["runs"]
-        if run.get("disabled") is not True
-        for task in tasks["task-config"]["tasks"]
-        if task.get("disabled") is not True
-    }
-    result = {"expected": len(expected), "recorded": 0, "complete": False}
-    path = directory / "mindtrial.json"
-    if not path.is_file() or not path.stat().st_size:
-        return {**result, "reason": "missing_or_empty_results"}
+
+def result_coverage(directory, config, tasks, *, seed):
+    """Check for one matching record per selected condition, regardless of verdict."""
+    readout = readout_module(Path(__file__).resolve().parent)
+    result = {"expected": 0, "recorded": 0, "complete": False}
     try:
-        payload = json.loads(path.read_bytes())
-        providers = payload["Results"]
-        if not isinstance(providers, dict):
-            raise TypeError("Results must be an object")
-        seen = Counter()
-        traces = set()
-        for provider, records in providers.items():
-            if not isinstance(records, list):
-                raise TypeError("Provider results must be a list")
-            for record in records:
-                if record["Kind"] not in ("Passed", "Failed", "Error", "Skipped"):
-                    raise ValueError("Unknown result kind")
-                key = (provider, record["Run"], record["Task"])
-                if not all(isinstance(value, str) and value for value in key):
-                    raise TypeError("Result identities must be nonempty strings")
-                trace = record["TraceID"]
-                if not isinstance(trace, str) or not trace or trace in traces:
-                    raise ValueError("Missing or duplicate trace identity")
-                traces.add(trace)
-                seen[key] += 1
+        configured, conditions = readout.selected_conditions(config["config"], tasks["task-config"]["tasks"])
+        expected = set(slot_counts(conditions))
+        result["expected"] = len(expected)
+        path = directory / "mindtrial.json"
+        if not path.is_file() or not path.stat().st_size:
+            return {**result, "reason": "missing_or_empty_results"}
+        checked = list(readout.checked_records(json.loads(path.read_bytes()), configured, seed))
+        seen = slot_counts(key for key, _, _ in checked)
+        mismatches = [rec["TraceID"] for _, rec, differences in checked if differences]
     except (OSError, ValueError, KeyError, TypeError):
         return {**result, "reason": "invalid_results"}
-    complete = set(seen) == expected and all(count == 1 for count in seen.values())
+    selection_complete = set(seen) == expected and all(count == 1 for count in seen.values())
+    complete = selection_complete and not mismatches
     return {
         **result,
         "recorded": sum(seen.values()),
         "complete": complete,
-        "reason": "complete" if complete else "incomplete_or_unexpected_selection",
+        "selection_complete": selection_complete,
+        "reason": ("complete" if complete else "configuration_mismatch" if mismatches
+                   else "incomplete_or_unexpected_selection"),
+        "configuration_mismatch_trace_ids": mismatches,
         "missing": [list(key) for key in sorted(expected - seen.keys())],
         "unexpected": [list(key) for key in sorted(seen.keys() - expected)],
         "duplicate_conditions": [list(key) for key, count in sorted(seen.items()) if count > 1],
@@ -782,7 +765,24 @@ def rate_limited_results(directory):
     ]
 
 
-def control_admission(package, release, config_name, config_raw, binary, tasks, *, pilot):
+def execution_config(config, directory, image_id):
+    """Only these output paths and image references change when launching a suite."""
+    effective = copy.deepcopy(config)
+    effective["config"].update(
+        {
+            "output-dir": str(directory),
+            "log-file": str(directory / "mindtrial.log"),
+            "task-source": str(directory / "tasks.yaml"),
+            "output-basename": "mindtrial",
+        }
+    )
+    for section in ("tools", "services", "validators"):
+        for entry in effective["config"][section]:
+            entry["image"] = image_id
+    return effective
+
+
+def control_admission(package, release, config_name, config_raw, binary, tasks, *, pilot, image_id):
     """Latest matching result per control must pass before this model's challenges.
 
     This is an operational receipt/configuration gate, not an offline replay audit.
@@ -792,11 +792,7 @@ def control_admission(package, release, config_name, config_raw, binary, tasks, 
     expected = {task["name"]: task for task in tasks["task-config"]["tasks"]}
     readout = readout_module(package)
     current = json.loads(config_raw)
-    configured = {
-        (p["name"], r.get("name") or r["model"]): (r, p.get("retry-policy", {}))
-        for p in current["config"]["providers"] for r in p["runs"]
-        if p.get("disabled") is not True and r.get("disabled") is not True
-    }
+    configured, _ = readout.selected_conditions(current["config"], tasks["task-config"]["tasks"])
     if len(configured) != 1:
         raise RunnerError("Control admission requires one configured model per file.")
     binary_hash = sha256(binary.read_bytes())
@@ -815,13 +811,19 @@ def control_admission(package, release, config_name, config_raw, binary, tasks, 
             continue
         path = folder / "manifest.json"
         try:
-            manifest = json.loads(path.read_bytes())
+            manifest_bytes = path.read_bytes()
+            manifest = json.loads(manifest_bytes)
             if not isinstance(manifest, dict) or any(
                 not isinstance(manifest.get(key), str) or not manifest[key] for key in identity
             ):
                 raise ValueError("missing or invalid control identity")
             if any(manifest[key] != value for key, value in identity.items()):
                 continue  # A well-formed identity proves this is a different condition.
+            recorded_id = manifest["image"]["id"]
+            if not isinstance(recorded_id, str) or not re.fullmatch(r"(?:sha256:)?[0-9a-f]{64}", recorded_id):
+                raise ValueError("invalid image ID")
+            if recorded_id.removeprefix("sha256:") != image_id.removeprefix("sha256:"):
+                continue
             started = datetime.fromisoformat(manifest["started_at"])
             if started.utcoffset() is None:
                 raise ValueError("control timestamp must include a timezone")
@@ -831,9 +833,11 @@ def control_admission(package, release, config_name, config_raw, binary, tasks, 
                 "Restore the original manifest, or preserve the whole damaged folder outside "
                 "results for inspection and rerun the affected controls."
             ) from exc
-        candidates.append((started, path, manifest))
-    latest = {}
-    for _, path, manifest in sorted(candidates, key=lambda entry: (entry[0], str(entry[1])), reverse=True):
+        candidates.append((started, path, manifest, sha256(manifest_bytes)))
+    latest, latest_start = {}, {}
+    for started, path, manifest, manifest_hash in sorted(candidates, key=lambda e: e[0], reverse=True):
+        if latest.keys() == expected.keys() and started < min(latest_start.values()):
+            break
         selection = manifest.get("selection")
         selected = selection.get("task_names") if isinstance(selection, dict) else None
         if (not isinstance(selected, list) or not selected
@@ -841,46 +845,51 @@ def control_admission(package, release, config_name, config_raw, binary, tasks, 
                 or len(set(selected)) != len(selected) or not set(selected) <= expected.keys()):
             raise RunnerError("A matching control manifest has an invalid task selection; inspect "
                               "the controls result folders before continuing.")
+        tied = sorted(name for name in selected if latest_start.get(name) == started)
+        if tied:
+            raise RunnerError("Control attempts have the same latest start time for "
+                              + ", ".join(tied) + "; preserve both folders and rerun these controls.")
         pending = set(selected) - latest.keys()
         if not pending:
             continue
         folder = path.parent
         accepted = {}
         try:
-            selected_tasks = read_json(folder / "tasks.yaml")
-            effective = read_json(folder / "config.yaml")
-            records = read_json(folder / "mindtrial.json")["Results"]
+            task_bytes = (folder / "tasks.yaml").read_bytes()
+            config_bytes = (folder / "config.yaml").read_bytes()
+            result_bytes = (folder / "mindtrial.json").read_bytes()
+            selected_tasks, effective, payload = map(json.loads, (task_bytes, config_bytes, result_bytes))
+            conditions, selected_slots = readout.selected_conditions(effective["config"], selected_tasks["task-config"]["tasks"])
+            checked = list(readout.checked_records(payload, conditions, pilot.evaluation_seed))
+            output = Path(manifest["output_dir"])
+
             valid = (
                 manifest.get("status") == "completed"
-                and manifest.get("exit_code") == manifest.get("launcher_exit_code") == 0
+                and all(type(manifest.get(k)) is int and manifest[k] == 0
+                        for k in ("exit_code", "launcher_exit_code"))
                 and sha256((folder / "input-config.yaml").read_bytes()) == sha256(config_raw)
-                and sha256((folder / "config.yaml").read_bytes()) == manifest["effective_config_sha256"]
-                and sha256((folder / "tasks.yaml").read_bytes()) == manifest["tasks_sha256"]
-                and selected_tasks == {"task-config": {
-                    **tasks["task-config"], "tasks": [expected[name] for name in selected]}}
-                and result_coverage(folder, effective, selected_tasks)["complete"]
+                and sha256(config_bytes) == manifest["effective_config_sha256"]
+                and sha256(task_bytes) == manifest["tasks_sha256"]
+                and output.is_absolute()
+                and readout.json_equal(effective, execution_config(current, output, manifest["image"]["id"]))
+                and readout.json_equal(selected_tasks, {"task-config": {
+                    **tasks["task-config"], "tasks": [expected[name] for name in selected]}})
+                and slot_counts(key for key, _, _ in checked) == slot_counts(selected_slots)
             )
-            for provider, values in records.items():
-                for record in values:
-                    run, retries = configured[(provider, record["Run"])]
-                    snapshot = record.get("RunConfig", {})
-                    accepted[record["Task"]] = (
-                        valid and record["Kind"] == "Passed"
-                        and record.get("Evaluation", {}).get("Seed") == pilot.evaluation_seed
-                        and snapshot.get("Model") == run["model"]
-                        and not readout.run_config_differences(run, snapshot, retries)
-                        and record.get("Details", {}).get("Validation", {}).get("Title")
-                        == "Valid victory code"
-                    )
-            result_hash = sha256((folder / "mindtrial.json").read_bytes())
+            for _, record, differences in checked:
+                accepted[record["Task"]] = (
+                    valid and not differences and record["Kind"] == "Passed"
+                    and ((record.get("Details") or {}).get("Validation") or {}).get("Title")
+                    == "Valid victory code"
+                )
+            result_hash = sha256(result_bytes)
         except (OSError, ValueError, KeyError, TypeError, AttributeError, RunnerError):
             accepted, result_hash = {}, None
         for name in pending:
+            latest_start[name] = started
             latest[name] = {"task": name, "accepted": accepted.get(name, False),
-                            "manifest": str(path), "manifest_sha256": sha256(path.read_bytes()),
+                            "manifest": str(path), "manifest_sha256": manifest_hash,
                             "results_sha256": result_hash}
-        if latest.keys() == expected.keys():
-            break
     missing = sorted(name for name in expected if not latest.get(name, {}).get("accepted"))
     if missing:
         raise RunnerError(
@@ -919,18 +928,7 @@ def run_suite(
     selected = select_task_ids(preflight["tasks"], (suite,), task_ids)[suite]
     write_json(tasks_path, selected)
     (directory / "input-config.yaml").write_bytes(config_raw)
-    effective = copy.deepcopy(config)
-    effective["config"].update(
-        {
-            "output-dir": str(directory),
-            "log-file": str(directory / "mindtrial.log"),
-            "task-source": str(tasks_path),
-            "output-basename": "mindtrial",
-        }
-    )
-    for section in ("tools", "services", "validators"):
-        for entry in effective["config"][section]:
-            entry["image"] = image["id"]
+    effective = execution_config(config, directory, image["id"])
     write_json(config_path, effective)
     write_json(directory / "preflight.json", preflight)
     write_json(directory / "release.json", release)
@@ -1001,7 +999,7 @@ def run_suite(
         code = 1
         manifest.update(status="failed_to_start", exit_code=code, error=type(exc).__name__)
     if code == 0 and not interactive:
-        coverage = result_coverage(directory, effective, selected)
+        coverage = result_coverage(directory, effective, selected, seed=seed)
         manifest["result_coverage"] = coverage
         if not coverage["complete"]:
             manifest["status"] = "incomplete_results"
@@ -1115,6 +1113,12 @@ def main(argv=None, *, package_dir=None, pilot=COORDINATION):
             for name in pilot.configs
             if name in config_names
         }
+        readout = readout_module(Path(__file__).resolve().parent)
+        for suite, name in jobs:
+            try:
+                readout.selected_conditions(configs[name][0]["config"], chosen[suite]["task-config"]["tasks"])
+            except ValueError as exc:
+                raise RunnerError(f"Invalid condition selection in {name}, suite {suite}: {exc}") from exc
         repository = Path(os.environ.get("NEXUS_REPO", str(Path.home() / "Go-Projects/NEXUS")))
         mindtrial = Path(os.environ.get("MINDTRIAL_DIR", str(Path.home() / "MindTrial")))
         repository, mindtrial = repository.expanduser().resolve(), mindtrial.expanduser().resolve()
@@ -1183,7 +1187,7 @@ def main(argv=None, *, package_dir=None, pilot=COORDINATION):
                 if pilot.control_suite and suite not in (pilot.control_suite, *pilot.ungated_suites):
                     admission = control_admission(
                         package, release, config_name, config_raw, mindtrial / "mindtrial",
-                        preflight["tasks"][pilot.control_suite], pilot=pilot,
+                        preflight["tasks"][pilot.control_suite], pilot=pilot, image_id=image["id"],
                     )
                 code = run_suite(
                     package,

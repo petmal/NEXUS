@@ -152,6 +152,7 @@ def controls(tmp_path, pilot):
     tasks = fresh.tasks(pilot)["controls"]
     release = {"source_commit": "a" * 40, "runtime_source_sha256": "c" * 64}
     counter = 0
+    image_id = "sha256:" + "b" * 64
 
     def record(names=None, mutation=None):
         nonlocal counter
@@ -164,7 +165,7 @@ def controls(tmp_path, pilot):
         folder = package / f"results/controls-{counter:03}"
         folder.mkdir(parents=True)
         config = json.loads(raw)
-        for name, value in (("config.yaml", config), ("tasks.yaml", chosen)):
+        for name, value in (("config.yaml", runner.execution_config(config, folder, image_id)), ("tasks.yaml", chosen)):
             runner.write_json(folder / name, value)
         (folder / "input-config.yaml").write_bytes(raw)
         (provider,) = config["config"]["providers"]
@@ -187,10 +188,11 @@ def controls(tmp_path, pilot):
             }
             for i, t in enumerate(chosen["task-config"]["tasks"])
         ]
-        result = {"Results": {provider["name"]: records}}
+        result = {"AppName": "MindTrial", "FormatVersion": 1, "Results": {provider["name"]: records}}
         manifest = {
             **release,
             "suite": "controls",
+            "output_dir": str(folder), "image": {"id": image_id},
             "status": "completed",
             "exit_code": 0,
             "launcher_exit_code": 0,
@@ -209,9 +211,9 @@ def controls(tmp_path, pilot):
         runner.write_json(folder / "manifest.json", manifest)
         return folder
 
-    def admit():
+    def admit(selected_image=image_id):
         return runner.control_admission(
-            package, release, config_name, raw, binary, tasks, pilot=PROFILE
+            package, release, config_name, raw, binary, tasks, pilot=PROFILE, image_id=selected_image
         )
 
     return SimpleNamespace(
@@ -250,6 +252,7 @@ def test_control_gate_rejects_absence_and_accepts_complete_bound_results(control
         "model",
         "duplicate",
         "null_details",
+        "boolean_exit",
         "incomplete",
         "status",
     ],
@@ -272,6 +275,8 @@ def test_new_failed_or_invalid_controls_override_old_success(controls, drift):
             records.append(copy.deepcopy(records[0]))
         elif drift == "null_details":
             records[0]["Details"] = None
+        elif drift == "boolean_exit":
+            manifest["exit_code"] = False
         elif drift == "incomplete":
             records.clear()
         elif drift == "status":
@@ -536,7 +541,7 @@ def test_main_routes_all_fresh_models_and_records_control_admission(tmp_path, pi
                 parameters["text-response-format-with-tools"] = False
             record["RunConfig"]["ModelParameters"] = parameters
         runner.write_json(
-            config_path.parent / "mindtrial.json", {"Results": {provider["name"]: records}}
+            config_path.parent / "mindtrial.json", {"AppName": "MindTrial", "FormatVersion": 1, "Results": {provider["name"]: records}}
         )
         calls.append((run["model"], selected))
         return SimpleNamespace(returncode=0)
@@ -686,3 +691,36 @@ def test_container_proof_must_match_release_report(tmp_path, pilot, proof, monke
             runner.qualify(tmp_path, release, {"id": "fixture"}, False, pilot=PROFILE)
     else:
         assert runner.qualify(tmp_path, release, {"id": "fixture"}, False, pilot=PROFILE) == payload
+
+
+def test_control_cannot_cross_images_or_inherit_changed_effective_tools(controls):
+    folder = controls.record()
+    assert controls.admit("b" * 64)  # Docker can print either spelling of the same digest.
+    with pytest.raises(runner.RunnerError, match="missing or failed"):
+        controls.admit("sha256:" + "d" * 64)
+    config = read(folder / "config.yaml")
+    config["config"]["tools"][0]["description"] = "different player interface"
+    runner.write_json(folder / "config.yaml", config)
+    manifest = read(folder / "manifest.json")
+    manifest["effective_config_sha256"] = runner.sha256((folder / "config.yaml").read_bytes())
+    runner.write_json(folder / "manifest.json", manifest)
+    with pytest.raises(runner.RunnerError, match="missing or failed"):
+        controls.admit()
+
+
+def test_correcting_one_wrong_condition_preserves_other_controls_from_same_group(controls):
+    controls.record(mutation=lambda m, rows: rows[0]["RunConfig"].update(Model="different"))
+    with pytest.raises(runner.RunnerError, match="missing or failed"):
+        controls.admit()
+    controls.record(names=controls.names[:1])
+    assert all(row["accepted"] for row in controls.admit()["controls"])
+
+
+def test_tied_latest_attempts_cannot_select_a_winner_by_folder_name(controls):
+    first = controls.record(mutation=lambda m, rows: rows[0].update(Kind="Failed"))
+    stamp = read(first / "manifest.json")["started_at"]
+    controls.record(names=controls.names[:1], mutation=lambda m, _: m.update(started_at=stamp))
+    with pytest.raises(runner.RunnerError, match="same latest start time"):
+        controls.admit()
+    controls.record(names=controls.names[:1])
+    assert all(row["accepted"] for row in controls.admit()["controls"])

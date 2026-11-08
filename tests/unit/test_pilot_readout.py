@@ -114,6 +114,7 @@ def fixture(directory):
         "runtime_source_sha256": "test",
         "mindtrial_sha256": "test",
         "suite": "core",
+        "evaluation_seed": "fixture-seed",
     }
     manifest["effective_config_sha256"] = write(
         directory, "config.yaml", {"config": {"providers": [{"name": "openai", "runs": runs}]}}
@@ -125,6 +126,7 @@ def fixture(directory):
     records = [
         {
             "TraceID": m,
+            "Evaluation": {"Seed": "fixture-seed"},
             "Run": m,
             "Task": "NEXUS interference-11",
             "Kind": "Passed",
@@ -670,3 +672,146 @@ def test_old_summary_null_does_not_erase_legacy_physical_goal(tmp_path):
     log += 'NEXUS operator summary: ' + json.dumps({'status': 'won', 'physical_goal_satisfied': None}) + '\n'
     (tmp_path / 'mindtrial.log').write_text(log)
     assert readout.summarize(tmp_path)['rows'][0]['diagnostics']['physical_goal_satisfied'] is True
+
+
+def test_boolean_settings_do_not_match_numbers_even_in_nested_json():
+    configured = {"model-parameters": {"options": [0, {"flag": True}]},
+                  "disable-structured-output": True, "max-requests-per-minute": 1}
+    recorded = {"ModelParameters": {"options": [False, {"flag": 1}]},
+                "DisableStructuredOutput": 1, "MaxRequestsPerMinute": True,
+                "RetryPolicy": {"MaxRetryAttempts": False}}
+    assert set(readout.run_config_differences(configured, recorded, {"max-retry-attempts": 0})) == {
+        "model_parameters", "disable_structured_output", "max_requests_per_minute",
+        "retry_policy.max-retry-attempts",
+    }
+    assert not readout.run_config_differences(
+        {"model-parameters": {"temperature": 0}},
+        {"ModelParameters": {"temperature": 0.0}}, {},
+    )
+
+
+def test_checker_confirms_access_but_not_a_world_outcome_or_action(tmp_path):
+    raw = fixture(tmp_path)
+    record = raw["Results"]["openai"][0]
+    record["Kind"] = "Failed"
+    answer = record["Details"]["Answer"]
+    answer.update(ToolCalls=[tool_call("check")], ToolUsage={"nexus": {"CallCount": 1}})
+    response = {"scope": "archive_and_observed_reader_outputs_only",
+                "consistent_with_readings": False, "distinct_readings_checked": 2,
+                "evidence_turn": 3, "world_action_cost": 0}
+    write(tmp_path, "mindtrial.json", raw)
+    (tmp_path / "mindtrial.log").write_text(log_block(record, [("check", "success", response)]))
+    d = readout.summarize(tmp_path)["rows"][0]["diagnostics"]
+    assert d["tool_log_complete"] and d["world_access"] is True
+    assert d["last_observed_turn"] == 3 and d["accepted_world_actions"] is None
+    assert d["world_win_observed"] is None
+    assert not readout.public_response({**response, "world_action_cost": False})
+
+
+@pytest.mark.parametrize("terminal,expected", [(None, None), ("won", True), ("failed", False)])
+def test_state_evidence_uses_game_turn_even_when_a_cached_response_arrives_last(
+    tmp_path, terminal, expected
+):
+    raw = fixture(tmp_path)
+    row = raw["Results"]["openai"][0]
+    row["Kind"] = "Failed"
+    row["Details"]["Answer"].update(ToolCalls=[tool_call("new"), tool_call("retry")],
+                                     ToolUsage={"nexus": {"CallCount": 2}})
+    states = [("new", "success", {"turn": 8, "status": terminal or "active", "actions_remaining": 2}),
+              ("retry", "success", {"turn": 4, "status": "active", "actions_remaining": 6})]
+    write(tmp_path, "mindtrial.json", raw)
+    (tmp_path / "mindtrial.log").write_text(log_block(row, states))
+    d = readout.summarize(tmp_path)["rows"][0]["diagnostics"]
+    assert d["last_observed_world_state"]["turn"] == d["last_observed_turn"] == 8
+    assert d["world_win_observed"] is expected
+
+
+@pytest.mark.parametrize("count", [False, 0.0])
+def test_invalid_counter_cannot_establish_no_access(tmp_path, count):
+    raw = fixture(tmp_path)
+    row = raw["Results"]["openai"][0]
+    row["Details"]["Answer"].update(ToolCalls=[], ToolUsage={"nexus": {"CallCount": count}})
+    write(tmp_path, "mindtrial.json", raw)
+    (tmp_path / "mindtrial.log").write_text(log_block(row, []))
+    d = readout.summarize(tmp_path)["rows"][0]["diagnostics"]
+    assert not d["tool_log_complete"] and d["world_access"] is None
+    assert d["tool_count_convention"] == "unresolved"
+
+
+def test_unreported_trace_starting_first_blocks_attribution_of_shared_log(tmp_path):
+    raw = fixture(tmp_path)
+    row = raw["Results"]["openai"][0]
+    foreign = {**row, "TraceID": "unreported", "Task": "other task"}
+    (tmp_path / "mindtrial.log").write_text(
+        log_block(foreign, [], finish=False) + log_block(row, [], performance={"terminal_status": "won"})
+    )
+    d = readout.summarize(tmp_path)["rows"][0]["diagnostics"]
+    assert d["log_evidence"] == "ambiguous_trace" and d["world_win_observed"] is None
+
+
+def test_wrong_seed_fails_the_readout_even_with_a_full_crossing(tmp_path):
+    raw = fixture(tmp_path)
+    manifest = readout.read(tmp_path / "manifest.json")
+    write(tmp_path, "manifest.json", {**manifest, "evaluation_seed": "selected"})
+    for row in raw["Results"]["openai"]:
+        row["Evaluation"] = {"Seed": "selected"}
+    raw["Results"]["openai"][0]["Evaluation"]["Seed"] = "other"
+    write(tmp_path, "mindtrial.json", raw)
+    report = readout.summarize(tmp_path)
+    assert not report["matrix_complete"]
+    assert report["rows"][0]["configuration_differences"] == ["evaluation_seed"]
+
+
+@pytest.mark.parametrize("summary_kind,public_status,conflicting_world,observed", [
+    ("failed", "won", True, None), ("failed", "failed", False, False),
+])
+def test_contradictory_world_or_harness_verdict_is_visible(
+    tmp_path, summary_kind, public_status, conflicting_world, observed
+):
+    raw = fixture(tmp_path)
+    row = raw["Results"]["openai"][0]
+    (tmp_path / "mindtrial.log").write_text(log_block(
+        row, [("last", "success", {"turn": 4, "status": public_status, "actions_remaining": 0})],
+        performance={"terminal_status": summary_kind},
+    ))
+    d = readout.summarize(tmp_path)["rows"][0]["diagnostics"]
+    assert d["world_evidence_conflict"] is conflicting_world
+    assert d["world_win_observed"] is observed and d["outcome"] == "conflicting_result_evidence"
+
+
+@pytest.mark.parametrize("duplicate", ["run", "task"])
+def test_ambiguous_condition_names_are_not_collapsed_into_a_smaller_denominator(tmp_path, duplicate):
+    fixture(tmp_path)
+    manifest = readout.read(tmp_path / "manifest.json")
+    if duplicate == "run":
+        config = readout.read(tmp_path / "config.yaml")
+        runs = config["config"]["providers"][0]["runs"]
+        runs.append({**runs[0], "model": "other"})
+        manifest["effective_config_sha256"] = write(tmp_path, "config.yaml", config)
+    else:
+        config = readout.read(tmp_path / "tasks.yaml")
+        config["task-config"]["tasks"] *= 2
+        manifest["tasks_sha256"] = write(tmp_path, "tasks.yaml", config)
+    write(tmp_path, "manifest.json", manifest)
+    with pytest.raises(ValueError, match="duplicate configured"):
+        readout.summarize(tmp_path)
+
+
+def test_unusable_usage_and_error_text_are_not_numeric_effort_or_world_verdict(tmp_path):
+    raw = fixture(tmp_path)
+    raw["Results"]["openai"][0].update(Kind="Error", DurationNS=-1,
+        Details={"Error": {"Message": None, "Usage": {"OutputTokens": -2, "ReasoningTokens": False}}})
+    write(tmp_path, "mindtrial.json", raw)
+    report = readout.summarize(tmp_path)
+    group = report["models"][0]
+    assert group["request_seconds"] is group["reported_output_tokens"] is group["reported_reasoning_tokens"] is None
+    assert report["rows"][0]["diagnostics"]["outcome"] == "result_error"
+
+def test_unbound_seed_retains_legacy_rows_without_certifying_the_condition(tmp_path):
+    fixture(tmp_path)
+    manifest = readout.read(tmp_path / "manifest.json")
+    del manifest["evaluation_seed"]
+    write(tmp_path, "manifest.json", manifest)
+    result = readout.summarize(tmp_path)
+    assert not result["matrix_complete"] and result["recorded_attempts"] == 2
+    assert all(row["configuration_differences"] == ["unbound_evaluation_seed"] for row in result["rows"])

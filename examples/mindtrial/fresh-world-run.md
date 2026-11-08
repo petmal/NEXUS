@@ -133,9 +133,9 @@ a failed fresh-control gate. It does not automatically retry. Ordinary completed
 challenge losses do not stop later tasks.
 
 All four fresh controls must have accepted receipts in this package's results
-under the same release, binary, exact input config and evaluation seed before
+under the same release, Docker image ID, MindTrial binary, exact input config and evaluation seed before
 that model can start challenges. Recorded inference settings and qualified task
-objects must also match. A newer failed control supersedes an older success.
+objects must also match. The launcher reconstructs the effective configuration, including the player tool and validator, using the saved output location and image ID. A newer failed control supersedes an older success. If two latest attempts for one control have the same start time, preserve both and rerun that control. For an unattended group, a row from the wrong model, settings or seed stops the batch even when all task names are present.
 
 A control folder with a missing, unreadable or invalid manifest blocks admission:
 the launcher cannot safely decide which attempt it represents. Restore the
@@ -166,7 +166,7 @@ bash run.sh --model luna --suite pr-a --task-id F17 --task-id F18 \
 
 Use --interactive when selecting tasks in MindTrial. Selecting all desired rows
 through --task-id plus --non-interactive avoids prompts. Repetitions create
-separate folders and retain the same world/evaluation seeds. A changed model config
+separate folders and retain the same world/evaluation seeds. A changed model config, different image ID
 or rebuilt MindTrial binary needs new matching controls; do not reuse earlier
 admission as if it were the same condition.
 
