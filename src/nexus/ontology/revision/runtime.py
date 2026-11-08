@@ -33,10 +33,16 @@ from nexus.ontology.revision.schema import FAMILY
 
 def public_contract(spec):
     result = contract(FAMILY, spec)
-    options = spec.data()
-    if options.finish_policy == "single":
+    finish_rule = "Failed eligible finishes are binary and recoverable while actions remain."
+    if spec is None:
+        # Family-level help has no selected finish policy or optional checker.
         result["ontology"]["contract"] = result["ontology"]["contract"].replace(
-            "Failed eligible finishes are binary and recoverable while actions remain.",
+            finish_rule, "The episode manifest specifies the finish policy."
+        )
+        return result
+    if spec.data().finish_policy == "single":
+        result["ontology"]["contract"] = result["ontology"]["contract"].replace(
+            finish_rule,
             "The first rejected eligible complete finish ends the attempt immediately. "
             "Ineligible finishes do not test a construction and remain recoverable.",
         )

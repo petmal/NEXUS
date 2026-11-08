@@ -5,12 +5,12 @@
     "proof": "independent complete 576-choice check; 3/7 upper",
     "review": "repair-release-judgement, 2026-10-14",
     "scope": "docs/repair-live-conformance.md",
-    "source_refresh": "2026-11-07: independent stored-proof check, finite conformance, construction/qualification/runtime tests, and 7,203 live public-policy receipt/replay cases passed. See docs/release-readiness.md for current review scope and validation."
+    "source_refresh": "2026-11-08: independent stored-proof check, finite conformance, construction/qualification/runtime tests, and 7,203 live public-policy receipt/replay cases passed. See docs/release-readiness.md for current review scope and validation."
   },
   "proof_sha256": "10ba4f5ca646b5a3246ff50b6abca16173bf80efb330bafdfe84e219f5d02cd2",
   "sources": {
     "__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-    "cli.py": "029e456effbe9d9525e8ca90388e2fbe468fc8a379b806121d6838c747ebb68c",
+    "cli.py": "5f752d5bab337ae255a0f5d64a63444cf3586d4e774b17e67d91cfe7aca43d42",
     "diagnostics.py": "a4654237788f022f5db1b1a7bc22c0d0fbfec497203a049940cebcfcdea1ba20",
     "engine/__init__.py": "75976174fce0ad3d8238137d1f10cf64f4f8303dda1af9ba667ff505f063bdfb",
     "engine/canonical.py": "8376561fe738e77bfacb1b648805631c1f6270f67c1d872278292bf1fd05e72d",
@@ -233,7 +233,7 @@
     "ontology/revision/laws.py": "587dd7673fe048e70d2e846f1e8a8bc0623bd5a9e3f06fe356cd147600e3958b",
     "ontology/revision/proof.py": "ba08dff08aa0ee9edae69c5926ec23c53f11bc51014b3bdd1726ddd968597097",
     "ontology/revision/qualification.py": "8ba8ee038c101b6d7961fb670c478091d2e8683a0b39c14e29381dc39f03b857",
-    "ontology/revision/runtime.py": "cac047cc21905f270d8ccbbefb5391418fd445afb28cf6c834435bd0d9652a46",
+    "ontology/revision/runtime.py": "489f8ebdc35a149b923117853e8a2b7c8d033ef24282538fe989e20d644830ff",
     "ontology/revision/schema.py": "719191687a4b8d6db26d2027b54b1a8ff76dff6625cbbea514d7c6f8e1723212",
     "ontology/staged/__init__.py": "6f4f161dd09bb9613a77782b4536769da6674d6523d52f72c10096229b9cc6fc",
     "ontology/staged/evidence.py": "1beaa167f19bfc42b99b04b80aa4fb8d8a0cd1739e874977048485e672a2c8b0",

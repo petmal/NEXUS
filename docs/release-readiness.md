@@ -162,6 +162,12 @@ failure from a world last seen active. All 110 historical fresh-world rows and
 six RC2 rows were re-read offline. Two provider errors have an unassessed world
 outcome; the accepted win counts are unchanged.
 
+The [follow-up review and independent confirmation](research/release-convergence-review-2026-11-08.md)
+fixed the human construction checker and the revision family's standalone action
+reference. A subsequent gameplay and accounting pass, followed by a separate
+transport and receipt pass, found no further material defect. The fixes change
+the installed source identity; build the final canary from the current candidate.
+
 ## Before publishing
 
 1. Review the candidate and require green CI on the final head before merge.

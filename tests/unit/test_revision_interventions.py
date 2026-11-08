@@ -167,3 +167,29 @@ def test_public_client_compatibility_exports_remain_available():
     assert ClientError is transport.ClientError
     assert check_health is transport.check_health
     assert service_url is transport.service_url
+
+
+@pytest.mark.parametrize("enabled", [False, True])
+def test_human_play_can_use_exactly_the_disclosed_checker(tmp_path, enabled):
+    from typer.testing import CliRunner
+
+    from nexus.cli import app
+    from nexus.io import save_episode
+    from nexus.protocol.audit import verify_bundle
+
+    ep = episode(consistency_check="readings") if enabled else episode()
+    save_episode(ep, tmp_path / "world")
+    build = list(ep.public.investigation.data().provisional)
+    request = json.dumps({"operation": "check", "build": build})
+    audit = tmp_path / "attempt"
+    transcript = CliRunner().invoke(
+        app, ["play", str(tmp_path / "world/private.json"), "--audit-dir", str(audit)],
+        input="help\n" + request + '\n{"operation":"check","build":[true]}\nquit\n',
+        env={"COLUMNS": "160", "NO_COLOR": "1"},
+    )
+    assert transcript.exit_code == 0, transcript.output
+    assert ("consistent_with_readings" in transcript.output) is enabled
+    assert ('"operation":"check"' in transcript.output) is enabled
+    outcome = json.loads((audit / "outcome.json").read_bytes())
+    assert outcome["assistance"]["construction_check_calls"] == int(enabled)
+    assert verify_bundle(audit)["accepted_actions"] == 0
