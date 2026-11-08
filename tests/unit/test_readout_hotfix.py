@@ -134,3 +134,37 @@ def test_resume_skips_completed_astra_tasks_and_stops_on_failure(tmp_path, fail)
     ]
     assert log.read_text().splitlines() == expected[: 1 if fail else 4]
     assert result.returncode == (23 if fail else 0)
+
+
+def test_packaging_reads_the_historical_commit_not_the_worktree(tmp_path, monkeypatch):
+    monkeypatch.syspath_prepend(str(ROOT / "scripts"))
+    import package_fresh_readout_hotfix as packer
+
+    repo = tmp_path / "source"
+    repo.mkdir()
+    subprocess.run(["git", "init", "-q", str(repo)], check=True)
+    for name in packer.FILES.values():
+        path = repo / name
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text("historical " + name)
+    subprocess.run(["git", "add", "."], cwd=repo, check=True)
+    subprocess.run(["git", "-c", "user.name=Test", "-c", "user.email=test@example.invalid",
+                    "commit", "-qm", "original patch"], cwd=repo, check=True)
+    original = subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=repo, text=True).strip()
+    for name in packer.FILES.values():
+        (repo / name).write_text("later release")
+    subprocess.run(["git", "-c", "user.name=Test", "-c", "user.email=test@example.invalid",
+                    "commit", "-qam", "later release"], cwd=repo, check=True)
+    monkeypatch.setattr(packer, "ROOT", repo)
+    monkeypatch.setattr(packer, "PATCH_COMMIT", original)
+    output = tmp_path / "patch"
+    packer.package(output)
+    metadata = json.loads((output / "patch.json").read_bytes())
+    assert metadata["operator_source_commit"] == original
+    assert metadata["new_sha256"] == fix.sha((output / fix.TARGET).read_bytes())
+    assert all((output / name).read_text() == "historical " + path for name, path in packer.FILES.items())
+    monkeypatch.setattr(packer, "PATCH_COMMIT", "a" * 40)
+    missing = tmp_path / "unavailable"
+    with pytest.raises(ValueError, match="fetch commit"):
+        packer.package(missing)
+    assert not missing.exists()

@@ -156,6 +156,12 @@ isolates action examples between Python players, and documents safe retries and
 public task access over JSONL. These corrections preserve game mechanics and
 the evaluated wording. Use the new source for the final canary.
 
+The [third quality review](research/result-quality-review-2026-11-08.md) checks
+whether each row belongs to its selected condition and distinguishes a terminal
+failure from a world last seen active. All 110 historical fresh-world rows and
+six RC2 rows were re-read offline. Two provider errors have an unassessed world
+outcome; the accepted win counts are unchanged.
+
 ## Before publishing
 
 1. Review the candidate and require green CI on the final head before merge.

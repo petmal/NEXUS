@@ -51,7 +51,13 @@ In the maintained panel package, each launched group has its own directory and r
 python3 summarize_results.py results/*/
 ```
 
-Each directory gets a `readout.json`. Check `expected_attempts`, `recorded_attempts` and `matrix_complete` before calculating rates; a recorded provider error still occupies a row. Use `rows[].reported_kind` for the harness verdict and `rows[].diagnostics.world_win_observed` for the world outcome. Keep nulls unassessed. Match by provider, model **and settings**, task ID and repetition, retaining the group manifest to distinguish reruns. Join task IDs to the matrix: F11/F12 are one pair, not two independent worlds. Report the numerator, denominator and missing cases for every contrast. A readout summarizes captured logs; it does not re-verify the original receipt or replay the world. This command requires the panel's run manifests and does not apply to the standalone tutorial directory.
+Each directory gets a `readout.json`. Read it in this order:
+
+1. **Check coverage.** Compare `expected_attempts`, `recorded_attempts` and `matrix_complete`. The v5 readout requires one record per selected condition, with the expected provider, model, recorded settings and evaluation seed. A legacy manifest without a seed leaves the rows available but their conditions unconfirmed. An error or skipped row occupies a slot; neither establishes a model loss. Interactive deselection can leave slots missing.
+2. **Separate the verdicts.** `rows[].reported_kind` is the harness verdict. `rows[].diagnostics.world_win_observed` is true for an observed win, false for an observed terminal failure, and null if no terminal result was established. An active world, a successful evidence check or a provider interruption alone establishes no outcome. Inspect `conflicting_result_evidence` rows before scoring. The readout does not replay a world or independently verify a receipt.
+3. **Build the comparison.** Match provider, model **and settings**, task ID, seed and repetition; retain each group's manifest. F11/F12, for example, are a matched pair. Report the numerator, denominator and number unassessed for every contrast.
+
+Use the current script with copies of older panel folders to refresh derived readouts. Keep the originals and record the readout version. The standalone tutorial does not produce the panel manifests this script needs.
 
 ## What earlier experiments show
 

@@ -298,12 +298,20 @@ def write_mock_results(command, *, partial=False, kind="Passed"):
                 "Run": run["name"],
                 "Task": task["name"],
                 "Kind": kind,
+                "Evaluation": {"Seed": next(v.split("=", 1)[1] for v in command
+                                            if v.startswith("--evaluation-seed="))},
+                "RunConfig": {
+                    "Model": run["model"], "ModelParameters": run.get("model-parameters"),
+                    "DisableStructuredOutput": run.get("disable-structured-output", False),
+                    "MaxRequestsPerMinute": run.get("max-requests-per-minute"),
+                    "RetryPolicy": {"InitialDelaySeconds": 30},
+                },
                 "TraceID": f"{p['name']}-{i}-{j}",
             }
             for i, run in enumerate(p["runs"])
             for j, task in enumerate(tasks[:1] if partial else tasks)
         ]
-    runner.write_json(config_path.parent / "mindtrial.json", {"Results": result})
+    runner.write_json(config_path.parent / "mindtrial.json", {"AppName": "MindTrial", "FormatVersion": 1, "Results": result})
 
 
 @pytest.mark.parametrize("kind", ["Passed", "Failed", "Error"])
@@ -601,9 +609,10 @@ def test_rate_probe_preserves_config_and_runs_one_control_with_forwarded_exit(tm
 
 @pytest.mark.parametrize("mode", ["duplicate", "unexpected", "invalid_identity", "duplicate_trace"])
 def test_result_coverage_rejects_ambiguous_records(tmp_path, mode):
-    config = {"config": {"providers": [{"name": "p", "runs": [{"name": "r"}]}]}}
+    config = {"config": {"providers": [{"name": "p", "runs": [{"name": "r", "model": "m"}]}]}}
     tasks = {"task-config": {"tasks": [{"name": "t"}]}}
-    record = {"Run": "r", "Task": "t", "Kind": "Passed", "TraceID": "one"}
+    record = {"Run": "r", "Task": "t", "Kind": "Passed", "TraceID": "one",
+              "RunConfig": {"Model": "m"}, "Evaluation": {"Seed": "s"}}
     records = [record]
     if mode in ("duplicate", "duplicate_trace"):
         records.append({**record, "TraceID": "two" if mode == "duplicate" else "one"})
@@ -611,5 +620,45 @@ def test_result_coverage_rejects_ambiguous_records(tmp_path, mode):
         record["Task"] = "other"
     else:
         record["Run"] = 42
-    runner.write_json(tmp_path / "mindtrial.json", {"Results": {"p": records}})
-    assert not runner.result_coverage(tmp_path, config, tasks)["complete"]
+    runner.write_json(tmp_path / "mindtrial.json", {"AppName": "MindTrial", "FormatVersion": 1, "Results": {"p": records}})
+    assert not runner.result_coverage(tmp_path, config, tasks, seed="s")["complete"]
+
+
+@pytest.mark.parametrize("drift", ["model", "provider", "evaluation_seed", "output_mode",
+                                  "unknown_kind", "wrong_format", "wrong_application"])
+def test_unattended_batch_stops_before_next_group_on_wrong_result_identity(
+    setup_package, monkeypatch, drift
+):
+    package, _, _, calls = setup_package
+    monkeypatch.setenv("XAI_API_KEY", "fixture-grok-key")
+
+    def execute(command, **kwargs):
+        calls.append(command)
+        write_mock_results(command)
+        path = Path(next(arg.split("=", 1)[1] for arg in command
+                         if arg.startswith("-config="))).parent / "mindtrial.json"
+        payload = read(path)
+        row = next(iter(payload["Results"].values()))[0]
+        if drift == "model":
+            row["RunConfig"]["Model"] = "other"
+        elif drift == "provider":
+            row["Provider"] = "other"
+        elif drift == "evaluation_seed":
+            row.pop("Evaluation")
+        elif drift == "output_mode":
+            row["RunConfig"]["DisableStructuredOutput"] = 0
+        elif drift == "unknown_kind":
+            row["Kind"] = "unknown"
+        elif drift == "wrong_format":
+            payload["FormatVersion"] = True
+        else:
+            payload["AppName"] = "other"
+        runner.write_json(path, payload)
+        return SimpleNamespace(returncode=0)
+
+    monkeypatch.setattr(runner.subprocess, "run", execute)
+    assert runner.main(["--model", "grok", "--suite", "all", "--non-interactive", "--skip-build"],
+                       package_dir=package, pilot=PROFILE) == 2
+    assert len(calls) == 1
+    report = read(next((package / "results").glob("*/manifest.json")))
+    assert report["status"] == "incomplete_results" and not report["result_coverage"]["complete"]

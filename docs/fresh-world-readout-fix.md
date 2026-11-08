@@ -1,5 +1,10 @@
 # Fresh-world control-admission fix — 3 November 2026
 
+**Historical patch.** The package builder reads the original correction from Git commit
+`7e2b74e5c16a8afd4687bfaf4538bbba72592ed6`; that commit must be available in your clone.
+Use this patch only with the November 3 package. New panel packages already include
+their own launcher, readout and run guide.
+
 The initial run completed ten Astra tasks successfully: six historical anchors and
 four fresh controls. The launcher then falsely rejected the controls because
 MindTrial recorded text-response-format: false while the YAML omitted this default.
