@@ -40,8 +40,16 @@ Enter one JSON object per line. For example, if a visible artifact is named
 Carried objects travel with you. To use an apparatus, you normally need to be in
 its room and carry the object. `probe` previews a result without applying the
 change; `operate` commits it. Both consume an action. Some families use additional
-controls, such as `configure`. Where a stock is offered, use `take` on its ID;
+controls, such as `configure`. Before starting a world, you can preview a family's
+actions with `nexus actions --axis-version 2 --science-family model-revision-v1`.
+The selected episode specifies its finish rules and any optional assistance.
+Where a stock is offered, use `take` on its ID;
 the response gives you the new specimen ID. Read `help` for your world.
+
+If your world's `help` lists a construction check, paste its JSON example and
+replace the build with yours. It compares your construction with the archive
+and readings you already have. It costs no action; agreement with those readings
+does not guarantee a win. Other worlds do not offer this operation.
 
 A turn is an accepted action, not a line of conversation or elapsed time.
 `wait` also spends an action. Reading and thinking have no real-time cost.

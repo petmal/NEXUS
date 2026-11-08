@@ -78,6 +78,11 @@ def _print_action_reference(*, scientific: bool = False, resonant: bool = False,
 
 def _print_play_reference(*, scientific: bool = False, resonant: bool = False, contract=None) -> None:
     _print_action_reference(scientific=scientific, resonant=resonant, contract=contract)
+    assistance = (contract or {}).get("ontology", {}).get("assistance")
+    if assistance and assistance["operation"] == "check":
+        console.print("Optional construction check (free): "
+                      + json.dumps(assistance["request"], separators=(",", ":")), markup=False)
+        console.print(assistance["scope"], markup=False)
     console.print(
         "Human-play meta-command: [bold]evidence <filename>[/bold] reads one of the "
         "public evidence files listed for the episode without consuming an action."
@@ -327,7 +332,15 @@ def _play(episode, *, debug_private=False, audit_dir=None):
                     console.print("Unknown file. Type mission to list evidence files.")
             else:
                 try:
-                    action = ACTION_ADAPTER.validate_python(json.loads(raw))
+                    payload = json.loads(raw)
+                    if isinstance(payload, dict) and payload.get("operation") == "check" and session.can_check_construction():
+                        from nexus.protocol.requests import CheckClientRequest
+
+                        request = CheckClientRequest.model_validate(payload)
+                        checked = session.check_construction(request.build)
+                        console.print_json(data=checked.model_dump(mode="json"))
+                        continue
+                    action = ACTION_ADAPTER.validate_python(payload)
                 except (ValueError, TypeError) as exc:
                     console.print(f"Invalid action JSON: {exc}", markup=False)
                     console.print("Type help for valid actions.")

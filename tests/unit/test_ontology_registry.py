@@ -114,3 +114,19 @@ def test_direct_registry_constructor_cannot_hide_a_specification_collision():
             {original.family: original, other.family: other},
             {original.specification_version: other},
         )
+
+
+def test_standalone_action_contracts_work_before_an_episode_is_selected():
+    from nexus.cli import app
+    from typer.testing import CliRunner
+
+    runner = CliRunner()
+    for name, definition in BUILTINS.items():
+        if definition.generator is None:
+            continue
+        result = runner.invoke(app, ["actions", "--axis-version", "2", "--science-family", name])
+        assert result.exit_code == 0, (name, result.exception)
+        assert "finish" in result.output
+    contract = BUILTINS["model-revision-v1"].action_reference()
+    assert "assistance" not in contract["ontology"]
+    assert "recoverable while actions remain" not in contract["ontology"]["contract"]
