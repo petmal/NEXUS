@@ -520,8 +520,9 @@ def attempt_diagnostics(record, telemetry, block, *, log_exists):
     return result
 
 
-def summarize(directory):
-    manifest = read(directory / "manifest.json")
+def summarize(directory, *, manifest=None):
+    if manifest is None:
+        manifest = read(directory / "manifest.json")
     result_path = directory / "mindtrial.json"
     result_file_status = "present"
     if not result_path.is_file() or not result_path.stat().st_size:
@@ -676,7 +677,22 @@ def main():
     parser.add_argument("result_directory", type=Path, nargs="+")
     args = parser.parse_args()
     for directory in args.result_directory:
-        report = summarize(directory)
+        try:
+            manifest = read(directory / "manifest.json")
+            if not isinstance(manifest, dict):
+                raise ValueError("run manifest must be an object")
+            if manifest.get("status") == "preflight-passed":
+                if ("command" not in manifest or manifest["command"] is not None
+                        or not (directory / "preflight.json").is_file()
+                        or any((directory / f).exists() for f in (
+                            "input-config.yaml", "config.yaml", "tasks.yaml", "mindtrial.json", "mindtrial.log"
+                        ))):
+                    raise ValueError("preflight manifest conflicts with attempt artifacts")
+                print(f"{directory.name}: preflight only; no model attempts")
+                continue
+            report = summarize(directory, manifest=manifest)
+        except (OSError, ValueError, KeyError, TypeError) as exc:
+            parser.exit(1, f"{directory}: cannot summarize: {exc}\n")
         path = directory / "readout.json"
         path.write_text(json.dumps(report, indent=2) + "\n")
         print(

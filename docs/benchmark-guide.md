@@ -51,7 +51,7 @@ In the maintained panel package, each launched group has its own directory and r
 python3 summarize_results.py results/*/
 ```
 
-Each directory gets a `readout.json`. Read it in this order:
+Each run directory gets a `readout.json`. The command skips preflight-only folders, which contain no model attempts. Read a run summary in this order:
 
 1. **Check coverage.** Compare `expected_attempts`, `recorded_attempts` and `matrix_complete`. The v5 readout requires one record per selected condition, with the expected provider, model, recorded settings and evaluation seed. A legacy manifest without a seed leaves the rows available but their conditions unconfirmed. An error or skipped row occupies a slot; neither establishes a model loss. Interactive deselection can leave slots missing.
 2. **Separate the verdicts.** `rows[].reported_kind` is the harness verdict. `rows[].diagnostics.world_win_observed` is true for an observed win, false for an observed terminal failure, and null if no terminal result was established. An active world, a successful evidence check or a provider interruption alone establishes no outcome. Inspect `conflicting_result_evidence` rows before scoring. The readout does not replay a world or independently verify a receipt.
