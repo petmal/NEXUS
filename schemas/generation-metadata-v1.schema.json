@@ -1,0 +1,389 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/petmal/NEXUS/main/schemas/generation-metadata-v1.schema.json",
+  "additionalProperties": false,
+  "description": "Trusted operator metadata produced and mechanically checked during generation.",
+  "properties": {
+    "generation_attempt": {
+      "default": 0,
+      "title": "Generation Attempt",
+      "type": "integer"
+    },
+    "scenario_family_id": {
+      "default": "",
+      "title": "Scenario Family Id",
+      "type": "string"
+    },
+    "scenario_family_attempt": {
+      "default": 0,
+      "title": "Scenario Family Attempt",
+      "type": "integer"
+    },
+    "topology_attempt": {
+      "default": 0,
+      "title": "Topology Attempt",
+      "type": "integer"
+    },
+    "theory_level": {
+      "default": 0,
+      "maximum": 3,
+      "minimum": 0,
+      "title": "Theory Level",
+      "type": "integer"
+    },
+    "discovery_level": {
+      "default": 0,
+      "title": "Discovery Level",
+      "type": "integer"
+    },
+    "planning_level": {
+      "default": 1,
+      "title": "Planning Level",
+      "type": "integer"
+    },
+    "resource_pressure": {
+      "default": 0,
+      "title": "Resource Pressure",
+      "type": "integer"
+    },
+    "planning_dependency_artifact_id": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Planning Dependency Artifact Id"
+    },
+    "planning_dependency_action_cost": {
+      "default": 0,
+      "title": "Planning Dependency Action Cost",
+      "type": "integer"
+    },
+    "machine_count": {
+      "default": 1,
+      "title": "Machine Count",
+      "type": "integer"
+    },
+    "room_count": {
+      "default": 0,
+      "title": "Room Count",
+      "type": "integer"
+    },
+    "graph_diameter": {
+      "default": 0,
+      "title": "Graph Diameter",
+      "type": "integer"
+    },
+    "candidate_rules_before_evidence": {
+      "default": 0,
+      "title": "Candidate Rules Before Evidence",
+      "type": "integer"
+    },
+    "candidate_rules_after_evidence": {
+      "default": 0,
+      "title": "Candidate Rules After Evidence",
+      "type": "integer"
+    },
+    "evidence_candidate_counts": {
+      "additionalProperties": {
+        "type": "integer"
+      },
+      "title": "Evidence Candidate Counts",
+      "type": "object"
+    },
+    "evidence_rows": {
+      "default": 0,
+      "title": "Evidence Rows",
+      "type": "integer"
+    },
+    "evidence_rows_by_machine": {
+      "additionalProperties": {
+        "type": "integer"
+      },
+      "title": "Evidence Rows By Machine",
+      "type": "object"
+    },
+    "mission_relevant_prediction_counts": {
+      "additionalProperties": {
+        "type": "integer"
+      },
+      "title": "Mission Relevant Prediction Counts",
+      "type": "object"
+    },
+    "direct_target_example": {
+      "default": false,
+      "title": "Direct Target Example",
+      "type": "boolean"
+    },
+    "required_probe_count": {
+      "default": 0,
+      "title": "Required Probe Count",
+      "type": "integer"
+    },
+    "viable_causal_hypotheses": {
+      "default": 0,
+      "title": "Viable Causal Hypotheses",
+      "type": "integer"
+    },
+    "transformation_phases": {
+      "additionalProperties": {
+        "type": "integer"
+      },
+      "title": "Transformation Phases",
+      "type": "object"
+    },
+    "requires_both_machines": {
+      "default": false,
+      "title": "Requires Both Machines",
+      "type": "boolean"
+    },
+    "reverse_order_reaches_goal": {
+      "default": false,
+      "title": "Reverse Order Reaches Goal",
+      "type": "boolean"
+    },
+    "epistemic_artifact_id": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Epistemic Artifact Id"
+    },
+    "distractor_artifact_id": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Distractor Artifact Id"
+    },
+    "epistemic_machine_id": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Epistemic Machine Id"
+    },
+    "distractor_machine_id": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Distractor Machine Id"
+    },
+    "epistemic_probe_outcomes": {
+      "default": 0,
+      "title": "Epistemic Probe Outcomes",
+      "type": "integer"
+    },
+    "distractor_probe_outcomes": {
+      "default": 0,
+      "title": "Distractor Probe Outcomes",
+      "type": "integer"
+    },
+    "epistemic_probe_action_cost": {
+      "default": 0,
+      "title": "Epistemic Probe Action Cost",
+      "type": "integer"
+    },
+    "distractor_probe_action_cost": {
+      "default": 0,
+      "title": "Distractor Probe Action Cost",
+      "type": "integer"
+    },
+    "constructed_probe_outcomes": {
+      "default": 0,
+      "title": "Constructed Probe Outcomes",
+      "type": "integer"
+    },
+    "direct_probe_action_cost": {
+      "default": 0,
+      "title": "Direct Probe Action Cost",
+      "type": "integer"
+    },
+    "constructor_action_cost": {
+      "default": 0,
+      "title": "Constructor Action Cost",
+      "type": "integer"
+    },
+    "distractor_action_cost": {
+      "default": 0,
+      "title": "Distractor Action Cost",
+      "type": "integer"
+    },
+    "estimated_reference_actions": {
+      "default": 0,
+      "title": "Estimated Reference Actions",
+      "type": "integer"
+    },
+    "optimal_action_count": {
+      "default": 0,
+      "title": "Optimal Action Count",
+      "type": "integer"
+    },
+    "guaranteed_policy_action_count": {
+      "default": 0,
+      "title": "Guaranteed Policy Action Count",
+      "type": "integer"
+    },
+    "guaranteed_policy_witness": {
+      "additionalProperties": true,
+      "title": "Guaranteed Policy Witness",
+      "type": "object"
+    },
+    "action_budget": {
+      "default": 0,
+      "title": "Action Budget",
+      "type": "integer"
+    },
+    "exploration_allowance": {
+      "default": 0,
+      "title": "Exploration Allowance",
+      "type": "integer"
+    },
+    "resource_allowance": {
+      "default": 0,
+      "title": "Resource Allowance",
+      "type": "integer"
+    },
+    "budget_profile": {
+      "default": "standard",
+      "enum": [
+        "standard",
+        "diagnostic-plus6"
+      ],
+      "title": "Budget Profile",
+      "type": "string"
+    },
+    "recommended_tool_call_limit": {
+      "default": 0,
+      "title": "Recommended Tool Call Limit",
+      "type": "integer"
+    },
+    "rule_ast_nodes": {
+      "default": 0,
+      "title": "Rule Ast Nodes",
+      "type": "integer"
+    },
+    "rule_ast_depth": {
+      "default": 0,
+      "title": "Rule Ast Depth",
+      "type": "integer"
+    },
+    "rule_ast_nodes_by_machine": {
+      "additionalProperties": {
+        "type": "integer"
+      },
+      "title": "Rule Ast Nodes By Machine",
+      "type": "object"
+    },
+    "rule_ast_depth_by_machine": {
+      "additionalProperties": {
+        "type": "integer"
+      },
+      "title": "Rule Ast Depth By Machine",
+      "type": "object"
+    },
+    "solver_visited_states": {
+      "default": 0,
+      "title": "Solver Visited States",
+      "type": "integer"
+    },
+    "solver_max_frontier_size": {
+      "default": 0,
+      "title": "Solver Max Frontier Size",
+      "type": "integer"
+    },
+    "investigation_certificate": {
+      "anyOf": [
+        {
+          "additionalProperties": true,
+          "type": "object"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Investigation Certificate"
+    }
+  },
+  "required": [
+    "generation_attempt",
+    "scenario_family_id",
+    "scenario_family_attempt",
+    "topology_attempt",
+    "theory_level",
+    "discovery_level",
+    "planning_level",
+    "resource_pressure",
+    "planning_dependency_artifact_id",
+    "planning_dependency_action_cost",
+    "machine_count",
+    "room_count",
+    "graph_diameter",
+    "candidate_rules_before_evidence",
+    "candidate_rules_after_evidence",
+    "evidence_candidate_counts",
+    "evidence_rows",
+    "evidence_rows_by_machine",
+    "mission_relevant_prediction_counts",
+    "direct_target_example",
+    "required_probe_count",
+    "viable_causal_hypotheses",
+    "transformation_phases",
+    "requires_both_machines",
+    "reverse_order_reaches_goal",
+    "epistemic_artifact_id",
+    "distractor_artifact_id",
+    "epistemic_machine_id",
+    "distractor_machine_id",
+    "epistemic_probe_outcomes",
+    "distractor_probe_outcomes",
+    "epistemic_probe_action_cost",
+    "distractor_probe_action_cost",
+    "constructed_probe_outcomes",
+    "direct_probe_action_cost",
+    "constructor_action_cost",
+    "distractor_action_cost",
+    "estimated_reference_actions",
+    "optimal_action_count",
+    "guaranteed_policy_action_count",
+    "guaranteed_policy_witness",
+    "action_budget",
+    "exploration_allowance",
+    "resource_allowance",
+    "recommended_tool_call_limit",
+    "rule_ast_nodes",
+    "rule_ast_depth",
+    "rule_ast_nodes_by_machine",
+    "rule_ast_depth_by_machine",
+    "solver_visited_states",
+    "solver_max_frontier_size"
+  ],
+  "title": "GenerationMetadata",
+  "type": "object"
+}

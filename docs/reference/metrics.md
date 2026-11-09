@@ -11,7 +11,27 @@ Start with one attempt. Join its harness record to its world and configuration, 
 | `version: mission-performance-v1` | [Ontology mission report](../../schemas/performance-mission-v1.schema.json). Read its `ontology` and family `certificate`. |
 | `version: mission-performance-v2` or `mission-performance-v3` | [v2 decision fields](../../schemas/performance-mission-v2.schema.json); [v3 decision and evidence records](../../schemas/performance-mission-v3.schema.json). Dispatch on the actual version, including for archived data. |
 
-Earlier legacy contracts remain in [schemas](../../schemas). A missing object, an unknown version and a measured zero are three different cases. An active session has no terminal performance report. A `null` budget means uncapped **inside NEXUS**; a null first-submission statistic can mean no such submission occurred. Do not fill either with zero.
+Earlier legacy contracts (v1–v5) remain in [schemas](../../schemas). Use the matching file when reading those archives. For legacy v6, `theory_level` can also be 3: the player must infer a bounded relationship without a working baseline. The pinned schema accepts 3, but its field description only explains levels 0–2. See the [theory levels](../difficulty.md).
+
+## Validate an output file
+
+Choose the object you actually saved. For example, extract the inner `performance` object from a terminal response before validating it. From a checkout:
+
+```bash
+jq '.performance' response.json > performance.json
+uv run --frozen --extra dev python scripts/metric_schemas.py validate terminal-performance-v1 performance.json
+```
+
+| What you saved | What to validate |
+|---|---|
+| A terminal action or evaluator-finalize response | Its `performance` object against [terminal-performance-v1](../../schemas/terminal-performance-v1.schema.json). This contract selects the family by its exact version and requires a won or failed outcome. |
+| A service log line containing `NEXUS operator summary:` | The JSON after the marker against [operator-summary-v4](../../schemas/operator-summary-v4.schema.json). A shutdown can record a still-active attempt. |
+| Output from `nexus inspect` or a generated `private.json` | Its `generation_metadata` object against [generation-metadata-v1](../../schemas/generation-metadata-v1.schema.json). These are private generation and qualification fields. |
+| Output from `nexus solve` | The entire object against [solver-result-v1](../../schemas/solver-result-v1.schema.json), including the returned plan and its cost. |
+
+The validator reads the schemas from the checkout and accepts `-` for standard input. It checks record structure and version; it does not verify a receipt, replay a run or prove that a certificate's numbers are correct. A harness readout and a verbose operator snapshot are separate records.
+
+A missing object, an unknown version and a measured zero are three different cases. An active player session has no terminal performance report. A `null` budget means uncapped **inside NEXUS**; a null first-submission statistic can mean no submission occurred. In generation metadata, some families leave legacy integer fields such as `action_budget` and `optimal_action_count` at their default zero. For the actual starting allowance use the operator summary's `initial_action_budget`; for a known physical minimum use the solver result below.
 
 ## What each group measures
 

@@ -67,6 +67,10 @@ readout semantics.
   settings, disclosures, costs, qualification scope and unavailable metrics.
   Keep provider errors, retries, inference settings and harness limits distinct
   from game outcomes. See the [metric contracts](docs/reference/metrics.md).
+  When a metrics producer changes, check its emitted JSON with the
+  [contract tests](tests/unit/test_metric_output_contracts.py). Use
+  `python scripts/metric_schemas.py export` in the dev environment to regenerate
+  the inspect/solve schemas. Preserve schema files referenced by immutable URLs.
 
 ## Verification and handoff
 
