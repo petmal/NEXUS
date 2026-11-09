@@ -20,19 +20,41 @@ An **ontology** is a family of worlds: it defines objects, legal mechanisms, obs
 
 The family checks (**qualification**) say what an instance actually requires. Its **certificate** records the scope and results of those checks. Neither proves that a given model finds the world difficult. Use the supported profiles in the family guide or [fresh matrix](fresh-world-guide.md), not arbitrary combinations of four axis numbers.
 
-## Worked comparison: what changes when the budget has slack?
+Try a world yourself before testing a model. Run any example from the repository root with a new output directory. In the console, type `mission` for the goal and evidence list, `help` for the controls, and `quit` to leave.
 
-Fresh rows F11 and F12 are the same short, independent planning problem, with disclosed laws and a 12-action minimum including `take` and `finish`. R2 gives exactly 12 actions. R1 gives 18. Generate the pair locally from the NEXUS root (Bash, new output directories):
+**Model revision — infer a routing law (F02).** Which reading would distinguish two explanations? For the supplied-law control (F01), use a second directory and change only theory and discovery to `0`.
+
+```bash
+uv run --frozen --no-dev nexus generate ../revision --axis-version 2 \
+  --science-family model-revision-v1 --seed 2073 --theory-level 3 --discovery-level 5 \
+  --planning-level 0 --resource-pressure 1 --ontology-options '{"guidance":"principles"}'
+uv run --frozen --no-dev nexus play ../revision/private.json
+```
+
+**Compositional repair — find a treatment that works in both contexts (F06).** For the supplied-treatment control (F05), keep the seed, use a second directory, and set theory and discovery to `0`. Check the starting allowance too: the hidden case gives 30 actions; the control gives 8.
+
+```bash
+uv run --frozen --no-dev nexus generate ../repair --axis-version 2 \
+  --science-family compositional-repair-v1 --seed 541 --theory-level 3 --discovery-level 5 \
+  --planning-level 1 --resource-pressure 1
+uv run --frozen --no-dev nexus play ../repair/private.json
+```
+
+**Interference — plan with disclosed laws (F11/F12).** Generate the same short mission at two budgets, then play the tight version first:
 
 ```bash
 for r in 2 1; do
-  uv run --frozen nexus generate "../nexus-pair-r$r" --seed 107 \
+  uv run --frozen --no-dev nexus generate "../nexus-pair-r$r" --seed 107 \
     --axis-version 2 --science-family stateful-interference-v1 \
     --theory-level 0 --discovery-level 0 --planning-level 0 --resource-pressure "$r" \
     --ontology-options '{"coupling":"independent","horizon":"short"}' || break
-  uv run --frozen nexus qualify "../nexus-pair-r$r/private.json" || break
 done
+uv run --frozen --no-dev nexus play ../nexus-pair-r2/private.json
 ```
+
+## Worked comparison: what changes when the budget has slack?
+
+To try the relaxed version, run `uv run --frozen --no-dev nexus play ../nexus-pair-r1/private.json`. Both worlds have a 12-action minimum including `take` and `finish`. R2 gives exactly 12 actions; R1 gives 18. To inspect the mechanical checks after playing, run `uv run --frozen --no-dev nexus qualify ../nexus-pair-r2/private.json`.
 
 A legal preview costs an action. If the player has already taken the seal, a preview that leaves the physical task unchanged uses one of the actions still needed by the tight plan. The same preview can fit in the relaxed budget. That is an interpretable difference even if both attempts end at the target. `finish` still costs its own action.
 

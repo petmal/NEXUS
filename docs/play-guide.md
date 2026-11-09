@@ -87,6 +87,21 @@ Enter one line at a time in `nexus demo --play`. You can type `look` between any
 
 On turn 5, M1 changes the value from 10 to 8 and the orientation from west to north; the polarity stays negative. Dropping A1 in R2 satisfies the physical goal. The ninth action, `finish`, asks the engine to check it. Expect `won`, ten actions left, and your own receipt. The exact receipt is not part of the walkthrough.
 
+## Try the same world with one change
+
+Use the [generate and play commands in the README](../README.md#change-the-question) with seed 17 and axis version 1. Choose a new output folder for each variant and pass its `private.json` to `play`. To start the same puzzle again, just repeat `play`.
+
+| T | D | P | R | What to compare | Action allowance |
+|---:|---:|---:|---:|---|---:|
+| 0 | 0 | 0 | 0 | Original demo: the records show the transformation you need. | 19 |
+| 0 | 0 | 0 | 2 | Same solution, but no spare move. | 9 |
+| 0 | 2 | 0 | 0 | Same machine and map; a probe can distinguish laws that fit the records. | 24 |
+| 1 | 2 | 0 | 0 | Compare with the row above: `theory.json` gives building blocks for laws instead of a list of candidates. | 24 |
+| 0 | 0 | 2 | 0 | Familiar machine, larger map: plan the route through seven rooms. | 31 |
+| 0 | 0 | 3 | 0 | Same seven rooms as the row above, with an extra delivery. The shortest solution grows from 17 actions to 19. | 33 |
+
+The allowance is how many actions you **may** use. Changing the budget does not change the shortest solution. Changing the evidence can make a probe useful even when someone who already knows the law could take the original route.
+
 ## Read the records, then choose your next step
 
 First locate the mission and its target. Check the layout, allowed controls,
