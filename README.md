@@ -11,13 +11,13 @@ You can play, send a model in, or run the same puzzle twice with one condition c
 With Git and [uv](https://docs.astral.sh/uv/getting-started/installation/) installed:
 
 ```bash
-git clone --branch feat/planning-resource-axes https://github.com/petmal/NEXUS.git
+git clone https://github.com/petmal/NEXUS.git
 cd NEXUS
 uv sync --frozen --no-dev --python 3.14.7
 uv run --frozen --no-dev nexus demo --play
 ```
 
-The clone command selects the current release candidate. No Docker, model account or API key is needed for local play. The first install may download Python and dependencies.
+No Docker, model account or API key is needed for local play. The first install may download Python and dependencies.
 
 At the console, type `mission` to read your goal, `look` to see the room, and `help` for the JSON actions. In the introductory world, try `{"type":"move","target":"R4"}`, then `look`. You have spent one world action; reading the display is free. Type `quit` to leave. Prefer to watch first? Run `uv run --frozen --no-dev nexus demo` for a complete unscored playthrough. [See all nine actions](docs/play-guide.md#the-introductory-world-in-nine-actions).
 
@@ -28,6 +28,16 @@ At the console, type `mission` to read your goal, `look` to see the room, and `h
 Read three things before comparing scores: **did the world issue a receipt**, **did the harness accept the submitted answer**, and **how many world actions did the player spend**? Reading evidence can cost a model tool call without spending a world action. Some families also tell you whether the evidence justified the winning choice.
 
 ## Change the question
+
+The demo uses **seed 17**, **axis version 1**, and four settings at zero. Want to try the same rooms, machine and mission with fewer moves to spare? From the repository, generate a variant that changes only resource pressure, then play it:
+
+```bash
+uv run --frozen --no-dev nexus generate ../demo-tight --seed 17 --axis-version 1 \
+  --theory-level 0 --discovery-level 0 --planning-level 0 --resource-pressure 2
+uv run --frozen --no-dev nexus play ../demo-tight/private.json
+```
+
+Your allowance drops from 19 actions to 9. To try discovery instead, replace `demo-tight` with `demo-discovery` in both commands, set `--resource-pressure 0`, and set `--discovery-level 2`. The map stays familiar, but the records leave a question for you to test. [Try more variations on the demo](docs/play-guide.md#try-the-same-world-with-one-change).
 
 | Dial | What it changes | Example question |
 |---|---|---|
