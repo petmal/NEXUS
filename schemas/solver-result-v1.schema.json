@@ -1,0 +1,322 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/petmal/NEXUS/main/schemas/solver-result-v1.schema.json",
+  "$defs": {
+    "ConfigureAction": {
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "const": "configure",
+          "default": "configure",
+          "title": "Type",
+          "type": "string"
+        },
+        "machine": {
+          "title": "Machine",
+          "type": "string"
+        },
+        "settings": {
+          "items": {
+            "maximum": 16,
+            "minimum": 0,
+            "type": "integer"
+          },
+          "maxItems": 9,
+          "minItems": 1,
+          "title": "Settings",
+          "type": "array"
+        }
+      },
+      "required": [
+        "type",
+        "machine",
+        "settings"
+      ],
+      "title": "ConfigureAction",
+      "type": "object"
+    },
+    "DropAction": {
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "const": "drop",
+          "default": "drop",
+          "title": "Type",
+          "type": "string"
+        },
+        "artifact": {
+          "title": "Artifact",
+          "type": "string"
+        }
+      },
+      "required": [
+        "type",
+        "artifact"
+      ],
+      "title": "DropAction",
+      "type": "object"
+    },
+    "FinishAction": {
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "const": "finish",
+          "default": "finish",
+          "title": "Type",
+          "type": "string"
+        }
+      },
+      "required": [
+        "type"
+      ],
+      "title": "FinishAction",
+      "type": "object"
+    },
+    "MoveAction": {
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "const": "move",
+          "default": "move",
+          "title": "Type",
+          "type": "string"
+        },
+        "target": {
+          "title": "Target",
+          "type": "string"
+        }
+      },
+      "required": [
+        "type",
+        "target"
+      ],
+      "title": "MoveAction",
+      "type": "object"
+    },
+    "ObserveAction": {
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "const": "observe",
+          "default": "observe",
+          "title": "Type",
+          "type": "string"
+        }
+      },
+      "required": [
+        "type"
+      ],
+      "title": "ObserveAction",
+      "type": "object"
+    },
+    "OperateAction": {
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "const": "operate",
+          "default": "operate",
+          "title": "Type",
+          "type": "string"
+        },
+        "machine": {
+          "title": "Machine",
+          "type": "string"
+        },
+        "artifact": {
+          "title": "Artifact",
+          "type": "string"
+        }
+      },
+      "required": [
+        "type",
+        "machine",
+        "artifact"
+      ],
+      "title": "OperateAction",
+      "type": "object"
+    },
+    "ProbeAction": {
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "const": "probe",
+          "default": "probe",
+          "title": "Type",
+          "type": "string"
+        },
+        "machine": {
+          "title": "Machine",
+          "type": "string"
+        },
+        "artifact": {
+          "title": "Artifact",
+          "type": "string"
+        }
+      },
+      "required": [
+        "type",
+        "machine",
+        "artifact"
+      ],
+      "title": "ProbeAction",
+      "type": "object"
+    },
+    "TakeAction": {
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "const": "take",
+          "default": "take",
+          "title": "Type",
+          "type": "string"
+        },
+        "artifact": {
+          "title": "Artifact",
+          "type": "string"
+        }
+      },
+      "required": [
+        "type",
+        "artifact"
+      ],
+      "title": "TakeAction",
+      "type": "object"
+    },
+    "WaitAction": {
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "const": "wait",
+          "default": "wait",
+          "title": "Type",
+          "type": "string"
+        }
+      },
+      "required": [
+        "type"
+      ],
+      "title": "WaitAction",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "solvable": {
+      "title": "Solvable",
+      "type": "boolean"
+    },
+    "plan_action_count": {
+      "anyOf": [
+        {
+          "type": "integer"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Plan Action Count"
+    },
+    "optimal_action_count": {
+      "anyOf": [
+        {
+          "type": "integer"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Optimal Action Count"
+    },
+    "plan": {
+      "default": [],
+      "items": {
+        "discriminator": {
+          "mapping": {
+            "configure": "#/$defs/ConfigureAction",
+            "drop": "#/$defs/DropAction",
+            "finish": "#/$defs/FinishAction",
+            "move": "#/$defs/MoveAction",
+            "observe": "#/$defs/ObserveAction",
+            "operate": "#/$defs/OperateAction",
+            "probe": "#/$defs/ProbeAction",
+            "take": "#/$defs/TakeAction",
+            "wait": "#/$defs/WaitAction"
+          },
+          "propertyName": "type"
+        },
+        "oneOf": [
+          {
+            "$ref": "#/$defs/ObserveAction"
+          },
+          {
+            "$ref": "#/$defs/MoveAction"
+          },
+          {
+            "$ref": "#/$defs/TakeAction"
+          },
+          {
+            "$ref": "#/$defs/DropAction"
+          },
+          {
+            "$ref": "#/$defs/OperateAction"
+          },
+          {
+            "$ref": "#/$defs/ProbeAction"
+          },
+          {
+            "$ref": "#/$defs/WaitAction"
+          },
+          {
+            "$ref": "#/$defs/FinishAction"
+          },
+          {
+            "$ref": "#/$defs/ConfigureAction"
+          }
+        ]
+      },
+      "title": "Plan",
+      "type": "array"
+    },
+    "visited_states": {
+      "default": 0,
+      "title": "Visited States",
+      "type": "integer"
+    },
+    "max_frontier_size": {
+      "default": 0,
+      "title": "Max Frontier Size",
+      "type": "integer"
+    },
+    "terminal_state_hash": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Terminal State Hash"
+    },
+    "exhausted_state_limit": {
+      "default": false,
+      "title": "Exhausted State Limit",
+      "type": "boolean"
+    }
+  },
+  "required": [
+    "solvable",
+    "plan_action_count",
+    "optimal_action_count",
+    "plan",
+    "visited_states",
+    "max_frontier_size",
+    "terminal_state_hash",
+    "exhausted_state_limit"
+  ],
+  "title": "SolveResult",
+  "type": "object"
+}

@@ -1,0 +1,100 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/petmal/NEXUS/main/schemas/terminal-performance-v1.schema.json",
+  "title": "Terminal NEXUS performance record",
+  "description": "Validate the performance object returned after termination. Scientific operator snapshots can be active and are not terminal records. Use the family schemas directly for historical permissive parsing.",
+  "type": "object",
+  "properties": {
+    "terminal_status": {
+      "enum": [
+        "won",
+        "failed"
+      ]
+    }
+  },
+  "required": [
+    "terminal_status"
+  ],
+  "oneOf": [
+    {
+      "$ref": "performance-v6.schema.json",
+      "properties": {
+        "$schema": {
+          "const": "https://raw.githubusercontent.com/petmal/NEXUS/50ea40636bf46313fe5eef46973527dec097d17a/schemas/performance-v6.schema.json"
+        }
+      },
+      "required": [
+        "$schema"
+      ]
+    },
+    {
+      "$ref": "performance-scientific-v1.schema.json",
+      "properties": {
+        "$schema": {
+          "const": "https://raw.githubusercontent.com/petmal/NEXUS/dd6564d848183d9f70eca474a6ef02c5ab84a58e/schemas/performance-scientific-v1.schema.json"
+        },
+        "axis_version": {
+          "const": 2
+        }
+      },
+      "required": [
+        "$schema"
+      ]
+    },
+    {
+      "$ref": "performance-mission-v1.schema.json",
+      "properties": {
+        "version": {
+          "const": "mission-performance-v1"
+        }
+      },
+      "required": [
+        "version"
+      ]
+    },
+    {
+      "$ref": "performance-mission-v2.schema.json",
+      "properties": {
+        "version": {
+          "const": "mission-performance-v2"
+        },
+        "target_count_meaning": {
+          "const": "distinct winning-set signatures; not exclusive target classes"
+        }
+      },
+      "required": [
+        "version",
+        "target_count_meaning"
+      ]
+    },
+    {
+      "$ref": "performance-mission-v3.schema.json",
+      "properties": {
+        "version": {
+          "const": "mission-performance-v3"
+        },
+        "target_count_meaning": {
+          "const": "distinct winning-set signatures; not exclusive target classes"
+        },
+        "decision_diagnostics": {
+          "properties": {
+            "version": {
+              "const": "decision-diagnostics-v1"
+            },
+            "readings": {
+              "type": "null"
+            }
+          },
+          "required": [
+            "version",
+            "readings"
+          ]
+        }
+      },
+      "required": [
+        "version",
+        "target_count_meaning"
+      ]
+    }
+  ]
+}
