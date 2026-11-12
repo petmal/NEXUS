@@ -42,9 +42,29 @@ def test_first_model_tutorial_preserves_control_and_validator(tmp_path, provider
     assert provider_config["client-config"]["api-key"] == ""
     assert run["disable-structured-output"] is text and "model-parameters" not in run
     assert taskset["validation-rules"] == full["validation-rules"]
-    for group in ("tools", "services", "validators"):
+    for group in ("tools", "validators"):
         assert cfg[group] == [dict(item, image="nexus:first-run") for item in template[group]]
+    service, = cfg["services"]
+    assert service["bind-mounts"] == [{"source": "./private-audits", "target": "/nexus-audits", "writable": True}]
+    assert service["input-env"] == {**template["services"][0]["input-env"], "audit-dir": "NEXUS_AUDIT_DIR"}
+    assert taskset["tool-selector"]["service-inputs"]["nexus"] == {
+        "audit-dir": "/nexus-audits/{{ .Service.InstanceID }}"
+    }
+    assert (dest / "private-audits").stat().st_mode & 0o777 == 0o700
     assert (dest / cfg["task-source"]).resolve() == dest / "tasks.yaml"
     assert taskset["max-turns"] == 40 and taskset["tool-selector"]["tools"][0]["max-calls"] == 32
     with pytest.raises(FileExistsError):
         prepare(dest, "other", "other", text)
+
+
+def test_mount_smoke_links_every_attempt_to_the_result_trace():
+    linked = runpy.run_path(str(EXAMPLE / "verify_mount_smoke.py"))["linked_attempts"]
+    row = {"Task": "NEXUS fresh-F05", "TraceID": "trace"}
+    results = {"Results": {"openai": [row]}}
+    names = ["mindtrial-service-one", "mindtrial-service-two"]
+    log = "\n".join(f'[trace] model: service nexus: created service container "{n}"' for n in names)
+    assert linked(results, log, reversed(names)) == (row, names)
+    for wrong_log, folders in [(log, names[:1]), (log.replace("[trace]", "[other]"), names),
+                               (log, [*names, "unrelated"]), (log + "\n" + log, names)]:
+        with pytest.raises(ValueError, match="instances"):
+            linked(results, wrong_log, folders)

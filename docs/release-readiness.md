@@ -72,7 +72,7 @@ lint and the 14 current-document link checks also passed.
 Audit retention is an integration responsibility: NEXUS provides a portable
 export and verifier; the calling framework supplies persistent operator storage
 and collects it. MindTrial is one example adapter, not a NEXUS dependency.
-Its current examples retain bounded logs rather than complete private bundles.
+The current tutorial and packaged panel launcher use MindTrial v0.26+ service bind mounts. Historical logs-only runs have no retroactive audit coverage. Run the [local mount smoke](first-model.md#test-that-the-mount-works) against the intended host before publication.
 See the [framework-neutral storage contract](research-guide.md#reproducibility-record).
 
 The [core robustness review](research/core-robustness-review-2026-11-06.md)

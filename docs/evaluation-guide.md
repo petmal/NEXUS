@@ -56,6 +56,8 @@ send the original turn with the action. See [protocol details](reference/protoco
 
 ## Use MindTrial
 
+The current tutorial and panel launcher require MindTrial v0.26.0+ for private audit mounts. The service alone gets the writable directory. Each service attempt writes a separate bundle; the provider log and result JSON stay separate. For the panel, find the parent in `manifest.json` under `private_audit_dir` or at `private-audits/<run-folder>/` beside `results/`. On SELinux, prepare that dedicated parent with a container-accessible label before running the panel. See the [mount smoke](first-model.md#test-that-the-mount-works) to test your setup without spending provider credits.
+
 The maintained panel launchers package configs, tasks, a result summarizer, and
 source bindings. Start with the [fresh-world guide](fresh-world-guide.md).
 Older [capability](capability-smoke-guide.md), [cross-axis](cross-axis-guide.md),

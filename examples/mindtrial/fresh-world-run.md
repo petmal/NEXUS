@@ -195,11 +195,7 @@ failures after a successful rerun. Control admission hashes records from this
 package; moving result folders to another package does not provide automatic
 portable admission.
 
-These example configurations currently collect harness results and bounded
-service logs, not NEXUS private audit bundles. Complete audit retention requires
-the harness to attach operator-only persistent storage and collect each attempt's
-export. This is a harness integration responsibility; see the framework-neutral
-[audit storage contract](../../docs/research-guide.md#reproducibility-record).
+Newly built panels require MindTrial v0.26.0 or newer. The launcher adds the audit mount and service-instance input to the effective run files after qualification. The supplied tasks, prompts and player tools remain the same. Private exports are in `private-audits/<run-folder>/<service-instance>/` **beside** `results/`, outside the ZIP command above. The manifest identifies the parent; the debug log links each service name to its result trace. Keep failed attempts as well as successes. Verify each export with the matching NEXUS image or source; an unclosed bundle is partial evidence. Old result folders do not acquire bundles. See the [audit storage contract](../../docs/research-guide.md#reproducibility-record).
 
 ## Regenerate from the repository
 

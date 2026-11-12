@@ -68,6 +68,7 @@ def setup(tmp_path, monkeypatch):
             "task-config": {"tasks": [{"name": f"{suite}-{index}"} for index in range(count)]}
         }
         dump(package / f"nexus-coordination-{suite}-tasks.yaml", tasks[suite])
+    shutil.copyfile(RUNNER.with_name("audit_mounts.py"), package / "audit_mounts.py")
     shutil.copyfile(LAUNCHER, package / "run.sh")
     shutil.copyfile(RUNNER, package / "runner.py")
     (package / "run.sh").chmod(0o755)
@@ -380,6 +381,16 @@ def test_default_paths_spaces_distinct_cwd_and_pinned_build_leave_checkout_untou
         "run",
     ]
     effective = json.loads((output / "config.yaml").read_text())["config"]
+    service, = effective["services"]
+    mount, = service["bind-mounts"]
+    audits = (output / mount["source"]).resolve()
+    assert audits == Path(record["private_audit_dir"]) == state["package"] / "private-audits" / output.name
+    assert audits.is_dir() and not audits.is_relative_to(output.parent)
+    assert mount["writable"] and mount["target"] == "/nexus-audits"
+    assert not any("bind-mounts" in e for g in ("tools", "validators") for e in effective[g])
+    assert json.loads((output / "tasks.yaml").read_text())["task-config"]["tool-selector"]["service-inputs"] == {
+        "nexus": {"audit-dir": "/nexus-audits/{{ .Service.InstanceID }}"}
+    }
     assert effective["output-dir"] == str(output)
     assert effective["log-file"] == str(output / "mindtrial.log")
     assert effective["task-source"] == str(output / "tasks.yaml")
@@ -753,6 +764,7 @@ def comparison_package_setup(tmp_path, monkeypatch):
     examples.mkdir(parents=True)
     profile = runner.INTERFERENCE_COMPARISON
     source_names = {
+        "audit_mounts.py",
         "coordination-runner.py",
         "interference-comparison-runner.py",
         "interference-comparison-run.sh",
@@ -912,6 +924,7 @@ def test_comparison_package_binds_launcher_config_guide_and_qualification_report
     assert release["runtime_source_sha256"] == RUNTIME
     assert release["design_url"].endswith(f"/{commit}/docs/interference-comparison-guide.md")
     assert set(release["files_sha256"]) == {
+        "audit_mounts.py",
         "run.sh",
         "runner.py",
         "pilot_runner.py",

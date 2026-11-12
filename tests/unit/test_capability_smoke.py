@@ -240,6 +240,7 @@ def test_packaged_bash_entry_point_accepts_model_selector(tmp_path):
     for source, target in (
         ("capability-smoke-run.sh", "run.sh"),
         ("capability-smoke-runner.py", "runner.py"),
+        ("audit_mounts.py", "audit_mounts.py"),
         ("coordination-runner.py", "pilot_runner.py"),
     ):
         shutil.copyfile(EXAMPLES / source, tmp_path / target)

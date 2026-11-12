@@ -13,6 +13,7 @@ import inspect
 import json
 import os
 import re
+import runpy
 import subprocess
 import sys
 import tarfile
@@ -21,6 +22,8 @@ from collections import Counter
 from datetime import UTC, datetime
 from pathlib import Path
 from typing import NamedTuple
+
+AUDITS = runpy.run_path(str(Path(__file__).with_name("audit_mounts.py")))
 
 CONFIG = "nexus-coordination-config.yaml"
 REPEAT_CONFIG = "nexus-coordination-repeat-config.yaml"
@@ -766,7 +769,7 @@ def rate_limited_results(directory):
 
 
 def execution_config(config, directory, image_id):
-    """Only these output paths and image references change when launching a suite."""
+    """Add operator output paths, the private service mount and the pinned image."""
     effective = copy.deepcopy(config)
     effective["config"].update(
         {
@@ -779,6 +782,13 @@ def execution_config(config, directory, image_id):
     for section in ("tools", "services", "validators"):
         for entry in effective["config"][section]:
             entry["image"] = image_id
+    AUDITS["configure_service"](effective["config"], AUDITS["panel_source"](directory))
+    return effective
+
+
+def execution_tasks(selected):
+    effective = copy.deepcopy(selected)
+    AUDITS["configure_tasks"](effective["task-config"])
     return effective
 
 
@@ -872,8 +882,8 @@ def control_admission(package, release, config_name, config_raw, binary, tasks, 
                 and sha256(task_bytes) == manifest["tasks_sha256"]
                 and output.is_absolute()
                 and readout.json_equal(effective, execution_config(current, output, manifest["image"]["id"]))
-                and readout.json_equal(selected_tasks, {"task-config": {
-                    **tasks["task-config"], "tasks": [expected[name] for name in selected]}})
+                and readout.json_equal(selected_tasks, execution_tasks({"task-config": {
+                    **tasks["task-config"], "tasks": [expected[name] for name in selected]}}))
                 and slot_counts(key for key, _, _ in checked) == slot_counts(selected_slots)
             )
             for _, record, differences in checked:
@@ -926,6 +936,12 @@ def run_suite(
     config_path = directory / "config.yaml"
     # Use the exact compared export even if someone edits the package mid-run.
     selected = select_task_ids(preflight["tasks"], (suite,), task_ids)[suite]
+    selected = execution_tasks(selected)
+    audit_parent = package / "private-audits"
+    audit_parent.mkdir(mode=0o700, exist_ok=True)
+    if audit_parent.is_symlink():
+        raise RunnerError("The private audit parent must not be a symlink.")
+    (audit_parent / directory.name).mkdir(mode=0o700)
     write_json(tasks_path, selected)
     (directory / "input-config.yaml").write_bytes(config_raw)
     effective = execution_config(config, directory, image["id"])
@@ -978,6 +994,7 @@ def run_suite(
         "effective_config_sha256": sha256(config_path.read_bytes()),
         "tasks_sha256": sha256(tasks_path.read_bytes()),
         "output_dir": str(directory),
+        "private_audit_dir": str(audit_parent / directory.name),
     }
     if pilot.tool_contract_version:
         manifest["tool_contract"] = tool_contract(config, pilot.tool_contract_version)
