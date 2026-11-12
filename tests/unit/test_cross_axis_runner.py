@@ -40,6 +40,7 @@ def test_cross_axis_bash_wrapper_self_locates_and_exposes_suite_groups(tmp_path,
     helper = package / ("runner.py" if packaged else "cross-axis-runner.py")
     shutil.copyfile(EXAMPLES / "cross-axis-run.sh", script)
     shutil.copyfile(EXAMPLES / "cross-axis-runner.py", helper)
+    shutil.copyfile(EXAMPLES / "audit_mounts.py", package / "audit_mounts.py")
     shutil.copyfile(
         EXAMPLES / "coordination-runner.py",
         package / ("pilot_runner.py" if packaged else "coordination-runner.py"),
@@ -329,6 +330,7 @@ def package_setup(cross_axis_setup, tmp_path, monkeypatch):
     examples = source / "examples/mindtrial"
     examples.mkdir(parents=True)
     for name in (
+        "audit_mounts.py",
         "coordination-runner.py",
         "cross-axis-runner.py",
         "cross-axis-run.sh",

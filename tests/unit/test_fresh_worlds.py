@@ -165,7 +165,7 @@ def controls(tmp_path, pilot):
         folder = package / f"results/controls-{counter:03}"
         folder.mkdir(parents=True)
         config = json.loads(raw)
-        for name, value in (("config.yaml", runner.execution_config(config, folder, image_id)), ("tasks.yaml", chosen)):
+        for name, value in (("config.yaml", runner.execution_config(config, folder, image_id)), ("tasks.yaml", runner.execution_tasks(chosen))):
             runner.write_json(folder / name, value)
         (folder / "input-config.yaml").write_bytes(raw)
         (provider,) = config["config"]["providers"]
@@ -411,6 +411,7 @@ def test_wrappers_self_locate_in_paths_with_spaces(tmp_path, packaged):
         EXAMPLES / "fresh-world-runner.py",
         package / ("runner.py" if packaged else "fresh-world-runner.py"),
     )
+    shutil.copyfile(EXAMPLES / "audit_mounts.py", package / "audit_mounts.py")
     shutil.copyfile(
         EXAMPLES / "coordination-runner.py",
         package / ("pilot_runner.py" if packaged else "coordination-runner.py"),
@@ -652,6 +653,7 @@ def test_package_includes_bound_proof_matrix_and_working_links(tmp_path, monkeyp
     required = {
         "matrix.json",
         "run-all.sh",
+        "audit_mounts.py",
         "run-canary.sh",
         "summarize_results.py",
         "guide.md",

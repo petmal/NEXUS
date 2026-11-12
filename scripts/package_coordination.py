@@ -301,6 +301,7 @@ def main(pilot_name="coordination"):
     destination = args.output_dir.resolve()
     destination.mkdir(parents=True, exist_ok=False)
     copies = {
+        "audit_mounts.py": examples / "audit_mounts.py",
         "run.sh": examples / f"{pilot_name}-run.sh",
         "runner.py": examples / f"{pilot_name}-runner.py",
         "README.md": examples / f"{pilot_name}-run.md",

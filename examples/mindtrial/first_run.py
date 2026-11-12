@@ -2,13 +2,15 @@
 
 import argparse
 import json
+import runpy
 from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
 IMAGE = "nexus:first-run"
+AUDITS = runpy.run_path(str(HERE / "audit_mounts.py"))
 
 
-def prepare(directory, provider, model, text_output=False):
+def prepare(directory, provider, model, text_output=False, image=IMAGE):
     config = json.loads((HERE / "nexus-fresh-world-luna-config.yaml").read_text())
     tasks = json.loads((HERE / "nexus-fresh-world-controls-tasks.yaml").read_text())
     settings = config["config"]
@@ -19,7 +21,7 @@ def prepare(directory, provider, model, text_output=False):
                         "max-requests-per-minute": 10, "disable-structured-output": text_output}]
     for group in ("tools", "services", "validators"):
         for entry in settings[group]:
-            entry["image"] = IMAGE
+            entry["image"] = image
     settings["task-source"] = "./tasks.yaml"
     taskset = tasks["task-config"]
     (control,) = (row for row in taskset["tasks"] if row["name"] == "NEXUS fresh-F05")
@@ -28,6 +30,9 @@ def prepare(directory, provider, model, text_output=False):
     taskset["max-turns"] = 40
     taskset["tool-selector"]["tools"][0]["max-calls"] = 32
     directory.mkdir(parents=True, exist_ok=False)
+    (directory / "private-audits").mkdir(mode=0o700)
+    AUDITS["configure_service"](settings, "./private-audits")
+    AUDITS["configure_tasks"](taskset)
     for name, data in (("config.yaml", config), ("tasks.yaml", tasks)):
         (directory / name).write_text(json.dumps(data, indent=2) + "\n", encoding="utf-8")
 
@@ -39,9 +44,10 @@ if __name__ == "__main__":
     parser.add_argument("--model", required=True, help="Tool-capable model ID at that provider")
     parser.add_argument("--text-output", action="store_true",
                         help="Disable structured final output; keep the NEXUS tool enabled")
+    parser.add_argument("--image", default=IMAGE, help="Locally built NEXUS image tag or ID")
     args = parser.parse_args()
     try:
-        prepare(args.directory, args.provider, args.model, args.text_output)
+        prepare(args.directory, args.provider, args.model, args.text_output, args.image)
     except FileExistsError:
         parser.exit(1, "Choose a new directory; the existing run was left untouched.\n")
     print(f"Wrote {args.directory}/config.yaml and tasks.yaml. No model calls made.")

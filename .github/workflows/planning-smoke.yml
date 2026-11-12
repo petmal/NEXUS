@@ -38,6 +38,9 @@ on:
       - "scripts/package_coordination.py"
       - "scripts/package_interference.py"
       - "scripts/package_interference_comparison.py"
+      - "examples/mindtrial/audit_mounts.py"
+      - "examples/mindtrial/first_run.py"
+      - "examples/mindtrial/test-persistent-mounts.sh"
       - "examples/mindtrial/coordination-*"
       - "examples/mindtrial/interference-*"
       - "examples/mindtrial/summarize-pilot-results.py"
@@ -86,6 +89,12 @@ jobs:
           revision=$(git rev-parse HEAD)
           docker build --build-arg VCS_REF="$revision" -t nexus:planning-resource-v1 -t nexus:coordination-v1 -t nexus:interference-v1 -t nexus:interference-comparison-v1 -t nexus:cross-axis-v1 -t nexus:capability-smoke-v1 -t nexus:fresh-world-v1 .
           test "$(docker image inspect nexus:planning-resource-v1 --format '{{ index .Config.Labels "org.opencontainers.image.revision" }}')" = "$revision"
+      - name: Verify a private audit after removing the service container
+        env:
+          NEXUS_REPO: ${{ github.workspace }}
+          OUTPUT_ROOT: ${{ runner.temp }}
+          NEXUS_SMOKE_IMAGE: nexus:planning-resource-v1
+        run: bash examples/mindtrial/test-persistent-mounts.sh --preflight-only
       - name: Qualify all 16 cases inside the image
         run: docker run --rm --entrypoint python nexus:planning-resource-v1 scripts/preflight_planning.py
       - name: Qualify all 40 coordination cases inside the image
