@@ -19,7 +19,7 @@ uv run --frozen --no-dev nexus demo --play
 
 No Docker, model account or API key is needed for local play. The first install may download Python and dependencies.
 
-At the console, type `mission` to read your goal, `look` to see the room, and `help` for the JSON actions. In the introductory world, try `{"type":"move","target":"R4"}`, then `look`. You have spent one world action; reading the display is free. Type `quit` to leave. Prefer to watch first? Run `uv run --frozen --no-dev nexus demo` for a complete unscored playthrough. [See all nine actions](docs/play-guide.md#the-introductory-world-in-nine-actions).
+At the console, type `mission` to read your goal, `look` to see the room, and `help` for the controls. In the introductory world, try `move R4`, then `look`. Use Tab to complete names, Up to edit your last command, or `log` to review what happened. JSON actions also work. You have spent one world action; reading the display is free. Type `quit` to leave. Prefer to watch first? Run `uv run --frozen --no-dev nexus demo` for a complete unscored playthrough. [See all nine actions](docs/play-guide.md#the-introductory-world-in-nine-actions).
 
 ## Send in a model
 

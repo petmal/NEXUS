@@ -40,7 +40,7 @@ def _handle(session, request):
             {"expected_turn": session.state.turn, **request} if isinstance(request, dict) else request
         )
         action = ActionRequest.model_validate(envelope)
-        response = session.act(action.expected_turn, action.action)
+        response = session.act(action.expected_turn, action.action, player_only=True)
         return response.model_dump(mode="json", exclude_none=True)
 
     op = SERVICE_REQUEST_ADAPTER.validate_python(request)
@@ -56,7 +56,7 @@ def _handle(session, request):
         return session.check_construction(op.build).model_dump(mode="json")
     if isinstance(op, ActionClientRequest):
         turn = op.expected_turn if op.expected_turn is not None else session.state.turn
-        return session.act(turn, op.action).model_dump(mode="json", exclude_none=True)
+        return session.act(turn, op.action, player_only=True).model_dump(mode="json", exclude_none=True)
     raise ValueError("unsupported player operation")
 
 

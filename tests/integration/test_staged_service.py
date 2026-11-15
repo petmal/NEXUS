@@ -58,7 +58,7 @@ def test_http_public_contract_actual_receipt_and_no_active_diagnostic_hints():
 
     result = public_policy(Player(), evidence)
     assert result.victory_code and client.get("/status").json()["status"] == "won"
-    assert result.performance.decision_diagnostics.escape_classification == "supported_win"
+    assert client.post("/finalize").json()["performance"]["decision_diagnostics"]["escape_classification"] == "supported_win"
     text = json.dumps(public)
     for key in (
         "construction_seed",

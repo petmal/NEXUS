@@ -109,13 +109,17 @@ def create_app(episode: PrivateEpisode) -> FastAPI:
     def act(session_id: str, request: ActionRequest):
         return (
             store.get(session_id)
-            .act(request.expected_turn, request.action)
+            .act(request.expected_turn, request.action, player_only=True)
             .model_dump(mode="json", exclude_none=True)
         )
 
     @app.get("/sessions/{session_id}/status")
     def status(session_id: str):
         return store.get(session_id).status().model_dump(mode="json")
+
+    @app.post("/sessions/{session_id}/finalize", include_in_schema=False)
+    def finalize_session(session_id: str):
+        return _finalize(store.get(session_id))
 
     @app.get("/sessions/{session_id}/events")
     def events(session_id: str):
@@ -181,7 +185,7 @@ def create_single_session_app(
 
     @app.post("/action")
     def act(request: ActionRequest):
-        response = session.act(request.expected_turn, request.action)
+        response = session.act(request.expected_turn, request.action, player_only=True)
         if recorder is not None:
             recorder.checkpoint_safely()
         if diagnostics is not None:

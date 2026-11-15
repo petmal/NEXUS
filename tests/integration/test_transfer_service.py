@@ -108,13 +108,15 @@ class Player:
 started = perf_counter()
 if sys.argv[2] == 'win':
     result = public_policy(Player(), ep.public.evidence_files)
-    assert result.victory_code and result.performance
+    assert result.victory_code and result.performance is None
+    assert client.post('/finalize').json()['performance']['terminal_status'] == 'won'
 elif sys.argv[2] == 'exhaust':
     for turn in range(ep.generation_metadata.action_budget):
         result = client.post('/action', json=dict(expected_turn=turn, action={'type':'wait'})).json()
         if turn + 1 < ep.generation_metadata.action_budget:
             assert result.get('performance') is None
-    assert result['performance']['terminal_status'] == 'failed'
+    assert 'performance' not in result
+    assert client.post('/finalize').json()['performance']['terminal_status'] == 'failed'
 else:
     result = client.post('/finalize').json()
     assert result['performance']['terminal_status'] == 'failed'

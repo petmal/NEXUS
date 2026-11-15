@@ -2,7 +2,8 @@ from __future__ import annotations
 
 from nexus.ontology.catalog import runtime_for
 from nexus.models.episode import PublicEpisode
-from nexus.models.observation import Observation
+from nexus.models.observation import Observation, VisibleItem, VisibleStock
+from nexus.models.domain import DomainArtifact, DomainStock
 from nexus.models.world import INVENTORY, WorldState
 from nexus.presentation import room_label
 
@@ -19,15 +20,25 @@ def _neighbors(episode: PublicEpisode, room_id: str) -> tuple[str, ...]:
 
 def observation(episode: PublicEpisode, state: WorldState) -> Observation:
     room_id = state.agent_room
+    def visible(item):
+        if episode.presentation_version == "sealed-facility-v3" and isinstance(item, (DomainArtifact, DomainStock)):
+            model = VisibleStock if isinstance(item, DomainStock) else VisibleItem
+            values = item.model_dump(exclude={"ontology", "version"})
+            from nexus.presentation.console import REGISTER_WORLDS
+            if isinstance(item, DomainArtifact) and item.ontology in REGISTER_WORLDS:
+                values["reading_label"] = "Seal display (x0; 5 signals collapse)"
+            return model.model_validate(values)
+        return item.model_copy(deep=True)
+
     visible_artifacts = tuple(
         sorted(
-            (a.model_copy(deep=True) for a in state.artifacts.values() if a.location == room_id),
+            (visible(a) for a in state.artifacts.values() if a.location == room_id),
             key=lambda a: a.id,
         )
     )
     carried = tuple(
         sorted(
-            (a.model_copy(deep=True) for a in state.artifacts.values() if a.location == INVENTORY),
+            (visible(a) for a in state.artifacts.values() if a.location == INVENTORY),
             key=lambda a: a.id,
         )
     )
@@ -50,7 +61,7 @@ def observation(episode: PublicEpisode, state: WorldState) -> Observation:
         carried_artifacts=carried,
         visible_machines=machines,
         terminal_status=state.terminal_status,
-        visible_stocks=tuple(s.model_copy(deep=True) for s in state.stocks.values() if s.location == room_id),
+        visible_stocks=tuple(visible(s) for s in state.stocks.values() if s.location == room_id),
         controller_settings=(state.controller_settings if episode.investigation is not None
                              and room_id == runtime_for(episode.investigation).mission_room(episode.investigation) else None),
         goal=episode.goal.model_dump(mode="json") if include_static_context else None,

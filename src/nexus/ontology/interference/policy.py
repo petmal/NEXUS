@@ -1,13 +1,14 @@
 """Exact known-law reference constructed solely from public evidence."""
 
-import json
 
 from nexus.ontology.interference.planner import actions_for, optimal
 from nexus.ontology.interference.schema import Investigation
 
 
 def public_policy(player, evidence):
-    spec = Investigation.model_validate(json.loads(evidence["theory.json"])["specification"])
+    from nexus.ontology.player_records import specification
+
+    spec = specification(Investigation, evidence, family="stateful-interference-v1")
     result = None
     for action in actions_for(spec, optimal(spec).modes):
         result = player.act(expected_turn=player.status().turn, action=action)

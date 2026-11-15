@@ -93,6 +93,8 @@ def run_case(config, task, folder, *, forged=False):
                     raise ValueError(f"private field leaked through player request: {field}")
         return result
 
+    terminal_metrics = {}
+
     def validate(candidate):
         candidate_file.write_text(candidate)
         command = [
@@ -102,6 +104,9 @@ def run_case(config, task, folder, *, forged=False):
         result = cli(command, client_env)
         if "NEXUS terminal performance:" not in result.stderr:
             raise ValueError("validator omitted terminal telemetry")
+        for line in result.stderr.splitlines():
+            if line.startswith("NEXUS terminal performance: "):
+                terminal_metrics.update(json.loads(line.removeprefix("NEXUS terminal performance: ")))
         return json.loads(result.stdout)
 
     class Player:
@@ -165,7 +170,7 @@ def run_case(config, task, folder, *, forged=False):
                     raise ValueError("public policy receipt was not accepted")
                 if validate(result.victory_code + "-WRONG")["correct"]:
                     raise ValueError("wrong receipt accepted after winning")
-                if result.performance.decision_diagnostics.escape_classification != "supported_win":
+                if terminal_metrics["decision_diagnostics"]["escape_classification"] != "supported_win":
                     raise ValueError("reference win lacked public support")
                 outcome = {
                     "case": task["name"],

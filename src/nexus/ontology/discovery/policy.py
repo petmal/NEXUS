@@ -11,11 +11,13 @@ from nexus.models.actions import (
 )
 from nexus.ontology.discovery.domains import module
 from nexus.ontology.inference import Measurement
+from nexus.ontology.player_records import discovery_family, specification
 
 
 def public_policy(player, evidence):
     theory = json.loads(evidence["theory.json"])
-    spec = module(theory["family"], "schema").Investigation.model_validate(theory["specification"])
+    family = discovery_family(theory)
+    spec = specification(module(family, "schema").Investigation, evidence, family=family)
 
     def act(action):
         response = player.act(expected_turn=player.status().turn, action=action)
@@ -27,7 +29,7 @@ def public_policy(player, evidence):
         act(TakeAction(artifact="carrier"))
     construction = theory.get("resolved_construction")
     if construction is None:
-        posterior = module(theory["family"], "inference").Belief(spec)
+        posterior = module(family, "inference").Belief(spec)
         while (query := posterior.choose_query()) is not None:
             act(ConfigureAction(machine="reader", settings=query))
             response = act(ProbeAction(machine="reader", artifact="carrier"))

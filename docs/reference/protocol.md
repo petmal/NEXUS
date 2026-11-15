@@ -33,7 +33,7 @@ GET  /evidence/{filename}
 GET  /observe
 POST /action
 GET  /status
-GET  /events
+GET  /events  (operator replay trace)
 ```
 
 When explicitly enabled for a compatible world, `POST /check` also provides the disclosed construction checker. The evaluator-only `POST /finalize` closes the attempt and returns terminal status and performance. Neither access to the evaluator nor arbitrary network access belongs in the model tool.
@@ -70,8 +70,8 @@ may retry after a timeout, put the turn from the last observation in the
 
 A pinned request goes straight to `POST /action`. A retry with the same turn
 and action returns the committed turn, observation and events with
-`duplicate: true`; terminal performance, if available, reflects current request
-counters. A different action for a committed turn is rejected. Repeating an
+`duplicate: true`; on older presentations, a terminal reply also includes performance with current
+request counters. A different action for a committed turn is rejected. Repeating an
 **unpinned** request asks to act on the latest turn and can spend a second action.
 Raw `POST /action` always requires a nonnegative integer `expected_turn`.
 
@@ -152,7 +152,7 @@ patterns.
 
 ## Terminal performance
 
-A terminal action or evaluator finalization can return `performance`. Read
+Evaluator finalization returns `performance`. Older presentations also returned it in terminal action replies. Read
 `$schema` for legacy and controller reports, or `version` and `ontology` for
 mission reports. [Metric definitions and schema links](metrics.md) explain how to
 interpret action costs, evidence support, physical success and missing fields.
@@ -208,7 +208,23 @@ POST /sessions
 GET  /sessions/{id}/observe
 POST /sessions/{id}/actions
 GET  /sessions/{id}/status
-GET  /sessions/{id}/events
+GET  /sessions/{id}/events  (operator replay trace)
+POST /sessions/{id}/finalize  (evaluator only)
 ```
 
 Canonical state, latent rules, reference plans, and verifier secrets remain server-side. The player-safe manifest also includes the machine-readable action schema and human-readable action reference.
+
+## Player console presentation
+
+Newly generated worlds use `sealed-facility-v3`. Operator family, difficulty and
+serializer tags are omitted from playable records and object payloads. Family-specific controls now appear under `action_contract.apparatus`. The public
+IDs, laws supplied in this run, physical target and remaining resources stay
+available. In the four-register worlds an action message labels a hypothetical
+seal display or a committed reading. Structured result payloads remain available.
+The current display is always in the observation: a preview never replaces it.
+
+In v3, player action replies omit terminal performance, including on retry. Read
+it through the evaluator’s finalization or audit interface. A terminal victory
+receipt remains in the player reply. Prior versions keep their wire behavior.
+Compare runs using the recorded presentation version and presented evidence hash.
+Terminal editing, shorthand and the local log do not change the JSON action protocol.

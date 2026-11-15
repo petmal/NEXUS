@@ -57,7 +57,7 @@ def test_http_receipt_and_no_active_posterior_or_private_qualification_hints(fam
     result = public_policy(Player(), evidence)
     assert (
         result.victory_code
-        and result.performance.decision_diagnostics.escape_classification == "supported_win"
+        and client.post("/finalize").json()["performance"]["decision_diagnostics"]["escape_classification"] == "supported_win"
     )
     assert client.get("/status").json()["victory_code"] == result.victory_code
     text = json.dumps(public)

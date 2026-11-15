@@ -1,6 +1,5 @@
 """Constructive public-only witness; no claim of minimum reading/action cost."""
 
-import json
 from collections import Counter
 
 from nexus.models.actions import (
@@ -23,7 +22,9 @@ def choose_tag(candidates) -> int:
 
 
 def public_policy(player, evidence):
-    spec = Investigation.model_validate(json.loads(evidence["theory.json"])["specification"])
+    from nexus.ontology.player_records import specification
+
+    spec = specification(Investigation, evidence, family="staged-repair-v1")
 
     def act(action):
         result = player.act(expected_turn=player.status().turn, action=action)
