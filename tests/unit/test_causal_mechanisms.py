@@ -368,4 +368,5 @@ def test_serve_session_uses_new_family_environment(monkeypatch):
     )
     assert result.exit_code == 0, result.output
     manifest = TestClient(captured["app"]).get("/manifest").json()
-    assert manifest["action_contract"]["ontology"]["family"] == FAMILY
+    assert "family" not in manifest["action_contract"]["apparatus"]
+    assert "stage" in manifest["action_contract"]["apparatus"]["configuration"]

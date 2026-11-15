@@ -125,8 +125,10 @@ def test_t1_cli_and_service_keep_diagnostics_terminal_only(tmp_path):
         assert response.json()["ok"]
         if response.json()["observation"]["terminal_status"] == "active":
             assert "performance" not in response.json()
-    assert response.json()["performance"]["theory_level"] == 1
-    assert response.json()["performance"]["$schema"].endswith("performance-v6.schema.json")
+    assert "performance" not in response.json()
+    metrics = client.post("/finalize").json()["performance"]
+    assert metrics["theory_level"] == 1
+    assert metrics["$schema"].endswith("performance-v6.schema.json")
 
 
 def test_service_reads_theory_env(monkeypatch):

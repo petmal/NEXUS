@@ -28,7 +28,7 @@ strongest-model failure boundary on the T/D axis.
 
 The evaluated game laws, targets and action costs remain unchanged. Saved
 `sealed-facility-v1` episodes retain their original wording; the subsequent story
-review introduces `sealed-facility-v2` for newly generated episodes. Wording is
+review introduced `sealed-facility-v2`; new episodes use the [v3 player presentation](reference/protocol.md#player-console-presentation). Wording is
 part of the evaluated input: record its version, use new source bindings and
 matched controls, and do not treat old live runs as validation of the new text.
 Historical empirical reports are preserved. Current preflight artifacts

@@ -196,12 +196,12 @@ def test_goal_failure_is_recoverable_with_no_component_feedback_and_terminal_met
     )
     result = client.post("/action", json={"expected_turn": 3, "action": {"type": "finish"}}).json()
     assert result["victory_code"]
-    metrics = result["performance"]
+    assert "performance" not in result
+    metrics = client.post("/finalize").json()["performance"]
     assert metrics["first_submission_correct"] is False
     assert metrics["controller_submissions"] == 2 and metrics["failed_finishes"] == 1
     assert metrics["measurements_used"] == 0 and metrics["termination_reason"] == "victory"
     assert metrics["initial_action_budget"] is None and metrics["budget_remaining"] is None
-    assert client.post("/finalize").json()["performance"] == metrics
 
 
 def test_active_surfaces_and_all_truths_share_public_contract():

@@ -46,8 +46,10 @@ def test_single_session_http_app_has_no_session_creation_and_can_win():
         assert response.status_code == 200
         assert response.json()["ok"] is True
 
-    assert response.json()["performance"]["$schema"] == PERFORMANCE_SCHEMA_URL
-    assert "schema_url" not in response.json()["performance"]
+    assert "performance" not in response.json()
+    metrics = client.post("/finalize").json()["performance"]
+    assert metrics["$schema"] == PERFORMANCE_SCHEMA_URL
+    assert "schema_url" not in metrics
     final_status = client.get("/status").json()
     assert final_status["status"] == "won"
     assert final_status["victory_code"] == victory_receipt(episode)
@@ -72,7 +74,7 @@ def test_evaluator_finalization_fails_closed_and_returns_terminal_diagnostics():
     action = episode.reference_plan[0]
     response = client.post("/action", json={"expected_turn": 0, "action": action}).json()
     assert response["ok"] is False
-    assert response["performance"]["terminal_status"] == "failed"
+    assert "performance" not in response
 
 
 def test_request_client_sets_current_turn_for_actions(monkeypatch):

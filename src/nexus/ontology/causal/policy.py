@@ -22,9 +22,13 @@ def public_policy(player, evidence: dict[str, str]):
     stock = player.observe().room
     functions = map_data.get("sector_functions", map_data["rooms"])
     lab = next(room for room, label in functions.items() if label == "Causal laboratory")
+    # The disclosed structure and measurements identify the public prior.
+    known = theory["known"]
+    level = 0 if theory["resolved"] is not None else 1 if "a" in known else 2 if known else 3
+    depth = 0 if level == 0 or theory["supplied"] else {1: 1, 2: 2, 3: 5}[level]
     spec = Investigation(
-        theory=theory["theory_level"],
-        discovery=theory["discovery_level"],
+        theory=theory.get("theory_level", level),
+        discovery=theory.get("discovery_level", depth),
         known=theory["known"],
         supplied=theory["supplied"],
         resolved=theory["resolved"],

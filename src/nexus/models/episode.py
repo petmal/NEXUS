@@ -103,6 +103,11 @@ class PlayerManifest(BaseModel):
         from nexus.ontology.catalog import runtime_for
         from nexus.presentation import description
 
+        controls = (runtime_for(episode.investigation).public_contract(episode.investigation)
+                    if episode.investigation is not None else action_contract())
+        if episode.presentation_version == "sealed-facility-v3":
+            from nexus.presentation.console import contract
+            controls = contract(controls)
         return cls(
             protocol_version=episode.protocol_version,
             episode_id=episode.episode_id,
@@ -110,8 +115,7 @@ class PlayerManifest(BaseModel):
             description=description(episode),
             goal=episode.goal,
             evidence_files=tuple(sorted(episode.evidence_files)),
-            action_contract=(runtime_for(episode.investigation).public_contract(episode.investigation)
-                             if episode.investigation is not None else action_contract()),
+            action_contract=controls,
         )
 
 

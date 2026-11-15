@@ -22,7 +22,8 @@ apparatus, and actions remaining. It does not show unseen objects elsewhere.
 | `look` | Show your current observation again |
 | `mission` | Show the goal and list the evidence files |
 | `evidence filename` | Read a listed file, such as `theory.json` |
-| `help` | Show this world's actions and JSON examples |
+| `log` | Review this session’s actions and the readings they returned, in order |
+| `help` | Show this world’s commands and JSON examples |
 | `quit` | Stop this local session |
 
 These commands do not spend an environment action. File names and object IDs
@@ -33,9 +34,18 @@ learn an alien language or find a hidden story clue.
 
 ## Take actions
 
-Enter one JSON object per line. For example, if a visible artifact is named
-`seal`, `{"type":"take","artifact":"seal"}` picks it up. Use
-`{"type":"move","target":"room-id"}` with an exit listed in your observation.
+Type one command per line, for example `take seal`, `move array`, or
+`probe vek seal` if those IDs are present. Enter `configure MACHINE 1 0 2` for
+a machine that accepts those settings. In a terminal, use Left/Right to edit,
+Up/Down for this session’s history, and Tab to complete commands or visible IDs.
+Raw JSON such as `{"type":"take","artifact":"seal"}` works too. Use `log` to
+review actions without replaying them; restarting begins a new log.
+
+In the four-register seal world, each mode updates only its own register, but
+every mode reports the same display: `x0` (or 5 for collapse). A **preview**
+shows what that display would read; an **applied** operation commits the step.
+An unchanged display does not tell you whether another register changed.
+Two previews both start from the actual seal. Other worlds have their own readers.
 
 Carried objects travel with you. To use an apparatus, you normally need to be in
 its room and carry the object. `probe` previews a result without applying the
@@ -57,7 +67,7 @@ A legal operation can consume resources even when
 it changes nothing. Invalid requests do not partially change the world. Phase
 is a separate world register, not a real-time clock.
 
-When you believe the exact mission state is ready, enter `{"type":"finish"}`.
+When you believe the exact mission state is ready, enter `finish`.
 A successful finish produces the victory receipt. Merely reaching the right
 physical state is not enough. A rejected finish still costs an action; whether
 you can recover depends on the remaining resources and the world's rules.

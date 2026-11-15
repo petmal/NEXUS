@@ -1,6 +1,5 @@
 """Executable public-only evidence policy and reusable physical construction plan."""
 
-import json
 
 from nexus.models.actions import (
     ConfigureAction,
@@ -57,7 +56,9 @@ def omniscient_construction(world):
 
 
 def public_policy(player, evidence):
-    spec = Investigation.model_validate(json.loads(evidence["theory.json"])["specification"])
+    from nexus.ontology.player_records import specification
+
+    spec = specification(Investigation, evidence, family="joint-assembly-v1")
     posterior = Belief(spec)
 
     def act(action):

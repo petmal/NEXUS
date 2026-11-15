@@ -54,7 +54,7 @@ def test_http_public_policy_receipt_and_nonresettable_service():
 
     result = public_policy(Player())
     assert result.victory_code and result.current_turn == 15
-    assert result.performance.certificate["status"] == "qualified"
+    assert client.post("/finalize").json()["performance"]["certificate"]["status"] == "qualified"
     assert client.post("/sessions").status_code == 404
     assert client.get("/status").json()["status"] == "won"
 

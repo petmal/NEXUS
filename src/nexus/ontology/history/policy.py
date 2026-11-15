@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-import json
 from functools import lru_cache
 from itertools import product
 
@@ -55,7 +54,9 @@ def public_policy(player, evidence):
     from nexus.ontology.history.schema import Investigation
     from nexus.ontology.inference import Measurement
 
-    spec = Investigation.model_validate(json.loads(evidence["theory.json"])["specification"])
+    from nexus.ontology.player_records import specification
+
+    spec = specification(Investigation, evidence, family="history-coupled-v1")
     posterior = Belief(spec)
 
     def act(action):

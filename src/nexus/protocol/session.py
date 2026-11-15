@@ -191,11 +191,17 @@ class Session:
     def status(self) -> SessionStatus:
         return self._exchange({"operation": "status"}, self._status, exclude_none=False)
 
-    def act(self, expected_turn: int, action: Action) -> ActionResponse:
+    def act(self, expected_turn: int, action: Action, *, player_only: bool = False) -> ActionResponse:
+        def apply():
+            response = self._act(expected_turn, action)
+            if player_only and self.episode.public.presentation_version == "sealed-facility-v3":
+                return response.model_copy(update={"performance": None})
+            return response
+
         return self._exchange(
             {"operation": "action", "expected_turn": expected_turn,
              "action": action.model_dump(mode="json")},
-            lambda: self._act(expected_turn, action),
+            apply,
         )
 
     def can_check_construction(self) -> bool:
@@ -455,6 +461,7 @@ class Session:
                     performance=self._performance_summary(),
                 )
 
+            previous_state = self.state
             previous_turn = self.state.turn
             self.state = result.state
 
@@ -478,13 +485,20 @@ class Session:
                 )
                 self.trace.append(record)
 
+            events = tuple(event.model_dump(mode="json") for event in result.events)
+            message = result.message
+            if self.episode.public.presentation_version == "sealed-facility-v3":
+                from nexus.presentation.console import action_result
+                item = previous_state.artifacts.get(getattr(action, "artifact", ""))
+                message = action_result(self.episode.public, action, events, message,
+                                        already_collapsed=getattr(item, "payload", {}).get("reading") == 5)
             response = ActionResponse(
                 ok=True,
                 expected_turn=expected_turn,
                 current_turn=self.state.turn,
                 observation=self._observe(),
-                events=tuple(event.model_dump(mode="json") for event in result.events),
-                message=result.message,
+                events=events,
+                message=message,
                 victory_code=result.victory_code,
                 performance=self._performance_summary(),
             )

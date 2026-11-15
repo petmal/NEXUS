@@ -78,7 +78,11 @@ def _print_action_reference(*, scientific: bool = False, resonant: bool = False,
 
 def _print_play_reference(*, scientific: bool = False, resonant: bool = False, contract=None) -> None:
     _print_action_reference(scientific=scientific, resonant=resonant, contract=contract)
-    assistance = (contract or {}).get("ontology", {}).get("assistance")
+    console.print("Short forms: move ROOM, take ID, drop ID, probe MACHINE ID, operate MACHINE ID, "
+                  "wait, finish. For configurable machines: configure MACHINE INTEGER ... . "
+                  "Use log to review this session. JSON actions still work.", markup=False)
+    contract = contract or {}
+    assistance = contract.get("apparatus", contract.get("ontology", {})).get("assistance")
     if assistance and assistance["operation"] == "check":
         console.print("Optional construction check (free): "
                       + json.dumps(assistance["request"], separators=(",", ":")), markup=False)
@@ -288,6 +292,8 @@ def _play(episode, *, debug_private=False, audit_dir=None):
     from nexus.protocol.session import Session
     from nexus.render.player import render_player
 
+    from nexus.render.commands import log_entry, parse, reader
+
     session = Session(episode)
     recorder = AuditRecorder(session, audit_dir) if audit_dir is not None else None
     try:
@@ -295,19 +301,23 @@ def _play(episode, *, debug_private=False, audit_dir=None):
         console.print(manifest.description, markup=False)
         console.print("Read the mission and evidence, make a plan, then use finish to claim success.")
         console.print("Evidence files: " + ", ".join(manifest.evidence_files), markup=False)
-        console.print("Commands: look, mission, evidence <filename>, help, quit. These are free.\n"
-                      'Actions use JSON; for example: {"type":"wait"}. Wait consumes an action.')
+        actions = tuple(item["type"] for item in manifest.action_contract["reference"])
+        read = reader(console, actions, manifest.evidence_files)
+        history = []
+        console.print("Free commands: look, mission, evidence <filename>, log, help, quit. "
+                      "Enter actions as commands or JSON. Use Tab for names and Up for history.")
         if debug_private:
             console.print("[yellow]Unscored operator mode: private information is visible.[/yellow]")
         while True:
-            render_player(session.observe(), console=console)
+            view = session.observe()
+            render_player(view, console=console)
             if debug_private:
                 from nexus.render.observer import render_observer
                 render_observer(episode, session.state_snapshot(), console=console, debug_private=True)
             if session.state.terminal_status.value != "active":
                 break
             try:
-                raw = console.input("[bold cyan]nexus>[/bold cyan] ").strip()
+                raw = read(view).strip()
             except (EOFError, KeyboardInterrupt):
                 break
             parts = raw.split(maxsplit=1)
@@ -318,6 +328,8 @@ def _play(episode, *, debug_private=False, audit_dir=None):
                 _print_play_reference(contract=manifest.action_contract)
             elif command in {"look", "status", ""}:
                 continue
+            elif command == "log":
+                console.print("\n".join(history) or "No actions yet.", markup=False, highlight=False)
             elif command == "mission":
                 console.print(manifest.description, markup=False)
                 console.print_json(data=manifest.goal.model_dump(mode="json"))
@@ -327,12 +339,16 @@ def _play(episode, *, debug_private=False, audit_dir=None):
                     console.print("Usage: evidence <filename>")
                     continue
                 try:
-                    console.print(session.evidence(parts[1]), markup=False, highlight=False)
+                    content = session.evidence(parts[1])
+                    if parts[1].endswith(".json"):
+                        console.print_json(content)
+                    else:
+                        console.print(content, markup=False, highlight=False)
                 except KeyError:
                     console.print("Unknown file. Type mission to list evidence files.")
             else:
                 try:
-                    payload = json.loads(raw)
+                    payload = parse(raw, actions)
                     if isinstance(payload, dict) and payload.get("operation") == "check" and session.can_check_construction():
                         from nexus.protocol.requests import CheckClientRequest
 
@@ -342,17 +358,18 @@ def _play(episode, *, debug_private=False, audit_dir=None):
                         continue
                     action = ACTION_ADAPTER.validate_python(payload)
                 except (ValueError, TypeError) as exc:
-                    console.print(f"Invalid action JSON: {exc}", markup=False)
+                    console.print(f"Invalid action: {exc}", markup=False)
                     console.print("Type help for valid actions.")
                     continue
-                response = session.act(session.state.turn, action)
+                response = session.act(session.state.turn, action, player_only=True)
+                history.append(log_entry(action, response))
                 console.print(response.message, markup=False)
                 if response.events:
                     console.print_json(data=list(response.events))
                 if recorder is not None:
                     recorder.checkpoint_safely()
                 if response.victory_code:
-                    if manifest.presentation_version == "sealed-facility-v2":
+                    if manifest.presentation_version in ("sealed-facility-v2", "sealed-facility-v3"):
                         console.print("Exit clearance granted. Your visit to NEXUS is complete.")
                     console.print("Victory receipt: " + response.victory_code, markup=False)
     finally:
@@ -383,7 +400,7 @@ def demo(interactive: bool = typer.Option(False, "--play", help="Play the introd
     for raw in episode.reference_plan:
         action = ACTION_ADAPTER.validate_python(raw)
         console.print(action.model_dump_json(), markup=False)
-        response = session.act(session.state.turn, action)
+        response = session.act(session.state.turn, action, player_only=True)
         if not response.ok:
             raise RuntimeError("demo reference action failed")
         render_player(response.observation, console=console)

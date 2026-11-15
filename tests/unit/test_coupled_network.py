@@ -140,11 +140,11 @@ def test_no_field_preview_or_active_telemetry_and_terminal_consistency():
         assert o["ok"]
         if o["observation"]["terminal_status"] == "active":
             assert "performance" not in o
-    assert o["performance"]["first_submission_correct"]
-    assert o["performance"]["target_classes_before_first_submission"] == 1
-    assert o["performance"]["certificate"]["structural_programs"] == 27
-    final = client.post("/finalize").json()
-    assert final["performance"] == o["performance"]
+    assert "performance" not in o
+    metrics = client.post("/finalize").json()["performance"]
+    assert metrics["first_submission_correct"]
+    assert metrics["target_classes_before_first_submission"] == 1
+    assert metrics["certificate"]["structural_programs"] == 27
     s = Session(episode())
 
     def act(**a):

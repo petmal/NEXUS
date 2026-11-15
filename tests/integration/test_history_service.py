@@ -56,7 +56,7 @@ def test_http_history_contract_receipt_and_roundtrip(tmp_path):
 
     result = public_policy(Player(), evidence)
     assert result.victory_code
-    assert result.performance.decision_diagnostics.escape_classification == "supported_win"
+    assert client.post("/finalize").json()["performance"]["decision_diagnostics"]["escape_classification"] == "supported_win"
     assert client.get("/status").json()["status"] == "won"
     public = json.dumps(transcript)
     for key in (

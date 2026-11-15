@@ -94,10 +94,10 @@ def test_real_performance_and_operator_log(case, key, label, caplog):
             assert body["ok"]
             if turn < len(plan) - 1:
                 assert "performance" not in body
-        won = body["performance"]
+        assert "performance" not in body
+        won = client.post("/finalize").json()["performance"]
         assert won[key] == label and won["terminal_status"] == "won"
         contracts()[TERMINAL].validate(won)
-        assert client.post("/finalize").json()["performance"] == won
     # Capture the actual serialized log (the emitter adds episode_id and trigger).
     with TestClient(create_single_session_app(ep, extended_diagnostics=True)):
         pass

@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-import json
 from functools import lru_cache
 
 from nexus.ontology.planning.layout import LAYOUTS, route
@@ -57,7 +56,9 @@ def public_policy(player, evidence):
         TakeAction,
     )
 
-    spec = Investigation.model_validate(json.loads(evidence["theory.json"])["specification"])
+    from nexus.ontology.player_records import specification
+
+    spec = specification(Investigation, evidence, family="stateful-planning-v1")
     layout = LAYOUTS[spec.planning]
 
     def act(action):

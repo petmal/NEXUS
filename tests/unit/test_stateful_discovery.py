@@ -146,8 +146,13 @@ def test_collapse_is_absorbing_even_in_r0():
         pytest.fail("fixture has no collapse trajectory")
     session = Session(ep)
     setup(session)
-    for a in word:
+    for a in word[:-1]:
         act(session, OperateAction(machine=MODES[a], artifact="seal"))
+    mode = MODES[word[-1]]
+    preview = act(session, ProbeAction(machine=mode, artifact="seal"))
+    assert "would collapse" in preview.message and session.state.artifacts["seal"].payload["reading"] != 5
+    applied = act(session, OperateAction(machine=mode, artifact="seal"))
+    assert "has collapsed" in applied.message
     for mode in MODES:
         result = act(session, ProbeAction(machine=mode, artifact="seal"))
         assert (

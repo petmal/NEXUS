@@ -33,7 +33,11 @@ def render_player(observation: Observation, *, console: Console | None = None) -
 
             values = item.model_dump(mode="json")
             values.pop("id", None)
-            table.add_row(Text(item.id), Text(json.dumps(values, ensure_ascii=False)))
+            if label := values.pop("reading_label", None):
+                details = f"{label}: {values['payload']['reading']}\nOperation history: {values['payload']['history']}"
+            else:
+                details = json.dumps(values, ensure_ascii=False)
+            table.add_row(Text(item.id), Text(details))
         console.print(table)
     if observation.controller_settings is not None:
         console.print("Controller settings:", observation.controller_settings)

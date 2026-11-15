@@ -104,7 +104,8 @@ def test_terminal_http_preserves_nullable_diagnostics_and_round_trips():
             parsed = ActionResponse.model_validate(payload)
             assert parsed.ok
         assert parsed.victory_code
-        diagnostics = payload["performance"]["decision_diagnostics"]
+        assert "performance" not in payload
+        diagnostics = client.post("/finalize").json()["performance"]["decision_diagnostics"]
         assert diagnostics["first_intervention_turn"] is None
         assert diagnostics["first_intervention_measurement"] is None
         assert diagnostics["submissions"][0]["evidence"]["accepting_worlds"] is None

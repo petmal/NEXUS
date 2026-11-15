@@ -219,11 +219,12 @@ def test_http_contract_has_no_active_diagnostics_and_terminal_metrics_are_exact(
         assert out["ok"]
         if out["observation"]["terminal_status"] == "active":
             assert "performance" not in out
-    assert out["performance"]["first_submission_correct"]
-    assert out["performance"]["target_classes_before_first_submission"] == 1
-    assert out["performance"]["controller_submissions"] == 1
-    assert out["performance"]["measurements_used"] <= 7
-    assert client.post("/finalize").json()["performance"] == out["performance"]
+    assert "performance" not in out
+    metrics = client.post("/finalize").json()["performance"]
+    assert metrics["first_submission_correct"]
+    assert metrics["target_classes_before_first_submission"] == 1
+    assert metrics["controller_submissions"] == 1
+    assert metrics["measurements_used"] <= 7
 
 
 def test_failed_submission_then_investigation_preserves_joint_feedback():

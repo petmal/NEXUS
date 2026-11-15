@@ -14,9 +14,9 @@ from typing import TYPE_CHECKING, Literal
 if TYPE_CHECKING:
     from nexus.models.episode import PrivateEpisode, PublicEpisode
 
-type PresentationVersion = Literal["sealed-facility-v1", "sealed-facility-v2"]
-SUPPORTED: tuple[PresentationVersion, ...] = ("sealed-facility-v1", "sealed-facility-v2")
-CURRENT: PresentationVersion = "sealed-facility-v2"
+type PresentationVersion = Literal["sealed-facility-v1", "sealed-facility-v2", "sealed-facility-v3"]
+SUPPORTED: tuple[PresentationVersion, ...] = ("sealed-facility-v1", "sealed-facility-v2", "sealed-facility-v3")
+CURRENT: PresentationVersion = "sealed-facility-v3"
 # Keep v1 text byte-for-byte stable for saved episodes and historical comparisons.
 PREMISE = (
     "You are confined inside NEXUS, a sealed artificial facility. Its apparatus acts "
@@ -112,7 +112,7 @@ def attach(
 
 
 def description(public: PublicEpisode) -> str:
-    if public.presentation_version == "sealed-facility-v2":
+    if public.presentation_version in ("sealed-facility-v2", "sealed-facility-v3"):
         return f"{PREMISE_V2}\n\nMISSION\n{_prose_v2(public.description)}"
     return (
         f"{PREMISE}\n\nMISSION\n{public.description}"
@@ -128,9 +128,12 @@ def room_label(public: PublicEpisode, room_id: str) -> str:
 
 def evidence(public: PublicEpisode, filename: str) -> str:
     content = public.evidence_files[filename]
+    if public.presentation_version == "sealed-facility-v3":
+        from nexus.presentation.console import local_record
+        content = local_record(public, filename, content)
     if not public.presentation_version:
         return content
-    if public.presentation_version == "sealed-facility-v2":
+    if public.presentation_version in ("sealed-facility-v2", "sealed-facility-v3"):
         if filename == "facility.txt":
             # Family identity is public; never branch on the selected hidden construction.
             if getattr(public.investigation, "ontology", None) == "model-revision-v1":
@@ -146,7 +149,7 @@ def evidence(public: PublicEpisode, filename: str) -> str:
         rooms = data.get("rooms")
         if isinstance(rooms, dict):
             data["sector_functions"] = (
-                deepcopy(rooms) if public.presentation_version == "sealed-facility-v2"
+                deepcopy(rooms) if public.presentation_version in ("sealed-facility-v2", "sealed-facility-v3")
                 else dict(rooms)
             )
             for room_id, value in rooms.items():

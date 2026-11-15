@@ -115,7 +115,6 @@ def investigator(target, resolved=None):
 
 
 def public_policy(player, evidence):
-    import json
 
     from nexus.models.actions import (
         FinishAction,
@@ -126,7 +125,9 @@ def public_policy(player, evidence):
     )
     from nexus.ontology.stateful.schema import Investigation
 
-    spec = Investigation.model_validate(json.loads(evidence["theory.json"])["specification"])
+    from nexus.ontology.player_records import specification
+
+    spec = specification(Investigation, evidence, family="stateful-discovery-v1")
 
     def act(action):
         result = player.act(expected_turn=player.status().turn, action=action)

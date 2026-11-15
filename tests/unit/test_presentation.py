@@ -75,7 +75,7 @@ def test_shared_setting_preserves_every_family_execution_and_receipt(family, tmp
         assert client.get(f"/evidence/{filename}").text == content
         assert (tmp_path / "attachments" / filename).read_text() == content
         if filename == "theory.json":
-            assert content == old.public.evidence_files[filename]
+            assert "family" not in json.loads(content)
         if filename == "map.json":
             assert all(v.startswith("Sector ") for v in json.loads(content)["rooms"].values())
 
@@ -137,6 +137,26 @@ def test_every_shipped_family_preserves_v1_text_and_shares_v2_player_records(fam
     ).hexdigest()
     assert actual == snapshots[family]["sha256"]
 
+    # Compare the current player surface with the original disclosed settings, not
+    # just two renderers that could agree on the same omission.
+    v3 = Session(episode)
+    contract = v3.manifest().action_contract
+    assert "ontology" not in contract
+    assert not {"family", "experimental", "qualification_scope"} & contract.get("apparatus", {}).keys()
+    for name in v3.manifest().evidence_files:
+        if name == "theory.json":
+            compiled = json.loads(episode.public.evidence_files[name])
+            shown = json.loads(v3.evidence(name))
+            assert not {"family", "axis_version", "theory_level", "discovery_level"} & shown.keys()
+            for key in ("target", "resolved", "known", "supplied", "resolved_construction",
+                        "resolved_controller_settings", "mission", "mission_protocols_in_order"):
+                if key in compiled:
+                    assert shown[key] == compiled[key]
+            if "specification" in compiled:
+                from nexus.ontology.player_records import specification
+                original = episode.public.investigation.data()
+                assert specification(type(original), evidence_files(episode.public), family=family) == original
+    episode = attach(episode, "sealed-facility-v2")
     before = episode.model_dump_json()
     session = Session(episode)
     client = TestClient(create_single_session_app(episode))
@@ -170,7 +190,7 @@ def test_revision_brief_does_not_claim_disclosed_routing_is_hidden_or_reveal_the
     assert briefings[0] == briefings[1]
     assert "composed routing is hidden" not in briefings[0]
     for ep in episodes:
-        assert Session(ep).evidence("theory.json") == ep.public.evidence_files["theory.json"]
+        assert Session(attach(ep, "sealed-facility-v2")).evidence("theory.json") == ep.public.evidence_files["theory.json"]
         assert "composed routing is hidden" in Session(
             attach(ep, "sealed-facility-v1")
         ).evidence("facility.txt")
@@ -195,6 +215,7 @@ def test_v2_map_keeps_existing_nested_room_functions_without_aliasing_labels():
 ))
 def test_v2_portable_parts_are_not_described_as_the_exit_lock(family):
     episode = story_episode(family)
+    episode = attach(episode, "sealed-facility-v2")
     original = episode.model_dump_json()
     text = Session(episode).manifest().description + Session(episode).evidence("facility.txt")
     for ambiguous in (
