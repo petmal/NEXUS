@@ -125,3 +125,54 @@ that file or using `--debug-private` makes the session an unscored operator view
 Researchers should connect evaluated players through the restricted service.
 Quitting does not save a resumable session; use an audit export to preserve its
 history. [Evaluation guide](evaluation-guide.md).
+
+## Two different laboratories to try next
+
+Both use the same console commands, editing, history and Tab completion. Read
+`evidence apparatus.txt` for the instruments and `evidence theory.json` for the
+rules. Use a new output directory for each generated world. To replay it from
+the start, repeat only the `play` command.
+
+### Compositional repair: experiment on surveys, treat the seal
+
+Find one treatment that works for four conditions across two contexts. Unlike
+the four-register world, you can take fresh surveys from stock. Each survey
+keeps its own preparation. The sensor reads that survey, not the seal.
+
+```bash
+uv run --frozen --no-dev nexus generate ../nexus-repair-play --axis-version 2 \
+  --science-family compositional-repair-v1 --seed 541 \
+  --theory-level 3 --discovery-level 5 --planning-level 1 --resource-pressure 1
+uv run --frozen --no-dev nexus play ../nexus-repair-play/private.json
+```
+
+Start with `take seal`, `take stock`, then `move array`. Use the survey ID returned
+by `take stock` in later actions. The stage accepts eight numbers in this order:
+`context x y z a b c d`. Configure chooses settings; operating stage applies them
+to the survey; probing sensor measures its actual preparation. A stage preview
+does neither. The doser takes `a b c d`; operating it on the seal applies your
+treatment. Only `finish` tests the complete mission.
+
+This setting allows 30 actions. For six extra actions on the same puzzle, add
+`--budget-profile diagnostic-plus6` when generating into another directory.
+
+### Model revision: reconstruct a routing cartridge
+
+Investigate how two modes move packets between reservoirs. The reader tests the
+facility's reference device from its initial inventory every time. Consecutive
+queries do not continue the previous query, and they do not test your cartridge.
+
+```bash
+uv run --frozen --no-dev nexus generate ../nexus-revision-play --axis-version 2 \
+  --science-family model-revision-v1 --seed 2073 \
+  --theory-level 3 --discovery-level 5 --planning-level 0 --resource-pressure 1 \
+  --ontology-options '{"guidance":"principles"}'
+uv run --frozen --no-dev nexus play ../nexus-revision-play/private.json
+```
+
+Take `carrier`. For example, `configure reader 0 1 0` selects a sequence of three
+modes; `probe reader carrier` reports its final reference display. The assembler
+takes four link indices from the list in the theory. Configure selects a build;
+operate installs it. A preview does not install or validate it. Finish compares
+the installed cartridge with the reference across every finite mode sequence.
+This setting allows 64 actions and retries after a rejected eligible finish.

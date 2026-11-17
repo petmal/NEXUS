@@ -5,7 +5,7 @@
     "proof": "independent complete 576-choice check; 3/7 upper",
     "review": "repair-release-judgement, 2026-10-14",
     "scope": "docs/repair-live-conformance.md",
-    "source_refresh": "2026-11-15: independent stored-proof check, finite conformance, construction/qualification/runtime tests, and 7,203 live public-policy receipt/replay cases passed. See docs/release-readiness.md for current review scope and validation."
+    "source_refresh": "2026-11-17: independent stored-proof check, finite conformance, construction/qualification/runtime tests, and 7,203 live public-policy receipt/replay cases passed. See docs/release-readiness.md for current review scope and validation."
   },
   "proof_sha256": "10ba4f5ca646b5a3246ff50b6abca16173bf80efb330bafdfe84e219f5d02cd2",
   "sources": {
@@ -280,7 +280,8 @@
     "ontology/uncertainty/runtime.py": "662be74da7e2e1fcd6cd3356ca3731f6eca2930b1ba8974d28029c9261b247d9",
     "ontology/uncertainty/schema.py": "99f2a9ec59c0725731941f42573d4ca9269647ea4bc0885b0c4646736041f976",
     "presentation/__init__.py": "bd8fba07a4df6f61066f8997e0f83fd1f9889611c70ce60d50ee359822a17ec9",
-    "presentation/console.py": "eda62e6d67b05faecb2d8d7ddf229dc8a0f61e5fa4c032f4aca07c0797957c68",
+    "presentation/console.py": "6ceef725374d69735e1db5d3db273e2dc6579e63e48aaf1f6da1b74a082cec93",
+    "presentation/laboratory.py": "22d2046603ca06cf9d57dee0dc8fd0da3f8d618720b2b84cdd2bde0451b922cf",
     "protocol/__init__.py": "e3b32fa236602d61f8591e0944c0a1cc6b12cbbc97e147ad9e22b42b5c77d9a6",
     "protocol/audit.py": "0bab907317fc93bc3cd80fc76c60037ada5ac2297e0944c9a2ba2357cddd5d4c",
     "protocol/client.py": "ee597a223a0a3df9b14f2e0c3d7e0dd1d1a637ec0672970017fd7d59cce6ec87",
