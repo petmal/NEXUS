@@ -49,6 +49,9 @@ def contract(data):
 
 def local_record(public, filename, original):
     family = getattr(public.investigation, "ontology", None)
+    if filename == "apparatus.txt" and family in {"compositional-repair-v1", "model-revision-v1"}:
+        from nexus.presentation.laboratory import apparatus
+        return apparatus(public)
     if filename == "apparatus.txt" and family == "staged-repair-v1":
         original = original.replace("from stores (or array in P0)", "from " + public.investigation.data().stock_room)
     if family is None and filename in ("theory.json", "facility_manual.txt") and "theory.json" in public.evidence_files:
@@ -100,12 +103,18 @@ def local_record(public, filename, original):
 def action_result(public, action, events, message, *, already_collapsed=False):
     """Project the copied public events; engine traces retain their exact original bytes."""
     family = getattr(public.investigation, "ontology", None)
+    if action.type == "configure":
+        from nexus.presentation.laboratory import configured
+        message = configured(family, action.machine) or message
     for event in events:
         result = event["details"].get("result")
         if not isinstance(result, dict) or "ontology" not in result:
             continue
         result.pop("ontology")
         result.pop("version", None)
+        if family in {"compositional-repair-v1", "model-revision-v1"} and action.type in ("probe", "operate"):
+            from nexus.presentation.laboratory import result_message
+            message = result_message(family, action, result["payload"]) or message
         if family not in REGISTER_WORLDS or action.type not in ("probe", "operate"):
             continue
         reading = result["payload"]["reading"]

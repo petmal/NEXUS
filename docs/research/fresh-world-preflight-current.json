@@ -36,7 +36,7 @@
       },
       "planning": 0,
       "presentation_version": "sealed-facility-v3",
-      "public_evidence_sha256": "ada04237ae54c8e8bdcbddb55dd73a1e80c7a981511af2e292f63993c7eae1f0",
+      "public_evidence_sha256": "ba9ed3f49b13579d3f8d2278f854784b959626f0de9899e0e0d9d02ef9ebdb76",
       "public_investigation_sha256": "b6738c1548023f0b07cd5c5da1a80bb4e8c0c5df927a7dd05bc25a7850ec7660",
       "qualification": {
         "behavior_class": 324,
@@ -92,7 +92,7 @@
       },
       "planning": 0,
       "presentation_version": "sealed-facility-v3",
-      "public_evidence_sha256": "f2a8d35e6f47e5946089d0c38669abc6c7bf2bec24557c52df2ad0ee04a432ae",
+      "public_evidence_sha256": "2e1295b21b4347aa1bd15c8143265edd27d79634c43752644811f5f0f3303e86",
       "public_investigation_sha256": "dcda80d9e10e7ca6b0d964d5d9bb9638b27053e753e6b82e5a36b08ab832407e",
       "qualification": {
         "behavior_class": 324,
@@ -147,7 +147,7 @@
       "ontology_options": {},
       "planning": 1,
       "presentation_version": "sealed-facility-v3",
-      "public_evidence_sha256": "ebd5875df3a62df105bcba494b2157cd4346e4f750eb6a21b8ba80e232488373",
+      "public_evidence_sha256": "decedf5ce65dd719aad67cbe0eacca567014c1a80be0ce1d4764e953f0c0d22b",
       "public_investigation_sha256": "0cbad4edde33deb35975f614e908263a6567ded373ff19aa198c9656349bbe4e",
       "qualification": {
         "changed_module": 1,
@@ -209,7 +209,7 @@
       "ontology_options": {},
       "planning": 1,
       "presentation_version": "sealed-facility-v3",
-      "public_evidence_sha256": "a0c88439b6bc2e87c5e811c01c833eba13f1147263ec2939e0135342e7e0cd63",
+      "public_evidence_sha256": "a85faab630164850f7b6796a5f227f4d032dfb383dd568be49e4d0e8a4af2c91",
       "public_investigation_sha256": "2f7f7e2ebf9f0abace8d842c365b1d135da32f97671a15d3e013e4343bd9364e",
       "qualification": {
         "changed_module": 1,
@@ -275,7 +275,7 @@
       "ontology_options": {},
       "planning": 1,
       "presentation_version": "sealed-facility-v3",
-      "public_evidence_sha256": "a0c88439b6bc2e87c5e811c01c833eba13f1147263ec2939e0135342e7e0cd63",
+      "public_evidence_sha256": "a85faab630164850f7b6796a5f227f4d032dfb383dd568be49e4d0e8a4af2c91",
       "public_investigation_sha256": "2f7f7e2ebf9f0abace8d842c365b1d135da32f97671a15d3e013e4343bd9364e",
       "qualification": {
         "changed_module": 1,
@@ -341,7 +341,7 @@
       "ontology_options": {},
       "planning": 1,
       "presentation_version": "sealed-facility-v3",
-      "public_evidence_sha256": "a0c88439b6bc2e87c5e811c01c833eba13f1147263ec2939e0135342e7e0cd63",
+      "public_evidence_sha256": "a85faab630164850f7b6796a5f227f4d032dfb383dd568be49e4d0e8a4af2c91",
       "public_investigation_sha256": "2f7f7e2ebf9f0abace8d842c365b1d135da32f97671a15d3e013e4343bd9364e",
       "qualification": {
         "changed_module": 1,
@@ -409,7 +409,7 @@
       },
       "planning": 0,
       "presentation_version": "sealed-facility-v3",
-      "public_evidence_sha256": "9743b8b8e99e58562e4af0d7648d67916515742ee97948bbc98418b621d8f1e0",
+      "public_evidence_sha256": "18fc1be7d5fdc28b8947daa5816b350bee4e9c073718aecacf620bb32dc7c807",
       "public_investigation_sha256": "cdd61b25b2cedd289c8fced65ef8406a20e1f6e5abd41706a3f0a4133cecc0e1",
       "qualification": {
         "behavior_class": 32,
@@ -462,7 +462,7 @@
       },
       "planning": 0,
       "presentation_version": "sealed-facility-v3",
-      "public_evidence_sha256": "aa7569fb92801d6cd4e09bf099aa897d276a132251dd543d059dd85521951837",
+      "public_evidence_sha256": "3287bc1a890436a8e708aeb0e22fac61059d8bb499aaddf02f9b59aae578c4ad",
       "public_investigation_sha256": "34fe8f75a2bf6ae3029a915b94601ea8f3c09eadaf07c4e962a329ecbcc144c0",
       "qualification": {
         "behavior_class": 32,
@@ -520,7 +520,7 @@
       },
       "planning": 0,
       "presentation_version": "sealed-facility-v3",
-      "public_evidence_sha256": "c24927ad3466f5bc85f36711cdff60669b46a8654aad759867f76f176707f446",
+      "public_evidence_sha256": "64bf7e252decb4f8ecedf69324051992808df28e8abd22f03d14514e7b5427d3",
       "public_investigation_sha256": "89752a5d725587af07e2b1312099fbe4ef78992aad718941c44f27c728ed6caf",
       "qualification": {
         "behavior_class": 99,
@@ -573,7 +573,7 @@
       },
       "planning": 0,
       "presentation_version": "sealed-facility-v3",
-      "public_evidence_sha256": "a2b142b457aa6c1c97ace5eecd45a68857a3b7bea92527153d6f89930bd6e51b",
+      "public_evidence_sha256": "3633eda34305888055c7155eda76463ae8262170ddad4573f0ac0202ae78d739",
       "public_investigation_sha256": "caed9a79e323925444289d3ce484ab9846bfe0863f349a8b52a20f64220caff8",
       "qualification": {
         "behavior_class": 99,
@@ -625,7 +625,7 @@
       "ontology_options": {},
       "planning": 1,
       "presentation_version": "sealed-facility-v3",
-      "public_evidence_sha256": "13f81d79ae4714e26134bbfaea562f29da9369f5bcc7274ddc55262b46efac26",
+      "public_evidence_sha256": "d0b90aace24e3e26dd11db3d58b2403bfb1cb891f3524ecdd099082777d30837",
       "public_investigation_sha256": "474582ef1811968334ee88700eeb4ea70c8b402982fdf379123c0df946028f1a",
       "qualification": {
         "changed_module": 1,
@@ -684,7 +684,7 @@
       "ontology_options": {},
       "planning": 1,
       "presentation_version": "sealed-facility-v3",
-      "public_evidence_sha256": "a0c88439b6bc2e87c5e811c01c833eba13f1147263ec2939e0135342e7e0cd63",
+      "public_evidence_sha256": "a85faab630164850f7b6796a5f227f4d032dfb383dd568be49e4d0e8a4af2c91",
       "public_investigation_sha256": "2f7f7e2ebf9f0abace8d842c365b1d135da32f97671a15d3e013e4343bd9364e",
       "qualification": {
         "changed_module": 1,
@@ -747,7 +747,7 @@
       "ontology_options": {},
       "planning": 1,
       "presentation_version": "sealed-facility-v3",
-      "public_evidence_sha256": "a0c88439b6bc2e87c5e811c01c833eba13f1147263ec2939e0135342e7e0cd63",
+      "public_evidence_sha256": "a85faab630164850f7b6796a5f227f4d032dfb383dd568be49e4d0e8a4af2c91",
       "public_investigation_sha256": "2f7f7e2ebf9f0abace8d842c365b1d135da32f97671a15d3e013e4343bd9364e",
       "qualification": {
         "changed_module": 1,
@@ -806,7 +806,7 @@
       "ontology_options": {},
       "planning": 1,
       "presentation_version": "sealed-facility-v3",
-      "public_evidence_sha256": "a43807a41bc02d0e5f8f86baa92577760e47214b8f7d0be8c862631a3d46152b",
+      "public_evidence_sha256": "73eb467ff4775494f0fcab32a89f80cddeb34ddbce11a0d973fa065a35c0ff0b",
       "public_investigation_sha256": "0c3834bfe85d5989e6e32b3ab6d38eb6b4c45c04f218fc15581639568d67e153",
       "qualification": {
         "changed_module": 2,
@@ -865,7 +865,7 @@
       "ontology_options": {},
       "planning": 1,
       "presentation_version": "sealed-facility-v3",
-      "public_evidence_sha256": "a0c88439b6bc2e87c5e811c01c833eba13f1147263ec2939e0135342e7e0cd63",
+      "public_evidence_sha256": "a85faab630164850f7b6796a5f227f4d032dfb383dd568be49e4d0e8a4af2c91",
       "public_investigation_sha256": "2f7f7e2ebf9f0abace8d842c365b1d135da32f97671a15d3e013e4343bd9364e",
       "qualification": {
         "changed_module": 2,
@@ -928,7 +928,7 @@
       "ontology_options": {},
       "planning": 1,
       "presentation_version": "sealed-facility-v3",
-      "public_evidence_sha256": "a0c88439b6bc2e87c5e811c01c833eba13f1147263ec2939e0135342e7e0cd63",
+      "public_evidence_sha256": "a85faab630164850f7b6796a5f227f4d032dfb383dd568be49e4d0e8a4af2c91",
       "public_investigation_sha256": "2f7f7e2ebf9f0abace8d842c365b1d135da32f97671a15d3e013e4343bd9364e",
       "qualification": {
         "changed_module": 2,
@@ -3498,7 +3498,7 @@
     }
   ],
   "scope": "Two purpose-selected fresh seeds per family, no live outcomes used for selection. Distinct behavior classes/repair observation and acceptance signatures/PR kernels checked against committed historical matrices; not a random population sample or a proof of nonisomorphism. Reading certificates are not cognitive depth measures.",
-  "source_sha256": "0f15c5a4529557966a05f3a03f2fb137d8e891da047600b7684e60cb138b2f59",
+  "source_sha256": "d4edddbc5066ca0faa2f42e99b1a4586dfc49e7663627cb90c446900bf7b17b2",
   "sources": {
     "__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
     "cli.py": "704f16915fe807f33a054813e0c363ca70bcc352140c0101add6fc87472d4704",
@@ -3771,7 +3771,8 @@
     "ontology/uncertainty/runtime.py": "662be74da7e2e1fcd6cd3356ca3731f6eca2930b1ba8974d28029c9261b247d9",
     "ontology/uncertainty/schema.py": "99f2a9ec59c0725731941f42573d4ca9269647ea4bc0885b0c4646736041f976",
     "presentation/__init__.py": "bd8fba07a4df6f61066f8997e0f83fd1f9889611c70ce60d50ee359822a17ec9",
-    "presentation/console.py": "eda62e6d67b05faecb2d8d7ddf229dc8a0f61e5fa4c032f4aca07c0797957c68",
+    "presentation/console.py": "6ceef725374d69735e1db5d3db273e2dc6579e63e48aaf1f6da1b74a082cec93",
+    "presentation/laboratory.py": "22d2046603ca06cf9d57dee0dc8fd0da3f8d618720b2b84cdd2bde0451b922cf",
     "protocol/__init__.py": "e3b32fa236602d61f8591e0944c0a1cc6b12cbbc97e147ad9e22b42b5c77d9a6",
     "protocol/audit.py": "0bab907317fc93bc3cd80fc76c60037ada5ac2297e0944c9a2ba2357cddd5d4c",
     "protocol/client.py": "ee597a223a0a3df9b14f2e0c3d7e0dd1d1a637ec0672970017fd7d59cce6ec87",
@@ -3809,5 +3810,5 @@
   },
   "status": "passed",
   "version": "fresh-world-preflight-v1",
-  "seconds": 21.438076273999286
+  "seconds": 21.859705781000002
 }

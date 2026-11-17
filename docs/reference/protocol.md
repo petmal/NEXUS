@@ -228,3 +228,12 @@ it through the evaluator’s finalization or audit interface. A terminal victory
 receipt remains in the player reply. Prior versions keep their wire behavior.
 Compare runs using the recorded presentation version and presented evidence hash.
 Terminal editing, shorthand and the local log do not change the JSON action protocol.
+
+The survey and routing laboratories also label configuration, preparation,
+measurement and installation. Readings are included in action messages and the
+local log as well as structured events. A preview leaves the artifact unchanged;
+an operated reader or sensor stores a historical measurement. Neither a doser
+preview nor an assembler preview checks the mission. The routing reader always
+measures the facility reference, even when the carrier has a cartridge installed.
+Apparatus records describe these distinctions and preserve the selected finish
+policy. These explanations use only public controls and returned results.
