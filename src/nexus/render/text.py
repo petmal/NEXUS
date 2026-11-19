@@ -5,7 +5,7 @@ from nexus.models.episode import PublicEpisode
 from nexus.models.observation import Observation, VisibleItem, VisibleStock
 from nexus.models.domain import DomainArtifact, DomainStock
 from nexus.models.world import INVENTORY, WorldState
-from nexus.presentation import room_label
+from nexus.presentation import CONSOLE_VERSIONS, room_label
 
 
 def _neighbors(episode: PublicEpisode, room_id: str) -> tuple[str, ...]:
@@ -21,7 +21,7 @@ def _neighbors(episode: PublicEpisode, room_id: str) -> tuple[str, ...]:
 def observation(episode: PublicEpisode, state: WorldState) -> Observation:
     room_id = state.agent_room
     def visible(item):
-        if episode.presentation_version == "sealed-facility-v3" and isinstance(item, (DomainArtifact, DomainStock)):
+        if episode.presentation_version in CONSOLE_VERSIONS and isinstance(item, (DomainArtifact, DomainStock)):
             model = VisibleStock if isinstance(item, DomainStock) else VisibleItem
             values = item.model_dump(exclude={"ontology", "version"})
             from nexus.presentation.console import REGISTER_WORLDS

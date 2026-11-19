@@ -22,9 +22,19 @@ def parse(line, actions):
     fields = FIELDS[verb]
     if verb == "configure" and len(args) >= 2:
         try:
-            return {"type": verb, "machine": args[0], "settings": [int(s) for s in args[1:]]}
+            # Preserve JSON quotes: shlex would otherwise turn ["1"] into [1].
+            lexer = shlex.shlex(line, posix=True)
+            lexer.whitespace_split = True
+            lexer.commenters = ""
+            next(lexer)  # command
+            next(lexer)  # machine
+            raw = lexer.instream.read().strip()
+            settings = json.loads(raw) if raw.startswith("[") else [int(s) for s in args[1:]]
+            if not isinstance(settings, list) or not settings or any(type(v) is not int for v in settings):
+                raise ValueError("settings must be a nonempty integer array")
+            return {"type": verb, "machine": args[0], "settings": settings}
         except ValueError:
-            raise ValueError("Usage: configure MACHINE INTEGER ...") from None
+            raise ValueError("Usage: configure MACHINE INTEGER ... or configure MACHINE [INTEGER,...]. Use integers only.") from None
     if len(args) != len(fields) or verb == "configure":
         usage = "MACHINE INTEGER ..." if verb == "configure" else " ".join(f.upper() for f in fields)
         raise ValueError(f"Usage: {verb} {usage}".rstrip())

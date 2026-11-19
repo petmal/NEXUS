@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from nexus.presentation import CONSOLE_VERSIONS
+
 from collections import Counter
 from threading import RLock
 
@@ -194,7 +196,7 @@ class Session:
     def act(self, expected_turn: int, action: Action, *, player_only: bool = False) -> ActionResponse:
         def apply():
             response = self._act(expected_turn, action)
-            if player_only and self.episode.public.presentation_version == "sealed-facility-v3":
+            if player_only and self.episode.public.presentation_version in CONSOLE_VERSIONS:
                 return response.model_copy(update={"performance": None})
             return response
 
@@ -487,7 +489,7 @@ class Session:
 
             events = tuple(event.model_dump(mode="json") for event in result.events)
             message = result.message
-            if self.episode.public.presentation_version == "sealed-facility-v3":
+            if self.episode.public.presentation_version in CONSOLE_VERSIONS:
                 from nexus.presentation.console import action_result
                 item = previous_state.artifacts.get(getattr(action, "artifact", ""))
                 message = action_result(self.episode.public, action, events, message,

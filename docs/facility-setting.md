@@ -59,14 +59,14 @@ See the [play guide](play-guide.md) for commands and a guided first visit.
 
 ## Presentation and reproducibility
 
-New worlds use `sealed-facility-v3`. Their records describe this run’s instruments and disclosures. The same introduction and terminology reach
+New worlds use `sealed-facility-v4`. Their records describe this run’s instruments and disclosures. The same introduction and terminology reach
 human and model players through the manifest and the listed manual or `facility.txt`.
 The presentation uses only public information. It does not change identifiers,
 numeric values, formal laws, action costs, goals or acceptance rules. Canonical
 evidence remains available to qualification; player-facing exports use the same
 rendering as the service and local interface.
 
-Saved `sealed-facility-v1` and `sealed-facility-v2` worlds retain their original text. Worlds without a
+Saved `sealed-facility-v1`, `sealed-facility-v2` and `sealed-facility-v3` worlds retain their original text. Worlds without a
 presentation version retain their canonical text. For an old/new wording control,
 use `generate_episode(..., presentation_version="sealed-facility-v1")`; use `None`
 for canonical presentation. Record the version and source digest when comparing

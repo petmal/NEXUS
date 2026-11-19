@@ -79,7 +79,8 @@ def _print_action_reference(*, scientific: bool = False, resonant: bool = False,
 def _print_play_reference(*, scientific: bool = False, resonant: bool = False, contract=None) -> None:
     _print_action_reference(scientific=scientific, resonant=resonant, contract=contract)
     console.print("Short forms: move ROOM, take ID, drop ID, probe MACHINE ID, operate MACHINE ID, "
-                  "wait, finish. For configurable machines: configure MACHINE INTEGER ... . "
+                  "wait, finish. For configurable machines: configure MACHINE INTEGER ... "
+                  "or configure MACHINE [INTEGER,...]. "
                   "Use log to review this session. JSON actions still work.", markup=False)
     contract = contract or {}
     assistance = contract.get("apparatus", contract.get("ontology", {})).get("assistance")
@@ -298,6 +299,8 @@ def _play(episode, *, debug_private=False, audit_dir=None):
     recorder = AuditRecorder(session, audit_dir) if audit_dir is not None else None
     try:
         manifest = session.manifest()
+        laboratory = (getattr(episode.public.investigation, "ontology", None)
+                      if manifest.presentation_version == "sealed-facility-v4" else None)
         console.print(manifest.description, markup=False)
         console.print("Read the mission and evidence, make a plan, then use finish to claim success.")
         console.print("Evidence files: " + ", ".join(manifest.evidence_files), markup=False)
@@ -310,7 +313,7 @@ def _play(episode, *, debug_private=False, audit_dir=None):
             console.print("[yellow]Unscored operator mode: private information is visible.[/yellow]")
         while True:
             view = session.observe()
-            render_player(view, console=console)
+            render_player(view, console=console, family=laboratory)
             if debug_private:
                 from nexus.render.observer import render_observer
                 render_observer(episode, session.state_snapshot(), console=console, debug_private=True)
@@ -340,7 +343,10 @@ def _play(episode, *, debug_private=False, audit_dir=None):
                     continue
                 try:
                     content = session.evidence(parts[1])
-                    if parts[1].endswith(".json"):
+                    if parts[1] == "theory.json" and laboratory is not None:
+                        from nexus.render.laboratory import render_theory
+                        render_theory(content, laboratory, console)
+                    elif parts[1].endswith(".json"):
                         console.print_json(content)
                     else:
                         console.print(content, markup=False, highlight=False)
@@ -369,7 +375,7 @@ def _play(episode, *, debug_private=False, audit_dir=None):
                 if recorder is not None:
                     recorder.checkpoint_safely()
                 if response.victory_code:
-                    if manifest.presentation_version in ("sealed-facility-v2", "sealed-facility-v3"):
+                    if manifest.presentation_version in ("sealed-facility-v2", "sealed-facility-v3", "sealed-facility-v4"):
                         console.print("Exit clearance granted. Your visit to NEXUS is complete.")
                     console.print("Victory receipt: " + response.victory_code, markup=False)
     finally:
