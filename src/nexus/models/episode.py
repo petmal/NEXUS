@@ -9,7 +9,7 @@ from nexus.models.actions import action_contract
 from nexus.models.goals import GoalPredicate
 from nexus.models.rules import Effect
 from nexus.models.world import Room, WorldState
-from nexus.presentation import PresentationVersion
+from nexus.presentation import CONSOLE_VERSIONS, PresentationVersion
 from nexus.models.investigation import InvestigationSpec, InvestigationTruth
 from nexus.models.network import NetworkSample, NetworkSpec, NetworkStock, NetworkTruth
 
@@ -105,7 +105,7 @@ class PlayerManifest(BaseModel):
 
         controls = (runtime_for(episode.investigation).public_contract(episode.investigation)
                     if episode.investigation is not None else action_contract())
-        if episode.presentation_version == "sealed-facility-v3":
+        if episode.presentation_version in CONSOLE_VERSIONS:
             from nexus.presentation.console import contract
             controls = contract(controls)
         return cls(

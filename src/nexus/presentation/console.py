@@ -114,6 +114,8 @@ def action_result(public, action, events, message, *, already_collapsed=False):
         result.pop("version", None)
         if family in {"compositional-repair-v1", "model-revision-v1"} and action.type in ("probe", "operate"):
             from nexus.presentation.laboratory import result_message
+            if public.presentation_version == "sealed-facility-v4":
+                from nexus.presentation.laboratory_v4 import result_message
             message = result_message(family, action, result["payload"]) or message
         if family not in REGISTER_WORLDS or action.type not in ("probe", "operate"):
             continue

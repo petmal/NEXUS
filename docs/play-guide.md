@@ -36,7 +36,9 @@ learn an alien language or find a hidden story clue.
 
 Type one command per line, for example `take seal`, `move array`, or
 `probe vek seal` if those IDs are present. Enter `configure MACHINE 1 0 2` for
-a machine that accepts those settings. In a terminal, use Left/Right to edit,
+a machine that accepts those settings; `configure MACHINE [1,0,2]` is equivalent.
+Both forms use the machine's listed ranges; invalid values are not reduced modulo.
+In a terminal, use Left/Right to edit,
 Up/Down for this session’s history, and Tab to complete commands or visible IDs.
 Raw JSON such as `{"type":"take","artifact":"seal"}` works too. Use `log` to
 review actions without replaying them; restarting begins a new log.
@@ -139,6 +141,15 @@ Find one treatment that works for four conditions across two contexts. Unlike
 the four-register world, you can take fresh surveys from stock. Each survey
 keeps its own preparation. The sensor reads that survey, not the seal.
 
+The three graphs in the theory are alternative wiring patterns. `n1`, `n2` and
+`n3` are calculated values, not persistent registers. Functions may use the same
+primitive more than once. All calculations use modulo 3.
+
+Both contexts share one graph. Context 1 replaces exactly one function; the other
+two stay unchanged. It also adds the output offset `d`. Setting `d=0` removes only
+that offset, **not the changed function**. You can experiment in either context
+from the start; neither context is the facility phase shown by `look`.
+
 ```bash
 uv run --frozen --no-dev nexus generate ../nexus-repair-play --axis-version 2 \
   --science-family compositional-repair-v1 --seed 541 \
@@ -152,6 +163,12 @@ by `take stock` in later actions. The stage accepts eight numbers in this order:
 to the survey; probing sensor measures its actual preparation. A stage preview
 does neither. The doser takes `a b c d`; operating it on the seal applies your
 treatment. Only `finish` tests the complete mission.
+
+`evidence theory.json` shows the fixed exit checks as a table. Their inputs do not
+change when you configure the stage: one treatment must pass every row, not a
+sequence of tasks. A valid treatment exists, but it need not be unique. The console
+labels pending machine settings, applied survey preparation and installed seal
+treatment separately. `log` retains the actual preparation with each sensor result.
 
 This setting allows 30 actions. For six extra actions on the same puzzle, add
 `--budget-profile diagnostic-plus6` when generating into another directory.
@@ -176,3 +193,15 @@ takes four link indices from the list in the theory. Configure selects a build;
 operate installs it. A preview does not install or validate it. Finish compares
 the installed cartridge with the reference across every finite mode sequence.
 This setting allows 64 actions and retries after a rejected eligible finish.
+
+`evidence theory.json` shows each link's index, source and destination. Index 0
+means the first listed link, not reservoir 0. The four cartridge slots select the
+first and second links for mode 0, then the first and second links for mode 1;
+repeated choices are allowed. Each transfer uses the inventory left by the previous
+transfer. Reservoir counts are ordinary integers; only the stated remainders are
+modular. The final display is `q0 % 3`, not the complete inventory.
+
+The archive contains trusted measurements. If you choose a setup that supplies
+a provisional model, treat it as an explanation to investigate, not another law
+or an already installed cartridge. The command above supplies the principles
+without that provisional explanation. Read `apparatus.txt` for the controls.
