@@ -108,6 +108,11 @@ class PlayerManifest(BaseModel):
         if episode.presentation_version in CONSOLE_VERSIONS:
             from nexus.presentation.console import contract
             controls = contract(controls)
+        if episode.presentation_version == "sealed-facility-v5":
+            from nexus.presentation.devices import public_catalog
+            devices = public_catalog(getattr(episode.investigation, "ontology", None))
+            if devices:
+                controls["apparatus"]["devices"] = devices
         return cls(
             protocol_version=episode.protocol_version,
             episode_id=episode.episode_id,

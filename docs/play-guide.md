@@ -24,6 +24,7 @@ apparatus, and actions remaining. It does not show unseen objects elsewhere.
 | `evidence filename` | Read a listed file, such as `theory.json` |
 | `log` | Review this session’s actions and the readings they returned, in order |
 | `help` | Show this world’s commands and JSON examples |
+| `help DEVICE` | In Repair and Model Revision, explain one device’s settings, targets and action effects |
 | `quit` | Stop this local session |
 
 These commands do not spend an environment action. File names and object IDs
@@ -175,9 +176,18 @@ This setting allows 30 actions. For six extra actions on the same puzzle, add
 
 ### Model revision: reconstruct a routing cartridge
 
-Investigate how two modes move packets between reservoirs. The reader tests the
-facility's reference device from its initial inventory every time. Consecutive
-queries do not continue the previous query, and they do not test your cartridge.
+Build a replacement that behaves like the facility's reference device. Both have
+two modes, 0 and 1; each mode moves packets through two directed links. You choose
+four links for your replacement cartridge, install it on `carrier`, and submit it
+with `finish`. Starting from the same initial inventory, its final display must
+match the reference for every mode sequence. Different internal wiring is accepted
+when its displayed behavior always matches.
+
+The reader measures the reference device from its initial inventory every time.
+Queries do not continue the previous query, and they do not test your cartridge.
+Use `help reader` or `help assembler` for settings, effects and one standalone usage
+example. Examples explain the controls; they contain no measured results or
+recommended experiment sequence.
 
 ```bash
 uv run --frozen --no-dev nexus generate ../nexus-revision-play --axis-version 2 \
@@ -187,8 +197,8 @@ uv run --frozen --no-dev nexus generate ../nexus-revision-play --axis-version 2 
 uv run --frozen --no-dev nexus play ../nexus-revision-play/private.json
 ```
 
-Take `carrier`. For example, `configure reader 0 1 0` selects a sequence of three
-modes; `probe reader carrier` reports its final reference display. The assembler
+For example, `configure reader [0,1,0]` stores three mode numbers without running
+them or changing an artifact. See `help reader` for measurement controls. The assembler
 takes four link indices from the list in the theory. Configure selects a build;
 operate installs it. A preview does not install or validate it. Finish compares
 the installed cartridge with the reference across every finite mode sequence.

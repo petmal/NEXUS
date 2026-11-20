@@ -50,6 +50,21 @@ def render_theory(content, family, console):
     if family not in (REPAIR, REVISION) or not isinstance(data, dict):
         console.print_json(content)
         return
+    if task := data.pop("task", None):
+        console.print("YOUR TASK", style="bold")
+        for text in task.values():
+            console.print(text, markup=False, highlight=False)
+    if terms := data.pop("terms", None):
+        table = Table(title="Terms used in this task")
+        table.add_column("Term")
+        table.add_column("Meaning")
+        for term, meaning in terms.items():
+            table.add_row(Text(term), Text(meaning))
+        console.print(table)
+    if devices := data.pop("devices", None):
+        for name, device in devices.items():
+            render_device(name, device, console)
+        console.print("DETAILED RULES", style="bold")
     if family == REPAIR:
         graphs, checks = data.pop("graphs"), data.pop("mission")
         console.print_json(data=data)
@@ -73,3 +88,36 @@ def render_theory(content, family, console):
         for i, (source, destination) in enumerate(links):
             table.add_row(str(i), f"q{source}", f"q{destination}")
     console.print(table)
+
+
+def render_device(name, device, console):
+    """One public device definition serves both theory and help; examples are not run."""
+    console.rule(Text(name))
+    console.print(device["description"], markup=False, highlight=False)
+    console.print("Targets: " + device["targets"], markup=False, highlight=False)
+    settings = device["settings"]
+    if settings is None:
+        console.print("Settings: none; this device does not accept configure.")
+    else:
+        console.print("Settings: " + settings["description"], markup=False, highlight=False)
+        schema = settings["schema"]
+        table = Table(title=f"{schema['minItems']}..{schema['maxItems']} settings")
+        for label in ("Parameter", "Allowed integers", "Meaning"):
+            table.add_column(label)
+        constraints = schema.get("prefixItems", [schema.get("items")])
+        for parameter, constraint in zip(settings["order"], constraints, strict=True):
+            meaning = settings["parameters"][parameter]
+            table.add_row(Text(parameter), f"{constraint['minimum']}..{constraint['maximum']}", Text(meaning))
+        console.print(table)
+    for action in ("configure", "probe", "operate"):
+        if (description := device["actions"].get(action)) is None:
+            continue
+        console.print(f"{action} ({description['action_cost']} action): " + description["effect"], markup=False, highlight=False)
+        console.print("Returns: " + description["returns"], markup=False, highlight=False)
+    for example in device["examples"]:
+        action = example["action"]
+        args = json.dumps(action["settings"]) if action["type"] == "configure" else action["artifact"]
+        console.print("Standalone usage example", style="bold")
+        console.print("Requires: " + example["requires"], markup=False, highlight=False)
+        console.print(f"{action['type']} {action['machine']} {args}", markup=False, highlight=False)
+        console.print("Effect: " + example["effect"], markup=False, highlight=False)
