@@ -43,6 +43,21 @@ formal records complete; prose cannot override an action or goal contract. Use t
 shared presentation layer for player output, preserve historical presentation
 versions, and extend the public-surface tests when adding a family.
 
+Start player instructions with what must be produced and the exact success
+condition. Introduce terms in the order needed to understand that task. The
+[shared device records](../src/nexus/presentation/devices.py), used first by Repair
+and Model Revision, give every device the same description/settings/targets/actions/
+examples structure. Settings schemas come from the existing public payload types.
+The service, evidence and local device help share those definitions.
+
+Keep each device example to one independent action, with its own prerequisites
+and immediate effect. Do not calculate a sample measurement from the selected
+world, select values from a hidden solution, reveal diagnostic intermediate values,
+or connect examples into an experiment or inference strategy. A syntax example
+may describe an output's type or range, but must not supply its unknown value.
+Tests should execute examples independently, check costs and state changes, and
+verify that rendering never calls the scientific laws, solver or measurement code.
+
 ## Extension points
 
 | Component | Responsibility | Existing example |

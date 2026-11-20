@@ -1,0 +1,44 @@
+{
+  "repair": {
+    "seed": 541,
+    "family": "compositional-repair-v1",
+    "theory": 3,
+    "discovery": 5,
+    "options": {},
+    "sha256": "e5387af1c4fef12fa67cb0c753c5fe9103d5c6f2462da3221f17b455c2db9505"
+  },
+  "repair-disclosed": {
+    "seed": 541,
+    "family": "compositional-repair-v1",
+    "theory": 0,
+    "discovery": 0,
+    "options": {},
+    "sha256": "c7a0e8a90de3358b6dfcb5133aba7aeca79d56208a15937afb0b93c49801a8b4"
+  },
+  "revision": {
+    "seed": 2073,
+    "family": "model-revision-v1",
+    "theory": 3,
+    "discovery": 5,
+    "options": {},
+    "sha256": "28ec99d953b14f51dc0eac598995d582645d2921426b4a39cebca70612c1b4c4"
+  },
+  "revision-single": {
+    "seed": 2073,
+    "family": "model-revision-v1",
+    "theory": 3,
+    "discovery": 5,
+    "options": {
+      "finish_policy": "single"
+    },
+    "sha256": "fb94e4017c772db16c75f6012308aa950bc448a350f62c7f64367b103ef8ab50"
+  },
+  "revision-disclosed": {
+    "seed": 2073,
+    "family": "model-revision-v1",
+    "theory": 0,
+    "discovery": 0,
+    "options": {},
+    "sha256": "ed09f341f1a74bb86d36a3fd8f67851e7bc50728b5f697bbdd62db468928bde3"
+  }
+}

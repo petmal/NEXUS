@@ -83,6 +83,9 @@ def _print_play_reference(*, scientific: bool = False, resonant: bool = False, c
                   "or configure MACHINE [INTEGER,...]. "
                   "Use log to review this session. JSON actions still work.", markup=False)
     contract = contract or {}
+    devices = contract.get("apparatus", {}).get("devices", {})
+    if devices:
+        console.print("Device help: " + ", ".join("help " + name for name in devices), markup=False)
     assistance = contract.get("apparatus", contract.get("ontology", {})).get("assistance")
     if assistance and assistance["operation"] == "check":
         console.print("Optional construction check (free): "
@@ -300,7 +303,7 @@ def _play(episode, *, debug_private=False, audit_dir=None):
     try:
         manifest = session.manifest()
         laboratory = (getattr(episode.public.investigation, "ontology", None)
-                      if manifest.presentation_version == "sealed-facility-v4" else None)
+                      if manifest.presentation_version in ("sealed-facility-v4", "sealed-facility-v5") else None)
         console.print(manifest.description, markup=False)
         console.print("Read the mission and evidence, make a plan, then use finish to claim success.")
         console.print("Evidence files: " + ", ".join(manifest.evidence_files), markup=False)
@@ -328,14 +331,23 @@ def _play(episode, *, debug_private=False, audit_dir=None):
             if command in {"quit", "exit"}:
                 break
             if command in {"help", "actions", "?"}:
-                _print_play_reference(contract=manifest.action_contract)
+                devices = manifest.action_contract.get("apparatus", {}).get("devices", {})
+                if command == "help" and len(parts) == 2 and devices:
+                    from nexus.render.laboratory import render_device
+                    if device := devices.get(parts[1].strip()):
+                        render_device(parts[1].strip(), device, console)
+                    else:
+                        console.print("Unknown device. Available device help: " + ", ".join(devices), markup=False)
+                else:
+                    _print_play_reference(contract=manifest.action_contract)
             elif command in {"look", "status", ""}:
                 continue
             elif command == "log":
                 console.print("\n".join(history) or "No actions yet.", markup=False, highlight=False)
             elif command == "mission":
                 console.print(manifest.description, markup=False)
-                console.print_json(data=manifest.goal.model_dump(mode="json"))
+                if not manifest.action_contract.get("apparatus", {}).get("devices"):
+                    console.print_json(data=manifest.goal.model_dump(mode="json"))
                 console.print("Evidence files: " + ", ".join(manifest.evidence_files), markup=False)
             elif command == "evidence":
                 if len(parts) != 2:
@@ -375,7 +387,7 @@ def _play(episode, *, debug_private=False, audit_dir=None):
                 if recorder is not None:
                     recorder.checkpoint_safely()
                 if response.victory_code:
-                    if manifest.presentation_version in ("sealed-facility-v2", "sealed-facility-v3", "sealed-facility-v4"):
+                    if manifest.presentation_version in ("sealed-facility-v2", "sealed-facility-v3", "sealed-facility-v4", "sealed-facility-v5"):
                         console.print("Exit clearance granted. Your visit to NEXUS is complete.")
                     console.print("Victory receipt: " + response.victory_code, markup=False)
     finally:

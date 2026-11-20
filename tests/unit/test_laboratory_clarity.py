@@ -99,7 +99,7 @@ def test_same_clarified_evidence_on_both_transports_and_export(laboratory, tmp_p
         assert "d=0 removes that offset only" in shown["context"]
         assert "same primitive may be used more than once" in shown["notation"]["choices"]
         assert "not persistent registers" in shown["notation"]["nodes"]
-        assert shown["settings_order"]["stage"] == ["context", "x", "y", "z", "a", "b", "c", "d"]
+        assert shown["devices"]["stage"]["settings"]["order"] == ["context", "x", "y", "z", "a", "b", "c", "d"]
     else:
         assert "zero-based" in shown["notation"]["link_indices"]
         assert "ordinary nonnegative integers" in shown["notation"]["operators"]
@@ -169,10 +169,11 @@ def test_reference_policy_preserves_actions_state_and_receipt(laboratory):
     from nexus.ontology.discovery.policy import public_policy as revision_policy
 
     policy = repair_policy if laboratory.public.investigation.ontology == REPAIR else revision_policy
-    sessions = [Session(attach(laboratory, version)) for version in ("sealed-facility-v3", "sealed-facility-v4")]
+    sessions = [Session(attach(laboratory, version)) for version in ("sealed-facility-v3", "sealed-facility-v4", "sealed-facility-v5")]
     for session in sessions:
         policy(session, evidence_files(session.episode.public))
         assert session.state.terminal_status.value == "won"
-    assert sessions[0].trace == sessions[1].trace
-    assert sessions[0].state == sessions[1].state
-    assert sessions[0].trace[-1].victory_code == sessions[1].trace[-1].victory_code
+    for session in sessions[1:]:
+        assert sessions[0].trace == session.trace
+        assert sessions[0].state == session.state
+        assert sessions[0].trace[-1].victory_code == session.trace[-1].victory_code

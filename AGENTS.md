@@ -59,6 +59,13 @@ readout semantics.
   the delivered text separately from its compiled source. Return independent
   instruction/observation objects; one Python player must not change another's
   inputs. A retry is identified by both the original turn and action.
+- Player instructions begin with the concrete task and success condition, then
+  introduce terms in the order needed. Device help uses public parameter types
+  and distinguishes configuration, preview and application. Usage examples are
+  standalone single actions with explicit prerequisites and immediate effects;
+  never compute example readings from hidden truth, supply a candidate solution,
+  or teach an experiment sequence or inference strategy. Test examples and their
+  privacy boundary. See the shared [device records](src/nexus/presentation/devices.py).
 - Separate a physical win, an issued receipt and a harness-accepted answer.
   Separate a winning witness, a proven minimum and a public-policy upper
   bound. Do not interpret missing diagnostics or an uncapped budget as zero.
