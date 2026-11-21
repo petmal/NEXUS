@@ -1,7 +1,6 @@
 """The tutorial must work without private hints, credentials or a paid model call."""
 
 import json
-import re
 import runpy
 from pathlib import Path
 
@@ -14,13 +13,13 @@ ROOT = Path(__file__).resolve().parents[2]
 EXAMPLE = ROOT / "examples/mindtrial"
 
 
-def test_documented_demo_actions_reach_the_advertised_ending():
-    guide = (ROOT / "docs/play-guide.md").read_text()
-    snippet = re.search(r"^```jsonl\n(.*?)^```", guide, flags=re.M | re.S).group(1)
-    result = CliRunner().invoke(app, ["demo", "--play"], input=snippet)
+def test_opt_in_demo_tutorial_reaches_the_advertised_ending():
+    # The player guide no longer gives the route. Its explicit demo command
+    # remains a complete, unscored tutorial that must reach a real victory.
+    result = CliRunner().invoke(app, ["demo"])
     assert result.exit_code == 0, result.stdout
     assert "turn 9 · won" in result.stdout and "Actions left: 10" in result.stdout
-    assert "Victory receipt: NX-" in result.stdout
+    assert "Success was checked by the engine. Receipt: NX-" in result.stdout
 
 
 @pytest.mark.parametrize("provider,model,text", [

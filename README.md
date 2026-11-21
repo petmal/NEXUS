@@ -19,7 +19,7 @@ uv run --frozen --no-dev nexus demo --play
 
 No Docker, model account or API key is needed for local play. The first install may download Python and dependencies.
 
-At the console, type `mission` to read your goal, `look` to see the room, and `help` for the controls. In the introductory world, try `move R4`, then `look`. Use Tab to complete names, Up to edit your last command, or `log` to review what happened. JSON actions also work. You have spent one world action; reading the display is free. Type `quit` to leave. Prefer to watch first? Run `uv run --frozen --no-dev nexus demo` for a complete unscored playthrough. [See all nine actions](docs/play-guide.md#the-introductory-world-in-nine-actions).
+At the console, type `mission` to read your goal, `look` to see the room, and `help` for the controls. These commands are free. Use Tab to complete names, Up to edit your last command, or `log` to review what happened. JSON actions also work. Type `quit` to leave. The [play guide](docs/play-guide.md) explains the controls without giving a solution. Prefer to watch a complete solution first? Run `uv run --frozen --no-dev nexus demo` for an explicitly unscored tutorial.
 
 ## Send in a model
 
@@ -47,6 +47,8 @@ Your allowance drops from 19 actions to 9. To try discovery instead, replace `de
 | R — resources | Room to spend actions beyond a reference cost | Does the same plan still work without spare moves? |
 
 The settings belong to a world family; a “3” is not a universal difficulty score. NEXUS is experimental research software. It has identified differences between tested model configurations, without establishing a general model ranking.
+
+Want a different kind of puzzle? Try the [repair and routing laboratories](docs/play-guide.md#two-different-laboratories-to-try-next). Their `help DEVICE` commands explain each instrument’s settings and effects.
 
 **Where next:** [Design and read a comparison](docs/benchmark-guide.md) · [Research methods and metrics](docs/research-guide.md) · [All documentation](docs/README.md) · [Release status](docs/release-readiness.md)
 

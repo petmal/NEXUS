@@ -1,0 +1,54 @@
+{
+  "repair": {
+    "seed": 541,
+    "family": "compositional-repair-v1",
+    "theory": 3,
+    "discovery": 5,
+    "options": {},
+    "sha256": "239da049e9c5432b7ceb3fe2a362c267ceb32db8b3495c44cea2b9be7ad1d505",
+    "description": "You are inside NEXUS, a sealed artificial facility of unknown origin. A translated console is your link to its machinery. The exit interlock is closed; the console offers clearance when you complete the mission below. Use the supplied records and apparatus to meet its exact requirements. Some records supply the laws or a design; others leave questions to investigate. A successful finish returns a victory receipt: clearance is granted and your visit ends. No further escape action is needed.\n\nYOUR TASK\nPrepare one treatment for the portable seal so it passes all four fixed exit checks.\n\nYou choose four treatment settings [a,b,c,d]. Survey specimens let you measure responses to laboratory preparations; the seal is the part submitted at the exit.\n\nThe records describe the possible calculation rules. The two operating contexts share a graph, but one function differs between them.\n\nApply the same treatment to seal, carry it in array and call finish. Its response must be 0 at every listed context and input. Any treatment that passes all checks is accepted.",
+    "action_contract_sha256": "d16acb9e58d11383247115be5bc4a23ce374e9703a36baedc0594d622a275a69"
+  },
+  "repair-disclosed": {
+    "seed": 541,
+    "family": "compositional-repair-v1",
+    "theory": 0,
+    "discovery": 0,
+    "options": {},
+    "sha256": "193471287c37523777bd159a95033a7d5dc7d4735fbb5810f0dd51bd851e78f8",
+    "description": "You are inside NEXUS, a sealed artificial facility of unknown origin. A translated console is your link to its machinery. The exit interlock is closed; the console offers clearance when you complete the mission below. Use the supplied records and apparatus to meet its exact requirements. Some records supply the laws or a design; others leave questions to investigate. A successful finish returns a victory receipt: clearance is granted and your visit ends. No further escape action is needed.\n\nYOUR TASK\nPrepare one treatment for the portable seal so it passes all four fixed exit checks.\n\nYou choose four treatment settings [a,b,c,d]. Survey specimens let you measure responses to laboratory preparations; the seal is the part submitted at the exit.\n\nThe records describe the possible calculation rules. The two operating contexts share a graph, but one function differs between them.\n\nApply the same treatment to seal, carry it in array and call finish. Its response must be 0 at every listed context and input. Any treatment that passes all checks is accepted.",
+    "action_contract_sha256": "d16acb9e58d11383247115be5bc4a23ce374e9703a36baedc0594d622a275a69"
+  },
+  "revision": {
+    "seed": 2073,
+    "family": "model-revision-v1",
+    "theory": 3,
+    "discovery": 5,
+    "options": {},
+    "sha256": "36b9f41a50cb15e24fd0008f37591171139425bb7f51bcd0c4ca5aa2d7971313",
+    "description": "You are inside NEXUS, a sealed artificial facility of unknown origin. A translated console is your link to its machinery. The exit interlock is closed; the console offers clearance when you complete the mission below. Use the supplied records and apparatus to meet its exact requirements. Some records supply the laws or a design; others leave questions to investigate. A successful finish returns a victory receipt: clearance is granted and your visit ends. No further escape action is needed.\n\nYOUR TASK\nBuild a replacement routing cartridge whose displayed behavior matches the facility's reference device.\n\nYou choose four directed links: two for mode 0 and two for mode 1. The assembler installs this design as a cartridge on carrier.\n\nThe reference device moves five packets between four reservoirs. Each of its two modes executes two fixed links. The reader runs your chosen mode sequence on the reference from its initial inventory and reports one final display. The records state the transfer rule and what construction information is supplied.\n\nCarry carrier in workshop with a cartridge installed and call finish. Starting at the same initial inventory, it must match the reference's final display for every finite sequence of modes, including the empty sequence. Different wiring is accepted if its displayed behavior always matches.",
+    "action_contract_sha256": "a14e7d974911f6a5ef1d5d57cf738dcf45445be46e9c9023cea523a60acac129"
+  },
+  "revision-single": {
+    "seed": 2073,
+    "family": "model-revision-v1",
+    "theory": 3,
+    "discovery": 5,
+    "options": {
+      "finish_policy": "single"
+    },
+    "sha256": "32a38f6971e025885b9b8eeb580ddb444349125505fee304c0e3db574e1f3aa8",
+    "description": "You are inside NEXUS, a sealed artificial facility of unknown origin. A translated console is your link to its machinery. The exit interlock is closed; the console offers clearance when you complete the mission below. Use the supplied records and apparatus to meet its exact requirements. Some records supply the laws or a design; others leave questions to investigate. A successful finish returns a victory receipt: clearance is granted and your visit ends. No further escape action is needed.\n\nYOUR TASK\nBuild a replacement routing cartridge whose displayed behavior matches the facility's reference device.\n\nYou choose four directed links: two for mode 0 and two for mode 1. The assembler installs this design as a cartridge on carrier.\n\nThe reference device moves five packets between four reservoirs. Each of its two modes executes two fixed links. The reader runs your chosen mode sequence on the reference from its initial inventory and reports one final display. The records state the transfer rule and what construction information is supplied.\n\nCarry carrier in workshop with a cartridge installed and call finish. Starting at the same initial inventory, it must match the reference's final display for every finite sequence of modes, including the empty sequence. Different wiring is accepted if its displayed behavior always matches.",
+    "action_contract_sha256": "753a99618e62c3eaa064fc975ee4f756ef1c9b8532150f9a6b5c3854a363a7f9"
+  },
+  "revision-disclosed": {
+    "seed": 2073,
+    "family": "model-revision-v1",
+    "theory": 0,
+    "discovery": 0,
+    "options": {},
+    "sha256": "09a5d622981b19316463ec0b6832e2a5027a93e47f384cacb277e5a7ad5c612a",
+    "description": "You are inside NEXUS, a sealed artificial facility of unknown origin. A translated console is your link to its machinery. The exit interlock is closed; the console offers clearance when you complete the mission below. Use the supplied records and apparatus to meet its exact requirements. Some records supply the laws or a design; others leave questions to investigate. A successful finish returns a victory receipt: clearance is granted and your visit ends. No further escape action is needed.\n\nYOUR TASK\nBuild a replacement routing cartridge whose displayed behavior matches the facility's reference device.\n\nYou choose four directed links: two for mode 0 and two for mode 1. The assembler installs this design as a cartridge on carrier.\n\nThe reference device moves five packets between four reservoirs. Each of its two modes executes two fixed links. The reader runs your chosen mode sequence on the reference from its initial inventory and reports one final display. The records state the transfer rule and what construction information is supplied.\n\nCarry carrier in workshop with a cartridge installed and call finish. Starting at the same initial inventory, it must match the reference's final display for every finite sequence of modes, including the empty sequence. Different wiring is accepted if its displayed behavior always matches.",
+    "action_contract_sha256": "a14e7d974911f6a5ef1d5d57cf738dcf45445be46e9c9023cea523a60acac129"
+  }
+}

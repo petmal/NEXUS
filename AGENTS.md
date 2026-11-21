@@ -65,7 +65,9 @@ readout semantics.
   standalone single actions with explicit prerequisites and immediate effects;
   never compute example readings from hidden truth, supply a candidate solution,
   or teach an experiment sequence or inference strategy. Test examples and their
-  privacy boundary. See the shared [device records](src/nexus/presentation/devices.py).
+  privacy boundary. Explain object roles, display scope and public arithmetic literally;
+  do not turn playtest deductions into hints. Match no-op versus rejection wording to
+  the engine. Keep introductory docs and device help consistent. See the shared [device records](src/nexus/presentation/devices.py).
 - Separate a physical win, an issued receipt and a harness-accepted answer.
   Separate a winning witness, a proven minimum and a public-policy upper
   bound. Do not interpret missing diagnostics or an uncapped budget as zero.

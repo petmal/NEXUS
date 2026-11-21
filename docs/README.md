@@ -2,7 +2,7 @@
 
 | Start here if you want to… | Read in this order | What you can do afterwards |
 |---|---|---|
-| **1 · Play or try one model** | [Five-minute start](../README.md#play-your-first-world) → [guided playthrough](play-guide.md#the-introductory-world-in-nine-actions) → [one model in MindTrial](first-model.md) | Play a local world, recognize victory and read one model's result. The [setting](facility-setting.md) explains the names. |
+| **1 · Play or try one model** | [Five-minute start](../README.md#play-your-first-world) → [player controls](play-guide.md) → [one model in MindTrial](first-model.md) | Play a local world, recognize victory and read one model's result. The [setting](facility-setting.md) explains the names. |
 | **2 · Run and publish a comparison** | [Design a benchmark](benchmark-guide.md) → [connect a harness](evaluation-guide.md) → [fresh-world matrix](fresh-world-guide.md) | Choose a controlled change, configure a panel and distinguish world success, evidence support and provider errors. |
 | **3 · Study or extend a world** | [Research methods](research-guide.md) → [metric dictionary](reference/metrics.md) → [author an ontology](ontology-author-guide.md) | Interpret a certificate, retain a reproducible audit and qualify an extension. [Contributing](../CONTRIBUTING.md) describes the development gates. |
 

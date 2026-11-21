@@ -41,7 +41,7 @@ def parse(line, actions):
     return {"type": verb, **dict(zip(fields, args, strict=True))}
 
 
-def candidates(before_cursor, actions, files, view):
+def candidates(before_cursor, actions, files, view, *, devices=()):
     words = before_cursor.split()
     if not words or before_cursor[-1:].isspace():
         words.append("")
@@ -49,6 +49,8 @@ def candidates(before_cursor, actions, files, view):
     choices = ()
     if not context:
         choices = (*META, *actions)
+    elif context == ["help"]:
+        choices = devices
     elif context == ["evidence"]:
         choices = files
     elif context == ["move"]:
@@ -62,7 +64,7 @@ def candidates(before_cursor, actions, files, view):
     return sorted({s for s in choices if s.startswith(prefix)})
 
 
-def reader(console, actions, files):
+def reader(console, actions, files, *, devices=()):
     # No persistent or cross-session history. Preserve pipes, redirected input and CLI tests.
     if not sys.stdin.isatty() or not sys.stdout.isatty():
         return lambda view: console.input("[bold cyan]nexus>[/bold cyan] ")
@@ -74,7 +76,7 @@ def reader(console, actions, files):
         def get_completions(self, document, complete_event):
             line = document.text_before_cursor
             prefix = line.split()[-1] if line and not line[-1].isspace() else ""
-            for word in candidates(line, actions, files, current):
+            for word in candidates(line, actions, files, current, devices=devices):
                 yield Completion(word, start_position=-len(prefix))
 
     prompt = PromptSession(completer=Visible(), complete_while_typing=False, complete_style=CompleteStyle.READLINE_LIKE)
@@ -89,7 +91,7 @@ def reader(console, actions, files):
 
 
 def log_entry(action, response):
-    kind = "Rejected" if not response.ok else "Preview" if action.type == "probe" else (
+    kind = "Rejected" if not response.ok else "Probe" if action.type == "probe" else (
         "Observation" if action.type == "observe" else "Applied")
     params = action.model_dump(mode="json", exclude={"type"})
     args = " ".join(str(v) for v in params.values())

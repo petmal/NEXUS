@@ -48,7 +48,11 @@ condition. Introduce terms in the order needed to understand that task. The
 [shared device records](../src/nexus/presentation/devices.py), used first by Repair
 and Model Revision, give every device the same description/settings/targets/actions/
 examples structure. Settings schemas come from the existing public payload types.
-The service, evidence and local device help share those definitions.
+The service, evidence and local device help share those definitions. Distinguish
+a specimen supply, an individual workpiece, the submitted mission object and any
+built-in reference device. State what a display observes and whether a wrong
+target is rejected or accepted with no effect. Explain public arithmetic plainly;
+do not add conclusions drawn from a particular playthrough.
 
 Keep each device example to one independent action, with its own prerequisites
 and immediate effect. Do not calculate a sample measurement from the selected
