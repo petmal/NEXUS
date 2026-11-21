@@ -303,12 +303,13 @@ def _play(episode, *, debug_private=False, audit_dir=None):
     try:
         manifest = session.manifest()
         laboratory = (getattr(episode.public.investigation, "ontology", None)
-                      if manifest.presentation_version in ("sealed-facility-v4", "sealed-facility-v5") else None)
+                      if manifest.presentation_version in ("sealed-facility-v4", "sealed-facility-v5", "sealed-facility-v6") else None)
         console.print(manifest.description, markup=False)
         console.print("Read the mission and evidence, make a plan, then use finish to claim success.")
         console.print("Evidence files: " + ", ".join(manifest.evidence_files), markup=False)
         actions = tuple(item["type"] for item in manifest.action_contract["reference"])
-        read = reader(console, actions, manifest.evidence_files)
+        devices = manifest.action_contract.get("apparatus", {}).get("devices", {})
+        read = reader(console, actions, manifest.evidence_files, devices=devices)
         history = []
         console.print("Free commands: look, mission, evidence <filename>, log, help, quit. "
                       "Enter actions as commands or JSON. Use Tab for names and Up for history.")
@@ -316,7 +317,8 @@ def _play(episode, *, debug_private=False, audit_dir=None):
             console.print("[yellow]Unscored operator mode: private information is visible.[/yellow]")
         while True:
             view = session.observe()
-            render_player(view, console=console, family=laboratory)
+            render_player(view, console=console, family=laboratory,
+                          roles=manifest.presentation_version == "sealed-facility-v6")
             if debug_private:
                 from nexus.render.observer import render_observer
                 render_observer(episode, session.state_snapshot(), console=console, debug_private=True)
@@ -331,7 +333,6 @@ def _play(episode, *, debug_private=False, audit_dir=None):
             if command in {"quit", "exit"}:
                 break
             if command in {"help", "actions", "?"}:
-                devices = manifest.action_contract.get("apparatus", {}).get("devices", {})
                 if command == "help" and len(parts) == 2 and devices:
                     from nexus.render.laboratory import render_device
                     if device := devices.get(parts[1].strip()):
@@ -387,7 +388,7 @@ def _play(episode, *, debug_private=False, audit_dir=None):
                 if recorder is not None:
                     recorder.checkpoint_safely()
                 if response.victory_code:
-                    if manifest.presentation_version in ("sealed-facility-v2", "sealed-facility-v3", "sealed-facility-v4", "sealed-facility-v5"):
+                    if manifest.presentation_version in ("sealed-facility-v2", "sealed-facility-v3", "sealed-facility-v4", "sealed-facility-v5", "sealed-facility-v6"):
                         console.print("Exit clearance granted. Your visit to NEXUS is complete.")
                     console.print("Victory receipt: " + response.victory_code, markup=False)
     finally:

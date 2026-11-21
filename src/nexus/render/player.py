@@ -6,7 +6,7 @@ from rich.table import Table
 from nexus.models.observation import Observation
 
 
-def render_player(observation: Observation, *, console: Console | None = None, family: str | None = None) -> None:
+def render_player(observation: Observation, *, console: Console | None = None, family: str | None = None, roles: bool = False) -> None:
     console = console or Console()
     console.rule(f"NEXUS · turn {observation.turn} · {observation.terminal_status.value}")
     remaining = observation.actions_remaining
@@ -35,7 +35,7 @@ def render_player(observation: Observation, *, console: Console | None = None, f
             values.pop("id", None)
             from nexus.render.laboratory import item_details
 
-            summary = item_details(family, item, stock=title == "Stocks here")
+            summary = item_details(family, item, stock=title == "Stocks here", roles=roles)
             if summary is not None:
                 details = summary
             elif label := values.pop("reading_label", None):

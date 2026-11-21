@@ -9,9 +9,16 @@ from nexus.presentation.laboratory import REPAIR, REVISION
 from nexus.presentation.laboratory_v4 import LINK_NAMES, PREPARATION_NAMES, TREATMENT_NAMES, named_settings
 
 
-def item_details(family, item, *, stock=False):
-    if family not in (REPAIR, REVISION) or stock:
+def item_details(family, item, *, stock=False, roles=False):
+    if family not in (REPAIR, REVISION):
         return None
+    if stock:
+        if not roles:
+            return None
+        supply = "Blank workpiece supply; not the reference device" if family == REVISION else "Reusable survey supply"
+        remaining = "unlimited" if item.remaining is None else str(item.remaining)
+        return (f"Location: {item.location}\n{supply}\nRemaining: {remaining}\n"
+                f"take {item.id} creates one carried specimen and returns its ID.")
     data = item.model_dump(mode="json")
     if "payload" in data:
         payload = data["payload"]
@@ -26,6 +33,9 @@ def item_details(family, item, *, stock=False):
                 value = payload["reading"]
                 lines += ["Stored sensor reading: " + ("not measured since preparation" if value is None else str(value))]
         else:
+            if roles:
+                lines += ["Mission carrier" if item.id == "carrier" else
+                          "Blank workpiece; cannot replace carrier at finish"]
             build, reading = payload["build"], payload["reading"]
             lines += ["Installed cartridge: " + ("none" if build is None else named_settings(build, LINK_NAMES))]
             lines += ["Stored reference reading: " + ("none" if reading is None else

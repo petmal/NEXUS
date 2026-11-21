@@ -169,7 +169,7 @@ def test_reference_policy_preserves_actions_state_and_receipt(laboratory):
     from nexus.ontology.discovery.policy import public_policy as revision_policy
 
     policy = repair_policy if laboratory.public.investigation.ontology == REPAIR else revision_policy
-    sessions = [Session(attach(laboratory, version)) for version in ("sealed-facility-v3", "sealed-facility-v4", "sealed-facility-v5")]
+    sessions = [Session(attach(laboratory, version)) for version in ("sealed-facility-v3", "sealed-facility-v4", "sealed-facility-v5", "sealed-facility-v6")]
     for session in sessions:
         policy(session, evidence_files(session.episode.public))
         assert session.state.terminal_status.value == "won"

@@ -17,7 +17,8 @@ from nexus.generator import generate_episode
 from nexus.io import save_episode
 from nexus.models.actions import ACTION_ADAPTER, ConfigureAction, TakeAction
 from nexus.presentation import evidence_files
-from nexus.presentation.devices import Device, public_catalog
+from nexus.presentation.devices import Device
+from nexus.presentation.laboratory_v6 import public_catalog
 from nexus.presentation.laboratory import REPAIR, REVISION
 from nexus.protocol.http import create_single_session_app
 from nexus.protocol.session import Session

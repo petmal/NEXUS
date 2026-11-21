@@ -216,14 +216,14 @@ Canonical state, latent rules, reference plans, and verifier secrets remain serv
 
 ## Player console presentation
 
-Newly generated worlds use `sealed-facility-v5`. Operator family, difficulty and
+Newly generated worlds use `sealed-facility-v6`. Operator family, difficulty and
 serializer tags are omitted from playable records and object payloads. Family-specific controls now appear under `action_contract.apparatus`. The public
 IDs, laws supplied in this run, physical target and remaining resources stay
 available. In the four-register worlds an action message labels a hypothetical
 seal display or a committed reading. Structured result payloads remain available.
 The current display is always in the observation: a preview never replaces it.
 
-In v3, v4 and v5, player action replies omit terminal performance, including on retry. Read
+In v3 through v6, player action replies omit terminal performance, including on retry. Read
 it through the evaluator’s finalization or audit interface. A terminal victory
 receipt remains in the player reply. Prior versions keep their wire behavior.
 Compare runs using the recorded presentation version and presented evidence hash.
@@ -258,3 +258,11 @@ renders that same record for free. The previous top-level reader/assembler entri
 are consolidated into `devices`; submission and finish policy remain explicit.
 Saved v1/v2/v3/v4 text is preserved. Other families retain their existing device
 records pending migration to the shared format.
+
+V6 clarifies blank-stock, workpieces, the mission carrier and the built-in reference,
+and spells out the shared packet total, parity rule and meaning of the final display.
+It also corrects Repair help: using the wrong material is a paid no-op, not a rejected
+request. Facility records begin with the task before the general glossary.
+Saved v5 evidence and device records remain unchanged. Local `help` completes only
+publicly listed device names. The log labels the action as `Probe`; its result message
+specifies whether it previewed a change or took a measurement. No query is replayed.

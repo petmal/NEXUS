@@ -59,7 +59,7 @@ def test_console_history_and_evidence(episode, tmp_path):
                                 input="\n".join(("evidence theory.json", *MOVES, "log", "quit", "")))
     assert output.exit_code == 0, output.exception
     assert '  "instrument":' in output.stdout
-    assert "Turn 7 | Preview: probe vek seal" in output.stdout
+    assert "Turn 7 | Probe: probe vek seal" in output.stdout
     assert "Turn 6 | Applied: operate sul seal" in output.stdout
     assert "turn 8" not in output.stdout
     assert "stateful-discovery-v1" not in output.stdout

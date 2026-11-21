@@ -8,11 +8,12 @@ for you to investigate. [Meet the facility](facility-setting.md).
 The story is a setting for a precise puzzle. Real-world chemistry or physics
 will not tell you the answer. Use this world's records and observations.
 
-## Start with a guided visit
+## Start a visit
 
-From the repository, run `uv run --frozen nexus demo`. You will see the evidence,
-a short reference solution, and a victory receipt. This is an unscored tutorial.
-Then run `uv run --frozen nexus demo --play` to try the same introductory setup.
+From the repository, run `uv run --frozen nexus demo --play` to try the introductory
+world yourself. This guide explains the controls without giving a solution.
+For an optional complete solution, run `uv run --frozen nexus demo` instead; it is
+an unscored tutorial and reveals that demo’s route and actions.
 
 The display shows your room, exits, objects you can see, objects you carry,
 apparatus, and actions remaining. It does not show unseen objects elsewhere.
@@ -51,8 +52,10 @@ An unchanged display does not tell you whether another register changed.
 Two previews both start from the actual seal. Other worlds have their own readers.
 
 Carried objects travel with you. To use an apparatus, you normally need to be in
-its room and carry the object. `probe` previews a result without applying the
-change; `operate` commits it. Both consume an action. Some families use additional
+its room and carry the object. `probe` returns a result without changing that
+object; `operate` applies the device’s effect. For a transforming machine this
+means preview versus application. For a reader or sensor, both measure: only
+`operate` stores the reading on the object. Both consume an action. Some families use additional
 controls, such as `configure`. Before starting a world, you can preview a family's
 actions with `nexus actions --axis-version 2 --science-family model-revision-v1`.
 The selected episode specifies its finish rules and any optional assistance.
@@ -77,28 +80,6 @@ you can recover depends on the remaining resources and the world's rules.
 The receipt marks exit clearance and ends the visit. No further escape action is
 needed. If an attempt ends without it, clearance was not granted; `quit` only
 closes the local program.
-
-## The introductory world in nine actions
-
-**Tutorial spoilers.** This is the fixed, unscored demo. Its mission calls for artifact A1 in room R2 with value 8, negative polarity, north orientation and phase 0. At the start you are in R0 with 19 actions. The route below shows only the rooms you visit.
-
-![Demo route: from R0, collect A1 in R4, return through R0, transform A1 at M1 in R3, then return through R0 to deliver it in R2.](assets/demo-route.svg)
-
-Enter one line at a time in `nexus demo --play`. You can type `look` between any two lines.
-
-```jsonl
-{"type":"move","target":"R4"}
-{"type":"take","artifact":"A1"}
-{"type":"move","target":"R0"}
-{"type":"move","target":"R3"}
-{"type":"operate","machine":"M1","artifact":"A1"}
-{"type":"move","target":"R0"}
-{"type":"move","target":"R2"}
-{"type":"drop","artifact":"A1"}
-{"type":"finish"}
-```
-
-On turn 5, M1 changes the value from 10 to 8 and the orientation from west to north; the polarity stays negative. Dropping A1 in R2 satisfies the physical goal. The ninth action, `finish`, asks the engine to check it. Expect `won`, ten actions left, and your own receipt. The exact receipt is not part of the walkthrough.
 
 ## Try the same world with one change
 
@@ -158,8 +139,9 @@ uv run --frozen --no-dev nexus generate ../nexus-repair-play --axis-version 2 \
 uv run --frozen --no-dev nexus play ../nexus-repair-play/private.json
 ```
 
-Start with `take seal`, `take stock`, then `move array`. Use the survey ID returned
-by `take stock` in later actions. The stage accepts eight numbers in this order:
+The portable `seal` receives the final treatment. The supply named `stock` provides
+reusable surveys: `take stock` returns a new survey ID. The instruments are in
+`array`; carry the appropriate object there to use one. The stage accepts eight numbers in this order:
 `context x y z a b c d`. Configure chooses settings; operating stage applies them
 to the survey; probing sensor measures its actual preparation. A stage preview
 does neither. The doser takes `a b c d`; operating it on the seal applies your
@@ -182,6 +164,11 @@ four links for your replacement cartridge, install it on `carrier`, and submit i
 with `finish`. Starting from the same initial inventory, its final display must
 match the reference for every mode sequence. Different internal wiring is accepted
 when its displayed behavior always matches.
+
+The reference device is built into the reader. `blank-stock` supplies optional
+blank workpieces: `take blank-stock` creates one and returns its ID. A workpiece
+can hold a cartridge and a stored reading, but only the actual `carrier` is accepted
+at finish. It is not a copy of the reference device.
 
 The reader measures the reference device from its initial inventory every time.
 Queries do not continue the previous query, and they do not test your cartridge.
@@ -209,7 +196,11 @@ means the first listed link, not reservoir 0. The four cartridge slots select th
 first and second links for mode 0, then the first and second links for mode 1;
 repeated choices are allowed. Each transfer uses the inventory left by the previous
 transfer. Reservoir counts are ordinary integers; only the stated remainders are
-modular. The final display is `q0 % 3`, not the complete inventory.
+modular. The five packets are shared: `q0 + q1 + q2 + q3 = 5`, initially `[2,1,1,1]`.
+A link requests 1 packet for an even destination count (including zero), or 2 for
+an odd count, capped by the source’s available count. An empty source transfers 0.
+The final display is `q0 % 3`, not the complete inventory. Equal displays need not
+mean equal inventories. These are the supplied rules, not observations of hidden links.
 
 The archive contains trusted measurements. If you choose a setup that supplies
 a provisional model, treat it as an explanation to investigate, not another law
