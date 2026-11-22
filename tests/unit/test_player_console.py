@@ -86,7 +86,6 @@ def test_public_completion_and_historical_versions(episode):
     assert not {"theory", "discovery", "experimental"} & current["specification"].keys()
 
 
-
 def test_terminal_editing_history_and_tab(monkeypatch, episode):
     import sys
     from functools import partial
@@ -116,8 +115,8 @@ def test_terminal_editing_history_and_tab(monkeypatch, episode):
 
 
 def test_historical_replay_and_terminal_receipt_survive_presentation_change(episode):
-    from nexus.ontology.stateful.runtime import physical_plan
     from nexus.engine.replay import replay
+    from nexus.ontology.stateful.runtime import physical_plan
 
     original = Session(attach(episode, "sealed-facility-v2"))
     current = Session(episode)
@@ -132,3 +131,21 @@ def test_historical_replay_and_terminal_receipt_survive_presentation_change(epis
     assert current.trace == original.trace
     assert replay(episode, original.trace) == current.state
     assert current.finalize_attempt()[1].terminal_status == "won"
+
+
+@pytest.mark.parametrize("values", ([0, 1, 0], [0] * 8, [0, 11, 2, 7]))
+def test_bracketed_and_spaced_settings_produce_identical_actions(values):
+    commands = ["configure device " + " ".join(map(str, values)),
+                "configure device " + json.dumps(values),
+                'configure "device" ' + json.dumps(values, separators=(",", ":"))]
+    parsed = [ACTION_ADAPTER.validate_python(parse(command, ACTIONS)) for command in commands]
+    assert parsed[0] == parsed[1] == parsed[2]
+
+
+@pytest.mark.parametrize("settings", ('["1"]', "[true]", "[null]", "[1.0]", "[[1]]", "[]", "[1,]", "[1] 2", "[1,2", "[0,...]"))
+def test_bracketed_settings_reject_noninteger_or_malformed_arrays(settings):
+    with pytest.raises(ValueError):
+        parse("configure stage " + settings, ACTIONS)
+
+
+ACTIONS = {"configure", "take", "operate", "probe", "move", "finish"}

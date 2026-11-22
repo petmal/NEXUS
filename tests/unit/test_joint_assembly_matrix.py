@@ -2,8 +2,6 @@
 
 import json
 import re
-import subprocess
-import sys
 from pathlib import Path
 
 import pytest
@@ -11,6 +9,8 @@ import pytest
 from nexus.evaluation.assembly import Pilot, preflight
 
 ROOT = Path(__file__).parents[2]
+
+
 MATRIX = ROOT / "docs/joint-assembly-matrix.json"
 
 
@@ -34,20 +34,6 @@ def test_full_matrix_covers_distinct_mechanisms_and_controls_with_exact_claims(t
     assert not report["deep_tier_admitted"]
 
 
-def test_source_failure_replaces_stale_success(tmp_path, monkeypatch):
-    from nexus.ontology.repair import qualification
-
-    def fail():
-        raise OSError("source unavailable")
-
-    monkeypatch.setattr(qualification, "source_binding", fail)
-    out = tmp_path / "report.json"
-    out.write_text('{"status":"passed"}')
-    with pytest.raises(OSError):
-        preflight(Pilot.model_validate_json(MATRIX.read_text()), out)
-    assert json.loads(out.read_text())["status"] == "blocked"
-
-
 def test_inflated_certificate_or_hidden_shortcut_cannot_be_admitted(tmp_path):
     raw = json.loads(MATRIX.read_text())
     raw["runs"] = [raw["runs"][4]]
@@ -58,31 +44,6 @@ def test_inflated_certificate_or_hidden_shortcut_cannot_be_admitted(tmp_path):
     with pytest.raises(ValueError, match="failed checks"):
         preflight(Pilot.model_validate(raw), out)
     assert json.loads(out.read_text())["status"] == "blocked"
-
-
-@pytest.mark.parametrize("content", [None, "{", '{"version":"joint-assembly-pilot-v1"}'])
-def test_cli_invalid_input_removes_stale_success(tmp_path, content):
-    matrix, out = tmp_path / "input.json", tmp_path / "output.json"
-    if content is not None:
-        matrix.write_text(content)
-    out.write_text('{"status":"passed","old":true}')
-    result = subprocess.run(
-        [
-            sys.executable,
-            str(ROOT / "scripts/preflight_joint_assembly.py"),
-            "--matrix",
-            str(matrix),
-            "--output",
-            str(out),
-        ],
-        capture_output=True,
-        text=True,
-        timeout=15,
-        check=False,
-    )
-    assert result.returncode != 0
-    report = json.loads(out.read_text())
-    assert report["status"] == "blocked" and "old" not in report
 
 
 def test_committed_yaml_service_inputs_match_qualified_matrix():

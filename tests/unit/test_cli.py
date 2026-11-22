@@ -1,13 +1,13 @@
 import json
 
 import pytest
-
 from typer.testing import CliRunner
 
+import nexus.generator as generator_module
 from nexus.cli import app
 from nexus.generator import generate_episode
+from nexus.generator.generator import _generate_episode_core
 from nexus.io import save_episode
-
 
 runner = CliRunner()
 
@@ -146,7 +146,6 @@ def test_generate_rejects_out_of_range_difficulty_levels(tmp_path):
     assert result.exit_code != 0
 
 
-
 @pytest.mark.slow
 def test_generate_supports_dependency_planning_and_resource_pressure(tmp_path):
     result = runner.invoke(
@@ -240,3 +239,19 @@ def test_generate_batch_leaves_earlier_worlds_unwritten_when_destination_taken(t
     assert result.exit_code != 0 and "empty directory" in result.output
     assert not (tmp_path / "episode-001").exists()
     assert (used / "notes").read_text() == "keep"
+
+
+def test_cli_generate_does_not_repeat_qualification(monkeypatch, tmp_path):
+    # Build the qualified return value before replacing the public generator entry point.
+    episode = _generate_episode_core(
+        17017, discovery_level=2, planning_level=0, verifier_secret="proof"
+    )
+    monkeypatch.setattr(generator_module, "generate_episode", lambda *args, **kwargs: episode)
+
+    def unexpected_qualification(*args, **kwargs):
+        raise AssertionError("CLI repeated final qualification")
+
+    monkeypatch.setattr(generator_module, "qualify_episode", unexpected_qualification)
+    result = runner.invoke(app, ["generate", str(tmp_path / "episode"), "--seed", "1"])
+    assert result.exit_code == 0, result.stdout
+    assert (tmp_path / "episode" / "private.json").exists()

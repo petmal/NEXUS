@@ -170,7 +170,15 @@ the installed source identity; build the final canary from the current candidate
 
 ## Before publishing
 
-1. Review the candidate and require green CI on the final head before merge.
+1. Review the candidate and require the current `CI / complete` aggregate on the
+   final proposed merge before merging, then verify CI on the resulting main commit.
+   The [parallel CI suite](development/testing.md) includes all slow and property
+   tests, all ten legacy stress seeds, package checks and container/service checks.
+   Local `make test-full` runs every pytest case; `make ci GROUP=...` reproduces a
+   full CI group including its extra checks. The old `full=true` dispatch option
+   has been removed: every ordinary CI run is full.
+
+   Historical validation:
    Both [CI](https://github.com/petmal/NEXUS/actions/runs/42195245242) and
    [runner/container smoke](https://github.com/petmal/NEXUS/actions/runs/42195245268)
    passed for `78cfdc8f975123c3a9e533d6c5baba81583a4dc7`, including the actual Docker
@@ -178,8 +186,7 @@ the installed source identity; build the final canary from the current candidate
    checks. These are completed checks for that commit, not a promise about later
    revisions. Require new relevant checks after further changes. Extended and
    cross-seed jobs were skipped in CI; the completed local full collection and
-   property run above supply those results. `make test-full` and `make stress`,
-   or the CI workflow's `full=true` option, reproduce the broader gate.
+   property run above supply those results for that older commit.
 2. Retain the completed RC1 and RC2 live canaries. Repeat the small check after
    changes to the game runtime or provider/tool integration. The successful
    `NEXUS-RC2-core-canary-2026-11-06.zip` run pins `164cb12` and the runtime digest

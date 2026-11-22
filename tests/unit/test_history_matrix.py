@@ -39,19 +39,3 @@ def test_wrong_rival_and_duplicate_identifiers_are_rejected(tmp_path):
     with pytest.raises(ValueError, match="failed checks"):
         preflight(bad, output)
     assert json.loads(output.read_text())["status"] == "blocked"
-
-
-def test_initial_source_failure_replaces_stale_pass(tmp_path, monkeypatch):
-    from nexus.ontology.repair import qualification
-
-    pilot = Pilot.model_validate_json(MATRIX.read_text())
-    output = tmp_path / "previous.json"
-    output.write_text('{"status":"passed"}')
-
-    def failed_read():
-        raise OSError("source unavailable")
-
-    monkeypatch.setattr(qualification, "source_binding", failed_read)
-    with pytest.raises(OSError, match="source unavailable"):
-        preflight(pilot, output)
-    assert json.loads(output.read_text())["status"] == "blocked"

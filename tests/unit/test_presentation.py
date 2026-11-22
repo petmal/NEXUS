@@ -1,7 +1,7 @@
 """Presentation changes cannot alter laws, evidence values or operational success."""
 
-import json
 import hashlib
+import json
 from pathlib import Path
 
 import pytest
@@ -12,8 +12,8 @@ from nexus.generator import generate_episode
 from nexus.io import load_private, save_episode
 from nexus.models.actions import ACTION_ADAPTER
 from nexus.models.episode import PlayerManifest
-from nexus.ontology.categorical.generation import generate_categorical, public_policy
 from nexus.ontology.catalog import BUILTINS
+from nexus.ontology.categorical.generation import generate_categorical, public_policy
 from nexus.presentation import CURRENT, attach, description, evidence_files, room_label
 from nexus.protocol.http import create_single_session_app
 from nexus.protocol.session import Session
@@ -226,3 +226,56 @@ def test_v2_portable_parts_are_not_described_as_the_exit_lock(family):
     assert "seal component" in text
     assert Session(episode).evidence("theory.json") == episode.public.evidence_files["theory.json"]
     assert episode.model_dump_json() == original
+
+
+@pytest.mark.parametrize("scientific", [False, True])
+def test_edits_to_an_action_example_do_not_change_other_players_instructions(boundary_world, scientific):
+    ep = boundary_world(scientific)
+    first, other = Session(ep), Session(ep)
+    example = first.manifest().action_contract["reference"][0]["example"]
+    pristine = other.manifest().action_contract
+    try:
+        example["annotation"] = "UI-only"
+        assert "annotation" not in other.manifest().action_contract["reference"][0]["example"]
+        assert "annotation" not in pristine["reference"][0]["example"]
+    finally:
+        example.pop("annotation", None)
+
+
+def test_v3_records_keep_prechange_bindings():
+    cases = json.loads((Path(__file__).parents[1] / "fixtures/laboratory-presentation-v3.json").read_text())
+    for case in cases.values():
+        episode = generate_episode(
+            case["seed"], axis_version=2, science_family=case["family"],
+            theory_level=case["theory"], discovery_level=case["discovery"],
+            planning_level=0, resource_pressure=1, ontology_options=case["options"],
+            presentation_version="sealed-facility-v3",
+        )
+        assert canonical_hash(evidence_files(episode.public)) == case["sha256"]
+
+
+def test_v5_public_records_remain_frozen():
+    cases = json.loads((Path(__file__).parents[1] / "fixtures/laboratory-presentation-v5.json").read_text())
+    for case in cases.values():
+        episode = generate_episode(
+            case["seed"], axis_version=2, science_family=case["family"],
+            theory_level=case["theory"], discovery_level=case["discovery"],
+            planning_level=0, resource_pressure=1, ontology_options=case["options"],
+            presentation_version="sealed-facility-v5",
+        )
+        manifest = Session(episode).manifest()
+        assert canonical_hash(evidence_files(episode.public)) == case["sha256"]
+        assert manifest.description == case["description"]
+        assert canonical_hash(manifest.action_contract) == case["action_contract_sha256"]
+
+
+def test_v4_records_keep_prechange_bindings():
+    cases = json.loads((Path(__file__).parents[1] / "fixtures/laboratory-presentation-v4.json").read_text())
+    for case in cases.values():
+        episode = generate_episode(
+            case["seed"], axis_version=2, science_family=case["family"],
+            theory_level=case["theory"], discovery_level=case["discovery"],
+            planning_level=0, resource_pressure=1, ontology_options=case["options"],
+            presentation_version="sealed-facility-v4",
+        )
+        assert canonical_hash(evidence_files(episode.public)) == case["sha256"]

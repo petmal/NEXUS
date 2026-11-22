@@ -1,0 +1,71 @@
+name: Generation profiling
+on:
+  workflow_dispatch:
+    inputs:
+      seed:
+        description: Legacy-world generation seed
+        type: string
+        default: '17'
+        required: true
+      discovery:
+        description: Discovery level
+        type: choice
+        options:
+          - '0'
+          - '1'
+          - '2'
+          - '3'
+          - '4'
+          - '5'
+        default: '5'
+        required: true
+      planning:
+        description: Planning levels to compare
+        type: choice
+        options:
+          - 2 3
+          - 0 1 2 3
+        default: 2 3
+        required: true
+      resource:
+        description: Resource pressure
+        type: choice
+        options:
+          - '0'
+          - '1'
+          - '2'
+        default: '0'
+        required: true
+permissions:
+  contents: read
+jobs:
+  profile:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: ./.github/actions/setup
+        with:
+          cache-suffix: profile
+      - name: Profile selected legacy settings
+        env:
+          SEED: ${{ inputs.seed }}
+          DISCOVERY: ${{ inputs.discovery }}
+          PLANNING: ${{ inputs.planning }}
+          RESOURCE: ${{ inputs.resource }}
+        run: |-
+          mkdir -p ci-results/profile
+          for planning in $PLANNING; do
+            uv run --frozen --all-extras python scripts/profile_generation.py \
+              --seed "$SEED" --discovery-level "$DISCOVERY" --planning-level "$planning" \
+              --resource-pressure "$RESOURCE" --json-out "ci-results/profile/p$planning.json"
+          done
+      - name: Upload results and timings
+        if: ${{ always() }}
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: generation-profile
+          path: ci-results/profile/
+          retention-days: 7

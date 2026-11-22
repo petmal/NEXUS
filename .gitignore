@@ -11,3 +11,4 @@ build/
 
 # Operator-only NEXUS exports (include verifier secrets).
 private-audits/
+ci-results/

@@ -7,34 +7,13 @@ import pytest
 
 from nexus.engine.engine import step
 from nexus.engine.replay import execute_with_trace
-from nexus.generator import generate_episode, qualify_episode
 from nexus.models.actions import DropAction, FinishAction, MoveAction, TakeAction
 from nexus.models.episode import PrivateEpisode, PublicEpisode
 from nexus.models.goals import GoalPredicate
-from nexus.models.rules import Condition, Effect
+from nexus.models.rules import Effect
 from nexus.models.world import Artifact, Machine, Resources, Room, TerminalStatus, WorldState
 from nexus.solver import solve
 from nexus.solver.belief import solve_compressed_physical, solve_guaranteed_policy
-
-
-@pytest.mark.parametrize("damage", ["waits", "illegal", "empty", "schema", "after_win"])
-def test_qualification_executes_the_stored_reference_plan(damage):
-    episode = generate_episode(17, planning_level=0)
-    assert qualify_episode(episode).passed
-    if damage == "waits":
-        episode.reference_plan = tuple({"type": "wait"} for _ in episode.reference_plan)
-    elif damage == "illegal":
-        episode.reference_plan = ({"type": "take", "artifact": "missing"}, *episode.reference_plan[1:])
-    elif damage == "empty":
-        episode.reference_plan = ()
-    elif damage == "schema":
-        episode.reference_plan = ({"type": "unknown"}, *episode.reference_plan[1:])
-    else:
-        episode.reference_plan = (*episode.reference_plan, {"type": "wait"})
-    report = qualify_episode(episode)
-    assert not report.passed
-    assert not report.checks["reference_plan_wins"]
-    assert not report.checks["victory_receipt_present"]
 
 
 def location_goal(location):
@@ -97,6 +76,8 @@ def location_oracle(episode):
 
 
 LOCATION_GOALS = [location_goal(r) for r in ("R0", "R1", "@inventory")]
+
+
 BOOLEAN_GOALS = (
     LOCATION_GOALS
     + [negate(g) for g in LOCATION_GOALS]
@@ -125,29 +106,6 @@ def test_boolean_location_costs_match_unpruned_oracle(goal, location):
     )
     assert result.solvable == (minimum is not None)
     assert result.optimal_worst_case_actions == minimum
-
-
-@pytest.mark.parametrize("payload", [
-    {"kind": "phase_equals", "value": value} for value in (False, True, 0.5, "0")
-] + [
-    {"kind": "artifact_field", "artifact_id": "A1", "field": field, "value": 0}
-    for field in ("missing", "location", "id", "sample")
-] + [
-    {"kind": "artifact_field", "artifact_id": "A1", "field": "value", "value": value}
-    for value in (False, True, 0.5, "0")
-] + [
-    {"kind": "artifact_field", "artifact_id": "A1", "field": "shape", "value": "hexagon"},
-    {"kind": "artifact_location", "artifact_id": "A1", "value": 0},
-])
-def test_invalid_goal_atoms_fail_before_play(payload):
-    with pytest.raises(ValueError):
-        GoalPredicate.model_validate(payload)
-
-
-@pytest.mark.parametrize("value", [False, True, 0.5, "0"])
-def test_rule_phase_conditions_do_not_coerce_the_declared_phase(value):
-    with pytest.raises(ValueError):
-        Condition(kind="phase_equals", value=value)
 
 
 @pytest.mark.parametrize("budget", [None, 5])

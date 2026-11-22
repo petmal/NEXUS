@@ -142,8 +142,8 @@ The subsequent [RC2 review](rc2-canary-results-2026-11-06.md) confirms all six l
 attempts passed on this runtime; the earlier RC1 provider run used older code.
 
 The main new checks are in
-[core certification tests](../../tests/unit/test_core_certification.py),
-[mathematical checks](../../tests/unit/test_core_math_audit.py) and
+[core certification tests](https://github.com/petmal/NEXUS/blob/f098fe9603c905774219641e40f6277c0329e86b/tests/unit/test_core_certification.py),
+[mathematical checks](https://github.com/petmal/NEXUS/blob/f098fe9603c905774219641e40f6277c0329e86b/tests/unit/test_core_math_audit.py) and
 [research audit tests](../../tests/unit/test_research_audit.py).
 To reproduce the full local gate from the repository root:
 

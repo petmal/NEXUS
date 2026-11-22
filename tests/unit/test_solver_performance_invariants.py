@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import nexus.solver.belief as belief_module
 from nexus.models.actions import ProbeAction
 from nexus.models.episode import PrivateEpisode, PublicEpisode
 from nexus.models.goals import GoalKind, GoalPredicate
@@ -17,10 +18,13 @@ from nexus.models.world import (
     WorldState,
 )
 from nexus.solver.belief import (
-    BeliefPolicyResult,
     _POLICY_RESULT_CACHE,
     _POLICY_RESULT_CACHE_LIMIT,
+    BeliefPolicyResult,
     _cache_result,
+    _episode_for_hypothesis,
+    _normalize_fresh_state,
+    _normalize_state,
     solve_compressed_physical,
     solve_guaranteed_policy,
 )
@@ -209,3 +213,99 @@ def test_compressed_generation_solver_remains_exact_against_bfs():
     assert compressed.optimal_action_count == ordinary.optimal_action_count
     assert len(compressed.plan) == ordinary.optimal_action_count
     assert compressed.max_frontier_size >= 1
+
+
+def test_fresh_state_normalization_matches_copying_normalization_without_source_mutation():
+    source = _episode().public.initial_state
+    before = source.model_copy(deep=True)
+    fresh = source.model_copy(deep=True)
+    fresh.turn = 9
+    fresh.resources.actions_remaining = 1
+    expected = _normalize_state(fresh, 777)
+    actual = _normalize_fresh_state(fresh, 777)
+    assert actual == expected
+    assert actual is fresh
+    assert source == before
+
+
+def test_hypothesis_episode_targeted_copy_matches_deep_copy_and_is_isolated():
+    episode = _episode()
+    replacement = _rule(1, 9)
+    reference = episode.model_copy(deep=True)
+    reference.public.initial_state.resources.actions_remaining = 777
+    reference.rules[reference.machine_rules["M1"]] = replacement
+
+    candidate = _episode_for_hypothesis(episode, {"M1": replacement}, search_budget=777)
+    sibling = _episode_for_hypothesis(episode, {"M1": _rule(2, 8)}, search_budget=888)
+    assert candidate.model_dump(mode="python") == reference.model_dump(mode="python")
+
+    candidate.public.initial_state.agent_room = "mutated"
+    candidate.rules["extra"] = _set(7)
+    assert episode.public.initial_state.agent_room == "R0"
+    assert "extra" not in episode.rules
+    assert sibling.public.initial_state.agent_room == "R0"
+    assert "extra" not in sibling.rules
+    assert sibling.public.initial_state.resources.actions_remaining == 888
+
+
+def test_rich_policy_cache_can_satisfy_weaker_exact_query(monkeypatch):
+    _POLICY_RESULT_CACHE.clear()
+    episode = _episode()
+    candidates = {"M1": [_rule(0, 4), _rule(1, 5), _rule(2, 6)]}
+    rich = solve_guaranteed_policy(
+        episode,
+        candidate_rules_by_machine=candidates,
+        max_actions=10,
+        requested_action_values=(ProbeAction(machine="M1", artifact="A1"),),
+    )
+    assert rich.solvable and rich.optimal_worst_case_actions is not None
+    cache_size = len(_POLICY_RESULT_CACHE)
+
+    def fail_physical(*args, **kwargs):
+        raise AssertionError("weaker query recomputed instead of reusing richer exact result")
+
+    monkeypatch.setattr(belief_module, "solve_compressed_physical", fail_physical)
+    weaker = solve_guaranteed_policy(
+        episode,
+        candidate_rules_by_machine=candidates,
+        max_actions=rich.optimal_worst_case_actions,
+        expected_actions=rich.optimal_worst_case_actions,
+        include_action_values=False,
+    )
+    assert weaker.solvable
+    assert weaker.optimal_worst_case_actions == rich.optimal_worst_case_actions
+    assert weaker.witness == rich.witness
+    assert weaker.initial_action_values == ()
+    assert len(_POLICY_RESULT_CACHE) == cache_size
+    _POLICY_RESULT_CACHE.clear()
+
+
+def test_exhausted_rich_cache_does_not_overstate_larger_proof_bound(monkeypatch):
+    _POLICY_RESULT_CACHE.clear()
+    episode = _episode()
+    candidates = {"M1": [_rule(0, 4), _rule(1, 5), _rule(2, 6)]}
+    too_small = solve_guaranteed_policy(
+        episode,
+        candidate_rules_by_machine=candidates,
+        max_actions=1,
+        requested_action_values=(ProbeAction(machine="M1", artifact="A1"),),
+    )
+    assert not too_small.solvable
+    calls = 0
+    original = belief_module.solve_compressed_physical
+
+    def counted(*args, **kwargs):
+        nonlocal calls
+        calls += 1
+        return original(*args, **kwargs)
+
+    monkeypatch.setattr(belief_module, "solve_compressed_physical", counted)
+    larger = solve_guaranteed_policy(
+        episode,
+        candidate_rules_by_machine=candidates,
+        max_actions=10,
+        include_action_values=False,
+    )
+    assert larger.solvable
+    assert calls > 0
+    _POLICY_RESULT_CACHE.clear()

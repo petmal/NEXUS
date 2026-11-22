@@ -1,15 +1,23 @@
 UV = uv run --frozen --python 3.14.7 --all-extras
 
-.PHONY: check test test-full stress package qualify-release preflight
+.PHONY: check test test-fast test-full stress package qualify-release preflight ci ci-partition
 check:
 	$(UV) ruff check src tests scripts examples
 	$(UV) python scripts/check_docs.py
 
-test:
+test: test-fast
+
+test-fast:
 	$(UV) pytest -q -m 'not slow and not stress' tests/unit tests/integration
 
 test-full:
-	$(UV) pytest -q tests/unit tests/integration
+	$(UV) pytest -q tests
+
+ci:
+	$(UV) python scripts/ci.py run $(GROUP)
+
+ci-partition:
+	$(UV) python scripts/ci.py partition
 
 stress:
 	$(UV) pytest -q tests/property

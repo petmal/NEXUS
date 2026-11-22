@@ -1,26 +1,29 @@
 """Validate actual producer output against the shipped schemas, with no network I/O."""
 
-from functools import cache
 import json
-from pathlib import Path
 import runpy
+from collections import Counter
+from functools import cache
+from pathlib import Path
 
+import pytest
 from fastapi.testclient import TestClient
 from jsonschema import Draft202012Validator
-import pytest
 from typer.testing import CliRunner
 
 from nexus.cli import app
+from nexus.engine.canonical import canonical_hash
+from nexus.engine.replay import replay
 from nexus.generator import generate_episode
 from nexus.io import save_episode
-from nexus.models.actions import WaitAction
+from nexus.models.actions import ObserveAction, TakeAction, WaitAction
 from nexus.ontology.catalog import runtime_for
 from nexus.protocol.http import create_single_session_app
 from nexus.protocol.investigation_metrics import (
+    SCIENCE_SCHEMA_URL,
     AuditedDecisionMissionPerformance,
     DecisionMissionPerformance,
     MissionPerformance,
-    SCIENCE_SCHEMA_URL,
 )
 from nexus.protocol.session import PERFORMANCE_SCHEMA_URL, Session
 from nexus.solver import solve
@@ -181,3 +184,46 @@ def test_serialized_cli_metric_outputs(case, tmp_path):
     # Every action in the serialized plan must carry its type.
     del result["plan"][0]["type"]
     assert not validator.is_valid(result)
+
+
+TERMINAL_METRIC_CASES = [
+    ("stateful-planning-v1", 21, 0, 5, 3, 2),
+    ("stateful-interference-v1", 67, 0, 0, 0, 2),
+    ("stateful-coordination-v1", 41, 0, 0, 0, 2),
+    ("compositional-repair-v1", 438, 3, 5, 1, 1),
+    ("model-revision-v1", 5866, 3, 5, 0, 1),
+]
+
+
+@pytest.mark.parametrize("family,seed,theory,discovery,planning,resource", TERMINAL_METRIC_CASES)
+def test_terminal_metrics_count_committed_actions_and_preserve_world(
+    family, seed, theory, discovery, planning, resource,
+):
+    episode = generate_episode(seed, axis_version=2, science_family=family,
+                               theory_level=theory, discovery_level=discovery,
+                               planning_level=planning, resource_pressure=resource)
+    session = Session(episode)
+    assert session.act(0, ObserveAction()).ok
+    assert not session.act(0, TakeAction(artifact="missing")).ok
+    actions = runtime_for(episode.public.investigation).physical_plan(episode)
+    assert actions
+    for turn, action in enumerate(actions):
+        result = session.act(turn, action)
+        assert result.ok
+        if turn == 0:
+            assert session.act(turn, action).duplicate
+            assert not session.act(turn, WaitAction()).ok
+    assert result.victory_code and result.performance
+    before = canonical_hash(session.state)
+    snapshot = session.operator_snapshot()
+    assert canonical_hash(session.state) == before
+    metrics = snapshot["performance"]
+    assert metrics["terminal_status"] == "won"
+    assert metrics["actions_used"] == len(actions) == len(session.trace) == session.state.turn
+    assert metrics["action_counts"] == dict(Counter(action.type for action in actions))
+    assert metrics["invalid_actions"] == metrics["duplicate_requests"] == metrics["protocol_conflicts"] == 1
+    assert metrics["initial_action_budget"] - metrics["budget_remaining"] == len(actions)
+    assert metrics["measurements_used"] == metrics["informative_measurements"] + metrics["redundant_measurements"]
+    assert metrics["mission_submissions"] == 1 and metrics["failed_finishes"] == 0
+    assert metrics["first_submission_correct"] and metrics["final_submission_correct"]
+    assert canonical_hash(replay(episode, session.trace)) == before

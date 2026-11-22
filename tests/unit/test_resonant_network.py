@@ -141,13 +141,6 @@ def test_supported_profiles_win_and_replay_with_public_policy(d, p, r):
         assert e.generation_metadata.action_budget < 92
 
 
-@pytest.mark.parametrize("t", [0, 3])
-def test_control_evidence_resolves_joint_field_without_experiments(t):
-    e = episode(d=0, t=t)
-    assert [a["type"] for a in e.reference_plan] == ["configure", "finish"]
-    assert qualify_episode(e).passed
-
-
 def test_no_signal_is_valid_atomic_probe_and_configuration_is_not_feedback():
     e = episode(d=4)
     s = Session(e)

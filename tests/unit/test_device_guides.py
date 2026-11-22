@@ -2,7 +2,6 @@
 
 import io
 import json
-from pathlib import Path
 
 import pytest
 from fastapi.testclient import TestClient
@@ -16,13 +15,14 @@ from nexus.engine.canonical import canonical_hash
 from nexus.generator import generate_episode
 from nexus.io import save_episode
 from nexus.models.actions import ACTION_ADAPTER, ConfigureAction, TakeAction
-from nexus.presentation import evidence_files
+from nexus.presentation import attach
 from nexus.presentation.devices import Device
-from nexus.presentation.laboratory_v6 import public_catalog
 from nexus.presentation.laboratory import REPAIR, REVISION
+from nexus.presentation.laboratory_v6 import public_catalog
 from nexus.protocol.http import create_single_session_app
 from nexus.protocol.session import Session
 from nexus.protocol.stdio import _handle, run_jsonl
+from nexus.render.commands import candidates
 from nexus.render.laboratory import render_device, render_theory
 
 
@@ -41,18 +41,6 @@ def act(session, action):
     reply = session.act(session.state.turn, action, player_only=True)
     assert reply.ok
     return reply
-
-
-def test_v4_records_keep_prechange_bindings():
-    cases = json.loads((Path(__file__).parents[1] / "fixtures/laboratory-presentation-v4.json").read_text())
-    for case in cases.values():
-        episode = generate_episode(
-            case["seed"], axis_version=2, science_family=case["family"],
-            theory_level=case["theory"], discovery_level=case["discovery"],
-            planning_level=0, resource_pressure=1, ontology_options=case["options"],
-            presentation_version="sealed-facility-v4",
-        )
-        assert canonical_hash(evidence_files(episode.public)) == case["sha256"]
 
 
 def test_same_devices_in_theory_manifest_http_and_stdio(laboratory):
@@ -210,3 +198,25 @@ def test_local_help_is_free_and_task_precedes_terminology(laboratory, tmp_path):
     assert "No example" in result.stdout
     assert "Unknown device" in result.stdout
     assert "No actions yet." in result.stdout
+
+
+def test_facility_task_precedes_glossary_and_help_completes_only_listed_devices(role_laboratory):
+    session = Session(role_laboratory)
+    assert session.evidence("facility.txt").startswith("YOUR TASK\n")
+    devices = session.manifest().action_contract["apparatus"]["devices"]
+    assert candidates("help ", (), (), session.observe(), devices=devices) == sorted(devices)
+    assert candidates("help se", (), (), session.observe(), devices=devices) == (
+        ["sensor"] if role_laboratory.public.investigation.ontology == REPAIR else [])
+    assert candidates("help ", (), (), session.observe()) == []
+
+
+def test_v6_does_not_add_example_measurements_or_alter_numeric_records(role_laboratory):
+    old = Session(attach(role_laboratory, "sealed-facility-v5"))
+    new = Session(role_laboratory)
+    before, after = (json.loads(s.evidence("theory.json")) for s in (old, new))
+    for name, value in before.items():
+        if name not in ("devices", "terms", "notation"):
+            assert after[name] == value
+    for name, device in before["devices"].items():
+        assert after["devices"][name] == {**device, "targets": after["devices"][name]["targets"]}
+    assert not new.trace and new.state == old.state

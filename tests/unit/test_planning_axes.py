@@ -2,6 +2,7 @@
 
 import json
 from copy import deepcopy
+from itertools import product
 from pathlib import Path
 
 import pytest
@@ -17,8 +18,8 @@ from nexus.ontology.planning.planner import optimal, science_shortest_cost
 from nexus.ontology.planning.policy import public_policy
 from nexus.ontology.planning.proof import all_world_policy, physical_minimum
 from nexus.ontology.stateful.generation import TARGETS, selection
-from nexus.protocol.session import Session
 from nexus.protocol.investigation_metrics import summarize
+from nexus.protocol.session import Session
 from nexus.solver import solve
 
 
@@ -275,3 +276,28 @@ def test_matrix_refuses_unmatched_profiles_or_reused_fixtures(pilot_report):
         row["seed"] = data["runs"][0]["seed"]
     with pytest.raises(ValueError):
         Pilot.model_validate(data)
+
+
+@pytest.mark.parametrize("planning", range(4))
+def test_planning_continuation_certifies_all_vectors_and_rooms_with_scalar_bellman_equations(planning):
+    from nexus.ontology.planning.layout import LAYOUTS
+    from nexus.ontology.planning.planner import continuation_distances
+    from nexus.ontology.stateful.generation import selection
+    from nexus.ontology.stateful.proof import scalar_step
+
+    world, target = selection(21)
+    layout = LAYOUTS[planning]
+    costs = continuation_distances(world, target, planning)
+
+    def cost(vector, room):
+        if vector is None:
+            return float("inf")
+        return costs.get((sum(v * 5**(3 - i) for i, v in enumerate(vector)), room), float("inf"))
+
+    for vector, room in product(product(range(5), repeat=4), layout.rooms):
+        after = [cost(vector, b if a == room else a)
+                 for a, b in layout.edges if room in (a, b)]
+        after += [cost(scalar_step(world, vector, mode), room)
+                  for mode, location in enumerate(layout.mode_rooms) if location == room]
+        assert cost(vector, room) == (0 if (vector, room) == (target, layout.finish)
+                                      else 1 + min(after, default=float("inf")))

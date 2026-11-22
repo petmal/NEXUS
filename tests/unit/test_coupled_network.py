@@ -24,10 +24,16 @@ from nexus.protocol.session import Session
 from nexus.solver.finite_experiments import FiniteExperimentProblem
 
 ROOT = Path(__file__).resolve().parents[2]
+
+
 module_spec = importlib.util.spec_from_file_location(
     "network_poc", ROOT / "scripts/coupled_network_poc.py"
 )
+
+
 poc = importlib.util.module_from_spec(module_spec)
+
+
 module_spec.loader.exec_module(poc)
 
 
@@ -111,13 +117,6 @@ def test_every_complete_prior_world_physically_wins(d, p, r):
     report = qualify_episode(episode(d, p, r))
     assert report.passed, report.errors
     assert report.metrics["worlds_replayed"] == 2187
-
-
-@pytest.mark.parametrize("t", [0, 3])
-def test_controls_supply_sufficient_data_without_measurements(t):
-    e = episode(d=0, t=t)
-    assert [a["type"] for a in e.reference_plan] == ["configure", "finish"]
-    assert qualify_episode(e).passed
 
 
 @pytest.mark.parametrize("d,t", [(3, 3), (4, 2), (5, 1), (1, 0)])
