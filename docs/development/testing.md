@@ -87,7 +87,7 @@ x86-64 if none is installed; other hosts can install it or set `ACTIONLINT`.
 
 Each group writes timings and, for pytest groups, JUnit results under ignored
 `ci-results/<group>/`. GitHub retains these diagnostics for seven days.
-Timing metadata records the tested commit, PR head, runner image, Python/uv and
+Timing metadata records the tested commit, local dirty state, PR head, runner image, Python/uv and
 stress sample. Private episode/proof exports live in temporary directories;
 they are not uploaded. CI checks committed reference bindings and never
 refreshes tracked certification reports.
@@ -107,6 +107,11 @@ After the new workflow has a successful run, require its **complete** check in
 the main branch rules and retire the previous individual required contexts.
 Use the actual context shown by GitHub; do not remove the existing protection
 before the replacement check is available. Check the first merged main run too.
+
+As checked on 22 November 2026, GitHub reports that rulesets are unavailable on
+this private repository's current plan. The CI workflow still runs normally.
+Enable the required check when the repository becomes public or uses an eligible
+plan; this CI change does not alter visibility or billing.
 
 Compare GitHub wall time and runner minutes using complete runs. The former
 roughly 13-minute host run excluded slow/property work; it is not a full-suite

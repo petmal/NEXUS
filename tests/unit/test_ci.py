@@ -2,7 +2,9 @@
 
 import importlib.util
 import json
+import os
 from pathlib import Path
+import subprocess
 
 import pytest
 
@@ -89,3 +91,40 @@ def test_complete_test_report_is_accepted(tmp_path):
     path = tmp_path / "pytest.xml"
     path.write_text('<testsuites><testsuite tests="2" skipped="0" failures="0" errors="0"/></testsuites>')
     ci.check_test_report(path)
+
+
+def test_runner_records_process_start_failure_as_failure(tmp_path, monkeypatch):
+    monkeypatch.setattr(ci, "command_output", lambda command: "")
+    monkeypatch.setattr(ci, "read_groups", lambda: {"core": ["tests/a.py"]})
+
+    def unavailable(*args, **kwargs):
+        raise OSError("cannot start test process")
+
+    monkeypatch.setattr(ci.subprocess, "run", unavailable)
+    with pytest.raises(OSError, match="cannot start"):
+        ci.run("core", tmp_path)
+    assert json.loads((tmp_path / "timing.json").read_text())["exit_code"] != 0
+
+
+def test_complete_group_ignores_inherited_test_selection(tmp_path, monkeypatch):
+    monkeypatch.setenv("PYTEST_ADDOPTS", "-k nothing")
+    monkeypatch.setenv("NEXUS_STRESS_SEED_COUNT", "1")
+    monkeypatch.setenv("NEXUS_STRESS_FAIL_FAST", "1")
+    monkeypatch.setattr(ci, "command_output", lambda command: "")
+    monkeypatch.setattr(ci, "read_groups", lambda: {"core": ["tests/a.py"]})
+    calls = []
+
+    def execute(command, **kwargs):
+        calls.append(command)
+        assert "PYTEST_ADDOPTS" not in kwargs["env"]
+        assert kwargs["env"]["NEXUS_STRESS_SEED_COUNT"] == "10"
+        assert "NEXUS_STRESS_FAIL_FAST" not in kwargs["env"]
+        (tmp_path / "pytest.xml").write_text(
+            '<testsuites><testsuite tests="1" skipped="0" errors="0" failures="0"/></testsuites>'
+        )
+        return subprocess.CompletedProcess(command, 0)
+
+    monkeypatch.setattr(ci.subprocess, "run", execute)
+    assert ci.run("core", tmp_path) == 0
+    assert len(calls) == 2 and calls[0][-1] == "tests/a.py"
+    assert os.environ["PYTEST_ADDOPTS"] == "-k nothing"
