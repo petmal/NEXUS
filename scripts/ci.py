@@ -109,6 +109,7 @@ def run(group, output):
     report = {
         "group": group,
         "tested_revision": command_output(["git", "rev-parse", "HEAD"]),
+        "working_tree_dirty": bool(command_output(["git", "status", "--porcelain"])),
         "pr_head": os.environ.get("NEXUS_PR_HEAD"),
         "python": platform.python_version(),
         "uv": command_output(["uv", "--version"]),
@@ -148,6 +149,9 @@ def run(group, output):
                     result = 1
                     check_test_report(output / "pytest.xml")
                     result = 0
+    except BaseException:
+        result = 1
+        raise
     finally:
         report.update(seconds=perf_counter() - started, exit_code=result)
         (output / "timing.json").write_text(json.dumps(report, indent=2) + "\n")
