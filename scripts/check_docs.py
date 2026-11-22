@@ -13,7 +13,7 @@ ENTRY = {
     'docs/release-readiness.md', 'docs/reference/protocol.md', 'docs/reference/metrics.md',
     'docs/facility-setting.md', 'docs/future-experiments.md', 'docs/ontology-author-guide.md',
     'docs/first-model.md', 'docs/benchmark-guide.md', 'docs/fresh-world-guide.md',
-    'examples/mindtrial/fresh-world-run.md',
+    'examples/mindtrial/fresh-world-run.md', 'docs/development/testing.md',
 }
 
 

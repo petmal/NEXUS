@@ -1,22 +1,27 @@
 """Research exports must replay exactly without granting the player extra data."""
 
-import stat
 import hashlib
 import json
+import logging
+import stat
 from io import StringIO
 
 import pytest
 from fastapi.testclient import TestClient
+from rich.console import Console
 
+from nexus.engine.canonical import canonical_hash
 from nexus.generator import generate_episode
-from nexus.models.actions import ACTION_ADAPTER, TakeAction, DropAction
+from nexus.io import save_episode
+from nexus.models.actions import ACTION_ADAPTER, DropAction, TakeAction
 from nexus.protocol.audit import AuditRecorder, verify_bundle
 from nexus.protocol.http import create_single_session_app
+from nexus.protocol.operator_diagnostics import OperatorDiagnostics
+from nexus.protocol.operator_summary import compact_summary
 from nexus.protocol.public_transcript import PublicTranscript
 from nexus.protocol.session import Session
 from nexus.protocol.stdio import run_jsonl
 from nexus.render.player import render_player
-from rich.console import Console
 
 
 def legacy():
@@ -307,8 +312,9 @@ def test_bundle_does_not_count_free_observation_as_committed_action(tmp_path):
 
 @pytest.mark.parametrize("turn", [True, "1", 1.0, -1])
 def test_trace_turn_requires_nonnegative_json_integer(tmp_path, turn):
-    from nexus.io import load_trace
     from pydantic import ValidationError
+
+    from nexus.io import load_trace
 
     session = Session(legacy())
     session.act(0, ACTION_ADAPTER.validate_python({"type": "wait"}))
@@ -350,3 +356,71 @@ def test_overlapping_checkpoints_write_each_committed_turn_once(tmp_path, monkey
     session.act(2, wait)
     recorder.close()
     assert verify_bundle(recorder.directory)["accepted_actions"] == 3
+
+
+@pytest.mark.parametrize("scientific", [False, True])
+def test_bound_evidence_matches_files_actually_delivered_and_summary_matches_world(boundary_world,
+    tmp_path, caplog, scientific
+):
+    ep = boundary_world(scientific)
+    session = Session(ep)
+    logger = OperatorDiagnostics(session)
+    with caplog.at_level(logging.INFO, logger="nexus.operator"):
+        logger.start()
+    message = next(r.getMessage() for r in caplog.records if '"kind":"binding"' in r.getMessage())
+    binding = json.loads(message.split("NEXUS operator diagnostic: ", 1)[1])
+    save_episode(ep, tmp_path / "export")
+    with TestClient(create_single_session_app(ep)) as service:
+        manifest = service.get("/manifest").json()
+        served = {
+            name: service.get("/evidence/" + name).text for name in manifest["evidence_files"]
+        }
+    exported = {
+        p.name: p.read_bytes().decode() for p in (tmp_path / "export/attachments").iterdir()
+    }
+    assert served == exported
+    audit = tmp_path / "audit"
+    AuditRecorder(session, audit).close()
+    assert verify_bundle(audit)["game_metrics_verified"]
+    private = json.loads((audit / "binding.json").read_text())
+    assert (
+        binding["public_evidence_sha256"]
+        == private["public_evidence_sha256"]
+        == canonical_hash(served)
+    )
+    assert (
+        binding["player_manifest_sha256"]
+        == private["player_manifest_sha256"]
+        == canonical_hash(manifest)
+    )
+    assert binding["compiled_evidence_sha256"] == canonical_hash(ep.public.evidence_files)
+    assert binding["presentation_version"] == manifest["presentation_version"]
+    assert binding["initial_action_budget"] == ep.public.initial_state.resources.actions_remaining
+    for terminal in (False, True):
+        if terminal:
+            session.finalize_attempt()
+        summary = compact_summary(session.operator_snapshot(), session.trace_snapshot())
+        assert (
+            summary["family"]
+            == binding["family"]
+            == ("shared-response-v1" if scientific else "legacy")
+        )
+        assert summary["initial_action_budget"] == binding["initial_action_budget"]
+        assert not summary["witnesses_available"] and summary["repeated_build_submissions"] is None
+
+
+def test_audit_rejects_different_mission_text_even_when_file_hashes_match(boundary_world, tmp_path):
+    import hashlib
+
+    root = tmp_path / "audit"
+    AuditRecorder(Session(boundary_world(False)), root).close()
+    private = root / "private.json"
+    episode = json.loads(private.read_text())
+    episode["public"]["description"] += " A different briefing."
+    private.write_text(json.dumps(episode))
+    manifest = root / "manifest.json"
+    data = json.loads(manifest.read_text())
+    data["files_sha256"]["private.json"] = hashlib.sha256(private.read_bytes()).hexdigest()
+    manifest.write_text(json.dumps(data))
+    with pytest.raises(ValueError, match="binding mismatch: player_manifest_sha256"):
+        verify_bundle(root)

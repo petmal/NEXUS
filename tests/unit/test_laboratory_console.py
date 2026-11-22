@@ -1,23 +1,27 @@
 """Teach instrument semantics without changing experiments, truth or old sessions."""
 
+import io
 import json
 
 import pytest
 from fastapi.testclient import TestClient
+from rich.console import Console
 from typer.testing import CliRunner
 
 from nexus.cli import app
+from nexus.engine.canonical import canonical_hash
 from nexus.generator import generate_episode
 from nexus.io import save_episode
 from nexus.models.actions import ACTION_ADAPTER
-from nexus.presentation import attach
+from nexus.presentation import attach, evidence_files
+from nexus.presentation.laboratory import REPAIR, REVISION
 from nexus.protocol.http import create_single_session_app
 from nexus.protocol.session import Session
 from nexus.protocol.stdio import _handle
 from nexus.render.commands import log_entry, parse
+from nexus.render.laboratory import item_details, render_theory
+from nexus.render.player import render_player
 
-REPAIR = "compositional-repair-v1"
-REVISION = "model-revision-v1"
 ACTIONS = {"take", "move", "configure", "probe", "operate", "finish"}
 
 
@@ -173,3 +177,190 @@ def test_revision_guide_retains_finish_policy(policy):
     assert ("ends the attempt" in guide) == (policy == "single")
     assert ("can be retried" in guide) == (policy == "recoverable")
     assert json.loads(session.evidence("theory.json"))["resolved_construction"] is not None
+
+
+def clarity_act(session, command):
+    return session.act(session.state.turn, ACTION_ADAPTER.validate_python(parse(command, ACTIONS)), player_only=True)
+
+
+def test_invalid_world_settings_are_free_and_atomic(clarity_laboratory):
+    session = Session(clarity_laboratory)
+    commands = (["configure stage [2,0,0,0,0,0,0,0]", "configure stage [0,3,0,0,0,0,0,0]",
+                 "configure doser [0,0,0]"] if clarity_laboratory.public.investigation.ontology == REPAIR else
+                ["configure reader [2]", "configure assembler [0,12,0,0]", "configure assembler [0,0,0]"])
+    before = canonical_hash(session.state)
+    for command in commands:
+        reply = clarity_act(session, command)
+        assert not reply.ok
+        assert reply.current_turn == 0 and not session.trace
+        assert canonical_hash(session.state) == before
+
+
+def test_same_clarified_evidence_on_both_transports_and_export(clarity_laboratory, tmp_path):
+    session = Session(clarity_laboratory)
+    client = TestClient(create_single_session_app(clarity_laboratory))
+    save_episode(clarity_laboratory, tmp_path)
+    before = clarity_laboratory.model_dump_json()
+    for name in ("theory.json", "apparatus.txt"):
+        text = session.evidence(name)
+        assert client.get("/evidence/" + name).text == text
+        assert _handle(session, {"operation": "evidence", "filename": name}) == {"filename": name, "content": text}
+        assert (tmp_path / "attachments" / name).read_text() == text
+    assert clarity_laboratory.model_dump_json() == before
+    assert session.state.turn == 0
+    shown = json.loads(session.evidence("theory.json"))
+    original = json.loads(clarity_laboratory.public.evidence_files["theory.json"])
+    for key in ("mission", "graphs", "primitives", "resolved", "archive", "provisional_model", "resolved_construction", "primitive_laws"):
+        if key in original:
+            assert shown[key] == original[key]
+    if clarity_laboratory.public.investigation.ontology == REPAIR:
+        assert "d=0 removes that offset only" in shown["context"]
+        assert "same primitive may be used more than once" in shown["notation"]["choices"]
+        assert "not persistent registers" in shown["notation"]["nodes"]
+        assert shown["devices"]["stage"]["settings"]["order"] == ["context", "x", "y", "z", "a", "b", "c", "d"]
+    else:
+        assert "zero-based" in shown["notation"]["link_indices"]
+        assert "ordinary nonnegative integers" in shown["notation"]["operators"]
+        assert "unverified explanation" in shown["notation"]["records"]
+
+
+def test_human_summaries_keep_applied_state_separate_from_pending_settings(clarity_laboratory):
+    session = Session(clarity_laboratory)
+    family = clarity_laboratory.public.investigation.ontology
+    if family == REPAIR:
+        clarity_act(session, "take seal")
+        clarity_act(session, "take stock")
+        survey = next(a.id for a in session.observe().carried_artifacts if a.id != "seal")
+        clarity_act(session, "configure stage [1,2,1,0,0,0,0,0]")
+        clarity_act(session, f"operate stage {survey}")
+        preview = clarity_act(session, f"probe sensor {survey}")
+        assert "context=1, x=2, y=1, z=0" in preview.message
+        summaries = {a.id: item_details(family, a) for a in session.observe().carried_artifacts}
+        assert "not measured since preparation" in summaries[survey]
+        assert "Applied treatment: none" in summaries["seal"]
+        assert "settings" not in summaries["seal"] and "reading" not in summaries["seal"]
+        clarity_act(session, f"operate sensor {survey}")
+        clarity_act(session, "configure stage [0,0,0,0,0,0,0,0]")
+        view = session.observe()
+        actual = item_details(family, next(a for a in view.carried_artifacts if a.id == survey))
+        pending = item_details(family, next(m for m in view.visible_machines if m.id == "stage"))
+        assert "context=1" in actual and "context=0" in pending
+        assert "not measured" not in actual
+    else:
+        clarity_act(session, "take carrier")
+        clarity_act(session, "configure reader [0,1,0]")
+        clarity_act(session, "operate reader carrier")
+        clarity_act(session, "configure reader [1]")
+        clarity_act(session, "configure assembler [0,0,0,0]")
+        clarity_act(session, "probe assembler carrier")
+        view = session.observe()
+        actual = item_details(family, view.carried_artifacts[0])
+        pending = item_details(family, next(m for m in view.visible_machines if m.id == "reader"))
+        assert "Installed cartridge: none" in actual
+        assert "word [0, 1, 0]" in actual
+        assert "Selected reference word: [1]" in pending
+        clarity_act(session, "operate assembler carrier")
+        actual = item_details(family, session.observe().carried_artifacts[0])
+        assert "mode0_first_link=0" in actual and "Stored reference reading: none" in actual
+
+
+def test_theory_tables_and_installed_console(clarity_laboratory, tmp_path):
+    session = Session(clarity_laboratory)
+    family = clarity_laboratory.public.investigation.ontology
+    content = session.evidence("theory.json")
+    out = io.StringIO()
+    render_theory(content, family, Console(file=out, width=140))
+    text = out.getvalue()
+    assert ("Fixed exit checks" if family == REPAIR else "Link indices") in text
+    assert ("Possible graphs" if family == REPAIR else "q3") in text
+    save_episode(clarity_laboratory, tmp_path)
+    cmd = "configure stage [0,0,0,0,0,0,0,0]" if family == REPAIR else "configure reader [0,1,0]"
+    result = CliRunner().invoke(app, ["play", str(tmp_path / "private.json")],
+                               input=f"evidence theory.json\n{cmd}\nlog\nquit\n")
+    assert result.exit_code == 0, result.exception
+    assert "Invalid action" not in result.stdout
+    assert "Turn 1 | Applied: configure" in result.stdout
+
+
+def test_reference_policy_preserves_actions_state_and_receipt(clarity_laboratory):
+    from nexus.ontology.compositional.policy import public_policy as repair_policy
+    from nexus.ontology.discovery.policy import public_policy as revision_policy
+
+    policy = repair_policy if clarity_laboratory.public.investigation.ontology == REPAIR else revision_policy
+    sessions = [Session(attach(clarity_laboratory, version)) for version in ("sealed-facility-v3", "sealed-facility-v4", "sealed-facility-v5", "sealed-facility-v6")]
+    for session in sessions:
+        policy(session, evidence_files(session.episode.public))
+        assert session.state.terminal_status.value == "won"
+    for session in sessions[1:]:
+        assert sessions[0].trace == session.trace
+        assert sessions[0].state == session.state
+        assert sessions[0].trace[-1].victory_code == session.trace[-1].victory_code
+
+
+def role_act(session, command):
+    action = ACTION_ADAPTER.validate_python(parse(command, {"take", "probe", "operate", "configure"}))
+    response = session.act(session.state.turn, action, player_only=True)
+    assert response.ok
+    return action, response
+
+
+def test_stock_and_workpiece_roles_do_not_imply_reference_or_submission(role_laboratory):
+    family = role_laboratory.public.investigation.ontology
+    session = Session(role_laboratory)
+    stock = "stock" if family == REPAIR else "blank-stock"
+    out = io.StringIO()
+    console = Console(file=out, width=140)
+    render_player(session.observe(), console=console, family=family, roles=True)
+    role_act(session, "take " + stock)
+    item = session.observe().carried_artifacts[0]
+    assert item.id != stock
+    render_player(session.observe(), console=console, family=family, roles=True)
+    text = out.getvalue()
+    assert "Remaining: unlimited" in text
+    if family == REVISION:
+        assert "not the reference device" in text
+        assert "Blank workpiece; cannot replace carrier at finish" in text
+        assert item.payload == {"build": None, "reading": None}
+        role_act(session, "take carrier")
+        render_player(session.observe(), console=console, family=family, roles=True)
+        assert "Mission carrier" in out.getvalue()
+        theory = json.loads(session.evidence("theory.json"))
+        assert "q0 + q1 + q2 + q3 = 5" in theory["notation"]["inventory"]
+        assert "1 packet if even (including zero), 2 if odd" in theory["notation"]["transfer"]
+        assert "Equal displays need not mean equal q0 values" in theory["notation"]["display"]
+    else:
+        assert "Reusable survey supply" in text and "Reusable survey" in text
+
+
+def test_measuring_probe_log_is_not_called_a_hypothetical_preview(role_laboratory):
+    session = Session(role_laboratory)
+    family = role_laboratory.public.investigation.ontology
+    role_act(session, "take " + ("stock" if family == REPAIR else "blank-stock"))
+    item = session.observe().carried_artifacts[0]
+    machine = "sensor" if family == REPAIR else "reader"
+    if family == REVISION:
+        role_act(session, "configure reader [0]")
+    before = session.state.artifacts[item.id].model_copy(deep=True)
+    action, response = role_act(session, f"probe {machine} {item.id}")
+    logged = log_entry(action, response)
+    assert "| Probe:" in logged
+    assert "| Preview:" not in logged
+    assert session.state.artifacts[item.id] == before
+    assert ("Sensor response" if family == REPAIR else "Reference display") in response.message
+
+
+@pytest.mark.parametrize("role_laboratory", [REPAIR], indirect=True)
+def test_repair_wrong_material_is_a_paid_noop_with_matching_help(role_laboratory):
+    session = Session(role_laboratory)
+    role_act(session, "take seal")
+    role_act(session, "take stock")
+    survey = next(item.id for item in session.observe().carried_artifacts if item.id != "seal")
+    for machine, target in (("stage", "seal"), ("sensor", "seal"), ("doser", survey)):
+        help_text = session.manifest().action_contract["apparatus"]["devices"][machine]["targets"]
+        assert "has no effect and still costs an action" in help_text
+        for verb in ("probe", "operate"):
+            before = session.state.model_copy(deep=True)
+            _, response = role_act(session, f"{verb} {machine} {target}")
+            assert session.state.turn == before.turn + 1
+            assert session.state.artifacts == before.artifacts
+            assert "has no effect on this material" in response.message

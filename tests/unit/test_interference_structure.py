@@ -2,6 +2,7 @@
 
 import json
 from copy import deepcopy
+from itertools import product
 from pathlib import Path
 
 import pytest
@@ -11,7 +12,7 @@ from nexus.evaluation.discovery import digest
 from nexus.evaluation.interference import Pilot
 from nexus.evaluation.interference_comparison import export_tasks, preflight
 from nexus.generator import generate_episode
-from nexus.models.actions import FinishAction, ProbeAction, WaitAction
+from nexus.models.actions import FinishAction, ProbeAction, TakeAction, WaitAction
 from nexus.ontology.interference.planner import actions_for, optimal
 from nexus.ontology.interference.structure import metrics, trajectory
 from nexus.ontology.interference.structure_proof import scalar_metrics
@@ -124,7 +125,7 @@ def test_source_bound_comparison_exports_unchanged_tasks_and_rejects_forged_metr
 
 @pytest.mark.parametrize("extra", ["drop_retake", "unchanged", "rejected"])
 def test_live_accounting_handles_drops_noops_and_rejected_requests(extra):
-    from nexus.models.actions import DropAction, OperateAction, TakeAction
+    from nexus.models.actions import DropAction, OperateAction
 
     ep = episode(67, "independent", "short")
     spec = ep.public.investigation.data()
@@ -153,7 +154,6 @@ def test_live_accounting_handles_drops_noops_and_rejected_requests(extra):
 
 
 def test_exhausted_exact_budget_retains_physical_shortfall_without_success():
-    from nexus.models.actions import TakeAction
 
     ep = episode(67, "independent", "short", resource=2)
     session = Session(ep)
@@ -166,3 +166,24 @@ def test_exhausted_exact_budget_retains_physical_shortfall_without_success():
     assert values["success_excess_actions"] is None
     assert values["remaining_minimum_actions"] == values["avoidable_actions_so_far"] == 7
     assert values["first_loss_of_optimality_turn"] == 2
+
+
+@pytest.mark.parametrize("coupling", ["independent", "coupled"])
+def test_interference_continuation_certifies_all_vectors_with_scalar_bellman_equations(coupling):
+    from nexus.ontology.interference.planner import continuation_distances
+    from nexus.ontology.interference.proof import scalar_step
+
+    episode = generate_episode(67, axis_version=2, science_family="stateful-interference-v1",
+                               theory_level=0, discovery_level=0, planning_level=0,
+                               resource_pressure=2, ontology_options={"coupling": coupling})
+    spec = episode.public.investigation.data()
+    costs = continuation_distances(spec)
+
+    def cost(vector):
+        value = costs[sum(v * 5**i for i, v in enumerate(vector))]
+        return float("inf") if value == -1 else value
+
+    for vector in product(range(5), repeat=6):
+        value = cost(vector)
+        assert value == (0 if vector == spec.target else
+                         1 + min(cost(scalar_step(spec, vector, mode)) for mode in range(6)))

@@ -8,7 +8,7 @@ from pathlib import Path
 
 import pytest
 
-from nexus.generator import generate_episode
+from nexus.generator import generate_episode, qualify_episode
 from nexus.generator.resonance import tables
 from nexus.models.actions import ACTION_ADAPTER
 from nexus.models.episode import PlayerManifest
@@ -76,3 +76,12 @@ def test_shared_factor_tables_are_read_only():
     for rows in (h_rows, g_rows):
         with pytest.raises(TypeError):
             rows[(0, 0)] = ()
+
+
+@pytest.mark.parametrize("family,secret", [("coupled-network-v1","network-test-secret"), ("resonant-network-v1","resonance-test-secret")])
+@pytest.mark.parametrize("theory", [0,3])
+def test_control_evidence_supplies_a_win_without_measurements(family, secret, theory):
+    e = generate_episode(7, axis_version=2, science_family=family, discovery_level=0,
+        theory_level=theory, planning_level=0, resource_pressure=0, verifier_secret=secret)
+    assert [a["type"] for a in e.reference_plan] == ["configure", "finish"]
+    assert qualify_episode(e).passed

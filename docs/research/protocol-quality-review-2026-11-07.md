@@ -22,7 +22,7 @@ family or starting cap in an older summary. These defects do not change which
 actions won or the validity of an issued receipt. A transport retry is a possible
 explanation for an extra action only when a trace or harness log shows it happened.
 
-**Reproduction.** The [boundary tests](../../tests/unit/test_review_boundaries.py)
+**Reproduction.** The [boundary tests](https://github.com/petmal/NEXUS/blob/f098fe9603c905774219641e40f6277c0329e86b/tests/unit/test_review_boundaries.py)
 compare the files delivered by HTTP with the exported attachment bytes and both
 operator bindings. They also check a changed mission with recomputed file
 checksums, separate Python sessions, retransmission of a committed action, and

@@ -1,271 +1,121 @@
 name: CI
-
 on:
-  push:
-    branches: [main]
-    paths:
-      - "**"
-      - "docs/difficulty-model-matrix.json"
-      - "docs/structural-model-matrix.json"
-      - "docs/budget-diagnostic-matrix.json"
-      - "docs/transfer-model-matrix.json"
-      - "docs/astra-diagnostic-matrix.json"
-      - "docs/history-diagnostic-matrix.json"
-      - "docs/staged-repair-matrix.json"
-      - "docs/joint-assembly-matrix.json"
-      - "docs/discovery-pocs-matrix.json"
-      - "docs/coupled-memory-matrix.json"
-      - "docs/stateful-matrix.json"
-      - "docs/model-revision-matrix.json"
-      - "docs/planning-resource-matrix.json"
-      - "docs/coordination-matrix.json"
-      - "docs/interference-matrix.json"
-      - "docs/cross-axis-matrix.json"
   pull_request:
-    paths:
-      - "**"
-      - "docs/difficulty-model-matrix.json"
-      - "docs/structural-model-matrix.json"
-      - "docs/budget-diagnostic-matrix.json"
-      - "docs/transfer-model-matrix.json"
-      - "docs/astra-diagnostic-matrix.json"
-      - "docs/history-diagnostic-matrix.json"
-      - "docs/staged-repair-matrix.json"
-      - "docs/joint-assembly-matrix.json"
-      - "docs/discovery-pocs-matrix.json"
-      - "docs/coupled-memory-matrix.json"
-      - "docs/stateful-matrix.json"
-      - "docs/model-revision-matrix.json"
-      - "docs/planning-resource-matrix.json"
-      - "docs/coordination-matrix.json"
-      - "docs/interference-matrix.json"
-      - "docs/cross-axis-matrix.json"
+    branches:
+      - main
+  push:
+    branches:
+      - main
+  merge_group:
   workflow_dispatch:
-    inputs:
-      full:
-        description: "Run extended tests, cross-seed stress, CLI smoke, and container smoke"
-        required: true
-        type: boolean
-        default: false
-      stress_seed_count:
-        description: "Cross-seed sample size for a full run"
-        required: true
-        type: choice
-        options:
-          - "3"
-          - "5"
-          - "10"
-        default: "5"
-
 permissions:
   contents: read
-
+# Superseded PRs may cancel; each main/queue/manual run keeps its own group.
 concurrency:
-  group: ci-${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
-
+  group: nexus-ci-${{ github.event_name }}-${{ github.event.pull_request.number || github.run_id }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+env:
+  NEXUS_PR_HEAD: ${{ github.event.pull_request.head.sha }}
+  UV_PYTHON: 3.14.7
 jobs:
-  test:
-    runs-on: ubuntu-latest
+  quality:
+    name: Quality and packaging
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: ./.github/actions/setup
+        with:
+          cache-suffix: quality
+      - run: make ci GROUP=quality
+      - name: Upload results and timings
+        if: ${{ always() }}
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: ci-quality
+          path: ci-results/quality/
+          retention-days: 7
+  host:
+    name: Tests (${{ matrix.group }})
+    runs-on: ubuntu-24.04
     timeout-minutes: 240
+    strategy:
+      fail-fast: false
+      matrix:
+        group:
+          - core
+          - scientific
+          - planning
+          - interfaces
+          - evaluation
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
-
-      - uses: actions/setup-python@v7
+      - uses: ./.github/actions/setup
         with:
-          python-version: "3.14.7"
-
-      - name: Cache uv downloads
-        uses: actions/cache@v6
+          cache-suffix: host-${{ matrix.group }}
+      - name: Install minimum operator Python
+        if: ${{ matrix.group == 'evaluation' }}
+        id: operator
+        uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
         with:
-          path: ~/.cache/uv
-          key: uv-${{ runner.os }}-py314-${{ hashFiles('uv.lock') }}
-          restore-keys: |
-            uv-${{ runner.os }}-py314-
-
-      - name: Install uv
-        run: python -m pip install --no-deps uv==0.12.21
-
-      - name: Verify lock and install
-        run: |
-          uv lock --check
-          uv sync --frozen --all-extras
-
-      - name: Check immutable dynamics reference
-        run: uv run python scripts/compile_dynamics_reference.py
-
-      - name: Check immutable transfer reference and pilot
-        run: |
-          uv run python scripts/compile_transfer_observations.py
-          uv run python scripts/compile_transfer_reference.py
-          uv run python scripts/preflight_transfer.py --output /tmp/nexus-transfer-preflight.json
-          uv run python scripts/preflight_transfer.py --matrix docs/astra-diagnostic-matrix.json --output /tmp/nexus-astra-preflight.json
-
-      - name: History PoC proof and matrix
-        run: |
-          uv run python scripts/history_oracle.py --output /tmp/history-proof.json
-          uv run python scripts/preflight_history.py --output /tmp/history-preflight.json
-
-      - name: Staged repair independent proof and matrix
-        run: |
-          uv run python scripts/staged_repair_oracle.py --output /tmp/staged-proof.json
-          uv run python scripts/preflight_staged_repair.py --output /tmp/staged-preflight.json
-
-      - name: Solver proof tests
-        run: |
-          uv run pytest -q tests/unit/test_belief_policy.py --maxfail=1 --durations=10
-
-      - name: Joint assembly independent proof and qualified matrix
-        # This bounded prior/proof runs on every feature CI execution.
-        run: |
-          uv run python scripts/joint_assembly_oracle.py --output /tmp/assembly-proof.json
-          uv run python scripts/preflight_joint_assembly.py --output /tmp/assembly-preflight.json
-
-      - name: Discovery PoC independent proofs and paired matrix
-        run: |
-          uv run python scripts/discovery_oracle.py --output /tmp/discovery-proof.json
-          uv run python scripts/preflight_discovery.py --output /tmp/discovery-preflight.json
-
-      - name: Coupled memory independent proof and paired pilot
-        run: uv run python scripts/preflight_coupled_memory.py --output /tmp/coupled-preflight.json --proof-output /tmp/coupled-proof.json
-
-      - name: Stateful trajectory qualification and paired matrix
-        run: uv run python scripts/preflight_stateful.py --output /tmp/stateful-preflight.json
-
-      - name: Model revision independent proof and paired matrix
-        run: uv run python scripts/preflight_revision.py --output /tmp/revision-preflight.json
-
-      - name: Planning/resource independent costs and matched pilot
-        run: uv run python scripts/preflight_planning.py --output /tmp/planning-resource-preflight.json
-
-      - name: Coordination independent costs and paired controls
-        run: uv run python scripts/preflight_coordination.py --output /tmp/coordination-preflight.json --tasks-output /tmp/coordination-tasks
-
-      - name: Disclosed interference independent costs and subgoal regression
-        run: uv run python scripts/preflight_interference.py --output /tmp/interference-preflight.json --tasks-output /tmp/interference-tasks
-
-      - name: Two-model interference comparison structural qualification
-        run: uv run python scripts/preflight_interference_comparison.py --output /tmp/interference-comparison-preflight.json --tasks-output /tmp/interference-comparison-tasks
-
-      - name: Cross-axis current-source qualification and task export
-        run: uv run python scripts/preflight_cross_axis.py --output /tmp/cross-axis-preflight.json --tasks-output /tmp/cross-axis-tasks
-
-      - name: Fresh-world mechanical qualification
-        run: uv run python scripts/fresh_worlds.py --output /tmp/fresh-world-preflight.json --tasks-output /tmp/fresh-world-tasks
-
-      - name: Lint and current documentation
-        run: make check
-
-      - name: Clean wheel and source-distribution installation
-        run: make package
-
-      - name: Fast tests
-        run: |
-          uv run pytest -q -m "not slow and not stress" tests/unit tests/integration \
-            --ignore=tests/unit/test_belief_policy.py --maxfail=1 --durations=15
-
-      - name: Extended unit and integration tests
-        if: ${{ (github.event_name == 'workflow_dispatch' && inputs.full) || (github.event_name == 'pull_request' && github.base_ref == 'feat/epistemic-calibration') }}
-        run: |
-          uv run pytest -q -m slow tests/unit tests/integration \
-            --maxfail=1 --durations=20
-
-      - name: Cross-seed property stress
-        if: ${{ (github.event_name == 'workflow_dispatch' && inputs.full) || (github.event_name == 'pull_request' && github.base_ref == 'feat/epistemic-calibration') }}
+          python-version: '3.12'
+      - run: make ci GROUP="${CI_GROUP}"
         env:
-          NEXUS_STRESS_SEED_COUNT: ${{ inputs.stress_seed_count || '3' }}
-          NEXUS_STRESS_FAIL_FAST: "1"
-        run: |
-          uv run pytest -q -m stress tests/property --maxfail=1 --durations=20
-
-      - name: CLI smoke test
-        if: ${{ (github.event_name == 'workflow_dispatch' && inputs.full) || (github.event_name == 'pull_request' && github.base_ref == 'feat/epistemic-calibration') }}
-        run: |
-          uv run nexus generate /tmp/nexus-smoke --seed 17 --discovery-level 2 \
-            --planning-level 3 --resource-pressure 2
-          uv run nexus qualify /tmp/nexus-smoke/private.json
-          uv run nexus solve /tmp/nexus-smoke/private.json --trace-out /tmp/nexus-smoke/run.jsonl
-          uv run nexus replay /tmp/nexus-smoke/private.json /tmp/nexus-smoke/run.jsonl
-          uv run nexus generate /tmp/nexus-t3-smoke --seed 17 --discovery-level 2 \
-            --planning-level 3 --resource-pressure 2 --theory-level 3
-          uv run nexus qualify /tmp/nexus-t3-smoke/private.json
-          uv run nexus solve /tmp/nexus-t3-smoke/private.json --trace-out /tmp/nexus-t3-smoke/run.jsonl
-          uv run nexus replay /tmp/nexus-t3-smoke/private.json /tmp/nexus-t3-smoke/run.jsonl
-          uv run nexus generate /tmp/nexus-science-smoke --axis-version 2 --seed 17 \
-            --discovery-level 5 --theory-level 3 --planning-level 1 --resource-pressure 1
-          uv run nexus qualify /tmp/nexus-science-smoke/private.json
-          uv run nexus solve /tmp/nexus-science-smoke/private.json --trace-out /tmp/nexus-science-smoke/run.jsonl
-          uv run nexus replay /tmp/nexus-science-smoke/private.json /tmp/nexus-science-smoke/run.jsonl
-          uv run nexus generate /tmp/nexus-network-smoke --axis-version 2 --seed 17 \
-            --science-family coupled-network-v1 --discovery-level 5 --theory-level 3 \
-            --planning-level 1 --resource-pressure 1
-          uv run nexus qualify /tmp/nexus-network-smoke/private.json
-          uv run nexus solve /tmp/nexus-network-smoke/private.json --trace-out /tmp/nexus-network-smoke/run.jsonl
-          uv run nexus replay /tmp/nexus-network-smoke/private.json /tmp/nexus-network-smoke/run.jsonl
-          uv run nexus generate /tmp/nexus-resonant-smoke --axis-version 2 --seed 17 \
-            --science-family resonant-network-v1 --discovery-level 5 --theory-level 3 \
-            --planning-level 1 --resource-pressure 1
-          uv run nexus solve /tmp/nexus-resonant-smoke/private.json --trace-out /tmp/nexus-resonant-smoke/run.jsonl
-          uv run nexus replay /tmp/nexus-resonant-smoke/private.json /tmp/nexus-resonant-smoke/run.jsonl
-
-          uv run nexus generate /tmp/nexus-causal-smoke --axis-version 2 --seed 17 \
-            --science-family causal-mechanisms-v1 --discovery-level 5 --theory-level 3 \
-            --planning-level 1 --resource-pressure 1
-          uv run nexus qualify /tmp/nexus-causal-smoke/private.json
-          uv run nexus solve /tmp/nexus-causal-smoke/private.json --trace-out /tmp/nexus-causal-smoke/run.jsonl
-          uv run nexus replay /tmp/nexus-causal-smoke/private.json /tmp/nexus-causal-smoke/run.jsonl
-          uv run nexus generate /tmp/nexus-repair-smoke --axis-version 2 --seed 17 \
-            --science-family coupled-repair-v1 --discovery-level 5 --theory-level 3 \
-            --planning-level 1 --resource-pressure 1
-          uv run nexus qualify /tmp/nexus-repair-smoke/private.json
-          uv run nexus solve /tmp/nexus-repair-smoke/private.json --trace-out /tmp/nexus-repair-smoke/run.jsonl
-          uv run nexus replay /tmp/nexus-repair-smoke/private.json /tmp/nexus-repair-smoke/run.jsonl
-
-  # Packaging is independent of Python test execution. Detect missing build-context
-  # files immediately instead of after all exhaustive legacy-domain checks.
+          CI_GROUP: ${{ matrix.group }}
+          NEXUS_OPERATOR_PYTHON: ${{ steps.operator.outputs.python-path }}
+      - name: Upload results and timings
+        if: ${{ always() }}
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: ci-host-${{ matrix.group }}
+          path: ci-results/${{ matrix.group }}/
+          retention-days: 7
   container:
-    if: ${{ (github.event_name == 'workflow_dispatch' && inputs.full) || (github.event_name == 'pull_request' && github.base_ref == 'feat/epistemic-calibration') }}
-    runs-on: ubuntu-latest
-    timeout-minutes: 60
+    name: Containers (${{ matrix.group }})
+    runs-on: ubuntu-24.04
+    timeout-minutes: 120
+    strategy:
+      fail-fast: false
+      matrix:
+        group:
+          - scientific
+          - planning
+          - panels
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
-
-      - name: Container smoke test
-        run: |
-          docker build --build-arg VCS_REF="$GITHUB_SHA" -t nexus-ci .
-          test "$(docker image inspect nexus-ci --format '{{ index .Config.Labels "org.opencontainers.image.revision" }}')" = "$GITHUB_SHA"
-          docker run --rm --entrypoint python nexus-ci --version
-          docker run --rm --entrypoint python nexus-ci scripts/preflight_repair.py
-          docker run --rm --entrypoint python nexus-ci scripts/preflight_matrix.py --output /tmp/matrix-preflight.json
-          docker run --rm --entrypoint python nexus-ci scripts/preflight_structural.py --output /tmp/structural-preflight.json
-          docker run --rm --entrypoint python nexus-ci scripts/preflight_budget.py --output /tmp/budget-preflight.json
-          docker run --rm --entrypoint python nexus-ci scripts/preflight_transfer.py --output /tmp/transfer-preflight.json
-          docker run --rm --entrypoint python nexus-ci scripts/preflight_transfer.py --matrix docs/astra-diagnostic-matrix.json --output /tmp/astra-preflight.json
-          docker run --rm --entrypoint python nexus-ci scripts/preflight_history.py --output /tmp/history-preflight.json
-          docker run --rm --entrypoint python nexus-ci scripts/preflight_staged_repair.py --output /tmp/staged-preflight.json
-          docker run --rm --entrypoint python nexus-ci scripts/preflight_joint_assembly.py --output /tmp/assembly-preflight.json
-          docker run --rm --entrypoint python nexus-ci scripts/preflight_discovery.py --output /tmp/discovery-preflight.json
-          docker run --rm --entrypoint python nexus-ci scripts/preflight_coupled_memory.py --output /tmp/coupled-preflight.json
-          docker run --rm --entrypoint python nexus-ci scripts/preflight_stateful.py --output /tmp/stateful-preflight.json
-          docker run --rm --entrypoint python nexus-ci scripts/preflight_revision.py --output /tmp/revision-preflight.json
-          docker run --rm nexus-ci --help
-          docker run --rm nexus-ci generate /tmp/nexus-t3 --seed 17 \
-            --discovery-level 2 --planning-level 0 --theory-level 3
-          docker run --rm nexus-ci generate /tmp/nexus-science --axis-version 2 --seed 17 \
-            --discovery-level 5 --planning-level 0 --theory-level 3 --resource-pressure 0
-          docker run --rm -e NEXUS_SCIENCE_FAMILY=coupled-network-v1 nexus-ci generate \
-            /tmp/nexus-network --axis-version 2 --seed 17 --discovery-level 5 \
-            --planning-level 1 --theory-level 3 --resource-pressure 1
-          docker run --rm -e NEXUS_SCIENCE_FAMILY=resonant-network-v1 nexus-ci generate \
-            /tmp/nexus-resonant --axis-version 2 --seed 17 --discovery-level 5 \
-            --planning-level 1 --theory-level 3 --resource-pressure 1
-          docker run --rm -e NEXUS_SCIENCE_FAMILY=causal-mechanisms-v1 nexus-ci generate \
-            /tmp/nexus-causal --axis-version 2 --seed 17 --discovery-level 5 \
-            --planning-level 1 --theory-level 3 --resource-pressure 1
-          docker run --rm -e NEXUS_SCIENCE_FAMILY=coupled-repair-v1 nexus-ci generate \
-            /tmp/nexus-repair --axis-version 2 --seed 17 --discovery-level 5 \
-            --planning-level 1 --theory-level 3 --resource-pressure 1
+      - uses: ./.github/actions/setup
+        with:
+          cache-suffix: container-${{ matrix.group }}
+      - run: make ci GROUP="container-${CI_GROUP}"
+        env:
+          CI_GROUP: ${{ matrix.group }}
+      - name: Upload results and timings
+        if: ${{ always() }}
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: ci-container-${{ matrix.group }}
+          path: ci-results/container-${{ matrix.group }}/
+          retention-days: 7
+  complete:
+    name: complete
+    if: ${{ always() }}
+    needs:
+      - quality
+      - host
+      - container
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Require every group to succeed
+        run: python3 scripts/ci.py gate
+        env:
+          NEXUS_CI_NEEDS: ${{ toJSON(needs) }}

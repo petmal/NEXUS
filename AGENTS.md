@@ -89,8 +89,8 @@ that exercises the observable defect or an independently checked invariant.
 
 | When | Check |
 |---|---|
-| Normal change | Run relevant tests, then `make check` (Ruff and local docs) and `make test` (fast unit/integration). |
-| Core mechanics, solver or release candidate | `make test-full` includes slow unit/integration cases; `make stress` runs the separate property suite. |
+| Normal change | Run relevant tests, then `make check` (Ruff and local docs) and `make test` (the local fast unit/integration command). Reproduce the affected complete CI group with `make ci GROUP=interfaces`, for example. |
+| Core mechanics, solver or release candidate | `make test-full` runs all unit, integration and property cases, including slow tests. `make stress` runs just the property suite. Full CI fixes the legacy stress sample at all ten seeds. |
 | Changes to files included in the [runtime source digest](src/nexus/provenance.py) | After the final source edit, run `make qualify-release`, then `make preflight`. Use the resulting source and current reports for release checks. Never hand-edit a digest to make a gate pass. For host-only changes, check the affected panel packager and readout instead; regenerate an operator report if its own source binding changed. |
 | Packaging or release | `make package` checks clean distribution installs. See [release readiness](docs/release-readiness.md) for container, live-canary and publication gates. Local tests do not establish provider behavior. |
 
@@ -99,3 +99,18 @@ results; regenerate only the current reports. Version changes to evaluated publi
 text and schema contracts so old results remain interpretable. Write introductory
 docs for a first-time player and research reports for an AI/CS undergraduate.
 Record what changed, which checks actually ran, and what remains unverified.
+
+## Maintaining CI
+
+[Testing and CI](docs/development/testing.md) defines the groups and their non-pytest
+checks. Every new test module needs exactly one entry in
+[the group manifest](tests/ci-groups.json); run `make ci-partition` after moving tests.
+Keep independent mathematical oracles and supported historical presentation/world
+contracts. Age or a `poc` filename is not evidence that a test is obsolete.
+
+PRs to main, main pushes and merge-queue revisions run the complete deterministic
+suite. The required `complete` check must reject missing, skipped, cancelled or
+failed groups. Do not add path filters, optional correctness jobs or provider calls.
+Keep action pins, local commands and the maintained CI guide consistent. CI verifies
+source-bound reference artifacts; it must never refresh tracked proofs to hide a
+mismatch. Record full-suite GitHub timings separately from local or fast-only runs.

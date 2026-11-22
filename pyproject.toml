@@ -49,8 +49,8 @@ packages = ["src/nexus"]
 pythonpath = ["src"]
 testpaths = ["tests"]
 markers = [
-  "slow: broader multi-profile tests kept out of the default paid CI fast gate",
-  "stress: cross-seed/property stress tests intended for explicit full validation",
+  "slow: broader multi-profile tests omitted only by the local fast command",
+  "stress: cross-seed/property tests included in full CI and make test-full",
 ]
 
 [tool.ruff]

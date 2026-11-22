@@ -1,6 +1,7 @@
 """A matrix is admitted by generated evidence and coverage, not optimistic labels."""
 
 import copy
+import importlib
 import json
 import subprocess
 import sys
@@ -136,3 +137,38 @@ def test_real_matrix_preflight_and_stale_binding(tmp_path):
     report["rows"].pop()
     with pytest.raises(ValueError):
         verify_preflight_binding(m, report)
+
+
+MATRIX_CONTRACTS = [
+    ("assembly", "joint-assembly-matrix.json", "preflight_joint_assembly.py", "joint-assembly-pilot-v1"),
+    ("discovery", "discovery-pocs-matrix.json", "preflight_discovery.py", "discovery-pocs-pilot-v1"),
+    ("history", "history-diagnostic-matrix.json", "preflight_history.py", "history-coupled-pilot-v1"),
+    ("staged", "staged-repair-matrix.json", "preflight_staged_repair.py", "staged-repair-pilot-v1"),
+]
+
+@pytest.mark.parametrize("module,matrix_name,script,version", MATRIX_CONTRACTS, ids=[r[0] for r in MATRIX_CONTRACTS])
+def test_source_failure_replaces_stale_success(tmp_path, monkeypatch, module, matrix_name, script, version):
+    from nexus.ontology.repair import qualification
+    evaluation = importlib.import_module("nexus.evaluation." + module)
+    pilot = evaluation.Pilot.model_validate_json((Path(__file__).parents[2] / "docs" / matrix_name).read_text())
+    def fail():
+        raise OSError("source unavailable")
+    monkeypatch.setattr(qualification, "source_binding", fail)
+    output = tmp_path / "report.json"
+    output.write_text('{"status":"passed"}')
+    with pytest.raises(OSError, match="source unavailable"):
+        evaluation.preflight(pilot, output)
+    assert json.loads(output.read_text())["status"] == "blocked"
+
+@pytest.mark.parametrize("module,matrix_name,script,version", [r for r in MATRIX_CONTRACTS if r[0] != "history"], ids=[r[0] for r in MATRIX_CONTRACTS if r[0] != "history"])
+@pytest.mark.parametrize("kind", ["missing", "malformed", "incomplete"])
+def test_cli_invalid_input_removes_stale_success(tmp_path, module, matrix_name, script, version, kind):
+    matrix, output = tmp_path / "matrix.json", tmp_path / "report.json"
+    if kind != "missing":
+        matrix.write_text("{" if kind == "malformed" else json.dumps({"version":version}))
+    output.write_text('{"status":"passed","old":true}')
+    result = subprocess.run([sys.executable, str(Path(__file__).parents[2] / "scripts" / script),
+        "--matrix",str(matrix),"--output",str(output)],capture_output=True,text=True,timeout=15,check=False)
+    assert result.returncode != 0
+    report = json.loads(output.read_text())
+    assert report["status"] == "blocked" and report["error"] and "old" not in report

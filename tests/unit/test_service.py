@@ -1,8 +1,13 @@
+import io
+import json
+
 import pytest
 from fastapi.testclient import TestClient
 
-from nexus.generator import generate_episode
 import nexus.protocol.transport as service_transport
+from nexus.generator import generate_episode
+from nexus.models.actions import WaitAction
+from nexus.protocol import transport
 from nexus.protocol.client import (
     SERVICE_REQUEST_ADAPTER,
     ValidationResult,
@@ -11,7 +16,8 @@ from nexus.protocol.client import (
     validate_candidate_with_performance,
 )
 from nexus.protocol.http import create_single_session_app
-from nexus.protocol.session import PERFORMANCE_SCHEMA_URL
+from nexus.protocol.session import PERFORMANCE_SCHEMA_URL, Session
+from nexus.protocol.stdio import run_jsonl
 from nexus.verification.receipt import victory_receipt
 
 
@@ -175,7 +181,6 @@ def test_protocol_v01_loaded_episode_retains_legacy_static_observation_context()
     assert observed["evidence_files"] == sorted(episode.public.evidence_files)
 
 
-
 def test_active_routes_never_expose_terminal_diagnostics_and_finalization_is_idempotent():
     episode = generate_episode(2031, verifier_secret="fixed-secret")
     client = TestClient(create_single_session_app(episode))
@@ -235,3 +240,58 @@ def test_validator_rejects_contradictory_finalization_without_scoring(monkeypatc
     monkeypatch.setattr(service_transport, "_json_request", lambda *_args: reply)
     with pytest.raises(service_transport.ClientError):
         validate_candidate_with_performance(reply["victory_code"] or "")
+
+
+def test_file_and_python_clients_can_retry_a_committed_turn_without_spending_again(boundary_world, monkeypatch):
+    session = Session(boundary_world(False))
+    calls = []
+
+    def send(base_url, method, path, payload=None, **options):
+        calls.append(path)
+        if path == "/status":
+            return session.status().model_dump(mode="json")
+        assert path == "/action" and payload["action"] == {"type": "wait"}
+        return session.act(payload["expected_turn"], WaitAction()).model_dump(mode="json")
+
+    monkeypatch.setattr(transport, "_json_request", send)
+    pinned = {"operation": "action", "expected_turn": 0, "action": {"type": "wait"}}
+    assert transport.request_service_payload(pinned)["current_turn"] == 1
+    assert request_service(SERVICE_REQUEST_ADAPTER.validate_python(pinned))["duplicate"]
+    assert calls == ["/action", "/action"] and session.state.turn == 1
+    auto = SERVICE_REQUEST_ADAPTER.validate_python(
+        {"operation": "action", "action": {"type": "wait"}}
+    )
+    assert request_service(auto)["current_turn"] == 2
+    assert calls[-2:] == ["/status", "/action"]
+
+
+@pytest.mark.parametrize("turn", [True, -1, 0.5, "0", None])
+def test_invalid_pinned_turn_is_rejected_before_network_access(monkeypatch, turn):
+    monkeypatch.setattr(
+        transport, "_json_request", lambda *a, **kw: pytest.fail("unexpected request")
+    )
+    data = {"operation": "action", "action": {"type": "wait"}, "expected_turn": turn}
+    with pytest.raises(ValueError):
+        SERVICE_REQUEST_ADAPTER.validate_python(data)
+    with pytest.raises(transport.ClientError):
+        transport.request_service_payload(data)
+
+
+@pytest.mark.parametrize("turn", [0.9, True, "0", None, -1])
+def test_turn_identifiers_are_strict_and_consistent_across_transports(hardened_episode, turn):
+    request = {"expected_turn": turn, "action": hardened_episode.reference_plan[0]}
+    app = create_single_session_app(hardened_episode)
+    with TestClient(app) as client:
+        assert client.post("/action", json=request).status_code == 422
+        assert client.get("/status").json()["turn"] == 0
+    output = io.StringIO()
+    run_jsonl(hardened_episode, io.StringIO(json.dumps(request) + "\n"), output)
+    rows = [json.loads(line) for line in output.getvalue().splitlines()]
+    assert rows[0]["observation"]["turn"] == 0
+    assert rows[1]["ok"] is False
+    session = Session(hardened_episode)
+    from nexus.models.actions import ACTION_ADAPTER
+
+    with pytest.raises(ValueError, match="nonnegative integer"):
+        session.act(turn, ACTION_ADAPTER.validate_python(hardened_episode.reference_plan[0]))
+    assert not session.trace and session.state.turn == 0

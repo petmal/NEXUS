@@ -1,5 +1,7 @@
 """Mission uncertainty is joint winning-set intersection, not parameter entropy."""
 
+from itertools import combinations, product
+
 import pytest
 
 from nexus.evaluation.goal_information import (
@@ -68,3 +70,33 @@ def test_history_seed_239_common_procedure_is_not_a_guess():
     assert words()[word_index(word)] == word
     result = assess_panel(tuple(decisions().winning[i] for i in indices(mask)), ((0,),) * 32, ())
     assert result.supported_worlds == 32
+
+
+def test_supporting_certificate_matches_all_subsets_on_small_overlapping_priors():
+    from nexus.evaluation.goal_information import minimum_supporting_certificate
+
+    # Each mask contains actual world zero. Other worlds can share overlapping
+    # accepted decisions; identifying the entire truth need not be necessary.
+    for outcomes in product((1, 3, 5, 7), repeat=3):
+        for winning in product((1, 3, 5, 7), repeat=2):
+            minimum = None
+            for size in range(4):
+                for chosen in combinations(range(3), size):
+                    remaining = 7
+                    for index in chosen:
+                        remaining &= outcomes[index]
+                    if any(remaining & decision == remaining for decision in winning):
+                        minimum = size
+                        break
+                if minimum is not None:
+                    break
+            if minimum is None:
+                with pytest.raises(ValueError, match="no guaranteed decision"):
+                    minimum_supporting_certificate(7, outcomes, winning)
+            else:
+                witness = minimum_supporting_certificate(7, outcomes, winning)
+                assert len(witness) == minimum
+                remaining = 7
+                for index in witness:
+                    remaining &= outcomes[index]
+                assert any(remaining & decision == remaining for decision in winning)

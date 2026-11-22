@@ -12,11 +12,14 @@ make test
 ```
 
 `make check` runs the pinned lint baseline and documentation-link checks.
-`make test` runs fast unit/integration tests. `make test-full` includes slower
-unit/integration cases; `make stress` runs the property suite. `make package`
+`make test` (also `make test-fast`) runs fast unit/integration tests.
+`make test-full` runs every test, including slow and property cases;
+`make stress` runs only the property suite. `make package`
 builds a wheel and source distribution and checks clean installation. None of
 these commands calls a paid model. See [release status](docs/release-readiness.md)
-for the separate container and live-provider gates.
+for the separate live-provider gate. PR and main CI always run the complete
+deterministic suite, including containers. See [testing and CI](docs/development/testing.md)
+for parallel groups, local reproduction, timing reports and adding tests.
 
 The engine owns atomic transitions, costs, terminal state, receipts and replay.
 Ontologies supply validated laws, inference and qualification. Renderers project

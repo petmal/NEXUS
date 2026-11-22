@@ -2,6 +2,7 @@ import pytest
 
 from nexus.generator import generate_episode
 from nexus.models import ACTION_ADAPTER
+from nexus.models.episode import PrivateEpisode
 from nexus.protocol.session import Session
 
 
@@ -240,3 +241,11 @@ def test_retry_returns_an_independent_copy_of_the_committed_observation():
     retry.observation.room = "other again"
     assert session.act(0, action).model_dump(exclude={"duplicate"}) == original
     assert session.state.turn == len(session.trace_snapshot()) == 1
+
+
+def test_missing_legacy_qualification_is_rejected_before_starting_session(hardened_episode):
+    data = hardened_episode.model_dump(mode="json")
+    del data["generation_metadata"]
+    malformed = PrivateEpisode.model_validate(data)
+    with pytest.raises(ValueError, match="qualified guaranteed-policy metadata"):
+        Session(malformed)
