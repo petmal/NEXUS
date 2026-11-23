@@ -491,3 +491,25 @@ def test_serve_session_uses_new_family_environment(monkeypatch):
     manifest = TestClient(captured["app"]).get("/manifest").json()
     assert "family" not in manifest["action_contract"]["apparatus"]
     assert "stage" in manifest["action_contract"]["apparatus"]["configuration"]
+
+
+@pytest.mark.parametrize("field,bad", [
+    ("scenario_family_id", "unrelated-world"), ("room_count", 3), ("machine_count", 4),
+    ("guaranteed_policy_action_count", 1), ("required_probe_count", 99),
+    ("estimated_reference_actions", 1), ("optimal_action_count", 17), ("action_budget", 1),
+    ("recommended_tool_call_limit", 2), ("viable_causal_hypotheses", 1),
+])
+def test_causal_import_and_qualification_reject_contradictory_metrics(tmp_path, field, bad):
+    episode = generate_causal(17, planning_level=0, resource_pressure=2)
+    assert getattr(episode.generation_metadata, field) != bad
+    setattr(episode.generation_metadata, field, bad)
+    path = tmp_path / "private.json"
+    path.write_text(episode.model_dump_json())
+    with pytest.raises(ValidationError, match=field):
+        load_private(path)
+    report = qualify_episode(episode)
+    assert not report.passed and field in " ".join(report.errors)
+    cli = CliRunner().invoke(app, ["qualify", str(path)])
+    assert cli.exit_code == 2
+    assert json.loads(cli.output)["checks"] == {"compiled_contract": False}
+    assert field in cli.output and episode.verifier_secret not in cli.output

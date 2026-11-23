@@ -254,7 +254,20 @@ def qualify(private: Path = typer.Argument(..., exists=True, readable=True)) -> 
     from nexus.generator import qualify_episode
     from nexus.io import load_private
 
-    report = qualify_episode(load_private(private))
+    from pydantic import ValidationError
+
+    from nexus.generator.qualify import QualificationReport
+
+    try:
+        episode = load_private(private)
+    except ValidationError as exc:
+        # Keep a schema/ontology rejection machine-readable without echoing private input.
+        errors = tuple(error["msg"] for error in exc.errors(include_input=False, include_url=False))
+        report = QualificationReport(passed=False, checks={"compiled_contract": False}, errors=errors)
+    except (OSError, UnicodeError) as exc:
+        report = QualificationReport(passed=False, checks={"readable_episode": False}, errors=(str(exc),))
+    else:
+        report = qualify_episode(episode)
     console.print_json(data=report.model_dump(mode="json"))
     if not report.passed:
         raise typer.Exit(code=2)

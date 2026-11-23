@@ -67,7 +67,7 @@ def validate_episode(episode):
         raise ValueError("D0 evidence must resolve the mission")
     if expected(episode) not in possible:
         raise ValueError("resolved prediction contradicts private mechanism")
-    from nexus.ontology.causal.qualification import certificate
+    from nexus.ontology.causal.qualification import certificate, research_metadata
 
     proof = certificate(initial_mask(spec), metadata.planning_level, spec.discovery != 2)
     bound = proof["reference_action_bound"]
@@ -82,6 +82,12 @@ def validate_episode(episode):
         or any(m.uses_remaining != uses for m in state.machines.values())
     ):
         raise ValueError("causal resource limits do not match profile")
+    expected_metrics = research_metadata(proof, state, len(room_ids), metadata.planning_level,
+                                         spec, resource)
+    # Qualification separately checks the versioned nested proof, including legacy v1.
+    for name in type(expected_metrics).model_fields:
+        if name != "investigation_certificate" and getattr(metadata, name) != getattr(expected_metrics, name):
+            raise ValueError(f"causal generation metadata contradicts world: {name}")
     if state.turn != 0 or state.mission_accepted or state.terminal_status.value != "active":
         raise ValueError("causal initial state must be fresh and active")
 

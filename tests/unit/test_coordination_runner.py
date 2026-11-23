@@ -1082,3 +1082,31 @@ def test_comparison_package_rejects_inconsistent_feasibility_proofs(
     dump(path, document)
     with pytest.raises(ValueError, match="comparison reports:"):
         state["packager"].validate_comparison_reports(state["source"])
+
+
+@pytest.mark.parametrize("empty", [False, True])
+def test_cancelled_before_first_result_reports_only_missing_slots(setup, monkeypatch, empty):
+    original = runner.subprocess.run
+
+    def interrupt(command, **kwargs):
+        if command[0] == "./mindtrial":
+            if empty:
+                config = next(v.split("=", 1)[1] for v in command if v.startswith("-config="))
+                Path(config).with_name("mindtrial.json").write_bytes(b"")
+            raise KeyboardInterrupt
+        return original(command, **kwargs)
+
+    monkeypatch.setattr(runner.subprocess, "run", interrupt)
+    assert runner.main(["--skip-build", "--suite", "core"], package_dir=setup["package"]) == 130
+    (record,) = manifests(setup)
+    folder = Path(record["output_dir"])
+    readout = runner.readout_module(RUNNER.parent)
+    report = readout.summarize(folder)
+    assert report["result_binding_status"] == "no_result_at_exit"
+    assert report["recorded_attempts"] == 0 and not report["matrix_complete"]
+    assert len(report["missing"]) == len(record["selection"]["task_names"]) == 16
+    with pytest.raises(ValueError, match="result binding"):
+        readout.verify_result_binding(folder, record, required=True)
+    (folder / "mindtrial.json").write_text('{"Results": {}}')
+    with pytest.raises(ValueError, match="result binding"):
+        readout.summarize(folder)

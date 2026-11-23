@@ -1057,6 +1057,8 @@ def run_suite(
     manifest["finished_at"] = timestamp()
     try:
         manifest["result_binding"] = readout_module(Path(__file__).resolve().parent).result_binding(directory, manifest["run_id"])
+        if code == 0 and manifest["result_binding"]["version"] == "pilot-no-result-v1":
+            manifest.update(status="invalid_results", launcher_exit_code=2)
     except (OSError, ValueError, KeyError, TypeError, AttributeError):
         manifest["result_binding_error"] = "missing or invalid output identity"
         if code == 0:

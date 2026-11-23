@@ -57,11 +57,11 @@ class QualificationReport(BaseModel):
     errors: tuple[str, ...] = ()
 
 
-def _graph_diameter(episode: PrivateEpisode) -> int:
+def _room_graph(episode: PrivateEpisode) -> nx.Graph:
     graph = nx.Graph()
     graph.add_nodes_from(episode.public.rooms)
     graph.add_edges_from(episode.public.edges)
-    return nx.diameter(graph)
+    return graph
 
 
 def _csv_row_count(csv_text: str) -> int:
@@ -122,6 +122,20 @@ def qualify_episode(
     if episode.public.investigation is not None:
         from nexus.ontology.catalog import definition_for
         return definition_for(episode.public.investigation).qualify(episode)
+    graph = _room_graph(episode)
+    if not graph or not nx.is_connected(graph):
+        return QualificationReport(passed=False, checks={"connected_rooms": False},
+                                   errors=("legacy room graph is disconnected",))
+    # The legacy discovery proofs index these named machine laws directly.
+    # Validate their domain before running a proof on an imported episode.
+    count = machine_count_for_discovery(episode.generation_metadata.discovery_level)
+    expected_machines = {f"M{i}" for i in range(1, count + 1)}
+    machines = episode.public.initial_state.machines
+    if (set(machines) != expected_machines or set(episode.machine_rules) != expected_machines
+            or any(machine.id != name for name, machine in machines.items())
+            or any(rule not in episode.rules for rule in episode.machine_rules.values())):
+        return QualificationReport(passed=False, checks={"machine_laws": False},
+                                   errors=("legacy machine inventory or rule assignment is incomplete",))
     checks: dict[str, bool] = {}
     errors: list[str] = []
     metrics: dict[str, int | str | bool] = {}
@@ -698,7 +712,7 @@ def qualify_episode(
         and metadata.scenario_family_id == expected_family_id
         and metadata.machine_count == len(machine_ids)
         and metadata.room_count == len(episode.public.rooms)
-        and metadata.graph_diameter == _graph_diameter(episode)
+        and metadata.graph_diameter == nx.diameter(graph)
         and metadata.required_probe_count == expected_probes
         and exact_probe_count == expected_probes
         and metadata.viable_causal_hypotheses == expected_viable_hypotheses

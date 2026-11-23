@@ -9,6 +9,7 @@ import argparse
 import hashlib
 import json
 import re
+import sys
 from collections import Counter
 from datetime import datetime
 from email.utils import parsedate_to_datetime
@@ -67,8 +68,20 @@ def read(path):
     return json.loads(path.read_text())
 
 
+def absent_result_kind(directory):
+    try:
+        return "empty" if (directory / "mindtrial.json").stat().st_size == 0 else None
+    except FileNotFoundError:
+        return "missing"
+
+
 def result_binding(directory, run_id):
     """Capture output identity when the launcher finishes, before file collection."""
+    if not isinstance(run_id, str) or not run_id:
+        raise ValueError("invalid run identity")
+    absent = absent_result_kind(directory)
+    if absent:
+        return {"version": "pilot-no-result-v1", "run_id": run_id, "file_status": absent}
     raw = (directory / "mindtrial.json").read_bytes()
     payload = json.loads(raw)
     if not isinstance(payload, dict) or not isinstance(payload.get("Results"), dict):
@@ -77,8 +90,7 @@ def result_binding(directory, run_id):
            for rows in payload["Results"].values()):
         raise ValueError("invalid result records")
     traces = [row["TraceID"] for rows in payload["Results"].values() for row in rows]
-    if (not isinstance(run_id, str) or not run_id
-            or any(not isinstance(trace, str) or not trace for trace in traces)
+    if (any(not isinstance(trace, str) or not trace for trace in traces)
             or len(set(traces)) != len(traces)):
         raise ValueError("invalid run or trace identity")
     log = directory / "mindtrial.log"
@@ -95,7 +107,19 @@ def verify_result_binding(directory, manifest, *, required=False):
     binding = manifest.get("result_binding")
     if binding is None and "run_id" not in manifest and not required:
         return "legacy_unbound"
-    if binding is None or binding != result_binding(directory, manifest.get("run_id")):
+    no_output = manifest.get("status") in {
+        "interrupted", "failed", "failed_to_start", "incomplete_results", "invalid_results",
+    } and absent_result_kind(directory)
+    if not required and no_output:
+        if binding is not None and binding == result_binding(directory, manifest.get("run_id")):
+            return "no_result_at_exit"
+        # Older launchers recorded only a generic error, not which bytes existed.
+        # Describe current absence without making a historical integrity claim.
+        if (binding is None and manifest.get("run_id")
+                and manifest.get("result_binding_error") == "missing or invalid output identity"):
+            return "unverified_no_result"
+    if (binding is None or absent_result_kind(directory)
+            or binding != result_binding(directory, manifest.get("run_id"))):
         raise ValueError("result binding missing or differs from completed run; preserve files and rerun")
     return "verified"
 
@@ -687,7 +711,7 @@ def summarize(directory, *, manifest=None):
             }
         )
     return {
-        "version": "nexus-pilot-readout-v6",
+        "version": "nexus-pilot-readout-v7",
         "result_binding_status": binding_status,
         "run_id": manifest.get("run_id"),
         "source_files_sha256": {
@@ -742,6 +766,7 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("result_directory", type=Path, nargs="+")
     args = parser.parse_args()
+    failed = False
     for directory in args.result_directory:
         try:
             manifest = read(directory / "manifest.json")
@@ -759,7 +784,9 @@ def main():
             report = summarize(directory, manifest=manifest)
         except (OSError, ValueError, KeyError, TypeError) as exc:
             (directory / "readout.json").unlink(missing_ok=True)
-            parser.exit(1, f"{directory}: cannot summarize: {exc}\n")
+            print(f"{directory}: cannot summarize: {exc}", file=sys.stderr)
+            failed = True
+            continue
         path = directory / "readout.json"
         temporary = path.with_suffix(".json.tmp")
         temporary.write_text(json.dumps(report, indent=2) + "\n")
@@ -772,6 +799,9 @@ def main():
                 f"{name}={count}" for name, count in group["diagnostic_outcome_counts"].items()
             )
             print(f"  {group['model']}: {outcomes}; world_access={group['world_access_counts']}")
+
+    if failed:
+        parser.exit(1)
 
 
 if __name__ == "__main__":
