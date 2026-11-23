@@ -880,3 +880,24 @@ def test_cli_handles_mixed_preflight_and_run_folders_without_hiding_a_damaged_ru
     write(preflight, "manifest.json", {"status": "interrupted"})
     result = subprocess.run(command, capture_output=True, text=True)
     assert result.returncode != 0 and "cannot summarize" in result.stderr
+
+
+def test_deleted_completed_results_do_not_mask_later_cancelled_folder(tmp_path):
+    broken, cancelled = tmp_path / "broken", tmp_path / "cancelled"
+    for folder in (broken, cancelled):
+        folder.mkdir()
+        fixture(folder)
+        manifest = readout.read(folder / "manifest.json")
+        manifest["run_id"] = folder.name
+        if folder == broken:
+            manifest.update(status="completed", result_binding=readout.result_binding(folder, folder.name))
+        else:
+            # Interrupted by the v6 launcher before it could bind a result.
+            manifest.update(status="interrupted", result_binding_error="missing or invalid output identity")
+        write(folder, "manifest.json", manifest)
+        (folder / "mindtrial.json").unlink()
+    cli = subprocess.run([sys.executable, str(PATH), str(broken), str(cancelled)], capture_output=True)
+    assert cli.returncode == 1 and not (broken / "readout.json").exists()
+    report = readout.read(cancelled / "readout.json")
+    assert report["result_binding_status"] == "unverified_no_result"
+    assert len(report["missing"]) == report["expected_attempts"] > 0 and not report["rows"]

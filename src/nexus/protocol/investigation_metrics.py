@@ -254,7 +254,7 @@ def summarize(
             ontology=spec.ontology, experimental=spec.data().experimental,
             terminal_status=state.terminal_status.value,
             termination_reason=reason,
-            actions_used=state.turn,
+            actions_used=len(trace),
             initial_action_budget=episode.public.initial_state.resources.actions_remaining,
             budget_remaining=state.resources.actions_remaining,
             action_counts=dict(Counter(record.action.type for record in trace)),
@@ -281,7 +281,7 @@ def summarize(
         else "active_at_snapshot"
         if state.terminal_status.value == "active"
         else "harness_finalization",
-        actions_used=state.turn,
+        actions_used=len(trace),
         initial_action_budget=episode.public.initial_state.resources.actions_remaining,
         budget_remaining=state.resources.actions_remaining,
         action_counts=dict(Counter(record.action.type for record in trace)),

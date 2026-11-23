@@ -8,13 +8,13 @@ from time import perf_counter
 
 from nexus.generator.randomness import rng_for
 from nexus.models.domain import DomainInvestigation, DomainStock, DomainTruth
-from nexus.models.episode import GenerationMetadata, PrivateEpisode, PublicEpisode
+from nexus.models.episode import PrivateEpisode, PublicEpisode
 from nexus.models.goals import GoalKind, GoalPredicate
 from nexus.models.world import Machine, Resources, Room, WorldState
 from nexus.ontology.causal.evidence import files
 from nexus.ontology.causal.inference import evidence_for, initial_mask
 from nexus.ontology.causal.laws import WORLDS, targets
-from nexus.ontology.causal.qualification import certificate
+from nexus.ontology.causal.qualification import certificate, research_metadata
 from nexus.ontology.causal.schema import FAMILY, LAW_FIELDS, STRUCTURE_FIELDS, Investigation
 
 
@@ -113,20 +113,8 @@ def generate_causal(
         verifier_secret=secret,
         construction_seed=seed,
         investigation_truth=DomainTruth(ontology=FAMILY, payload=world._asdict()),
-        generation_metadata=GenerationMetadata(
-            theory_level=theory_level,
-            discovery_level=discovery_level,
-            planning_level=planning_level,
-            resource_pressure=resource_pressure,
-            scenario_family_id=FAMILY,
-            room_count=len({lab, stock}),
-            machine_count=5,
-            estimated_reference_actions=bound,
-            optimal_action_count=planning_level + 2,
-            action_budget=budget or 0,
-            recommended_tool_call_limit=bound + 24,
-            viable_causal_hypotheses=initial_mask(spec).bit_count(),
-            investigation_certificate=proof,
+        generation_metadata=research_metadata(
+            proof, state, len({lab, stock}), planning_level, spec, resource_pressure,
         ),
     )
     logging.getLogger("nexus.generation").info(

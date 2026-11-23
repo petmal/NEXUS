@@ -99,7 +99,13 @@ digest at completion. Control admission and readout verify this binding. Preserv
 the original result folder together; replacing its result or log invalidates it.
 Historical unbound results remain readable with `result_binding_status=legacy_unbound`,
 but cannot admit new challenges. Rerun controls with the current package for admission.
-Readout v6 counts transport interruptions as provider availability errors even
+Readout v7 reports every selected slot as missing if the run ended without results.
+For new runs, `no_result_at_exit` means the launcher recorded the absence; for older failed runs,
+`unverified_no_result` only describes the files available now. Neither admits a challenge.
+A missing or altered *completed* result is still an error. When summarizing multiple folders,
+valid folders get a readout even if another folder fails verification; the command exits nonzero in that case.
+
+Readout v6 and later count transport interruptions as provider availability errors even
 without an HTTP status; the separate HTTP stop-batch policy is unchanged.
 
 Qualify without model calls or provider keys:

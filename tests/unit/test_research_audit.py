@@ -424,3 +424,33 @@ def test_audit_rejects_different_mission_text_even_when_file_hashes_match(bounda
     manifest.write_text(json.dumps(data))
     with pytest.raises(ValueError, match="binding mismatch: player_manifest_sha256"):
         verify_bundle(root)
+
+
+def test_imported_turn_offset_is_not_spent_actions(tmp_path):
+    from nexus.io import load_private
+    from nexus.solver import solve
+
+    episode = generate_episode(17, discovery_level=2, planning_level=1)
+    episode.public.initial_state.turn = 50
+    path = tmp_path / "private.json"
+    path.write_text(episode.model_dump_json())
+    episode = load_private(path)
+    session = Session(episode)
+    root = tmp_path / "audit"
+    recorder = AuditRecorder(session, root)
+    plan = solve(episode).plan
+    for action in plan:
+        response = session.act(session.state.turn, action)
+        assert response.ok
+    assert response.victory_code and session.state.turn == 50 + len(plan)
+    perf = response.performance
+    assert perf.actions_used == len(plan) == perf.initial_action_budget - perf.budget_remaining
+    assert perf.action_delta_from_physical_optimum == 0
+    assert perf.action_delta_from_guaranteed_policy == len(plan) - perf.guaranteed_policy_actions
+    recorder.close()
+    assert verify_bundle(root)["accepted_actions"] == len(plan)
+    outcome = json.loads((root / "outcome.json").read_text())
+    outcome["performance"]["actions_used"] = session.state.turn
+    rewrite_outcome(root, outcome)
+    with pytest.raises(ValueError, match="actions_used"):
+        verify_bundle(root)

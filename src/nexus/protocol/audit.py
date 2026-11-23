@@ -63,6 +63,8 @@ def _verify_game_outcome(episode, records, outcome):
         actual, wanted = outcome[field], expected[field]
         if field == "performance" and isinstance(actual, dict) and isinstance(wanted, dict):
             actual, wanted = dict(actual), dict(wanted)
+            if actual.get("actions_used") != len(records):
+                raise ValueError("audit performance mismatch: actions_used differs from journal length")
             for name in REQUEST_COUNTERS:
                 value = actual.pop(name, None)
                 if type(value) is not int or value < 0:

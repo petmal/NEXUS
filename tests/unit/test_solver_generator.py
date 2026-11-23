@@ -194,3 +194,33 @@ def test_legacy_public_identity_is_secret_backed_without_changing_world(hardened
     # All old public IDs were 16 hex characters; new IDs are HMAC-derived.
     assert len(public_id) == 32
     assert public_id != hashlib.sha256(known_family.encode()).hexdigest()[:16]
+
+
+def test_disconnected_import_produces_structured_qualification_failure(tmp_path):
+    import json
+
+    from typer.testing import CliRunner
+
+    from nexus.cli import app
+
+    episode = generate_episode(17, discovery_level=0, planning_level=0)
+    episode.public.edges = episode.public.edges[1:]
+    path = tmp_path / "private.json"
+    path.write_text(episode.model_dump_json())
+    result = CliRunner().invoke(app, ["qualify", str(path)])
+    assert result.exit_code == 2, result.output
+    report = json.loads(result.output)
+    assert not report["passed"] and report["checks"]["connected_rooms"] is False
+    assert "disconnected" in " ".join(report["errors"])
+
+
+
+def test_missing_second_machine_law_rejects_import_before_discovery_proof(tmp_path):
+    from nexus.io import load_private
+
+    episode = generate_episode(17, discovery_level=3, planning_level=0)
+    del episode.machine_rules["M2"]
+    path = tmp_path / "private.json"
+    path.write_text(episode.model_dump_json())
+    result = qualify_episode(load_private(path))
+    assert not result.passed and result.checks == {"machine_laws": False}

@@ -45,6 +45,26 @@ def certificate(mask: int, planning: int, allow_preparation: bool = True):
     }
 
 
+def research_metadata(proof, state, room_count, planning, spec, resource):
+    """Values exposed by inspect and audit must describe the admitted world."""
+    from nexus.models.episode import GenerationMetadata
+    from nexus.ontology.causal.schema import FAMILY
+
+    bound = proof["reference_action_bound"]
+    return GenerationMetadata(
+        theory_level=spec.theory, discovery_level=spec.discovery,
+        planning_level=planning, resource_pressure=resource,
+        scenario_family_id=FAMILY, room_count=room_count, machine_count=len(state.machines),
+        estimated_reference_actions=bound,
+        # One walk if stock is outside the lab, then configure and finish.
+        optimal_action_count=planning + 2,
+        action_budget=state.resources.actions_remaining or 0,
+        recommended_tool_call_limit=bound + 24,
+        viable_causal_hypotheses=proof["prior_worlds"],
+        investigation_certificate=proof,
+    )
+
+
 def certificate_matches(recorded, current):
     """Read original certificates without repeating their ambiguous field name."""
     if recorded == current:

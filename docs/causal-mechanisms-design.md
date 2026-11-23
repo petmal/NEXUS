@@ -81,3 +81,7 @@ tables (72 law combinations × 81 rows). Independent exhaustive one-step checkin
 proves any bounded history by induction; independent whole-protocol checks cover
 all witness and mission outcomes. Joint partition masks, policy subproblems and
 law tables have bounded caches. No CPU/GPU parallelism is needed at this scale.
+
+On import, the causal world checks its reported budget, physical optimum, reference cost,
+initial hypothesis count and family identity against the compiled world and public prior.
+Qualification also recomputes the investigation certificate.
