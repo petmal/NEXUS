@@ -208,6 +208,11 @@ def controls(tmp_path, pilot):
         if mutation:
             mutation(manifest, records)
         runner.write_json(folder / "mindtrial.json", result)
+        manifest["run_id"] = f"control-{counter}"
+        try:
+            manifest["result_binding"] = runner.readout_module(package).result_binding(folder, manifest["run_id"])
+        except (ValueError, KeyError, TypeError):
+            pass  # Deliberately malformed fixture; the gate must reject it.
         runner.write_json(folder / "manifest.json", manifest)
         return folder
 
@@ -228,6 +233,7 @@ def controls(tmp_path, pilot):
 def test_control_gate_rejects_absence_and_accepts_complete_bound_results(controls):
     with pytest.raises(runner.RunnerError, match="missing or failed"):
         controls.admit()
+
     folder = controls.record()
     result = controls.admit()
     assert len(result["controls"]) == 4
@@ -238,6 +244,32 @@ def test_control_gate_rejects_absence_and_accepts_complete_bound_results(control
         for c in result["controls"]
     )
     controls.binary.write_bytes(b"new binary")
+    with pytest.raises(runner.RunnerError, match="missing or failed"):
+        controls.admit()
+
+
+def test_control_results_cannot_be_replaced_by_an_older_matching_success(controls):
+    old = controls.record()
+
+    def failed(manifest, records):
+        records[0]["Kind"] = "Failed"
+        for record in records:
+            record["TraceID"] = "new-" + record["TraceID"]
+
+    new = controls.record(mutation=failed)
+    with pytest.raises(runner.RunnerError, match="missing or failed"):
+        controls.admit()
+    shutil.copyfile(old / "mindtrial.json", new / "mindtrial.json")
+    with pytest.raises(runner.RunnerError, match="missing or failed"):
+        controls.admit()
+
+
+def test_legacy_unbound_control_results_cannot_authorize_new_challenges(controls):
+    folder = controls.record()
+    manifest = read(folder / "manifest.json")
+    manifest.pop("result_binding")
+    manifest.pop("run_id")
+    runner.write_json(folder / "manifest.json", manifest)
     with pytest.raises(runner.RunnerError, match="missing or failed"):
         controls.admit()
 

@@ -15,6 +15,7 @@ from nexus.generator.constructed import (
     DISTRACTOR_VALUE,
     MISSION_TARGET_VALUE,
     constant_value_rule,
+    constructed_manual,
     constructed_mission_rules,
 )
 from nexus.generator.difficulty import (
@@ -174,8 +175,17 @@ def qualify_episode(
         and all(serialized_rule not in public_json for serialized_rule in serialized_rules)
     )
 
-    checks["causal_grammar_disclosed"] = bool(
-        episode.public.evidence_files.get("facility_manual.txt", "").strip()
+    # The T1/T2/T3 validators above bind their version-specific manuals. T0
+    # needs the same check, including its separate constructed-experiment grammar.
+    from nexus.generator.manual import FACILITY_MANUAL
+
+    expected_manual = FACILITY_MANUAL
+    if metadata.theory_level == 0 and metadata.discovery_level == 5:
+        diagnostic = episode.public.initial_state.artifacts.get("A2")
+        expected_manual = constructed_manual(diagnostic.shape) if diagnostic is not None else None
+    checks["causal_grammar_disclosed"] = (
+        expected_manual is not None and episode.public.evidence_files.get("facility_manual.txt") == expected_manual
+        if metadata.theory_level == 0 else True
     )
 
     try:

@@ -25,19 +25,19 @@ arbitrary Python import. New-family code lives under `ontology/causal`.
 | T0/D0 | Six exact physical predictions | Configure and finish |
 | T1/D1 | Exact laws, unknown initial specimen mode | One untreated reading |
 | T2/D2 | Known forms; coefficients, offset and initial mode unknown | Untreated-only strategy, at most four readings; at least three needed for a guarantee |
-| T3/D5 | Complete bounded structural prior | At most six readings; untreated data alone cannot guarantee mission identification |
+| T3/D5 | Complete bounded structural prior | At most six readings; untreated data alone cannot guarantee identification before the first eligible submission |
 | T1–T3/D0 | Sufficient experimental records supplied | No new measurements required |
 
 P0/P1 and R0/R1/R2 are supported; unsupported cells fail explicitly. D2 publicly
-restricts the response form to 0/1, because form 2 otherwise introduces a construction
-requirement. All coefficient/state combinations under that disclosed form remain
+restricts the response form to 0/1, because form 2 otherwise requires treatment
+to guarantee identification from measurements alone. All coefficient/state combinations under that disclosed form remain
 admitted. A named response draw preserves other same-seed mechanism components;
 T2/D2 is not an exactly matched-truth ablation of T3/D5.
 
 The T3 prior contains 648 worlds and 113 joint mission answers. Complete untreated
 data produces 126 observation classes, 120 still mission-ambiguous. The remaining
-six classes are retained: this is a guarantee over the prior, not a claim every
-selected world individually needs treatment. A 568-experiment subset witnesses
+six classes are retained: the identification guarantee covers the full prior,
+without requiring treatment for every selected world. A 568-experiment subset witnesses
 identifiability; every other legal history/setting remains supported by exact joint
 posterior inference. There is no hidden filtering of T3 truths.
 
@@ -48,9 +48,15 @@ copy. All six exact mission sensor protocols are publicly outside the measuremen
 contract, including sensor operate. This deliberate transfer requirement must be
 included in the task contract, not treated as an accidental tool restriction.
 
-D5 proves construction is needed for a guaranteed strategy over the prior. It does
-not prove an optimal discovery→preparation sequence or an adaptive advantage over
-every fixed panel. D4 remains unsupported. CLI solve is an omniscient physical
+Certificate version 2 proves that untreated readings alone cannot guarantee
+identification before the first eligible submission. Failed submissions provide
+additional evidence: an untreated-only policy can win all 648 laws within R2
+using at most 28 actions at P0 or 29 at P1. D5 therefore does not prove that
+treatment is necessary for eventual victory, an optimal discovery→preparation
+sequence, or an adaptive advantage over every fixed panel. Original certificates
+remain readable with their historical field names and evidence text; new reports
+and version-2 theory evidence use the explicit identification scope. D4 remains
+unsupported. CLI solve is an omniscient physical
 solver; scientific winnability is separately proved by the public-information policy.
 The entire family is marked experimental until real-model difficulty is measured.
 

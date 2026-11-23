@@ -30,7 +30,8 @@ REPEAT_CONFIG = "nexus-coordination-repeat-config.yaml"
 CONFIGS = (CONFIG, REPEAT_CONFIG)
 EDITABLE_RUN_FIELDS = ("name", "model", "model-parameters", "max-requests-per-minute")
 SUITES = ("core", "slack", "spatial", "repeat")
-BRANCH = "feat/planning-resource-axes"
+BRANCH = "main"
+LEGACY_BRANCH = "feat/planning-resource-axes"
 IMAGE = "nexus:coordination-v1"
 PROVIDER_KEYS = {
     "openai": "OPENAI_API_KEY",
@@ -453,7 +454,7 @@ def load_release(package, pilot=COORDINATION):
         raise RunnerError("release.json must contain an object.")
     if not re.fullmatch(r"[0-9a-f]{40}", str(release.get("source_commit", ""))):
         raise RunnerError("release.json must pin a full 40-character source commit.")
-    if release.get("branch") != BRANCH or release.get("image") != pilot.image:
+    if release.get("branch") not in (BRANCH, LEGACY_BRANCH) or release.get("image") != pilot.image:
         raise RunnerError("release.json names an unexpected branch or image.")
     if not re.fullmatch(r"[0-9a-f]{64}", str(release.get("runtime_source_sha256", ""))):
         raise RunnerError("release.json must pin the runtime source digest.")
@@ -587,7 +588,7 @@ def build_image(repository, release):
 
     if not has_commit():
         checked(
-            [*git, "fetch", "--no-tags", "origin", release["branch"]],
+            [*git, "fetch", "--no-tags", "origin", BRANCH],
             label="Fetching the release branch",
         )
         if not has_commit():
@@ -753,7 +754,7 @@ def provider_error_results(directory):
             {"provider": provider, "task": record["Task"], "trace_id": record["TraceID"], **error}
             for provider, records in payload["Results"].items()
             for record in records
-            if (error := classify(record)) is not None
+            if (error := classify(record)) is not None and error["stop_batch"]
         ]
     except (OSError, ValueError, KeyError, TypeError, AttributeError):
         # Invalid/missing records are handled by coverage checks, not invented outages.
@@ -868,6 +869,7 @@ def control_admission(package, release, config_name, config_raw, binary, tasks, 
             task_bytes = (folder / "tasks.yaml").read_bytes()
             config_bytes = (folder / "config.yaml").read_bytes()
             result_bytes = (folder / "mindtrial.json").read_bytes()
+            readout.verify_result_binding(folder, manifest, required=True)
             selected_tasks, effective, payload = map(json.loads, (task_bytes, config_bytes, result_bytes))
             conditions, selected_slots = readout.selected_conditions(effective["config"], selected_tasks["task-config"]["tasks"])
             checked = list(readout.checked_records(payload, conditions, pilot.evaluation_seed))
@@ -904,7 +906,8 @@ def control_admission(package, release, config_name, config_raw, binary, tasks, 
     if missing:
         raise RunnerError(
             "Fresh control admission missing or failed for " + ", ".join(missing)
-            + ". Run --suite controls for this model/settings, then resume --suite challenges."
+            + ". Unbound historical results cannot establish admission. Run --suite controls "
+            "for this model/settings, then resume --suite challenges."
         )
     return {"scope": "accepted receipts and matching recorded configuration; not canonical replay",
             "controls": [latest[name] for name in expected]}
@@ -1001,6 +1004,9 @@ def run_suite(
     if admission is not None:
         manifest["control_admission"] = admission
     manifest_path = directory / "manifest.json"
+    import uuid
+
+    manifest["run_id"] = uuid.uuid4().hex
     write_json(manifest_path, manifest)
     print(f"Running {suite}; results: {directory}", flush=True)
     try:
@@ -1049,6 +1055,12 @@ def run_suite(
         )
     manifest["launcher_exit_code"] = code if code >= 0 else 128 - code
     manifest["finished_at"] = timestamp()
+    try:
+        manifest["result_binding"] = readout_module(Path(__file__).resolve().parent).result_binding(directory, manifest["run_id"])
+    except (OSError, ValueError, KeyError, TypeError, AttributeError):
+        manifest["result_binding_error"] = "missing or invalid output identity"
+        if code == 0:
+            manifest.update(status="invalid_results", launcher_exit_code=2)
     write_json(manifest_path, manifest)
     return manifest["launcher_exit_code"]
 

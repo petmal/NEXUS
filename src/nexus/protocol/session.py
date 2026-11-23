@@ -19,6 +19,7 @@ from nexus.models.world import TerminalStatus, WorldState
 from nexus.protocol.investigation_metrics import (
     AuditedDecisionMissionPerformance,
     DecisionMissionPerformance,
+    EligibleDecisionMissionPerformance,
     InvestigationPerformance,
     MissionPerformance,
 )
@@ -81,6 +82,7 @@ class PerformanceSummary(BaseModel):
 TerminalPerformance = (
     PerformanceSummary
     | InvestigationPerformance
+    | EligibleDecisionMissionPerformance
     | AuditedDecisionMissionPerformance
     | DecisionMissionPerformance
     | MissionPerformance

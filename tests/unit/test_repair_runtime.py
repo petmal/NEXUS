@@ -35,8 +35,9 @@ class Player:
 
 
 @pytest.mark.slow
-def test_every_truth_reaches_actual_victory_through_three_public_rounds():
+def test_every_truth_reaches_actual_victory_through_three_public_rounds(record_property):
     base = attach(generate_repair(0, verifier_secret="all-worlds"))
+    completed = 0
     for index, world in enumerate(worlds()):
         episode = base.model_copy(
             update={
@@ -54,6 +55,9 @@ def test_every_truth_reaches_actual_victory_through_three_public_rounds():
         assert session.public_transcript.snapshot()["complete"]
         # Replay covers the exact state transitions and receipt, not only arithmetic.
         assert canonical_hash(replay(episode, session.trace)) == canonical_hash(session.state)
+        completed += 1
+    assert completed == 7203
+    record_property("live_policy_receipt_replay_cases", completed)
 
 
 @pytest.mark.parametrize("p", (0, 1))

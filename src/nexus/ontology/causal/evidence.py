@@ -5,7 +5,9 @@ import json
 from nexus.ontology.causal.laws import MISSION
 
 
-def files(spec):
+def files(spec, *, version=2):
+    if version not in (1, 2):
+        raise ValueError("unsupported causal evidence version")
     theory = {
         "family": "causal-mechanisms-v1",
         "experimental": True,
@@ -27,6 +29,15 @@ def files(spec):
         "resolved": spec.resolved,
         "acceptance": "Any six correct physical predictions are accepted. No graph, equation, hypothesis name or prescribed experiment sequence is required. Finite enumeration is valid.",
     }
+    if version == 2:
+        theory["evidence_version"] = 2
+        theory["profile"] = (
+            "D2 discloses response form 0 or 1 and admits every remaining coefficient/state "
+            "combination; untreated measurements suffice. D5 certifies that untreated readings "
+            "alone cannot guarantee identification before the first eligible submission. "
+            "This excludes rejection feedback and does not require treatment for eventual "
+            "victory. No optimality or adaptive-advantage claim."
+        )
     manual = """Investigate the fixed artificial mechanism and predict the six mission protocols.
 Start with manifest and observe; read theory.json and map.json.
 Take stock to create a fresh specimen. Use the returned specimen ID.

@@ -140,7 +140,7 @@ def test_public_witness_live_replay_and_metrics(seed):
     assert result.victory_code and result.current_turn <= 27
     assert canonical_hash(replay(e, s.trace)) == canonical_hash(s.state)
     metrics = result.model_dump(mode="json")["performance"]
-    assert metrics["version"] == "mission-performance-v3"
+    assert metrics["version"] == "mission-performance-v4"
     assert metrics["first_submission_supported_by_evidence"]
     assert metrics["common_repairs_before_first_submission"] >= 1
 

@@ -15,6 +15,23 @@ from nexus.models.episode import PrivateEpisode
 from nexus.protocol.http import create_single_session_app
 
 
+@pytest.mark.parametrize("discovery", [2, 5])
+@pytest.mark.parametrize("presentation", [None, "sealed-facility-v6"])
+def test_t0_qualification_binds_the_actual_version_appropriate_manual(discovery, presentation):
+    from nexus.protocol.session import Session
+
+    episode = generate_episode(17, theory_level=0, discovery_level=discovery,
+                               planning_level=1, presentation_version=presentation)
+    assert qualify_episode(episode).passed
+    original = Session(episode).evidence("facility_manual.txt")
+    assert "All machines preserve the artifact exactly." not in original
+    episode.public.evidence_files["facility_manual.txt"] = "All machines preserve the artifact exactly."
+    restored = PrivateEpisode.model_validate_json(episode.model_dump_json())
+    assert "All machines preserve the artifact exactly." in Session(restored).evidence("facility_manual.txt")
+    result = qualify_episode(restored)
+    assert not result.passed and not result.checks["causal_grammar_disclosed"]
+
+
 @pytest.mark.parametrize("d", range(6))
 def test_t0_retains_pre_theory_compiled_episode(d):
     fixture = json.loads((Path(__file__).parents[1] / "fixtures/theory-t0-baseline.json").read_text())

@@ -3,6 +3,41 @@ from nexus.models.rules import Condition, ConditionKind, Effect, EffectKind
 from nexus.models.world import Artifact, Orientation, Pattern, Polarity, Shape
 
 
+def test_completed_beliefs_are_collectable_despite_populated_search_caches():
+    import gc
+    import weakref
+
+    from nexus.generator.discovery import DiscoveryBelief
+
+    references = []
+    for _ in range(12):
+        belief = DiscoveryBelief(candidate_rules_by_machine={"M1": [_set_value(1)]},
+                                 initial_artifact=_artifact(0), target_artifact=_artifact(1),
+                                 phase_modulus=1)
+        assert belief.analysis().minimum_guaranteed_probes == 0
+        references.append(weakref.ref(belief))
+    del belief
+    gc.collect()
+    assert all(reference() is None for reference in references)
+
+
+def test_legal_probe_after_final_machine_commit_remains_analyzable():
+    from nexus.engine.replay import execute_with_trace
+    from nexus.generator import generate_episode
+    from nexus.generator.discovery import analyze_causal_trace
+    from nexus.models.actions import ACTION_ADAPTER, ProbeAction
+
+    episode = generate_episode(17, discovery_level=2, planning_level=1)
+    plan = [ACTION_ADAPTER.validate_python(a) for a in episode.reference_plan]
+    index = next(i for i, action in enumerate(plan) if action.type == "operate")
+    operation = plan[index]
+    plan.insert(index + 1, ProbeAction(machine=operation.machine, artifact=operation.artifact))
+    state, trace = execute_with_trace(episode, plan)
+    assert state.terminal_status == "won" and trace[-1].victory_code
+    decisions = analyze_causal_trace(episode, trace)
+    assert any(d.action_type == "probe" and d.turn_before == index + 1 for d in decisions)
+
+
 def _artifact(value: int) -> Artifact:
     return Artifact(
         id="A1",
