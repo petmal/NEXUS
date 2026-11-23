@@ -171,6 +171,8 @@ def cross_axis_setup(tmp_path, monkeypatch):
             return subprocess.CompletedProcess(command, 0, json.dumps(state["payload"]), "")
         if command[0] == "./mindtrial":
             assert kwargs == {"cwd": mindtrial, "check": False}
+            output = Path(next(arg.removeprefix("-config=") for arg in command if arg.startswith("-config="))).parent
+            dump(output / "mindtrial.json", {"Results": {}})
             return subprocess.CompletedProcess(command, 0)
         raise AssertionError(f"Unexpected subprocess: {command}")
 

@@ -155,6 +155,9 @@ def setup_package(tmp_path, monkeypatch):
 
     def run(command, **kwargs):
         calls.append((command, kwargs))
+        if command[0] == "./mindtrial":
+            output = Path(next(arg.removeprefix("-config=") for arg in command if arg.startswith("-config="))).parent
+            runner.write_json(output / "mindtrial.json", {"Results": {}})
         return SimpleNamespace(returncode=0)
 
     monkeypatch.setattr(runner.subprocess, "run", run)
