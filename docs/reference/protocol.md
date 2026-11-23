@@ -208,6 +208,11 @@ POST /sessions
 GET  /sessions/{id}/observe
 POST /sessions/{id}/actions
 GET  /sessions/{id}/status
+```
+
+Operator and evaluator endpoints must remain outside the player's tool access:
+
+```text
 GET  /sessions/{id}/events  (operator replay trace)
 POST /sessions/{id}/finalize  (evaluator only)
 ```

@@ -55,7 +55,7 @@ def generate_causal(
             spec.model_dump() | {"supplied": evidence_for(spec, index)}
         )
     proof = certificate(initial_mask(spec), planning_level, discovery_level != 2)
-    if discovery_level == 5 and not proof["construction_required_for_guarantee"]:
+    if discovery_level == 5 and not proof["untreated_readings_insufficient_for_identification"]:
         raise ValueError("family does not qualify for construction difficulty")
     if discovery_level == 1 and proof["reference_reading_bound"] != 1:
         raise ValueError("family does not qualify for direct measurement difficulty")

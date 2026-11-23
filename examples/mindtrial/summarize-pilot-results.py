@@ -44,6 +44,12 @@ def classify_provider_error(record):
         return None
     match = HTTP_ERROR.search(message)
     if match is None:
+        if "failed to generate response:" in message and re.search(
+            r"timeout|timed out|connection (?:reset|refused)|unexpected eof|"
+            r"deadline exceeded|tls handshake|no such host|network is unreachable",
+            message, re.IGNORECASE,
+        ):
+            return {"http_status": None, "category": "transport_interruption", "stop_batch": False}
         return None
     status = int(match[1] or match[2])
     category = (
@@ -59,6 +65,39 @@ def classify_provider_error(record):
 
 def read(path):
     return json.loads(path.read_text())
+
+
+def result_binding(directory, run_id):
+    """Capture output identity when the launcher finishes, before file collection."""
+    raw = (directory / "mindtrial.json").read_bytes()
+    payload = json.loads(raw)
+    if not isinstance(payload, dict) or not isinstance(payload.get("Results"), dict):
+        raise ValueError("invalid result envelope")
+    if any(not isinstance(rows, list) or any(not isinstance(row, dict) for row in rows)
+           for rows in payload["Results"].values()):
+        raise ValueError("invalid result records")
+    traces = [row["TraceID"] for rows in payload["Results"].values() for row in rows]
+    if (not isinstance(run_id, str) or not run_id
+            or any(not isinstance(trace, str) or not trace for trace in traces)
+            or len(set(traces)) != len(traces)):
+        raise ValueError("invalid run or trace identity")
+    log = directory / "mindtrial.log"
+    return {
+        "version": "pilot-result-binding-v1",
+        "run_id": run_id,
+        "results_sha256": hashlib.sha256(raw).hexdigest(),
+        "trace_ids": sorted(traces),
+        "log_sha256": hashlib.sha256(log.read_bytes()).hexdigest() if log.is_file() else None,
+    }
+
+
+def verify_result_binding(directory, manifest, *, required=False):
+    binding = manifest.get("result_binding")
+    if binding is None and "run_id" not in manifest and not required:
+        return "legacy_unbound"
+    if binding is None or binding != result_binding(directory, manifest.get("run_id")):
+        raise ValueError("result binding missing or differs from completed run; preserve files and rerun")
+    return "verified"
 
 
 def seconds(value):
@@ -397,6 +436,15 @@ def attempt_diagnostics(record, telemetry, block, *, log_exists):
         performance = block["performance"] or (block.get("operator_report") or {}).get("performance") or {}
         summary = block.get("operator_summary") or {}
         decision = performance.get("decision_diagnostics") or summary
+        physical_goal = decision.get("physical_goal_satisfied")
+        if physical_goal is None:
+            physical_goal = performance.get("goal_satisfied")
+        if physical_goal is None and str(performance.get("version", "")).startswith("mission-performance-"):
+            physical_goal = performance.get("final_submission_correct")
+        correct_without_finish = decision.get("correct_state_without_successful_finish")
+        if correct_without_finish is None and physical_goal is not None:
+            status = performance.get("terminal_status", summary.get("status"))
+            correct_without_finish = physical_goal and status != "won" if status is not None else None
         states = []
         for response in responses:
             state = response.get("observation")
@@ -439,15 +487,16 @@ def attempt_diagnostics(record, telemetry, block, *, log_exists):
             structure=block["structure"],
             world_win_observed=("won" in terminal_states) if len(terminal_states) == 1 else None,
             world_evidence_conflict=len(terminal_states) > 1,
-            physical_goal_satisfied=(decision["physical_goal_satisfied"]
-                if decision.get("physical_goal_satisfied") is not None else performance.get("goal_satisfied")),
+            physical_goal_satisfied=physical_goal,
             evidence_support=decision.get("escape_classification"),
             first_submission_evidence_support=performance.get(
                 "first_submission_supported_by_evidence", summary.get("first_submission_supported_by_evidence")
             ),
-            correct_state_without_successful_finish=decision.get(
-                "correct_state_without_successful_finish"
-            ),
+            correct_state_without_successful_finish=correct_without_finish,
+            **{key: performance.get(key, summary.get(key)) for key in (
+                "first_eligible_submission_turn", "first_eligible_submission_correct",
+                "first_eligible_submission_supported_by_evidence",
+            )},
             physical_continuation=summary.get("physical_continuation") or (block.get("operator_report") or {}).get("physical_continuation"),
         )
     details = record.get("Details") or {}
@@ -467,6 +516,12 @@ def attempt_diagnostics(record, telemetry, block, *, log_exists):
     # An error message belongs to this exact record, even if logs are unavailable.
     if record["Kind"] == "Error" and re.search(r'stop reason:?\s*["\']?length\b', message):
         result.update(provider_stop_reason="length", provider_stop_source="error_record")
+    result["provider_availability_interrupted"] = (
+        result["provider_error"] is not None
+        or (record["Kind"] == "Error" and "failed to generate response:" in message
+            and result["provider_stop_reason"] != "length"
+            and "no response candidates" not in message and "no actionable content" not in message)
+    )
     if isinstance(answer.get("ActualAnswer"), str):
         result["response_text_present"] = bool(answer["ActualAnswer"].strip())
     elif isinstance(answer.get("ActualAnswer"), list) and all(
@@ -496,7 +551,10 @@ def attempt_diagnostics(record, telemetry, block, *, log_exists):
     elif result["provider_http_status"] == 429:
         result["outcome"] = "http_rate_limited"
     elif result["provider_error"] is not None:
-        result["outcome"] = "http_" + result["provider_error"]["category"]
+        result["outcome"] = (
+            "provider_interruption" if result["provider_http_status"] is None
+            else "http_" + result["provider_error"]["category"]
+        )
     elif result["provider_stop_reason"] == "length":
         result["outcome"] = (
             "response_length_with_text"
@@ -523,6 +581,7 @@ def attempt_diagnostics(record, telemetry, block, *, log_exists):
 def summarize(directory, *, manifest=None):
     if manifest is None:
         manifest = read(directory / "manifest.json")
+    binding_status = verify_result_binding(directory, manifest)
     result_path = directory / "mindtrial.json"
     result_file_status = "present"
     if not result_path.is_file() or not result_path.stat().st_size:
@@ -628,7 +687,14 @@ def summarize(directory, *, manifest=None):
             }
         )
     return {
-        "version": "nexus-pilot-readout-v5",
+        "version": "nexus-pilot-readout-v6",
+        "result_binding_status": binding_status,
+        "run_id": manifest.get("run_id"),
+        "source_files_sha256": {
+            name: hashlib.sha256((directory / name).read_bytes()).hexdigest()
+            if (directory / name).is_file() else None
+            for name in ("manifest.json", "config.yaml", "tasks.yaml", "mindtrial.json", "mindtrial.log")
+        },
         "app_version": result.get("AppVersion"),
         "result_file_status": result_file_status,
         "source_commit": manifest["source_commit"],
@@ -647,10 +713,10 @@ def summarize(directory, *, manifest=None):
         and all(v == 1 for v in seen.values())
         and not mismatches,
         "error_attempts": sum(r["reported_kind"] == "Error" for r in rows),
-        "provider_error_attempts": sum(r["diagnostics"]["provider_error"] is not None for r in rows),
+        "provider_error_attempts": sum(r["diagnostics"]["provider_availability_interrupted"] for r in rows),
         "completed_without_provider_errors": set(seen) == expected
         and all(v == 1 for v in seen.values())
-        and not mismatches and all(r["diagnostics"]["provider_error"] is None for r in rows),
+        and not mismatches and not any(r["diagnostics"]["provider_availability_interrupted"] for r in rows),
         "configuration_mismatch_trace_ids": mismatches,
         "missing": [list(k) for k in sorted(expected - seen.keys())],
         "unexpected": [list(k) for k in sorted(seen.keys() - expected, key=lambda k: (k[0], k[1], k[2] or "", k[3]))],
@@ -692,9 +758,12 @@ def main():
                 continue
             report = summarize(directory, manifest=manifest)
         except (OSError, ValueError, KeyError, TypeError) as exc:
+            (directory / "readout.json").unlink(missing_ok=True)
             parser.exit(1, f"{directory}: cannot summarize: {exc}\n")
         path = directory / "readout.json"
-        path.write_text(json.dumps(report, indent=2) + "\n")
+        temporary = path.with_suffix(".json.tmp")
+        temporary.write_text(json.dumps(report, indent=2) + "\n")
+        temporary.replace(path)
         print(
             f"{directory.name}: {report['recorded_attempts']}/{report['expected_attempts']} attempts; coverage_complete={report['matrix_complete']}; {path}"
         )

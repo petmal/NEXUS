@@ -1,5 +1,9 @@
 # Testing and CI
 
+The aggregate also checks the literal host/container matrices against the required
+group lists. Removing, duplicating or excluding a matrix group must fail even when
+the remaining parent jobs report success.
+
 Every pull request to main, main push and merge-queue revision runs the full
 deterministic suite. There are no paid model calls. The final **complete** check
 passes only when all groups succeed; a skipped or cancelled group is a failure.

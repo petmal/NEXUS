@@ -95,6 +95,35 @@
         "version",
         "target_count_meaning"
       ]
+    },
+    {
+      "$ref": "performance-mission-v4.schema.json",
+      "properties": {
+        "version": {
+          "const": "mission-performance-v4"
+        },
+        "target_count_meaning": {
+          "const": "distinct winning-set signatures; not exclusive target classes"
+        },
+        "decision_diagnostics": {
+          "properties": {
+            "version": {
+              "const": "decision-diagnostics-v1"
+            },
+            "readings": {
+              "type": "null"
+            }
+          },
+          "required": [
+            "version",
+            "readings"
+          ]
+        }
+      },
+      "required": [
+        "version",
+        "target_count_meaning"
+      ]
     }
   ]
 }

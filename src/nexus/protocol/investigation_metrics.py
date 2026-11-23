@@ -114,6 +114,15 @@ class AuditedDecisionMissionPerformance(DecisionMissionPerformance):
     decision_diagnostics: DecisionDiagnostics
 
 
+class EligibleDecisionMissionPerformance(AuditedDecisionMissionPerformance):
+    """Keep first-finish fields and separately report the first eligible decision."""
+
+    version: str = "mission-performance-v4"
+    first_eligible_submission_turn: int | None
+    first_eligible_submission_correct: bool | None
+    first_eligible_submission_supported_by_evidence: bool | None
+
+
 def summarize(
     episode: PrivateEpisode,
     state: WorldState,
@@ -136,6 +145,7 @@ def summarize(
     established_repair_count = 0
     first_correct = first_classes = None
     first_common = first_supported = None
+    first_eligible_turn = first_eligible_correct = first_eligible_supported = None
     decision_semantics = callable(getattr(posterior, "common_decisions", None))
     audited_decisions = (
         decision_semantics
@@ -148,10 +158,16 @@ def summarize(
         action = record.action
         tracker.observe(record)
         if action.type == "finish":
+            attempted = tracker.attempted()
             if decision_audit is not None:
                 decision_audit.submission(record, posterior, tracker.attempted())
             submissions += 1
             correct = record.terminal_status.value == "won"
+            if first_eligible_turn is None and attempted is not None:
+                first_eligible_turn = record.turn
+                first_eligible_correct = correct
+                if decision_semantics:
+                    first_eligible_supported = posterior.supports(attempted)
             if first_correct is None:
                 first_correct = correct
                 first_classes = posterior.counts()[1]
@@ -206,7 +222,7 @@ def summarize(
                 spec.ontology, first_common, first_supported, after_resolved_count,
             )
         performance_type = (
-            AuditedDecisionMissionPerformance if audited_decisions else
+            EligibleDecisionMissionPerformance if audited_decisions else
             DecisionMissionPerformance if decision_semantics else MissionPerformance
         )
         decision_fields = {
@@ -216,6 +232,11 @@ def summarize(
             "measurements_after_guaranteed_repair": after_resolved_count,
         } if decision_semantics else {}
         if decision_audit is not None:
+            decision_fields.update(
+                first_eligible_submission_turn=first_eligible_turn,
+                first_eligible_submission_correct=first_eligible_correct,
+                first_eligible_submission_supported_by_evidence=first_eligible_supported,
+            )
             decision_fields["decision_diagnostics"] = decision_audit.summary(
                 posterior, tracker.attempted(), won=state.terminal_status.value == "won",
                 physical_goal=final_correct, extended=extended,

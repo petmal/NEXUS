@@ -22,7 +22,8 @@ The full prior has 648 parameter/state/operator combinations and six jointly
 graded transfer predictions. Worlds compose wiring, transition and response
 primitives; supplied T1 laws, T2 fixed forms, T3 bounded structures and T0 resolved
 predictions have separate public disclosures. D0 supplies sufficient experimental
-records. Constructed T3 investigations require preparation for a guarantee.
+records. Untreated T3 readings cannot guarantee identification before the first eligible
+submission; rejection feedback can still permit an untreated-only eventual win.
 Only supported cells are accepted; D4 remains unavailable unless a strict adaptive
 versus fixed-batch advantage over the full legal domain is proved. Do not relabel
 this family to fill unsupported axis combinations.
@@ -53,8 +54,9 @@ ambiguous; a greedy public-information policy on 568 experiments resolves every
 world in at most six readings and 37 reference experiment actions (before final
 submission and logistics). The policy is not an optimality claim. Actual preloading plus P1 and final submission yields a
 40-action guaranteed reference bound (R1 budget 48, R2 budget 40). Degenerate
-worlds remain admitted; construction is necessary for a guaranteed policy over
-the disclosed family, not asserted necessary for every selected truth.
+worlds remain admitted. The construction certificate concerns identification
+from untreated readings before the first eligible submission. It does not require
+treatment for eventual victory or for every selected truth.
 
 Inference uses immutable cached ternary partition masks and exact posterior
 bitsets; observations and joint target exclusions can couple all parameters.
@@ -66,8 +68,8 @@ fresh-seed model pilot. History/cause discovery must be distinguished from API,
 provider, arithmetic and resource failures.
 
 
-Review refinement: the D5 guarantee proves that untreated measurements alone do
-not suffice over the full prior. The reference selects preparation after earlier
+Review refinement: untreated measurements alone do not guarantee identification
+over the full prior before the first eligible submission. The reference selects preparation after earlier
 readings, but no theorem requires that exact discovery→preparation sequence or
 proves it cheaper than every fixed panel. The certificate states this scope;
 D4 remains unsupported. This is an experimental family until real-model results

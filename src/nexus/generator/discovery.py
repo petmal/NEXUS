@@ -96,6 +96,10 @@ class DiscoveryBelief:
         if phase_modulus < 1:
             raise ValueError("phase_modulus must be at least 1")
 
+        # Cache keys belong to this analysis. Class-level method caches retained
+        # every completed episode through their strong reference to self.
+        self._known_reachable = lru_cache(maxsize=None)(self._known_reachable)
+        self._search = lru_cache(maxsize=None)(self._search)
         self.machine_ids = tuple(sorted(candidate_rules_by_machine))
         self.phase_modulus = phase_modulus
         self.target_projection = artifact_projection(target_artifact)
@@ -124,7 +128,6 @@ class DiscoveryBelief:
         self.belief = viable
         self.infinity = len(viable) + len(self.machine_ids) * phase_modulus + 1
 
-    @lru_cache(maxsize=None)
     def _known_reachable(
         self,
         hypothesis_index: int,
@@ -168,7 +171,6 @@ class DiscoveryBelief:
             groups.setdefault(_artifact_key(transformed), set()).add(hypothesis_index)
         return {key: frozenset(members) for key, members in groups.items()}
 
-    @lru_cache(maxsize=None)
     def _search(
         self,
         belief: frozenset[int],
@@ -305,7 +307,7 @@ class DiscoveryBelief:
         phase: int,
     ) -> ExperimentAnalysis:
         """Classify an arbitrary carried-artifact probe against the current mission belief."""
-        if machine_id not in self.remaining:
+        if machine_id not in self.machine_ids:
             raise ValueError(f"machine {machine_id!r} is not available in the causal belief state")
         if not 0 <= phase < self.phase_modulus:
             raise ValueError(f"phase {phase} is outside the configured phase cycle")
@@ -356,7 +358,7 @@ class DiscoveryBelief:
         observed_artifact: Artifact,
         input_artifact: Artifact | None = None,
     ) -> frozenset[int]:
-        if machine_id not in self.remaining:
+        if machine_id not in self.machine_ids:
             raise ValueError(f"machine {machine_id!r} is not available in the causal belief state")
         if not 0 <= phase < self.phase_modulus:
             raise ValueError(f"phase {phase} is outside the configured phase cycle")
@@ -395,6 +397,8 @@ class DiscoveryBelief:
         phase: int,
         observed_artifact: Artifact,
     ) -> None:
+        if machine_id not in self.remaining:
+            raise ValueError(f"machine {machine_id!r} has no remaining commitment")
         self.belief = self._members_for_observation(
             machine_id=machine_id,
             phase=phase,

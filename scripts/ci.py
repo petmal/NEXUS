@@ -13,6 +13,7 @@ import json
 import os
 from pathlib import Path
 import platform
+import re
 import subprocess
 import sys
 import tempfile
@@ -82,7 +83,25 @@ def partition():
     return assign_tests(read_groups(), collected.nodeids)
 
 
+def check_workflow_matrices(text):
+    """Guard the workflow's deliberately literal matrices without a YAML dependency.
+
+    Reject a changed matrix representation too: additions such as exclude/include
+    must be reviewed alongside the completeness contract instead of bypassing it.
+    """
+    for job, expected in (("host", GROUPS), ("container", CONTAINERS)):
+        block = re.search(rf"(?ms)^  {job}:\n(.*?)(?=^  \S|\Z)", text)
+        matrix = re.search(r"(?ms)^      matrix:\n(.*?)(?=^    \S|\Z)", block[1]) if block else None
+        body = matrix[1] if matrix else ""
+        if not re.fullmatch(r"        group:\n(?:          - [a-z]+\n)+", body):
+            raise ValueError(f"Unrecognized {job} CI matrix; cannot establish complete coverage")
+        groups = re.findall(r"(?m)^          - ([a-z]+)$", body)
+        if len(groups) != len(expected) or set(groups) != set(expected):
+            raise ValueError(f"Missing, duplicate or unexpected {job} CI matrix group")
+
+
 def check_gate(needs):
+    check_workflow_matrices((ROOT / ".github/workflows/ci.yml").read_text())
     if not isinstance(needs, dict) or set(needs) != REQUIRED_JOBS:
         raise ValueError("Required job results are missing or unexpected")
     failed = {name: value.get("result") if isinstance(value, dict) else None

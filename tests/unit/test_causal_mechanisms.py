@@ -194,8 +194,129 @@ def test_known_law_and_known_shape_disclosures_for_every_truth():
                 assert (
                     proof["target_classes"] > 9
                 )  # At least three ternary readings for a guarantee.
-                assert not proof["construction_required_for_guarantee"]
+                assert not proof["untreated_readings_insufficient_for_identification"]
                 assert proof["reference_reading_bound"] <= 4
+
+
+@pytest.mark.parametrize("theory,discovery", [(0, 0), (3, 5)])
+def test_prefilled_initial_board_cannot_claim_the_empty_board_optimum(theory, discovery):
+    from nexus.solver import solve
+
+    episode = generate_causal(17, theory_level=theory, discovery_level=discovery, planning_level=0)
+    assert solve(episode).optimal_action_count == 2
+    assert not Session(episode).act(0, FinishAction()).victory_code
+    normal = Session(episode)
+    assert normal.act(0, ConfigureAction(machine="board", settings=expected(episode))).ok
+    assert normal.act(1, FinishAction()).victory_code
+    assert normal.status().turn == 2
+    episode.public.initial_state.machines["board"].settings = expected(episode)
+    assert not qualify_episode(episode).passed
+    with pytest.raises(ValueError, match="invalid initial causal apparatus"):
+        PrivateEpisode.model_validate_json(episode.model_dump_json())
+
+
+def test_original_certificate_is_readable_but_new_qualification_has_explicit_scope():
+    from nexus.ontology.causal.evidence import files
+
+    episode = generate_causal(17)
+    theory = json.loads(episode.public.evidence_files["theory.json"])
+    assert theory["evidence_version"] == 2
+    assert "before the first eligible submission" in theory["profile"]
+    assert "before the first eligible submission" in Session(episode).evidence("theory.json")
+    episode.public.evidence_files = files(episode.public.investigation.data(), version=1)
+    proof = dict(episode.generation_metadata.investigation_certificate)
+    assert proof.pop("certificate_version") == 2
+    proof["construction_required_for_guarantee"] = proof.pop("untreated_readings_insufficient_for_identification")
+    proof["construction_scope"] = "untreated readings cannot guarantee identification; not a per-truth or optimality claim"
+    episode.generation_metadata.investigation_certificate = proof
+    restored = PrivateEpisode.model_validate_json(episode.model_dump_json())
+    result = qualify_episode(restored)
+    assert result.passed
+    assert result.metrics["certificate_version"] == 2
+    assert "construction_required_for_guarantee" not in result.metrics
+    proof["certificate_version"] = 999
+    episode.generation_metadata.investigation_certificate = proof
+    assert not qualify_episode(episode).passed
+
+
+@pytest.mark.slow
+def test_untreated_policy_can_win_every_law_with_rejection_feedback():
+    """Independent arithmetic, public action replies and no selected-law access."""
+    from collections import defaultdict
+    from functools import cache
+    from itertools import count
+
+    from nexus.generator.randomness import rng_for
+    from nexus.models.actions import MoveAction
+
+    boards = [tuple(oracle(w, e, sensor=False) for e in MISSION) for w in WORLDS]
+    queries = (Experiment(instrument="reference"), *(Experiment(point=p) for p in POINTS))
+    readings = [[oracle(w, query) for w in WORLDS] for query in queries]
+
+    @cache
+    def choose(group):
+        candidates = tuple(sorted({boards[i] for i in group}))
+        best = (2 * len(candidates), None, candidates)
+        partitions = []
+        for index, row in enumerate(readings):
+            buckets = defaultdict(list)
+            for i in group:
+                buckets[row[i]].append(i)
+            if len(buckets) == 1:
+                continue
+            parts = {v: tuple(g) for v, g in buckets.items()}
+            rank = (max(len({boards[i] for i in g}) for g in parts.values()),
+                    sum(len(g) ** 2 for g in parts.values()), index)
+            partitions.append((rank, index, parts))
+        for _, index, parts in sorted(partitions)[:2]:
+            cost = 3 + max(choose(g)[0] for g in parts.values())
+            if cost < best[0]:
+                best = (cost, index, parts)
+        return best
+
+    def play(send, planning):
+        reply = send(TakeAction(artifact="stock"))
+        sample = next(e["details"]["artifact"] for e in reply.events if e["type"] == "take")
+        if planning:
+            send(MoveAction(target="lab"))
+        group = tuple(range(len(WORLDS)))
+        while True:
+            _, index, options = choose(group)
+            if index is None:
+                for board in options:
+                    send(ConfigureAction(machine="board", settings=board))
+                    if send(FinishAction()).victory_code:
+                        return
+                raise AssertionError("No candidate board won")
+            query = queries[index]
+            send(ConfigureAction(machine="stage", settings=query.point))
+            send(OperateAction(machine="stage", artifact=sample))
+            reply = send(ProbeAction(machine=query.instrument, artifact=sample))
+            value = next(e["details"]["result"]["payload"]["reading"]
+                         for e in reply.events if "result" in e["details"])
+            group = options[value]
+
+    seeds = {}
+    for seed in count():
+        seeds.setdefault(rng_for(seed, FAMILY, "mechanism").randrange(len(WORLDS)), seed)
+        if len(seeds) == len(WORLDS):
+            break
+    for planning in (0, 1):
+        costs = []
+        for seed in seeds.values():
+            episode = generate_causal(seed, planning_level=planning, resource_pressure=2)
+            session = Session(episode)
+
+            def send(action):
+                assert getattr(action, "machine", None) != "pulse"
+                reply = session.act(session.status().turn, action, player_only=True)
+                assert reply.ok
+                return reply
+
+            play(send, planning)
+            assert session.status().status == "won"
+            costs.append(session.status().turn)
+        assert len(costs) == 648 and max(costs) == 28 + planning
 
 
 def test_off_witness_measurement_and_failed_joint_target_exclusion():

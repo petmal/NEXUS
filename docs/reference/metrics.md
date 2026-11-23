@@ -9,7 +9,7 @@ Start with one attempt. Join its harness record to its world and configuration, 
 | `$schema` ending in `performance-v6.schema.json` | [Legacy transformation worlds](../../schemas/performance-v6.schema.json). Field descriptions include units and baselines. |
 | `$schema` ending in `performance-scientific-v1.schema.json` | [Scientific controller worlds](../../schemas/performance-scientific-v1.schema.json). Includes field calibration and controller submissions. |
 | `version: mission-performance-v1` | [Ontology mission report](../../schemas/performance-mission-v1.schema.json). Read its `ontology` and family `certificate`. |
-| `version: mission-performance-v2` or `mission-performance-v3` | [v2 decision fields](../../schemas/performance-mission-v2.schema.json); [v3 decision and evidence records](../../schemas/performance-mission-v3.schema.json). Dispatch on the actual version, including for archived data. |
+| `version: mission-performance-v2`, `mission-performance-v3` or `mission-performance-v4` | [v2 decision fields](../../schemas/performance-mission-v2.schema.json); [v3 decision and evidence records](../../schemas/performance-mission-v3.schema.json); [v4 first eligible decision](../../schemas/performance-mission-v4.schema.json). Dispatch on the actual version, including for archived data. |
 
 Earlier legacy contracts (v1–v5) remain in [schemas](../../schemas). Use the matching file when reading those archives. For legacy v6, `theory_level` can also be 3: the player must infer a bounded relationship without a working baseline. The pinned schema accepts 3, but its field description only explains levels 0–2. See the [theory levels](../difficulty.md).
 
@@ -25,7 +25,7 @@ uv run --frozen --extra dev python scripts/metric_schemas.py validate terminal-p
 | What you saved | What to validate |
 |---|---|
 | A terminal action or evaluator-finalize response | Its `performance` object against [terminal-performance-v1](../../schemas/terminal-performance-v1.schema.json). This contract selects the family by its exact version and requires a won or failed outcome. |
-| A service log line containing `NEXUS operator summary:` | The JSON after the marker against [operator-summary-v4](../../schemas/operator-summary-v4.schema.json). A shutdown can record a still-active attempt. |
+| A service log line containing `NEXUS operator summary:` | Current JSON uses [operator-summary-v5](../../schemas/operator-summary-v5.schema.json); archived [v4](../../schemas/operator-summary-v4.schema.json) remains readable. A shutdown can record a still-active attempt. |
 | Output from `nexus inspect` or a generated `private.json` | Its `generation_metadata` object against [generation-metadata-v1](../../schemas/generation-metadata-v1.schema.json). These are private generation and qualification fields. |
 | Output from `nexus solve` | The entire object against [solver-result-v1](../../schemas/solver-result-v1.schema.json), including the returned plan and its cost. |
 
@@ -48,7 +48,8 @@ A missing object, an unknown version and a measured zero are three different cas
 | `resource_allowance`, `planning_dependency_action_cost` | Legacy extra actions above the guaranteed-policy cost, and measured overhead from the P3 delivery dependency. Use the family's own budget rule for newer worlds. |
 | `certificate` | Family-specific proof data. Distinguish **exact minimum**, **lower bound** (at least this much is necessary), and **constructive upper bound** (one strategy suffices at this cost). A successful reference strategy alone proves no minimum. |
 | `measurements_used`, `informative_measurements`, `target_reducing_measurements`, `redundant_measurements` | Readings, readings narrowing candidate worlds, readings narrowing possible task outcomes/signatures, and readings that do not narrow the worlds. An operation can advance the physical plan while yielding a redundant observation. |
-| `target_classes_before_first_submission`, `target_count_meaning`, `first_submission_correct`, `controller_submissions`, `mission_submissions` | Remaining classes and actual submission history. For overlapping goals, different sets of accepted repairs are signatures; their count is not the number of remaining physical worlds. |
+| `target_classes_before_first_submission`, `target_count_meaning`, `first_submission_correct`, `controller_submissions`, `mission_submissions` | Remaining classes and actual submission history. First-submission fields retain the first accepted `finish`, including an ineligible attempt. For overlapping goals, different sets of accepted repairs are signatures; their count is not the number of remaining physical worlds. |
+| `first_eligible_submission_turn`, `first_eligible_submission_correct`, `first_eligible_submission_supported_by_evidence` | Mission-v4 records the first complete, physically eligible decision before its rejection feedback. A missing cartridge or wrong room does not count. Null means no eligible submission occurred; summaries also use null when the family does not provide this analysis. |
 | `final_correct_field_values`, `field_value_count`, `final_port_correct`, `final_submission_correct` | Family-specific controller/mission results. A partially correct field vector need not win. Never substitute partial credit for receipt validation without declaring a new scoring rule. |
 | `common_repairs_before_first_submission`, `first_submission_supported_by_evidence`, `measurements_establishing_guaranteed_repair`, `measurements_after_guaranteed_repair` | Whether a common repair existed, whether the **chosen** repair was supported, and measurements establishing/following resolution. Several surviving worlds can share a repair. |
 | `decision_diagnostics` | Nested decision-by-decision account in v3. See below and the schema definitions for reading, evidence and submission records. |
@@ -58,7 +59,9 @@ The private `nexus solve` command reports the cost of its returned plan as
 for that world with its laws known. An unproven minimum stays null even if
 the plan wins. Neither field measures the work of discovering a hidden law.
 
-For service logs, `operator-summary-v4` records the world family and starting
+For service logs, `operator-summary-v5` preserves known physical completion from
+mission-v1/v2, without awarding a win, and includes the v4 eligible-decision fields.
+Like v4, it records the world family and starting
 allowance even if the attempt is still active. `repeated_build_submissions: null`
 means witness analysis was unavailable; zero means it ran and found none. Some
 older summaries labeled scientific controller worlds `legacy`. For those records,

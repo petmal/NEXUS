@@ -22,7 +22,7 @@ def validate_episode(episode):
     world = world_for(episode)
     from nexus.ontology.causal.evidence import files
 
-    if episode.public.evidence_files != files(spec):
+    if episode.public.evidence_files not in (files(spec), files(spec, version=1)):
         raise ValueError("causal public evidence does not match specification")
     metadata = episode.generation_metadata
     if (metadata.theory_level, metadata.discovery_level) != (spec.theory, spec.discovery):
@@ -46,7 +46,7 @@ def validate_episode(episode):
         if name == "stage":
             valid = machine.settings is not None and len(machine.settings) == 3
         elif name == "board":
-            valid = machine.settings is None or len(machine.settings) == 6
+            valid = machine.settings is None
         else:
             valid = machine.settings is None
         if not valid or (machine.settings and any(v not in (0, 1, 2) for v in machine.settings)):

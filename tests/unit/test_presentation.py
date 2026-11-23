@@ -123,6 +123,11 @@ def test_every_shipped_family_preserves_v1_text_and_shares_v2_player_records(fam
     episode = story_episode(family)
     assert episode.public.presentation_version == CURRENT
     historical = attach(episode, "sealed-facility-v1").public
+    if family == "causal-mechanisms-v1":
+        from nexus.ontology.causal.evidence import files
+
+        # This golden record predates the separately versioned D5 scope correction.
+        historical.evidence_files = files(historical.investigation.data(), version=1)
     old_text = {
         "description": description(historical),
         "evidence": evidence_files(historical),

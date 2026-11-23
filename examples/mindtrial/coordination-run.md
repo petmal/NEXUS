@@ -115,7 +115,7 @@ group sizes and added cross-group dependencies, not hidden-law difficulty. R2 is
 an exact physical minimum; R1 adds slack. At P0 the coupled fixtures have a certified
 advantage for revisiting groups over every group-contiguous solution. A lack of
 model failures would remain a valid result. See the repository's
-[coordination guide](https://github.com/petmal/NEXUS/blob/feat/planning-resource-axes/docs/coordination-guide.md)
+[coordination guide](https://github.com/petmal/NEXUS/blob/main/docs/coordination-guide.md)
 for controls, guarantees and interpretation limits.
 
 No model calls were made while preparing this package. Its `release.json` records

@@ -86,13 +86,21 @@ requalifies it. No confirmation is needed between groups.
 Host Python 3.12+, Docker, the release commit in your local clone and your local
 MindTrial binary are required. The image uses the repository's pinned Python and
 dependencies. Override paths with NEXUS_REPO, MINDTRIAL_DIR or PYTHON when needed.
-If fetch does not bring in the feature commit, fetch the feature branch explicitly:
+If your clone does not contain the pinned release commit, fetch the published branch:
 
 ```bash
-git -C "$HOME/Go-Projects/NEXUS" fetch origin feat/planning-resource-axes
+git -C "$HOME/Go-Projects/NEXUS" fetch origin main
 ```
 
 ## Preflight or selected runs
+
+New runs record a unique run identity, result digest, trace identities and log
+digest at completion. Control admission and readout verify this binding. Preserve
+the original result folder together; replacing its result or log invalidates it.
+Historical unbound results remain readable with `result_binding_status=legacy_unbound`,
+but cannot admit new challenges. Rerun controls with the current package for admission.
+Readout v6 counts transport interruptions as provider availability errors even
+without an HTTP status; the separate HTTP stop-batch policy is unchanged.
 
 Qualify without model calls or provider keys:
 

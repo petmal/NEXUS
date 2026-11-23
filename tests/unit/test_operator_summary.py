@@ -11,6 +11,57 @@ from nexus.protocol.operator_summary import SUMMARY_LIMIT_BYTES, compact_summary
 from nexus.protocol.session import Session
 
 
+def test_physical_completion_survives_mission_v1_projection_without_awarding_a_win():
+    from nexus.ontology.catalog import runtime_for
+
+    episode = generate_episode(7, axis_version=2, science_family="coupled-repair-v1",
+                               theory_level=3, discovery_level=5, planning_level=0, resource_pressure=1)
+    session = Session(episode)
+    for action in runtime_for(episode.public.investigation).physical_plan(episode)[:-1]:
+        assert session.act(session.status().turn, action).ok
+    _, performance = session.finalize_attempt()
+    assert performance.final_submission_correct
+    summary = compact_summary(session.operator_snapshot(), session.trace_snapshot())
+    assert summary["physical_goal_satisfied"] is True
+    assert summary["correct_state_without_successful_finish"] is True
+    assert summary["status"] == "failed"
+
+
+def test_first_eligible_metrics_preserve_early_procedural_error_and_unknown():
+    from nexus.models.actions import FinishAction
+
+    episode = generate_episode(2073, axis_version=2, science_family="model-revision-v1",
+                               theory_level=0, discovery_level=0, planning_level=0, resource_pressure=1)
+    for early_finish in (False, True):
+        session = Session(episode)
+        if early_finish:
+            assert session.act(0, FinishAction()).ok
+        _, result = session.finalize_attempt()
+        assert result.first_eligible_submission_turn is None
+        assert result.first_eligible_submission_correct is None
+        assert result.first_eligible_submission_supported_by_evidence is None
+        assert result.first_submission_correct is (False if early_finish else None)
+    session = Session(episode)
+    assert session.act(0, FinishAction()).ok
+    won = public_policy(session, episode.public.evidence_files)
+    assert won.victory_code
+    result = won.performance
+    assert result.version == "mission-performance-v4"
+    assert result.first_submission_correct is False
+    assert result.first_submission_supported_by_evidence is False
+    assert result.first_eligible_submission_turn == 5
+    assert result.first_eligible_submission_correct is True
+    assert result.first_eligible_submission_supported_by_evidence is True
+    serialized = won.model_dump(mode="json")["performance"]
+    assert serialized["version"] == "mission-performance-v4"
+    assert serialized["first_eligible_submission_turn"] == 5
+    assert serialized["first_eligible_submission_correct"] is True
+    assert serialized["first_eligible_submission_supported_by_evidence"] is True
+    summary = compact_summary(session.operator_snapshot(), session.trace_snapshot())
+    assert summary["first_eligible_submission_correct"] is True
+    assert summary["first_eligible_submission_supported_by_evidence"] is True
+
+
 def test_long_report_keeps_complete_summary_in_8192_byte_tail(caplog):
     episode = generate_episode(
         95,
@@ -109,6 +160,6 @@ def test_archived_v1_witness_summary_does_not_invent_zero_behavioral_repeats():
         "submissions": [{"repeated_build": True, "witness": None}],
     }
     summary = compact_summary(snapshot, session.trace_snapshot())
-    assert summary["version"] == "operator-summary-v4"
+    assert summary["version"] == "operator-summary-v5"
     assert summary["repeated_build_submissions"] == 1
     assert summary["rejected_equivalent_submissions"] is None

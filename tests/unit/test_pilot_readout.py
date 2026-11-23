@@ -176,6 +176,47 @@ def test_complete_crossing_and_timing_separate_selection_from_requests(tmp_path)
     assert report["rows"][0]["usage"]["OutputTokens"] == 10
 
 
+def test_transport_interruption_is_counted_without_changing_http_stop_policy(tmp_path):
+    raw = fixture(tmp_path)
+    record = raw["Results"]["openai"][0]
+    record["Kind"] = "Error"
+    record["Details"] = {"Error": {"Message": "failed to generate response: Post request: http2: timeout awaiting response headers"}}
+    write(tmp_path, "mindtrial.json", raw)
+    error = readout.classify_provider_error(record)
+    assert error["http_status"] is None and error["stop_batch"] is False
+    report = readout.summarize(tmp_path)
+    assert report["rows"][0]["diagnostics"]["outcome"] == "provider_interruption"
+    assert report["provider_error_attempts"] == 1
+    assert not report["completed_without_provider_errors"]
+
+
+def test_readout_verifies_completion_binding_and_marks_legacy_inputs(tmp_path):
+    raw = fixture(tmp_path)
+    assert readout.summarize(tmp_path)["result_binding_status"] == "legacy_unbound"
+    manifest = readout.read(tmp_path / "manifest.json")
+    manifest["run_id"] = "attempt-2"
+    manifest["result_binding"] = readout.result_binding(tmp_path, manifest["run_id"])
+    write(tmp_path, "manifest.json", manifest)
+    report = readout.summarize(tmp_path)
+    assert report["result_binding_status"] == "verified"
+    assert report["source_files_sha256"]["mindtrial.json"] == manifest["result_binding"]["results_sha256"]
+    raw["Results"]["openai"][0]["TraceID"] = "older-trace"
+    write(tmp_path, "mindtrial.json", raw)
+    with pytest.raises(ValueError, match="result binding"):
+        readout.summarize(tmp_path)
+
+
+def test_failed_readout_refresh_does_not_leave_a_stale_success(tmp_path):
+    fixture(tmp_path)
+    command = [sys.executable, str(PATH), str(tmp_path)]
+    subprocess.run(command, check=True, capture_output=True)
+    assert (tmp_path / "readout.json").is_file()
+    (tmp_path / "mindtrial.json").write_text('{"Results":')
+    failed = subprocess.run(command, check=False, capture_output=True)
+    assert failed.returncode != 0
+    assert not (tmp_path / "readout.json").exists()
+
+
 def test_partial_failed_attempt_retains_missing_effort(tmp_path):
     raw = fixture(tmp_path)
     raw["Results"]["openai"] = raw["Results"]["openai"][:1]

@@ -142,6 +142,8 @@ def setup(tmp_path, monkeypatch):
             return subprocess.CompletedProcess(command, 0, json.dumps(state["payload"]), "")
         if command[0] == "./mindtrial":
             assert kwargs == {"cwd": state["mindtrial"], "check": False}
+            output = Path(next(arg.removeprefix("-config=") for arg in command if arg.startswith("-config="))).parent
+            dump(output / "mindtrial.json", {"Results": {}})
             return subprocess.CompletedProcess(command, state["live_status"])
         raise AssertionError(f"Unexpected subprocess: {command}")
 
@@ -655,7 +657,8 @@ def test_local_git_errors_block_without_fetch_build_or_leaking_stderr(setup, cap
     assert os.environ["OPENAI_API_KEY"] not in captured.out + captured.err
 
 
-def test_missing_commit_fetches_only_release_branch_without_checkout(setup, tmp_path):
+@pytest.mark.parametrize("release_branch", ["main", "feat/planning-resource-axes"])
+def test_missing_commit_fetches_published_main_without_checkout(setup, tmp_path, release_branch):
     remote = tmp_path / "origin repository"
     REAL_RUN(
         ["git", "clone", str(setup["repository"]), str(remote)], check=True, capture_output=True
@@ -677,6 +680,7 @@ def test_missing_commit_fetches_only_release_branch_without_checkout(setup, tmp_
         capture_output=True,
     )
     setup["release"]["source_commit"] = commit
+    setup["release"]["branch"] = release_branch
     setup["revision"] = commit
     dump(setup["package"] / "release.json", setup["release"])
     assert runner.main(["--preflight-only"], package_dir=setup["package"]) == 0
@@ -714,6 +718,10 @@ def test_environment_overrides_and_repeated_invocations_create_unique_local_resu
     assert runner.main(["--skip-build"], package_dir=setup["package"]) == 0
     records = manifests(setup)
     assert len({record["output_dir"] for record in records}) == 2
+    assert len({record["run_id"] for record in records}) == 2
+    readout = runner.readout_module(RUNNER.parent)
+    for record in records:
+        assert readout.verify_result_binding(Path(record["output_dir"]), record, required=True) == "verified"
     assert all(record["cwd"] == str(mindtrial) for record in records)
     assert (mindtrial / "mindtrial").read_bytes() == binary_bytes
 

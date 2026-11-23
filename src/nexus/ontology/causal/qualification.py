@@ -26,6 +26,7 @@ def certificate(mask: int, planning: int, allow_preparation: bool = True):
     ambiguous = sum(len(target_set(g)) > 1 for g in raw)
     return {
         "family": "causal-mechanisms-v1",
+        "certificate_version": 2,
         "experimental": True,
         "empirical_difficulty_calibrated": False,
         "prior_worlds": mask.bit_count(),
@@ -35,13 +36,26 @@ def certificate(mask: int, planning: int, allow_preparation: bool = True):
         "policy_scope": "greedy public-information subset witness; not global minimax",
         "untreated_observation_classes": len(raw),
         "untreated_ambiguous_classes": ambiguous,
-        "construction_required_for_guarantee": ambiguous > 0,
+        "untreated_readings_insufficient_for_identification": ambiguous > 0,
         "maximum_specimen_pulses": 2,
         "reference_allows_preparation": allow_preparation,
         "adaptive_advantage_proven": False,
-        "construction_scope": "untreated readings cannot guarantee identification; not a per-truth or optimality claim",
+        "construction_scope": "identification from untreated readings before the first eligible submission; excludes rejection feedback and makes no eventual-victory requirement",
         "exact_arithmetic": True,
     }
+
+
+def certificate_matches(recorded, current):
+    """Read original certificates without repeating their ambiguous field name."""
+    if recorded == current:
+        return True
+    legacy = dict(current)
+    legacy.pop("certificate_version")
+    legacy["construction_required_for_guarantee"] = legacy.pop(
+        "untreated_readings_insufficient_for_identification"
+    )
+    legacy["construction_scope"] = "untreated readings cannot guarantee identification; not a per-truth or optimality claim"
+    return recorded == legacy
 
 
 def qualify_causal(episode):
@@ -76,14 +90,15 @@ def qualify_causal(episode):
     checks = {
         "nonempty_identifiable_prior": bool(expected_targets),
         "public_policy_wins": result.victory_code is not None,
-        "metadata_matches_public_family": proof
-        == episode.generation_metadata.investigation_certificate,
+        "metadata_matches_public_family": certificate_matches(
+            episode.generation_metadata.investigation_certificate, proof
+        ),
         "D0_resolved": spec.discovery != 0 or len(expected_targets) == 1,
         "D1_single_reading": spec.discovery != 1 or proof["reference_reading_bound"] == 1,
         "D2_combines_measurements": spec.discovery != 2
-        or (len(expected_targets) > 3 and not proof["construction_required_for_guarantee"]),
-        "D5_construction_required": spec.discovery != 5
-        or proof["construction_required_for_guarantee"],
+        or (len(expected_targets) > 3 and not proof["untreated_readings_insufficient_for_identification"]),
+        "D5_untreated_identification_insufficient": spec.discovery != 5
+        or proof["untreated_readings_insufficient_for_identification"],
     }
     return QualificationReport(
         passed=all(checks.values()),

@@ -1,0 +1,407 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/petmal/NEXUS/main/schemas/operator-summary-v5.schema.json",
+  "title": "Compact operator log record (including episode and trigger)",
+  "description": "The JSON object following NEXUS operator summary: in service logs. May describe an active attempt. This is not the verbose operator snapshot or the player performance payload.",
+  "$defs": {
+    "count": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "nullableCount": {
+      "type": [
+        "integer",
+        "null"
+      ],
+      "minimum": 0
+    },
+    "nullableBoolean": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    }
+  },
+  "type": "object",
+  "properties": {
+    "version": {
+      "const": "operator-summary-v5"
+    },
+    "episode_id": {
+      "type": "string",
+      "maxLength": 128
+    },
+    "trigger": {
+      "type": "string",
+      "maxLength": 80
+    },
+    "family": {
+      "type": "string",
+      "maxLength": 128
+    },
+    "status": {
+      "enum": [
+        "active",
+        "won",
+        "failed"
+      ]
+    },
+    "termination_reason": {
+      "type": "string"
+    },
+    "turn": {
+      "$ref": "#/$defs/count"
+    },
+    "initial_action_budget": {
+      "$ref": "#/$defs/nullableCount"
+    },
+    "actions_remaining": {
+      "$ref": "#/$defs/nullableCount"
+    },
+    "action_counts": {
+      "type": "object",
+      "properties": {
+        "observe": {
+          "$ref": "#/$defs/count"
+        },
+        "move": {
+          "$ref": "#/$defs/count"
+        },
+        "take": {
+          "$ref": "#/$defs/count"
+        },
+        "drop": {
+          "$ref": "#/$defs/count"
+        },
+        "operate": {
+          "$ref": "#/$defs/count"
+        },
+        "probe": {
+          "$ref": "#/$defs/count"
+        },
+        "measure": {
+          "$ref": "#/$defs/count"
+        },
+        "configure": {
+          "$ref": "#/$defs/count"
+        },
+        "wait": {
+          "$ref": "#/$defs/count"
+        },
+        "finish": {
+          "$ref": "#/$defs/count"
+        }
+      },
+      "required": [
+        "observe",
+        "move",
+        "take",
+        "drop",
+        "operate",
+        "probe",
+        "measure",
+        "configure",
+        "wait",
+        "finish"
+      ],
+      "additionalProperties": false
+    },
+    "escape_classification": {
+      "enum": [
+        "supported_win",
+        "compatible_win",
+        "not_won",
+        null
+      ]
+    },
+    "physical_goal_satisfied": {
+      "$ref": "#/$defs/nullableBoolean"
+    },
+    "correct_state_without_successful_finish": {
+      "$ref": "#/$defs/nullableBoolean"
+    },
+    "final_evidence": {
+      "type": "object",
+      "properties": {
+        "classification": {
+          "enum": [
+            "guaranteed",
+            "compatible",
+            "contradicted",
+            "ineligible",
+            null
+          ]
+        },
+        "remaining_worlds": {
+          "$ref": "#/$defs/nullableCount"
+        },
+        "accepting_worlds": {
+          "$ref": "#/$defs/nullableCount"
+        },
+        "common_repairs": {
+          "$ref": "#/$defs/nullableCount"
+        }
+      },
+      "required": [
+        "classification",
+        "remaining_worlds",
+        "accepting_worlds",
+        "common_repairs"
+      ],
+      "additionalProperties": false
+    },
+    "measurements_used": {
+      "$ref": "#/$defs/nullableCount"
+    },
+    "informative_measurements": {
+      "$ref": "#/$defs/nullableCount"
+    },
+    "noninformative_measurements": {
+      "$ref": "#/$defs/nullableCount"
+    },
+    "measurement_accounting": {
+      "anyOf": [
+        {
+          "type": "null"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "preview_readings": {
+              "$ref": "#/$defs/count"
+            },
+            "committed_readings": {
+              "$ref": "#/$defs/count"
+            },
+            "other_readings": {
+              "$ref": "#/$defs/count"
+            },
+            "noninformative_preview_readings": {
+              "$ref": "#/$defs/count"
+            },
+            "noninformative_committed_readings": {
+              "$ref": "#/$defs/count"
+            },
+            "noninformative_other_readings": {
+              "$ref": "#/$defs/count"
+            }
+          },
+          "required": [
+            "preview_readings",
+            "committed_readings",
+            "other_readings",
+            "noninformative_preview_readings",
+            "noninformative_committed_readings",
+            "noninformative_other_readings"
+          ],
+          "additionalProperties": false
+        }
+      ]
+    },
+    "noninformative_meaning": {
+      "type": "string"
+    },
+    "mission_submissions": {
+      "$ref": "#/$defs/nullableCount"
+    },
+    "failed_finishes": {
+      "$ref": "#/$defs/nullableCount"
+    },
+    "invalid_actions": {
+      "$ref": "#/$defs/nullableCount"
+    },
+    "duplicate_requests": {
+      "$ref": "#/$defs/nullableCount"
+    },
+    "protocol_conflicts": {
+      "$ref": "#/$defs/nullableCount"
+    },
+    "first_submission_supported_by_evidence": {
+      "$ref": "#/$defs/nullableBoolean"
+    },
+    "first_guaranteed_repair_turn": {
+      "$ref": "#/$defs/nullableCount"
+    },
+    "submission_classifications": {
+      "type": "object",
+      "additionalProperties": {
+        "$ref": "#/$defs/count"
+      },
+      "propertyNames": {
+        "enum": [
+          "guaranteed",
+          "compatible",
+          "contradicted",
+          "ineligible"
+        ]
+      }
+    },
+    "witnesses_available": {
+      "type": "boolean"
+    },
+    "witness_kinds": {
+      "type": "object",
+      "additionalProperties": {
+        "$ref": "#/$defs/count"
+      }
+    },
+    "repeated_build_submissions": {
+      "$ref": "#/$defs/nullableCount"
+    },
+    "rejected_equivalent_submissions": {
+      "$ref": "#/$defs/nullableCount"
+    },
+    "assistance": {
+      "type": "object",
+      "properties": {
+        "construction_check_calls": {
+          "$ref": "#/$defs/count"
+        }
+      },
+      "required": [
+        "construction_check_calls"
+      ],
+      "additionalProperties": false
+    },
+    "receipt_validation": {
+      "const": "not_observed_by_service"
+    },
+    "provider_completion": {
+      "const": "not_observed_by_service"
+    },
+    "physical_continuation": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "version": {
+              "const": "physical-continuation-v1"
+            },
+            "available": {
+              "const": false
+            },
+            "reason": {
+              "enum": [
+                "family_has_no_exact_continuation_hook",
+                "laws_are_not_disclosed"
+              ]
+            }
+          },
+          "required": [
+            "version",
+            "available",
+            "reason"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "version": {
+              "const": "physical-continuation-v1"
+            },
+            "available": {
+              "const": true
+            },
+            "scope": {
+              "type": "string"
+            },
+            "initial_minimum_actions": {
+              "$ref": "#/$defs/count"
+            },
+            "minimum_remaining_actions": {
+              "$ref": "#/$defs/nullableCount"
+            },
+            "initial_action_budget": {
+              "$ref": "#/$defs/nullableCount"
+            },
+            "accepted_actions": {
+              "$ref": "#/$defs/count"
+            },
+            "first_budget_infeasible_turn": {
+              "$ref": "#/$defs/nullableCount"
+            },
+            "first_unreachable_turn": {
+              "$ref": "#/$defs/nullableCount"
+            },
+            "excess_actions": {
+              "$ref": "#/$defs/nullableCount"
+            }
+          },
+          "required": [
+            "version",
+            "available",
+            "scope",
+            "initial_minimum_actions",
+            "minimum_remaining_actions",
+            "initial_action_budget",
+            "accepted_actions",
+            "first_budget_infeasible_turn",
+            "first_unreachable_turn",
+            "excess_actions"
+          ],
+          "additionalProperties": false
+        }
+      ]
+    },
+    "first_eligible_submission_turn": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "first_eligible_submission_correct": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "first_eligible_submission_supported_by_evidence": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    }
+  },
+  "required": [
+    "version",
+    "episode_id",
+    "trigger",
+    "family",
+    "status",
+    "termination_reason",
+    "turn",
+    "initial_action_budget",
+    "actions_remaining",
+    "action_counts",
+    "escape_classification",
+    "physical_goal_satisfied",
+    "correct_state_without_successful_finish",
+    "final_evidence",
+    "measurements_used",
+    "informative_measurements",
+    "noninformative_measurements",
+    "measurement_accounting",
+    "noninformative_meaning",
+    "mission_submissions",
+    "failed_finishes",
+    "invalid_actions",
+    "duplicate_requests",
+    "protocol_conflicts",
+    "first_submission_supported_by_evidence",
+    "first_guaranteed_repair_turn",
+    "submission_classifications",
+    "witnesses_available",
+    "witness_kinds",
+    "repeated_build_submissions",
+    "rejected_equivalent_submissions",
+    "assistance",
+    "receipt_validation",
+    "provider_completion",
+    "physical_continuation",
+    "first_eligible_submission_turn",
+    "first_eligible_submission_correct",
+    "first_eligible_submission_supported_by_evidence"
+  ],
+  "additionalProperties": false
+}

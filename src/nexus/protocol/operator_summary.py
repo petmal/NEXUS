@@ -52,8 +52,16 @@ def compact_summary(snapshot: dict, trace) -> dict:
     submissions = decision.get("submissions") or ()
     witness_report = snapshot.get("evidence_witnesses") or {}
     witnesses = witness_report.get("submissions", ())
+    physical_goal = decision.get("physical_goal_satisfied")
+    if physical_goal is None:
+        physical_goal = performance.get("goal_satisfied")
+    if physical_goal is None and str(performance.get("version", "")).startswith("mission-performance-"):
+        physical_goal = performance.get("final_submission_correct")
+    correct_without_finish = decision.get("correct_state_without_successful_finish")
+    if correct_without_finish is None and physical_goal is not None:
+        correct_without_finish = physical_goal and snapshot["status"]["status"] != "won"
     return {
-        "version": "operator-summary-v4",
+        "version": "operator-summary-v5",
         "family": str(world.get("family") or performance.get("ontology") or "unknown")[:128],
         "status": str(snapshot["status"]["status"])[:80],
         "termination_reason": str(performance.get("termination_reason") or "unknown")[:80],
@@ -76,10 +84,16 @@ def compact_summary(snapshot: dict, trace) -> dict:
             )
         },
         "escape_classification": decision.get("escape_classification"),
-        "physical_goal_satisfied": decision.get("physical_goal_satisfied", performance.get("goal_satisfied")),
-        "correct_state_without_successful_finish": decision.get(
-            "correct_state_without_successful_finish"
-        ),
+        "physical_goal_satisfied": physical_goal,
+        "correct_state_without_successful_finish": correct_without_finish,
+        **{
+            key: performance.get(key)
+            for key in (
+                "first_eligible_submission_turn",
+                "first_eligible_submission_correct",
+                "first_eligible_submission_supported_by_evidence",
+            )
+        },
         "final_evidence": {
             key: evidence.get(key)
             for key in ("classification", "remaining_worlds", "accepting_worlds", "common_repairs")

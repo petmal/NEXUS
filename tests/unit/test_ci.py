@@ -77,6 +77,21 @@ def test_aggregate_requires_the_complete_successful_dependency_set():
             ci.check_gate(malformed)
 
 
+@pytest.mark.parametrize("job,groups", [("host", ci.GROUPS), ("container", ci.CONTAINERS)])
+def test_workflow_cannot_silently_drop_or_duplicate_a_required_matrix_group(job, groups):
+    text = (ROOT / ".github/workflows/ci.yml").read_text()
+    start = text.index(f"  {job}:\n")
+    before, block = text[:start], text[start:]
+    ci.check_workflow_matrices(text)
+    for group in groups:
+        line = f"          - {group}\n"
+        for replacement in ("", line + line):
+            with pytest.raises(ValueError, match="matrix group"):
+                ci.check_workflow_matrices(before + block.replace(line, replacement, 1))
+    with pytest.raises(ValueError, match="matrix"):
+        ci.check_workflow_matrices(before + block.replace("    steps:", "        exclude: []\n    steps:", 1))
+
+
 @pytest.mark.parametrize("counts", [
     'tests="0"', 'tests="1" skipped="1"', 'tests="1" failures="1"', 'tests="1" errors="1"',
 ])

@@ -10,6 +10,84 @@ from nexus.ontology.repair.qualification import check_offline_proof, proof_paylo
 from nexus.solver.finite_game import SearchBudget, SearchLimit
 
 
+def refresh_module():
+    import importlib.util
+    from pathlib import Path
+
+    spec = importlib.util.spec_from_file_location(
+        "repair_refresh", Path(__file__).parents[2] / "scripts/refresh_repair_release.py"
+    )
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module
+
+
+@pytest.mark.parametrize("damage", ["deselected", "skipped", "failed", "interrupted", "missing-test", "missing-count", "short-loop"])
+def test_release_attestation_requires_actual_exhaustive_completion(damage):
+    from types import SimpleNamespace
+
+    module = refresh_module()
+    evidence = module.Completion()
+    nodes = [module.LIVE_TEST, "tests/unit/test_repair_conformance.py::finite"]
+    evidence.pytest_collection_finish(SimpleNamespace(items=[SimpleNamespace(nodeid=n) for n in nodes]))
+    for node in nodes:
+        if damage == "missing-test" and node == nodes[-1]:
+            continue
+        evidence.pytest_runtest_logreport(SimpleNamespace(
+            nodeid=node, when="call", failed=damage == "failed", skipped=damage == "skipped",
+            passed=damage not in ("failed", "skipped"),
+            user_properties=[] if damage == "missing-count" else [
+                ("live_policy_receipt_replay_cases", 7202 if damage == "short-loop" else 7203)
+            ],
+        ))
+    if damage == "deselected":
+        evidence.pytest_deselected([object()])
+    with pytest.raises(RuntimeError, match="did not complete"):
+        evidence.evidence(2 if damage == "interrupted" else 0)
+
+
+@pytest.mark.parametrize("outcome", ["success", "missing-report", "short-loop", "interrupted", "preflight-failed"])
+def test_refresh_isolates_selection_and_preserves_manifest_on_incomplete_checks(tmp_path, monkeypatch, outcome):
+    import json
+    import subprocess
+
+    module = refresh_module()
+    directory = tmp_path / "src/nexus/ontology/repair"
+    directory.mkdir(parents=True)
+    path = directory / "qualified-release.json"
+    original = b'{"evidence": {}}\n'
+    path.write_bytes(original)
+    (directory / "query-upper-proof.json").write_text('{}')
+    monkeypatch.setattr(module, "ROOT", tmp_path)
+    monkeypatch.setattr(module, "check_offline_proof", lambda: None)
+    monkeypatch.setattr(module, "source_binding", lambda: {"source": "bound"})
+    monkeypatch.setattr(module, "witness_binding", lambda: {"test": "bound"})
+    monkeypatch.setenv("PYTEST_ADDOPTS", "-k test_release_identity_mismatch_fails_closed")
+
+    def execute(command, **kwargs):
+        if "--checks-report" in command:
+            assert "PYTEST_ADDOPTS" not in kwargs["env"]
+            if outcome == "interrupted":
+                raise KeyboardInterrupt()
+            if outcome != "missing-report":
+                from pathlib import Path
+
+                Path(command[-1]).write_text(json.dumps({"tests_passed": 30,
+                    "live_policy_receipt_replay_cases": 7202 if outcome == "short-loop" else 7203}))
+        elif outcome == "preflight-failed":
+            raise subprocess.CalledProcessError(1, command)
+        return subprocess.CompletedProcess(command, 0)
+
+    monkeypatch.setattr(module.subprocess, "run", execute)
+    if outcome == "success":
+        module.main()
+        assert json.loads(path.read_text())["evidence"]["completion"]["live_policy_receipt_replay_cases"] == 7203
+    else:
+        with pytest.raises((OSError, RuntimeError, KeyboardInterrupt, subprocess.CalledProcessError)):
+            module.main()
+        assert path.read_bytes() == original
+
+
 def test_checked_relaxation_meets_ceiling_and_has_complete_choice_payload():
     proof = check_offline_proof()
     assert Fraction(proof.upper_mass, proof.worlds) == Fraction(3, 7)

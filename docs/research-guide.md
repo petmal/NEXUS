@@ -57,7 +57,7 @@ Registration in the ontology catalog alone implies neither property.
 | World result | Did an accepted `finish` produce a valid victory receipt? |
 | Physical goal | Was the mission state actually reached, even without a successful finish? |
 | Evidence support | Did the available public evidence support the chosen decision, or was it only compatible with it? |
-| First submission | Was the first eligible attempt supported/correct, before feedback from rejection? |
+| First eligible submission | Was the first physically eligible attempt supported/correct, before feedback from rejection? Use `first_eligible_submission_*` in mission-performance-v4 where available. Historical `first_submission_*` fields describe the first accepted `finish`, including procedural failures. |
 | Resource trajectory | When, if ever, did a valid continuation become impossible within the remaining budget? |
 | Availability | Did billing, rate limits, transport, or provider failure interrupt the attempt? |
 

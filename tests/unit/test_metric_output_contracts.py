@@ -22,6 +22,7 @@ from nexus.protocol.http import create_single_session_app
 from nexus.protocol.investigation_metrics import (
     SCIENCE_SCHEMA_URL,
     AuditedDecisionMissionPerformance,
+    EligibleDecisionMissionPerformance,
     DecisionMissionPerformance,
     MissionPerformance,
 )
@@ -42,7 +43,7 @@ def test_published_schemas_and_operator_serialization_contracts():
     for name, model in SCHEMA_TOOL["MODELS"].items():
         assert contracts()[name].schema == SCHEMA_TOOL["output_schema"](name, model)
     for version, model in enumerate(
-        (MissionPerformance, DecisionMissionPerformance, AuditedDecisionMissionPerformance), 1
+        (MissionPerformance, DecisionMissionPerformance, AuditedDecisionMissionPerformance, EligibleDecisionMissionPerformance), 1
     ):
         assert contracts()[f"performance-mission-v{version}"].schema == model.model_json_schema()
 
@@ -79,7 +80,7 @@ def episode(case):
         ("legacy", "$schema", PERFORMANCE_SCHEMA_URL),
         ("controller", "$schema", SCIENCE_SCHEMA_URL),
         ("mission", "version", "mission-performance-v1"),
-        ("planning", "version", "mission-performance-v3"),
+        ("planning", "version", "mission-performance-v4"),
     ],
 )
 def test_real_performance_and_operator_log(case, key, label, caplog):
@@ -116,7 +117,7 @@ def test_real_performance_and_operator_log(case, key, label, caplog):
     ]
     assert {s["status"] for s in summaries} == {"won", "failed", "active"}
     for summary in summaries:
-        contracts()["operator-summary-v4"].validate(summary)
+        contracts()["operator-summary-v5"].validate(summary)
     if case == "controller":
         assert all(s["initial_action_budget"] is None for s in summaries)
     if case != "legacy":

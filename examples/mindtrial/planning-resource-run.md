@@ -5,7 +5,7 @@ gets a fresh persistent NEXUS service. The only model tool is NEXUS; external
 Python is unavailable. The validator checks the actual terminal victory receipt.
 No model calls are made by the build or preflight commands below.
 
-The implementation is on `feat/planning-resource-axes` in
+The implementation is on `main` in
 [petmal/NEXUS](https://github.com/petmal/NEXUS/pull/7). Build from the exact commit
 listed in the downloaded package's `run-manifest.json`; keep that file with the
 results. Main contains the earlier T/D checkpoint, not this P/R runner.
@@ -93,5 +93,5 @@ For the first read, inspect the slack known-law cells 05/13, then their R2 partn
 then the unknown-law cells. Separate physical wins, receipt-validation failures,
 unsupported guesses, action exhaustion, harness limits and provider errors.
 Keep the config, tasks, source revision/image digest and full logs together.
-The [P/R guide](https://github.com/petmal/NEXUS/blob/feat/planning-resource-axes/docs/planning-resource-guide.md)
+The [P/R guide](https://github.com/petmal/NEXUS/blob/main/docs/planning-resource-guide.md)
 contains the mechanical guarantees and interpretation limits.
