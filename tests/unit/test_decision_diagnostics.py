@@ -123,6 +123,12 @@ def test_v2_response_still_parses_and_v3_schema_matches():
 
     session = Session(make_episode(438))
     result = public_policy(session, session.episode.public.evidence_files).model_dump(mode="json")
+    # Reconstruct the fields present in an actual historical response.
+    for field in ("first_eligible_submission_turn", "first_eligible_submission_correct",
+                  "first_eligible_submission_supported_by_evidence"):
+        result["performance"].pop(field)
+    result["performance"]["version"] = "mission-performance-v3"
+    assert ActionResponse.model_validate(result).performance.version == "mission-performance-v3"
     result["performance"].pop("decision_diagnostics")
     result["performance"]["version"] = "mission-performance-v2"
     assert ActionResponse.model_validate(result).performance.version == "mission-performance-v2"
