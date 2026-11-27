@@ -305,6 +305,7 @@ def play(
 
 def _play(episode, *, debug_private=False, audit_dir=None):
     from nexus.models.actions import ACTION_ADAPTER
+    from nexus.presentation import LABORATORY_VERSIONS, ORIENTATION_VERSIONS, ROLE_VERSIONS
     from nexus.protocol.audit import AuditRecorder
     from nexus.protocol.session import Session
     from nexus.render.player import render_player
@@ -316,7 +317,7 @@ def _play(episode, *, debug_private=False, audit_dir=None):
     try:
         manifest = session.manifest()
         laboratory = (getattr(episode.public.investigation, "ontology", None)
-                      if manifest.presentation_version in ("sealed-facility-v4", "sealed-facility-v5", "sealed-facility-v6") else None)
+                      if manifest.presentation_version in LABORATORY_VERSIONS else None)
         console.print(manifest.description, markup=False)
         console.print("Read the mission and evidence, make a plan, then use finish to claim success.")
         console.print("Evidence files: " + ", ".join(manifest.evidence_files), markup=False)
@@ -331,7 +332,7 @@ def _play(episode, *, debug_private=False, audit_dir=None):
         while True:
             view = session.observe()
             render_player(view, console=console, family=laboratory,
-                          roles=manifest.presentation_version == "sealed-facility-v6")
+                          roles=manifest.presentation_version in ROLE_VERSIONS)
             if debug_private:
                 from nexus.render.observer import render_observer
                 render_observer(episode, session.state_snapshot(), console=console, debug_private=True)
@@ -401,7 +402,7 @@ def _play(episode, *, debug_private=False, audit_dir=None):
                 if recorder is not None:
                     recorder.checkpoint_safely()
                 if response.victory_code:
-                    if manifest.presentation_version in ("sealed-facility-v2", "sealed-facility-v3", "sealed-facility-v4", "sealed-facility-v5", "sealed-facility-v6"):
+                    if manifest.presentation_version in ORIENTATION_VERSIONS:
                         console.print("Exit clearance granted. Your visit to NEXUS is complete.")
                     console.print("Victory receipt: " + response.victory_code, markup=False)
     finally:

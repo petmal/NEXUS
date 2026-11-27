@@ -284,3 +284,20 @@ def test_v4_records_keep_prechange_bindings():
             presentation_version="sealed-facility-v4",
         )
         assert canonical_hash(evidence_files(episode.public)) == case["sha256"]
+
+
+@pytest.mark.parametrize("family,file,old,new", [
+    ("coupled-repair-v1", "manual.md", "Carry both into", "For survey measurements, take stock"),
+    ("coupled-dynamics-v1", "manual.md", "Take seal and take stock", "For an experiment, take stock"),
+    ("causal-mechanisms-v1", "manual.md", "Take stock to create", "For a bench experiment, take stock"),
+    ("history-coupled-v1", "apparatus.txt", "Take seal and/or", "For a separate experimental specimen"),
+    ("coupled-transfer-v1", "facility.txt", "Experiment in any order, then", "Apply a counterprogram"),
+    ("coupled-evidence-v1", "apparatus.txt", "Take seal, stock, or", "For experiments, take stock"),
+    ("staged-repair-v1", "facility.txt", "choose useful reference experiments", "Reference experiments are available"),
+    ("representation-discovery-v1", "facility.txt", "Investigate the reference fixture", "available for measurements"),
+])
+def test_optional_experiments_in_player_records(family, file, old, new):
+    episode = story_episode(family)
+    assert old in Session(attach(episode, "sealed-facility-v6")).evidence(file)
+    presented = Session(episode).evidence(file)
+    assert old not in presented and new in presented

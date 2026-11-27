@@ -6,6 +6,14 @@ settings with the result: they are part of the experiment. For your first model,
 use the [one-task MindTrial tutorial](first-model.md). For a comparison, start
 with the [worked budget pair](benchmark-guide.md).
 
+The maintained MindTrial run presets use v0.27.0 or newer to request official
+summaries from supported models. The OpenAI presets use `reasoning-summary: auto`,
+the Google presets use `thinking-summaries: auto`, and the Claude presets with
+adaptive effort use `thinking-display: summarized`. Look in the MindTrial INFO
+log for summaries returned between tool calls. The Alibaba presets use Qwen3.8;
+Alibaba documents summarized display for Qwen4-Max with thinking and thinking
+preservation both enabled. See the [MindTrial provider settings](https://github.com/petmal/MindTrial#basic-usage).
+
 ## Start one local service
 
 From the repository, install with `uv sync --frozen --all-extras --python 3.14.7`.

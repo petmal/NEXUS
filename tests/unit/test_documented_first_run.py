@@ -22,10 +22,13 @@ def test_opt_in_demo_tutorial_reaches_the_advertised_ending():
     assert "Success was checked by the engine. Receipt: NX-" in result.stdout
 
 
-@pytest.mark.parametrize("provider,model,text", [
-    ("openai", "example-model", False), ("openrouter", "vendor/example-model", True),
+@pytest.mark.parametrize("provider,model,text,parameters", [
+    ("openai", "example-model", False, None), ("openrouter", "vendor/example-model", True, None),
+    ("openai", "gpt-6-luna", False, {"reasoning-summary": "auto"}),
+    ("google", "gemini-3.8-flash", False, {"thinking-summaries": "auto"}),
+    ("xai", "grok-4.7", False, None),
 ])
-def test_first_model_tutorial_preserves_control_and_validator(tmp_path, provider, model, text):
+def test_first_model_tutorial_preserves_control_and_validator(tmp_path, provider, model, text, parameters):
     prepare = runpy.run_path(str(EXAMPLE / "first_run.py"))["prepare"]
     dest = tmp_path / "first"
     prepare(dest, provider, model, text)
@@ -39,7 +42,7 @@ def test_first_model_tutorial_preserves_control_and_validator(tmp_path, provider
     run, = provider_config["runs"]
     assert provider_config["name"] == provider and run["model"] == model
     assert provider_config["client-config"]["api-key"] == ""
-    assert run["disable-structured-output"] is text and "model-parameters" not in run
+    assert run["disable-structured-output"] is text and run.get("model-parameters") == parameters
     assert taskset["validation-rules"] == full["validation-rules"]
     for group in ("tools", "validators"):
         assert cfg[group] == [dict(item, image="nexus:first-run") for item in template[group]]

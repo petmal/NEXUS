@@ -21,7 +21,8 @@
             "model": "gemini-3.8-flash",
             "max-requests-per-minute": 3,
             "model-parameters": {
-              "thinking-level": "high"
+              "thinking-level": "high",
+              "thinking-summaries": "auto"
             }
           }
         ]

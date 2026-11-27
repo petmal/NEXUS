@@ -2,7 +2,7 @@
 
 Start with one repair whose solution is supplied. This answers a useful first question: can your model read the mission, control the apparatus and return the receipt? One control is an integration check, not a benchmark score.
 
-**You need:** a NEXUS checkout with the [local demo](../README.md#play-your-first-world) working, Docker Engine 25+ running, a tool-capable model with provider access, and [MindTrial](https://github.com/petmal/MindTrial) v0.26.0 or newer. With Go as specified by MindTrial, install the tested version with `go install github.com/petmal/mindtrial/cmd/mindtrial@v0.26.0` and put the Go binary directory on PATH. An existing compatible binary works too; substitute its absolute path for `mindtrial` below.
+**You need:** a NEXUS checkout with the [local demo](../README.md#play-your-first-world) working, Docker Engine 25+ running, a tool-capable model with provider access, and [MindTrial](https://github.com/petmal/MindTrial) v0.27.0 or newer. With Go as specified by MindTrial, install the tested version with `go install github.com/petmal/mindtrial/cmd/mindtrial@v0.27.0` and put the Go binary directory on PATH. An existing compatible binary works too; substitute its absolute path for `mindtrial` below.
 
 ## 1. Prepare the world and the two files
 
@@ -14,7 +14,7 @@ uv run --frozen --no-dev python examples/mindtrial/first_run.py ../nexus-first-r
   --provider openai --model gpt-6-luna
 ```
 
-Use the provider name MindTrial recognizes and the model ID your account can actually call. For example, with OpenRouter, use `--provider openrouter --model YOUR_MODEL_ID` and set `OPENROUTER_API_KEY`; OpenAI uses `OPENAI_API_KEY`. Leave the key field blank in the generated config: MindTrial reads the provider's environment variable. For a model that loses tool use with structured final output (observed with GLM and MiniMax), add `--text-output` when preparing the files. Other provider-specific settings belong in the single run's `model-parameters`; consult the [MindTrial configuration guide](https://github.com/petmal/MindTrial#basic-usage).
+Use the provider name MindTrial recognizes and the model ID your account can actually call. For example, with OpenRouter, use `--provider openrouter --model YOUR_MODEL_ID` and set `OPENROUTER_API_KEY`; OpenAI uses `OPENAI_API_KEY`. Leave the key field blank in the generated config: MindTrial reads the provider's environment variable. For a model that loses tool use with structured final output (observed with GLM and MiniMax), add `--text-output` when preparing the files. The named Astra, Luna and Gemini Flash presets request provider summaries in the MindTrial log. Other provider-specific settings belong in the single run's `model-parameters`; consult the [MindTrial configuration guide](https://github.com/petmal/MindTrial#basic-usage).
 
 Preparation makes no model calls. The script creates a **new** directory. Inspect `tasks.yaml`: it contains just F05, a supplied-solution repair control. `config.yaml` has one model, one tool, its persistent world service and a receipt validator. The example uses provider defaults for inference; it does not reproduce the historical panel's model settings.
 

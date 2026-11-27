@@ -221,16 +221,17 @@ Canonical state, latent rules, reference plans, and verifier secrets remain serv
 
 ## Player console presentation
 
-Newly generated worlds use `sealed-facility-v6`. Operator family, difficulty and
+Newly generated worlds use `sealed-facility-v7`. Operator family, difficulty and
 serializer tags are omitted from playable records and object payloads. Family-specific controls now appear under `action_contract.apparatus`. The public
 IDs, laws supplied in this run, physical target and remaining resources stay
 available. In the four-register worlds an action message labels a hypothetical
 seal display or a committed reading. Structured result payloads remain available.
 The current display is always in the observation: a preview never replaces it.
 
-In v3 through v6, player action replies omit terminal performance, including on retry. Read
+In v3 through v7, player action replies omit terminal performance, including on retry. Read
 it through the evaluator’s finalization or audit interface. A terminal victory
 receipt remains in the player reply. Prior versions keep their wire behavior.
+V7 marks survey collection and reference experiments as optional where the exit checks only a mission object or board. Earlier versions retain their original instructions.
 Compare runs using the recorded presentation version and presented evidence hash.
 Terminal editing, shorthand and the local log do not change the JSON action protocol.
 

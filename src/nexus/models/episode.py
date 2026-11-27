@@ -9,7 +9,7 @@ from nexus.models.actions import action_contract
 from nexus.models.goals import GoalPredicate
 from nexus.models.rules import Effect
 from nexus.models.world import Room, WorldState
-from nexus.presentation import CONSOLE_VERSIONS, PresentationVersion
+from nexus.presentation import CONSOLE_VERSIONS, DEVICE_VERSIONS, ROLE_VERSIONS, PresentationVersion
 from nexus.models.investigation import InvestigationSpec, InvestigationTruth
 from nexus.models.network import NetworkSample, NetworkSpec, NetworkStock, NetworkTruth
 
@@ -108,9 +108,9 @@ class PlayerManifest(BaseModel):
         if episode.presentation_version in CONSOLE_VERSIONS:
             from nexus.presentation.console import contract
             controls = contract(controls)
-        if episode.presentation_version in ("sealed-facility-v5", "sealed-facility-v6"):
+        if episode.presentation_version in DEVICE_VERSIONS:
             from nexus.presentation.devices import public_catalog
-            if episode.presentation_version == "sealed-facility-v6":
+            if episode.presentation_version in ROLE_VERSIONS:
                 from nexus.presentation.laboratory_v6 import public_catalog
             devices = public_catalog(getattr(episode.investigation, "ontology", None))
             if devices:

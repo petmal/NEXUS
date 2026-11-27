@@ -35,7 +35,7 @@
         "guidance": "principles"
       },
       "planning": 0,
-      "presentation_version": "sealed-facility-v6",
+      "presentation_version": "sealed-facility-v7",
       "public_evidence_sha256": "4807fcc2d532c6126ad88cc0c7861081557ff7f1a34a1f35972d5e5463b98270",
       "public_investigation_sha256": "b6738c1548023f0b07cd5c5da1a80bb4e8c0c5df927a7dd05bc25a7850ec7660",
       "qualification": {
@@ -91,7 +91,7 @@
         "guidance": "principles"
       },
       "planning": 0,
-      "presentation_version": "sealed-facility-v6",
+      "presentation_version": "sealed-facility-v7",
       "public_evidence_sha256": "5a9acec9544f875b505b14605a621caf85d95416526a5ee2ad6af4e18bd2c6eb",
       "public_investigation_sha256": "dcda80d9e10e7ca6b0d964d5d9bb9638b27053e753e6b82e5a36b08ab832407e",
       "qualification": {
@@ -146,8 +146,8 @@
       "id": "S21",
       "ontology_options": {},
       "planning": 1,
-      "presentation_version": "sealed-facility-v6",
-      "public_evidence_sha256": "888482ee837d842fa317b40b4457b8ad3fa2e4e50ec3bc24d39ed6b5203fff5d",
+      "presentation_version": "sealed-facility-v7",
+      "public_evidence_sha256": "40a65874deec141eaee63ad1dff91b7a572719591ab57d96896387360816b549",
       "public_investigation_sha256": "0cbad4edde33deb35975f614e908263a6567ded373ff19aa198c9656349bbe4e",
       "qualification": {
         "changed_module": 1,
@@ -208,8 +208,8 @@
       "id": "S22",
       "ontology_options": {},
       "planning": 1,
-      "presentation_version": "sealed-facility-v6",
-      "public_evidence_sha256": "fcd03385d028cc3ce378173d7a89afb0c5465cbc87d47bc4bb5ba0cecd3c6874",
+      "presentation_version": "sealed-facility-v7",
+      "public_evidence_sha256": "4b755f1f5a6a65a11a72b1d332f8a21dc47ba5df220e153e74bf45fcea42cb51",
       "public_investigation_sha256": "2f7f7e2ebf9f0abace8d842c365b1d135da32f97671a15d3e013e4343bd9364e",
       "qualification": {
         "changed_module": 1,
@@ -274,8 +274,8 @@
       "id": "S23",
       "ontology_options": {},
       "planning": 1,
-      "presentation_version": "sealed-facility-v6",
-      "public_evidence_sha256": "fcd03385d028cc3ce378173d7a89afb0c5465cbc87d47bc4bb5ba0cecd3c6874",
+      "presentation_version": "sealed-facility-v7",
+      "public_evidence_sha256": "4b755f1f5a6a65a11a72b1d332f8a21dc47ba5df220e153e74bf45fcea42cb51",
       "public_investigation_sha256": "2f7f7e2ebf9f0abace8d842c365b1d135da32f97671a15d3e013e4343bd9364e",
       "qualification": {
         "changed_module": 1,
@@ -340,8 +340,8 @@
       "id": "S24",
       "ontology_options": {},
       "planning": 1,
-      "presentation_version": "sealed-facility-v6",
-      "public_evidence_sha256": "fcd03385d028cc3ce378173d7a89afb0c5465cbc87d47bc4bb5ba0cecd3c6874",
+      "presentation_version": "sealed-facility-v7",
+      "public_evidence_sha256": "4b755f1f5a6a65a11a72b1d332f8a21dc47ba5df220e153e74bf45fcea42cb51",
       "public_investigation_sha256": "2f7f7e2ebf9f0abace8d842c365b1d135da32f97671a15d3e013e4343bd9364e",
       "qualification": {
         "changed_module": 1,
@@ -408,7 +408,7 @@
         "guidance": "principles"
       },
       "planning": 0,
-      "presentation_version": "sealed-facility-v6",
+      "presentation_version": "sealed-facility-v7",
       "public_evidence_sha256": "65de7c839307953c84581e1242547da8a354b2332d9fdaa6efcd21d7a573e4de",
       "public_investigation_sha256": "cdd61b25b2cedd289c8fced65ef8406a20e1f6e5abd41706a3f0a4133cecc0e1",
       "qualification": {
@@ -461,7 +461,7 @@
         "guidance": "principles"
       },
       "planning": 0,
-      "presentation_version": "sealed-facility-v6",
+      "presentation_version": "sealed-facility-v7",
       "public_evidence_sha256": "a1531bf0e927e7d2a749b940f0ceedacde8bf6318a3851e8f8c85712a143467e",
       "public_investigation_sha256": "34fe8f75a2bf6ae3029a915b94601ea8f3c09eadaf07c4e962a329ecbcc144c0",
       "qualification": {
@@ -519,7 +519,7 @@
         "guidance": "principles"
       },
       "planning": 0,
-      "presentation_version": "sealed-facility-v6",
+      "presentation_version": "sealed-facility-v7",
       "public_evidence_sha256": "48c702ec7d5e0886ff730c237dcdf4b6a6dd0bb5600c66a9b963416ee7d8d3bd",
       "public_investigation_sha256": "89752a5d725587af07e2b1312099fbe4ef78992aad718941c44f27c728ed6caf",
       "qualification": {
@@ -572,7 +572,7 @@
         "guidance": "principles"
       },
       "planning": 0,
-      "presentation_version": "sealed-facility-v6",
+      "presentation_version": "sealed-facility-v7",
       "public_evidence_sha256": "cd3f20ce73bc2a97a735ccaaf9b10b11553a5e8753e7875a8c94c3288be4d8a8",
       "public_investigation_sha256": "caed9a79e323925444289d3ce484ab9846bfe0863f349a8b52a20f64220caff8",
       "qualification": {
@@ -624,8 +624,8 @@
       "id": "F05",
       "ontology_options": {},
       "planning": 1,
-      "presentation_version": "sealed-facility-v6",
-      "public_evidence_sha256": "d582a52f9d9ff7628665f218d37cffe7f5bfe468fb541b9fe63dc031a5d35d50",
+      "presentation_version": "sealed-facility-v7",
+      "public_evidence_sha256": "684e5068589ea4fc5c3f3ce2190b8db9b1bcd6405d65fd046b106d7293a8b9d0",
       "public_investigation_sha256": "474582ef1811968334ee88700eeb4ea70c8b402982fdf379123c0df946028f1a",
       "qualification": {
         "changed_module": 1,
@@ -683,8 +683,8 @@
       "id": "F06",
       "ontology_options": {},
       "planning": 1,
-      "presentation_version": "sealed-facility-v6",
-      "public_evidence_sha256": "fcd03385d028cc3ce378173d7a89afb0c5465cbc87d47bc4bb5ba0cecd3c6874",
+      "presentation_version": "sealed-facility-v7",
+      "public_evidence_sha256": "4b755f1f5a6a65a11a72b1d332f8a21dc47ba5df220e153e74bf45fcea42cb51",
       "public_investigation_sha256": "2f7f7e2ebf9f0abace8d842c365b1d135da32f97671a15d3e013e4343bd9364e",
       "qualification": {
         "changed_module": 1,
@@ -746,8 +746,8 @@
       "id": "F07",
       "ontology_options": {},
       "planning": 1,
-      "presentation_version": "sealed-facility-v6",
-      "public_evidence_sha256": "fcd03385d028cc3ce378173d7a89afb0c5465cbc87d47bc4bb5ba0cecd3c6874",
+      "presentation_version": "sealed-facility-v7",
+      "public_evidence_sha256": "4b755f1f5a6a65a11a72b1d332f8a21dc47ba5df220e153e74bf45fcea42cb51",
       "public_investigation_sha256": "2f7f7e2ebf9f0abace8d842c365b1d135da32f97671a15d3e013e4343bd9364e",
       "qualification": {
         "changed_module": 1,
@@ -805,8 +805,8 @@
       "id": "F08",
       "ontology_options": {},
       "planning": 1,
-      "presentation_version": "sealed-facility-v6",
-      "public_evidence_sha256": "184c4f29fc552d4b577ec4a5bb8bb5b2835cf015872442a5d407d865c3c9980a",
+      "presentation_version": "sealed-facility-v7",
+      "public_evidence_sha256": "d4fa7c9a7baa2d84bd190cf81d37830322a559e2bf96e0b988455c23cdd83784",
       "public_investigation_sha256": "0c3834bfe85d5989e6e32b3ab6d38eb6b4c45c04f218fc15581639568d67e153",
       "qualification": {
         "changed_module": 2,
@@ -864,8 +864,8 @@
       "id": "F09",
       "ontology_options": {},
       "planning": 1,
-      "presentation_version": "sealed-facility-v6",
-      "public_evidence_sha256": "fcd03385d028cc3ce378173d7a89afb0c5465cbc87d47bc4bb5ba0cecd3c6874",
+      "presentation_version": "sealed-facility-v7",
+      "public_evidence_sha256": "4b755f1f5a6a65a11a72b1d332f8a21dc47ba5df220e153e74bf45fcea42cb51",
       "public_investigation_sha256": "2f7f7e2ebf9f0abace8d842c365b1d135da32f97671a15d3e013e4343bd9364e",
       "qualification": {
         "changed_module": 2,
@@ -927,8 +927,8 @@
       "id": "F10",
       "ontology_options": {},
       "planning": 1,
-      "presentation_version": "sealed-facility-v6",
-      "public_evidence_sha256": "fcd03385d028cc3ce378173d7a89afb0c5465cbc87d47bc4bb5ba0cecd3c6874",
+      "presentation_version": "sealed-facility-v7",
+      "public_evidence_sha256": "4b755f1f5a6a65a11a72b1d332f8a21dc47ba5df220e153e74bf45fcea42cb51",
       "public_investigation_sha256": "2f7f7e2ebf9f0abace8d842c365b1d135da32f97671a15d3e013e4343bd9364e",
       "qualification": {
         "changed_module": 2,
@@ -1018,7 +1018,7 @@
         "kernel_transition_checks": 93750,
         "minimum_coordinate_goal_breaks": 2,
         "physical_minimum": 12,
-        "presentation_version": "sealed-facility-v6",
+        "presentation_version": "sealed-facility-v7",
         "public_evidence_sha256": "98e55283f49b610dd9e7a833070b61bfe16bcae5bfbd0a91dfc1830d0721d27e",
         "reference_operations": 10,
         "reference_trajectory": {
@@ -1148,7 +1148,7 @@
         "kernel_transition_checks": 93750,
         "minimum_coordinate_goal_breaks": 2,
         "physical_minimum": 12,
-        "presentation_version": "sealed-facility-v6",
+        "presentation_version": "sealed-facility-v7",
         "public_evidence_sha256": "98e55283f49b610dd9e7a833070b61bfe16bcae5bfbd0a91dfc1830d0721d27e",
         "reference_operations": 10,
         "reference_trajectory": {
@@ -1278,7 +1278,7 @@
         "kernel_transition_checks": 93750,
         "minimum_coordinate_goal_breaks": 4,
         "physical_minimum": 22,
-        "presentation_version": "sealed-facility-v6",
+        "presentation_version": "sealed-facility-v7",
         "public_evidence_sha256": "7e838575c0a217f3354f7b5eea1563123ada42b501b9239014e71e56e25fb96a",
         "reference_operations": 20,
         "reference_trajectory": {
@@ -1408,7 +1408,7 @@
         "kernel_transition_checks": 93750,
         "minimum_coordinate_goal_breaks": 4,
         "physical_minimum": 22,
-        "presentation_version": "sealed-facility-v6",
+        "presentation_version": "sealed-facility-v7",
         "public_evidence_sha256": "7e838575c0a217f3354f7b5eea1563123ada42b501b9239014e71e56e25fb96a",
         "reference_operations": 20,
         "reference_trajectory": {
@@ -1538,7 +1538,7 @@
         "kernel_transition_checks": 93750,
         "minimum_coordinate_goal_breaks": 4,
         "physical_minimum": 22,
-        "presentation_version": "sealed-facility-v6",
+        "presentation_version": "sealed-facility-v7",
         "public_evidence_sha256": "77eb4bcc0624415281373aa4bf31792bdcfd8c4ec3b691ddfa00638e9985df30",
         "reference_operations": 20,
         "reference_trajectory": {
@@ -1668,7 +1668,7 @@
         "kernel_transition_checks": 93750,
         "minimum_coordinate_goal_breaks": 4,
         "physical_minimum": 22,
-        "presentation_version": "sealed-facility-v6",
+        "presentation_version": "sealed-facility-v7",
         "public_evidence_sha256": "77eb4bcc0624415281373aa4bf31792bdcfd8c4ec3b691ddfa00638e9985df30",
         "reference_operations": 20,
         "reference_trajectory": {
@@ -1798,7 +1798,7 @@
         "kernel_transition_checks": 93750,
         "minimum_coordinate_goal_breaks": 6,
         "physical_minimum": 36,
-        "presentation_version": "sealed-facility-v6",
+        "presentation_version": "sealed-facility-v7",
         "public_evidence_sha256": "668b2f6e58f58f2d85a6a64ac8e4ec1931d3060f97f7e79502dd76fa68f61863",
         "reference_operations": 34,
         "reference_trajectory": {
@@ -1928,7 +1928,7 @@
         "kernel_transition_checks": 93750,
         "minimum_coordinate_goal_breaks": 6,
         "physical_minimum": 36,
-        "presentation_version": "sealed-facility-v6",
+        "presentation_version": "sealed-facility-v7",
         "public_evidence_sha256": "668b2f6e58f58f2d85a6a64ac8e4ec1931d3060f97f7e79502dd76fa68f61863",
         "reference_operations": 34,
         "reference_trajectory": {
@@ -2058,7 +2058,7 @@
         "kernel_transition_checks": 93750,
         "minimum_coordinate_goal_breaks": 3,
         "physical_minimum": 17,
-        "presentation_version": "sealed-facility-v6",
+        "presentation_version": "sealed-facility-v7",
         "public_evidence_sha256": "e97dfc8af28b387e9cb19ab7cbb62dd3e65782055fbf6aec2852ce704f840af7",
         "reference_operations": 15,
         "reference_trajectory": {
@@ -2188,7 +2188,7 @@
         "kernel_transition_checks": 93750,
         "minimum_coordinate_goal_breaks": 3,
         "physical_minimum": 17,
-        "presentation_version": "sealed-facility-v6",
+        "presentation_version": "sealed-facility-v7",
         "public_evidence_sha256": "e97dfc8af28b387e9cb19ab7cbb62dd3e65782055fbf6aec2852ce704f840af7",
         "reference_operations": 15,
         "reference_trajectory": {
@@ -2318,7 +2318,7 @@
         "kernel_transition_checks": 93750,
         "minimum_coordinate_goal_breaks": 4,
         "physical_minimum": 22,
-        "presentation_version": "sealed-facility-v6",
+        "presentation_version": "sealed-facility-v7",
         "public_evidence_sha256": "5d6750de70e1eebe62c50f5310de53050051e1951ecc026e5da75487439db3ce",
         "reference_operations": 20,
         "reference_trajectory": {
@@ -2448,7 +2448,7 @@
         "kernel_transition_checks": 93750,
         "minimum_coordinate_goal_breaks": 4,
         "physical_minimum": 22,
-        "presentation_version": "sealed-facility-v6",
+        "presentation_version": "sealed-facility-v7",
         "public_evidence_sha256": "5d6750de70e1eebe62c50f5310de53050051e1951ecc026e5da75487439db3ce",
         "reference_operations": 20,
         "reference_trajectory": {
@@ -2578,7 +2578,7 @@
         "kernel_transition_checks": 93750,
         "minimum_coordinate_goal_breaks": 9,
         "physical_minimum": 35,
-        "presentation_version": "sealed-facility-v6",
+        "presentation_version": "sealed-facility-v7",
         "public_evidence_sha256": "e27d66fee8cc7dabb9638a67ff0c3adfcffa13b97ce82710f1dcd6e83c4e6461",
         "reference_operations": 33,
         "reference_trajectory": {
@@ -2708,7 +2708,7 @@
         "kernel_transition_checks": 93750,
         "minimum_coordinate_goal_breaks": 9,
         "physical_minimum": 35,
-        "presentation_version": "sealed-facility-v6",
+        "presentation_version": "sealed-facility-v7",
         "public_evidence_sha256": "e27d66fee8cc7dabb9638a67ff0c3adfcffa13b97ce82710f1dcd6e83c4e6461",
         "reference_operations": 33,
         "reference_trajectory": {
@@ -2838,7 +2838,7 @@
         "kernel_transition_checks": 93750,
         "minimum_coordinate_goal_breaks": 6,
         "physical_minimum": 37,
-        "presentation_version": "sealed-facility-v6",
+        "presentation_version": "sealed-facility-v7",
         "public_evidence_sha256": "12dc2d1350efc34c72538b5e9be3d078c47414933d37a1b81a636393fd08d29a",
         "reference_operations": 35,
         "reference_trajectory": {
@@ -2968,7 +2968,7 @@
         "kernel_transition_checks": 93750,
         "minimum_coordinate_goal_breaks": 6,
         "physical_minimum": 37,
-        "presentation_version": "sealed-facility-v6",
+        "presentation_version": "sealed-facility-v7",
         "public_evidence_sha256": "12dc2d1350efc34c72538b5e9be3d078c47414933d37a1b81a636393fd08d29a",
         "reference_operations": 35,
         "reference_trajectory": {
@@ -3498,10 +3498,10 @@
     }
   ],
   "scope": "Two purpose-selected fresh seeds per family, no live outcomes used for selection. Distinct behavior classes/repair observation and acceptance signatures/PR kernels checked against committed historical matrices; not a random population sample or a proof of nonisomorphism. Reading certificates are not cognitive depth measures.",
-  "source_sha256": "47b24901f0d446ec02897850e2f3baccb84ce2c5b003e3b7c505d1a150fc6d29",
+  "source_sha256": "a3ff0848a423d8a67f04270801b5bc800e8913fbca8d8fe106a745863e876657",
   "sources": {
     "__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-    "cli.py": "82e1b9176a09ef76d1a46322b5891c957c470e97b3b9770cb0c46325a11335bd",
+    "cli.py": "694e86fc97946849c018677e05a216f1d8e6fba61afe20657a4e9ece028a08cb",
     "diagnostics.py": "a4654237788f022f5db1b1a7bc22c0d0fbfec497203a049940cebcfcdea1ba20",
     "engine/__init__.py": "75976174fce0ad3d8238137d1f10cf64f4f8303dda1af9ba667ff505f063bdfb",
     "engine/canonical.py": "8376561fe738e77bfacb1b648805631c1f6270f67c1d872278292bf1fd05e72d",
@@ -3567,7 +3567,7 @@
     "models/__init__.py": "4bae834eeea9fc03d43fc3f89e2be03d61a8c630e8d7c3ab32f8351cc38b82a4",
     "models/actions.py": "6e366f247d4c3527361c95ee5f0569a70258b7369b1a9d84534fd479ec2119eb",
     "models/domain.py": "d290d0fff0a3a32b77ef97a70526681d1220871f6e25534fd8596421d684d684",
-    "models/episode.py": "d63f2bb5454d897cd1091800382d814e28df46664e26f2e973303385cae016d0",
+    "models/episode.py": "e9e8dd5aaf8b33bd83782ec64b0db0c9fddb4a8a65370a965f7a2fd56953cf3f",
     "models/events.py": "a6dc202be68a04e8033516d962d3216e9b22b910dcf3be83b9eabcfb2096701a",
     "models/goals.py": "284fb4e515e403f1297c4b903394f24e25d687d82625157c337c5a19bd74a05e",
     "models/investigation.py": "46f107f3dc21b5f6732787852b8701f704498a5dbaf5a518bb04c576243861a2",
@@ -3657,7 +3657,7 @@
     "ontology/dynamics/policy.py": "3744d5160a5ad5c71b88af8edd5da601f9e2fb98c1aedee7e6002d3083ffe55d",
     "ontology/dynamics/qualification.py": "a5b2ebe01ac63a08bce6880d03675a1465ed797bad7394bbc29ff87c159a91e1",
     "ontology/dynamics/reference_cache.py": "28a7508c6c22ddb6892372c028cd74e433d69845699fdaf7fce5694e2c40f0ae",
-    "ontology/dynamics/reference_identity.py": "08d5493da8b1e622d9809bc8b52eff4e39ac3b237d87c11a7cf76d78f7ed8ddc",
+    "ontology/dynamics/reference_identity.py": "54cbbbf2e6018a11c37a40edb080532312d1b00d8d87651f9684d4e946511a42",
     "ontology/dynamics/reference_proof.py": "34e769abc8b6228de49a5c0f802842fb5582572435fff1ba9c72ec71cab818eb",
     "ontology/dynamics/runtime.py": "6298ca5dea1b77ae2ef7958ea2e2248bf8cb5131b6d1e351199ed7695c186030",
     "ontology/dynamics/schema.py": "0d718adb94c480ba8d0a56fff1e46468b160247af5ee290580443ae98ba1fbb5",
@@ -3770,13 +3770,14 @@
     "ontology/uncertainty/laws.py": "91e19fc3df991b7f199bdb7f2655e6e377470f162bdc2ab9f883a09b3cab3ed5",
     "ontology/uncertainty/runtime.py": "662be74da7e2e1fcd6cd3356ca3731f6eca2930b1ba8974d28029c9261b247d9",
     "ontology/uncertainty/schema.py": "99f2a9ec59c0725731941f42573d4ca9269647ea4bc0885b0c4646736041f976",
-    "presentation/__init__.py": "f2dfb845864b69ca42657b447f1a7881b53967c7bb0305b34d346fac179b5436",
-    "presentation/console.py": "503a500106469a4efc6ba81d5b039f5121b706ca649c4bddd2d96801b49c82fd",
+    "presentation/__init__.py": "2159767230e601f2433335127293ea6596f8b1d52fc262699a8c022b97936a40",
+    "presentation/console.py": "ddde918f80d88bc781a67b32f36e1d1fcf3131c60f6ab6de71e733e804fa42c2",
     "presentation/devices.py": "5eba5126109ceaa80b97043425db09574ba8500f4551362c6f9e876bfa097868",
     "presentation/laboratory.py": "22d2046603ca06cf9d57dee0dc8fd0da3f8d618720b2b84cdd2bde0451b922cf",
     "presentation/laboratory_v4.py": "331913a1c016cf9deb5ad1983aabf8e705477f9a49afea1fb21db4f24f3c5afe",
     "presentation/laboratory_v5.py": "dadb62ddd51317fb26642a2a83aef6a2103cf803883a21c86629ff4397835fa0",
     "presentation/laboratory_v6.py": "55c0a1e76d7b32b7bd6a17b1a28db68161e827dca5f14d996a719d0dd549481f",
+    "presentation/survey_instructions.py": "de3b08452797b8e01af436d21b1cf9758836b4e13165268d438aa66e11b70e05",
     "protocol/__init__.py": "e3b32fa236602d61f8591e0944c0a1cc6b12cbbc97e147ad9e22b42b5c77d9a6",
     "protocol/audit.py": "8d21199ecdaf39456e65e2af54a5f0102514889f307c48ca310529e5315eda54",
     "protocol/client.py": "ee597a223a0a3df9b14f2e0c3d7e0dd1d1a637ec0672970017fd7d59cce6ec87",
@@ -3815,5 +3816,5 @@
   },
   "status": "passed",
   "version": "fresh-world-preflight-v1",
-  "seconds": 20.16596395800002
+  "seconds": 17.543395069999974
 }
