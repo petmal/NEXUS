@@ -73,5 +73,5 @@ def test_runner_enables_one_inherited_model_without_secret_or_hidden_task_retrie
     assert len(provider["runs"]) == 1
     run = provider["runs"][0]
     assert not run["disabled"] and run["model"] == "gpt-6-astra"
-    assert run["model-parameters"] == {"reasoning-effort": "medium"}
+    assert run["model-parameters"] == {"reasoning-effort": "medium", "reasoning-summary": "auto"}
     assert "pricing" not in run  # No stale tariff is presented as a current price.

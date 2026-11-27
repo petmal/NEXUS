@@ -222,7 +222,7 @@ def test_comparison_preserves_both_model_runs_for_both_suites(comparison_setup, 
         assert all(
             run["disabled"] is False
             and run["max-requests-per-minute"] == 20
-            and run["model-parameters"] == {"reasoning-effort": "medium"}
+            and run["model-parameters"] == {"reasoning-effort": "medium", "reasoning-summary": "auto"}
             for run in provider["runs"]
         )
         assert all(
