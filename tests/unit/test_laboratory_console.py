@@ -364,3 +364,18 @@ def test_repair_wrong_material_is_a_paid_noop_with_matching_help(role_laboratory
             assert session.state.turn == before.turn + 1
             assert session.state.artifacts == before.artifacts
             assert "has no effect on this material" in response.message
+
+
+@pytest.mark.parametrize("seed", [541, 586], ids=["F05", "F08"])
+def test_disclosed_repair_needs_only_the_seal(seed):
+    episode = generate_episode(seed, axis_version=2, science_family=REPAIR, theory_level=0,
+                               discovery_level=0, planning_level=1, resource_pressure=1)
+    session = Session(episode)
+    assert "To run a survey, take stock." in session.evidence("apparatus.txt")
+    assert "Take seal and take stock." in Session(attach(episode, "sealed-facility-v6")).evidence("apparatus.txt")
+    dose = json.loads(session.evidence("theory.json"))["resolved"]
+    for command in ("take seal", "move array", "configure doser " + " ".join(map(str, dose)),
+                    "operate doser seal", "finish"):
+        reply = session.act(session.state.turn, action(command), player_only=True)
+        assert reply.ok
+    assert reply.victory_code and session.state.turn == 5

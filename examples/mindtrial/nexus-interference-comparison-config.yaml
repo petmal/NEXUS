@@ -21,7 +21,8 @@
             "model": "gpt-6-astra",
             "max-requests-per-minute": 20,
             "model-parameters": {
-              "reasoning-effort": "medium"
+              "reasoning-effort": "medium",
+              "reasoning-summary": "auto"
             }
           },
           {
@@ -30,7 +31,8 @@
             "model": "gpt-6-luna",
             "max-requests-per-minute": 20,
             "model-parameters": {
-              "reasoning-effort": "medium"
+              "reasoning-effort": "medium",
+              "reasoning-summary": "auto"
             }
           }
         ]

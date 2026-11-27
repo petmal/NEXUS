@@ -14,11 +14,14 @@ from typing import TYPE_CHECKING, Literal
 if TYPE_CHECKING:
     from nexus.models.episode import PrivateEpisode, PublicEpisode
 
-type PresentationVersion = Literal["sealed-facility-v1", "sealed-facility-v2", "sealed-facility-v3", "sealed-facility-v4", "sealed-facility-v5", "sealed-facility-v6"]
-SUPPORTED: tuple[PresentationVersion, ...] = ("sealed-facility-v1", "sealed-facility-v2", "sealed-facility-v3", "sealed-facility-v4", "sealed-facility-v5", "sealed-facility-v6")
-CONSOLE_VERSIONS = ("sealed-facility-v3", "sealed-facility-v4", "sealed-facility-v5", "sealed-facility-v6")
-LABORATORY_VERSIONS = ("sealed-facility-v4", "sealed-facility-v5", "sealed-facility-v6")
-CURRENT: PresentationVersion = "sealed-facility-v6"
+type PresentationVersion = Literal["sealed-facility-v1", "sealed-facility-v2", "sealed-facility-v3", "sealed-facility-v4", "sealed-facility-v5", "sealed-facility-v6", "sealed-facility-v7"]
+SUPPORTED: tuple[PresentationVersion, ...] = ("sealed-facility-v1", "sealed-facility-v2", "sealed-facility-v3", "sealed-facility-v4", "sealed-facility-v5", "sealed-facility-v6", "sealed-facility-v7")
+ORIENTATION_VERSIONS = SUPPORTED[1:]
+CONSOLE_VERSIONS = SUPPORTED[2:]
+LABORATORY_VERSIONS = SUPPORTED[3:]
+DEVICE_VERSIONS = SUPPORTED[4:]
+ROLE_VERSIONS = SUPPORTED[5:]
+CURRENT: PresentationVersion = "sealed-facility-v7"
 # Keep v1 text byte-for-byte stable for saved episodes and historical comparisons.
 PREMISE = (
     "You are confined inside NEXUS, a sealed artificial facility. Its apparatus acts "
@@ -114,11 +117,11 @@ def attach(
 
 
 def description(public: PublicEpisode) -> str:
-    if public.presentation_version in ("sealed-facility-v5", "sealed-facility-v6"):
+    if public.presentation_version in DEVICE_VERSIONS:
         from nexus.presentation.laboratory_v5 import brief
         if task := brief(public):
             return f"{PREMISE_V2}\n\nYOUR TASK\n{task}"
-    if public.presentation_version in ("sealed-facility-v2", "sealed-facility-v3", "sealed-facility-v4", "sealed-facility-v5", "sealed-facility-v6"):
+    if public.presentation_version in ORIENTATION_VERSIONS:
         return f"{PREMISE_V2}\n\nMISSION\n{_prose_v2(public.description)}"
     return (
         f"{PREMISE}\n\nMISSION\n{public.description}"
@@ -140,21 +143,24 @@ def evidence(public: PublicEpisode, filename: str) -> str:
     if public.presentation_version in LABORATORY_VERSIONS:
         from nexus.presentation.laboratory_v4 import record
         content = record(public, filename, content)
-    if public.presentation_version in ("sealed-facility-v5", "sealed-facility-v6"):
+    if public.presentation_version in DEVICE_VERSIONS:
         from nexus.presentation.laboratory_v5 import record
         content = record(public, filename, content)
-    if public.presentation_version == "sealed-facility-v6" and filename != "facility.txt":
+    if public.presentation_version in ROLE_VERSIONS and filename != "facility.txt":
         from nexus.presentation.laboratory_v6 import record
+        content = record(public, filename, content)
+    if public.presentation_version == "sealed-facility-v7":
+        from nexus.presentation.survey_instructions import record
         content = record(public, filename, content)
     if not public.presentation_version:
         return content
-    if public.presentation_version in ("sealed-facility-v2", "sealed-facility-v3", "sealed-facility-v4", "sealed-facility-v5", "sealed-facility-v6"):
+    if public.presentation_version in ORIENTATION_VERSIONS:
         if filename == "facility.txt":
             # Family identity is public; never branch on the selected hidden construction.
             if getattr(public.investigation, "ontology", None) == "model-revision-v1":
                 content = REVISION_BRIEF_V2
             content = GLOSSARY_V2 + _prose_v2(content)
-            if public.presentation_version == "sealed-facility-v6":
+            if public.presentation_version in ROLE_VERSIONS:
                 from nexus.presentation.laboratory_v6 import record
                 content = record(public, filename, content)
             return content
@@ -168,7 +174,7 @@ def evidence(public: PublicEpisode, filename: str) -> str:
         rooms = data.get("rooms")
         if isinstance(rooms, dict):
             data["sector_functions"] = (
-                deepcopy(rooms) if public.presentation_version in ("sealed-facility-v2", "sealed-facility-v3", "sealed-facility-v4", "sealed-facility-v5", "sealed-facility-v6")
+                deepcopy(rooms) if public.presentation_version in ORIENTATION_VERSIONS
                 else dict(rooms)
             )
             for room_id, value in rooms.items():

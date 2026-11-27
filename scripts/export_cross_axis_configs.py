@@ -63,9 +63,9 @@ def provider(name, models):
                 "disabled": False,
                 "model": model,
                 "max-requests-per-minute": 3 if google else 20,
-                "model-parameters": {"thinking-level": "high"}
+                "model-parameters": {"thinking-level": "high", "thinking-summaries": "auto"}
                 if google
-                else {"reasoning-effort": "medium"},
+                else {"reasoning-effort": "medium", "reasoning-summary": "auto"},
             }
         )
     return {

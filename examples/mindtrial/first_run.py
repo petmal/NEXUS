@@ -19,6 +19,16 @@ def prepare(directory, provider, model, text_output=False, image=IMAGE):
     backend["name"] = provider
     backend["runs"] = [{"name": model, "model": model, "disabled": False,
                         "max-requests-per-minute": 10, "disable-structured-output": text_output}]
+    # For a named panel model, copy only its summary setting. Other models use provider defaults.
+    for preset in HERE.glob("nexus-fresh-world-*-config.yaml"):
+        (panel_provider,) = json.loads(preset.read_text())["config"]["providers"]
+        (panel_run,) = panel_provider["runs"]
+        if (provider, model) == (panel_provider["name"], panel_run["model"]):
+            summary = {k: v for k, v in panel_run["model-parameters"].items()
+                       if k in ("reasoning-summary", "thinking-summaries")}
+            if summary:
+                backend["runs"][0]["model-parameters"] = summary
+            break
     for group in ("tools", "services", "validators"):
         for entry in settings[group]:
             entry["image"] = image

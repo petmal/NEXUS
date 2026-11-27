@@ -5,6 +5,8 @@ Astra anchors: **110 attempts maximum**, with no automatic repetitions. Live
 model calls begin only when you run the launcher. The [design guide](../../docs/fresh-world-guide.md)
 explains the matrix, exact costs, controls and interpretation limits.
 
+With MindTrial v0.27.0 or newer, the Astra and Luna presets request official reasoning summaries and the Gemini Flash preset requests thinking summaries. MindTrial logs available summaries at INFO between tool calls. Availability depends on the provider and model.
+
 ## Small release canary
 
 Before a larger run, check one model and provider on the candidate package:
@@ -209,7 +211,7 @@ failures after a successful rerun. Control admission hashes records from this
 package; moving result folders to another package does not provide automatic
 portable admission.
 
-Newly built panels require MindTrial v0.26.0 or newer. The launcher adds the audit mount and service-instance input to the effective run files after qualification. The supplied tasks, prompts and player tools remain the same. Private exports are in `private-audits/<run-folder>/<service-instance>/` **beside** `results/`, outside the ZIP command above. The manifest identifies the parent; the debug log links each service name to its result trace. Keep failed attempts as well as successes. Verify each export with the matching NEXUS image or source; an unclosed bundle is partial evidence. Old result folders do not acquire bundles. See the [audit storage contract](../../docs/research-guide.md#reproducibility-record).
+Audit mounts require MindTrial v0.26.0 or newer. Use v0.27.0 or newer for the supplied summary-enabled presets. The launcher adds the audit mount and service-instance input to the effective run files after qualification. The supplied tasks, prompts and player tools remain the same. Private exports are in `private-audits/<run-folder>/<service-instance>/` **beside** `results/`, outside the ZIP command above. The manifest identifies the parent; the debug log links each service name to its result trace. Keep failed attempts as well as successes. Verify each export with the matching NEXUS image or source; an unclosed bundle is partial evidence. Old result folders do not acquire bundles. See the [audit storage contract](../../docs/research-guide.md#reproducibility-record).
 
 ## Regenerate from the repository
 
